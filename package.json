@@ -6,7 +6,7 @@
     "start": "react-native start",
     "run-ios": "react-native run-ios",
     "run-android": "react-native run-android",
-    "clean-build": "watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && yarn cache clean && yarn install &&  yarn start -- --reset-cache",
+    "clean-build": "watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && yarn cache clean && yarn install && cd ios && pod install && cd .. &&  yarn start -- --reset-cache",
     "test": "jest",
     "lint": "eslint ."
   },
