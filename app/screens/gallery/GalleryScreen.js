@@ -65,14 +65,12 @@ class GalleryScreen extends React.PureComponent {
     return (
       <View style={Styles.detailsContainer}>
         <View style={Styles.row}>
-          <View>
-            <Text style={Styles.authorText}>{image.author}</Text>
-            <Text style={Styles.title}>{image.title}</Text>
-          </View>
+          <Text style={Styles.authorText}>{image.author}</Text>
           <Text style={Styles.authorText}>
             {this.state.index + 1} / {images.length}
           </Text>
         </View>
+        <Text style={Styles.title}>{image.title}</Text>
       </View>
     );
   };
