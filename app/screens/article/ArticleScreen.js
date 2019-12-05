@@ -152,11 +152,11 @@ class ArticleScreen extends React.Component {
 
   _handleSharePress = () => {
     const { article } = this.state;
-    if (article === null || article.article_url === null) {
+    if (!article) {
       return;
     }
 
-    const url = 'https://lrt.lt' + this.state.article.article_url;
+    const url = 'https://lrt.lt' + (this.state.article.article_url || this.state.article.url);
     const shareOptions = {
       url,
     };
