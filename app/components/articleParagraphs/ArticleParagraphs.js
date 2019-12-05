@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Linking } from 'react-native';
+import SelectableText from '../selectableText/SelectableText';
 import { WebView } from 'react-native-webview';
 import Styles from './styles';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -12,29 +13,20 @@ const renderBlockquote = (_, children, __, passProps) => {
   return (
     <View style={Styles.quoteContainer} key={passProps.key}>
       <Text style={Styles.quoteSimbol}>”</Text>
-      <Text
-        style={([passProps.tagsStyles.blockquote], [Styles.quoteText])}
-        selectable={true}
-        textBreakStrategy="simple"
-      >
+      <SelectableText style={([passProps.tagsStyles.blockquote], [Styles.quoteText])}>
         {children}
-      </Text>
+      </SelectableText>
     </View>
   );
 };
 
 const renderP = (_, children, __, passProps) => {
-  //console.log('children', children);
-  //console.log('passProps', passProps);
+  // console.log('children', children);
+  // console.log('passProps', passProps);
   return (
-    <Text
-      selectable={true}
-      style={passProps.tagsStyles.baseFontStyle}
-      textBreakStrategy="simple"
-      key={passProps.key}
-    >
+    <SelectableText key={passProps.key} style={passProps.tagsStyles.baseFontStyle}>
       {children}
-    </Text>
+    </SelectableText>
   );
 };
 

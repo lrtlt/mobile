@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
+import SelectableText from '../selectableText/SelectableText';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 const scalableText = props => {
@@ -8,10 +9,11 @@ const scalableText = props => {
   const multiplier = EStyleSheet.value('$textSizeMultiplier');
   style.fontSize += multiplier ? multiplier : 0;
 
+  const TextComponent = props.selectable === true ? SelectableText : Text;
   return (
-    <Text {...props} style={style} textBreakStrategy="simple">
+    <TextComponent {...props} style={style} textBreakStrategy="simple">
       {props.children}
-    </Text>
+    </TextComponent>
   );
 };
 

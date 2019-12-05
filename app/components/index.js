@@ -39,3 +39,4 @@ export { default as ActionButton } from './actionButton/ActionButton';
 export { default as HeaderTitle } from './screenHeaderTitle/ScreenHeaderTitle';
 export { default as SearchTools } from './searchTools/SearchTools';
 export { default as SearchFilterDrawer } from './searchFilterDrawer/SearchFilterDrawer';
+export { default as SelectableText } from './selectableText/SelectableText';
