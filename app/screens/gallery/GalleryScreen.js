@@ -12,18 +12,42 @@ import { BorderlessButton } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-navigation';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
+/**
+ * Formats images array so that the element at given index starts at the beggening. Trailing images appended to the end of the array.
+ * This is a workaround for issue in gallery swiper https://github.com/Luehang/react-native-gallery-swiper/issues/26
+ */
+const formatImages = (imagesArray, index) => {
+  if (!index || index === 0 || imagesArray.length <= 1) {
+    return imagesArray;
+  }
+
+  const start = imagesArray.slice(index, imagesArray.length);
+  const end = imagesArray.slice(0, index);
+  return start.concat(end);
+};
+
 class GalleryScreen extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    const selectedImage = this.props.navigation.getParam('selectedImage', null);
+    const { navigation } = this.props;
+
+    const selectedImage = navigation.getParam('selectedImage', null);
+    const images = navigation.getParam('images', []);
+
     let initialIndex = 0;
     if (selectedImage) {
-      initialIndex = this.getImages().findIndex(img => img.path === selectedImage.path);
+      initialIndex = images.findIndex(img => img.path === selectedImage.path);
       initialIndex = Math.max(0, initialIndex);
     }
 
-    this.state = { index: initialIndex, initialIndex };
+    const formattedImages = formatImages(this.props.navigation.getParam('images', []), initialIndex);
+
+    this.state = {
+      index: initialIndex,
+      initialIndex,
+      images: formattedImages,
+    };
   }
 
   componentDidMount() {
@@ -34,10 +58,8 @@ class GalleryScreen extends React.PureComponent {
     this.setState({ ...this.state, index });
   };
 
-  getImages = () => this.props.navigation.getParam('images', []);
-
   renderDetails = () => {
-    const images = this.getImages();
+    const images = this.state.images;
     const image = images[this.state.index];
 
     return (
@@ -68,7 +90,7 @@ class GalleryScreen extends React.PureComponent {
   };
 
   render() {
-    const images = this.getImages().map(img => ({
+    const images = this.state.images.map(img => ({
       uri: buildArticleImageUri(IMG_SIZE_XXL, img.path),
     }));
 
