@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "600456007823",
+    "firebase_url": "https://lrtlt-6ece5.firebaseio.com",
+    "project_id": "lrtlt-6ece5",
+    "storage_bucket": "lrtlt-6ece5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:600456007823:android:7d65485e9650ea15f0e0fa",
+        "android_client_info": {
+          "package_name": "com.lrtapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "600456007823-3g2g6e9g19d7h850qnn6qfn8ld2uq5fa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC23W-MJxSbHMsCkwuW5TRASREpzGJIw9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "600456007823-3g2g6e9g19d7h850qnn6qfn8ld2uq5fa.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "600456007823-0r1spfuto0apihm0g7i38ajr00pmtfs2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "lt.lrtlt.lrtltapp",
+                "app_store_id": "999758256"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:600456007823:android:a3451937a028a404f0e0fa",
+        "android_client_info": {
+          "package_name": "lt.mediapark.lrt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "600456007823-3g2g6e9g19d7h850qnn6qfn8ld2uq5fa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC23W-MJxSbHMsCkwuW5TRASREpzGJIw9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "600456007823-3g2g6e9g19d7h850qnn6qfn8ld2uq5fa.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "600456007823-0r1spfuto0apihm0g7i38ajr00pmtfs2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "lt.lrtlt.lrtltapp",
+                "app_store_id": "999758256"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,11 @@
+export { default as Splash } from './splash/SplashScreen';
+export { default as MainScreen } from './main/MainScreen';
+export { default as SettingsScreen } from './settings/SettingsScreen';
+export { default as ArticleScreen } from './article/ArticleScreen';
+export { default as ChannelScreen } from './channel/ChannelScreen';
+export { default as ProgramScreen } from './program/ProgramScreen';
+export { default as TestScreen } from './testScreen/TestScreen';
+export { default as CommentsScreen } from './commentsScreen/CommentsScreen';
+export { default as SlugScreen } from './slug/SlugScreen';
+export { default as SearchScreen } from './search/SearchScreen';
+export { default as GalleryScreen } from './gallery/GalleryScreen';

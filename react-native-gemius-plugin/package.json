@@ -1,0 +1,29 @@
+{
+  "name": "react-native-gemius-plugin",
+  "title": "React Native Gemius Plugin",
+  "version": "1.1.11",
+  "description": "Gemius plugin for react-native",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github_account/react-native-gemius-plugin.git",
+    "baseUrl": "https://github.com/github_account/react-native-gemius-plugin"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "author": {
+    "name": "Kestas Venslauskas",
+    "email": "kestas.venslauskas@gmail.com"
+  },
+  "license": "MIT",
+  "licenseFilename": "LICENSE",
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "react": "^16.8.3",
+    "react-native": "^0.59.10"
+  }
+}
