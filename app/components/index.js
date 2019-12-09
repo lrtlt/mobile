@@ -5,7 +5,6 @@ export { default as ArticleRow } from './article/articleRow/ArticleRow';
 export { default as ArticleGallery } from './articleGallery/ArticleGallery';
 export { default as ArticleParagraphs } from './articleParagraphs/ArticleParagraphs';
 export { default as ArticlePhoto } from './articlePhoto/ArticlePhoto';
-export { default as ArticleVideo } from './articleVideo/ArticleVideo';
 export { default as AudioPlayer } from './audioPlayer/AudioPlayer';
 export { default as BackIcon } from './backIcon/BackIcon';
 export { default as Button } from './button/Button';

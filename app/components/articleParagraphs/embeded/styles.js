@@ -31,6 +31,11 @@ export default EStyleSheet.create({
     width: '100%',
     overflow: 'hidden',
   },
+  embededVideoContainer: {
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   embededArticleText: {
     color: '$textColorSecondary',
     fontFamily: 'PlayfairDisplay-Regular',
