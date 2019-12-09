@@ -62,12 +62,14 @@ class ArticleScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    props.navigation.setParams({
+    const { navigation } = props;
+    navigation.setParams({
       commentsHandler: this._handleCommentsPress,
       shareHandler: this._handleSharePress,
     });
 
     this.state = {
+      articleId: navigation.state.params.articleId,
       article: null,
       state: STATE_LOADING,
     };
@@ -76,7 +78,7 @@ class ArticleScreen extends React.Component {
   componentDidMount() {
     setSafeBounceHeight(Platform.OS === 'ios' ? 200 : 100);
 
-    const articleId = this.props.navigation.state.params.articleId;
+    const articleId = this.state.articleId;
 
     //N-18
     //const articleId = 1109283;
@@ -99,21 +101,42 @@ class ArticleScreen extends React.Component {
     //Embeded youtube
     //const articleId = 1101118;
 
+    this.loadArticleById(articleId);
+  }
+
+  componentDidUpdate() {
+    const { navigation } = this.props;
+    const { articleId } = navigation.state.params;
+
+    if (this.state.articleId !== articleId) {
+      //Needs to be reloadad for with new article id
+      this.loadArticleById(articleId);
+    }
+  }
+
+  loadArticleById = articleId => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
       screen: 'article',
       articleId: articleId.toString(),
     });
 
+    this.setState({
+      ...this.state,
+      articleId: articleId,
+      article: null,
+      state: STATE_LOADING,
+    });
+
     this.callApi(articleId)
       .then(article => this.parseArticle(article.article))
-      .catch(error =>
+      .catch(_ =>
         this.setState({
           ...this.state,
           article: null,
           state: STATE_ERROR,
         }),
       );
-  }
+  };
 
   parseArticle = article => {
     const state =
