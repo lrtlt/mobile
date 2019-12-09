@@ -48,7 +48,7 @@ const scrollingChannels = props => {
         return (
           <LiveChannel
             data={liveItem}
-            key={String(i)}
+            key={liveItem.title}
             onPress={liveChannel => onLiveItemPressHandler(liveChannel)}
           />
         );
@@ -57,7 +57,13 @@ const scrollingChannels = props => {
 
   const itemsContent = props.data.items
     ? props.data.items.map((item, i) => {
-        return <Channel data={item} key={String(i)} onPress={channel => onChannelPressHandler(channel)} />;
+        return (
+          <Channel
+            data={item}
+            key={`${i}-${item.proc}`}
+            onPress={channel => onChannelPressHandler(channel)}
+          />
+        );
       })
     : null;
 
