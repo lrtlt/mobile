@@ -8,7 +8,6 @@ import AudioArticle from './audio/AudioArticle';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { CommentsIcon, ShareIcon } from '../../components/svg';
 import Share from 'react-native-share';
-import { getOrientation } from '../../util/UI';
 import Gemius from 'react-native-gemius-plugin';
 import { GEMIUS_VIEW_SCRIPT_ID } from '../../constants';
 import { SafeAreaView } from 'react-navigation';
@@ -199,12 +198,12 @@ class ArticleScreen extends React.Component {
   );
 
   renderDefaultArticle = props => (
-    <DefaultArticle {...props} key={getOrientation()} onItemPress={item => this._handleItemPress(item)} />
+    <DefaultArticle {...props} onItemPress={item => this._handleItemPress(item)} />
   );
 
-  renderVideoArticle = props => <VideoArticle {...props} key={getOrientation()} />;
+  renderVideoArticle = props => <VideoArticle {...props} />;
 
-  renderAudioArticle = props => <AudioArticle {...props} key={getOrientation()} />;
+  renderAudioArticle = props => <AudioArticle {...props} />;
 
   renderArticleComponent = props => {
     const { paddingHeight, animatedY, onScroll } = this.props.collapsible;
