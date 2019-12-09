@@ -6,6 +6,7 @@ import {
   ArticleFeedItem,
   SectionHeader,
   MoreArticlesButton,
+  ScreenLoader,
 } from '../../../../components';
 import Styles from './styles';
 import { withNavigation } from 'react-navigation';
@@ -157,7 +158,15 @@ class HomeScreen extends React.Component {
 
   renderSeparator = () => <View style={Styles.separator} />;
 
+  renderLoading = () => <ScreenLoader style={Styles.loadingContainer} />;
+
   render() {
+    const { sections, lastFetchTime, refreshing } = this.props;
+
+    if (sections.length === 0) {
+      return this.renderLoading();
+    }
+
     return (
       <View style={Styles.container}>
         <SectionList
@@ -166,14 +175,14 @@ class HomeScreen extends React.Component {
           ref={ref => (this.sectionList = ref)}
           extraData={{
             orientation: getOrientation(),
-            lastFetchTime: this.props.lastFetchTime,
+            lastFetchTime: lastFetchTime,
           }}
           renderItem={this.renderItem}
           onScroll={event => (this.scrollY = event.nativeEvent.contentOffset.y)}
           scrollEventThrottle={500}
-          refreshControl={<RefreshControl refreshing={this.props.refreshing} onRefresh={this._onRefresh} />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this._onRefresh} />}
           renderSectionHeader={this.renderSectionHeader}
-          sections={this.props.sections}
+          sections={sections}
           removeClippedSubviews={false}
           windowSize={12}
           updateCellsBatchingPeriod={20}

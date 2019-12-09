@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, RefreshControl, Text, Button } from 'react-native';
-import { ArticleRow, ListLoader, DefaultSectionHeader } from '../../../../components';
+import { ArticleRow, ListLoader, DefaultSectionHeader, ScreenLoader } from '../../../../components';
 import Styles from './styles';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -85,7 +85,7 @@ class CategoryScreen extends React.Component {
   };
 
   renderLoading = () => {
-    return <View style={Styles.loadingContainer} />;
+    return <ScreenLoader style={Styles.loadingContainer} />;
   };
 
   renderError = () => {

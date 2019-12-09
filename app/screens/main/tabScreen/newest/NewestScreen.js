@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, RefreshControl, Text, Button } from 'react-native';
-import { ArticleRow, DefaultSectionHeader } from '../../../../components';
+import { ArticleRow, DefaultSectionHeader, ScreenLoader } from '../../../../components';
 import Styles from './styles';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -69,26 +69,22 @@ class NewestScreen extends React.Component {
     }
   }
 
-  renderItem = val => {
-    return <ArticleRow data={val.item} onArticlePress={article => this.onArticlePressHandler(article)} />;
-  };
+  renderItem = val => (
+    <ArticleRow data={val.item} onArticlePress={article => this.onArticlePressHandler(article)} />
+  );
 
-  renderLoading = () => {
-    return <View style={Styles.loadingContainer} />;
-  };
+  renderLoading = () => <ScreenLoader style={Styles.loadingContainer} />;
 
-  renderError = () => {
-    return (
-      <View style={Styles.errorContainer}>
-        <Text style={Styles.errorText}>{EStyleSheet.value('$error_no_connection')}</Text>
-        <Button
-          title={EStyleSheet.value('$tryAgain')}
-          color={EStyleSheet.value('$primary')}
-          onPress={() => this.callApi()}
-        />
-      </View>
-    );
-  };
+  renderError = () => (
+    <View style={Styles.errorContainer}>
+      <Text style={Styles.errorText}>{EStyleSheet.value('$error_no_connection')}</Text>
+      <Button
+        title={EStyleSheet.value('$tryAgain')}
+        color={EStyleSheet.value('$primary')}
+        onPress={() => this.callApi()}
+      />
+    </View>
+  );
 
   onListEndReached = () => {
     if (this.props.isFetching === false) {
@@ -111,11 +107,9 @@ class NewestScreen extends React.Component {
       return this.renderError();
     }
 
-    if (articles.length === 0 && isFetching === true) {
+    if (articles.length === 0) {
       return this.renderLoading();
     }
-
-    const data = articles;
 
     return (
       <View style={Styles.container}>
@@ -125,7 +119,7 @@ class NewestScreen extends React.Component {
           scrollEventThrottle={500}
           showsVerticalScrollIndicator={false}
           style={Styles.container}
-          data={data}
+          data={articles}
           ListHeaderComponent={<DefaultSectionHeader title={title} />}
           windowSize={4}
           onEndReachedThreshold={0.2}
