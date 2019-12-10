@@ -10,6 +10,10 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  embedPlayer: {
+    width: '100%',
+    flex: 1,
+  },
   mediaIndicator: {
     width: 44,
     height: 44,
@@ -27,5 +31,10 @@ export default EStyleSheet.create({
     color: '$white',
     marginTop: 12,
     fontSize: 15,
+  },
+  htmlContainer: {
+    flex: 1,
+    overflow: 'hidden',
+    opacity: 0.99,
   },
 });

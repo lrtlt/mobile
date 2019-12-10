@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Styles from './styles';
 import { withNavigation } from 'react-navigation';
-import { ArticleParagraphs, VideoContainer } from '../../../components';
+import { ArticleParagraphs, VideoComponent } from '../../../components';
 import Header from '../header/Header';
 
 const renderHeader = article => {
@@ -34,12 +34,11 @@ const articleComponent = props => {
     <View style={Styles.container}>
       {renderHeader(article)}
       <View style={Styles.playerContainer}>
-        <VideoContainer
+        <VideoComponent
           style={Styles.player}
           cover={article.main_photo}
-          isLiveStream={false}
-          autoPlay={false}
-          videoUrl={article.get_playlist_url}
+          autoPlay={true}
+          streamUrl={article.get_playlist_url}
         />
       </View>
 

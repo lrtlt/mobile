@@ -6,7 +6,7 @@ import WebView from 'react-native-autoheight-webview';
 import ArticlePhoto from '../../articlePhoto/ArticlePhoto';
 import AudioPlayer from '../../audioPlayer/AudioPlayer';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
-import VideoContainer from '../../videoContainer/VideoContainer';
+import VideoComponent from '../../videoComponent/VideoComponent';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -52,12 +52,10 @@ const renderVideoImage = data => {
   const content = data.map((item, i) => {
     return (
       <View style={Styles.embededVideoContainer} key={i}>
-        <VideoContainer
+        <VideoComponent
           style={Styles.player}
-          isLiveStream={false}
           cover={item.el}
-          autoPlay={false}
-          videoUrl={item.el.get_playlist_url || item.el.get_streams_url}
+          streamUrl={item.el.get_playlist_url || item.el.get_streams_url}
         />
       </View>
     );
@@ -69,13 +67,7 @@ const renderBroadcast = data => {
   const content = data.map((item, i) => {
     return (
       <View style={Styles.embededVideoContainer} key={i}>
-        <VideoContainer
-          style={Styles.player}
-          isLiveStream={true}
-          autoPlay={false}
-          cover={item.el}
-          videoUrl={item.el.get_streams_url}
-        />
+        <VideoComponent style={Styles.player} cover={item.el} streamUrl={item.el.get_streams_url} />
       </View>
     );
   });

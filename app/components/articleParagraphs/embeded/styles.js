@@ -30,6 +30,7 @@ export default EStyleSheet.create({
   embededHtmlContainer: {
     width: '100%',
     overflow: 'hidden',
+    opacity: 0.99,
   },
   embededVideoContainer: {
     backgroundColor: 'black',

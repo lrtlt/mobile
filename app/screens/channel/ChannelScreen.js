@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Animated, Platform } from 'react-native';
 import { withCollapsible, setSafeBounceHeight } from 'react-navigation-collapsible';
-import { VideoContainer, ProgramItem, ScrollingChannels, ScreenLoader, ScreenError } from '../../components';
+import { VideoComponent, ProgramItem, ScrollingChannels, ScreenLoader, ScreenError } from '../../components';
 import { channelGet } from '../../api';
 import { connect } from 'react-redux';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
@@ -110,8 +110,9 @@ class ChannelScreen extends React.Component {
   );
 
   renderChannelComponent = props => {
-    const channel = this.state.channel.channel_info.channel;
-    const channelIconComponent = getIconForChannel(channel, 40);
+    const { channel_info } = this.state.channel;
+
+    const channelIconComponent = getIconForChannel(channel_info.channel, 40);
 
     const { prog } = this.state.channel;
 
@@ -137,12 +138,13 @@ class ChannelScreen extends React.Component {
     return (
       <View>
         <View style={Styles.playerContainer}>
-          <VideoContainer
-            key={this.state.channel.channel_info.get_streams_url}
+          <VideoComponent
+            key={channel_info.stream_embed}
             style={Styles.player}
-            isLiveStream={true}
             autoPlay={true}
-            videoUrl={this.state.channel.channel_info.get_streams_url}
+            isLiveStream={true}
+            streamUrl={channel_info.get_streams_url}
+            embedUrl={channel_info.stream_embed}
           />
         </View>
         <View style={Styles.programContainer}>
