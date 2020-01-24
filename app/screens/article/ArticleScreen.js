@@ -247,7 +247,7 @@ class ArticleScreen extends React.Component {
       <View style={Styles.screen}>
         <AnimatedScrollView
           style={Styles.scrollContainer}
-          contentContainerStyle={{ paddingTop: paddingHeight }}
+          contentContainerStyle={{ paddingTop: paddingHeight, width: '100%' }}
           scrollIndicatorInsets={{ top: paddingHeight }}
           _mustAddThis={animatedY}
           onScroll={onScroll}
