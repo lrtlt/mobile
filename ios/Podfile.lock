@@ -255,7 +255,7 @@ PODS:
     - react-native-video/Video (= 5.0.2)
   - react-native-video/Video (5.0.2):
     - React
-  - react-native-webview (7.5.2):
+  - react-native-webview (8.0.4):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -313,7 +313,7 @@ PODS:
     - React
   - RNShare (2.0.0):
     - React
-  - RNSVG (9.13.3):
+  - RNSVG (11.0.1):
     - React
   - RNVectorIcons (6.6.0):
     - React
@@ -345,7 +345,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-gemius-plugin (from `../react-native-gemius-plugin`)
+  - react-native-gemius-plugin (from `../node_modules/react-native-gemius-plugin`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -371,7 +371,7 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - boost-for-react-native
     - Crashlytics
     - Fabric
@@ -417,7 +417,7 @@ EXTERNAL SOURCES:
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-gemius-plugin:
-    :path: "../react-native-gemius-plugin"
+    :path: "../node_modules/react-native-gemius-plugin"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
   react-native-video:
@@ -493,7 +493,7 @@ SPEC CHECKSUMS:
   react-native-gemius-plugin: 1c0b8ee9c763bf9c45371d5a775258ba3ebbc9f3
   react-native-onesignal: 663944f5290d758d138b65ab6e60cf7d9c8e8f8f
   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
-  react-native-webview: d1b30cc9128256ec1a9c6d10fb572231bd371337
+  react-native-webview: 3f5aa91c3cb083ea4762e006b9653291a96a777a
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -510,7 +510,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
   RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
   RNShare: 8b171d4b43c1d886917fdd303bf7a4b87167b05c
-  RNSVG: f6177f8d7c095fada7cfee2e4bb7388ba426064c
+  RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   SDWebImage: fb387001955223213dde14bc08c8b73f371f8d8f
   SDWebImageWebPCoder: 7568737603c50f6237850afedd7e9e28e5917e6b
