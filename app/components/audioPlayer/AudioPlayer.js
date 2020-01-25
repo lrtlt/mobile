@@ -3,6 +3,7 @@ import Video from 'react-native-video';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
+  ActivityIndicator,
   TouchableWithoutFeedback,
   TouchableHighlight,
   ImageBackground,
@@ -757,23 +758,7 @@ export default class VideoPlayer extends Component {
     if (this.state.loading) {
       return (
         <View style={styles.loader.container}>
-          <Animated.View
-            style={[
-              styles.loader.icon,
-              {
-                transform: [
-                  {
-                    rotate: this.animations.loader.rotate.interpolate({
-                      inputRange: [0, 360],
-                      outputRange: ['0deg', '360deg'],
-                    }),
-                  },
-                ],
-              },
-            ]}
-          >
-            <Icon name="crop-square" color="white" size={iconSize} />
-          </Animated.View>
+          <ActivityIndicator size="small" animating={true} color={'white'} />
         </View>
       );
     }
