@@ -71,7 +71,8 @@ const VideoComponent = props => {
   if (Platform.OS === 'ios' && streamUri) {
     content = renderNativePlayer(streamUri);
   } else if (Platform.OS !== 'ios' && (props.embedUrl || embedUrl)) {
-    content = renderJWPlayer(props.embedUrl || embedUrl);
+    //content = renderJWPlayer(props.embedUrl || embedUrl);
+    content = renderNativePlayer(streamUri);
   } else if (isLoading === true) {
     content = renderLoading(isLoading);
   } else {

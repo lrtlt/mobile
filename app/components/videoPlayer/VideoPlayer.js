@@ -3,6 +3,7 @@ import Video from 'react-native-video';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
+  ActivityIndicator,
   TouchableWithoutFeedback,
   ImageBackground,
   PanResponder,
@@ -690,10 +691,9 @@ export default class VideoPlayer extends React.Component {
         ? this.renderNullControl()
         : this.renderSeekbar();
 
-    const fullscreenControl =
-      this.props.disableFullscreen || Platform.OS === 'android'
-        ? this.renderNullControl()
-        : this.renderFullscreen();
+    const fullscreenControl = this.props.disableFullscreen
+      ? this.renderNullControl()
+      : this.renderFullscreen();
 
     const soundControl = this.renderSoundControl();
 
@@ -819,23 +819,7 @@ export default class VideoPlayer extends React.Component {
     if (this.state.loading) {
       return (
         <View style={styles.loader.container}>
-          <Animated.View
-            style={[
-              styles.loader.icon,
-              {
-                transform: [
-                  {
-                    rotate: this.animations.loader.rotate.interpolate({
-                      inputRange: [0, 360],
-                      outputRange: ['0deg', '360deg'],
-                    }),
-                  },
-                ],
-              },
-            ]}
-          >
-            <Icon name="crop-square" color="white" size={24} />
-          </Animated.View>
+          <ActivityIndicator size="small" animating={true} color={'white'} />
         </View>
       );
     }
