@@ -691,9 +691,10 @@ export default class VideoPlayer extends React.Component {
         ? this.renderNullControl()
         : this.renderSeekbar();
 
-    const fullscreenControl = this.props.disableFullscreen
-      ? this.renderNullControl()
-      : this.renderFullscreen();
+    const fullscreenControl =
+      this.props.disableFullscreen || Platform.OS === 'android'
+        ? this.renderNullControl()
+        : this.renderFullscreen();
 
     const soundControl = this.renderSoundControl();
 
