@@ -33,7 +33,7 @@ class App extends React.Component {
   }
 
   onIds(device) {
-    //console.log('OneSignal device info: ', device);
+    console.log('OneSignal device info: ', device);
   }
 
   render() {

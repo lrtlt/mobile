@@ -90,7 +90,7 @@ class HomeScreen extends React.Component {
   };
 
   onCategoryPressHandler = category => {
-    //console.log('CategoryPressed', category);
+    console.log('CategoryPressed', category);
 
     let name = category.name;
     if (name === 'Naujienų srautas') {

@@ -29,14 +29,14 @@ class SplashScreen extends React.PureComponent {
   }
 
   onOpened = openResult => {
-    //console.log('Message: ', openResult.notification.payload.body);
-    //console.log('Data: ', openResult.notification.payload.additionalData);
-    //console.log('isActive: ', openResult.notification.isAppInFocus);
-    //console.log('openResult: ', openResult);
+    console.log('Message: ', openResult.notification.payload.body);
+    console.log('Data: ', openResult.notification.payload.additionalData);
+    console.log('isActive: ', openResult.notification.isAppInFocus);
+    console.log('openResult: ', openResult);
   };
 
   navigateToHome() {
-    //console.log('Replacing Splash with Home screen...');
+    console.log('Replacing Splash with Home screen...');
 
     //Set home tab selected
     this.props.dispatch(setSelectedCategory(0));
@@ -64,10 +64,10 @@ class SplashScreen extends React.PureComponent {
 
     if (this.props.isLoading !== true) {
       if (this.props.hasMenuData) {
-        //console.log('Fetching articles...');
+        console.log('Fetching articles...');
         setTimeout(() => this.props.dispatch(fetchArticles()), 100);
       } else {
-        //console.log('Fetching menu items...');
+        console.log('Fetching menu items...');
         setTimeout(() => this.props.dispatch(fetchMenuItems()), 100);
       }
     }

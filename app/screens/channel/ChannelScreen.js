@@ -51,7 +51,7 @@ class ChannelScreen extends React.Component {
   }
 
   loadChannel = id => {
-    //console.log('Loading channel:' + id);
+    console.log('Loading channel:' + id);
     this.callApi(id)
       .then(response =>
         this.setState({
@@ -74,7 +74,7 @@ class ChannelScreen extends React.Component {
   callApi = async channelId => {
     const response = await fetch(channelGet(channelId));
     const result = await response.json();
-    //console.log('CHANNEL API RESPONSE', result);
+    console.log('CHANNEL API RESPONSE', result);
     return result;
   };
 

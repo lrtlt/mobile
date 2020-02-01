@@ -113,7 +113,7 @@ const renderHtml = data => {
     //Remove query height value
     //.replace(new RegExp('\\height\\s*=\\s*["\'](.*?)["\']'), '');
 
-    //console.log(formatted);
+    console.log(formatted);
 
     return (
       <View style={Styles.embededHtmlContainer} key={i}>
@@ -136,7 +136,7 @@ const renderHtml = data => {
           startInLoadingState={true}
           source={{ html: formatted }}
           // onNavigationStateChange={event => {
-          //   //console.log('onNavigationStateChange', event);
+          //   console.log('onNavigationStateChange', event);
           //   if (event.url !== 'about:blank') {
           //     this.webview.stopLoading();
           //     Linking.openURL(event.url).catch(err =>

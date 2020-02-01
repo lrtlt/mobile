@@ -126,7 +126,7 @@ const parseRoutes = apiResponse => {
     });
   });
 
-  //console.log(routes);
+  console.log(routes);
   return routes;
 };
 

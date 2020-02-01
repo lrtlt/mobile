@@ -168,7 +168,7 @@ class ArticleScreen extends React.Component {
   callApi = async articleId => {
     const response = await fetch(articleGet(articleId));
     const result = await response.json();
-    //console.log('ARTICLE API RESPONSE', result);
+    console.log('ARTICLE API RESPONSE', result);
     return result;
   };
 

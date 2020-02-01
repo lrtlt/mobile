@@ -91,7 +91,7 @@ class SettingsScreen extends React.Component {
   };
 
   goBack = () => {
-    //console.log('goBack() - called');
+    console.log('goBack() - called');
     this.save();
     this.navigateToHome();
   };

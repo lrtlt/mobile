@@ -9,7 +9,7 @@ import { IGNORED_TAGS, alterNode, makeTableRenderer } from 'react-native-render-
 import Embed from './embeded/Embed';
 
 const renderBlockquote = (_, children, __, passProps) => {
-  //console.log(children);
+  console.log(children);
   return (
     <View style={Styles.quoteContainer} key={passProps.key}>
       <Text style={Styles.quoteSimbol}>”</Text>

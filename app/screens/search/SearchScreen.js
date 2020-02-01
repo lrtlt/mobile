@@ -94,7 +94,7 @@ class SearchScreen extends React.Component {
   async callApi() {
     const response = await fetch(searchArticles(this.state.query, this.state.filter));
     const result = await response.json();
-    //console.log('SEARCH ARTICLES RESPONSE', result);
+    console.log('SEARCH ARTICLES RESPONSE', result);
     return result;
   }
 

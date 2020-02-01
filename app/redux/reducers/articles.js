@@ -140,7 +140,7 @@ const reducer = (state = initialState, action) => {
       insertTvProg(action.result, homeItems);
       insertMoreFooters(homeItems);
 
-      //console.log('HOME ITEMS', homeItems);
+      console.log('HOME ITEMS', homeItems);
 
       const home = {
         ...state.home,

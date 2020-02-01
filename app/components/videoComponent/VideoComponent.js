@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 import VideoCover from './VideoCover';
 import JWPlayerEmbed from './JWPlayerEmbed';
+import JWPlayerNative from './JWPlayerNative';
 import NativeVideoPlayer from './NativeVideoPlayer';
 
 const renderLoading = animating => {
@@ -20,7 +21,7 @@ const renderLoading = animating => {
 const callApi = async url => {
   const response = await fetch(url);
   const result = await response.json();
-  //console.log('VIDEO API RESPONSE', result);
+  console.log('VIDEO API RESPONSE', result);
   return result;
 };
 
@@ -50,7 +51,11 @@ const VideoComponent = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderJWPlayer = url => {
+  const renderJWPlayerNative = (streamUrl, autoPlay) => {
+    return <JWPlayerNative streamUrl={streamUrl} autoPlay={autoPlay} />;
+  };
+
+  const renderJWPlayerEmbed = url => {
     const formatedUrl = url.endsWith('?embed') ? url : `${url}?embed`;
     return <JWPlayerEmbed embedUrl={formatedUrl} autoPlay={props.autoPlay} />;
   };
@@ -69,7 +74,12 @@ const VideoComponent = props => {
 
   let content;
   if (streamUri) {
-    content = renderNativePlayer(streamUri);
+    //content = renderJWPlayerNative(streamUri, true);
+    if (Platform.OS == 'android') {
+      content = renderJWPlayerNative(streamUri, true);
+    } else {
+      content = renderNativePlayer(streamUri);
+    }
   } else if (isLoading === true) {
     content = renderLoading(isLoading);
   } else {
