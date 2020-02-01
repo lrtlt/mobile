@@ -26,7 +26,7 @@
     "react-native-gallery-swiper": "^1.25.2",
     "react-native-gemius-plugin": "./react-native-gemius-plugin",
     "react-native-gesture-handler": "^1.5.2",
-    "react-native-jw-media-player": "https://github.com/dschrimm/react-native-jw-media-player.git#fullscreenPlayerAndroid",
+    "react-native-jw-media-player": "https://github.com/KestasVenslauskas/react-native-jw-media-player.git#fullscreenPlayerAndroid",
     "react-native-onesignal": "^3.6.4",
     "react-native-reanimated": "^1.4.0",
     "react-native-render-html": "^4.2.0",
