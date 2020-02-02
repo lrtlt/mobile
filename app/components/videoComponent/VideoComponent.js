@@ -15,6 +15,8 @@ const initialState = {
   embedUrl: null,
   streamUri: null,
   mediaId: null,
+  title: null,
+  description: null,
 };
 
 const renderLoading = animating => {
@@ -44,10 +46,12 @@ const VideoComponent = props => {
 
       if (props.isLiveStream) {
         newState.streamUri = response.response.data.content.trim();
+        newState.title = props.title;
       } else {
         const { playlist_item } = response;
         newState.streamUri = playlist_item.file.trim();
         newState.mediaId = playlist_item.mediaid ? playlist_item.mediaid.toString() : null;
+        newState.title = response.title;
       }
       setVideoState(newState);
     });
@@ -60,8 +64,8 @@ const VideoComponent = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderJWPlayerNative = (streamUrl, mediaId, autoPlay) => {
-    return <JWPlayerNative streamUrl={streamUrl} autoPlay={autoPlay} mediaId={mediaId} />;
+  const renderJWPlayerNative = props => {
+    return <JWPlayerNative {...props} />;
   };
 
   const renderJWPlayerEmbed = url => {
@@ -83,10 +87,10 @@ const VideoComponent = props => {
 
   let content;
 
-  const { streamUri, isLoading, mediaId } = videoState;
+  const { streamUri, isLoading } = videoState;
   if (streamUri) {
     if (Platform.OS == 'android') {
-      content = renderJWPlayerNative(streamUri, mediaId, true);
+      content = renderJWPlayerNative(videoState);
     } else {
       content = renderNativePlayer(streamUri);
     }
@@ -104,6 +108,7 @@ VideoComponent.propTypes = {
   ...JWPlayerEmbed.propTypes,
   ...NativeVideoPlayer.propTypes,
   streamUrl: PropTypes.string,
+  title: PropTypes.string,
 };
 
 VideoComponent.defaultProps = {

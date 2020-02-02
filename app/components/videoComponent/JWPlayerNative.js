@@ -5,15 +5,15 @@ import PropTypes from 'prop-types';
 import Styles from './styles';
 import JWPlayer from 'react-native-jw-media-player';
 
-const JWPlayerNative = ({ streamUrl, mediaId, autoPlay }) => {
+const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) => {
   const createPlaylistItem = () => {
     return {
-      //title: 'Title',
-      mediaId,
+      title: title,
+      mediaId: mediaId,
       //image: 'https://www.lrt.lt/images/logo/logo-lrt.svg?v=254',
-      //desc: 'Description',
+      desc: description,
       time: 0,
-      file: streamUrl,
+      file: streamUri,
       autostart: autoPlay,
       controls: true,
       repeat: false,
@@ -55,6 +55,8 @@ JWPlayerNative.propTypes = {
   autoPlay: PropTypes.bool,
   streamUrl: PropTypes.string,
   mediaId: PropTypes.string,
+  title: PropTypes.string,
+  description: PropTypes.string,
 };
 
 JWPlayerNative.defaultProps = {

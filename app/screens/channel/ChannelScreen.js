@@ -143,6 +143,7 @@ class ChannelScreen extends React.Component {
             style={Styles.player}
             autoPlay={true}
             isLiveStream={true}
+            title={channel_info.title}
             streamUrl={channel_info.get_streams_url}
             embedUrl={channel_info.stream_embed}
           />
