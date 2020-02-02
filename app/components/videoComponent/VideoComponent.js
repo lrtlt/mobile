@@ -10,6 +10,13 @@ import JWPlayerEmbed from './JWPlayerEmbed';
 import JWPlayerNative from './JWPlayerNative';
 import NativeVideoPlayer from './NativeVideoPlayer';
 
+const initialState = {
+  isLoading: false,
+  embedUrl: null,
+  streamUri: null,
+  mediaId: null,
+};
+
 const renderLoading = animating => {
   return (
     <View style={Styles.loaderContainer}>
@@ -26,21 +33,23 @@ const callApi = async url => {
 };
 
 const VideoComponent = props => {
-  const [isLoading, setLoading] = useState(false);
-  const [embedUrl, setEmbedUrl] = useState(null);
-  const [streamUri, setStreamUri] = useState(null);
+  const [videoState, setVideoState] = useState(initialState);
 
   const handlePlayPress = () => {
-    setLoading(true);
+    setVideoState({ ...initialState, isLoading: true });
     callApi(props.streamUrl).then(response => {
-      setLoading(false);
-      setEmbedUrl(response.full_url);
+      const newState = { ...videoState };
+      newState.isLoading = false;
+      newState.embedUrl = response.full_url;
 
       if (props.isLiveStream) {
-        setStreamUri(response.response.data.content.trim());
+        newState.streamUri = response.response.data.content.trim();
       } else {
-        setStreamUri(response.playlist_item.file.trim());
+        const { playlist_item } = response;
+        newState.streamUri = playlist_item.file.trim();
+        newState.mediaId = playlist_item.mediaid ? playlist_item.mediaid.toString() : null;
       }
+      setVideoState(newState);
     });
   };
 
@@ -51,8 +60,8 @@ const VideoComponent = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderJWPlayerNative = (streamUrl, autoPlay) => {
-    return <JWPlayerNative streamUrl={streamUrl} autoPlay={autoPlay} />;
+  const renderJWPlayerNative = (streamUrl, mediaId, autoPlay) => {
+    return <JWPlayerNative streamUrl={streamUrl} autoPlay={autoPlay} mediaId={mediaId} />;
   };
 
   const renderJWPlayerEmbed = url => {
@@ -73,10 +82,11 @@ const VideoComponent = props => {
   };
 
   let content;
+
+  const { streamUri, isLoading, mediaId } = videoState;
   if (streamUri) {
-    //content = renderJWPlayerNative(streamUri, true);
     if (Platform.OS == 'android') {
-      content = renderJWPlayerNative(streamUri, true);
+      content = renderJWPlayerNative(streamUri, mediaId, true);
     } else {
       content = renderNativePlayer(streamUri);
     }

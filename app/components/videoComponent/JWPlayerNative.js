@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
+import { StatusBar } from 'react-native';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Styles from './styles';
-import LRTStatusBar from '../statusBar/LRTStatusBar';
-
 import JWPlayer from 'react-native-jw-media-player';
 
-const JWPlayerNative = ({ streamUrl, autoPlay }) => {
-  const [isFullScreen, setFullScreen] = useState(false);
-
+const JWPlayerNative = ({ streamUrl, mediaId, autoPlay }) => {
   const createPlaylistItem = () => {
     return {
       //title: 'Title',
-      //mediaId: -1,
+      mediaId,
       //image: 'https://www.lrt.lt/images/logo/logo-lrt.svg?v=254',
       //desc: 'Description',
       time: 0,
@@ -27,7 +24,6 @@ const JWPlayerNative = ({ streamUrl, autoPlay }) => {
 
   return (
     <View style={Styles.htmlContainer}>
-      <LRTStatusBar hidden={isFullScreen} />
       <JWPlayer
         style={Styles.embedPlayer}
         playlistItem={createPlaylistItem()}
@@ -45,10 +41,10 @@ const JWPlayerNative = ({ streamUrl, autoPlay }) => {
         // onBuffer={() => this.onBuffer()}
         // onTime={event => this.onTime(event)}
         onFullScreen={() => {
-          setFullScreen(true);
+          StatusBar.setHidden(true, true);
         }}
         onFullScreenExit={() => {
-          setFullScreen(false);
+          StatusBar.setHidden(false, true);
         }}
       />
     </View>
@@ -58,6 +54,7 @@ const JWPlayerNative = ({ streamUrl, autoPlay }) => {
 JWPlayerNative.propTypes = {
   autoPlay: PropTypes.bool,
   streamUrl: PropTypes.string,
+  mediaId: PropTypes.string,
 };
 
 JWPlayerNative.defaultProps = {

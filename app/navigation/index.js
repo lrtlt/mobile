@@ -176,6 +176,7 @@ const StackNavigator = createStackNavigator(
     defaultNavigationOptions: ({ navigation }) => ({
       headerBackTitle: null,
       headerRightContainerStyle: { paddingEnd: 4 },
+      headerStatusBarHeight: Platform.OS === 'android' ? 0 : null,
       headerTitle: props => <HeaderTitle {...props} />,
       headerTintColor: EStyleSheet.value('$headerTintColor'),
       headerStyle: {

@@ -10,13 +10,16 @@ const statusBar = props => {
     <StatusBar
       translucent={props.transulent ? props.transulent : false}
       barStyle={style}
-      backgroundColor={EStyleSheet.value('$statusBar')}
+      backgroundColor={props.backgroundColor ? props.backgroundColor : EStyleSheet.value('$statusBar')}
+      hidden={props.hidden ? props.hidden : false}
     />
   );
 };
 
 statusBar.propTypes = {
+  hidden: PropTypes.bool,
   transulent: PropTypes.bool,
+  backgroundColor: PropTypes.string,
 };
 
 export default statusBar;
