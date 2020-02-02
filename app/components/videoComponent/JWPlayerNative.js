@@ -10,7 +10,8 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
     return {
       title: title,
       mediaId: mediaId,
-      //image: 'https://www.lrt.lt/images/logo/logo-lrt.svg?v=254',
+      image:
+        'https://yt3.ggpht.com/a/AGF-l78bfgG98j-GH2Yw816bbYmnXho-wUselvJM6A=s288-c-k-c0xffffffff-no-rj-mo',
       desc: description,
       time: 0,
       file: streamUri,
