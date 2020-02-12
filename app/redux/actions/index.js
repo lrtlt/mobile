@@ -18,3 +18,5 @@ export {
 export { toggleDarkMode, setTextSizeMultiplier, setImageMaxScaleFactor, setConfig } from './config';
 
 export { fetchProgram } from './program';
+
+export { addArticleToHistory } from './articleStorage';

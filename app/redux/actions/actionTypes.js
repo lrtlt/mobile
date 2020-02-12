@@ -20,6 +20,9 @@ export const REFRESH_NEWEST = 'REFRESH_NEWEST';
 export const API_NEWEST_RESULT = 'API_NEWEST_RESULT';
 export const API_NEWEST_ERROR = 'API_NEWEST_ERROR';
 
+//Article storage
+export const ADD_ARTICLE_TO_HISTORY = 'ADD_ARTICLE_TO_HISTORY';
+
 //Navigation
 export const FETCH_MENU_ITEMS = 'FETCH_MENU_ITEMS';
 export const API_MENU_ITEMS_RESULT = 'API_MENU_ITEMS_RESULT';

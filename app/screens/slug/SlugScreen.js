@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, Button, ActivityIndicator } from 'react-native';
 import Styles from './styles';
 import { ArticleRow } from '../../components';
-
+import { connect } from 'react-redux';
+import { addArticleToHistory } from '../../redux/actions';
 import { getOrientation } from '../../util/UI';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { articleGetByTag } from '../../api';
@@ -79,6 +80,7 @@ class SlugScreen extends React.PureComponent {
 
   onArticlePressHandler = article => {
     this.props.navigation.push('article', { articleId: article.id });
+    this.props.dispatch(addArticleToHistory(article));
   };
 
   renderItem = val => {
@@ -138,4 +140,8 @@ class SlugScreen extends React.PureComponent {
   }
 }
 
-export default SlugScreen;
+const mapStateToProps = state => {
+  return {};
+};
+
+export default connect(mapStateToProps)(SlugScreen);

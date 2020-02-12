@@ -4,6 +4,8 @@ export const ARTICLE_LIST_TYPE_CATEGORY = 'category';
 export const ARTICLE_LIST_TYPE_NEWEST = 'newest';
 export const ARTICLE_LIST_TYPE_MEDIA = 'mediateka';
 
+export const ARTICLE_HISTORY_COUNT = 15;
+
 //Article list item types:
 export const LIST_DATA_TYPE_ARTICLES = 'article';
 export const LIST_DATA_TYPE_ARTICLES_FEED = 'article_feed';

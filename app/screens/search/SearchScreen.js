@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Button, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import { resetSearchFilter } from '../../redux/actions';
+import { resetSearchFilter, addArticleToHistory } from '../../redux/actions';
 import { Article } from '../../components';
 import Styles from './styles';
 import { getOrientation } from '../../util/UI';
@@ -100,6 +100,7 @@ class SearchScreen extends React.Component {
 
   onArticlePressHandler = article => {
     this.props.navigation.push('article', { articleId: article.id });
+    this.props.dispatch(addArticleToHistory(article));
   };
 
   handleInputChange = text => {
