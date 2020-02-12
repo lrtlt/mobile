@@ -18,6 +18,7 @@ import {
   SlugScreen,
   SearchScreen,
   GalleryScreen,
+  HistoryScreen,
 } from '../screens';
 
 import { createAppContainer } from 'react-navigation';
@@ -131,6 +132,9 @@ const StackNavigator = createStackNavigator(
     },
     program: {
       screen: ProgramScreen,
+    },
+    history: {
+      screen: HistoryScreen,
     },
     search: {
       screen: searchDrawerNavigator,

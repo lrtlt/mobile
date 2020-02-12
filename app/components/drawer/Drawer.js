@@ -45,6 +45,10 @@ class Drawer extends React.PureComponent {
     this.props.navigation.navigate('program');
   };
 
+  onHistoryPressHandler = () => {
+    this.props.navigation.navigate('history');
+  };
+
   renderFooterItems() {
     return (
       <View style={Styles.footerContainer}>
@@ -118,6 +122,17 @@ class Drawer extends React.PureComponent {
     );
   };
 
+  renderHistory = () => {
+    return (
+      <DrawerItem
+        key={'history'}
+        text={EStyleSheet.value('$history')}
+        iconComponent={<FeatherIcon name="clock" size={22} color={EStyleSheet.value('$primaryDark')} />}
+        onPress={() => this.onHistoryPressHandler()}
+      />
+    );
+  };
+
   render() {
     const content = this.props.routes.map((route, i) => {
       return (
@@ -132,6 +147,7 @@ class Drawer extends React.PureComponent {
             <View style={Styles.content}>
               <View style={Styles.headerContainer}>
                 {this.renderSearch()}
+                {this.renderHistory()}
                 {this.renderProgram()}
               </View>
               <View style={Styles.line} />

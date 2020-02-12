@@ -31,10 +31,6 @@ class SlugScreen extends React.PureComponent {
     this.state = initialState;
   }
 
-  handleBackPress() {
-    this.props.navigation.goBack();
-  }
-
   componentDidMount() {
     const { category } = this.props.navigation.state.params;
 

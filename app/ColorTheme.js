@@ -10,6 +10,7 @@ const strings = {
   $tvProgramTitle: 'Tiesiogiai',
   $tvProgram: 'PROGRAMA',
   $tvProgramButtonText: 'VISA PROGRAMA',
+  $history: 'ISTORIJA',
   $liveChannelTitle: 'TIESIOGIAI',
   $channelScreenTitle: 'LRT GYVAI',
   $moreButtonText: 'DAUGIAU',
@@ -138,7 +139,7 @@ const tvProgramTheme = {
 };
 
 const drawerTheme = {
-  $drawerPadding: 12,
+  $drawerPadding: 10,
   $drawerTitleTextSize: 16,
   $drawerItemTextSize: 15,
 };

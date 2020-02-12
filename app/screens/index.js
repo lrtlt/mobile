@@ -9,3 +9,4 @@ export { default as CommentsScreen } from './commentsScreen/CommentsScreen';
 export { default as SlugScreen } from './slug/SlugScreen';
 export { default as SearchScreen } from './search/SearchScreen';
 export { default as GalleryScreen } from './gallery/GalleryScreen';
+export { default as HistoryScreen } from './history/HistoryScreen';
