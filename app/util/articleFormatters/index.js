@@ -5,7 +5,7 @@ import template2Formatter from './articleFormatterTemplate2';
 import template3Formatter from './articleFormatterTemplate3';
 import template999Formatter from './articleFormatterTemplate999';
 
-export const formatArticles = (template_id, articles) => {
+export const formatArticles = (template_id, articles, clipLast = true) => {
   switch (template_id) {
     case 0: {
       return topFormatter(articles);
@@ -23,7 +23,7 @@ export const formatArticles = (template_id, articles) => {
       return template999Formatter(articles);
     }
     default: {
-      return defaultFormatter(articles);
+      return defaultFormatter(articles, clipLast);
     }
   }
 };

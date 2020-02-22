@@ -1,14 +1,14 @@
-import { ADD_ARTICLE_TO_HISTORY } from '../actions/actionTypes';
-import { ARTICLE_HISTORY_COUNT } from '../../constants';
+import { ADD_ARTICLE_TO_HISTORY, SAVE_ARTICLE, REMOVE_ARTICLE } from '../actions/actionTypes';
+import { ARTICLE_HISTORY_COUNT, ARTICLE_SAVED_MAX_COUNT } from '../../constants';
 
 const initialState = {
   history: [],
+  savedArticles: [],
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_ARTICLE_TO_HISTORY: {
-      console.log(state);
       const { history } = state;
 
       //Check if the same article already exists in history. Filter out if exists.
@@ -17,20 +17,49 @@ const reducer = (state = initialState, action) => {
       filteredHistory.unshift(action.article);
 
       if (filteredHistory.length > ARTICLE_HISTORY_COUNT) {
-        //Remove oldest entry
         filteredHistory.pop();
       }
 
-      const newState = {
+      return {
         ...state,
         history: filteredHistory,
       };
+    }
+    case SAVE_ARTICLE: {
+      const { savedArticles } = state;
+      savedArticles.unshift(mapArticleData(action.article));
 
-      return newState;
+      if (savedArticles.length > ARTICLE_SAVED_MAX_COUNT) {
+        savedArticles.pop();
+      }
+
+      return {
+        ...state,
+        savedArticles,
+      };
+    }
+    case REMOVE_ARTICLE: {
+      const { savedArticles } = state;
+      const filteredArticles = savedArticles.filter(a => a.id != action.articleId);
+      return {
+        ...state,
+        savedArticles: filteredArticles,
+      };
     }
     default:
       return state;
   }
+};
+
+const mapArticleData = article => {
+  return {
+    id: article.article_id,
+    category_title: article.category_title,
+    category_id: article.category_id,
+    title: article.article_title,
+    url: article.article_url,
+    photo: article.main_photo.path,
+  };
 };
 
 export default reducer;

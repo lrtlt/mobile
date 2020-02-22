@@ -22,6 +22,8 @@ export const API_NEWEST_ERROR = 'API_NEWEST_ERROR';
 
 //Article storage
 export const ADD_ARTICLE_TO_HISTORY = 'ADD_ARTICLE_TO_HISTORY';
+export const SAVE_ARTICLE = 'SAVE_ARTICLE';
+export const REMOVE_ARTICLE = 'REMOVE_ARTICLE';
 
 //Navigation
 export const FETCH_MENU_ITEMS = 'FETCH_MENU_ITEMS';

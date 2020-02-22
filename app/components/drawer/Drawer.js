@@ -49,6 +49,10 @@ class Drawer extends React.PureComponent {
     this.props.navigation.navigate('history');
   };
 
+  onBookmarksPressHandler = () => {
+    this.props.navigation.navigate('bookmarks');
+  };
+
   renderFooterItems() {
     return (
       <View style={Styles.footerContainer}>
@@ -133,6 +137,17 @@ class Drawer extends React.PureComponent {
     );
   };
 
+  renderBookmarks = () => {
+    return (
+      <DrawerItem
+        key={'bookmarks'}
+        text={EStyleSheet.value('$bookmarks')}
+        iconComponent={<FeatherIcon name="bookmark" size={22} color={EStyleSheet.value('$primaryDark')} />}
+        onPress={() => this.onBookmarksPressHandler()}
+      />
+    );
+  };
+
   render() {
     const content = this.props.routes.map((route, i) => {
       return (
@@ -147,6 +162,7 @@ class Drawer extends React.PureComponent {
             <View style={Styles.content}>
               <View style={Styles.headerContainer}>
                 {this.renderSearch()}
+                {this.renderBookmarks()}
                 {this.renderHistory()}
                 {this.renderProgram()}
               </View>

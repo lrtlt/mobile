@@ -11,16 +11,16 @@ import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-navigation';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-class HistoryScreen extends React.PureComponent {
+class BookmarksScreen extends React.PureComponent {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: EStyleSheet.value('$history'),
+      title: EStyleSheet.value('$bookmarks'),
     };
   };
 
   componentDidMount() {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      page: 'history',
+      page: 'bookmarks',
     });
   }
 
@@ -56,8 +56,8 @@ class HistoryScreen extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
-  const { history } = state.articleStorage;
-  return { articles: formatArticles(-1, history, false) };
+  const { savedArticles } = state.articleStorage;
+  return { articles: formatArticles(-1, savedArticles, false) };
 };
 
-export default connect(mapStateToProps)(HistoryScreen);
+export default connect(mapStateToProps)(BookmarksScreen);

@@ -259,7 +259,7 @@ PODS:
     - react-native-video/Video (= 5.0.2)
   - react-native-video/Video (5.0.2):
     - React
-  - react-native-webview (8.0.4):
+  - react-native-webview (8.1.2):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -317,6 +317,8 @@ PODS:
     - React
   - RNShare (2.0.0):
     - React
+  - RNSnackbar (2.2.0):
+    - React
   - RNSVG (11.0.1):
     - React
   - RNVectorIcons (6.6.0):
@@ -371,6 +373,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNShare (from `../node_modules/react-native-share`)
+  - RNSnackbar (from `../node_modules/react-native-snackbar`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -464,6 +467,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNShare:
     :path: "../node_modules/react-native-share"
+  RNSnackbar:
+    :path: "../node_modules/react-native-snackbar"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
@@ -503,7 +508,7 @@ SPEC CHECKSUMS:
   react-native-jw-media-player: fdb83dc7d3ed1ce0820ca02c7eb8644cfb81a1ab
   react-native-onesignal: 80fc3683083d23b17a2aba180f965dc83bd77efd
   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
-  react-native-webview: 3f5aa91c3cb083ea4762e006b9653291a96a777a
+  react-native-webview: fcb5f377aadc216273300f452ee0d321fb85809b
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -520,6 +525,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
   RNShare: 8b171d4b43c1d886917fdd303bf7a4b87167b05c
+  RNSnackbar: 160077964866262ed08cfd33ab4760219ea2aef6
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   SDWebImage: fb387001955223213dde14bc08c8b73f371f8d8f

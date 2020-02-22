@@ -1,16 +1,19 @@
 import React from 'react';
 import { View, ScrollView, Animated, Platform } from 'react-native';
 import { withCollapsible, setSafeBounceHeight } from 'react-navigation-collapsible';
+import { connect } from 'react-redux';
+import { saveArticle, removeArticle } from '../../redux/actions';
 import { articleGet } from '../../api';
 import DefaultArticle from './DefaultArticle';
 import VideoArticle from './video/VideoArticle';
 import AudioArticle from './audio/AudioArticle';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { CommentsIcon, ShareIcon } from '../../components/svg';
+import { CommentsIcon, ShareIcon, SaveIcon } from '../../components/svg';
 import Share from 'react-native-share';
 import Gemius from 'react-native-gemius-plugin';
 import { GEMIUS_VIEW_SCRIPT_ID } from '../../constants';
 import { SafeAreaView } from 'react-navigation';
+import Snackbar from 'react-native-snackbar';
 
 import { ScreenLoader, ScreenError, AdultContentWarning, ActionButton } from '../../components';
 
@@ -24,13 +27,27 @@ const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
 class ArticleScreen extends React.Component {
-  static navigationOptions = navigationProps => {
+  static navigationOptions = ({ navigation }) => {
     return {
       headerRight: (
         <View style={Styles.row}>
           <ActionButton
             onPress={() => {
-              const { params } = navigationProps.navigation.state;
+              const { params } = navigation.state;
+              if (params && params.saveHandler) {
+                params.saveHandler();
+              }
+            }}
+          >
+            <SaveIcon
+              size={EStyleSheet.value('$navBarIconSize')}
+              color={EStyleSheet.value('$headerTintColor')}
+              filled={navigation.state.params.isSaved}
+            />
+          </ActionButton>
+          <ActionButton
+            onPress={() => {
+              const { params } = navigation.state;
               if (params && params.commentsHandler) {
                 params.commentsHandler();
               }
@@ -43,7 +60,7 @@ class ArticleScreen extends React.Component {
           </ActionButton>
           <ActionButton
             onPress={() => {
-              const { params } = navigationProps.navigation.state;
+              const { params } = navigation.state;
               if (params && params.shareHandler) {
                 params.shareHandler();
               }
@@ -64,8 +81,10 @@ class ArticleScreen extends React.Component {
 
     const { navigation } = props;
     navigation.setParams({
+      saveHandler: this._saveArticlePress,
       commentsHandler: this._handleCommentsPress,
       shareHandler: this._handleSharePress,
+      isSaved: props.isSaved,
     });
 
     this.state = {
@@ -172,6 +191,27 @@ class ArticleScreen extends React.Component {
     return result;
   };
 
+  _saveArticlePress = () => {
+    const { article } = this.state;
+    if (!article) {
+      return;
+    }
+
+    if (this.props.isSaved === true) {
+      this.props.dispatch(removeArticle(article.article_id));
+    } else {
+      this.props.dispatch(saveArticle(article));
+      Snackbar.show({
+        text: EStyleSheet.value('$articleHasBeenSaved'),
+        duration: Snackbar.LENGTH_SHORT,
+      });
+    }
+
+    this.props.navigation.setParams({
+      isSaved: !this.props.isSaved,
+    });
+  };
+
   _handleSharePress = () => {
     const { article } = this.state;
     if (!article) {
@@ -247,7 +287,7 @@ class ArticleScreen extends React.Component {
       <View style={Styles.screen}>
         <AnimatedScrollView
           style={Styles.scrollContainer}
-          contentContainerStyle={{ paddingTop: paddingHeight, width: '100%'}}
+          contentContainerStyle={{ paddingTop: paddingHeight, width: '100%' }}
           scrollIndicatorInsets={{ top: paddingHeight }}
           _mustAddThis={animatedY}
           onScroll={onScroll}
@@ -316,6 +356,16 @@ class ArticleScreen extends React.Component {
   }
 }
 
-export default withCollapsible(ArticleScreen, {
+const mapStateToProps = (state, ownProps) => {
+  const { savedArticles } = state.articleStorage;
+  const { articleId } = ownProps.navigation.state.params;
+
+  const isSaved = savedArticles && savedArticles.find(a => a.id == articleId) != undefined;
+  return { isSaved };
+};
+
+const root = withCollapsible(ArticleScreen, {
   iOSCollapsedColor: 'transparent',
 });
+
+export default connect(mapStateToProps)(root);

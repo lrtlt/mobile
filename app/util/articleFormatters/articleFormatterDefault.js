@@ -8,7 +8,7 @@
  * ...
  */
 
-const formatter = articles => {
+const formatter = (articles, clipLast) => {
   const groupedArticles = [];
 
   let currentColumn = 0;
@@ -28,7 +28,7 @@ const formatter = articles => {
 
     let rowContainer;
     if (currentColumn === 0) {
-      if (i === articles.length - 1) {
+      if (i === articles.length - 1 && clipLast == true) {
         //Ignore last article because it does not fit.
         return;
       }
