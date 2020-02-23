@@ -2,7 +2,7 @@ import React from 'react';
 import { View, ScrollView, Animated, Platform } from 'react-native';
 import { withCollapsible, setSafeBounceHeight } from 'react-navigation-collapsible';
 import { connect } from 'react-redux';
-import { saveArticle, removeArticle } from '../../redux/actions';
+import { saveArticle, removeArticle, addArticleToHistory } from '../../redux/actions';
 import { articleGet } from '../../api';
 import DefaultArticle from './DefaultArticle';
 import VideoArticle from './video/VideoArticle';
@@ -134,10 +134,21 @@ class ArticleScreen extends React.Component {
   }
 
   loadArticleById = articleId => {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      screen: 'article',
-      articleId: articleId.toString(),
-    });
+    try {
+      Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
+        screen: 'article',
+        articleId: articleId.toString(),
+      });
+    } catch (e) {
+      console.log(e);
+      this.setState({
+        ...this.state,
+        articleId: articleId,
+        article: null,
+        state: STATE_ERROR,
+      });
+      return;
+    }
 
     this.setState({
       ...this.state,
@@ -167,6 +178,8 @@ class ArticleScreen extends React.Component {
       article: article,
       state,
     });
+
+    this.props.dispatch(addArticleToHistory(article));
   };
 
   handleAcceptAdultContent = () => {

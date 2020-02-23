@@ -4,7 +4,7 @@ import { ArticleRow, DefaultSectionHeader, ScreenLoader } from '../../../../comp
 import Styles from './styles';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
-import { fetchNewest, refreshNewest, addArticleToHistory } from '../../../../redux/actions';
+import { fetchNewest, refreshNewest } from '../../../../redux/actions';
 import { FlatList } from 'react-native-gesture-handler';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {
@@ -57,7 +57,6 @@ class NewestScreen extends React.Component {
 
   onArticlePressHandler = article => {
     this.props.navigation.push('article', { articleId: article.id });
-    this.props.dispatch(addArticleToHistory(article));
   };
 
   handleLogoPress() {

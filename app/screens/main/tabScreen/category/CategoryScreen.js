@@ -4,7 +4,7 @@ import { ArticleRow, ListLoader, DefaultSectionHeader, ScreenLoader } from '../.
 import Styles from './styles';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
-import { fetchCategory, refreshCategory, addArticleToHistory } from '../../../../redux/actions';
+import { fetchCategory, refreshCategory } from '../../../../redux/actions';
 
 import { FlatList } from 'react-native-gesture-handler';
 import { getOrientation } from '../../../../util/UI';
@@ -78,7 +78,6 @@ class CategoryScreen extends React.Component {
 
   onArticlePressHandler = article => {
     this.props.navigation.push('article', { articleId: article.id });
-    this.props.dispatch(addArticleToHistory(article));
   };
 
   renderItem = val => {

@@ -11,10 +11,12 @@ const reducer = (state = initialState, action) => {
     case ADD_ARTICLE_TO_HISTORY: {
       const { history } = state;
 
+      const article = mapArticleData(action.article);
+
       //Check if the same article already exists in history. Filter out if exists.
-      const filteredHistory = history.filter(a => a.id != action.article.id);
+      const filteredHistory = history.filter(a => a.id != article.id);
       //Add article to the front of array.
-      filteredHistory.unshift(action.article);
+      filteredHistory.unshift(article);
 
       if (filteredHistory.length > ARTICLE_HISTORY_COUNT) {
         filteredHistory.pop();
@@ -53,12 +55,14 @@ const reducer = (state = initialState, action) => {
 
 const mapArticleData = article => {
   return {
-    id: article.article_id,
+    id: article.article_id || article.id,
     category_title: article.category_title,
     category_id: article.category_id,
-    title: article.article_title,
-    url: article.article_url,
+    title: article.article_title || article.title,
+    url: article.article_url || article.url,
     photo: article.main_photo.path,
+    subtitle: article.article_subtitle || article.subtitle,
+    is_video: article.is_video,
   };
 };
 

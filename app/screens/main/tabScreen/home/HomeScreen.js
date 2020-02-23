@@ -11,12 +11,7 @@ import {
 import Styles from './styles';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
-import {
-  fetchArticles,
-  fetchMediateka,
-  openCategoryForName,
-  addArticleToHistory,
-} from '../../../../redux/actions/index';
+import { fetchArticles, fetchMediateka, openCategoryForName } from '../../../../redux/actions/index';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { getOrientation } from '../../../../util/UI';
 import {
@@ -87,7 +82,6 @@ class HomeScreen extends React.Component {
 
   onArticlePressHandler = article => {
     this.props.navigation.push('article', { articleId: article.id });
-    this.props.dispatch(addArticleToHistory(article));
   };
 
   onChannelPressHandler = channel => {
