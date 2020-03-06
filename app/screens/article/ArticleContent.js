@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Dimensions, Animated } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { View, Dimensions, Animated, FlatList } from 'react-native';
 import Header from './header/Header';
 import { getOrientation } from '../../util/UI';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -30,6 +29,16 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const getContentWidth = () => {
   return Dimensions.get('window').width - EStyleSheet.value('$contentPadding') * 2;
+};
+
+const getItemKey = (item, index) => {
+  const { type } = item;
+
+  if (type == TYPE_GALLERY || type == TYPE_HEADER || type == TYPE_SUMMARY) {
+    return String(index) + String(item) + getOrientation();
+  } else {
+    return String(index) + String(item);
+  }
 };
 
 const ArticleContent = props => {
@@ -136,9 +145,11 @@ const ArticleContent = props => {
         extraData={{
           orientation: getOrientation(),
         }}
+        windowSize={6}
+        showsVerticalScrollIndicator={false}
         renderItem={renderItem}
         removeClippedSubviews={false}
-        keyExtractor={(item, index) => String(index) + String(item)}
+        keyExtractor={(item, index) => getItemKey(item, index)}
         //Collapsible params
         scrollEventThrottle={16}
         contentContainerStyle={{ paddingTop: paddingHeight }}
