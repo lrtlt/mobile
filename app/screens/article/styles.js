@@ -1,5 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { StyleSheet } from 'react-native';
+import { getSmallestDim } from '../../util/UI';
 
 export default EStyleSheet.create({
   root: {
@@ -34,6 +35,19 @@ export default EStyleSheet.create({
   },
   photo: {
     width: '100%',
+  },
+  playerContainer: {
+    backgroundColor: '#121212',
+    alignItems: 'center',
+  },
+  player: {
+    width: '100%',
+    aspectRatio: 16 / 9,
+    maxHeight: getSmallestDim() - 62,
+  },
+  audioPlayer: {
+    flex: 1,
+    marginTop: '$contentPadding',
   },
   centerContainer: {
     flex: 1,

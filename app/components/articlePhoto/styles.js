@@ -7,7 +7,7 @@ export default EStyleSheet.create({
   },
   imageVertical: {
     width: '100%',
-    maxHeight: Dimensions.get('window').height * 0.7,
+    maxHeight: Dimensions.get('window').height * 0.6,
   },
   verticalImageContainer: {
     alignItems: 'center',

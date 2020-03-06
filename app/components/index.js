@@ -4,6 +4,7 @@ export { default as ArticleFeedItem } from './article/articleFeedItem/ArticleFee
 export { default as ArticleRow } from './article/articleRow/ArticleRow';
 export { default as ArticleGallery } from './articleGallery/ArticleGallery';
 export { default as ArticleParagraphs } from './articleParagraphs/ArticleParagraphs';
+export { default as ArticleParagraph } from './articleParagraphs/ArticleParagraph';
 export { default as ArticlePhoto } from './articlePhoto/ArticlePhoto';
 export { default as AudioPlayer } from './audioPlayer/AudioPlayer';
 export { default as BackIcon } from './backIcon/BackIcon';

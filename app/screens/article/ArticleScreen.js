@@ -1,12 +1,10 @@
 import React from 'react';
-import { View, ScrollView, Animated, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
 import { withCollapsible, setSafeBounceHeight } from 'react-navigation-collapsible';
 import { connect } from 'react-redux';
 import { saveArticle, removeArticle, addArticleToHistory } from '../../redux/actions';
 import { articleGet } from '../../api';
-import DefaultArticle from './DefaultArticle';
-import VideoArticle from './video/VideoArticle';
-import AudioArticle from './audio/AudioArticle';
+import ArticleContent from './ArticleContent';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { CommentsIcon, ShareIcon, SaveIcon } from '../../components/svg';
 import Share from 'react-native-share';
@@ -16,8 +14,6 @@ import { SafeAreaView } from 'react-navigation';
 import Snackbar from 'react-native-snackbar';
 
 import { ScreenLoader, ScreenError, AdultContentWarning, ActionButton } from '../../components';
-
-const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
 import Styles from './styles';
 
@@ -95,7 +91,7 @@ class ArticleScreen extends React.Component {
   }
 
   componentDidMount() {
-    setSafeBounceHeight(Platform.OS === 'ios' ? 200 : 100);
+    setSafeBounceHeight(Platform.OS === 'ios' ? 150 : 100);
 
     const articleId = this.state.articleId;
 
@@ -273,50 +269,35 @@ class ArticleScreen extends React.Component {
     </View>
   );
 
-  renderDefaultArticle = props => (
-    <DefaultArticle {...props} onItemPress={item => this._handleItemPress(item)} />
-  );
-
-  renderVideoArticle = props => <VideoArticle {...props} />;
-
-  renderAudioArticle = props => <AudioArticle {...props} />;
-
   renderArticleComponent = props => {
-    const { paddingHeight, animatedY, onScroll } = this.props.collapsible;
     const { article } = this.state;
 
     let articleComponent;
     if (article === null) {
       articleComponent = <View />;
-    } else if (article.is_video === 1) {
-      articleComponent = this.renderVideoArticle(this.state);
-    } else if (article.is_audio === 1) {
-      articleComponent = this.renderAudioArticle(this.state);
     } else {
-      articleComponent = this.renderDefaultArticle(this.state);
+      articleComponent = (
+        <ArticleContent
+          article={article}
+          itemPressHandler={this._handleItemPress}
+          collapsible={this.props.collapsible}
+        />
+      );
     }
 
-    return (
-      <View style={Styles.screen}>
-        <AnimatedScrollView
-          style={Styles.scrollContainer}
-          contentContainerStyle={{ paddingTop: paddingHeight, width: '100%' }}
-          scrollIndicatorInsets={{ top: paddingHeight }}
-          _mustAddThis={animatedY}
-          onScroll={onScroll}
-          scrollEventThrottle={16}
-        >
-          {articleComponent}
-        </AnimatedScrollView>
-      </View>
-    );
+    return <View style={Styles.screen}>{articleComponent}</View>;
   };
 
-  _handleItemPress(item) {
+  _handleItemPress = item => {
     switch (item.type) {
       case 'photo': {
+        const images = this.state.article.article_photos;
+        if (!images) {
+          return;
+        }
+
         this.props.navigation.push('gallery', {
-          images: this.state.article.article_photos,
+          images,
           selectedImage: item.item,
         });
         break;
@@ -330,7 +311,7 @@ class ArticleScreen extends React.Component {
         break;
       }
     }
-  }
+  };
 
   render() {
     const { state } = this.state;
