@@ -67,7 +67,7 @@ class SlugScreen extends React.PureComponent {
     const { category } = this.props.navigation.state.params;
     const urlSegments = category.slug_url.split('/');
     const tag = urlSegments[urlSegments.length - 1];
-    const response = await fetch(articleGetByTag(tag, ARTICLES_PER_PAGE_COUNT));
+    const response = await fetch(articleGetByTag(tag, ARTICLES_PER_PAGE_COUNT * 3));
     const result = await response.json();
     console.log('ARTICLES BY TAG API RESPONSE', result);
     return result;
