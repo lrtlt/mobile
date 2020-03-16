@@ -133,8 +133,8 @@ android {
         applicationId "lt.mediapark.lrt"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 201010
-        versionName "2.10.1"
+        versionCode 201020
+        versionName "2.10.2"
     }
     splits {
         abi {
