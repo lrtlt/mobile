@@ -6,7 +6,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import PropTypes from 'prop-types';
 import Styles from './styles';
 
-const NativeVideoPlayer = ({ streamUri, isLiveStream }) => {
+const NativeVideoPlayer = ({ autoPlay, streamUri, isLiveStream }) => {
   const renderError = () => {
     return (
       <View style={Styles.loaderContainer}>
@@ -19,7 +19,7 @@ const NativeVideoPlayer = ({ streamUri, isLiveStream }) => {
   if (streamUri) {
     return (
       <VideoPlayer
-        paused={false}
+        paused={autoPlay == false}
         disableFullscreen={false}
         disableBack={true}
         fullscreen={false}
@@ -36,6 +36,11 @@ const NativeVideoPlayer = ({ streamUri, isLiveStream }) => {
 NativeVideoPlayer.propTypes = {
   streamUri: PropTypes.string,
   isLiveStream: PropTypes.bool,
+  autoPlay: PropTypes.bool,
+};
+
+NativeVideoPlayer.defaultProps = {
+  autoPlay: false,
 };
 
 export default React.memo(NativeVideoPlayer);

@@ -67,7 +67,13 @@ const renderBroadcast = data => {
   const content = data.map((item, i) => {
     return (
       <View style={Styles.embededVideoContainer} key={i}>
-        <VideoComponent style={Styles.player} cover={item.el} streamUrl={item.el.get_streams_url} />
+        <VideoComponent
+          style={Styles.player}
+          cover={item.el}
+          streamUrl={item.el.get_streams_url}
+          isLiveStream={true}
+          autoPlay={false}
+        />
       </View>
     );
   });

@@ -64,8 +64,8 @@ const VideoComponent = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderJWPlayerNative = props => {
-    return <JWPlayerNative {...props} />;
+  const renderJWPlayerNative = videoProps => {
+    return <JWPlayerNative {...videoProps} autoPlay={props.autoPlay} />;
   };
 
   const renderJWPlayerEmbed = url => {
@@ -74,7 +74,7 @@ const VideoComponent = props => {
   };
 
   const renderNativePlayer = uri => {
-    return <NativeVideoPlayer isLiveStream={props.isLiveStream} streamUri={uri} />;
+    return <NativeVideoPlayer isLiveStream={props.isLiveStream} streamUri={uri} autoPlay={props.autoPlay} />;
   };
 
   const renderCover = () => {
@@ -109,10 +109,13 @@ VideoComponent.propTypes = {
   ...NativeVideoPlayer.propTypes,
   streamUrl: PropTypes.string,
   title: PropTypes.string,
+  isLiveStream: PropTypes.bool,
+  autoPlay: PropTypes.bool,
 };
 
 VideoComponent.defaultProps = {
   autoPlay: true,
+  isLiveStream: false,
 };
 
 export default VideoComponent;
