@@ -8,6 +8,8 @@ import PhotoCountBadge from '../../photoCount/PhotoCount';
 import FacebookReactions from '../../facebookReactions/FacebookReactions';
 import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 
+import PropTypes from 'prop-types';
+
 import { CameraIcon, MicIcon } from '../../svg';
 import { stylesSingle, stylesMulti, stylesMultiScroll } from './styles';
 
@@ -35,6 +37,11 @@ const Article = props => {
   const subtitle = props.data.subtitle ? (
     <ScalableText style={style.subtitle}>{props.data.subtitle}</ScalableText>
   ) : null;
+
+  const date =
+    props.data.date && props.showDate === true ? (
+      <ScalableText style={style.categoryTitle}>{props.data.date}</ScalableText>
+    ) : null;
 
   const photoCount =
     props.data.photo && String(props.data.photo).length < 10 ? (
@@ -103,6 +110,8 @@ const Article = props => {
             {mediaIcon}
             <ScalableText style={style.categoryTitle}>{props.data.category_title}</ScalableText>
           </View>
+          <View style={style.dateContainer}>{date}</View>
+
           <ScalableText style={style.title}>{props.data.title}</ScalableText>
           <View style={style.bottomBadgeRow}>
             {photoCount}
@@ -114,6 +123,12 @@ const Article = props => {
       </TouchableDebounce>
     </View>
   );
+};
+
+Article.propTypes = {
+  data: PropTypes.object.isRequired,
+  type: PropTypes.string.isRequired,
+  showDate: PropTypes.bool,
 };
 
 export default React.memo(Article);

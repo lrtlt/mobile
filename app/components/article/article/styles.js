@@ -30,6 +30,13 @@ const styleSingle = {
     paddingTop: '$categoryPaddingTop',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    paddingTop: 4,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   title: {
     color: '$titleTextColor',

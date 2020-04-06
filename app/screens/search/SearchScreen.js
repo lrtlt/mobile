@@ -116,6 +116,7 @@ class SearchScreen extends React.Component {
       <Article
         style={Styles.article}
         data={val.item}
+        showDate={true}
         onPress={article => this.onArticlePressHandler(article)}
         type={'multi'}
       />
