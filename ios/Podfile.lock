@@ -261,7 +261,7 @@ PODS:
     - react-native-video/Video (= 5.0.2)
   - react-native-video/Video (5.0.2):
     - React
-  - react-native-webview (8.1.2):
+  - react-native-webview (9.0.2):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -315,7 +315,7 @@ PODS:
     - Fabric
     - Firebase/Core
     - React
-  - RNGestureHandler (1.6.0):
+  - RNGestureHandler (1.6.1):
     - React
   - RNReanimated (1.7.0):
     - React
@@ -325,7 +325,7 @@ PODS:
     - React
   - RNSnackbar (2.2.0):
     - React
-  - RNSVG (11.0.1):
+  - RNSVG (12.0.3):
     - React
   - RNVectorIcons (6.6.0):
     - React
@@ -524,7 +524,7 @@ SPEC CHECKSUMS:
   react-native-onesignal: 80fc3683083d23b17a2aba180f965dc83bd77efd
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
-  react-native-webview: fcb5f377aadc216273300f452ee0d321fb85809b
+  react-native-webview: 53d0b4e398e8f59a1e9870685d079ace9228db70
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -539,12 +539,12 @@ SPEC CHECKSUMS:
   RNCMaskedView: 76c40a1d41c3e2535df09246a2b5487f04de0814
   RNFastImage: 9b0c22643872bb7494c8d87bbbb66cc4c0d9e7a2
   RNFirebase: 37daa9a346d070f9f6ee1f3b4aaf4c8e3b1d5d1c
-  RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
+  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
   RNScreens: 812b79d384e2bea7eebc4ec981469160d4948fd5
   RNShare: 8b171d4b43c1d886917fdd303bf7a4b87167b05c
   RNSnackbar: 160077964866262ed08cfd33ab4760219ea2aef6
-  RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
+  RNSVG: 7e16ddfc6e00d5aa69c9eb83e699bcce5dcb85d4
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   SDWebImage: fb387001955223213dde14bc08c8b73f371f8d8f
   SDWebImageWebPCoder: 7568737603c50f6237850afedd7e9e28e5917e6b
