@@ -9,8 +9,6 @@ target 'lrtApp' do
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
   pod 'RCTTypeSafety', :path => "../node_modules/react-native/Libraries/TypeSafety"
 
-  pod 'Firebase/Core', '~> 6.3.0'
-
   pod 'React', :path => '../node_modules/react-native/'
   pod 'React-Core', :path => '../node_modules/react-native/'
   pod 'React-CoreModules', :path => '../node_modules/react-native/React/CoreModules'
@@ -39,12 +37,6 @@ target 'lrtApp' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-
-
-
-  pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
-  pod 'Fabric', '~> 1.10.2'
-  pod 'Crashlytics', '~> 3.13.2'
 
   target 'lrtAppTests' do
     inherit! :search_paths
