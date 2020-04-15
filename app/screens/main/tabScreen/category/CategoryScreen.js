@@ -5,7 +5,6 @@ import Styles from './styles';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { fetchCategory, refreshCategory } from '../../../../redux/actions';
-
 import { FlatList } from 'react-native-gesture-handler';
 import { getOrientation } from '../../../../util/UI';
 import EStyleSheet from 'react-native-extended-stylesheet';

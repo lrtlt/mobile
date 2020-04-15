@@ -2,6 +2,7 @@
 export const ARTICLE_LIST_TYPE_HOME = 'home';
 export const ARTICLE_LIST_TYPE_CATEGORY = 'category';
 export const ARTICLE_LIST_TYPE_NEWEST = 'newest';
+export const ARTICLE_LIST_TYPE_POPULAR = 'popular';
 export const ARTICLE_LIST_TYPE_MEDIA = 'mediateka';
 
 export const ARTICLE_HISTORY_COUNT = 15;

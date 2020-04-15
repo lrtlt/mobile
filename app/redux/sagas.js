@@ -5,6 +5,7 @@ import {
   categoryGet,
   categoryTopsGet,
   newestArticlesGet,
+  popularArticlesGet,
   mediatekaGet,
   programGet,
 } from '../api';
@@ -23,6 +24,10 @@ import {
   API_NEWEST_RESULT,
   API_NEWEST_ERROR,
   REFRESH_NEWEST,
+  FETCH_POPULAR,
+  API_POPULAR_RESULT,
+  API_POPULAR_ERROR,
+  REFRESH_POPULAR,
   FETCH_MEDIATEKA,
   API_MEDIATEKA_RESULT,
   API_MEDIATEKA_ERROR,
@@ -40,6 +45,8 @@ const fetchProgramApi = () => fetch(programGet());
 const fetchMediatekaApi = () => fetch(mediatekaGet());
 
 const fetchNewestAPI = (page, count) => fetch(newestArticlesGet(count, page));
+
+const fetchPopularApi = (page, count) => fetch(popularArticlesGet(count, page));
 
 const fetchCategoryAPI = (categoryId, count, page) => fetch(categoryGet(categoryId, count, page));
 
@@ -149,6 +156,34 @@ function* refreshNewestData(action) {
   }
 }
 
+function* fetchPopularData(action) {
+  try {
+    const { page, count } = action.payload;
+    const response = yield call(() => fetchPopularApi(page, count));
+    const result = yield response.json();
+    result.refresh = false;
+    console.log('API RESPONSE POPULAR', result);
+    yield put({ type: API_POPULAR_RESULT, result });
+  } catch (e) {
+    console.log('Saga error', e);
+    yield put({ type: API_POPULAR_ERROR });
+  }
+}
+
+function* refreshPopularData(action) {
+  try {
+    const { count } = action.payload;
+    const response = yield call(() => fetchPopularApi(1, count));
+    const result = yield response.json();
+    result.refresh = true;
+    console.log('API RESPONSE _REFRESH', result);
+    yield put({ type: API_POPULAR_RESULT, result });
+  } catch (e) {
+    console.log('Saga error', e);
+    yield put({ type: API_POPULAR_ERROR });
+  }
+}
+
 function* fetchCategoryTopsData(action) {
   try {
     const { categoryId, count } = action.payload;
@@ -169,6 +204,8 @@ export default function* rootSaga() {
   yield takeEvery(REFRESH_CATEGORY, refreshCategoryData);
   yield takeEvery(FETCH_NEWEST, fetchNewestData);
   yield takeEvery(REFRESH_NEWEST, refreshNewestData);
+  yield takeEvery(FETCH_POPULAR, fetchPopularData);
+  yield takeEvery(REFRESH_POPULAR, refreshPopularData);
   yield takeEvery(FETCH_MEDIATEKA, fetchMediatekaData);
   yield takeEvery(FETCH_PROGRAM, fetchProgramData);
 }

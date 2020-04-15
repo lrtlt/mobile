@@ -5,6 +5,8 @@ import {
   REFRESH_CATEGORY,
   FETCH_NEWEST,
   REFRESH_NEWEST,
+  FETCH_POPULAR,
+  REFRESH_POPULAR,
 } from './actionTypes';
 
 export const fetchArticles = () => ({ type: FETCH_HOME });
@@ -28,5 +30,15 @@ export const fetchNewest = (page, count) => ({
 
 export const refreshNewest = count => ({
   type: REFRESH_NEWEST,
+  payload: { page: 0, count },
+});
+
+export const fetchPopular = (page, count) => ({
+  type: FETCH_POPULAR,
+  payload: { page, count },
+});
+
+export const refreshPopular = count => ({
+  type: REFRESH_POPULAR,
   payload: { page: 0, count },
 });

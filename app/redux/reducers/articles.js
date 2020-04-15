@@ -10,6 +10,10 @@ import {
   API_NEWEST_RESULT,
   FETCH_NEWEST,
   REFRESH_NEWEST,
+  API_POPULAR_ERROR,
+  API_POPULAR_RESULT,
+  FETCH_POPULAR,
+  REFRESH_POPULAR,
   API_MENU_ITEMS_RESULT,
   FETCH_MEDIATEKA,
   API_MEDIATEKA_RESULT,
@@ -52,6 +56,7 @@ const initialState = {
   mediateka: initialMediatekaBlockState,
   categories: [],
   newest: initialNewestBlockState,
+  popular: initialNewestBlockState,
 };
 
 const reducer = (state = initialState, action) => {
@@ -107,6 +112,29 @@ const reducer = (state = initialState, action) => {
         ...state,
         newest: {
           ...state.newest,
+          isFetching: false,
+          isError: true,
+          isRefreshing: false,
+        },
+      };
+    }
+    case FETCH_POPULAR: {
+      return {
+        ...state,
+        popular: { ...state.popular, isFetching: true },
+      };
+    }
+    case REFRESH_POPULAR: {
+      return {
+        ...state,
+        popular: { ...state.popular, isFetching: true, isRefreshing: true },
+      };
+    }
+    case API_POPULAR_ERROR: {
+      return {
+        ...state,
+        popular: {
+          ...state.popular,
           isFetching: false,
           isError: true,
           isRefreshing: false,
@@ -239,6 +267,26 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         newest: {
+          isFetching: false,
+          isError: false,
+          isRefreshing: false,
+          articles,
+          page,
+          lastFetchTime: Date.now(),
+        },
+      };
+    }
+    case API_POPULAR_RESULT: {
+      const formattedArticles = formatArticleBlock(-1, action.result.articles);
+
+      const articles =
+        action.result.refresh === true ? formattedArticles : state.popular.articles.concat(formattedArticles);
+
+      const page = action.result.refresh === true ? 1 : state.popular.page + 1;
+
+      return {
+        ...state,
+        popular: {
           isFetching: false,
           isError: false,
           isRefreshing: false,

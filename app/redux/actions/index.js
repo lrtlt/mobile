@@ -5,6 +5,8 @@ export {
   refreshCategory,
   fetchNewest,
   refreshNewest,
+  fetchPopular,
+  refreshPopular,
 } from './articles';
 
 export {

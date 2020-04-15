@@ -4,11 +4,11 @@ import { ArticleRow, DefaultSectionHeader, ScreenLoader } from '../../../../comp
 import Styles from './styles';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
-import { fetchNewest, refreshNewest } from '../../../../redux/actions';
+import { fetchPopular, refreshPopular } from '../../../../redux/actions';
 import { FlatList } from 'react-native-gesture-handler';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {
-  ARTICLE_LIST_TYPE_NEWEST,
+  ARTICLE_LIST_TYPE_POPULAR,
   ARTICLES_PER_PAGE_COUNT,
   GEMIUS_VIEW_SCRIPT_ID,
   EVENT_LOGO_PRESS,
@@ -18,10 +18,10 @@ import { getOrientation } from '../../../../util/UI';
 import Gemius from 'react-native-gemius-plugin';
 import { EventRegister } from 'react-native-event-listeners';
 
-class NewestScreen extends React.Component {
+class PopularScreen extends React.Component {
   componentDidMount() {
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      page: ARTICLE_LIST_TYPE_NEWEST,
+      page: ARTICLE_LIST_TYPE_POPULAR,
     });
 
     const { articles } = this.props;
@@ -47,12 +47,12 @@ class NewestScreen extends React.Component {
   }
 
   _onRefresh = () => {
-    this.props.dispatch(refreshNewest(ARTICLES_PER_PAGE_COUNT));
+    this.props.dispatch(refreshPopular(ARTICLES_PER_PAGE_COUNT));
   };
 
   callApi() {
     const page = this.props.page + 1;
-    this.props.dispatch(fetchNewest(page, ARTICLES_PER_PAGE_COUNT));
+    this.props.dispatch(fetchPopular(page, ARTICLES_PER_PAGE_COUNT));
   }
 
   onArticlePressHandler = article => {
@@ -140,15 +140,15 @@ class NewestScreen extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { newest } = state.articles;
+  const { popular } = state.articles;
 
-  const newestRoute = state.navigation.routes.find(r => r.type === ARTICLE_LIST_TYPE_NEWEST);
-  const title = newestRoute && newestRoute.title;
+  const popularRoute = state.navigation.routes.find(r => r.type === ARTICLE_LIST_TYPE_POPULAR);
+  const title = popularRoute && popularRoute.title;
 
   return {
-    ...newest,
+    ...popular,
     title,
   };
 };
 
-export default connect(mapStateToProps)(withNavigation(NewestScreen));
+export default connect(mapStateToProps)(withNavigation(PopularScreen));

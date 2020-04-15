@@ -9,6 +9,7 @@ import { setSelectedCategory } from '../../redux/actions';
 import HomeScreen from './tabScreen/home/HomeScreen';
 import CategoryScreen from './tabScreen/category/CategoryScreen';
 import NewestScreen from './tabScreen/newest/NewestScreen';
+import PopularScreen from './tabScreen/popular/PopularScreen';
 import TestScreen from '../testScreen/TestScreen';
 import Gemius from 'react-native-gemius-plugin';
 
@@ -18,6 +19,7 @@ import {
   ARTICLE_LIST_TYPE_MEDIA,
   ARTICLE_LIST_TYPE_NEWEST,
   GEMIUS_VIEW_SCRIPT_ID,
+  ARTICLE_LIST_TYPE_POPULAR,
 } from '../../constants';
 import { SafeAreaView } from 'react-navigation';
 
@@ -49,6 +51,8 @@ class MainScreen extends React.Component {
         return <CategoryScreen route={props.route} isCurrent={current} />;
       case ARTICLE_LIST_TYPE_NEWEST:
         return <NewestScreen isCurrent={current} />;
+      case ARTICLE_LIST_TYPE_POPULAR:
+        return <PopularScreen isCurrent={current} />;
       default:
         return <TestScreen text={'Unkown type: ' + type} />;
     }
