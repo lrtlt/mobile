@@ -8,14 +8,14 @@ export default class Gemius {
   }
 
   static sendPartialPageViewedEvent(gemiusPrismIdentifier, extraParameters = null) {
-    GemiusPlugin.sendPartialPageViewedEvent(gemiusPrismIdentifier, extraParameters);
+    //GemiusPlugin.sendPartialPageViewedEvent(gemiusPrismIdentifier, extraParameters);
   }
 
   static sendPageViewedEvent(gemiusPrismIdentifier, extraParameters = null) {
-    GemiusPlugin.sendPageViewedEvent(gemiusPrismIdentifier, extraParameters);
+    //GemiusPlugin.sendPageViewedEvent(gemiusPrismIdentifier, extraParameters);
   }
 
   static sendActionEvent(gemiusPrismIdentifier, extraParameters = null) {
-    GemiusPlugin.sendActionEvent(gemiusPrismIdentifier, extraParameters);
+    //GemiusPlugin.sendActionEvent(gemiusPrismIdentifier, extraParameters);
   }
 }
