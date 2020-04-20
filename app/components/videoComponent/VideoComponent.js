@@ -10,6 +10,8 @@ import JWPlayerEmbed from './JWPlayerEmbed';
 import JWPlayerNative from './JWPlayerNative';
 import NativeVideoPlayer from './NativeVideoPlayer';
 
+import Gemius from 'react-native-gemius-plugin';
+
 const initialState = {
   isLoading: false,
   embedUrl: null,
@@ -45,13 +47,16 @@ const VideoComponent = props => {
       newState.embedUrl = response.full_url;
 
       if (props.isLiveStream) {
+        newState.mediaId = props.mediaId;
         newState.streamUri = response.response.data.content.trim();
         newState.title = props.title;
+        Gemius.setProgramData(props.mediaId, newState.title, -1, !props.isAudioOnly);
       } else {
         const { playlist_item } = response;
         newState.streamUri = playlist_item.file.trim();
         newState.mediaId = playlist_item.mediaid ? playlist_item.mediaid.toString() : null;
         newState.title = response.title;
+        Gemius.setProgramData(newState.mediaId, newState.title, 0, !props.isAudioOnly);
       }
       setVideoState(newState);
     });
@@ -107,15 +112,18 @@ VideoComponent.propTypes = {
   ...VideoCover.propTypes,
   ...JWPlayerEmbed.propTypes,
   ...NativeVideoPlayer.propTypes,
+  mediaId: PropTypes.string,
   streamUrl: PropTypes.string,
   title: PropTypes.string,
   isLiveStream: PropTypes.bool,
+  isAudioOnly: PropTypes.bool,
   autoPlay: PropTypes.bool,
 };
 
 VideoComponent.defaultProps = {
   autoPlay: true,
   isLiveStream: false,
+  isAudioOnly: false,
 };
 
 export default VideoComponent;

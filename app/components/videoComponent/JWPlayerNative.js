@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import Styles from './styles';
 import JWPlayer from 'react-native-jw-media-player';
 
+import Gemius from 'react-native-gemius-plugin';
+
 const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) => {
   useEffect(() => {
     return () => {
@@ -35,19 +37,19 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
   const sendPlay = () => {
     if (!isPlaying) {
       isPlaying = !isPlaying;
-      console.log('Sending play');
+      Gemius.sendPlay(mediaId, 0);
     }
   };
 
   const sendPause = () => {
     if (isPlaying) {
       isPlaying = !isPlaying;
-      console.log('Sending pause');
+      Gemius.sendPause(mediaId, 0);
     }
   };
 
   const sendClose = () => {
-    console.log('Sending close');
+    Gemius.sendClose(mediaId, 0);
   };
 
   return (
@@ -60,15 +62,15 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
         //landscapeOnFullScreen={true}
         exitFullScreenOnPortrait={true}
         fullScreenOnLandscape={true}
-        // fullScreenOnLandscape={true}
-        // landscapeOnFullScreen={true}
+        //fullScreenOnLandscape={true}
+        //landscapeOnFullScreen={true}
         //onBeforePlay={() => console.log('onBeforePlay')}
         onPlay={() => sendPlay()}
         onPause={() => sendPause()}
         //onIdle={() => console.log('onIdle')}
         //onPlaylistItem={event => console.log('onPlaylistItem', event)}
         //onSetupPlayerError={event => this.onPlayerError(event)}
-        // onPlayerError={event => this.onPlayerError(event)}
+        //onPlayerError={event => this.onPlayerError(event)}
         //onBuffer={() => console.log('onBuffer')}
         //onTime={event => console.log('onTime', event)}
         onFullScreen={() => {

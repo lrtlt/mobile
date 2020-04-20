@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import { initTheme } from './app/ColorTheme';
 import { store } from './app/redux/store';
 import OneSignal from 'react-native-onesignal';
@@ -12,6 +12,7 @@ import {
   GEMIUS_APP_NAME,
   GEMIUS_VIEW_SCRIPT_ID,
   GEMIUS_HIT_COLLECTOR_HOST,
+  GEMIUS_PLAYER_SCRIPT_ID,
 } from './app/constants';
 import Gemius from 'react-native-gemius-plugin';
 
@@ -26,6 +27,9 @@ class App extends React.Component {
     OneSignal.addEventListener('ids', this.onIds);
 
     Gemius.setAppInfo(GEMIUS_APP_NAME, appVersion, GEMIUS_HIT_COLLECTOR_HOST, GEMIUS_VIEW_SCRIPT_ID);
+
+    const playerId = 'lrt-player-' + Platform.OS;
+    Gemius.setPlayerInfo(playerId, GEMIUS_HIT_COLLECTOR_HOST, GEMIUS_PLAYER_SCRIPT_ID);
   }
 
   componentWillUnmount() {

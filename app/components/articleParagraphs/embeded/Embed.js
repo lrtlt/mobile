@@ -124,9 +124,6 @@ const renderHtml = data => {
     return (
       <View style={Styles.embededHtmlContainer} key={i}>
         <WebView
-          ref={ref => {
-            this.webview = ref;
-          }}
           style={style}
           originWhitelist={['*']}
           cacheEnabled={false}

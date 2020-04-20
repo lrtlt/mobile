@@ -140,9 +140,11 @@ class ChannelScreen extends React.Component {
         <View style={Styles.playerContainer}>
           <VideoComponent
             key={channel_info.stream_embed}
+            mediaId={channel_info.channel_id ? channel_info.channel_id.toString() : null}
             style={Styles.player}
             autoPlay={true}
             isLiveStream={true}
+            isAudioOnly={channel_info.is_radio === 1}
             title={channel_info.title}
             streamUrl={channel_info.get_streams_url}
             embedUrl={channel_info.stream_embed}
