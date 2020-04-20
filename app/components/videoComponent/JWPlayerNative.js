@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
@@ -6,6 +6,13 @@ import Styles from './styles';
 import JWPlayer from 'react-native-jw-media-player';
 
 const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) => {
+  useEffect(() => {
+    return () => {
+      //Cleanup
+      sendClose();
+    };
+  }, []);
+
   const createPlaylistItem = () => {
     return {
       title: title,
@@ -23,6 +30,26 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
     };
   };
 
+  let isPlaying = false;
+
+  const sendPlay = () => {
+    if (!isPlaying) {
+      isPlaying = !isPlaying;
+      console.log('Sending play');
+    }
+  };
+
+  const sendPause = () => {
+    if (isPlaying) {
+      isPlaying = !isPlaying;
+      console.log('Sending pause');
+    }
+  };
+
+  const sendClose = () => {
+    console.log('Sending close');
+  };
+
   return (
     <View style={Styles.htmlContainer}>
       <JWPlayer
@@ -30,17 +57,20 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
         playlistItem={createPlaylistItem()}
         nativeFullScreen={true}
         nextUpDisplay={true}
+        //landscapeOnFullScreen={true}
+        exitFullScreenOnPortrait={true}
+        fullScreenOnLandscape={true}
         // fullScreenOnLandscape={true}
         // landscapeOnFullScreen={true}
-        // onBeforePlay={() => this.onBeforePlay()}
-        // onPlay={() => this.onPlay()}
-        // onPause={() => this.onPause()}
-        // onIdle={() => console.log('onIdle')}
-        // onPlaylistItem={event => this.onPlaylistItem(event)}
-        // onSetupPlayerError={event => this.onPlayerError(event)}
+        //onBeforePlay={() => console.log('onBeforePlay')}
+        onPlay={() => sendPlay()}
+        onPause={() => sendPause()}
+        //onIdle={() => console.log('onIdle')}
+        //onPlaylistItem={event => console.log('onPlaylistItem', event)}
+        //onSetupPlayerError={event => this.onPlayerError(event)}
         // onPlayerError={event => this.onPlayerError(event)}
-        // onBuffer={() => this.onBuffer()}
-        // onTime={event => this.onTime(event)}
+        //onBuffer={() => console.log('onBuffer')}
+        //onTime={event => console.log('onTime', event)}
         onFullScreen={() => {
           StatusBar.setHidden(true, true);
         }}
