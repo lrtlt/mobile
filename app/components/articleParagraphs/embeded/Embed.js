@@ -73,6 +73,7 @@ const renderBroadcast = data => {
           streamUrl={item.el.get_streams_url}
           isLiveStream={true}
           autoPlay={false}
+          mediaId={'0'}
         />
       </View>
     );
