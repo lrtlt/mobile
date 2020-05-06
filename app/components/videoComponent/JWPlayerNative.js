@@ -65,13 +65,14 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
         //fullScreenOnLandscape={true}
         //landscapeOnFullScreen={true}
         //onBeforePlay={() => console.log('onBeforePlay')}
+        onBeforeComplete={() => console.log('onBeforeComplete')}
         onPlay={() => sendPlay()}
         onPause={() => sendPause()}
         //onIdle={() => console.log('onIdle')}
         //onPlaylistItem={event => console.log('onPlaylistItem', event)}
         //onSetupPlayerError={event => this.onPlayerError(event)}
         //onPlayerError={event => this.onPlayerError(event)}
-        //onBuffer={() => console.log('onBuffer')}
+        onBuffer={() => console.log('onBuffer')}
         //onTime={event => console.log('onTime', event)}
         onFullScreen={() => {
           StatusBar.setHidden(true, true);

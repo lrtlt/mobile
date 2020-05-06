@@ -19,7 +19,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath('com.android.tools.build:gradle:3.6.2')
+        classpath('com.android.tools.build:gradle:3.6.3')
         classpath 'com.google.gms:google-services:4.2.0'
         classpath 'io.fabric.tools:gradle:1.28.1'
         classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.1, 0.99.99]'
