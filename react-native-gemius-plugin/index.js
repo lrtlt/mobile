@@ -48,6 +48,14 @@ export default class Gemius {
     GemiusPlugin.sendPause(clipId, offset);
   }
 
+  static sendBuffer(clipId, offset) {
+    if (Platform.OS === 'ios') {
+      //No implementation for iOS yet.
+      return;
+    }
+    GemiusPlugin.sendBuffer(clipId, offset);
+  }
+
   static sendStop(clipId, offset) {
     if (Platform.OS === 'ios') {
       //No implementation for iOS yet.

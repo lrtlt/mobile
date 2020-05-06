@@ -1,7 +1,7 @@
 {
   "name": "react-native-gemius-plugin",
   "title": "React Native Gemius Plugin",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Gemius plugin for react-native",
   "main": "index.js",
   "scripts": {

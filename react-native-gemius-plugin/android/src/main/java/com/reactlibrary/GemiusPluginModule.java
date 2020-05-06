@@ -94,6 +94,12 @@ public class GemiusPluginModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void sendBuffer(String clipId, Integer offset) {
+        Log.d(TAG, "Player BUFFER event for '" + clipId + "' offset: " + offset);
+        player.programEvent(clipId, offset, Player.EventType.BUFFER, null);
+    }
+
+    @ReactMethod
     public void sendClose(String clipId, Integer offset) {
         Log.d(TAG, "Player CLOSE event for '" + clipId + "' offset: " + offset);
         player.programEvent(clipId, offset, Player.EventType.CLOSE, null);

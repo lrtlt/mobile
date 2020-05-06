@@ -32,25 +32,25 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
     };
   };
 
-  let isPlaying = false;
-
   const sendPlay = () => {
-    if (!isPlaying) {
-      isPlaying = !isPlaying;
-      Gemius.sendPlay(mediaId, 0);
-    }
+    console.log('JWPlayer event: play')
+    Gemius.sendPlay(mediaId, 0);
   };
 
   const sendPause = () => {
-    if (isPlaying) {
-      isPlaying = !isPlaying;
-      Gemius.sendPause(mediaId, 0);
-    }
+    console.log('JWPlayer event: pause')
+    Gemius.sendPause(mediaId, 0);
   };
 
   const sendClose = () => {
+    console.log('JWPlayer event: close')
     Gemius.sendClose(mediaId, 0);
   };
+
+  const sendBuffer = () => {
+    console.log('JWPlayer event: buffering')
+    Gemius.sendBuffer(mediaId, 0);
+  }
 
   return (
     <View style={Styles.htmlContainer}>
@@ -65,14 +65,14 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
         //fullScreenOnLandscape={true}
         //landscapeOnFullScreen={true}
         //onBeforePlay={() => console.log('onBeforePlay')}
-        onBeforeComplete={() => console.log('onBeforeComplete')}
+        //onBeforeComplete={() => console.log('onBeforeComplete')}
         onPlay={() => sendPlay()}
         onPause={() => sendPause()}
-        //onIdle={() => console.log('onIdle')}
+        onIdle={() => console.log('onIdle')}
+        onBuffer={() => sendBuffer()}
         //onPlaylistItem={event => console.log('onPlaylistItem', event)}
         //onSetupPlayerError={event => this.onPlayerError(event)}
         //onPlayerError={event => this.onPlayerError(event)}
-        onBuffer={() => console.log('onBuffer')}
         //onTime={event => console.log('onTime', event)}
         onFullScreen={() => {
           StatusBar.setHidden(true, true);
