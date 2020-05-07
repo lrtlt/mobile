@@ -9,13 +9,12 @@ import Gemius from 'react-native-gemius-plugin';
 
 const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) => {
 
-  let playerRef;
+  let playerRef = null;
 
   useEffect(() => {
     return () => {
       //Cleanup
       sendClose();
-      playerRef = null;
     };
   }, []);
 
@@ -39,33 +38,36 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
   const sendPlay = () => {
     console.log('JWPlayer event: play')
     playerRef.position().then(pos => {
-      Gemius.sendPlay(mediaId, pos);
+      Gemius.sendPlay(mediaId, pos ? pos : 0);
     });
   };
 
   const sendPause = () => {
     console.log('JWPlayer event: pause')
     playerRef.position().then(pos => {
-      Gemius.sendPause(mediaId, pos);
+      Gemius.sendPause(mediaId, pos ? pos : 0);
     });
   };
 
   const sendClose = () => {
     console.log('JWPlayer event: close')
-    Gemius.sendClose(mediaId, 0);
+    playerRef.position().then(pos => {
+      playerRef = null;
+      Gemius.sendClose(mediaId, pos ? pos : 0);
+    });
   };
 
   const sendBuffer = () => {
     console.log('JWPlayer event: buffering')
     playerRef.position().then(pos => {
-      Gemius.sendBuffer(mediaId, pos);
+      Gemius.sendBuffer(mediaId, pos ? pos : 0);
     });
   }
 
   const sendComplete = () => {
     console.log('JWPlayer event: complete')
     playerRef.position().then(pos => {
-      Gemius.sendComplete(mediaId, pos);
+      Gemius.sendComplete(mediaId, pos ? pos : 0);
     });
   }
 
@@ -77,7 +79,11 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
   return (
     <View style={Styles.htmlContainer}>
       <JWPlayer
-        ref={ ref => playerRef = ref}
+        ref={ ref => {
+          if(playerRef === null || ref !== null){
+            playerRef = ref;
+          }
+        }}
         style={Styles.embedPlayer}
         playlistItem={createPlaylistItem()}
         nativeFullScreen={true}
