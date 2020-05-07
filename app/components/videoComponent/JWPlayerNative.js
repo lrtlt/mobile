@@ -69,6 +69,11 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
     });
   }
 
+  const sendSeek = position => {
+    console.log('JWPlayer event: seek')
+    Gemius.sendSeek(mediaId, position);
+  }
+
   return (
     <View style={Styles.htmlContainer}>
       <JWPlayer
@@ -86,6 +91,7 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
         //onBeforeComplete={() => console.log('onBeforeComplete')}
         onPlay={() => sendPlay()}
         onPause={() => sendPause()}
+        onSeeked={e => sendSeek(e.nativeEvent.position)}
         //onIdle={() => console.log('onIdle')}
         onBuffer={() => sendBuffer()}
         onComplete={() => sendComplete()}
