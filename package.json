@@ -28,7 +28,7 @@
     "react-native-gallery-swiper": "^1.25.3",
     "react-native-gemius-plugin": "./react-native-gemius-plugin",
     "react-native-gesture-handler": "^1.6.1",
-    "react-native-jw-media-player": "^0.1.41",
+    "react-native-jw-media-player": "^0.1.43",
     "react-native-onesignal": "^3.7.1",
     "react-native-reanimated": "^1.8.0",
     "react-native-render-html": "^4.2.0",

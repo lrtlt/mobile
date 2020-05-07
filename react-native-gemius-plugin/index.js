@@ -64,6 +64,14 @@ export default class Gemius {
     GemiusPlugin.sendStop(clipId, offset);
   }
 
+  static sendComplete(clipId, offset) {
+    if (Platform.OS === 'ios') {
+      //No implementation for iOS yet.
+      return;
+    }
+    GemiusPlugin.sendComplete(clipId, offset);
+  }
+
   static sendClose(clipId, offset) {
     if (Platform.OS === 'ios') {
       //No implementation for iOS yet.

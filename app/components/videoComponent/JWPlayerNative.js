@@ -8,10 +8,14 @@ import JWPlayer from 'react-native-jw-media-player';
 import Gemius from 'react-native-gemius-plugin';
 
 const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) => {
+
+  let playerRef;
+
   useEffect(() => {
     return () => {
       //Cleanup
       sendClose();
+      playerRef = null;
     };
   }, []);
 
@@ -34,12 +38,16 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
 
   const sendPlay = () => {
     console.log('JWPlayer event: play')
-    Gemius.sendPlay(mediaId, 0);
+    playerRef.position().then(pos => {
+      Gemius.sendPlay(mediaId, pos);
+    });
   };
 
   const sendPause = () => {
     console.log('JWPlayer event: pause')
-    Gemius.sendPause(mediaId, 0);
+    playerRef.position().then(pos => {
+      Gemius.sendPause(mediaId, pos);
+    });
   };
 
   const sendClose = () => {
@@ -49,12 +57,22 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
 
   const sendBuffer = () => {
     console.log('JWPlayer event: buffering')
-    Gemius.sendBuffer(mediaId, 0);
+    playerRef.position().then(pos => {
+      Gemius.sendBuffer(mediaId, pos);
+    });
+  }
+
+  const sendComplete = () => {
+    console.log('JWPlayer event: complete')
+    playerRef.position().then(pos => {
+      Gemius.sendComplete(mediaId, pos);
+    });
   }
 
   return (
     <View style={Styles.htmlContainer}>
       <JWPlayer
+        ref={ ref => playerRef = ref}
         style={Styles.embedPlayer}
         playlistItem={createPlaylistItem()}
         nativeFullScreen={true}
@@ -68,12 +86,13 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
         //onBeforeComplete={() => console.log('onBeforeComplete')}
         onPlay={() => sendPlay()}
         onPause={() => sendPause()}
-        onIdle={() => console.log('onIdle')}
+        //onIdle={() => console.log('onIdle')}
         onBuffer={() => sendBuffer()}
+        onComplete={() => sendComplete()}
         //onPlaylistItem={event => console.log('onPlaylistItem', event)}
         //onSetupPlayerError={event => this.onPlayerError(event)}
         //onPlayerError={event => this.onPlayerError(event)}
-        //onTime={event => console.log('onTime', event)}
+        //onTime={e => console.log('onTime', e.nativeEvent)}
         onFullScreen={() => {
           StatusBar.setHidden(true, true);
         }}
