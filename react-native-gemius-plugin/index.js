@@ -16,83 +16,43 @@ export default class Gemius {
   }
 
   static setPlayerInfo(playerId, serverHost, accountId) {
-    if (Platform.OS === 'ios') {
-      //No implementation for iOS yet.
-      return;
-    }
     GemiusPlugin.setPlayerInfo(playerId, serverHost, accountId);
   }
 
   static setProgramData(clipId, name, duration, isVideo) {
-    if (Platform.OS === 'ios') {
-      //No implementation for iOS yet.
-      return;
-    }
     const type = isVideo === true ? PROGRAM_TYPE_VIDEO : PROGRAM_TYPE_AUDIO;
     GemiusPlugin.setProgramData(clipId, name, duration, type);
   }
 
   static sendPlay(clipId, offset) {
-    if (Platform.OS === 'ios') {
-      //No implementation for iOS yet.
-      return;
-    }
     GemiusPlugin.sendPlay(clipId, offset);
   }
 
   static sendPause(clipId, offset) {
-    if (Platform.OS === 'ios') {
-      //No implementation for iOS yet.
-      return;
-    }
     GemiusPlugin.sendPause(clipId, offset);
   }
 
   static sendBuffer(clipId, offset) {
-    if (Platform.OS === 'ios') {
-      //No implementation for iOS yet.
-      return;
-    }
     GemiusPlugin.sendBuffer(clipId, offset);
   }
 
   static sendStop(clipId, offset) {
-    if (Platform.OS === 'ios') {
-      //No implementation for iOS yet.
-      return;
-    }
     GemiusPlugin.sendStop(clipId, offset);
   }
 
   static sendComplete(clipId, offset) {
-    if (Platform.OS === 'ios') {
-      //No implementation for iOS yet.
-      return;
-    }
     GemiusPlugin.sendComplete(clipId, offset);
   }
 
   static sendClose(clipId, offset) {
-    if (Platform.OS === 'ios') {
-      //No implementation for iOS yet.
-      return;
-    }
     GemiusPlugin.sendClose(clipId, offset);
   }
 
   static sendSeek(clipId, offset) {
-    if (Platform.OS === 'ios') {
-      //No implementation for iOS yet.
-      return;
-    }
     GemiusPlugin.sendSeek(clipId, offset);
   }
 
   static sendComplete(clipId, offset) {
-    if (Platform.OS === 'ios') {
-      //No implementation for iOS yet.
-      return;
-    }
     GemiusPlugin.sendComplete(clipId, offset);
   }
 

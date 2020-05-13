@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, Platform } from 'react-native';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Styles from './styles';
@@ -10,6 +10,7 @@ import Gemius from 'react-native-gemius-plugin';
 const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) => {
 
   let playerRef = null;
+  let isSeeking = false;
 
   useEffect(() => {
     return () => {
@@ -38,6 +39,12 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
   const sendPlay = () => {
     console.log('JWPlayer event: play')
     playerRef.position().then(pos => {
+      if(isSeeking === true){
+        isSeeking = false;
+        console.log('JWPlayer event: seek ' + pos)
+        Gemius.sendSeek(mediaId, pos ? pos : 0);
+      }
+      
       Gemius.sendPlay(mediaId, pos ? pos : 0);
     });
   };
@@ -72,8 +79,13 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
   }
 
   const sendSeek = position => {
-    console.log('JWPlayer event: seek')
+    console.log('JWPlayer event: seek ' + position)
     Gemius.sendSeek(mediaId, position);
+  }
+
+  //TODO: replace with sendSeek after JW player callback fix
+  const sendSeekIOS = () => {
+    isSeeking = true;
   }
 
   return (
@@ -89,28 +101,35 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
         nativeFullScreen={true}
         nextUpDisplay={true}
         //landscapeOnFullScreen={true}
-        exitFullScreenOnPortrait={true}
-        fullScreenOnLandscape={true}
+        //exitFullScreenOnPortrait={true}
         //fullScreenOnLandscape={true}
         //landscapeOnFullScreen={true}
         //onBeforePlay={() => console.log('onBeforePlay')}
         //onBeforeComplete={() => console.log('onBeforeComplete')}
         onPlay={() => sendPlay()}
         onPause={() => sendPause()}
-        onSeeked={e => sendSeek(e.nativeEvent.position)}
-        //onIdle={() => console.log('onIdle')}
+        onSeeked={e => { 
+          if(Platform.OS === 'android'){
+            sendSeek(e.nativeEvent.position);
+          }
+        }}
+        onSeek={e => { 
+          if(Platform.OS === 'ios'){
+            sendSeekIOS();
+          }
+        }}
         onBuffer={() => sendBuffer()}
         onComplete={() => sendComplete()}
         //onPlaylistItem={event => console.log('onPlaylistItem', event)}
         //onSetupPlayerError={event => this.onPlayerError(event)}
         //onPlayerError={event => this.onPlayerError(event)}
         //onTime={e => console.log('onTime', e.nativeEvent)}
-        onFullScreen={() => {
-          StatusBar.setHidden(true, true);
-        }}
-        onFullScreenExit={() => {
-          StatusBar.setHidden(false, true);
-        }}
+        // onFullScreen={() => {
+        //   StatusBar.setHidden(true, true);
+        // }}
+        // onFullScreenExit={() => {
+        //   StatusBar.setHidden(false, true);
+        // }}
       />
     </View>
   );

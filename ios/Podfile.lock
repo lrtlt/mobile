@@ -259,12 +259,12 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-gemius-plugin (1.2.0):
+  - react-native-gemius-plugin (1.4.0):
     - React
-  - react-native-jw-media-player (0.1.40):
+  - react-native-jw-media-player (0.1.45):
     - JWPlayer-SDK
     - React
-  - react-native-onesignal (3.7.1):
+  - react-native-onesignal (3.7.2):
     - OneSignal (= 2.13.1)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-safe-area-context (0.7.3):
@@ -274,7 +274,7 @@ PODS:
     - react-native-video/Video (= 5.0.2)
   - react-native-video/Video (5.0.2):
     - React
-  - react-native-webview (9.0.2):
+  - react-native-webview (9.2.2):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -313,16 +313,16 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.5)
   - RNCAsyncStorage (1.9.0):
     - React
-  - RNCMaskedView (0.1.9):
+  - RNCMaskedView (0.1.10):
     - React
   - RNFastImage (8.1.5):
     - React
     - SDWebImage (~> 5.0)
     - SDWebImageWebPCoder (~> 0.4.1)
-  - RNFBApp (6.4.0):
+  - RNFBApp (6.7.1):
     - Firebase/Core (~> 6.13.0)
     - React
-  - RNFBCrashlytics (6.4.0):
+  - RNFBCrashlytics (6.7.1):
     - Crashlytics (~> 3.14.0)
     - Fabric (~> 1.10.2)
     - Firebase/Core (~> 6.13.0)
@@ -332,7 +332,7 @@ PODS:
     - React
   - RNReanimated (1.8.0):
     - React
-  - RNScreens (2.4.0):
+  - RNScreens (2.5.0):
     - React
   - RNShare (2.0.0):
     - React
@@ -540,12 +540,12 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-gemius-plugin: ac693c5ccf9b76a694a0c001c1fce91038338a2e
-  react-native-jw-media-player: d0bffd78ee748d774286455be1e554960462e513
-  react-native-onesignal: 6268fb73b9a6df2b819b94119b38de838664dc73
+  react-native-gemius-plugin: 769a634647fffd10c03820624fd870fa5fcd4967
+  react-native-jw-media-player: 929085968063ade88bfe790f61962a0909349c87
+  react-native-onesignal: e8895a69983c8ffe953e1b0fc0f2ca75afc6af68
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
-  react-native-webview: 53d0b4e398e8f59a1e9870685d079ace9228db70
+  react-native-webview: 881baa70f381b838964574f48153a2d453402922
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -557,13 +557,13 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNCAsyncStorage: 453cd7c335ec9ba3b877e27d02238956b76f3268
-  RNCMaskedView: 71fc32d971f03b7f03d6ab6b86b730c4ee64f5b6
+  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFastImage: 35ae972d6727c84ee3f5c6897e07f84d0a3445e9
-  RNFBApp: 69781cf10ce41f6f6db789e6264dd80119ef2fb7
-  RNFBCrashlytics: f6630b1cfa1fbac5348205232709ac779369d9e7
+  RNFBApp: 7b539bb25520fa73d6a240f5c6ea569e27683645
+  RNFBCrashlytics: b34063b906dd0c57a5d286dd743a40c90c8326c7
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
-  RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
+  RNScreens: ac02d0e4529f08ced69f5580d416f968a6ec3a1d
   RNShare: 8b171d4b43c1d886917fdd303bf7a4b87167b05c
   RNSnackbar: 160077964866262ed08cfd33ab4760219ea2aef6
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
@@ -574,4 +574,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c1586ef2b580d00429cf02baa6a97b4f08f49805
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1

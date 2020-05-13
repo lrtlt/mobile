@@ -6,7 +6,6 @@ import Styles from './styles';
 import PropTypes from 'prop-types';
 
 import VideoCover from './VideoCover';
-import JWPlayerEmbed from './JWPlayerEmbed';
 import JWPlayerNative from './JWPlayerNative';
 import NativeVideoPlayer from './NativeVideoPlayer';
 
@@ -73,11 +72,6 @@ const VideoComponent = props => {
     return <JWPlayerNative {...videoProps} autoPlay={props.autoPlay} />;
   };
 
-  const renderJWPlayerEmbed = url => {
-    const formatedUrl = url.endsWith('?embed') ? url : `${url}?embed`;
-    return <JWPlayerEmbed embedUrl={formatedUrl} autoPlay={props.autoPlay} />;
-  };
-
   const renderNativePlayer = uri => {
     return <NativeVideoPlayer isLiveStream={props.isLiveStream} streamUri={uri} autoPlay={props.autoPlay} />;
   };
@@ -94,11 +88,12 @@ const VideoComponent = props => {
 
   const { streamUri, isLoading } = videoState;
   if (streamUri) {
-    if (Platform.OS == 'android') {
-      content = renderJWPlayerNative(videoState);
-    } else {
-      content = renderNativePlayer(streamUri);
-    }
+    content = renderJWPlayerNative(videoState);
+    // if (Platform.OS == 'android') {
+    //   content = renderJWPlayerNative(videoState);
+    // } else {
+    //   content = renderNativePlayer(streamUri);
+    // }
   } else if (isLoading === true) {
     content = renderLoading(isLoading);
   } else {
@@ -110,7 +105,6 @@ const VideoComponent = props => {
 
 VideoComponent.propTypes = {
   ...VideoCover.propTypes,
-  ...JWPlayerEmbed.propTypes,
   ...NativeVideoPlayer.propTypes,
   mediaId: PropTypes.string,
   streamUrl: PropTypes.string,
