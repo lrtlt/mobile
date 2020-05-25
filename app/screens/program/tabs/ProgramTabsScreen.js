@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Dimensions, Text } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { ProgramItem } from '../../../components';
 import Styles from './styles';
 import { TabView, TabBar } from 'react-native-tab-view';
@@ -46,27 +47,40 @@ const tabsScreen = props => {
     }),
   };
 
+  const renderProgramItem = val => {
+    const item = val.item;
+    return (
+      <View key={item.time_start + item.title}>
+        <ProgramItem title={item.title} startTime={item.time_start} percent={item.proc} />
+        <View style={Styles.separator} />
+      </View>
+    );
+  };
+
+
   const renderScene = props => {
-    if (Math.abs(index - navigationState.routes.indexOf(props.route)) > 1) {
+    if (Math.abs(index - navigationState.routes.indexOf(props.route)) > 0) {
       return <View />;
     }
 
     const prog = props.route.program;
-    const programComponent = prog
-      ? prog.map((item, i) => {
-          return (
-            <View key={item.time_start + item.title}>
-              <ProgramItem title={item.title} startTime={item.time_start} percent={item.proc} />
-              <View style={Styles.separator} />
-            </View>
-          );
-        })
-      : null;
+
+    const scrollToIndex = prog.findIndex(i => {
+      const proc = Math.max(0, Math.min(Number(i.proc), 100));
+      return proc < 100
+    });
 
     return (
-      <ScrollView>
-        <View style={Styles.contentContainer}>{programComponent}</View>
-      </ScrollView>
+      <View style={Styles.contentContainer}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={prog}
+          renderItem={renderProgramItem}
+          getItemLayout={(data, index) => ({ length: 59, offset: 59 * index, index })}
+          initialScrollIndex={scrollToIndex}
+          keyExtractor={(item, index) => String(index) + String(item)}
+        />
+      </View>
     );
   };
 
