@@ -261,10 +261,10 @@ PODS:
   - React-jsinspector (0.61.5)
   - react-native-gemius-plugin (1.4.0):
     - React
-  - react-native-jw-media-player (0.1.45):
+  - react-native-jw-media-player (0.1.46):
     - JWPlayer-SDK
     - React
-  - react-native-onesignal (3.7.2):
+  - react-native-onesignal (3.7.3):
     - OneSignal (= 2.13.1)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-safe-area-context (0.7.3):
@@ -274,7 +274,7 @@ PODS:
     - react-native-video/Video (= 5.0.2)
   - react-native-video/Video (5.0.2):
     - React
-  - react-native-webview (9.2.2):
+  - react-native-webview (9.4.0):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -332,11 +332,11 @@ PODS:
     - React
   - RNReanimated (1.8.0):
     - React
-  - RNScreens (2.5.0):
+  - RNScreens (2.8.0):
     - React
   - RNShare (2.0.0):
     - React
-  - RNSnackbar (2.2.0):
+  - RNSnackbar (2.2.1):
     - React
   - RNSVG (12.1.0):
     - React
@@ -541,11 +541,11 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-gemius-plugin: 769a634647fffd10c03820624fd870fa5fcd4967
-  react-native-jw-media-player: 929085968063ade88bfe790f61962a0909349c87
-  react-native-onesignal: e8895a69983c8ffe953e1b0fc0f2ca75afc6af68
+  react-native-jw-media-player: 83b7ced40aa6be90875842960a61d33e1c56b4a1
+  react-native-onesignal: 417b2ae5c3148a47a6ef70b6af443186048b2022
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
-  react-native-webview: 881baa70f381b838964574f48153a2d453402922
+  react-native-webview: cf5527893252b3b036eea024a1da6996f7344c74
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -563,9 +563,9 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: b34063b906dd0c57a5d286dd743a40c90c8326c7
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
-  RNScreens: ac02d0e4529f08ced69f5580d416f968a6ec3a1d
+  RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
   RNShare: 8b171d4b43c1d886917fdd303bf7a4b87167b05c
-  RNSnackbar: 160077964866262ed08cfd33ab4760219ea2aef6
+  RNSnackbar: 098d0664ea5446ce57c104359d1922ebd82b7763
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   SDWebImage: d9ea4959d99c52276dfada481987018fcaea3d58
