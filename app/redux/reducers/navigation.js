@@ -19,6 +19,7 @@ const defaultSearchFilter = { type: 0, section: '', days: '' };
 const initialState = {
   selectedCategory: 0,
   routes: [],
+  pages: [],
   isLoading: false,
   isReady: false,
   isError: false,
@@ -73,6 +74,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         routes: parseRoutes(action.result),
+        pages: parsePages(action.result),
         isLoading: false,
         isError: false,
         isReady: false,
@@ -117,17 +119,55 @@ const parseRoutes = apiResponse => {
     type: ARTICLE_LIST_TYPE_HOME,
   });
 
-  apiResponse.main_menu.forEach((item, i) => {
-    routes.push({
-      key: item.name,
-      title: item.name,
-      type: item.type,
-      categoryId: item.id,
+  const availableTypes = ["mediateka", "newest", "popular", "category"];
+
+  apiResponse.main_menu
+    .filter(item => {
+      return availableTypes.includes(item.type);
+    })
+    .forEach((item, i) => {
+      routes.push({
+        key: item.name,
+        title: item.name,
+        type: item.type,
+        categoryId: item.id,
+      });
     });
-  });
 
   console.log(routes);
   return routes;
+};
+
+const parsePages = apiResponse => {
+  const pages = [];
+
+  apiResponse.main_menu
+    .filter(item => {
+      return item.type === "page";
+    })
+    .forEach(item => {
+      const routes = item.categories.map(item => {
+        return {
+          key: item.name,
+          title: item.name,
+          type: "category",
+          categoryId: item.id,
+        };
+      });
+
+      pages.push({
+        key: item.name,
+        title: item.name,
+        type: item.type,
+        routes
+      });
+    });
+
+  if (pages.length > 0) {
+    console.log("Found pages", pages);
+  }
+
+  return pages;
 };
 
 export default reducer;

@@ -20,6 +20,7 @@ import {
   GalleryScreen,
   HistoryScreen,
   BookmarksScreen,
+  CustomPageScreen,
 } from '../screens';
 
 import { createAppContainer } from 'react-navigation';
@@ -139,6 +140,9 @@ const StackNavigator = createStackNavigator(
     },
     bookmarks: {
       screen: BookmarksScreen,
+    },
+    customPage: {
+      screen: CustomPageScreen,
     },
     search: {
       screen: searchDrawerNavigator,

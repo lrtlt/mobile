@@ -11,3 +11,4 @@ export { default as SearchScreen } from './search/SearchScreen';
 export { default as GalleryScreen } from './gallery/GalleryScreen';
 export { default as HistoryScreen } from './history/HistoryScreen';
 export { default as BookmarksScreen } from './bookmarks/BookmarksScreen';
+export { default as CustomPageScreen } from './customPage/CustomPageScreen';

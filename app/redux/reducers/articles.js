@@ -365,6 +365,26 @@ const parseCategoriesFromMenu = apiResponse => {
     });
   });
 
+  const pageMenuItems = apiResponse.main_menu.filter(menuItem => {
+    return menuItem.type === "page";
+  });
+
+  pageMenuItems.forEach(page => {
+    page.categories.forEach(category => {
+      categories.push({
+        isFetching: false,
+        isError: false,
+        isRefreshing: false,
+        lastFetchTime: 0,
+        articles: [],
+        page: 0,
+        nextPage: 1,
+        id: category.id,
+        title: category.name,
+      });
+    });
+  })
+
   return categories;
 };
 

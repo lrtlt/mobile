@@ -29,6 +29,10 @@ class Drawer extends React.PureComponent {
     Linking.openURL(EStyleSheet.value('$upload_news_url'));
   };
 
+  handlePagePress = page => {
+    this.props.navigation.push('customPage', { page });
+  }
+
   handleSearchPress = () => {
     this.props.navigation.navigate('search');
   };
@@ -148,6 +152,27 @@ class Drawer extends React.PureComponent {
     );
   };
 
+  renderPages = () => {
+    const pages = this.props.pages;
+
+    if (pages && pages.length > 0) {
+      const content = this.props.pages.map(page =>
+        <DrawerItem
+          key={page.key}
+          text={page.title}
+          iconComponent={<FeatherIcon name="globe" size={22} color={EStyleSheet.value('$primaryLight')} />}
+          onPress={() => this.handlePagePress(page)} />
+      )
+
+      return <View>
+        <View style={Styles.line} />
+        {content}
+      </View>;
+    } else {
+      return null;
+    }
+  }
+
   render() {
     const content = this.props.routes.map((route, i) => {
       return (
@@ -172,6 +197,7 @@ class Drawer extends React.PureComponent {
               <View style={Styles.line} />
               <ScalableText style={Styles.title}>{EStyleSheet.value('$drawerMenu')}</ScalableText>
               {content}
+              {this.renderPages()}
               {this.renderFooterItems()}
             </View>
           </ScrollView>
@@ -184,6 +210,7 @@ class Drawer extends React.PureComponent {
 const mapStateToProps = state => {
   return {
     routes: state.navigation.routes,
+    pages: state.navigation.pages,
     channels: state.articles.tvprog.items,
   };
 };

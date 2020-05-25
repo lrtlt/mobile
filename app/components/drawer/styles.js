@@ -17,7 +17,6 @@ export default EStyleSheet.create({
     fontFamily: 'SourceSansPro-Regular',
     fontSize: '$drawerTitleTextSize',
     padding: '$drawerPadding*2',
-    paddingTop: '$drawerPadding',
     fontWeight: 'bold',
   },
   channelContainer: {
@@ -34,7 +33,7 @@ export default EStyleSheet.create({
     height: 1,
     marginStart: '$drawerPadding*2',
     marginEnd: '$drawerPadding*2',
-    marginBottom: '$drawerPadding',
+    //marginBottom: '$drawerPadding',
     backgroundColor: '$listSeparator',
   },
 });
