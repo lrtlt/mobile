@@ -104,7 +104,13 @@ const renderHtml = data => {
     // item.el.html =
     //   '<iframe class="instagram-media instagram-media-rendered" id="instagram-embed-0" src="https://www.instagram.com/p/B4deOwHgBUK/embed/captioned/?cr=1&amp;v=12&amp;wp=1080&amp;rd=https%3A%2F%2Fwww.lrt.lt&amp;rp=%2Fnaujienos%2Fveidai%2F14%2F1113431%2Fgreta-thunberg-tesia-susitikimus-su-zvaigzdemis-sikart-su-arnoldu-schwarzeneggeriu-vazinejo-dviraciais#%7B%22ci%22%3A0%2C%22os%22%3A615.0150000030408%2C%22ls%22%3A419.7599999970407%2C%22le%22%3A422.38999999972293%7D" allowtransparency="true" allowfullscreen="true" frameborder="0" height="741" data-instgrm-payload-id="instagram-media-payload-0" scrolling="no" style="background: white; max-width: 540px; width: calc(100% - 2px); border-radius: 3px; border: 1px solid rgb(219, 219, 219); box-shadow: none; display: block; margin: 0px 0px 12px; min-width: 326px; padding: 0px;"></iframe>';
 
-    const formatted = item.el.html
+    const html = item.el.html;
+
+    if (!html) {
+      return null;
+    }
+
+    const formatted = html
       //Replace width value without quotes in range 300-2400.
       .replace(
         new RegExp('\\width=\\b([3-8][0-9]{2}|9[0-8][0-9]|99[0-9]|1[0-9]{3}|2[0-3][0-9]{2}|2400)\\b'),
@@ -139,15 +145,15 @@ const renderHtml = data => {
           bounces={false}
           startInLoadingState={true}
           source={{ html: formatted }}
-          // onNavigationStateChange={event => {
-          //   console.log('onNavigationStateChange', event);
-          //   if (event.url !== 'about:blank') {
-          //     this.webview.stopLoading();
-          //     Linking.openURL(event.url).catch(err =>
-          //       console.warn('An error occurred', err),
-          //     );
-          //   }
-          // }}
+        // onNavigationStateChange={event => {
+        //   console.log('onNavigationStateChange', event);
+        //   if (event.url !== 'about:blank') {
+        //     this.webview.stopLoading();
+        //     Linking.openURL(event.url).catch(err =>
+        //       console.warn('An error occurred', err),
+        //     );
+        //   }
+        // }}
         />
       </View>
     );
