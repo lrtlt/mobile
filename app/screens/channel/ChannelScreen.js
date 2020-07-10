@@ -118,21 +118,21 @@ class ChannelScreen extends React.Component {
 
     const programComponent = prog
       ? prog.map((item, i) => {
-          if (i >= PROGRAM_ITEMS_VISIBLE) {
-            return;
-          }
+        if (i >= PROGRAM_ITEMS_VISIBLE) {
+          return;
+        }
 
-          const marginTop = i > 0 ? 8 : 0;
-          return (
-            <ProgramItem
-              style={{ marginTop }}
-              title={item.title}
-              key={item.time_start + item.title}
-              startTime={item.time_start}
-              percent={item.proc}
-            />
-          );
-        })
+        const marginTop = i > 0 ? 8 : 0;
+        return (
+          <ProgramItem
+            style={{ marginTop }}
+            title={item.title}
+            key={item.time_start + item.title}
+            startTime={item.time_start}
+            percent={item.proc}
+          />
+        );
+      })
       : null;
 
     return (
@@ -143,6 +143,7 @@ class ChannelScreen extends React.Component {
             mediaId={channel_info.channel_id ? channel_info.channel_id.toString() : null}
             style={Styles.player}
             autoPlay={true}
+            backgroundImage={channel_info.player_background_image}
             isLiveStream={true}
             isAudioOnly={channel_info.is_radio === 1}
             title={channel_info.title}

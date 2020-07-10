@@ -164,7 +164,7 @@ const parsePages = apiResponse => {
     });
 
   if (pages.length > 0) {
-    console.log("Found pages", pages);
+    console.log('Found pages', pages);
   }
 
   return pages;

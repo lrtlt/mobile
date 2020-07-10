@@ -7,7 +7,9 @@ import JWPlayer from 'react-native-jw-media-player';
 
 import Gemius from 'react-native-gemius-plugin';
 
-const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) => {
+const DEFAULT_BACKGROUND_IMAGE = 'https://yt3.ggpht.com/a/AGF-l78bfgG98j-GH2Yw816bbYmnXho-wUselvJM6A=s288-c-k-c0xffffffff-no-rj-mo';
+
+const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, description }) => {
 
   let playerRef = null;
 
@@ -19,12 +21,13 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, description }) =>
     };
   }, []);
 
+  const image = backgroundImage ? backgroundImage : DEFAULT_BACKGROUND_IMAGE;
+
   const createPlaylistItem = () => {
     return {
       title: title,
       mediaId: mediaId,
-      image:
-        'https://yt3.ggpht.com/a/AGF-l78bfgG98j-GH2Yw816bbYmnXho-wUselvJM6A=s288-c-k-c0xffffffff-no-rj-mo',
+      image: image,
       desc: description,
       time: 0,
       file: streamUri,
@@ -123,6 +126,7 @@ JWPlayerNative.propTypes = {
   streamUrl: PropTypes.string,
   mediaId: PropTypes.string,
   title: PropTypes.string,
+  backgroundImage: PropTypes.string,
   description: PropTypes.string,
 };
 

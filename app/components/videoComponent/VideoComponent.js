@@ -17,6 +17,7 @@ const initialState = {
   streamUri: null,
   mediaId: null,
   title: null,
+  backgroundImage: null,
   description: null,
 };
 
@@ -49,6 +50,7 @@ const VideoComponent = props => {
         newState.mediaId = props.mediaId;
         newState.streamUri = response.response.data.content.trim();
         newState.title = props.title;
+        newState.backgroundImage = props.backgroundImage;
         Gemius.setProgramData(props.mediaId, newState.title, -1, !props.isAudioOnly);
       } else {
         const { playlist_item } = response;
@@ -89,11 +91,6 @@ const VideoComponent = props => {
   const { streamUri, isLoading } = videoState;
   if (streamUri) {
     content = renderJWPlayerNative(videoState);
-    // if (Platform.OS == 'android') {
-    //   content = renderJWPlayerNative(videoState);
-    // } else {
-    //   content = renderNativePlayer(streamUri);
-    // }
   } else if (isLoading === true) {
     content = renderLoading(isLoading);
   } else {
@@ -106,6 +103,7 @@ const VideoComponent = props => {
 VideoComponent.propTypes = {
   ...VideoCover.propTypes,
   ...NativeVideoPlayer.propTypes,
+  ...JWPlayerNative.propTypes,
   mediaId: PropTypes.string,
   streamUrl: PropTypes.string,
   title: PropTypes.string,
