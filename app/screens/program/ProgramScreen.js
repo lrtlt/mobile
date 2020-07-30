@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, BackHandler } from 'react-native';
+import { View } from 'react-native';
 import { ScreenLoader, ProgramDay, ActionButton } from '../../components';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Styles from './styles';
@@ -61,8 +61,6 @@ class ProgramScreen extends React.PureComponent {
   };
 
   componentDidMount() {
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, { screen: 'program' });
     this.props.dispatch(fetchProgram());
   }
@@ -79,10 +77,6 @@ class ProgramScreen extends React.PureComponent {
     }
   }
 
-  componentWillUnmount() {
-    this.backHandler.remove();
-  }
-
   onDaySelectedHandler = day => {
     this.setState(
       {
@@ -97,11 +91,6 @@ class ProgramScreen extends React.PureComponent {
     this.props.navigation.setParams({
       titleComponent: this.renderSelectedDayHeader(day),
     });
-  };
-
-  handleBackPress = () => {
-    this.props.navigation.pop();
-    return true;
   };
 
   renderSelectedDayHeader = day => {
