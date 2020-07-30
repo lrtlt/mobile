@@ -7,6 +7,7 @@
     "run-ios": "react-native run-ios",
     "run-android": "react-native run-android",
     "clean-build": "watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && yarn cache clean && yarn install && cd ios && pod install && cd .. &&  yarn start -- --reset-cache",
+    "clean-build-win": "del %appdata%\\Temp\\react-native-* & cd android & gradlew clean & cd .. & del node_modules/ & yarn cache clean --force & yarn install & yarn start -- --reset-cache",
     "test": "jest",
     "lint": "eslint ."
   },
@@ -39,7 +40,7 @@
     "react-native-snackbar": "^2.2.1",
     "react-native-svg": "^12.1.0",
     "react-native-tab-view": "^2.14.2",
-    "react-native-vector-icons": "^6.6.0",
+    "react-native-vector-icons": "^7.0.0",
     "react-native-video": "^5.0.2",
     "react-native-webview": "^10.3.3",
     "react-navigation": "^4.3.9",

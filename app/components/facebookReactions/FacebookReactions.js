@@ -11,7 +11,7 @@ const facebookReactions = props => {
       <View style={Styles.container}>
         <Icon
           style={Styles.icon}
-          name="facebook-box"
+          name="facebook"
           size={EStyleSheet.value('$facebookIconSize') + EStyleSheet.value('$textSizeMultiplier')}
           color={EStyleSheet.value('$facebook')}
         />

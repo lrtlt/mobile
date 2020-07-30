@@ -11,14 +11,12 @@ export default EStyleSheet.create({
     borderColor: '$buttonBorderColor',
     borderWidth: 1,
     paddingStart: 4,
-    paddingTop: 0.5,
-    paddingBottom: 0.5,
+    paddingTop: 1,
+    paddingBottom: 1,
     paddingEnd: 4,
     borderRadius: 4,
   },
-  icon: {
-    marginTop: 2,
-  },
+  icon: {},
   countText: {
     color: '$facebook',
     paddingStart: 4,
