@@ -4,12 +4,17 @@ export default EStyleSheet.create({
   container: {
     marginTop: '$tvPadding',
     marginBottom: '$tvPadding',
+    padding: 4,
+    backgroundColor: '$slugBackground',
+    paddingBottom: 8,
   },
 
   topHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   scrollContent: {
     flex: 1,
@@ -19,6 +24,7 @@ export default EStyleSheet.create({
   leftText: {
     color: '$textColor',
     fontSize: '$tvSectionTextSize',
+    textTransform: 'uppercase',
     margin: '$articlePadding',
     fontFamily: 'SourceSansPro-SemiBold',
   },

@@ -128,12 +128,13 @@ export const colorsDark = {
 
 const tvProgramTheme = {
   $tvSectionTextSize: 18,
-  $tvPadding: 12,
+  $tvPadding: 2,
   $tvBackgroundColor: '$greyBackground',
-  $tvItemWidth: 210,
-  $tvTitleTextSize: 14,
-  $tvTimeTextSize: 14,
-  $tvBarHeight: 4,
+  $tvItemWidth: 180,
+  $tvChannelTitleTextSize: 12,
+  $tvTitleTextSize: 16,
+  $tvTimeTextSize: 12,
+  $tvBarHeight: 8,
 
   $tvLiveItemWidth: 230,
   $tvLiveItemHeight: 120,
