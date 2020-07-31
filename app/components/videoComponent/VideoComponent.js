@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 
 import VideoCover from './VideoCover';
 import JWPlayerNative from './JWPlayerNative';
-import NativeVideoPlayer from './NativeVideoPlayer';
 
 import Gemius from 'react-native-gemius-plugin';
 
@@ -74,10 +73,6 @@ const VideoComponent = props => {
     return <JWPlayerNative {...videoProps} autoPlay={props.autoPlay} />;
   };
 
-  const renderNativePlayer = uri => {
-    return <NativeVideoPlayer isLiveStream={props.isLiveStream} streamUri={uri} autoPlay={props.autoPlay} />;
-  };
-
   const renderCover = () => {
     return (
       <TouchableHighlight onPress={handlePlayPress}>
@@ -102,7 +97,6 @@ const VideoComponent = props => {
 
 VideoComponent.propTypes = {
   ...VideoCover.propTypes,
-  ...NativeVideoPlayer.propTypes,
   ...JWPlayerNative.propTypes,
   mediaId: PropTypes.string,
   streamUrl: PropTypes.string,

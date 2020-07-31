@@ -10,7 +10,7 @@ export const compose = article => {
   const data = [];
   data.push(getHeaderData(article));
 
-  if (article.is_video != 1) {
+  if (article.is_video != 1 && article.is_audio != 1) {
     data.push(getMainPhoto(article));
   }
 
@@ -28,12 +28,16 @@ export const compose = article => {
     }
 
     if (article.content) {
-      data.push(getContentForVideo(article));
+      data.push(getContentForMedia(article));
     }
   }
 
   if (article.is_audio == 1) {
     data.push(getAudio(article));
+
+    if (article.content) {
+      data.push(getContentForMedia(article));
+    }
   }
 
   if (article.article_photos) {
@@ -100,7 +104,7 @@ const getParagraphs = article => {
   });
 };
 
-const getContentForVideo = article => {
+const getContentForMedia = article => {
   return {
     type: TYPE_PARAGRAPH,
     data: { p: article.content },
@@ -121,7 +125,8 @@ const getAudio = article => {
   return {
     type: TYPE_AUDIO,
     data: {
-      source: { uri: article.stream_url },
+      cover: article.main_photo,
+      streamUri: article.stream_url,
     },
   };
 };

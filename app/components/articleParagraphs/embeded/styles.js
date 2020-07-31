@@ -37,6 +37,10 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  embededAudioContainer: {
+    backgroundColor: 'black',
+    aspectRatio: 16 / 9,
+  },
   embededArticleText: {
     color: '$textColorSecondary',
     fontFamily: 'PlayfairDisplay-Regular',

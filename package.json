@@ -41,7 +41,6 @@
     "react-native-svg": "^12.1.0",
     "react-native-tab-view": "^2.15.0",
     "react-native-vector-icons": "^7.0.0",
-    "react-native-video": "^5.0.2",
     "react-native-webview": "^10.3.3",
     "react-navigation": "^4.3.9",
     "react-navigation-backhandler": "^1.4.0",

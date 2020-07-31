@@ -37,6 +37,7 @@ export default EStyleSheet.create({
     width: '100%',
   },
   playerContainer: {
+    width: '100%',
     backgroundColor: '#121212',
     alignItems: 'center',
   },

@@ -10,7 +10,7 @@ import {
   ArticleGallery,
   ArticleParagraph,
   VideoComponent,
-  AudioPlayer,
+  AudioComponent,
 } from '../../components';
 import {
   compose,
@@ -92,8 +92,8 @@ const ArticleContent = props => {
 
     const renderAudio = () => {
       return (
-        <View style={Styles.audioPlayer}>
-          <AudioPlayer {...data} paused={true} controlTimeout={Number.MAX_VALUE} disableBack={true} />
+        <View style={Styles.playerContainer}>
+          <AudioComponent {...data} style={Styles.player} />
         </View>
       );
     };
@@ -131,7 +131,7 @@ const ArticleContent = props => {
         return renderAudio();
       }
       default: {
-        return <View style={{ backgroundColor: 'red', height: 40 }}></View>;
+        return <View style={{ backgroundColor: 'red', height: 40 }} />;
       }
     }
   };

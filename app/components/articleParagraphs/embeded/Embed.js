@@ -2,9 +2,8 @@ import React from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import Styles from './styles';
 import WebView from 'react-native-autoheight-webview';
-
 import ArticlePhoto from '../../articlePhoto/ArticlePhoto';
-import AudioPlayer from '../../audioPlayer/AudioPlayer';
+import JWPlayer from '../../videoComponent/JWPlayerNative';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import VideoComponent from '../../videoComponent/VideoComponent';
 
@@ -73,7 +72,7 @@ const renderBroadcast = data => {
           streamUrl={item.el.get_streams_url}
           isLiveStream={true}
           autoPlay={false}
-          mediaId={'0'}
+          mediaId={'-1'}
         />
       </View>
     );
@@ -145,15 +144,15 @@ const renderHtml = data => {
           bounces={false}
           startInLoadingState={true}
           source={{ html: formatted }}
-        // onNavigationStateChange={event => {
-        //   console.log('onNavigationStateChange', event);
-        //   if (event.url !== 'about:blank') {
-        //     this.webview.stopLoading();
-        //     Linking.openURL(event.url).catch(err =>
-        //       console.warn('An error occurred', err),
-        //     );
-        //   }
-        // }}
+          // onNavigationStateChange={event => {
+          //   console.log('onNavigationStateChange', event);
+          //   if (event.url !== 'about:blank') {
+          //     this.webview.stopLoading();
+          //     Linking.openURL(event.url).catch(err =>
+          //       console.warn('An error occurred', err),
+          //     );
+          //   }
+          // }}
         />
       </View>
     );
@@ -162,17 +161,17 @@ const renderHtml = data => {
 };
 
 const renderAudioPlayer = data => {
-  const uri = data[0].el.stream_url;
+  const { stream_url, id, title } = data[0].el;
   return (
-    <AudioPlayer
-      paused={true}
-      disableFullscreen={true}
-      controlTimeout={Number.MAX_VALUE}
-      disableBack={true}
-      fullscreen={false}
-      fullscreenAutorotate={false}
-      source={{ uri: uri }}
-    />
+    <View style={Styles.embededAudioContainer}>
+      <JWPlayer
+        streamUri={stream_url}
+        mediaId={id ? id.toString() : '0'}
+        title={title}
+        autoPlay={false}
+        style={Styles.player}
+      />
+    </View>
   );
 };
 

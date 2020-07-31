@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar, Platform } from 'react-native';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
@@ -7,10 +7,10 @@ import JWPlayer from 'react-native-jw-media-player';
 
 import Gemius from 'react-native-gemius-plugin';
 
-const DEFAULT_BACKGROUND_IMAGE = 'https://yt3.ggpht.com/a/AGF-l78bfgG98j-GH2Yw816bbYmnXho-wUselvJM6A=s288-c-k-c0xffffffff-no-rj-mo';
+const DEFAULT_BACKGROUND_IMAGE =
+  'https://yt3.ggpht.com/a/AGF-l78bfgG98j-GH2Yw816bbYmnXho-wUselvJM6A=s288-c-k-c0xffffffff-no-rj-mo';
 
 const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, description }) => {
-
   let playerRef = null;
 
   useEffect(() => {
@@ -36,25 +36,26 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, 
       repeat: false,
       displayDescription: false,
       displayTitle: false,
+      backgroundAudioEnabled: true,
     };
   };
 
   const sendPlay = () => {
-    console.log('JWPlayer event: play')
+    console.log('JWPlayer event: play');
     playerRef.position().then(pos => {
       Gemius.sendPlay(mediaId, pos ? pos : 0);
     });
   };
 
   const sendPause = () => {
-    console.log('JWPlayer event: pause')
+    console.log('JWPlayer event: pause');
     playerRef.position().then(pos => {
       Gemius.sendPause(mediaId, pos ? pos : 0);
     });
   };
 
   const sendClose = () => {
-    console.log('JWPlayer event: close')
+    console.log('JWPlayer event: close');
     playerRef.position().then(pos => {
       playerRef = null;
       Gemius.sendClose(mediaId, pos ? pos : 0);
@@ -62,23 +63,23 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, 
   };
 
   const sendBuffer = () => {
-    console.log('JWPlayer event: buffering')
+    console.log('JWPlayer event: buffering');
     playerRef.position().then(pos => {
       Gemius.sendBuffer(mediaId, pos ? pos : 0);
     });
-  }
+  };
 
   const sendComplete = () => {
-    console.log('JWPlayer event: complete')
+    console.log('JWPlayer event: complete');
     playerRef.position().then(pos => {
       Gemius.sendComplete(mediaId, pos ? pos : 0);
     });
-  }
+  };
 
   const sendSeek = position => {
-    console.log('JWPlayer event: seek ' + position)
+    console.log('JWPlayer event: seek ' + position);
     Gemius.sendSeek(mediaId, position);
-  }
+  };
 
   return (
     <View style={Styles.htmlContainer}>
@@ -123,7 +124,7 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, 
 
 JWPlayerNative.propTypes = {
   autoPlay: PropTypes.bool,
-  streamUrl: PropTypes.string,
+  streamUri: PropTypes.string,
   mediaId: PropTypes.string,
   title: PropTypes.string,
   backgroundImage: PropTypes.string,

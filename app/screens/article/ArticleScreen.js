@@ -155,13 +155,14 @@ class ArticleScreen extends React.Component {
 
     this.callApi(articleId)
       .then(article => this.parseArticle(article.article))
-      .catch(_ =>
+      .catch(e => {
+        console.log(e);
         this.setState({
           ...this.state,
           article: null,
           state: STATE_ERROR,
-        }),
-      );
+        });
+      });
   };
 
   parseArticle = article => {

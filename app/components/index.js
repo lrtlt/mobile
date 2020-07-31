@@ -6,7 +6,7 @@ export { default as ArticleGallery } from './articleGallery/ArticleGallery';
 export { default as ArticleParagraphs } from './articleParagraphs/ArticleParagraphs';
 export { default as ArticleParagraph } from './articleParagraphs/ArticleParagraph';
 export { default as ArticlePhoto } from './articlePhoto/ArticlePhoto';
-export { default as AudioPlayer } from './audioPlayer/AudioPlayer';
+export { default as AudioComponent } from './audioComponent/AudioComponent';
 export { default as BackIcon } from './backIcon/BackIcon';
 export { default as Button } from './button/Button';
 export { default as CoverImage } from './coverImage/CoverImage';
@@ -33,8 +33,8 @@ export { default as SettingsToggleButton } from './settingsToggleButton/Settings
 export { default as SlugTitle } from './slugTitle/SlugTitle';
 export { default as StatusBar } from './statusBar/LRTStatusBar';
 export { default as TouchableDebounce } from './touchableDebounce/TouchableDebounce';
+export { default as JWPlayer } from './videoComponent/JWPlayerNative';
 export { default as VideoComponent } from './videoComponent/VideoComponent';
-export { default as VideoPlayer } from './videoPlayer/VideoPlayer';
 export { default as ActionButton } from './actionButton/ActionButton';
 export { default as HeaderTitle } from './screenHeaderTitle/ScreenHeaderTitle';
 export { default as SearchTools } from './searchTools/SearchTools';

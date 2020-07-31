@@ -54,13 +54,15 @@ const reducer = (state = initialState, action) => {
 };
 
 const mapArticleData = article => {
+  const photo = article.main_photo ? article.main_photo.path : null;
+
   return {
     id: article.article_id || article.id,
     category_title: article.category_title,
     category_id: article.category_id,
     title: article.article_title || article.title,
     url: article.article_url || article.url,
-    photo: article.main_photo.path,
+    photo,
     subtitle: article.article_subtitle || article.subtitle,
     is_video: article.is_video,
   };
