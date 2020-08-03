@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 
 #define GEM_SDK_NAME                                @"GemiusSDK"
-#define GEM_SDK_VERSION                             @"1.5.1"
+#define GEM_SDK_VERSION                             @"1.9.4"
 
 @interface GEMConfig : NSObject
 @property(nonatomic, assign) BOOL       loggingEnabled;
@@ -18,5 +18,5 @@
 
 + (NSString*)getSdkVersion;
 - (void)setAppInfo:(NSString*)name version:(NSString*)version;
-- (NSString*)getUA4WebView;
+- (NSString *)getUA4WebView;
 @end

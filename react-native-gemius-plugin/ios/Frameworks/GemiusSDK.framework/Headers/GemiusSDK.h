@@ -18,8 +18,8 @@ FOUNDATION_EXPORT const unsigned char GemiusSDKVersionString[];
 #import <GemiusSDK/Config.h>
 #import <GemiusSDK/AdOceanConfig.h>
 #import <GemiusSDK/AdDefine.h>
-#import <GemiusSDK/BillboardAd.h>
-#import <GemiusSDK/FullScreenAd.h>
+#import <GemiusSDK/GEMBillboardAd.h>
+#import <GemiusSDK/GEMFullScreenAd.h>
 #import <GemiusSDK/AudienceEvent.h>
 #import <GemiusSDK/NetpanelEvent.h>
 #import <GemiusSDK/AudienceConfig.h>

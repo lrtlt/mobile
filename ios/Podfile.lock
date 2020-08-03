@@ -266,7 +266,7 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-gemius-plugin (1.4.0):
+  - react-native-gemius-plugin (1.5.1):
     - React
   - react-native-jw-media-player (0.1.48):
     - JWPlayer-SDK
@@ -536,7 +536,7 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-gemius-plugin: 769a634647fffd10c03820624fd870fa5fcd4967
+  react-native-gemius-plugin: 6d03b49c8e5df6e5d70d02c4dfc4f46c9fb5f30c
   react-native-jw-media-player: 2676429006b4aa585e3e43912355cca0aaee14d4
   react-native-onesignal: 417b2ae5c3148a47a6ef70b6af443186048b2022
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
