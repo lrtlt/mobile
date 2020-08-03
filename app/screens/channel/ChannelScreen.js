@@ -1,7 +1,14 @@
 import React from 'react';
 import { View, Text, Animated, Platform } from 'react-native';
 import { withCollapsible, setSafeBounceHeight } from 'react-navigation-collapsible';
-import { VideoComponent, ProgramItem, ScrollingChannels, ScreenLoader, ScreenError } from '../../components';
+import {
+  VideoComponent,
+  ProgramItem,
+  OpusNowPlaying,
+  ScrollingChannels,
+  ScreenLoader,
+  ScreenError,
+} from '../../components';
 import { channelGet } from '../../api';
 import { connect } from 'react-redux';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
@@ -118,21 +125,28 @@ class ChannelScreen extends React.Component {
 
     const programComponent = prog
       ? prog.map((item, i) => {
-        if (i >= PROGRAM_ITEMS_VISIBLE) {
-          return;
-        }
+          if (i >= PROGRAM_ITEMS_VISIBLE) {
+            return;
+          }
 
-        const marginTop = i > 0 ? 8 : 0;
-        return (
-          <ProgramItem
-            style={{ marginTop }}
-            title={item.title}
-            key={item.time_start + item.title}
-            startTime={item.time_start}
-            percent={item.proc}
-          />
-        );
-      })
+          let opusNowPlayingComponent = null;
+          if (i === 0 && channel_info.channel.toLowerCase().includes('opus')) {
+            opusNowPlayingComponent = <OpusNowPlaying />;
+          }
+
+          const marginTop = i > 0 ? 8 : 0;
+          return (
+            <View key={item.time_start + item.title}>
+              <ProgramItem
+                style={{ marginTop }}
+                title={item.title}
+                startTime={item.time_start}
+                percent={item.proc}
+              />
+              {opusNowPlayingComponent}
+            </View>
+          );
+        })
       : null;
 
     return (

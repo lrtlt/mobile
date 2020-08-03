@@ -25,15 +25,17 @@ export default EStyleSheet.create({
   titleText: {
     flex: 1,
     padding: 6,
+    paddingStart: 0,
     color: '$textColor',
-    fontFamily: 'PlayfairDisplay-Regular',
+    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 15,
   },
   titleTextUpcoming: {
     flex: 1,
     padding: 6,
+    paddingStart: 0,
     color: '$textColorSecondary',
-    fontFamily: 'PlayfairDisplay-Regular',
+    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 15,
   },
 });

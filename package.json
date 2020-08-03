@@ -16,6 +16,7 @@
     "@react-native-community/masked-view": "^0.1.9",
     "@react-native-firebase/app": "^8.2.0",
     "@react-native-firebase/crashlytics": "^8.1.2",
+    "@react-native-firebase/firestore": "^7.5.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",

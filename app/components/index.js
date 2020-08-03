@@ -22,6 +22,7 @@ export { default as MoreArticlesButton } from './moreArticlesButton/MoreArticles
 export { default as PhotoCountBadge } from './photoCount/PhotoCount';
 export { default as ProgramDay } from './programDay/ProgramDay';
 export { default as ProgramItem } from './programItem/ProgramItem';
+export { default as OpusNowPlaying } from './opusNowPlaying/OpusNowPlaying';
 export { default as ProgressiveImage } from './progressiveImage/ProgressiveImage';
 export { default as ScalableText } from './scalableText/ScalableText';
 export { default as ScreenError } from './screenError/ScreenError';
