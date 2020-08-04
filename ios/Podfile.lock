@@ -535,6 +535,8 @@ PODS:
     - React (< 1.0.0, >= 0.13.0)
   - react-native-safe-area-context (0.7.3):
     - React
+  - react-native-selectable-text (1.5.1):
+    - React
   - react-native-webview (10.3.3):
     - React
   - React-RCTActionSheet (0.61.5):
@@ -573,6 +575,8 @@ PODS:
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
   - RNCAsyncStorage (1.9.0):
+    - React
+  - RNCClipboard (1.2.3):
     - React
   - RNCMaskedView (0.1.10):
     - React
@@ -635,6 +639,7 @@ DEPENDENCIES:
   - react-native-jw-media-player (from `../node_modules/react-native-jw-media-player/ios`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - "react-native-selectable-text (from `../node_modules/@astrocoders/react-native-selectable-text`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -648,6 +653,7 @@ DEPENDENCIES:
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
+  - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
@@ -726,6 +732,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-onesignal"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-selectable-text:
+    :path: "../node_modules/@astrocoders/react-native-selectable-text"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
@@ -750,6 +758,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-community/clipboard"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNFastImage:
@@ -818,6 +828,7 @@ SPEC CHECKSUMS:
   react-native-jw-media-player: 2676429006b4aa585e3e43912355cca0aaee14d4
   react-native-onesignal: 417b2ae5c3148a47a6ef70b6af443186048b2022
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
+  react-native-selectable-text: 1db201c4080adba28e1853e26cdaad7035f55477
   react-native-webview: 136107c8fc07efc95be59e519710cdc05822ad40
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
@@ -830,6 +841,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNCAsyncStorage: 453cd7c335ec9ba3b877e27d02238956b76f3268
+  RNCClipboard: 48eaf27bea3de7c9a265529725434268d47a2ee9
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFastImage: e19ba191922e7dab9d932a4d59d62d76660aa222
   RNFBApp: 6fd8a7e757135d4168bf033a8812c241af7363a0
