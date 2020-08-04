@@ -1,6 +1,6 @@
 {
   "name": "lrtApp",
-  "version": "2.12.4",
+  "version": "2.14.0",
   "private": true,
   "scripts": {
     "start": "react-native start",
