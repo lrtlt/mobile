@@ -16,7 +16,6 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, 
   useEffect(() => {
     return () => {
       //Cleanup
-      StatusBar.setHidden(false, true);
       sendClose();
     };
   }, []);
@@ -111,11 +110,17 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, 
         }}
         onBuffer={() => sendBuffer()}
         onComplete={() => sendComplete()}
-        onFullScreen={() => {
-          StatusBar.setHidden(true, true);
+        onFullScreenRequested={() => {
+          // console.log('onFullScreen');
+          if (Platform.OS === 'android') {
+            StatusBar.setHidden(true, true);
+          }
         }}
-        onFullScreenExit={() => {
-          StatusBar.setHidden(false, true);
+        onFullScreenExitRequested={() => {
+          //console.log('onFullScreenExit');
+          if (Platform.OS === 'android') {
+            StatusBar.setHidden(false, true);
+          }
         }}
       />
     </View>
