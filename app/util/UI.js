@@ -1,6 +1,5 @@
 import React from 'react';
 import { Dimensions, Platform } from 'react-native';
-import LiveBadge from '../components/liveBadge/LiveBadge';
 
 import {
   ChannelLRadioIcon,
@@ -9,6 +8,7 @@ import {
   ChannelLRTHDIcon,
   ChannelLRTWorldIcon,
   ChannelOpusIcon,
+  LogoLight,
 } from '../components/svg';
 
 import { channelColors } from '../ColorTheme';
@@ -82,10 +82,6 @@ export const getColorsForChannel = channel => {
 };
 
 export const getIconForChannel = (channel, size = DEFAULT_CHANNEL_ICON_SIZE) => {
-  if (channel && channel.toLowerCase().includes('live')) {
-    return <LiveBadge />;
-  }
-
   switch (channel.toLowerCase()) {
     case 'ltv1': {
       return <ChannelLRTHDIcon size={size} />;
@@ -106,7 +102,7 @@ export const getIconForChannel = (channel, size = DEFAULT_CHANNEL_ICON_SIZE) => 
       return <ChannelOpusIcon size={size} />;
     }
     default: {
-      return <ChannelLRTHDIcon size={size} />;
+      return <LogoLight size={size} />;
     }
   }
 };

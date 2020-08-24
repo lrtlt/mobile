@@ -8,6 +8,7 @@ export { default as ChannelOpusIcon } from './ic_channel_opus';
 export { default as CommentsIcon } from './ic_comments';
 export { default as SaveIcon } from './ic_save';
 export { default as Logo } from './ic_logo';
+export { default as LogoLight } from './ic_logo_light';
 export { default as NoteIcon } from './ic_current_song';
 export { default as MicIcon } from './ic_microphone';
 export { default as MoonIcon } from './ic_moon';

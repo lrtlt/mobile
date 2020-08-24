@@ -6,6 +6,7 @@ export default EStyleSheet.create({
     borderRadius: 4,
     width: '$tvItemWidth',
     alignSelf: 'center',
+    flexWrap: 'wrap',
   },
   coverContainer: {
     flex: 1,
@@ -31,6 +32,7 @@ export default EStyleSheet.create({
   },
   mediaIndicatorContainer: {
     flex: 1,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
