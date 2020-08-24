@@ -18,9 +18,8 @@ const REPORT_EMAIL_SUBJECT = 'Klaida tekste';
 const component = props => {
   return (
     <SelectableText
-      {...props}
-      textBreakStrategy="simple"
       menuItems={[EVENT_COPY, EVENT_REPORT]}
+      textComponentProps={{ ...props, textBreakStrategy: 'simple' }}
       onSelection={({ eventType, content, selectionStart, selectionEnd }) => {
         switch (eventType) {
           case EVENT_COPY: {
