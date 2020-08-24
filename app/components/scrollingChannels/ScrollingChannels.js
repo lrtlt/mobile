@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import Styles from './styles';
 import { ScrollView } from 'react-native-gesture-handler';
 import ScalableText from '../scalableText/ScalableText';
-import LiveChannel from './channelLive/LiveChannel';
 import Channel from './channel/Channel';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { CHANNEL_TYPE_DEFAULT, CHANNEL_TYPE_LIVE } from '../../constants';
