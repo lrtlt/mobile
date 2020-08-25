@@ -13,8 +13,12 @@ const component = props => {
       .collection('rds')
       .doc('opus')
       .onSnapshot(documentSnapshot => {
-        const { info } = documentSnapshot.data();
-        setCurrentSong(info);
+        if (documentSnapshot != null) {
+          const { info } = documentSnapshot.data();
+          setCurrentSong(info);
+        } else {
+          console.warn('documentSnapshot is null from firestore');
+        }
       });
     return () => subscriber();
   }, []);
