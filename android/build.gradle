@@ -5,8 +5,10 @@ buildscript {
         buildToolsVersion = "28.0.3"
         minSdkVersion = 21
         compileSdkVersion = 28
-        targetSdkVersion = 28
-        supportLibVersion = "28.0.0"
+
+        // Google play store requires target SDK version to be at least 29 to ensure it is built
+        // on the latest APIs optimized for security and performance
+        targetSdkVersion = 29
     }
     repositories {
         google()
