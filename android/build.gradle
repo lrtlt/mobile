@@ -16,7 +16,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath('com.android.tools.build:gradle:4.0.0')
+        classpath('com.android.tools.build:gradle:3.6.4')
         classpath 'com.google.gms:google-services:4.2.0'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.0.0'
         classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.1, 0.99.99]'
