@@ -12,9 +12,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@astrocoders/react-native-selectable-text": "^1.5.1",
     "@react-native-community/async-storage": "^1.9.0",
-    "@react-native-community/clipboard": "^1.2.3",
     "@react-native-community/masked-view": "^0.1.9",
     "@react-native-firebase/app": "^8.2.0",
     "@react-native-firebase/crashlytics": "^8.1.2",
