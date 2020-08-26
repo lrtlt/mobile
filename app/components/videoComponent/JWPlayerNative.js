@@ -91,7 +91,7 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, 
         style={Styles.embedPlayer}
         playlistItem={createPlaylistItem()}
         nativeFullScreen={true}
-        nextUpDisplay={true}
+        nextUpDisplay={false}
         //landscapeOnFullScreen={true}
         //exitFullScreenOnPortrait={true}
         //fullScreenOnLandscape={true}
@@ -110,16 +110,15 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, 
         }}
         onBuffer={() => sendBuffer()}
         onComplete={() => sendComplete()}
-        onFullScreenRequested={() => {
-          // console.log('onFullScreen');
-          if (Platform.OS === 'android') {
-            StatusBar.setHidden(true, true);
-          }
-        }}
-        onFullScreenExitRequested={() => {
-          //console.log('onFullScreenExit');
+        onFullScreen={() => {
           if (Platform.OS === 'android') {
             StatusBar.setHidden(false, true);
+          }
+        }}
+        onFullScreenExit={() => {
+          if (Platform.OS === 'android') {
+            StatusBar.setHidden(false, true);
+            StatusBar.setBarStyle('dark-content', true);
           }
         }}
       />

@@ -30,7 +30,7 @@
     "react-native-gallery-swiper": "^1.26.4",
     "react-native-gemius-plugin": "./react-native-gemius-plugin",
     "react-native-gesture-handler": "^1.6.1",
-    "react-native-jw-media-player": "^0.1.48",
+    "react-native-jw-media-player": "https://github.com/KestasVenslauskas/react-native-jw-media-player.git#temp-prod",
     "react-native-onesignal": "^3.7.3",
     "react-native-reanimated": "^1.8.0",
     "react-native-render-html": "^4.2.2",
