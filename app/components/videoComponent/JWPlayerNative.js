@@ -112,7 +112,7 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, 
         onComplete={() => sendComplete()}
         onFullScreen={() => {
           if (Platform.OS === 'android') {
-            StatusBar.setHidden(false, true);
+            StatusBar.setHidden(true, true);
           }
         }}
         onFullScreenExit={() => {
