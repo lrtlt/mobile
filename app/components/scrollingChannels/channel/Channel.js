@@ -6,7 +6,7 @@ import Styles from './styles';
 import IC_CAMERA from '../../svg/ic_camera';
 import IC_MICROPHONE from '../../svg/ic_microphone';
 import { getIconForChannel, getColorsForChannel } from '../../../util/UI';
-import { getImageSizeForWidth, buildArticleImageUri } from '../../../util/ImageUtil';
+import { buildArticleImageUri, IMG_SIZE_L } from '../../../util/ImageUtil';
 
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 
@@ -22,8 +22,7 @@ const channel = props => {
 
   let coverUrl = null;
   if (props.isLive) {
-    const imgSize = getImageSizeForWidth(300);
-    coverUrl = buildArticleImageUri(imgSize, data.photo);
+    coverUrl = buildArticleImageUri(IMG_SIZE_L, data.photo);
   } else {
     coverUrl = data.cover_url;
   }

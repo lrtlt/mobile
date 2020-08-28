@@ -13,9 +13,15 @@ const DEFAULT_BACKGROUND_IMAGE =
 const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, description }) => {
   let playerRef = null;
 
+  const showStatusBar = () => {
+    StatusBar.setHidden(false, true);
+    StatusBar.setBarStyle('dark-content', true);
+  };
+
   useEffect(() => {
     return () => {
       //Cleanup
+      showStatusBar();
       sendClose();
     };
   }, []);
@@ -117,8 +123,7 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, 
         }}
         onFullScreenExit={() => {
           if (Platform.OS === 'android') {
-            StatusBar.setHidden(false, true);
-            StatusBar.setBarStyle('dark-content', true);
+            showStatusBar();
           }
         }}
       />
