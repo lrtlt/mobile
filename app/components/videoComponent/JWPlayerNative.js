@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Styles from './styles';
 import JWPlayer from 'react-native-jw-media-player';
-
 import Gemius from 'react-native-gemius-plugin';
 
 const DEFAULT_BACKGROUND_IMAGE =
@@ -21,7 +20,13 @@ const JWPlayerNative = ({ streamUri, mediaId, autoPlay, title, backgroundImage, 
   useEffect(() => {
     return () => {
       //Cleanup
-      showStatusBar();
+
+      /* This fixes the bug on android where user presses back button 
+       * while video is in fullscreen and status bar does not show up */
+      if (Platform.OS === 'android') {
+        showStatusBar();
+      }
+
       sendClose();
     };
   }, []);
