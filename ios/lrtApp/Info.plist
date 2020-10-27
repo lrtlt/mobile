@@ -70,6 +70,8 @@
 	<string>Optional permission required by 3rd party library. If you see this, you can deny access.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Optional permission required by 3rd party library. If you see this, you can deny access.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We will use your Microphone for media casting.</string>
 	<key>Privacy - Local Network Usage Description</key>
 	<string>We will use the local network to discover Cast-enabled devices on your WiFi network.</string>
 	<key>UIAppFonts</key>
