@@ -228,30 +228,30 @@ PODS:
     - React-Core (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/turbomodule/core (= 0.61.5)
-  - Firebase/CoreOnly (6.30.0):
-    - FirebaseCore (= 6.10.0)
-  - Firebase/Crashlytics (6.30.0):
+  - Firebase/CoreOnly (6.34.0):
+    - FirebaseCore (= 6.10.4)
+  - Firebase/Crashlytics (6.34.0):
     - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 4.4.0)
-  - Firebase/Firestore (6.30.0):
+    - FirebaseCrashlytics (~> 4.6.2)
+  - Firebase/Firestore (6.34.0):
     - Firebase/CoreOnly
-    - FirebaseFirestore (~> 1.16.4)
-  - FirebaseCore (6.10.0):
-    - FirebaseCoreDiagnostics (~> 1.3)
+    - FirebaseFirestore (~> 1.19.0)
+  - FirebaseCore (6.10.4):
+    - FirebaseCoreDiagnostics (~> 1.6)
     - GoogleUtilities/Environment (~> 6.7)
     - GoogleUtilities/Logger (~> 6.7)
-  - FirebaseCoreDiagnostics (1.5.0):
-    - GoogleDataTransport (~> 7.0)
+  - FirebaseCoreDiagnostics (1.7.0):
+    - GoogleDataTransport (~> 7.4)
     - GoogleUtilities/Environment (~> 6.7)
     - GoogleUtilities/Logger (~> 6.7)
-    - nanopb (~> 1.30905.0)
-  - FirebaseCrashlytics (4.4.0):
+    - nanopb (~> 1.30906.0)
+  - FirebaseCrashlytics (4.6.2):
     - FirebaseCore (~> 6.10)
     - FirebaseInstallations (~> 1.6)
     - GoogleDataTransport (~> 7.2)
-    - nanopb (~> 1.30905.0)
+    - nanopb (~> 1.30906.0)
     - PromisesObjC (~> 1.2)
-  - FirebaseFirestore (1.16.4):
+  - FirebaseFirestore (1.19.0):
     - abseil/algorithm (= 0.20200225.0)
     - abseil/base (= 0.20200225.0)
     - abseil/memory (= 0.20200225.0)
@@ -262,7 +262,7 @@ PODS:
     - FirebaseCore (~> 6.10)
     - "gRPC-C++ (~> 1.28.0)"
     - leveldb-library (~> 1.22)
-    - nanopb (~> 1.30905.0)
+    - nanopb (~> 1.30906.0)
   - FirebaseInstallations (1.7.0):
     - FirebaseCore (~> 6.10)
     - GoogleUtilities/Environment (~> 6.7)
@@ -285,8 +285,8 @@ PODS:
   - google-cast-sdk/Core (4.4.8):
     - GTMSessionFetcher/Core (~> 1.1)
     - Protobuf (~> 3.0)
-  - GoogleDataTransport (7.2.0):
-    - nanopb (~> 1.30905.0)
+  - GoogleDataTransport (7.5.1):
+    - nanopb (~> 1.30906.0)
   - GoogleUtilities/Environment (6.7.2):
     - PromisesObjC (~> 1.2)
   - GoogleUtilities/Logger (6.7.2):
@@ -317,8 +317,8 @@ PODS:
     - BoringSSL-GRPC (= 0.0.7)
     - gRPC-Core/Interface (= 1.28.2)
   - gRPC-Core/Interface (1.28.2)
-  - GTMSessionFetcher/Core (1.4.0)
-  - JWPlayer-SDK (3.17.0)
+  - GTMSessionFetcher/Core (1.5.0)
+  - JWPlayer-SDK (3.18.1)
   - leveldb-library (1.22)
   - libwebp (1.1.0):
     - libwebp/demux (= 1.1.0)
@@ -329,13 +329,13 @@ PODS:
   - libwebp/mux (1.1.0):
     - libwebp/demux
   - libwebp/webp (1.1.0)
-  - nanopb (1.30905.0):
-    - nanopb/decode (= 1.30905.0)
-    - nanopb/encode (= 1.30905.0)
-  - nanopb/decode (1.30905.0)
-  - nanopb/encode (1.30905.0)
-  - OneSignal (2.13.1)
-  - PromisesObjC (1.2.10)
+  - nanopb (1.30906.0):
+    - nanopb/decode (= 1.30906.0)
+    - nanopb/encode (= 1.30906.0)
+  - nanopb/decode (1.30906.0)
+  - nanopb/encode (1.30906.0)
+  - OneSignal (2.15.4)
+  - PromisesObjC (1.2.11)
   - Protobuf (3.13.0)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
@@ -502,17 +502,17 @@ PODS:
   - React-jsinspector (0.61.5)
   - react-native-gemius-plugin (1.5.1):
     - React
-  - react-native-jw-media-player (0.1.49):
+  - react-native-jw-media-player (0.1.51):
     - google-cast-sdk (~> 4.4.5)
     - JWPlayer-SDK
     - React
-  - react-native-onesignal (3.7.3):
-    - OneSignal (= 2.13.1)
+  - react-native-onesignal (3.9.2):
+    - OneSignal (= 2.15.4)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-safe-area-context (0.7.3):
     - React
-  - react-native-webview (10.8.2):
-    - React
+  - react-native-webview (10.10.0):
+    - React-Core
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
   - React-RCTAnimation (0.61.5):
@@ -548,42 +548,42 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - RNCAsyncStorage (1.12.0):
-    - React
+  - RNCAsyncStorage (1.12.1):
+    - React-Core
   - RNCMaskedView (0.1.10):
     - React
   - RNFastImage (8.3.2):
     - React
     - SDWebImage (~> 5.8)
     - SDWebImageWebPCoder (~> 0.6.1)
-  - RNFBApp (8.4.2):
-    - Firebase/CoreOnly (~> 6.30.0)
-    - React
-  - RNFBCrashlytics (8.4.4):
-    - Firebase/Crashlytics (~> 6.30.0)
-    - React
+  - RNFBApp (8.4.6):
+    - Firebase/CoreOnly (~> 6.34.0)
+    - React-Core
+  - RNFBCrashlytics (8.4.11):
+    - Firebase/Crashlytics (~> 6.34.0)
+    - React-Core
     - RNFBApp
-  - RNFBFirestore (7.8.1):
-    - Firebase/Firestore (~> 6.30.0)
-    - React
+  - RNFBFirestore (7.8.7):
+    - Firebase/Firestore (~> 6.34.0)
+    - React-Core
     - RNFBApp
-  - RNGestureHandler (1.6.1):
+  - RNGestureHandler (1.8.0):
     - React
-  - RNReanimated (1.8.0):
+  - RNReanimated (1.13.1):
     - React
-  - RNScreens (2.9.0):
-    - React
-  - RNShare (3.7.0):
-    - React
+  - RNScreens (2.12.0):
+    - React-Core
+  - RNShare (3.8.5):
+    - React-Core
   - RNSnackbar (2.2.3):
     - React
   - RNSVG (12.1.0):
     - React
-  - RNVectorIcons (7.0.0):
+  - RNVectorIcons (7.1.0):
     - React
-  - SDWebImage (5.9.1):
-    - SDWebImage/Core (= 5.9.1)
-  - SDWebImage/Core (5.9.1)
+  - SDWebImage (5.9.4):
+    - SDWebImage/Core (= 5.9.4)
+  - SDWebImage/Core (5.9.4)
   - SDWebImageWebPCoder (0.6.1):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
@@ -759,26 +759,26 @@ SPEC CHECKSUMS:
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
-  Firebase: 210f41ca352067d83b1ba4fd2e7fb49a0c017397
-  FirebaseCore: 9a41e2de78fef10f63cee30ab10e2945266bc1fc
-  FirebaseCoreDiagnostics: 7535fe695737f8c5b350584292a70b7f8ff0357b
-  FirebaseCrashlytics: 859918905322e8816d2b5ab7fe54bf5a0c84d21c
-  FirebaseFirestore: ff82cd15f8ed3b417c307eb729e3e2e68aad0bdd
+  Firebase: c23a36d9e4cdf7877dfcba8dd0c58add66358999
+  FirebaseCore: d3a978a3cfa3240bf7e4ba7d137fdf5b22b628ec
+  FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
+  FirebaseCrashlytics: 1a747c9cc084a24dc6d9511c991db1cd078154eb
+  FirebaseFirestore: 9b2f1b9b9a6f2f0b6fb7484b9e32ab7e39243554
   FirebaseInstallations: 466c7b4d1f58fe16707693091da253726a731ed2
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   google-cast-sdk: 2feec01ef5ee467f70a14acde9f01f188aeea76f
-  GoogleDataTransport: 672fb0ce96fe7f7f31d43672fca62ad2c9c86f7b
+  GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   "gRPC-C++": 13d8ccef97d5c3c441b7e3c529ef28ebee86fad2
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
-  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
-  JWPlayer-SDK: bca5b9d2644e188f90b6a05c22e3e0969e15d7df
+  GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
+  JWPlayer-SDK: c892971007a9fbcf5f3ddc12098c5924e121a374
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
-  nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
-  OneSignal: fa98eaa90372bb367b6a4a1c1622ffb9832c7600
-  PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
+  nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
+  OneSignal: 6647275955d0f06d9e17c90dc93af9d85ecfd2b9
+  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
   Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -790,10 +790,10 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-gemius-plugin: 6d03b49c8e5df6e5d70d02c4dfc4f46c9fb5f30c
-  react-native-jw-media-player: 0e6d6e63a583c43ec7fcd2dc92039e5b678b12ce
-  react-native-onesignal: 417b2ae5c3148a47a6ef70b6af443186048b2022
+  react-native-jw-media-player: 39c47128f0288ed09f4b907afcc4be5e4ab7c9c2
+  react-native-onesignal: ab5bd48dfc62d6f502ee2087cef317cd1c2b72f7
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
-  react-native-webview: 0e49a2e85f42b20ea5579928a8b254a07fa901dc
+  react-native-webview: 73e409ecc987c189772bda27ba7f0e2f3dcd2e81
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -804,23 +804,23 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  RNCAsyncStorage: 2a692bcb9b69b76a2f1a95f33db057129700af64
+  RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFastImage: e19ba191922e7dab9d932a4d59d62d76660aa222
-  RNFBApp: 373cce42559cc7a9a42afc876746e3946de3e32e
-  RNFBCrashlytics: 834057016b34fa49e3eef028a13e35f48840c78c
-  RNFBFirestore: 75c8fb40f3414f7b8158a260eec47dc3bbc0cfd0
-  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
-  RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
-  RNShare: a1d5064df7a0ebe778d001869b3f0a124bf0a491
+  RNFBApp: 7eacc7da7ab19f96c05e434017d44a9f09410da8
+  RNFBCrashlytics: e35507742eebf1483d518efe70425ee931d555e6
+  RNFBFirestore: 09a65d56413b9e11ab550f5f7e27106312c5fb7e
+  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
+  RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
+  RNScreens: 4b488fdf9537bbce829e2910c8cce1d17f6d9be8
+  RNShare: 7e22ba3bf66294ff7c122a1f2da8a8ec642091a0
   RNSnackbar: a08d0d7e1e18c7312cd2b9c6f476211267855bce
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
-  RNVectorIcons: da6fe858f5a65d7bbc3379540a889b0b12aa5976
-  SDWebImage: a990c053fff71e388a10f3357edb0be17929c9c5
+  RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
+  SDWebImage: b69257f4ab14e9b6a2ef53e910fdf914d8f757c1
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: c1586ef2b580d00429cf02baa6a97b4f08f49805
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.10.0
