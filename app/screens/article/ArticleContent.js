@@ -135,8 +135,6 @@ const ArticleContent = (props) => {
     }
   };
 
-  const {paddingHeight, animatedY, onScroll} = props.collapsible;
-
   return (
     <View style={Styles.container}>
       <AnimatedFlatList
@@ -149,12 +147,6 @@ const ArticleContent = (props) => {
         renderItem={renderItem}
         removeClippedSubviews={false}
         keyExtractor={(item, index) => getItemKey(item, index)}
-        //Collapsible params
-        scrollEventThrottle={16}
-        contentContainerStyle={{paddingTop: paddingHeight}}
-        scrollIndicatorInsets={{top: paddingHeight}}
-        _mustAddThis={animatedY}
-        onScroll={onScroll}
       />
     </View>
   );

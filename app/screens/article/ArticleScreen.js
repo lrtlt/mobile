@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, Platform} from 'react-native';
-import {withCollapsible, setSafeBounceHeight} from 'react-navigation-collapsible';
+import {View} from 'react-native';
 import {connect} from 'react-redux';
 import {saveArticle, removeArticle, addArticleToHistory} from '../../redux/actions';
 import {articleGet} from '../../api';
@@ -87,8 +86,6 @@ class ArticleScreen extends React.Component {
   }
 
   componentDidMount() {
-    setSafeBounceHeight(Platform.OS === 'ios' ? 150 : 100);
-
     const articleId = this.state.articleId;
 
     //N-18
@@ -273,13 +270,7 @@ class ArticleScreen extends React.Component {
     if (article === null) {
       articleComponent = <View />;
     } else {
-      articleComponent = (
-        <ArticleContent
-          article={article}
-          itemPressHandler={this._handleItemPress}
-          collapsible={this.props.collapsible}
-        />
-      );
+      articleComponent = <ArticleContent article={article} itemPressHandler={this._handleItemPress} />;
     }
 
     return <View style={Styles.screen}>{articleComponent}</View>;
@@ -346,8 +337,4 @@ const mapStateToProps = (state, ownProps) => {
   return {isSaved};
 };
 
-const root = withCollapsible(ArticleScreen, {
-  iOSCollapsedColor: 'transparent',
-});
-
-export default connect(mapStateToProps)(root);
+export default connect(mapStateToProps)(ArticleScreen);

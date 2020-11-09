@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, Text, Animated, Platform} from 'react-native';
-import {withCollapsible, setSafeBounceHeight} from 'react-navigation-collapsible';
+import {View, Text, Animated} from 'react-native';
 import {
   VideoComponent,
   ProgramItem,
@@ -45,8 +44,6 @@ class ChannelScreen extends React.Component {
   }
 
   componentDidMount() {
-    setSafeBounceHeight(Platform.OS === 'ios' ? 100 : 0);
-
     const {channelId} = this.props.navigation.state.params;
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
       screen: 'channel',
@@ -202,17 +199,9 @@ class ChannelScreen extends React.Component {
         />
       ) : null;
 
-    const {paddingHeight, animatedY, onScroll} = this.props.collapsible;
-
     return (
       <View style={Styles.screen}>
-        <AnimatedScrollView
-          style={Styles.scrollContainer}
-          contentContainerStyle={{paddingTop: paddingHeight}}
-          scrollIndicatorInsets={{top: paddingHeight}}
-          _mustAddThis={animatedY}
-          onScroll={onScroll}
-          scrollEventThrottle={16}>
+        <AnimatedScrollView style={Styles.scrollContainer} scrollEventThrottle={16}>
           <View style={Styles.container}>
             {content}
             {tvBar}
@@ -229,8 +218,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(
-  withCollapsible(ChannelScreen, {
-    iOSCollapsedColor: 'transparent',
-  }),
-);
+export default connect(mapStateToProps)(ChannelScreen);
