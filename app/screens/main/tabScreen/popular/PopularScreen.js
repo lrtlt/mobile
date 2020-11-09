@@ -2,7 +2,6 @@ import React from 'react';
 import {View, RefreshControl, Text, Button} from 'react-native';
 import {ArticleRow, DefaultSectionHeader, ScreenLoader} from '../../../../components';
 import Styles from './styles';
-import {withNavigation} from 'react-navigation';
 import {connect} from 'react-redux';
 import {fetchPopular, refreshPopular} from '../../../../redux/actions';
 import {FlatList} from 'react-native-gesture-handler';
@@ -151,4 +150,4 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(withNavigation(PopularScreen));
+export default connect(mapStateToProps)(PopularScreen);

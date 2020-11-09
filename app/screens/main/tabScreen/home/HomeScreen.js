@@ -9,7 +9,6 @@ import {
   ScreenLoader,
 } from '../../../../components';
 import Styles from './styles';
-import {withNavigation} from 'react-navigation';
 import {connect} from 'react-redux';
 import {fetchArticles, fetchMediateka, openCategoryForName} from '../../../../redux/actions/index';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -217,4 +216,4 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(withNavigation(HomeScreen));
+export default connect(mapStateToProps)(HomeScreen);

@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Dimensions} from 'react-native';
-import {withNavigation} from 'react-navigation';
 import {TabView} from 'react-native-tab-view';
 import Styles from './styles';
 import TabBar from '../main/tabBar/TabBar';
@@ -89,4 +88,4 @@ class CustomPageScreen extends React.Component {
   }
 }
 
-export default withNavigation(CustomPageScreen);
+export default CustomPageScreen;

@@ -6,12 +6,10 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import Styles from './styles';
 import {connect} from 'react-redux';
 import {setConfig} from '../../redux/actions';
-import {withOrientation} from 'react-navigation';
 import {initTheme} from '../../ColorTheme';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import {AndroidBackHandler} from 'react-navigation-backhandler';
 import {isEqual} from 'lodash';
-import {StackActions, NavigationActions} from 'react-navigation';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 
@@ -97,15 +95,15 @@ class SettingsScreen extends React.Component {
 
   navigateToHome = () => {
     const hasChanges = this.hasChanges();
-    if (hasChanges) {
-      const resetAction = StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({routeName: 'home'})],
-      });
-      this.props.navigation.dispatch(resetAction);
-    } else {
-      this.props.navigation.dispatch(StackActions.popToTop());
-    }
+    // if (hasChanges) {
+    //   const resetAction = StackActions.reset({
+    //     index: 0,
+    //     actions: [NavigationActions.navigate({routeName: 'home'})],
+    //   });
+    //   this.props.navigation.dispatch(resetAction);
+    // } else {
+    //   this.props.navigation.dispatch(StackActions.popToTop());
+    // }
   };
 
   save = () => {
@@ -213,4 +211,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(withOrientation(SettingsScreen));
+export default connect(mapStateToProps)(SettingsScreen);
