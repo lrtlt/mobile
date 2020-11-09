@@ -10,7 +10,6 @@ import {searchArticles} from '../../api';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {FlatList} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-navigation';
 import {isEqual} from 'lodash';
 
 const initialState = {
@@ -171,9 +170,9 @@ class SearchScreen extends React.Component {
     }
 
     return (
-      <SafeAreaView style={Styles.root} forceInset={{bottom: 'never'}}>
+      <View style={Styles.root}>
         <View style={Styles.container}>{content}</View>
-      </SafeAreaView>
+      </View>
     );
   }
 }

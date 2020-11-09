@@ -10,7 +10,6 @@ import {formatArticles} from '../../util/articleFormatters';
 import {ARTICLES_PER_PAGE_COUNT, GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {FlatList} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-navigation';
 
 const initialState = {
   isFetching: true,
@@ -127,9 +126,9 @@ class SlugScreen extends React.PureComponent {
     }
 
     return (
-      <SafeAreaView style={Styles.root} forceInset={{bottom: 'never'}}>
+      <View style={Styles.root}>
         <View style={Styles.container}>{content}</View>
-      </SafeAreaView>
+      </View>
     );
   }
 }

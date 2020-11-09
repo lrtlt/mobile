@@ -9,7 +9,6 @@ import TestScreen from '../testScreen/TestScreen';
 import Gemius from 'react-native-gemius-plugin';
 
 import {ARTICLE_LIST_TYPE_CATEGORY, GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
-import {SafeAreaView} from 'react-navigation';
 
 class CustomPageScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -74,20 +73,18 @@ class CustomPageScreen extends React.Component {
 
   render() {
     return (
-      <SafeAreaView style={Styles.container} forceInset={{bottom: 'never'}}>
-        <View style={Styles.container}>
-          <TabView
-            navigationState={this.state}
-            swipeEnabled={true}
-            renderScene={this.renderScene}
-            renderTabBar={this.renderTabBar}
-            onIndexChange={this.handleIndexChange}
-            lazy={true}
-            lazyPreloadDistance={0}
-            initialLayout={{height: 0, width: Dimensions.get('window').width}}
-          />
-        </View>
-      </SafeAreaView>
+      <View style={Styles.container}>
+        <TabView
+          navigationState={this.state}
+          swipeEnabled={true}
+          renderScene={this.renderScene}
+          renderTabBar={this.renderTabBar}
+          onIndexChange={this.handleIndexChange}
+          lazy={true}
+          lazyPreloadDistance={0}
+          initialLayout={{height: 0, width: Dimensions.get('window').width}}
+        />
+      </View>
     );
   }
 }

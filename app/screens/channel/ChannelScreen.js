@@ -18,7 +18,6 @@ import {getIconForChannel} from '../../util/UI';
 
 import {CHANNEL_TYPE_DEFAULT, CHANNEL_TYPE_LIVE, GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
-import {SafeAreaView} from 'react-navigation';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
@@ -206,22 +205,20 @@ class ChannelScreen extends React.Component {
     const {paddingHeight, animatedY, onScroll} = this.props.collapsible;
 
     return (
-      <SafeAreaView style={Styles.root} forceInset={{horizontal: 'always'}}>
-        <View style={Styles.screen}>
-          <AnimatedScrollView
-            style={Styles.scrollContainer}
-            contentContainerStyle={{paddingTop: paddingHeight}}
-            scrollIndicatorInsets={{top: paddingHeight}}
-            _mustAddThis={animatedY}
-            onScroll={onScroll}
-            scrollEventThrottle={16}>
-            <View style={Styles.container}>
-              {content}
-              {tvBar}
-            </View>
-          </AnimatedScrollView>
-        </View>
-      </SafeAreaView>
+      <View style={Styles.screen}>
+        <AnimatedScrollView
+          style={Styles.scrollContainer}
+          contentContainerStyle={{paddingTop: paddingHeight}}
+          scrollIndicatorInsets={{top: paddingHeight}}
+          _mustAddThis={animatedY}
+          onScroll={onScroll}
+          scrollEventThrottle={16}>
+          <View style={Styles.container}>
+            {content}
+            {tvBar}
+          </View>
+        </AnimatedScrollView>
+      </View>
     );
   }
 }

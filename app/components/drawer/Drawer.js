@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Linking} from 'react-native';
-import {withNavigation, SafeAreaView} from 'react-navigation';
 import {connect} from 'react-redux';
 import ScalableText from '../scalableText/ScalableText';
 import Styles from './styles';
@@ -185,26 +184,24 @@ class Drawer extends React.PureComponent {
 
     return (
       <View style={Styles.container}>
-        <SafeAreaView>
-          <ScrollView style={Styles.scroll} showsVerticalScrollIndicator={false}>
-            <View style={Styles.content}>
-              <View style={Styles.headerContainer}>
-                {this.renderSearch()}
-                {this.renderBookmarks()}
-                {this.renderHistory()}
-                {this.renderProgram()}
-              </View>
-              <View style={Styles.line} />
-              {this.renderChannelItems(this.props)}
-
-              <View style={Styles.line} />
-              <ScalableText style={Styles.title}>{EStyleSheet.value('$drawerMenu')}</ScalableText>
-              {content}
-              {this.renderPages()}
-              {this.renderFooterItems()}
+        <ScrollView style={Styles.scroll} showsVerticalScrollIndicator={false}>
+          <View style={Styles.content}>
+            <View style={Styles.headerContainer}>
+              {this.renderSearch()}
+              {this.renderBookmarks()}
+              {this.renderHistory()}
+              {this.renderProgram()}
             </View>
-          </ScrollView>
-        </SafeAreaView>
+            <View style={Styles.line} />
+            {this.renderChannelItems(this.props)}
+
+            <View style={Styles.line} />
+            <ScalableText style={Styles.title}>{EStyleSheet.value('$drawerMenu')}</ScalableText>
+            {content}
+            {this.renderPages()}
+            {this.renderFooterItems()}
+          </View>
+        </ScrollView>
       </View>
     );
   }

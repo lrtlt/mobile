@@ -6,7 +6,6 @@ import Styles from './styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {fetchProgram} from '../../redux/actions';
 import {connect} from 'react-redux';
-import {SafeAreaView} from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Collapsible from 'react-native-collapsible';
 import ProgramTabs from './tabs/ProgramTabsScreen';
@@ -164,9 +163,7 @@ class ProgramScreen extends React.PureComponent {
 
     return (
       <View style={Styles.root}>
-        <SafeAreaView style={Styles.flexContainer} forceInset={{bottom: 'never'}}>
-          {content}
-        </SafeAreaView>
+        <View style={Styles.flexContainer}>{content}</View>
       </View>
     );
   }

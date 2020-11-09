@@ -11,7 +11,6 @@ export default EStyleSheet.create({
     justifyContent: 'center',
   },
   embedPlayer: {
-    width: '100%',
     flex: 1,
   },
   mediaIndicator: {

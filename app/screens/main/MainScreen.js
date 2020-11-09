@@ -21,7 +21,6 @@ import {
   GEMIUS_VIEW_SCRIPT_ID,
   ARTICLE_LIST_TYPE_POPULAR,
 } from '../../constants';
-import {SafeAreaView} from 'react-navigation';
 
 class MainScreen extends React.Component {
   componentDidMount() {
@@ -60,22 +59,20 @@ class MainScreen extends React.Component {
 
   render() {
     return (
-      <SafeAreaView style={Styles.container} forceInset={{bottom: 'never'}}>
-        <View style={Styles.container}>
-          <StatusBar />
-          <TabView
-            navigationState={this.props}
-            swipeEnabled={true}
-            renderScene={this.renderScene}
-            renderTabBar={this.renderTabBar}
-            // removeClippedSubviews={true}
-            onIndexChange={this.handleIndexChange}
-            lazy={true}
-            lazyPreloadDistance={0}
-            initialLayout={{height: 0, width: Dimensions.get('window').width}}
-          />
-        </View>
-      </SafeAreaView>
+      <View style={Styles.container}>
+        <StatusBar />
+        <TabView
+          navigationState={this.props}
+          swipeEnabled={true}
+          renderScene={this.renderScene}
+          renderTabBar={this.renderTabBar}
+          // removeClippedSubviews={true}
+          onIndexChange={this.handleIndexChange}
+          lazy={true}
+          lazyPreloadDistance={0}
+          initialLayout={{height: 0, width: Dimensions.get('window').width}}
+        />
+      </View>
     );
   }
 }

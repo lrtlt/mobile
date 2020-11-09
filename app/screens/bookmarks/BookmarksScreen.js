@@ -8,7 +8,6 @@ import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {formatArticles} from '../../util/articleFormatters';
 import Gemius from 'react-native-gemius-plugin';
 import {FlatList} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-navigation';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 class BookmarksScreen extends React.PureComponent {
@@ -36,21 +35,19 @@ class BookmarksScreen extends React.PureComponent {
     const {articles} = this.props;
 
     return (
-      <SafeAreaView style={Styles.root} forceInset={{bottom: 'never'}}>
-        <View style={Styles.container}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={articles}
-            windowSize={4}
-            extraData={{
-              orientation: getOrientation(),
-            }}
-            renderItem={this.renderItem}
-            removeClippedSubviews={false}
-            keyExtractor={(item, index) => String(index) + String(item)}
-          />
-        </View>
-      </SafeAreaView>
+      <View style={Styles.container}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={articles}
+          windowSize={4}
+          extraData={{
+            orientation: getOrientation(),
+          }}
+          renderItem={this.renderItem}
+          removeClippedSubviews={false}
+          keyExtractor={(item, index) => String(index) + String(item)}
+        />
+      </View>
     );
   }
 }

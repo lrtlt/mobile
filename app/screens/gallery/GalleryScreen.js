@@ -9,7 +9,6 @@ import GallerySwiper from 'react-native-gallery-swiper';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
 import {BorderlessButton} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-navigation';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 /**
@@ -77,13 +76,13 @@ class GalleryScreen extends React.PureComponent {
 
   renderExitButton = () => {
     return (
-      <SafeAreaView style={Styles.absoluteLayout}>
+      <View style={Styles.absoluteLayout}>
         <View style={Styles.backButtonContainer}>
           <BorderlessButton onPress={() => this.props.navigation.goBack()}>
             <Icon name="close" color={EStyleSheet.value('$headerTintColor')} size={32} />
           </BorderlessButton>
         </View>
-      </SafeAreaView>
+      </View>
     );
   };
 

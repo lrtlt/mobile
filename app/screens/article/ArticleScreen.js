@@ -10,7 +10,6 @@ import {CommentsIcon, ShareIcon, SaveIcon} from '../../components/svg';
 import Share from 'react-native-share';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
-import {SafeAreaView} from 'react-navigation';
 import Snackbar from 'react-native-snackbar';
 
 import {ScreenLoader, ScreenError, AdultContentWarning, ActionButton} from '../../components';
@@ -335,15 +334,7 @@ class ArticleScreen extends React.Component {
       }
     }
 
-    return (
-      <SafeAreaView
-        style={Styles.root}
-        forceInset={{
-          bottom: 'never',
-        }}>
-        {content}
-      </SafeAreaView>
-    );
+    return content;
   }
 }
 

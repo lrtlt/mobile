@@ -9,7 +9,7 @@ import Gemius from 'react-native-gemius-plugin';
 const DEFAULT_BACKGROUND_IMAGE =
   'https://yt3.ggpht.com/a/AGF-l78bfgG98j-GH2Yw816bbYmnXho-wUselvJM6A=s288-c-k-c0xffffffff-no-rj-mo';
 
-const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, description}) => {
+const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, description, style}) => {
   let playerRef = null;
 
   const showStatusBar = () => {
@@ -92,14 +92,14 @@ const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, d
   };
 
   return (
-    <View style={Styles.htmlContainer}>
+    <View style={[Styles.htmlContainer, style]}>
       <JWPlayer
         ref={(ref) => {
           if (playerRef === null || ref !== null) {
             playerRef = ref;
           }
         }}
-        style={Styles.embedPlayer}
+        style={{flex: 1}}
         playlistItem={createPlaylistItem()}
         nativeFullScreen={true}
         nextUpDisplay={false}

@@ -15,7 +15,13 @@ const styles = EStyleSheet.create({
   absoluteLayout: {
     position: 'absolute',
   },
-  backButtonContainer: {margin: 6, padding: 6, borderRadius: 40, backgroundColor: '#FFFFFF20'},
+  backButtonContainer: {
+    marginTop: 48,
+    marginLeft: 12,
+    padding: 6,
+    borderRadius: 40,
+    backgroundColor: '#FFFFFF20',
+  },
   detailsContainer: {
     padding: 16,
     paddingTop: 8,

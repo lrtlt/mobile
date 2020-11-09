@@ -556,16 +556,16 @@ PODS:
   - React-jsinspector (0.63.3)
   - react-native-gemius-plugin (1.5.1):
     - React
-  - react-native-jw-media-player (0.1.51):
+  - react-native-jw-media-player (0.1.52):
     - google-cast-sdk (~> 4.4.5)
     - JWPlayer-SDK
     - React
   - react-native-onesignal (3.9.2):
     - OneSignal (= 2.15.4)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-safe-area-context (0.7.3):
-    - React
-  - react-native-webview (10.10.0):
+  - react-native-safe-area-context (3.1.8):
+    - React-Core
+  - react-native-webview (10.10.2):
     - React-Core
   - React-RCTActionSheet (0.63.3):
     - React-Core/RCTActionSheetHeaders (= 0.63.3)
@@ -631,8 +631,8 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.10):
     - React
-  - RNFastImage (8.3.2):
-    - React
+  - RNFastImage (8.3.3):
+    - React-Core
     - SDWebImage (~> 5.8)
     - SDWebImageWebPCoder (~> 0.6.1)
   - RNFBApp (8.4.6):
@@ -915,10 +915,10 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b56c03e61c0dd5f5801255f2160a815f4a53d451
   React-jsinspector: 8e68ffbfe23880d3ee9bafa8be2777f60b25cbe2
   react-native-gemius-plugin: 6d03b49c8e5df6e5d70d02c4dfc4f46c9fb5f30c
-  react-native-jw-media-player: 39c47128f0288ed09f4b907afcc4be5e4ab7c9c2
+  react-native-jw-media-player: 029aef09de00a3deafa7001f0f748033343ca579
   react-native-onesignal: ab5bd48dfc62d6f502ee2087cef317cd1c2b72f7
-  react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
-  react-native-webview: 73e409ecc987c189772bda27ba7f0e2f3dcd2e81
+  react-native-safe-area-context: 79fea126c6830c85f65947c223a5e3058a666937
+  react-native-webview: 0aa2cde4ee7e3e1c5fffdf64dbce9c709aa18155
   React-RCTActionSheet: 53ea72699698b0b47a6421cb1c8b4ab215a774aa
   React-RCTAnimation: 1befece0b5183c22ae01b966f5583f42e69a83c2
   React-RCTBlob: 0b284339cbe4b15705a05e2313a51c6d8b51fa40
@@ -931,7 +931,7 @@ SPEC CHECKSUMS:
   ReactCommon: 4167844018c9ed375cc01a843e9ee564399e53c3
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNFastImage: e19ba191922e7dab9d932a4d59d62d76660aa222
+  RNFastImage: ff7e055d085abe465b358ce5aa51e3c6d64b1efd
   RNFBApp: 7eacc7da7ab19f96c05e434017d44a9f09410da8
   RNFBCrashlytics: e35507742eebf1483d518efe70425ee931d555e6
   RNFBFirestore: 09a65d56413b9e11ab550f5f7e27106312c5fb7e
