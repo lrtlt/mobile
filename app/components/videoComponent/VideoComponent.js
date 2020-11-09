@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, Platform } from 'react-native';
-import { TouchableHighlight } from 'react-native-gesture-handler';
+import React, {useState, useEffect} from 'react';
+import {View, ActivityIndicator, Platform} from 'react-native';
+import {TouchableHighlight} from 'react-native-gesture-handler';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Styles from './styles';
 import PropTypes from 'prop-types';
@@ -20,7 +20,7 @@ const initialState = {
   description: null,
 };
 
-const renderLoading = animating => {
+const renderLoading = (animating) => {
   return (
     <View style={Styles.loaderContainer}>
       <ActivityIndicator size="small" animating={animating} color={EStyleSheet.value('$primary')} />
@@ -28,20 +28,20 @@ const renderLoading = animating => {
   );
 };
 
-const callApi = async url => {
+const callApi = async (url) => {
   const response = await fetch(url);
   const result = await response.json();
   console.log('VIDEO API RESPONSE', result);
   return result;
 };
 
-const VideoComponent = props => {
+const VideoComponent = (props) => {
   const [videoState, setVideoState] = useState(initialState);
 
   const handlePlayPress = () => {
-    setVideoState({ ...initialState, isLoading: true });
-    callApi(props.streamUrl).then(response => {
-      const newState = { ...videoState };
+    setVideoState({...initialState, isLoading: true});
+    callApi(props.streamUrl).then((response) => {
+      const newState = {...videoState};
       newState.isLoading = false;
       newState.embedUrl = response.full_url;
 
@@ -52,7 +52,7 @@ const VideoComponent = props => {
         newState.backgroundImage = props.backgroundImage;
         Gemius.setProgramData(props.mediaId, newState.title, -1, !props.isAudioOnly);
       } else {
-        const { playlist_item } = response;
+        const {playlist_item} = response;
         newState.streamUri = playlist_item.file.trim();
         newState.mediaId = playlist_item.mediaid ? playlist_item.mediaid.toString() : null;
         newState.title = response.title;
@@ -69,7 +69,7 @@ const VideoComponent = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderJWPlayerNative = videoProps => {
+  const renderJWPlayerNative = (videoProps) => {
     return <JWPlayerNative {...videoProps} autoPlay={props.autoPlay} />;
   };
 
@@ -83,7 +83,7 @@ const VideoComponent = props => {
 
   let content;
 
-  const { streamUri, isLoading } = videoState;
+  const {streamUri, isLoading} = videoState;
   if (streamUri) {
     content = renderJWPlayerNative(videoState);
   } else if (isLoading === true) {

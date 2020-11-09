@@ -18,7 +18,7 @@ export const homeGet = () => {
 /**
  * Returns article screen data by articleId
  */
-export const articleGet = articleId => {
+export const articleGet = (articleId) => {
   return `${BASE_URL}article/${articleId}`;
 };
 
@@ -43,7 +43,7 @@ export const articleGetByTag = (tag, count) => {
 /**
  * Return array of articles by search filter
  */
-export const searchArticles = (query, filter = { type: 0, section: '', days: '' }) => {
+export const searchArticles = (query, filter = {type: 0, section: '', days: ''}) => {
   return `${BASE_URL}search?q=${query}&type=${filter.type}&section=${filter.section}&days=${filter.days}`;
 };
 
@@ -64,7 +64,7 @@ export const popularArticlesGet = (count, page) => {
 /**
  * Returns channel page data by it's id
  */
-export const channelGet = id => {
+export const channelGet = (id) => {
   return `${BASE_URL}tv/channel/${id}`;
 };
 

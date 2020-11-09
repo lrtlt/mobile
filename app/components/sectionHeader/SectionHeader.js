@@ -1,11 +1,11 @@
 import React from 'react';
 import DefaultHeader from './DefaultHeader';
 import SlugHeader from './SlugHeader';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const sectionHeader = props => {
-  const { category } = props;
-  const { backgroundColor, name } = category;
+const sectionHeader = (props) => {
+  const {category} = props;
+  const {backgroundColor, name} = category;
 
   const header =
     category.is_slug_block && category.is_slug_block === 1 ? (
@@ -17,7 +17,7 @@ const sectionHeader = props => {
   return props.onPress ? (
     <TouchableOpacity onPress={() => props.onPress(category)}>{header}</TouchableOpacity>
   ) : (
-    { header }
+    {header}
   );
 };
 

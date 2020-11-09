@@ -1,12 +1,12 @@
 import 'react-native-gesture-handler';
 
 import React from 'react';
-import { AppRegistry, YellowBox } from 'react-native';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
+import {AppRegistry, YellowBox} from 'react-native';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
 import App from './App';
-import { store, persistor } from './app/redux/store';
-import { name as appName } from './app.json';
+import {store, persistor} from './app/redux/store';
+import {name as appName} from './app.json';
 
 YellowBox.ignoreWarnings(['componentWillMount is deprecated', 'componentWillReceiveProps']);
 

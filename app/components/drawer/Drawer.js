@@ -1,18 +1,18 @@
 import React from 'react';
-import { View, Linking } from 'react-native';
-import { withNavigation, SafeAreaView } from 'react-navigation';
-import { connect } from 'react-redux';
+import {View, Linking} from 'react-native';
+import {withNavigation, SafeAreaView} from 'react-navigation';
+import {connect} from 'react-redux';
 import ScalableText from '../scalableText/ScalableText';
 import Styles from './styles';
-import { setSelectedCategory } from '../../redux/actions';
+import {setSelectedCategory} from '../../redux/actions';
 import DrawerItem from '../drawerItem/DrawerItem';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { getIconForChannel } from '../../util/UI';
+import {getIconForChannel} from '../../util/UI';
 
 class Drawer extends React.PureComponent {
-  handleCategorySelection = index => {
+  handleCategorySelection = (index) => {
     this.props.navigation.closeDrawer();
     this.props.dispatch(setSelectedCategory(index));
   };
@@ -29,9 +29,9 @@ class Drawer extends React.PureComponent {
     Linking.openURL(EStyleSheet.value('$upload_news_url'));
   };
 
-  handlePagePress = page => {
-    this.props.navigation.push('customPage', { page });
-  }
+  handlePagePress = (page) => {
+    this.props.navigation.push('customPage', {page});
+  };
 
   handleSearchPress = () => {
     this.props.navigation.navigate('search');
@@ -41,8 +41,8 @@ class Drawer extends React.PureComponent {
     Linking.openURL(EStyleSheet.value('$feedback_url'));
   };
 
-  onChannelPressHandler = channelId => {
-    this.props.navigation.push('channel', { channelId: channelId });
+  onChannelPressHandler = (channelId) => {
+    this.props.navigation.push('channel', {channelId: channelId});
   };
 
   onProgramPressHandler = () => {
@@ -89,8 +89,8 @@ class Drawer extends React.PureComponent {
     );
   }
 
-  renderChannelItems = props => {
-    const channels = props.channels.map(channel => {
+  renderChannelItems = (props) => {
+    const channels = props.channels.map((channel) => {
       return (
         <DrawerItem
           key={channel.channel_title}
@@ -156,22 +156,25 @@ class Drawer extends React.PureComponent {
     const pages = this.props.pages;
 
     if (pages && pages.length > 0) {
-      const content = this.props.pages.map(page =>
+      const content = this.props.pages.map((page) => (
         <DrawerItem
           key={page.key}
           text={page.title}
           iconComponent={<FeatherIcon name="globe" size={22} color={EStyleSheet.value('$primaryLight')} />}
-          onPress={() => this.handlePagePress(page)} />
-      )
+          onPress={() => this.handlePagePress(page)}
+        />
+      ));
 
-      return <View>
-        <View style={Styles.line} />
-        {content}
-      </View>;
+      return (
+        <View>
+          <View style={Styles.line} />
+          {content}
+        </View>
+      );
     } else {
       return null;
     }
-  }
+  };
 
   render() {
     const content = this.props.routes.map((route, i) => {
@@ -207,7 +210,7 @@ class Drawer extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     routes: state.navigation.routes,
     pages: state.navigation.pages,

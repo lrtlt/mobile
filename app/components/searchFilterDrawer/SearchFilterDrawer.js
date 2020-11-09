@@ -1,27 +1,27 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { connect } from 'react-redux';
-import { setSearchFilter } from '../../redux/actions';
+import {View, Text} from 'react-native';
+import {connect} from 'react-redux';
+import {setSearchFilter} from '../../redux/actions';
 import SelectableItem from './selectableItem/SelectableItem';
 import Styles from './styles';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import styles from './styles';
 
-const SearchFilterDrawer = props => {
-  const selectType = type => {
-    props.dispatch(setSearchFilter({ ...props.filter, type }));
+const SearchFilterDrawer = (props) => {
+  const selectType = (type) => {
+    props.dispatch(setSearchFilter({...props.filter, type}));
   };
 
-  const selectSection = section => {
-    props.dispatch(setSearchFilter({ ...props.filter, section }));
+  const selectSection = (section) => {
+    props.dispatch(setSearchFilter({...props.filter, section}));
   };
 
-  const selectDays = days => {
-    props.dispatch(setSearchFilter({ ...props.filter, days }));
+  const selectDays = (days) => {
+    props.dispatch(setSearchFilter({...props.filter, days}));
   };
 
   const renderTypeSelection = () => {
-    const { type } = props.filter;
+    const {type} = props.filter;
     return (
       <View>
         <Text style={Styles.titleText}>TIPAS</Text>
@@ -35,7 +35,7 @@ const SearchFilterDrawer = props => {
   };
 
   const renderSectionSelection = () => {
-    const { section } = props.filter;
+    const {section} = props.filter;
     return (
       <View>
         <Text style={Styles.titleText}>TEMA</Text>
@@ -80,7 +80,7 @@ const SearchFilterDrawer = props => {
   };
 
   const renderDateSelection = () => {
-    const { days } = props.filter;
+    const {days} = props.filter;
     return (
       <View>
         <Text style={Styles.titleText}>DATA</Text>
@@ -107,8 +107,8 @@ const SearchFilterDrawer = props => {
   );
 };
 
-const mapStateToProps = state => {
-  return { filter: state.navigation.filter };
+const mapStateToProps = (state) => {
+  return {filter: state.navigation.filter};
 };
 
 export default connect(mapStateToProps)(SearchFilterDrawer);

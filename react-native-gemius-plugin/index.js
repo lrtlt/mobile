@@ -1,6 +1,6 @@
-import { NativeModules, Platform } from 'react-native';
+import {NativeModules, Platform} from 'react-native';
 
-const { GemiusPlugin } = NativeModules;
+const {GemiusPlugin} = NativeModules;
 
 const PROGRAM_TYPE_VIDEO = 'video';
 const PROGRAM_TYPE_AUDIO = 'audio';

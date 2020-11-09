@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, SafeAreaView } from 'react-native';
+import {View, SafeAreaView} from 'react-native';
 import Styles from './styles';
-import { FacebookComments } from '../../components';
+import {FacebookComments} from '../../components';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 class CommentsScreen extends React.PureComponent {

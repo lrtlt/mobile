@@ -1,19 +1,19 @@
 import React from 'react';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import Styles from './styles';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import ScalableText from '../scalableText/ScalableText';
 import Channel from './channel/Channel';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { CHANNEL_TYPE_DEFAULT, CHANNEL_TYPE_LIVE } from '../../constants';
+import {CHANNEL_TYPE_DEFAULT, CHANNEL_TYPE_LIVE} from '../../constants';
 
-const scrollingChannels = props => {
-  const onChannelPressHandler = channel => {
-    props.onChannelPress({ type: CHANNEL_TYPE_DEFAULT, payload: channel });
+const scrollingChannels = (props) => {
+  const onChannelPressHandler = (channel) => {
+    props.onChannelPress({type: CHANNEL_TYPE_DEFAULT, payload: channel});
   };
 
-  const onLiveItemPressHandler = liveItem => {
-    props.onChannelPress({ type: CHANNEL_TYPE_LIVE, payload: liveItem });
+  const onLiveItemPressHandler = (liveItem) => {
+    props.onChannelPress({type: CHANNEL_TYPE_LIVE, payload: liveItem});
   };
 
   if (!props.data) {
@@ -29,7 +29,7 @@ const scrollingChannels = props => {
             data={liveItem}
             key={liveItem.title}
             isLive={true}
-            onPress={liveChannel => onLiveItemPressHandler(liveChannel)}
+            onPress={(liveChannel) => onLiveItemPressHandler(liveChannel)}
           />
         );
       })
@@ -41,7 +41,7 @@ const scrollingChannels = props => {
           <Channel
             data={item}
             key={`${i}-${item.proc}`}
-            onPress={channel => onChannelPressHandler(channel)}
+            onPress={(channel) => onChannelPressHandler(channel)}
           />
         );
       })

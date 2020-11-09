@@ -1,15 +1,15 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { StatusBar } from '../../components';
+import {View, Text} from 'react-native';
+import {StatusBar} from '../../components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Styles from './styles';
 
 import Gemius from 'react-native-gemius-plugin';
 import GallerySwiper from 'react-native-gallery-swiper';
-import { GEMIUS_VIEW_SCRIPT_ID } from '../../constants';
-import { buildArticleImageUri, IMG_SIZE_XXL } from '../../util/ImageUtil';
-import { BorderlessButton } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-navigation';
+import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
+import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
+import {BorderlessButton} from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-navigation';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 /**
@@ -30,14 +30,14 @@ class GalleryScreen extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    const { navigation } = this.props;
+    const {navigation} = this.props;
 
     const selectedImage = navigation.getParam('selectedImage', null);
     const images = navigation.getParam('images', []);
 
     let initialIndex = 0;
     if (selectedImage) {
-      initialIndex = images.findIndex(img => img.path === selectedImage.path);
+      initialIndex = images.findIndex((img) => img.path === selectedImage.path);
       initialIndex = Math.max(0, initialIndex);
     }
 
@@ -51,11 +51,11 @@ class GalleryScreen extends React.PureComponent {
   }
 
   componentDidMount() {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, { screen: 'gallery' });
+    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'gallery'});
   }
 
-  handleImageSelected = index => {
-    this.setState({ ...this.state, index });
+  handleImageSelected = (index) => {
+    this.setState({...this.state, index});
   };
 
   renderDetails = () => {
@@ -88,7 +88,7 @@ class GalleryScreen extends React.PureComponent {
   };
 
   render() {
-    const images = this.state.images.map(img => ({
+    const images = this.state.images.map((img) => ({
       uri: buildArticleImageUri(IMG_SIZE_XXL, img.path),
     }));
 

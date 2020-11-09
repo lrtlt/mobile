@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { StyleSheet } from 'react-native';
-import { getSmallestDim } from '../../util/UI';
+import {StyleSheet} from 'react-native';
+import {getSmallestDim} from '../../util/UI';
 
 export default EStyleSheet.create({
   root: {

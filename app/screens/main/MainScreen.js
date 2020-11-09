@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Dimensions } from 'react-native';
-import { TabView } from 'react-native-tab-view';
-import { StatusBar } from '../../components';
+import {View, Dimensions} from 'react-native';
+import {TabView} from 'react-native-tab-view';
+import {StatusBar} from '../../components';
 import Styles from './styles';
 import TabBar from './tabBar/TabBar';
-import { connect } from 'react-redux';
-import { setSelectedCategory } from '../../redux/actions';
+import {connect} from 'react-redux';
+import {setSelectedCategory} from '../../redux/actions';
 import HomeScreen from './tabScreen/home/HomeScreen';
 import CategoryScreen from './tabScreen/category/CategoryScreen';
 import NewestScreen from './tabScreen/newest/NewestScreen';
@@ -21,18 +21,18 @@ import {
   GEMIUS_VIEW_SCRIPT_ID,
   ARTICLE_LIST_TYPE_POPULAR,
 } from '../../constants';
-import { SafeAreaView } from 'react-navigation';
+import {SafeAreaView} from 'react-navigation';
 
 class MainScreen extends React.Component {
   componentDidMount() {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, { screen: 'main' });
+    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'main'});
   }
 
-  handleIndexChange = index => this.props.dispatch(setSelectedCategory(index));
+  handleIndexChange = (index) => this.props.dispatch(setSelectedCategory(index));
 
-  renderTabBar = props => <TabBar {...props} />;
+  renderTabBar = (props) => <TabBar {...props} />;
 
-  renderScene = props => {
+  renderScene = (props) => {
     //Render only 1 screen on each side
     const routeIndex = this.props.routes.indexOf(props.route);
     if (Math.abs(this.props.index - routeIndex) > 1) {
@@ -41,7 +41,7 @@ class MainScreen extends React.Component {
 
     const current = routeIndex === this.props.index;
 
-    const { type } = props.route;
+    const {type} = props.route;
     switch (type) {
       case ARTICLE_LIST_TYPE_HOME:
         return <HomeScreen type={ARTICLE_LIST_TYPE_HOME} isCurrent={current} />;
@@ -60,7 +60,7 @@ class MainScreen extends React.Component {
 
   render() {
     return (
-      <SafeAreaView style={Styles.container} forceInset={{ bottom: 'never' }}>
+      <SafeAreaView style={Styles.container} forceInset={{bottom: 'never'}}>
         <View style={Styles.container}>
           <StatusBar />
           <TabView
@@ -72,7 +72,7 @@ class MainScreen extends React.Component {
             onIndexChange={this.handleIndexChange}
             lazy={true}
             lazyPreloadDistance={0}
-            initialLayout={{ height: 0, width: Dimensions.get('window').width }}
+            initialLayout={{height: 0, width: Dimensions.get('window').width}}
           />
         </View>
       </SafeAreaView>
@@ -80,7 +80,7 @@ class MainScreen extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     index: state.navigation.selectedCategory,
     routes: state.navigation.routes,

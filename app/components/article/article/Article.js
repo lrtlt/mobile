@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
+import React, {useState} from 'react';
+import {View} from 'react-native';
 
 import ScalableText from '../../scalableText/ScalableText';
 import CoverImage from '../../coverImage/CoverImage';
@@ -10,12 +10,12 @@ import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 
 import PropTypes from 'prop-types';
 
-import { CameraIcon, MicIcon } from '../../svg';
-import { stylesSingle, stylesMulti, stylesMultiScroll } from './styles';
+import {CameraIcon, MicIcon} from '../../svg';
+import {stylesSingle, stylesMulti, stylesMultiScroll} from './styles';
 
-import { getImageSizeForWidth, buildImageUri, buildArticleImageUri } from '../../../util/ImageUtil';
+import {getImageSizeForWidth, buildImageUri, buildArticleImageUri} from '../../../util/ImageUtil';
 
-const getArticleStyle = type => {
+const getArticleStyle = (type) => {
   switch (type) {
     case 'single': {
       return stylesSingle;
@@ -29,8 +29,8 @@ const getArticleStyle = type => {
   }
 };
 
-const Article = props => {
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+const Article = (props) => {
+  const [dimensions, setDimensions] = useState({width: 0, height: 0});
 
   const style = getArticleStyle(props.type);
 
@@ -93,11 +93,10 @@ const Article = props => {
         <View>
           <View
             style={style.imageContainer}
-            onLayout={event => {
-              const { width, height } = event.nativeEvent.layout;
-              setDimensions({ width: width, height: height });
-            }}
-          >
+            onLayout={(event) => {
+              const {width, height} = event.nativeEvent.layout;
+              setDimensions({width: width, height: height});
+            }}>
             <CoverImage
               style={style.image}
               source={{

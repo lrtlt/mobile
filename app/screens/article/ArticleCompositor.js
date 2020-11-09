@@ -6,7 +6,7 @@ export const TYPE_PARAGRAPH = 'content_paragraph';
 export const TYPE_VIDEO = 'content_video';
 export const TYPE_AUDIO = 'content_audio';
 
-export const compose = article => {
+export const compose = (article) => {
   const data = [];
   data.push(getHeaderData(article));
 
@@ -46,11 +46,11 @@ export const compose = article => {
   return data;
 };
 
-const getHeaderData = article => {
+const getHeaderData = (article) => {
   let author = null;
   try {
     const authors = article.article_authors || article.authors;
-    author = authors.map(a => a.name).join(', ');
+    author = authors.map((a) => a.name).join(', ');
   } catch (e) {
     //Problem with author...
   }
@@ -68,7 +68,7 @@ const getHeaderData = article => {
   };
 };
 
-const getMainPhoto = article => {
+const getMainPhoto = (article) => {
   return {
     type: TYPE_MAIN_PHOTO,
     data: {
@@ -77,7 +77,7 @@ const getMainPhoto = article => {
   };
 };
 
-const getSummary = article => {
+const getSummary = (article) => {
   return {
     type: TYPE_SUMMARY,
     data: {
@@ -86,7 +86,7 @@ const getSummary = article => {
   };
 };
 
-const getGallery = article => {
+const getGallery = (article) => {
   return {
     type: TYPE_GALLERY,
     data: {
@@ -95,8 +95,8 @@ const getGallery = article => {
   };
 };
 
-const getParagraphs = article => {
-  return article.paragraphs.map(p => {
+const getParagraphs = (article) => {
+  return article.paragraphs.map((p) => {
     return {
       type: TYPE_PARAGRAPH,
       data: p,
@@ -104,14 +104,14 @@ const getParagraphs = article => {
   });
 };
 
-const getContentForMedia = article => {
+const getContentForMedia = (article) => {
   return {
     type: TYPE_PARAGRAPH,
-    data: { p: article.content },
+    data: {p: article.content},
   };
 };
 
-const getVideo = article => {
+const getVideo = (article) => {
   return {
     type: TYPE_VIDEO,
     data: {
@@ -121,7 +121,7 @@ const getVideo = article => {
   };
 };
 
-const getAudio = article => {
+const getAudio = (article) => {
   return {
     type: TYPE_AUDIO,
     data: {

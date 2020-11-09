@@ -1,11 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import LogoLight from './ic_logo_light';
 import LogoDark from './ic_logo_dark';
 import PropTypes from 'prop-types';
-import { isDarkTheme } from '../../ColorTheme';
+import {isDarkTheme} from '../../ColorTheme';
 
-const logoComponent = props => {
+const logoComponent = (props) => {
   const logo = isDarkTheme() ? <LogoDark size={props.size} /> : <LogoLight size={props.size} />;
 
   return <View {...props}>{logo}</View>;

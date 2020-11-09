@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {View, Text} from 'react-native';
 import Styles from './styles';
 import Image from '../coverImage/CoverImage';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
-import { buildArticleImageUri, getImageSizeForWidth } from '../../util/ImageUtil';
+import {buildArticleImageUri, getImageSizeForWidth} from '../../util/ImageUtil';
 
 const renderPhoto = (photo, width, pressHandler) => {
   let img;
@@ -12,15 +12,15 @@ const renderPhoto = (photo, width, pressHandler) => {
     const aspectRatio = 3 / 2;
     img = (
       <Image
-        style={{ ...Styles.image, aspectRatio }}
-        source={{ uri: buildArticleImageUri(imgSize, photo.path) }}
+        style={{...Styles.image, aspectRatio}}
+        source={{uri: buildArticleImageUri(imgSize, photo.path)}}
       />
     );
   }
 
   return (
     <View style={Styles.imageContainer}>
-      <TouchableDebounce onPress={() => pressHandler({ type: 'photo', item: photo })}>
+      <TouchableDebounce onPress={() => pressHandler({type: 'photo', item: photo})}>
         <View>{img}</View>
       </TouchableDebounce>
     </View>
@@ -29,7 +29,7 @@ const renderPhoto = (photo, width, pressHandler) => {
 
 const renderPhotoWithOverlay = (photo, width, pressHandler, count) => {
   return (
-    <TouchableDebounce onPress={() => pressHandler({ type: 'photo', item: photo })}>
+    <TouchableDebounce onPress={() => pressHandler({type: 'photo', item: photo})}>
       <View style={Styles.imageContainer}>
         {renderPhoto(photo, width, null)}
 
@@ -41,8 +41,8 @@ const renderPhotoWithOverlay = (photo, width, pressHandler, count) => {
   );
 };
 
-const gallery = props => {
-  const { data } = props;
+const gallery = (props) => {
+  const {data} = props;
 
   if (data.length === 0) {
     return <View />;

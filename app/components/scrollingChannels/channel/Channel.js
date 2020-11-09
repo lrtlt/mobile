@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { CoverImage, LiveBadge } from '../..';
+import {View, Text} from 'react-native';
+import {CoverImage, LiveBadge} from '../..';
 import MediaIcon from '../../mediaIndicator/MediaIndicator';
 import Styles from './styles';
 import IC_CAMERA from '../../svg/ic_camera';
 import IC_MICROPHONE from '../../svg/ic_microphone';
-import { getIconForChannel, getColorsForChannel } from '../../../util/UI';
-import { buildArticleImageUri, IMG_SIZE_L } from '../../../util/ImageUtil';
+import {getIconForChannel, getColorsForChannel} from '../../../util/UI';
+import {buildArticleImageUri, IMG_SIZE_L} from '../../../util/ImageUtil';
 
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 
-const channel = props => {
+const channel = (props) => {
   const data = props.data;
   const proc = Math.max(0, Math.min(Number(data.proc), 100));
   const colorsSet = getColorsForChannel(data.channel);
@@ -35,7 +35,7 @@ const channel = props => {
 
   const channelTitleComponent = props.isLive ? (
     <View style={Styles.channelTitleContainer}>
-      <Text style={{ ...Styles.channelTitle, paddingStart: 2, padding: 2 }} numberOfLines={2}>
+      <Text style={{...Styles.channelTitle, paddingStart: 2, padding: 2}} numberOfLines={2}>
         LRT.LT
       </Text>
     </View>
@@ -69,7 +69,7 @@ const channel = props => {
   );
 
   const liveBadge = props.isLive ? (
-    <View style={{ flexWrap: 'wrap' }}>
+    <View style={{flexWrap: 'wrap'}}>
       <LiveBadge />
     </View>
   ) : null;
@@ -79,7 +79,7 @@ const channel = props => {
       <TouchableDebounce debounceTime={500} onPress={() => props.onPress(props.data)}>
         <View style={Styles.container}>
           <View style={Styles.coverContainer}>
-            <CoverImage style={Styles.cover} source={{ uri: coverUrl }} />
+            <CoverImage style={Styles.cover} source={{uri: coverUrl}} />
             <View style={Styles.coverContentContainer}>
               <View style={Styles.channelImageContainer}>{channelIcon}</View>
               <View style={Styles.mediaIndicatorContainer}>

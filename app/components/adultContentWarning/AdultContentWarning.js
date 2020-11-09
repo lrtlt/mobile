@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {View, Text} from 'react-native';
 import Styles from './styles';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { RectButton } from 'react-native-gesture-handler';
+import {RectButton} from 'react-native-gesture-handler';
 
-const component = props => {
+const component = (props) => {
   return (
     <View style={Styles.container}>
       <View style={Styles.headerRow}>
@@ -19,8 +19,7 @@ const component = props => {
           style={Styles.button}
           rippleColor={EStyleSheet.value('$rippleColor')}
           underlayColor={EStyleSheet.value('$primary')}
-          onPress={props.onAccept}
-        >
+          onPress={props.onAccept}>
           <View style={Styles.buttonPositive}>
             <Text style={Styles.buttonPositiveText}>MAN JAU YRA 18 METŲ</Text>
           </View>
@@ -30,8 +29,7 @@ const component = props => {
           style={Styles.button}
           rippleColor={EStyleSheet.value('$rippleColor')}
           underlayColor={EStyleSheet.value('$primary')}
-          onPress={props.onDecline}
-        >
+          onPress={props.onDecline}>
           <View style={Styles.buttonNegative}>
             <Text style={Styles.buttonNegativeText}>MAN DAR NĖRA 18 METŲ</Text>
           </View>

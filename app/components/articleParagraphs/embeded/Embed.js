@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import {View, Text, Dimensions} from 'react-native';
 import Styles from './styles';
 import WebView from 'react-native-autoheight-webview';
 import ArticlePhoto from '../../articlePhoto/ArticlePhoto';
@@ -15,7 +15,7 @@ const renderArticles = (data, pressHandler) => {
   const content = data.map((item, i) => {
     return (
       <View style={Styles.embededArticleContainer} key={i}>
-        <TouchableDebounce onPress={() => pressHandler({ type: 'article', item: item.el })}>
+        <TouchableDebounce onPress={() => pressHandler({type: 'article', item: item.el})}>
           <Text style={Styles.embededArticleText}>{item.el.title}</Text>
         </TouchableDebounce>
       </View>
@@ -38,7 +38,7 @@ const renderPhotos = (data, pressHandler) => {
   const content = data.map((item, i) => {
     return (
       <View style={Styles.embededPhotoContainer} key={i}>
-        <TouchableDebounce onPress={() => pressHandler({ type: 'photo', item: item.el })}>
+        <TouchableDebounce onPress={() => pressHandler({type: 'photo', item: item.el})}>
           <ArticlePhoto photo={item.el} expectedWidth={getScreenWidth()} />
         </TouchableDebounce>
       </View>
@@ -47,7 +47,7 @@ const renderPhotos = (data, pressHandler) => {
   return <View>{content}</View>;
 };
 
-const renderVideoImage = data => {
+const renderVideoImage = (data) => {
   const content = data.map((item, i) => {
     return (
       <View style={Styles.embededVideoContainer} key={i}>
@@ -62,7 +62,7 @@ const renderVideoImage = data => {
   return <View>{content}</View>;
 };
 
-const renderBroadcast = data => {
+const renderBroadcast = (data) => {
   const content = data.map((item, i) => {
     return (
       <View style={Styles.embededVideoContainer} key={i}>
@@ -80,7 +80,7 @@ const renderBroadcast = data => {
   return <View>{content}</View>;
 };
 
-const renderHtml = data => {
+const renderHtml = (data) => {
   const width = getScreenWidth() - EStyleSheet.value('$contentPadding') * 2;
   const style = {
     width,
@@ -143,7 +143,7 @@ const renderHtml = data => {
           collapsable={false}
           bounces={false}
           startInLoadingState={true}
-          source={{ html: formatted }}
+          source={{html: formatted}}
           // onNavigationStateChange={event => {
           //   console.log('onNavigationStateChange', event);
           //   if (event.url !== 'about:blank') {
@@ -160,8 +160,8 @@ const renderHtml = data => {
   return <View>{content}</View>;
 };
 
-const renderAudioPlayer = data => {
-  const { stream_url, id, title } = data[0].el;
+const renderAudioPlayer = (data) => {
+  const {stream_url, id, title} = data[0].el;
   return (
     <View style={Styles.embededAudioContainer}>
       <JWPlayer
@@ -175,8 +175,8 @@ const renderAudioPlayer = data => {
   );
 };
 
-const embed = props => {
-  const { data, pressHandler } = props;
+const embed = (props) => {
+  const {data, pressHandler} = props;
 
   let content = null;
   switch (data[0].embed_type) {

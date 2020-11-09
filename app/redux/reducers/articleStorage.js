@@ -1,5 +1,5 @@
-import { ADD_ARTICLE_TO_HISTORY, SAVE_ARTICLE, REMOVE_ARTICLE } from '../actions/actionTypes';
-import { ARTICLE_HISTORY_COUNT, ARTICLE_SAVED_MAX_COUNT } from '../../constants';
+import {ADD_ARTICLE_TO_HISTORY, SAVE_ARTICLE, REMOVE_ARTICLE} from '../actions/actionTypes';
+import {ARTICLE_HISTORY_COUNT, ARTICLE_SAVED_MAX_COUNT} from '../../constants';
 
 const initialState = {
   history: [],
@@ -9,12 +9,12 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_ARTICLE_TO_HISTORY: {
-      const { history } = state;
+      const {history} = state;
 
       const article = mapArticleData(action.article);
 
       //Check if the same article already exists in history. Filter out if exists.
-      const filteredHistory = history.filter(a => a.id != article.id);
+      const filteredHistory = history.filter((a) => a.id != article.id);
       //Add article to the front of array.
       filteredHistory.unshift(article);
 
@@ -28,7 +28,7 @@ const reducer = (state = initialState, action) => {
       };
     }
     case SAVE_ARTICLE: {
-      const { savedArticles } = state;
+      const {savedArticles} = state;
       savedArticles.unshift(mapArticleData(action.article));
 
       if (savedArticles.length > ARTICLE_SAVED_MAX_COUNT) {
@@ -41,8 +41,8 @@ const reducer = (state = initialState, action) => {
       };
     }
     case REMOVE_ARTICLE: {
-      const { savedArticles } = state;
-      const filteredArticles = savedArticles.filter(a => a.id != action.articleId);
+      const {savedArticles} = state;
+      const filteredArticles = savedArticles.filter((a) => a.id != action.articleId);
       return {
         ...state,
         savedArticles: filteredArticles,
@@ -53,7 +53,7 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-const mapArticleData = article => {
+const mapArticleData = (article) => {
   const photo = article.main_photo ? article.main_photo.path : null;
 
   return {

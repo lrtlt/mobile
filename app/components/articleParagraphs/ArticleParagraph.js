@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
-import { View, Text, Linking } from 'react-native';
+import React, {Fragment} from 'react';
+import {View, Text, Linking} from 'react-native';
 import SelectableText from '../selectableText/SelectableText';
-import { WebView } from 'react-native-webview';
+import {WebView} from 'react-native-webview';
 import Styles from './styles';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import HTML from 'react-native-render-html';
-import { IGNORED_TAGS, alterNode, makeTableRenderer } from 'react-native-render-html-table-bridge';
+import {IGNORED_TAGS, alterNode, makeTableRenderer} from 'react-native-render-html-table-bridge';
 import Embed from './embeded/Embed';
 
 const renderBlockquote = (_, children, __, passProps) => {
@@ -71,7 +71,7 @@ const htmlConfig = {
   ignoredTags: IGNORED_TAGS,
 };
 
-const renderParagrah = html => {
+const renderParagrah = (html) => {
   return (
     <View style={Styles.paragraphContainer}>
       <HTML
@@ -118,9 +118,9 @@ const renderEmbed = (embedArray, _itemSelectHandler) => {
   return <View>{content}</View>;
 };
 
-const paragraph = props => {
-  const { p, embed } = props.data;
-  const { itemSelectHandler } = props;
+const paragraph = (props) => {
+  const {p, embed} = props.data;
+  const {itemSelectHandler} = props;
 
   const textComponent = p ? renderParagrah(p) : null;
   const embedComponent = embed ? renderEmbed(embed, itemSelectHandler) : null;

@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {View, Text} from 'react-native';
 import Styles from './styles';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Icon from 'react-native-vector-icons/Entypo';
 
-const lable = props => {
+const lable = (props) => {
   const style = props.focused ? Styles.labelFocused : Styles.label;
 
   let content;

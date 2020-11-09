@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text, Linking } from 'react-native';
+import {View, Text, Linking} from 'react-native';
 import SelectableText from '../selectableText/SelectableText';
-import { WebView } from 'react-native-webview';
+import {WebView} from 'react-native-webview';
 import Styles from './styles';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import HTML from 'react-native-render-html';
-import { IGNORED_TAGS, alterNode, makeTableRenderer } from 'react-native-render-html-table-bridge';
+import {IGNORED_TAGS, alterNode, makeTableRenderer} from 'react-native-render-html-table-bridge';
 import Embed from './embeded/Embed';
 
 const renderBlockquote = (_, children, __, passProps) => {
@@ -118,7 +118,7 @@ const renderEmbed = (embedArray, key, _itemSelectHandler) => {
   return <View>{content}</View>;
 };
 
-const paragraphs = props => {
+const paragraphs = (props) => {
   const content = props.data.map((item, i) => {
     const text = item.p ? renderParagrah(item.p, i) : null;
     const embed = item.embed ? renderEmbed(item.embed, i, props.itemSelectHandler) : null;

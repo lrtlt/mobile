@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { View, Dimensions, Text } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { ProgramItem } from '../../../components';
+import React, {useState} from 'react';
+import {View, Dimensions, Text} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
+import {ProgramItem} from '../../../components';
 import Styles from './styles';
-import { TabView, TabBar } from 'react-native-tab-view';
+import {TabView, TabBar} from 'react-native-tab-view';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { getIconForChannelById } from '../../../util/UI';
-import { ScrollView } from 'react-native-gesture-handler';
+import {getIconForChannelById} from '../../../util/UI';
+import {ScrollView} from 'react-native-gesture-handler';
 
-const renderTabLable = props => {
+const renderTabLable = (props) => {
   const channelId = props.route.key;
   const title = props.route.title;
   return (
@@ -19,13 +19,13 @@ const renderTabLable = props => {
   );
 };
 
-const renderTabBar = props => {
+const renderTabBar = (props) => {
   return (
     <TabBar
       {...props}
       scrollEnabled={true}
       pressColor={EStyleSheet.value('androidTouchFeedback')}
-      renderLabel={labelProps => renderTabLable(labelProps)}
+      renderLabel={(labelProps) => renderTabLable(labelProps)}
       indicatorStyle={Styles.indicator}
       style={Styles.tabbar}
       tabStyle={Styles.tab}
@@ -33,12 +33,12 @@ const renderTabBar = props => {
   );
 };
 
-const tabsScreen = props => {
+const tabsScreen = (props) => {
   const [index, setIndex] = useState(0);
 
   const navigationState = {
     index,
-    routes: props.program.map(channel => {
+    routes: props.program.map((channel) => {
       return {
         key: channel.channel_id,
         title: channel.title,
@@ -47,7 +47,7 @@ const tabsScreen = props => {
     }),
   };
 
-  const renderProgramItem = val => {
+  const renderProgramItem = (val) => {
     const item = val.item;
     return (
       <View key={item.time_start + item.title}>
@@ -57,17 +57,16 @@ const tabsScreen = props => {
     );
   };
 
-
-  const renderScene = props => {
+  const renderScene = (props) => {
     if (Math.abs(index - navigationState.routes.indexOf(props.route)) > 0) {
       return <View />;
     }
 
     const prog = props.route.program;
 
-    const scrollToIndex = prog.findIndex(i => {
+    const scrollToIndex = prog.findIndex((i) => {
       const proc = Math.max(0, Math.min(Number(i.proc), 100));
-      return proc < 100
+      return proc < 100;
     });
 
     return (
@@ -76,7 +75,7 @@ const tabsScreen = props => {
           showsVerticalScrollIndicator={false}
           data={prog}
           renderItem={renderProgramItem}
-          getItemLayout={(data, index) => ({ length: 59, offset: 59 * index, index })}
+          getItemLayout={(data, index) => ({length: 59, offset: 59 * index, index})}
           initialScrollIndex={scrollToIndex}
           keyExtractor={(item, index) => String(index) + String(item)}
         />
@@ -92,8 +91,8 @@ const tabsScreen = props => {
         renderScene={renderScene}
         renderTabBar={renderTabBar}
         lazy={true}
-        onIndexChange={i => setIndex(i)}
-        initialLayout={{ width: Dimensions.get('window').width }}
+        onIndexChange={(i) => setIndex(i)}
+        initialLayout={{width: Dimensions.get('window').width}}
       />
     </View>
   );

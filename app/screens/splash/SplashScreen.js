@@ -1,20 +1,20 @@
 import React from 'react';
-import { View, Text, ActivityIndicator, Button } from 'react-native';
-import { StatusBar } from '../../components';
-import { Logo } from '../../components/svg';
+import {View, Text, ActivityIndicator, Button} from 'react-native';
+import {StatusBar} from '../../components';
+import {Logo} from '../../components/svg';
 import Styles from './styles';
-import { fetchArticles, fetchMenuItems, setSelectedCategory } from '../../redux/actions';
-import { connect } from 'react-redux';
+import {fetchArticles, fetchMenuItems, setSelectedCategory} from '../../redux/actions';
+import {connect} from 'react-redux';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 import OneSignal from 'react-native-onesignal';
-import { StackActions } from 'react-navigation';
+import {StackActions} from 'react-navigation';
 import Gemius from 'react-native-gemius-plugin';
-import { GEMIUS_VIEW_SCRIPT_ID } from '../../constants';
+import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 
 class SplashScreen extends React.PureComponent {
   componentDidMount() {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, { screen: 'splash' });
+    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'splash'});
     OneSignal.addEventListener('opened', this.onOpened);
 
     if (this.props.isReady !== true) {
@@ -28,7 +28,7 @@ class SplashScreen extends React.PureComponent {
     OneSignal.removeEventListener('opened', this.onOpened);
   }
 
-  onOpened = openResult => {
+  onOpened = (openResult) => {
     console.log('Message: ', openResult.notification.payload.body);
     console.log('Data: ', openResult.notification.payload.additionalData);
     console.log('isActive: ', openResult.notification.isAppInFocus);
@@ -102,7 +102,7 @@ class SplashScreen extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     isLoading: state.navigation.isLoading,
     isError: state.navigation.isError,

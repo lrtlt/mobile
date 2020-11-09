@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 
 import React from 'react';
-import { View, Platform, TextInput } from 'react-native';
-import { BorderlessButton } from 'react-native-gesture-handler';
-import { Drawer, SearchFilterDrawer, ActionButton, HeaderTitle } from '../components';
-import { FilterIcon, SearchIcon } from '../components/svg';
+import {View, Platform, TextInput} from 'react-native';
+import {BorderlessButton} from 'react-native-gesture-handler';
+import {Drawer, SearchFilterDrawer, ActionButton, HeaderTitle} from '../components';
+import {FilterIcon, SearchIcon} from '../components/svg';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Logo, SettingsIcon } from '../components/svg';
+import {Logo, SettingsIcon} from '../components/svg';
 import {
   ProgramScreen,
   ArticleScreen,
@@ -23,12 +23,12 @@ import {
   CustomPageScreen,
 } from '../screens';
 
-import { createAppContainer } from 'react-navigation';
-import { createDrawerNavigator } from 'react-navigation-drawer';
-import { createStackNavigator } from 'react-navigation-stack';
+import {createAppContainer} from 'react-navigation';
+import {createDrawerNavigator} from 'react-navigation-drawer';
+import {createStackNavigator} from 'react-navigation-stack';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { EventRegister } from 'react-native-event-listeners';
-import { EVENT_LOGO_PRESS } from '../constants';
+import {EventRegister} from 'react-native-event-listeners';
+import {EVENT_LOGO_PRESS} from '../constants';
 
 import styles from './styles';
 
@@ -73,7 +73,7 @@ const StackNavigator = createStackNavigator(
     },
     home: {
       screen: mainDrawerNavigator,
-      navigationOptions: ({ navigation }) => ({
+      navigationOptions: ({navigation}) => ({
         headerShown: true,
         headerLeft: (
           <ActionButton onPress={() => navigation.toggleDrawer()}>
@@ -97,9 +97,8 @@ const StackNavigator = createStackNavigator(
           <BorderlessButton
             onPress={() => {
               EventRegister.emit(EVENT_LOGO_PRESS, null);
-            }}
-          >
-            <View style={{ paddingStart: 12, paddingEnd: 12 }}>
+            }}>
+            <View style={{paddingStart: 12, paddingEnd: 12}}>
               <Logo size={EStyleSheet.value('$navBarIconSize')} />
             </View>
           </BorderlessButton>
@@ -146,7 +145,7 @@ const StackNavigator = createStackNavigator(
     },
     search: {
       screen: searchDrawerNavigator,
-      navigationOptions: ({ navigation }) => ({
+      navigationOptions: ({navigation}) => ({
         headerTitle: (
           <TextInput
             style={styles.searchInput}
@@ -156,7 +155,7 @@ const StackNavigator = createStackNavigator(
             onSubmitEditing={() => navigation.getParam('searchHandler')()}
             returnKeyType="search"
             placeholderTextColor={EStyleSheet.value('$textColorDisabled')}
-            onChangeText={text => navigation.getParam('searchInputHandler')(text)}
+            onChangeText={(text) => navigation.getParam('searchInputHandler')(text)}
             value={navigation.getParam('q', '')}
           />
         ),
@@ -185,11 +184,11 @@ const StackNavigator = createStackNavigator(
     cardShadowEnabled: false,
     headerLayoutPreset: 'center',
     headerMode: Platform.OS === 'android' ? 'screen' : 'float',
-    defaultNavigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: ({navigation}) => ({
       headerBackTitle: null,
-      headerRightContainerStyle: { paddingEnd: 4 },
+      headerRightContainerStyle: {paddingEnd: 4},
       headerStatusBarHeight: Platform.OS === 'android' ? 0 : null,
-      headerTitle: props => <HeaderTitle {...props} />,
+      headerTitle: (props) => <HeaderTitle {...props} />,
       headerTintColor: EStyleSheet.value('$headerTintColor'),
       headerStyle: {
         backgroundColor: EStyleSheet.value('$appBarBackground'),

@@ -4,7 +4,7 @@ import {
   SET_IMAGE_SCALE_FACTOR,
   SET_CONFIG,
 } from '../actions/actionTypes';
-import { initTheme } from '../../ColorTheme';
+import {initTheme} from '../../ColorTheme';
 
 const initialState = {
   isDarkMode: false,
@@ -41,7 +41,7 @@ const reducer = (state = initialState, action) => {
       };
     }
     case SET_CONFIG: {
-      return { ...state, ...action.payload };
+      return {...state, ...action.payload};
     }
     default:
       return state;

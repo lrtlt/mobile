@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Animated, Image } from 'react-native';
+import {View, StyleSheet, Animated, Image} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 const styles = StyleSheet.create({
@@ -28,15 +28,15 @@ class ProgressiveImage extends React.Component {
   };
 
   render() {
-    const { thumbnailSource, source, style, ...props } = this.props;
+    const {thumbnailSource, source, style, ...props} = this.props;
 
     const MainImage = this.props.useFastImage === false ? Image : FastImage;
     return (
       <View style={style}>
-        <Animated.View {...props} style={[{ opacity: this.thumbnailAnimated }, style]}>
+        <Animated.View {...props} style={[{opacity: this.thumbnailAnimated}, style]}>
           <Image style={style} source={thumbnailSource} onLoad={this.handleThumbnailLoad} blurRadius={2} />
         </Animated.View>
-        <Animated.View {...props} style={[styles.imageOverlay, { opacity: this.imageAnimated }, style]}>
+        <Animated.View {...props} style={[styles.imageOverlay, {opacity: this.imageAnimated}, style]}>
           <MainImage style={style} source={source} onLoad={this.onImageLoad} />
         </Animated.View>
       </View>

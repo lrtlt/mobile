@@ -1,13 +1,13 @@
 import React from 'react';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import Styles from './styles';
 import Text from '../scalableText/ScalableText';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const photoCount = props => {
+const photoCount = (props) => {
   return (
-    <View {...props} style={{ ...props.style, ...Styles.container }}>
+    <View {...props} style={{...props.style, ...Styles.container}}>
       <Icon
         name="photo-camera"
         size={EStyleSheet.value('$photoBadgeIconSize') + EStyleSheet.value('$textSizeMultiplier')}

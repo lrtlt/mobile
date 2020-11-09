@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, Text, Button, ActivityIndicator } from 'react-native';
+import {View, Text, Button, ActivityIndicator} from 'react-native';
 import Styles from './styles';
-import { ArticleRow } from '../../components';
-import { connect } from 'react-redux';
-import { getOrientation } from '../../util/UI';
+import {ArticleRow} from '../../components';
+import {connect} from 'react-redux';
+import {getOrientation} from '../../util/UI';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { articleGetByTag } from '../../api';
-import { formatArticles } from '../../util/articleFormatters';
-import { ARTICLES_PER_PAGE_COUNT, GEMIUS_VIEW_SCRIPT_ID } from '../../constants';
+import {articleGetByTag} from '../../api';
+import {formatArticles} from '../../util/articleFormatters';
+import {ARTICLES_PER_PAGE_COUNT, GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
-import { FlatList } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-navigation';
+import {FlatList} from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-navigation';
 
 const initialState = {
   isFetching: true,
@@ -19,7 +19,7 @@ const initialState = {
 };
 
 class SlugScreen extends React.PureComponent {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({navigation}) => {
     return {
       title: navigation.getParam('title', null),
     };
@@ -31,9 +31,9 @@ class SlugScreen extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { category } = this.props.navigation.state.params;
+    const {category} = this.props.navigation.state.params;
 
-    this.props.navigation.setParams({ title: '#' + category.name });
+    this.props.navigation.setParams({title: '#' + category.name});
 
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
       page: 'slug',
@@ -44,9 +44,9 @@ class SlugScreen extends React.PureComponent {
   }
 
   startLoading = () => {
-    this.setState({ ...this.state, isFetching: true, isError: false });
+    this.setState({...this.state, isFetching: true, isError: false});
     this.callApi()
-      .then(response => {
+      .then((response) => {
         const formattedArticles = formatArticles(-1, response.articles);
         this.setState({
           isFetching: false,
@@ -54,7 +54,7 @@ class SlugScreen extends React.PureComponent {
           articles: formattedArticles,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           ...this.state,
           isFetching: false,
@@ -64,7 +64,7 @@ class SlugScreen extends React.PureComponent {
   };
 
   async callApi() {
-    const { category } = this.props.navigation.state.params;
+    const {category} = this.props.navigation.state.params;
     const urlSegments = category.slug_url.split('/');
     const tag = urlSegments[urlSegments.length - 1];
     const response = await fetch(articleGetByTag(tag, ARTICLES_PER_PAGE_COUNT * 3));
@@ -73,12 +73,12 @@ class SlugScreen extends React.PureComponent {
     return result;
   }
 
-  onArticlePressHandler = article => {
-    this.props.navigation.push('article', { articleId: article.id });
+  onArticlePressHandler = (article) => {
+    this.props.navigation.push('article', {articleId: article.id});
   };
 
-  renderItem = val => {
-    return <ArticleRow data={val.item} onArticlePress={article => this.onArticlePressHandler(article)} />;
+  renderItem = (val) => {
+    return <ArticleRow data={val.item} onArticlePress={(article) => this.onArticlePressHandler(article)} />;
   };
 
   renderLoading = () => {
@@ -103,7 +103,7 @@ class SlugScreen extends React.PureComponent {
   };
 
   render() {
-    const { isFetching, isError, articles } = this.state;
+    const {isFetching, isError, articles} = this.state;
 
     let content;
     if (isError === true) {
@@ -127,14 +127,14 @@ class SlugScreen extends React.PureComponent {
     }
 
     return (
-      <SafeAreaView style={Styles.root} forceInset={{ bottom: 'never' }}>
+      <SafeAreaView style={Styles.root} forceInset={{bottom: 'never'}}>
         <View style={Styles.container}>{content}</View>
       </SafeAreaView>
     );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {};
 };
 

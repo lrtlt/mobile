@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
 
-const icon = props => {
+const icon = (props) => {
   return <Icon name="arrow-back" size={props.size} color={props.color} />;
 };
 

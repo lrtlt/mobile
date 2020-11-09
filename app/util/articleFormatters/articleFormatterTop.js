@@ -13,7 +13,7 @@
  * [13][14]
  */
 
-const formatter = articles => {
+const formatter = (articles) => {
   const groupedArticles = [];
 
   let currentColumn = 0;

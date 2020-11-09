@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { getSmallestDim } from '../../util/UI';
+import {getSmallestDim} from '../../util/UI';
 
 //TODO remove unused styles
 export default EStyleSheet.create({

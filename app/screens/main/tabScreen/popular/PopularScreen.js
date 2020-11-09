@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, RefreshControl, Text, Button } from 'react-native';
-import { ArticleRow, DefaultSectionHeader, ScreenLoader } from '../../../../components';
+import {View, RefreshControl, Text, Button} from 'react-native';
+import {ArticleRow, DefaultSectionHeader, ScreenLoader} from '../../../../components';
 import Styles from './styles';
-import { withNavigation } from 'react-navigation';
-import { connect } from 'react-redux';
-import { fetchPopular, refreshPopular } from '../../../../redux/actions';
-import { FlatList } from 'react-native-gesture-handler';
+import {withNavigation} from 'react-navigation';
+import {connect} from 'react-redux';
+import {fetchPopular, refreshPopular} from '../../../../redux/actions';
+import {FlatList} from 'react-native-gesture-handler';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {
   ARTICLE_LIST_TYPE_POPULAR,
@@ -13,10 +13,10 @@ import {
   GEMIUS_VIEW_SCRIPT_ID,
   EVENT_LOGO_PRESS,
 } from '../../../../constants';
-import { ListLoader } from '../../../../components';
-import { getOrientation } from '../../../../util/UI';
+import {ListLoader} from '../../../../components';
+import {getOrientation} from '../../../../util/UI';
 import Gemius from 'react-native-gemius-plugin';
-import { EventRegister } from 'react-native-event-listeners';
+import {EventRegister} from 'react-native-event-listeners';
 
 class PopularScreen extends React.Component {
   componentDidMount() {
@@ -24,12 +24,12 @@ class PopularScreen extends React.Component {
       page: ARTICLE_LIST_TYPE_POPULAR,
     });
 
-    const { articles } = this.props;
+    const {articles} = this.props;
     if (articles.length === 0) {
       this.callApi();
     }
 
-    this.listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, data => {
+    this.listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (data) => {
       this.handleLogoPress();
     });
   }
@@ -55,22 +55,22 @@ class PopularScreen extends React.Component {
     this.props.dispatch(fetchPopular(page, ARTICLES_PER_PAGE_COUNT));
   }
 
-  onArticlePressHandler = article => {
-    this.props.navigation.push('article', { articleId: article.id });
+  onArticlePressHandler = (article) => {
+    this.props.navigation.push('article', {articleId: article.id});
   };
 
   handleLogoPress() {
     if (this.props.isCurrent) {
       if (this.scrollY > 100) {
-        this.list.scrollToOffset({ offset: 0 });
+        this.list.scrollToOffset({offset: 0});
       } else {
         this._onRefresh();
       }
     }
   }
 
-  renderItem = val => (
-    <ArticleRow data={val.item} onArticlePress={article => this.onArticlePressHandler(article)} />
+  renderItem = (val) => (
+    <ArticleRow data={val.item} onArticlePress={(article) => this.onArticlePressHandler(article)} />
   );
 
   renderLoading = () => <ScreenLoader style={Styles.loadingContainer} />;
@@ -92,7 +92,7 @@ class PopularScreen extends React.Component {
     }
   };
 
-  renderFooter = isFetching => {
+  renderFooter = (isFetching) => {
     if (isFetching === true) {
       return <ListLoader />;
     } else {
@@ -101,7 +101,7 @@ class PopularScreen extends React.Component {
   };
 
   render() {
-    const { isError, articles, isFetching, isRefreshing, lastFetchTime, title } = this.props;
+    const {isError, articles, isFetching, isRefreshing, lastFetchTime, title} = this.props;
 
     if (isError === true) {
       return this.renderError();
@@ -114,8 +114,8 @@ class PopularScreen extends React.Component {
     return (
       <View style={Styles.container}>
         <FlatList
-          ref={ref => (this.list = ref)}
-          onScroll={event => (this.scrollY = event.nativeEvent.contentOffset.y)}
+          ref={(ref) => (this.list = ref)}
+          onScroll={(event) => (this.scrollY = event.nativeEvent.contentOffset.y)}
           scrollEventThrottle={500}
           showsVerticalScrollIndicator={false}
           style={Styles.container}
@@ -140,9 +140,9 @@ class PopularScreen extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { popular } = state.articles;
+  const {popular} = state.articles;
 
-  const popularRoute = state.navigation.routes.find(r => r.type === ARTICLE_LIST_TYPE_POPULAR);
+  const popularRoute = state.navigation.routes.find((r) => r.type === ARTICLE_LIST_TYPE_POPULAR);
   const title = popularRoute && popularRoute.title;
 
   return {

@@ -8,7 +8,7 @@
  * ...
  */
 
-const formatter = articles => {
+const formatter = (articles) => {
   const groupedArticles = [];
 
   articles.forEach((article, i) => {

@@ -1,8 +1,8 @@
 import React from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Svg, { Path } from 'react-native-svg';
+import Svg, {Path} from 'react-native-svg';
 
-const SvgComponent = props => (
+const SvgComponent = (props) => (
   <Svg {...props} viewBox="0 0 58 58" width={props.size} height={props.size}>
     <Path
       fill={EStyleSheet.value('$textColorSecondary')}

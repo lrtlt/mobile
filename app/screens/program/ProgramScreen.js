@@ -1,35 +1,34 @@
 import React from 'react';
-import { View } from 'react-native';
-import { ScreenLoader, ProgramDay, ActionButton } from '../../components';
+import {View} from 'react-native';
+import {ScreenLoader, ProgramDay, ActionButton} from '../../components';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Styles from './styles';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { fetchProgram } from '../../redux/actions';
-import { connect } from 'react-redux';
-import { SafeAreaView } from 'react-navigation';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {fetchProgram} from '../../redux/actions';
+import {connect} from 'react-redux';
+import {SafeAreaView} from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Collapsible from 'react-native-collapsible';
 import ProgramTabs from './tabs/ProgramTabsScreen';
 import Gemius from 'react-native-gemius-plugin';
-import { GEMIUS_VIEW_SCRIPT_ID } from '../../constants';
+import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 
 const STATE_LOADING = 'loading';
 const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
 class ProgramScreen extends React.PureComponent {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({navigation}) => {
     const title = navigation.getParam('titleComponent', null);
     return {
       headerRight: (
         <ActionButton
           onPress={() => {
-            const { params } = navigation.state;
+            const {params} = navigation.state;
             if (params && params.calendarHandler) {
               params.calendarHandler();
             }
-          }}
-        >
+          }}>
           <Icon
             size={EStyleSheet.value('$navBarIconSize')}
             color={EStyleSheet.value('$headerTintColor')}
@@ -44,7 +43,7 @@ class ProgramScreen extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    props.navigation.setParams({ calendarHandler: this.calendarClickHandler });
+    props.navigation.setParams({calendarHandler: this.calendarClickHandler});
 
     this.state = {
       datesExpanded: false,
@@ -61,23 +60,23 @@ class ProgramScreen extends React.PureComponent {
   };
 
   componentDidMount() {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, { screen: 'program' });
+    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'program'});
     this.props.dispatch(fetchProgram());
   }
 
   componentDidUpdate() {
-    const { program } = this.props;
+    const {program} = this.props;
     if (this.state.selectedDate === null && program) {
       const selectedDate = program.days[0];
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ ...this.state, selectedDate });
+      this.setState({...this.state, selectedDate});
       this.props.navigation.setParams({
         titleComponent: this.renderSelectedDayHeader(selectedDate),
       });
     }
   }
 
-  onDaySelectedHandler = day => {
+  onDaySelectedHandler = (day) => {
     this.setState(
       {
         ...this.state,
@@ -93,7 +92,7 @@ class ProgramScreen extends React.PureComponent {
     });
   };
 
-  renderSelectedDayHeader = day => {
+  renderSelectedDayHeader = (day) => {
     if (day === null) {
       return <View />;
     }
@@ -102,7 +101,7 @@ class ProgramScreen extends React.PureComponent {
   };
 
   renderDays = () => {
-    const daysComponent = this.props.program.days.map(day => {
+    const daysComponent = this.props.program.days.map((day) => {
       return (
         <TouchableOpacity onPress={() => this.onDaySelectedHandler(day)} key={day}>
           <View>
@@ -132,7 +131,7 @@ class ProgramScreen extends React.PureComponent {
   };
 
   renderProgram = () => {
-    const { program } = this.props;
+    const {program} = this.props;
 
     const selectedDay = this.state.selectedDate || program.days[0];
     const selectedDayProgram = program[selectedDay];
@@ -145,7 +144,7 @@ class ProgramScreen extends React.PureComponent {
   };
 
   render() {
-    const { screenState } = this.props;
+    const {screenState} = this.props;
 
     let content;
     switch (screenState) {
@@ -165,7 +164,7 @@ class ProgramScreen extends React.PureComponent {
 
     return (
       <View style={Styles.root}>
-        <SafeAreaView style={Styles.flexContainer} forceInset={{ bottom: 'never' }}>
+        <SafeAreaView style={Styles.flexContainer} forceInset={{bottom: 'never'}}>
           {content}
         </SafeAreaView>
       </View>
@@ -173,7 +172,7 @@ class ProgramScreen extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const prog = state.program;
   const screenState = prog.isError
     ? STATE_ERROR

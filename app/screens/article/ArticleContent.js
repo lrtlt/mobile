@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Dimensions, Animated, FlatList } from 'react-native';
+import {View, Dimensions, Animated, FlatList} from 'react-native';
 import Header from './header/Header';
-import { getOrientation } from '../../util/UI';
+import {getOrientation} from '../../util/UI';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {
   ArticlePhoto,
@@ -32,7 +32,7 @@ const getContentWidth = () => {
 };
 
 const getItemKey = (item, index) => {
-  const { type } = item;
+  const {type} = item;
 
   if (type == TYPE_GALLERY || type == TYPE_HEADER || type == TYPE_SUMMARY) {
     return String(index) + String(item) + getOrientation();
@@ -41,13 +41,13 @@ const getItemKey = (item, index) => {
   }
 };
 
-const ArticleContent = props => {
+const ArticleContent = (props) => {
   const articleData = compose(props.article);
 
   console.log('composition', articleData);
 
-  const renderItem = item => {
-    const { type, data } = item.item;
+  const renderItem = (item) => {
+    const {type, data} = item.item;
 
     const renderMainPhoto = () => {
       return (
@@ -57,8 +57,7 @@ const ArticleContent = props => {
               type: 'photo',
               item: data.photo,
             })
-          }
-        >
+          }>
           <ArticlePhoto
             style={Styles.photo}
             photo={data.photo}
@@ -131,12 +130,12 @@ const ArticleContent = props => {
         return renderAudio();
       }
       default: {
-        return <View style={{ backgroundColor: 'red', height: 40 }} />;
+        return <View style={{backgroundColor: 'red', height: 40}} />;
       }
     }
   };
 
-  const { paddingHeight, animatedY, onScroll } = props.collapsible;
+  const {paddingHeight, animatedY, onScroll} = props.collapsible;
 
   return (
     <View style={Styles.container}>
@@ -152,8 +151,8 @@ const ArticleContent = props => {
         keyExtractor={(item, index) => getItemKey(item, index)}
         //Collapsible params
         scrollEventThrottle={16}
-        contentContainerStyle={{ paddingTop: paddingHeight }}
-        scrollIndicatorInsets={{ top: paddingHeight }}
+        contentContainerStyle={{paddingTop: paddingHeight}}
+        scrollIndicatorInsets={{top: paddingHeight}}
         _mustAddThis={animatedY}
         onScroll={onScroll}
       />

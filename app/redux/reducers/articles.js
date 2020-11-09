@@ -27,8 +27,8 @@ import {
   LIST_DATA_TYPE_MORE_FOOTER,
 } from '../../constants';
 
-import { ARTICLE_LIST_TYPE_CATEGORY } from '../../constants/';
-import { formatArticles as formatArticleBlock } from '../../util/articleFormatters';
+import {ARTICLE_LIST_TYPE_CATEGORY} from '../../constants/';
+import {formatArticles as formatArticleBlock} from '../../util/articleFormatters';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 const initialNewestBlockState = {
@@ -76,9 +76,9 @@ const reducer = (state = initialState, action) => {
         categories: parseCategoriesFromMenu(action.result),
       };
     case FETCH_CATEGORY: {
-      const { categoryId } = action.payload;
-      const newCategories = state.categories.map(c => {
-        return c.id === categoryId ? { ...c, isFetching: true, isError: false } : c;
+      const {categoryId} = action.payload;
+      const newCategories = state.categories.map((c) => {
+        return c.id === categoryId ? {...c, isFetching: true, isError: false} : c;
       });
       return {
         ...state,
@@ -86,9 +86,9 @@ const reducer = (state = initialState, action) => {
       };
     }
     case REFRESH_CATEGORY: {
-      const { categoryId } = action.payload;
-      const newCategories = state.categories.map(c => {
-        return c.id === categoryId ? { ...c, isFetching: true, isRefreshing: true } : c;
+      const {categoryId} = action.payload;
+      const newCategories = state.categories.map((c) => {
+        return c.id === categoryId ? {...c, isFetching: true, isRefreshing: true} : c;
       });
       return {
         ...state,
@@ -98,13 +98,13 @@ const reducer = (state = initialState, action) => {
     case FETCH_NEWEST: {
       return {
         ...state,
-        newest: { ...state.newest, isFetching: true },
+        newest: {...state.newest, isFetching: true},
       };
     }
     case REFRESH_NEWEST: {
       return {
         ...state,
-        newest: { ...state.newest, isFetching: true, isRefreshing: true },
+        newest: {...state.newest, isFetching: true, isRefreshing: true},
       };
     }
     case API_NEWEST_ERROR: {
@@ -121,13 +121,13 @@ const reducer = (state = initialState, action) => {
     case FETCH_POPULAR: {
       return {
         ...state,
-        popular: { ...state.popular, isFetching: true },
+        popular: {...state.popular, isFetching: true},
       };
     }
     case REFRESH_POPULAR: {
       return {
         ...state,
-        popular: { ...state.popular, isFetching: true, isRefreshing: true },
+        popular: {...state.popular, isFetching: true, isRefreshing: true},
       };
     }
     case API_POPULAR_ERROR: {
@@ -152,9 +152,9 @@ const reducer = (state = initialState, action) => {
       };
     }
     case API_CATEGORY_ERROR: {
-      const { categoryId } = action.payload;
-      const newCategories = state.categories.map(c => {
-        return c.id === categoryId ? { ...c, isFetching: false, isRefreshing: false, isError: true } : c;
+      const {categoryId} = action.payload;
+      const newCategories = state.categories.map((c) => {
+        return c.id === categoryId ? {...c, isFetching: false, isRefreshing: false, isError: true} : c;
       });
       return {
         ...state,
@@ -224,14 +224,14 @@ const reducer = (state = initialState, action) => {
       };
     }
     case API_CATEGORY_RESULT: {
-      const { category_id } = action.result.category_info;
+      const {category_id} = action.result.category_info;
       const articles = formatArticleBlock(-1, action.result.articles);
 
       //Reset page to 1 if it's after refresh
       const page = action.result.page;
       const nextPage = action.result.next_page;
 
-      const newCategories = state.categories.map(c => {
+      const newCategories = state.categories.map((c) => {
         if (c.id === category_id) {
           const articlesList = action.result.refresh === true ? articles : c.articles.concat(articles);
 
@@ -303,21 +303,21 @@ const reducer = (state = initialState, action) => {
 };
 
 //Returns formatted articles for home screen based on template_id's.
-const formatArticles = articleBlocks => {
-  return articleBlocks.map(block => ({
+const formatArticles = (articleBlocks) => {
+  return articleBlocks.map((block) => ({
     ...block,
     items: formatArticleBlock(block.category.template_id, block.items),
   }));
 };
 
 //Wraps article data into wrapper object with type:TYPE_ARTICLES or
-const prepareHomeScreenData = articleBlocks => {
-  return articleBlocks.map(block => {
+const prepareHomeScreenData = (articleBlocks) => {
+  return articleBlocks.map((block) => {
     const type = block.category.template_id === 999 ? LIST_DATA_TYPE_ARTICLES_FEED : LIST_DATA_TYPE_ARTICLES;
 
     return {
       ...block,
-      items: block.items.map(articlesRow => ({
+      items: block.items.map((articlesRow) => ({
         type: type,
         data: articlesRow,
       })),
@@ -326,12 +326,12 @@ const prepareHomeScreenData = articleBlocks => {
 };
 
 const insertTvProg = (apiResponse, homeItems) => {
-  const tvProg = { type: LIST_DATA_TYPE_TVPROG, data: apiResponse.tvprog };
+  const tvProg = {type: LIST_DATA_TYPE_TVPROG, data: apiResponse.tvprog};
   homeItems[0].items.splice(1, 0, tvProg);
 };
 
-const insertMoreFooters = homeItems => {
-  homeItems.forEach(block => {
+const insertMoreFooters = (homeItems) => {
+  homeItems.forEach((block) => {
     if (block.category.id === 0 || block.category.is_slug_block) {
       //Skip tops && slug blocks;
       return;
@@ -344,14 +344,14 @@ const insertMoreFooters = homeItems => {
   });
 };
 
-const parseCategoriesFromMenu = apiResponse => {
+const parseCategoriesFromMenu = (apiResponse) => {
   const categories = [];
 
-  const categoryMenuItems = apiResponse.main_menu.filter(menuItem => {
+  const categoryMenuItems = apiResponse.main_menu.filter((menuItem) => {
     return menuItem.type === ARTICLE_LIST_TYPE_CATEGORY;
   });
 
-  categoryMenuItems.forEach(item => {
+  categoryMenuItems.forEach((item) => {
     categories.push({
       isFetching: false,
       isError: false,
@@ -365,12 +365,12 @@ const parseCategoriesFromMenu = apiResponse => {
     });
   });
 
-  const pageMenuItems = apiResponse.main_menu.filter(menuItem => {
-    return menuItem.type === "page";
+  const pageMenuItems = apiResponse.main_menu.filter((menuItem) => {
+    return menuItem.type === 'page';
   });
 
-  pageMenuItems.forEach(page => {
-    page.categories.forEach(category => {
+  pageMenuItems.forEach((page) => {
+    page.categories.forEach((category) => {
       categories.push({
         isFetching: false,
         isError: false,
@@ -383,13 +383,13 @@ const parseCategoriesFromMenu = apiResponse => {
         title: category.name,
       });
     });
-  })
+  });
 
   return categories;
 };
 
 //Parses article blocks and top article block into single array.
-const parseArticles = apiResponse => {
+const parseArticles = (apiResponse) => {
   const articleBlocks = [];
 
   articleBlocks.push({

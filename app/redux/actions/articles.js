@@ -9,36 +9,36 @@ import {
   REFRESH_POPULAR,
 } from './actionTypes';
 
-export const fetchArticles = () => ({ type: FETCH_HOME });
+export const fetchArticles = () => ({type: FETCH_HOME});
 
-export const fetchMediateka = () => ({ type: FETCH_MEDIATEKA });
+export const fetchMediateka = () => ({type: FETCH_MEDIATEKA});
 
 export const fetchCategory = (categoryId, count, page) => ({
   type: FETCH_CATEGORY,
-  payload: { categoryId, count, page },
+  payload: {categoryId, count, page},
 });
 
 export const refreshCategory = (categoryId, count) => ({
   type: REFRESH_CATEGORY,
-  payload: { categoryId, count },
+  payload: {categoryId, count},
 });
 
 export const fetchNewest = (page, count) => ({
   type: FETCH_NEWEST,
-  payload: { page, count },
+  payload: {page, count},
 });
 
-export const refreshNewest = count => ({
+export const refreshNewest = (count) => ({
   type: REFRESH_NEWEST,
-  payload: { page: 0, count },
+  payload: {page: 0, count},
 });
 
 export const fetchPopular = (page, count) => ({
   type: FETCH_POPULAR,
-  payload: { page, count },
+  payload: {page, count},
 });
 
-export const refreshPopular = count => ({
+export const refreshPopular = (count) => ({
   type: REFRESH_POPULAR,
-  payload: { page: 0, count },
+  payload: {page: 0, count},
 });

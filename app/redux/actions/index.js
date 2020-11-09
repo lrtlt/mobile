@@ -17,8 +17,8 @@ export {
   resetSearchFilter,
 } from './navigation';
 
-export { toggleDarkMode, setTextSizeMultiplier, setImageMaxScaleFactor, setConfig } from './config';
+export {toggleDarkMode, setTextSizeMultiplier, setImageMaxScaleFactor, setConfig} from './config';
 
-export { fetchProgram } from './program';
+export {fetchProgram} from './program';
 
-export { addArticleToHistory, saveArticle, removeArticle } from './articleStorage';
+export {addArticleToHistory, saveArticle, removeArticle} from './articleStorage';

@@ -10,11 +10,11 @@ import {
   SET_SEARCH_FILTER,
   RESET_SEARCH_FILTER,
 } from '../actions/actionTypes';
-import { ARTICLE_LIST_TYPE_HOME } from '../../constants';
+import {ARTICLE_LIST_TYPE_HOME} from '../../constants';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-const defaultSearchFilter = { type: 0, section: '', days: '' };
+const defaultSearchFilter = {type: 0, section: '', days: ''};
 
 const initialState = {
   selectedCategory: 0,
@@ -92,8 +92,10 @@ const reducer = (state = initialState, action) => {
         selectedCategory: action.category,
       };
     case OPEN_CATEGORY_FOR_NAME: {
-      const { categoryName } = action;
-      const index = state.routes.findIndex(route => route.title.toLowerCase() === categoryName.toLowerCase());
+      const {categoryName} = action;
+      const index = state.routes.findIndex(
+        (route) => route.title.toLowerCase() === categoryName.toLowerCase(),
+      );
 
       if (index > 0) {
         return {
@@ -110,7 +112,7 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-const parseRoutes = apiResponse => {
+const parseRoutes = (apiResponse) => {
   const routes = [];
 
   routes.push({
@@ -119,10 +121,10 @@ const parseRoutes = apiResponse => {
     type: ARTICLE_LIST_TYPE_HOME,
   });
 
-  const availableTypes = ["mediateka", "newest", "popular", "category"];
+  const availableTypes = ['mediateka', 'newest', 'popular', 'category'];
 
   apiResponse.main_menu
-    .filter(item => {
+    .filter((item) => {
       return availableTypes.includes(item.type);
     })
     .forEach((item, i) => {
@@ -138,19 +140,19 @@ const parseRoutes = apiResponse => {
   return routes;
 };
 
-const parsePages = apiResponse => {
+const parsePages = (apiResponse) => {
   const pages = [];
 
   apiResponse.main_menu
-    .filter(item => {
-      return item.type === "page";
+    .filter((item) => {
+      return item.type === 'page';
     })
-    .forEach(item => {
-      const routes = item.categories.map(item => {
+    .forEach((item) => {
+      const routes = item.categories.map((item) => {
         return {
           key: item.name,
           title: item.name,
-          type: "category",
+          type: 'category',
           categoryId: item.id,
         };
       });
@@ -159,7 +161,7 @@ const parsePages = apiResponse => {
         key: item.name,
         title: item.name,
         type: item.type,
-        routes
+        routes,
       });
     });
 

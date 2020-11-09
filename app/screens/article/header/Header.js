@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {View, Text} from 'react-native';
 import PropTypes from 'prop-types';
-import { FacebookReactions, ScalableText } from '../../../components';
+import {FacebookReactions, ScalableText} from '../../../components';
 import Styles from './styles';
 
-const articleHeader = props => {
+const articleHeader = (props) => {
   const subtitle = props.subtitle ? (
     <ScalableText style={Styles.subtitle}>{props.subtitle}</ScalableText>
   ) : null;

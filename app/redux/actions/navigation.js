@@ -6,19 +6,19 @@ import {
   RESET_SEARCH_FILTER,
 } from './actionTypes';
 
-export const fetchMenuItems = () => ({ type: FETCH_MENU_ITEMS });
+export const fetchMenuItems = () => ({type: FETCH_MENU_ITEMS});
 
-export const setSelectedCategory = category => ({
+export const setSelectedCategory = (category) => ({
   type: SET_SELECTED_CATEGORY,
   category,
 });
 
-export const openCategoryForName = categoryName => ({
+export const openCategoryForName = (categoryName) => ({
   type: OPEN_CATEGORY_FOR_NAME,
   categoryName,
 });
 
-export const setSearchFilter = filter => ({
+export const setSearchFilter = (filter) => ({
   type: SET_SEARCH_FILTER,
   filter,
 });

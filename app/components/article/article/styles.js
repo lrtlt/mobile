@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Dimensions } from 'react-native';
+import {Dimensions} from 'react-native';
 
 const getScrollingArticleMaxWidth = () => {
   const dim = Dimensions.get('window');
@@ -101,4 +101,4 @@ const stylesSingle = EStyleSheet.create(styleSingle);
 const stylesMulti = EStyleSheet.create(styleMulti);
 const stylesMultiScroll = EStyleSheet.create(styleMultiScroll);
 
-export { stylesSingle, stylesMulti, stylesMultiScroll };
+export {stylesSingle, stylesMulti, stylesMultiScroll};

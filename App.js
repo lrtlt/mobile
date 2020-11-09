@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Platform } from 'react-native';
-import { initTheme } from './app/ColorTheme';
-import { store } from './app/redux/store';
+import {View, Platform} from 'react-native';
+import {initTheme} from './app/ColorTheme';
+import {store} from './app/redux/store';
 import OneSignal from 'react-native-onesignal';
-import { version as appVersion } from './package.json';
+import {version as appVersion} from './package.json';
 import Navigation from './app/navigation';
 import EStyleSheet from 'react-native-extended-stylesheet';
 

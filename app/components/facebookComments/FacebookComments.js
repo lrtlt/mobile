@@ -1,10 +1,10 @@
 import React from 'react';
-import { Dimensions } from 'react-native';
+import {Dimensions} from 'react-native';
 import WebView from 'react-native-autoheight-webview';
 
 const getWidth = () => Dimensions.get('window').width;
 
-const buildFrame = url => {
+const buildFrame = (url) => {
   return `<!DOCTYPE html>
         <html>
           <head>
@@ -25,7 +25,7 @@ const buildFrame = url => {
         </html>`;
 };
 
-const comments = props => {
+const comments = (props) => {
   const html = buildFrame(props.url);
   return (
     <WebView
@@ -41,7 +41,7 @@ const comments = props => {
       collapsable={false}
       bounces={false}
       startInLoadingState={true}
-      source={{ html }}
+      source={{html}}
     />
   );
 };

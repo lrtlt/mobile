@@ -1,19 +1,19 @@
 import React from 'react';
-import { View, Platform } from 'react-native';
-import { withCollapsible, setSafeBounceHeight } from 'react-navigation-collapsible';
-import { connect } from 'react-redux';
-import { saveArticle, removeArticle, addArticleToHistory } from '../../redux/actions';
-import { articleGet } from '../../api';
+import {View, Platform} from 'react-native';
+import {withCollapsible, setSafeBounceHeight} from 'react-navigation-collapsible';
+import {connect} from 'react-redux';
+import {saveArticle, removeArticle, addArticleToHistory} from '../../redux/actions';
+import {articleGet} from '../../api';
 import ArticleContent from './ArticleContent';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { CommentsIcon, ShareIcon, SaveIcon } from '../../components/svg';
+import {CommentsIcon, ShareIcon, SaveIcon} from '../../components/svg';
 import Share from 'react-native-share';
 import Gemius from 'react-native-gemius-plugin';
-import { GEMIUS_VIEW_SCRIPT_ID } from '../../constants';
-import { SafeAreaView } from 'react-navigation';
+import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
+import {SafeAreaView} from 'react-navigation';
 import Snackbar from 'react-native-snackbar';
 
-import { ScreenLoader, ScreenError, AdultContentWarning, ActionButton } from '../../components';
+import {ScreenLoader, ScreenError, AdultContentWarning, ActionButton} from '../../components';
 
 import Styles from './styles';
 
@@ -23,18 +23,17 @@ const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
 class ArticleScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({navigation}) => {
     return {
       headerRight: (
         <View style={Styles.row}>
           <ActionButton
             onPress={() => {
-              const { params } = navigation.state;
+              const {params} = navigation.state;
               if (params && params.saveHandler) {
                 params.saveHandler();
               }
-            }}
-          >
+            }}>
             <SaveIcon
               size={EStyleSheet.value('$navBarIconSize')}
               color={EStyleSheet.value('$headerTintColor')}
@@ -43,12 +42,11 @@ class ArticleScreen extends React.Component {
           </ActionButton>
           <ActionButton
             onPress={() => {
-              const { params } = navigation.state;
+              const {params} = navigation.state;
               if (params && params.commentsHandler) {
                 params.commentsHandler();
               }
-            }}
-          >
+            }}>
             <CommentsIcon
               size={EStyleSheet.value('$navBarIconSize')}
               color={EStyleSheet.value('$headerTintColor')}
@@ -56,12 +54,11 @@ class ArticleScreen extends React.Component {
           </ActionButton>
           <ActionButton
             onPress={() => {
-              const { params } = navigation.state;
+              const {params} = navigation.state;
               if (params && params.shareHandler) {
                 params.shareHandler();
               }
-            }}
-          >
+            }}>
             <ShareIcon
               size={EStyleSheet.value('$navBarIconSize')}
               color={EStyleSheet.value('$headerTintColor')}
@@ -75,7 +72,7 @@ class ArticleScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    const { navigation } = props;
+    const {navigation} = props;
     navigation.setParams({
       saveHandler: this._saveArticlePress,
       commentsHandler: this._handleCommentsPress,
@@ -120,8 +117,8 @@ class ArticleScreen extends React.Component {
   }
 
   componentDidUpdate() {
-    const { navigation } = this.props;
-    const { articleId } = navigation.state.params;
+    const {navigation} = this.props;
+    const {articleId} = navigation.state.params;
 
     if (this.state.articleId !== articleId) {
       //Needs to be reloadad for with new article id
@@ -129,7 +126,7 @@ class ArticleScreen extends React.Component {
     }
   }
 
-  loadArticleById = articleId => {
+  loadArticleById = (articleId) => {
     try {
       Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
         screen: 'article',
@@ -154,8 +151,8 @@ class ArticleScreen extends React.Component {
     });
 
     this.callApi(articleId)
-      .then(article => this.parseArticle(article.article))
-      .catch(e => {
+      .then((article) => this.parseArticle(article.article))
+      .catch((e) => {
         console.log(e);
         this.setState({
           ...this.state,
@@ -165,7 +162,7 @@ class ArticleScreen extends React.Component {
       });
   };
 
-  parseArticle = article => {
+  parseArticle = (article) => {
     const state =
       article === null ? STATE_ERROR : article['n-18'] ? STATE_ADULT_CONTENT_WARNING : STATE_READY;
 
@@ -194,7 +191,7 @@ class ArticleScreen extends React.Component {
     this.props.navigation.goBack();
   }
 
-  callApi = async articleId => {
+  callApi = async (articleId) => {
     const response = await fetch(articleGet(articleId));
     const result = await response.json();
     console.log('ARTICLE API RESPONSE', result);
@@ -202,7 +199,7 @@ class ArticleScreen extends React.Component {
   };
 
   _saveArticlePress = () => {
-    const { article } = this.state;
+    const {article} = this.state;
     if (!article) {
       return;
     }
@@ -223,7 +220,7 @@ class ArticleScreen extends React.Component {
   };
 
   _handleSharePress = () => {
-    const { article } = this.state;
+    const {article} = this.state;
     if (!article) {
       return;
     }
@@ -236,30 +233,30 @@ class ArticleScreen extends React.Component {
   };
 
   _handleCommentsPress = () => {
-    const { article } = this.state;
+    const {article} = this.state;
     if (article === null || article.article_url === null) {
       return;
     }
 
     const url = 'https://lrt.lt' + this.state.article.article_url;
-    this.props.navigation.push('comments', { url: url });
+    this.props.navigation.push('comments', {url: url});
   };
 
   isArticleLoaded = () => this.state.article !== null;
 
-  renderLoading = props => (
+  renderLoading = (props) => (
     <View style={Styles.screen}>
       <ScreenLoader />
     </View>
   );
 
-  renderError = props => (
+  renderError = (props) => (
     <View style={Styles.screen}>
       <ScreenError text={EStyleSheet.value('$articleError')} />
     </View>
   );
 
-  renderAdultContentWarning = props => (
+  renderAdultContentWarning = (props) => (
     <View style={Styles.screen}>
       <View style={Styles.centerContainer}>
         <AdultContentWarning
@@ -270,8 +267,8 @@ class ArticleScreen extends React.Component {
     </View>
   );
 
-  renderArticleComponent = props => {
-    const { article } = this.state;
+  renderArticleComponent = (props) => {
+    const {article} = this.state;
 
     let articleComponent;
     if (article === null) {
@@ -289,7 +286,7 @@ class ArticleScreen extends React.Component {
     return <View style={Styles.screen}>{articleComponent}</View>;
   };
 
-  _handleItemPress = item => {
+  _handleItemPress = (item) => {
     switch (item.type) {
       case 'photo': {
         const images = this.state.article.article_photos;
@@ -304,7 +301,7 @@ class ArticleScreen extends React.Component {
         break;
       }
       case 'article': {
-        this.props.navigation.push('article', { articleId: item.item.id });
+        this.props.navigation.push('article', {articleId: item.item.id});
         break;
       }
       default: {
@@ -315,7 +312,7 @@ class ArticleScreen extends React.Component {
   };
 
   render() {
-    const { state } = this.state;
+    const {state} = this.state;
 
     let content;
 
@@ -343,8 +340,7 @@ class ArticleScreen extends React.Component {
         style={Styles.root}
         forceInset={{
           bottom: 'never',
-        }}
-      >
+        }}>
         {content}
       </SafeAreaView>
     );
@@ -352,11 +348,11 @@ class ArticleScreen extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { savedArticles } = state.articleStorage;
-  const { articleId } = ownProps.navigation.state.params;
+  const {savedArticles} = state.articleStorage;
+  const {articleId} = ownProps.navigation.state.params;
 
-  const isSaved = savedArticles && savedArticles.find(a => a.id == articleId) != undefined;
-  return { isSaved };
+  const isSaved = savedArticles && savedArticles.find((a) => a.id == articleId) != undefined;
+  return {isSaved};
 };
 
 const root = withCollapsible(ArticleScreen, {

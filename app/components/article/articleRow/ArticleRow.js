@@ -1,13 +1,13 @@
 import React from 'react';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import Styles from './styles';
 import Article from '../article/Article';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 
 //TODO calculate for bigger screens.
 const articleFitCount = 2;
 
-const getArticleType = articleCount => {
+const getArticleType = (articleCount) => {
   if (articleCount === 1) {
     return 'single';
   }
@@ -32,7 +32,7 @@ class ArticleRow extends React.PureComponent {
         <Article
           style={Styles.article}
           data={a}
-          onPress={article => this.props.onArticlePress(article)}
+          onPress={(article) => this.props.onArticlePress(article)}
           type={articleType}
           key={i}
         />
@@ -42,11 +42,11 @@ class ArticleRow extends React.PureComponent {
     if (articleType === 'scroll') {
       return (
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View style={{ ...Styles.container, backgroundColor }}>{content}</View>
+          <View style={{...Styles.container, backgroundColor}}>{content}</View>
         </ScrollView>
       );
     } else {
-      return <View style={{ ...Styles.container, backgroundColor }}>{content}</View>;
+      return <View style={{...Styles.container, backgroundColor}}>{content}</View>;
     }
   }
 }

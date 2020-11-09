@@ -1,4 +1,4 @@
-import { FETCH_PROGRAM, API_PROGRAM_RESULT, API_PROGRAM_ERROR } from '../actions/actionTypes';
+import {FETCH_PROGRAM, API_PROGRAM_RESULT, API_PROGRAM_ERROR} from '../actions/actionTypes';
 
 const initialState = {
   program: null,

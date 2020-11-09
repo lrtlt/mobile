@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Dimensions } from 'react-native';
-import { getImageSizeForWidth, buildArticleImageUri, buildImageUri, IMG_SIZE_XS } from '../../util/ImageUtil';
+import {View, Dimensions} from 'react-native';
+import {getImageSizeForWidth, buildArticleImageUri, buildImageUri, IMG_SIZE_XS} from '../../util/ImageUtil';
 import Image from '../progressiveImage/ProgressiveImage';
 import MediaIndicator from '../mediaIndicator/MediaIndicator';
 import PropTypes from 'prop-types';
@@ -8,7 +8,7 @@ import Styles from './styles';
 
 const aspectRatio = 16 / 9;
 
-const VideoCover = ({ cover, coverComponent }) => {
+const VideoCover = ({cover, coverComponent}) => {
   if (coverComponent) {
     return coverComponent;
   }
@@ -17,10 +17,10 @@ const VideoCover = ({ cover, coverComponent }) => {
     return (
       <View style={Styles.videoImageContainer}>
         <Image
-          style={{ ...Styles.photo, aspectRatio }}
+          style={{...Styles.photo, aspectRatio}}
           resizeMode="contain"
-          source={{ uri }}
-          thumbnailSource={{ uri: thumbUri }}
+          source={{uri}}
+          thumbnailSource={{uri: thumbUri}}
         />
         <MediaIndicator style={Styles.mediaIndicator} />
       </View>

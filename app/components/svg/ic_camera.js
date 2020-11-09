@@ -1,14 +1,13 @@
 import React from 'react';
-import Svg, { G, Rect, Path } from 'react-native-svg';
+import Svg, {G, Rect, Path} from 'react-native-svg';
 
-const SvgComponent = props => (
+const SvgComponent = (props) => (
   <Svg
     {...props}
     className="svg-icon svg-icon-camera"
     width={props.size}
     height={props.size}
-    viewBox="0 0 19 12"
-  >
+    viewBox="0 0 19 12">
     <G stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">
       <G transform="translate(-80.000000, -6313.000000)" fillRule="nonzero">
         <G transform="translate(0.000000, 5840.000000)">

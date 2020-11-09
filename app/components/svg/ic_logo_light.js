@@ -1,7 +1,7 @@
 import React from 'react';
-import Svg, { Defs, LinearGradient, Stop, RadialGradient, G, Path } from 'react-native-svg';
+import Svg, {Defs, LinearGradient, Stop, RadialGradient, G, Path} from 'react-native-svg';
 
-const SvgComponent = props => (
+const SvgComponent = (props) => (
   <Svg {...props} className="logo__svg" width={props.size} height={props.size} viewBox="0 0 48 45">
     <Defs>
       <LinearGradient
@@ -9,8 +9,7 @@ const SvgComponent = props => (
         x1="25.0527612%"
         y1="-58.4954988%"
         x2="72.8483252%"
-        y2="146.180869%"
-      >
+        y2="146.180869%">
         <Stop stopColor="#151C4B" offset="0%" />
         <Stop stopColor="#016CA8" offset="100%" />
       </LinearGradient>
@@ -21,8 +20,7 @@ const SvgComponent = props => (
         fx="35.7645244%"
         fy="-15.5647172%"
         r="102.289554%"
-        gradientTransform="translate(0.357645,-0.155647),scale(0.775571,1.000000),rotate(90.000000),scale(1.000000,1.877618),translate(-0.357645,0.155647)"
-      >
+        gradientTransform="translate(0.357645,-0.155647),scale(0.775571,1.000000),rotate(90.000000),scale(1.000000,1.877618),translate(-0.357645,0.155647)">
         <Stop stopColor="#1D1F6C" offset="0%" />
         <Stop stopColor="#A8A7FF" offset="100%" />
       </RadialGradient>
@@ -33,8 +31,7 @@ const SvgComponent = props => (
         fx="35.7645244%"
         fy="-15.5647172%"
         r="102.289554%"
-        gradientTransform="translate(0.357645,-0.155647),scale(0.894963,1.000000),rotate(90.000000),scale(1.000000,1.877618),translate(-0.357645,0.155647)"
-      >
+        gradientTransform="translate(0.357645,-0.155647),scale(0.894963,1.000000),rotate(90.000000),scale(1.000000,1.877618),translate(-0.357645,0.155647)">
         <Stop stopColor="#1D1F6C" offset="0%" />
         <Stop stopColor="#A8A7FF" offset="100%" />
       </RadialGradient>
@@ -45,8 +42,7 @@ const SvgComponent = props => (
         fx="35.7645244%"
         fy="-15.5647172%"
         r="131.877637%"
-        gradientTransform="translate(0.357645,-0.155647),scale(1.000000,0.775640),rotate(90.000000),scale(1.000000,1.877618),translate(-0.357645,0.155647)"
-      >
+        gradientTransform="translate(0.357645,-0.155647),scale(1.000000,0.775640),rotate(90.000000),scale(1.000000,1.877618),translate(-0.357645,0.155647)">
         <Stop stopColor="#1D1F6C" offset="0%" />
         <Stop stopColor="#A8A7FF" offset="100%" />
       </RadialGradient>

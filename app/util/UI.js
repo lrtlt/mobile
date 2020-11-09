@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Platform } from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 
 import {
   ChannelLRadioIcon,
@@ -11,7 +11,7 @@ import {
   LogoLight,
 } from '../components/svg';
 
-import { channelColors } from '../ColorTheme';
+import {channelColors} from '../ColorTheme';
 
 const DEFAULT_CHANNEL_ICON_SIZE = 25;
 
@@ -55,7 +55,7 @@ export const getDefaultHeaderHeight = () => {
   return headerHeight;
 };
 
-export const getColorsForChannel = channel => {
+export const getColorsForChannel = (channel) => {
   switch (channel) {
     case 'LTV1': {
       return channelColors.color_set_lrtHD;

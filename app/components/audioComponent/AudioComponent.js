@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Dimensions } from 'react-native';
+import {View, Dimensions} from 'react-native';
 import JWPlayerNative from '../videoComponent/JWPlayerNative';
-import { getImageSizeForWidth, buildArticleImageUri } from '../../util/ImageUtil';
+import {getImageSizeForWidth, buildArticleImageUri} from '../../util/ImageUtil';
 import Gemius from 'react-native-gemius-plugin';
 
 import PropTypes from 'prop-types';
 
-const AudioComponent = props => {
+const AudioComponent = (props) => {
   const mediaId = props.mediaId || '0';
 
   Gemius.setProgramData(mediaId, props.title, 0, false);

@@ -1,7 +1,7 @@
 import React from 'react';
-import Svg, { G, Path } from 'react-native-svg';
+import Svg, {G, Path} from 'react-native-svg';
 
-const SvgComponent = props => (
+const SvgComponent = (props) => (
   <Svg {...props} className="logo__svg" width={props.size} height={props.size} viewBox="0 0 27 16">
     <G stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">
       <G transform="translate(-308.000000, -828.000000)">

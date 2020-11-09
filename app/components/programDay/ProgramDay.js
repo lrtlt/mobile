@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {View, Text} from 'react-native';
 import Styles from './styles';
 import moment from 'moment';
 
@@ -15,7 +15,7 @@ const weekDays = [
 
 const today = 'Šiandien';
 
-const programDay = props => {
+const programDay = (props) => {
   const date = moment(props.dateString, 'YYYY-MM-DD');
   const dateString = props.dateString.slice(-5);
 

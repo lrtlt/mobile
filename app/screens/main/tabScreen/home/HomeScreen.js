@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, SectionList, RefreshControl } from 'react-native';
+import {View, SectionList, RefreshControl} from 'react-native';
 import {
   ArticleRow,
   ScrollingChannels,
@@ -9,11 +9,11 @@ import {
   ScreenLoader,
 } from '../../../../components';
 import Styles from './styles';
-import { withNavigation } from 'react-navigation';
-import { connect } from 'react-redux';
-import { fetchArticles, fetchMediateka, openCategoryForName } from '../../../../redux/actions/index';
+import {withNavigation} from 'react-navigation';
+import {connect} from 'react-redux';
+import {fetchArticles, fetchMediateka, openCategoryForName} from '../../../../redux/actions/index';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { getOrientation } from '../../../../util/UI';
+import {getOrientation} from '../../../../util/UI';
 import {
   ARTICLE_LIST_TYPE_MEDIA,
   ARTICLE_EXPIRE_DURATION,
@@ -25,7 +25,7 @@ import {
   EVENT_LOGO_PRESS,
 } from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
-import { EventRegister } from 'react-native-event-listeners';
+import {EventRegister} from 'react-native-event-listeners';
 
 class HomeScreen extends React.Component {
   _onRefresh = () => {
@@ -43,7 +43,7 @@ class HomeScreen extends React.Component {
       this.callApi();
     }
 
-    this.listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, data => {
+    this.listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (data) => {
       this.handleLogoPress();
     });
   }
@@ -80,16 +80,16 @@ class HomeScreen extends React.Component {
     }
   }
 
-  onArticlePressHandler = article => {
-    this.props.navigation.push('article', { articleId: article.id });
+  onArticlePressHandler = (article) => {
+    this.props.navigation.push('article', {articleId: article.id});
   };
 
-  onChannelPressHandler = channel => {
-    const { channel_id } = channel.payload;
-    this.props.navigation.push('channel', { channelId: channel_id });
+  onChannelPressHandler = (channel) => {
+    const {channel_id} = channel.payload;
+    this.props.navigation.push('channel', {channelId: channel_id});
   };
 
-  onCategoryPressHandler = category => {
+  onCategoryPressHandler = (category) => {
     console.log('CategoryPressed', category);
 
     let name = category.name;
@@ -99,19 +99,19 @@ class HomeScreen extends React.Component {
     }
 
     if (category.is_slug_block === 1) {
-      this.props.navigation.push('slug', { category: category });
+      this.props.navigation.push('slug', {category: category});
     } else {
       this.props.dispatch(openCategoryForName(name));
     }
   };
 
-  renderItem = val => {
+  renderItem = (val) => {
     switch (val.item.type) {
       case LIST_DATA_TYPE_ARTICLES: {
         return (
           <ArticleRow
             data={val.item.data}
-            onArticlePress={article => this.onArticlePressHandler(article)}
+            onArticlePress={(article) => this.onArticlePressHandler(article)}
             backgroundColor={val.section.backgroundColor}
           />
         );
@@ -120,7 +120,7 @@ class HomeScreen extends React.Component {
         return (
           <ScrollingChannels
             data={val.item.data}
-            onChannelPress={channel => this.onChannelPressHandler(channel)}
+            onChannelPress={(channel) => this.onChannelPressHandler(channel)}
           />
         );
       }
@@ -128,7 +128,7 @@ class HomeScreen extends React.Component {
         return (
           <ArticleFeedItem
             article={val.item.data[0]}
-            onArticlePress={article => this.onArticlePressHandler(article)}
+            onArticlePress={(article) => this.onArticlePressHandler(article)}
             backgroundColor={val.section.backgroundColor}
           />
         );
@@ -148,11 +148,11 @@ class HomeScreen extends React.Component {
     }
   };
 
-  renderSectionHeader = ({ section }) =>
+  renderSectionHeader = ({section}) =>
     section.index !== 0 ? (
       <SectionHeader
         category={section.category}
-        onPress={category => this.onCategoryPressHandler(category)}
+        onPress={(category) => this.onCategoryPressHandler(category)}
       />
     ) : null;
 
@@ -161,7 +161,7 @@ class HomeScreen extends React.Component {
   renderLoading = () => <ScreenLoader style={Styles.loadingContainer} />;
 
   render() {
-    const { sections, lastFetchTime, refreshing } = this.props;
+    const {sections, lastFetchTime, refreshing} = this.props;
 
     if (sections.length === 0) {
       return this.renderLoading();
@@ -172,13 +172,13 @@ class HomeScreen extends React.Component {
         <SectionList
           showsVerticalScrollIndicator={false}
           style={Styles.container}
-          ref={ref => (this.sectionList = ref)}
+          ref={(ref) => (this.sectionList = ref)}
           extraData={{
             orientation: getOrientation(),
             lastFetchTime: lastFetchTime,
           }}
           renderItem={this.renderItem}
-          onScroll={event => (this.scrollY = event.nativeEvent.contentOffset.y)}
+          onScroll={(event) => (this.scrollY = event.nativeEvent.contentOffset.y)}
           scrollEventThrottle={500}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this._onRefresh} />}
           renderSectionHeader={this.renderSectionHeader}
@@ -196,7 +196,7 @@ class HomeScreen extends React.Component {
   }
 }
 
-const mapSections = items => {
+const mapSections = (items) => {
   return items.map((block, i) => {
     return {
       index: i,

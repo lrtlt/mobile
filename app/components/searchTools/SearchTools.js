@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { View, Picker, Text } from 'react-native';
+import React, {useState} from 'react';
+import {View, Picker, Text} from 'react-native';
 
 import Styles from './styles';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-const SearchTools = props => {
+const SearchTools = (props) => {
   const [selectedType, setSelectedType] = useState(0);
   const [selectedSection, setSelectedSection] = useState('');
   const [selectedDays, setSelectedDays] = useState('');
@@ -21,8 +21,7 @@ const SearchTools = props => {
           itemStyle={Styles.itemText}
           prompt="Tipas"
           selectedValue={selectedType}
-          onValueChange={(itemValue, itemIndex) => setSelectedType(itemValue)}
-        >
+          onValueChange={(itemValue, itemIndex) => setSelectedType(itemValue)}>
           <Picker.Item label="Visi" value={0} color={textColor} />
           <Picker.Item label="Naujienos" value={1} color={textColor} />
           <Picker.Item label="Audio" value={2} color={textColor} />
@@ -38,8 +37,7 @@ const SearchTools = props => {
           itemStyle={Styles.itemText}
           prompt="Tema"
           selectedValue={selectedSection}
-          onValueChange={(itemValue, itemIndex) => setSelectedSection(itemValue)}
-        >
+          onValueChange={(itemValue, itemIndex) => setSelectedSection(itemValue)}>
           <Picker.Item label="Visos" value="" color={textColor} />
           <Picker.Item
             label="Naujienos"
@@ -62,8 +60,7 @@ const SearchTools = props => {
           itemStyle={Styles.itemText}
           prompt="Data"
           selectedValue={selectedDays}
-          onValueChange={(itemValue, itemIndex) => setSelectedDays(itemValue)}
-        >
+          onValueChange={(itemValue, itemIndex) => setSelectedDays(itemValue)}>
           <Picker.Item label="Visos" value="" color={textColor} />
           <Picker.Item label="Per 24 valandas" value="1" color={textColor} />
           <Picker.Item label="Per savaite" value="7" color={textColor} />

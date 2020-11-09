@@ -1,4 +1,4 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
+import {takeEvery, call, put} from 'redux-saga/effects';
 import {
   homeGet,
   menuGet,
@@ -57,10 +57,10 @@ function* fetchMenuItems() {
     const response = yield call(fetchMenuItemsApi);
     const result = yield response.json();
     console.log('API RESPONSE MENU', result);
-    yield put({ type: API_MENU_ITEMS_RESULT, result });
+    yield put({type: API_MENU_ITEMS_RESULT, result});
   } catch (e) {
     console.log('Saga error', e);
-    yield put({ type: API_MENU_ITEMS_ERROR });
+    yield put({type: API_MENU_ITEMS_ERROR});
   }
 }
 
@@ -69,10 +69,10 @@ function* fetchArticlesData() {
     const response = yield call(fetchArticlesApi);
     const result = yield response.json();
     console.log('API RESPONSE ARTICLES', result);
-    yield put({ type: API_HOME_RESULT, result });
+    yield put({type: API_HOME_RESULT, result});
   } catch (e) {
     console.log('Saga error', e);
-    yield put({ type: API_HOME_ERROR });
+    yield put({type: API_HOME_ERROR});
   }
 }
 
@@ -81,10 +81,10 @@ function* fetchMediatekaData() {
     const response = yield call(fetchMediatekaApi);
     const result = yield response.json();
     console.log('API RESPONSE MEDIATEKA', result);
-    yield put({ type: API_MEDIATEKA_RESULT, result });
+    yield put({type: API_MEDIATEKA_RESULT, result});
   } catch (e) {
     console.log('Saga error', e);
-    yield put({ type: API_MEDIATEKA_ERROR });
+    yield put({type: API_MEDIATEKA_ERROR});
   }
 }
 
@@ -93,107 +93,107 @@ function* fetchProgramData() {
     const response = yield call(fetchProgramApi);
     const result = yield response.json();
     console.log('API RESPONSE PROGRAM', result);
-    yield put({ type: API_PROGRAM_RESULT, result });
+    yield put({type: API_PROGRAM_RESULT, result});
   } catch (e) {
     console.log('Saga error', e);
-    yield put({ type: API_PROGRAM_ERROR });
+    yield put({type: API_PROGRAM_ERROR});
   }
 }
 
 function* fetchCategoryData(action) {
   try {
-    const { categoryId, count, page } = action.payload;
+    const {categoryId, count, page} = action.payload;
     const response = yield call(() => fetchCategoryAPI(categoryId, count, page));
     const result = yield response.json();
     result.refresh = false;
     console.log('API RESPONSE', result);
-    yield put({ type: API_CATEGORY_RESULT, result });
+    yield put({type: API_CATEGORY_RESULT, result});
   } catch (e) {
     console.log('Saga error', e);
-    yield put({ type: API_CATEGORY_ERROR, payload: action.payload });
+    yield put({type: API_CATEGORY_ERROR, payload: action.payload});
   }
 }
 
 function* refreshCategoryData(action) {
   try {
-    const { categoryId, count } = action.payload;
+    const {categoryId, count} = action.payload;
     const response = yield call(() => fetchCategoryAPI(categoryId, count, 1));
     const result = yield response.json();
     result.refresh = true;
     console.log('API RESPONSE', result);
-    yield put({ type: API_CATEGORY_RESULT, result });
+    yield put({type: API_CATEGORY_RESULT, result});
   } catch (e) {
     console.log('Saga error', e);
-    yield put({ type: API_CATEGORY_ERROR, payload: action.payload });
+    yield put({type: API_CATEGORY_ERROR, payload: action.payload});
   }
 }
 
 function* fetchNewestData(action) {
   try {
-    const { page, count } = action.payload;
+    const {page, count} = action.payload;
     const response = yield call(() => fetchNewestAPI(page, count));
     const result = yield response.json();
     result.refresh = false;
     console.log('API RESPONSE NEWEST', result);
-    yield put({ type: API_NEWEST_RESULT, result });
+    yield put({type: API_NEWEST_RESULT, result});
   } catch (e) {
     console.log('Saga error', e);
-    yield put({ type: API_NEWEST_ERROR });
+    yield put({type: API_NEWEST_ERROR});
   }
 }
 
 function* refreshNewestData(action) {
   try {
-    const { count } = action.payload;
+    const {count} = action.payload;
     const response = yield call(() => fetchNewestAPI(1, count));
     const result = yield response.json();
     result.refresh = true;
     console.log('API RESPONSE _REFRESH', result);
-    yield put({ type: API_NEWEST_RESULT, result });
+    yield put({type: API_NEWEST_RESULT, result});
   } catch (e) {
     console.log('Saga error', e);
-    yield put({ type: API_NEWEST_ERROR });
+    yield put({type: API_NEWEST_ERROR});
   }
 }
 
 function* fetchPopularData(action) {
   try {
-    const { page, count } = action.payload;
+    const {page, count} = action.payload;
     const response = yield call(() => fetchPopularApi(page, count));
     const result = yield response.json();
     result.refresh = false;
     console.log('API RESPONSE POPULAR', result);
-    yield put({ type: API_POPULAR_RESULT, result });
+    yield put({type: API_POPULAR_RESULT, result});
   } catch (e) {
     console.log('Saga error', e);
-    yield put({ type: API_POPULAR_ERROR });
+    yield put({type: API_POPULAR_ERROR});
   }
 }
 
 function* refreshPopularData(action) {
   try {
-    const { count } = action.payload;
+    const {count} = action.payload;
     const response = yield call(() => fetchPopularApi(1, count));
     const result = yield response.json();
     result.refresh = true;
     console.log('API RESPONSE _REFRESH', result);
-    yield put({ type: API_POPULAR_RESULT, result });
+    yield put({type: API_POPULAR_RESULT, result});
   } catch (e) {
     console.log('Saga error', e);
-    yield put({ type: API_POPULAR_ERROR });
+    yield put({type: API_POPULAR_ERROR});
   }
 }
 
 function* fetchCategoryTopsData(action) {
   try {
-    const { categoryId, count } = action.payload;
+    const {categoryId, count} = action.payload;
     const response = yield call(() => fetchCategoryTopsAPI(categoryId, count));
     const result = yield response.json();
     console.log('API RESPONSE CATEGORY TOPS', result);
-    yield put({ type: API_CATEGORY_RESULT, result });
+    yield put({type: API_CATEGORY_RESULT, result});
   } catch (e) {
     console.log('Saga error', e);
-    yield put({ type: API_CATEGORY_ERROR });
+    yield put({type: API_CATEGORY_ERROR});
   }
 }
 

@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, RefreshControl, Text, Button } from 'react-native';
-import { ArticleRow, ListLoader, DefaultSectionHeader, ScreenLoader } from '../../../../components';
+import {View, RefreshControl, Text, Button} from 'react-native';
+import {ArticleRow, ListLoader, DefaultSectionHeader, ScreenLoader} from '../../../../components';
 import Styles from './styles';
-import { withNavigation } from 'react-navigation';
-import { connect } from 'react-redux';
-import { fetchCategory, refreshCategory } from '../../../../redux/actions';
-import { FlatList } from 'react-native-gesture-handler';
-import { getOrientation } from '../../../../util/UI';
+import {withNavigation} from 'react-navigation';
+import {connect} from 'react-redux';
+import {fetchCategory, refreshCategory} from '../../../../redux/actions';
+import {FlatList} from 'react-native-gesture-handler';
+import {getOrientation} from '../../../../util/UI';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {
   ARTICLES_PER_PAGE_COUNT,
@@ -15,18 +15,18 @@ import {
   EVENT_LOGO_PRESS,
 } from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
-import { EventRegister } from 'react-native-event-listeners';
+import {EventRegister} from 'react-native-event-listeners';
 
 class CategoryScreen extends React.Component {
   componentDidMount() {
-    const { category } = this.props;
+    const {category} = this.props;
 
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
       page: 'category',
       categoryId: category.id.toString(),
     });
 
-    this.listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, data => {
+    this.listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (data) => {
       this.handleLogoPress();
     });
 
@@ -56,31 +56,31 @@ class CategoryScreen extends React.Component {
   }
 
   _onRefresh = () => {
-    const { id } = this.props.category;
+    const {id} = this.props.category;
     this.props.dispatch(refreshCategory(id, ARTICLES_PER_PAGE_COUNT));
   };
 
   callApi() {
-    const { id, nextPage } = this.props.category;
+    const {id, nextPage} = this.props.category;
     this.props.dispatch(fetchCategory(id, ARTICLES_PER_PAGE_COUNT, nextPage));
   }
 
   handleLogoPress() {
     if (this.props.isCurrent) {
       if (this.scrollY > 100) {
-        this.list.scrollToOffset({ offset: 0 });
+        this.list.scrollToOffset({offset: 0});
       } else {
         this._onRefresh();
       }
     }
   }
 
-  onArticlePressHandler = article => {
-    this.props.navigation.push('article', { articleId: article.id });
+  onArticlePressHandler = (article) => {
+    this.props.navigation.push('article', {articleId: article.id});
   };
 
-  renderItem = val => {
-    return <ArticleRow data={val.item} onArticlePress={article => this.onArticlePressHandler(article)} />;
+  renderItem = (val) => {
+    return <ArticleRow data={val.item} onArticlePress={(article) => this.onArticlePressHandler(article)} />;
   };
 
   renderLoading = () => {
@@ -100,7 +100,7 @@ class CategoryScreen extends React.Component {
     );
   };
 
-  renderFooter = isFetching => {
+  renderFooter = (isFetching) => {
     if (isFetching === true) {
       return <ListLoader />;
     } else {
@@ -109,7 +109,7 @@ class CategoryScreen extends React.Component {
   };
 
   onListEndReached = () => {
-    const { isFetching, nextPage } = this.props.category;
+    const {isFetching, nextPage} = this.props.category;
 
     //When nextPage === null the end is reached.
     if (isFetching === false && nextPage !== null) {
@@ -118,7 +118,7 @@ class CategoryScreen extends React.Component {
   };
 
   render() {
-    const { isFetching, isError, isRefreshing, lastFetchTime, articles, title } = this.props.category;
+    const {isFetching, isError, isRefreshing, lastFetchTime, articles, title} = this.props.category;
 
     if (isError === true) {
       return this.renderError();
@@ -131,8 +131,8 @@ class CategoryScreen extends React.Component {
     return (
       <View style={Styles.container}>
         <FlatList
-          ref={ref => (this.list = ref)}
-          onScroll={event => (this.scrollY = event.nativeEvent.contentOffset.y)}
+          ref={(ref) => (this.list = ref)}
+          onScroll={(event) => (this.scrollY = event.nativeEvent.contentOffset.y)}
           scrollEventThrottle={500}
           showsVerticalScrollIndicator={false}
           style={Styles.container}
@@ -157,7 +157,7 @@ class CategoryScreen extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const category = state.articles.categories.find(val => {
+  const category = state.articles.categories.find((val) => {
     return val.id === ownProps.route.categoryId;
   });
 

@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 
 export const THEME_LIGHT = 'theme-light';
 export const THEME_DARK = 'theme-dark';
@@ -48,12 +48,12 @@ const staticColors = {
 };
 
 export const channelColors = {
-  color_set_lrtHD: { primary: '#80BCE6', secondary: '#00679C' },
-  color_set_lrtPlius: { primary: '#A91B73', secondary: '#721F47' },
-  color_set_lrt_world: { primary: '#6D9B36', secondary: '#007A3C' },
-  color_set_l_radio: { primary: '#EA8D7A', secondary: '#D92053' },
-  color_set_classic: { primary: '#C47FAA', secondary: '#441D56' },
-  color_set_opus: { primary: '#F2B12E', secondary: '#E7792B' },
+  color_set_lrtHD: {primary: '#80BCE6', secondary: '#00679C'},
+  color_set_lrtPlius: {primary: '#A91B73', secondary: '#721F47'},
+  color_set_lrt_world: {primary: '#6D9B36', secondary: '#007A3C'},
+  color_set_l_radio: {primary: '#EA8D7A', secondary: '#D92053'},
+  color_set_classic: {primary: '#C47FAA', secondary: '#441D56'},
+  color_set_opus: {primary: '#F2B12E', secondary: '#E7792B'},
 };
 
 export const colorsLight = {
@@ -194,7 +194,7 @@ const articleTheme = {
   $galleryOpacity: 0.97,
 };
 
-export const initTheme = config => {
+export const initTheme = (config) => {
   const isDarkTheme = config.isDarkMode;
   const colors = isDarkTheme === true ? colorsDark : colorsLight;
 
