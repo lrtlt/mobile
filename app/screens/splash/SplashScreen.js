@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {View, Text, ActivityIndicator, Button} from 'react-native';
-import {useSelector, useDispatch, batch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {StatusBar} from '../../components';
 import {Logo} from '../../components/svg';
 import Styles from './styles';
@@ -36,7 +36,7 @@ const SplashScreenComponent = (props) => {
       load();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [state.hasMenuData]);
 
   const load = (ignoreError = false) => {
     if (state.isError && ignoreError === false) {
@@ -44,11 +44,12 @@ const SplashScreenComponent = (props) => {
     }
 
     if (state.isLoading !== true) {
-      batch(() => {
-        dispatch(fetchMenuItems());
-        dispatch(fetchArticles());
+      if (state.hasMenuData) {
         dispatch(setSelectedCategory(0));
-      });
+        dispatch(fetchArticles());
+      } else {
+        dispatch(fetchMenuItems());
+      }
     }
   };
 

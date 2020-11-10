@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Dimensions} from 'react-native';
 import {TabView} from 'react-native-tab-view';
 import {StatusBar} from '../../components';
 import Styles from './styles';
 import TabBar from './tabBar/TabBar';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setSelectedCategory} from '../../redux/actions';
 import HomeScreen from './tabScreen/home/HomeScreen';
 import CategoryScreen from './tabScreen/category/CategoryScreen';
@@ -21,33 +21,38 @@ import {
   GEMIUS_VIEW_SCRIPT_ID,
   ARTICLE_LIST_TYPE_POPULAR,
 } from '../../constants';
+import {selectMainScreenState} from '../../redux/selectors';
 
-class MainScreen extends React.Component {
-  componentDidMount() {
+const MainScreen = (props) => {
+  useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'main'});
-  }
+  }, []);
 
-  handleIndexChange = (index) => this.props.dispatch(setSelectedCategory(index));
+  const state = useSelector(selectMainScreenState);
 
-  renderTabBar = (props) => <TabBar {...props} />;
+  const dispatch = useDispatch();
 
-  renderScene = (props) => {
+  const handleIndexChange = (index) => dispatch(setSelectedCategory(index));
+
+  const renderTabBar = (tabBarProps) => <TabBar {...tabBarProps} />;
+
+  const renderScene = (sceneProps) => {
     //Render only 1 screen on each side
-    const routeIndex = this.props.routes.indexOf(props.route);
-    if (Math.abs(this.props.index - routeIndex) > 1) {
+    const routeIndex = state.routes.indexOf(sceneProps.route);
+    if (Math.abs(state.index - routeIndex) > 1) {
       return <View />;
     }
 
-    const current = routeIndex === this.props.index;
+    const current = routeIndex === state.index;
 
-    const {type} = props.route;
+    const {type} = sceneProps.route;
     switch (type) {
       case ARTICLE_LIST_TYPE_HOME:
         return <HomeScreen type={ARTICLE_LIST_TYPE_HOME} isCurrent={current} />;
       case ARTICLE_LIST_TYPE_MEDIA:
         return <HomeScreen type={ARTICLE_LIST_TYPE_MEDIA} isCurrent={current} />;
       case ARTICLE_LIST_TYPE_CATEGORY:
-        return <CategoryScreen route={props.route} isCurrent={current} />;
+        return <CategoryScreen route={sceneProps.route} isCurrent={current} />;
       case ARTICLE_LIST_TYPE_NEWEST:
         return <NewestScreen isCurrent={current} />;
       case ARTICLE_LIST_TYPE_POPULAR:
@@ -57,31 +62,22 @@ class MainScreen extends React.Component {
     }
   };
 
-  render() {
-    return (
-      <View style={Styles.container}>
-        <StatusBar />
-        <TabView
-          navigationState={this.props}
-          swipeEnabled={true}
-          renderScene={this.renderScene}
-          renderTabBar={this.renderTabBar}
-          // removeClippedSubviews={true}
-          onIndexChange={this.handleIndexChange}
-          lazy={true}
-          lazyPreloadDistance={0}
-          initialLayout={{height: 0, width: Dimensions.get('window').width}}
-        />
-      </View>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    index: state.navigation.selectedCategory,
-    routes: state.navigation.routes,
-  };
+  return (
+    <View style={Styles.container}>
+      <StatusBar />
+      <TabView
+        navigationState={state}
+        swipeEnabled={true}
+        renderScene={renderScene}
+        renderTabBar={renderTabBar}
+        // removeClippedSubviews={true}
+        onIndexChange={handleIndexChange}
+        lazy={true}
+        lazyPreloadDistance={0}
+        initialLayout={{height: 0, width: Dimensions.get('window').width}}
+      />
+    </View>
+  );
 };
 
-export default connect(mapStateToProps)(MainScreen);
+export default MainScreen;

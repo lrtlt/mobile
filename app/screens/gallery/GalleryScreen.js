@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {StatusBar} from '../../components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -25,48 +25,37 @@ const formatImages = (imagesArray, index) => {
   return start.concat(end);
 };
 
-class GalleryScreen extends React.PureComponent {
-  constructor(props) {
-    super(props);
+const GalleryScreen = (props) => {
+  const {route, navigation} = props;
 
-    const {navigation} = this.props;
-
-    const selectedImage = navigation.getParam('selectedImage', null);
-    const images = navigation.getParam('images', []);
+  const [state, setState] = useState(() => {
+    const selectedImage = route.params.selectedImage ?? null;
+    const images = route.params.images ?? [];
 
     let initialIndex = 0;
     if (selectedImage) {
       initialIndex = images.findIndex((img) => img.path === selectedImage.path);
       initialIndex = Math.max(0, initialIndex);
     }
-
-    const formattedImages = formatImages(this.props.navigation.getParam('images', []), initialIndex);
-
-    this.state = {
+    return {
       index: initialIndex,
       initialIndex,
-      images: formattedImages,
+      images: formatImages(images, initialIndex),
     };
-  }
+  });
 
-  componentDidMount() {
+  useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'gallery'});
-  }
+  }, []);
 
-  handleImageSelected = (index) => {
-    this.setState({...this.state, index});
-  };
-
-  renderDetails = () => {
-    const images = this.state.images;
-    const image = images[this.state.index];
-
+  const renderDetails = () => {
+    const image = state.images[state.index];
     return (
       <View style={Styles.detailsContainer}>
         <View style={Styles.row}>
           <Text style={Styles.authorText}>{image.author}</Text>
           <Text style={Styles.authorText}>
-            {this.state.index + 1} / {images.length}
+            {state.index + 1} / {state.images.length}
           </Text>
         </View>
         <Text style={Styles.title}>{image.title}</Text>
@@ -74,11 +63,11 @@ class GalleryScreen extends React.PureComponent {
     );
   };
 
-  renderExitButton = () => {
+  const renderExitButton = () => {
     return (
       <View style={Styles.absoluteLayout}>
         <View style={Styles.backButtonContainer}>
-          <BorderlessButton onPress={() => this.props.navigation.goBack()}>
+          <BorderlessButton onPress={() => navigation.goBack()}>
             <Icon name="close" color={EStyleSheet.value('$headerTintColor')} size={32} />
           </BorderlessButton>
         </View>
@@ -86,28 +75,110 @@ class GalleryScreen extends React.PureComponent {
     );
   };
 
-  render() {
-    const images = this.state.images.map((img) => ({
-      uri: buildArticleImageUri(IMG_SIZE_XXL, img.path),
-    }));
+  const imageUrls = state.images.map((img) => ({
+    uri: buildArticleImageUri(IMG_SIZE_XXL, img.path),
+  }));
 
-    return (
-      <View style={Styles.container}>
-        <StatusBar />
-        <GallerySwiper
-          style={Styles.gallerySwiper}
-          images={images}
-          sensitiveScroll={false}
-          initialNumToRender={2}
-          //initialPage={this.state.initialIndex}
-          pageMargin={4}
-          onPageSelected={this.handleImageSelected}
-        />
-        {this.renderDetails()}
-        {this.renderExitButton()}
-      </View>
-    );
-  }
-}
+  return (
+    <View style={Styles.container}>
+      <StatusBar />
+      <GallerySwiper
+        style={Styles.gallerySwiper}
+        images={imageUrls}
+        sensitiveScroll={false}
+        initialNumToRender={2}
+        //initialPage={state.initialIndex}
+        pageMargin={4}
+        onPageSelected={(i) => setState({...state, index: i})}
+      />
+      {renderDetails()}
+      {renderExitButton()}
+    </View>
+  );
+};
+// class GalleryScreen extends React.PureComponent {
+//   constructor(props) {
+//     super(props);
+
+//     const {navigation} = this.props;
+
+//     const selectedImage = navigation.getParam('selectedImage', null);
+//     const images = navigation.getParam('images', []);
+
+//     let initialIndex = 0;
+//     if (selectedImage) {
+//       initialIndex = images.findIndex((img) => img.path === selectedImage.path);
+//       initialIndex = Math.max(0, initialIndex);
+//     }
+
+//     const formattedImages = formatImages(this.props.navigation.getParam('images', []), initialIndex);
+
+//     this.state = {
+//       index: initialIndex,
+//       initialIndex,
+//       images: formattedImages,
+//     };
+//   }
+
+//   componentDidMount() {
+//     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'gallery'});
+//   }
+
+//   handleImageSelected = (index) => {
+//     this.setState({...this.state, index});
+//   };
+
+//   renderDetails = () => {
+//     const images = this.state.images;
+//     const image = images[this.state.index];
+
+//     return (
+//       <View style={Styles.detailsContainer}>
+//         <View style={Styles.row}>
+//           <Text style={Styles.authorText}>{image.author}</Text>
+//           <Text style={Styles.authorText}>
+//             {this.state.index + 1} / {images.length}
+//           </Text>
+//         </View>
+//         <Text style={Styles.title}>{image.title}</Text>
+//       </View>
+//     );
+//   };
+
+//   renderExitButton = () => {
+//     return (
+//       <View style={Styles.absoluteLayout}>
+//         <View style={Styles.backButtonContainer}>
+//           <BorderlessButton onPress={() => this.props.navigation.goBack()}>
+//             <Icon name="close" color={EStyleSheet.value('$headerTintColor')} size={32} />
+//           </BorderlessButton>
+//         </View>
+//       </View>
+//     );
+//   };
+
+//   render() {
+//     const images = this.state.images.map((img) => ({
+//       uri: buildArticleImageUri(IMG_SIZE_XXL, img.path),
+//     }));
+
+//     return (
+//       <View style={Styles.container}>
+//         <StatusBar />
+//         <GallerySwiper
+//           style={Styles.gallerySwiper}
+//           images={images}
+//           sensitiveScroll={false}
+//           initialNumToRender={2}
+//           //initialPage={this.state.initialIndex}
+//           pageMargin={4}
+//           onPageSelected={this.handleImageSelected}
+//         />
+//         {this.renderDetails()}
+//         {this.renderExitButton()}
+//       </View>
+//     );
+//   }
+// }
 
 export default GalleryScreen;

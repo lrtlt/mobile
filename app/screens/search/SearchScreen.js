@@ -1,8 +1,9 @@
-import React from 'react';
-import {View, Text, Button, ActivityIndicator} from 'react-native';
-import {connect} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {View, Text, Button, ActivityIndicator, TextInput} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 import {resetSearchFilter} from '../../redux/actions';
-import {Article} from '../../components';
+import {Article, ActionButton} from '../../components';
+import {SearchIcon, FilterIcon} from '../../components/svg';
 import Styles from './styles';
 import {getOrientation} from '../../util/UI';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -10,175 +11,158 @@ import {searchArticles} from '../../api';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {FlatList} from 'react-native-gesture-handler';
-import {isEqual} from 'lodash';
+import {selectSearchFilter} from '../../redux/selectors';
 
-const initialState = {
-  query: '',
-  isFetching: false,
-  isError: false,
-  articles: [],
-  filter: null,
-};
+const SearchScreen = (props) => {
+  const {navigation} = props;
+  const searchFilter = useSelector(selectSearchFilter);
 
-class SearchScreen extends React.Component {
-  constructor(props) {
-    super(props);
+  const [loadingState, setLoadingState] = useState({
+    isFetching: false,
+    isError: false,
+  });
 
-    const parentNavigation = props.navigation.dangerouslyGetParent();
-    if (parentNavigation) {
-      parentNavigation.setParams({
-        searchInputHandler: this.handleInputChange,
-        searchHandler: this.handleSearchPress,
-      });
-    }
+  const [query, setQuery] = useState('');
+  const [articles, setArticles] = useState([]);
 
-    this.state = initialState;
-  }
+  const dispatch = useDispatch();
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      !isEqual(this.props.filter, nextProps.filter) ||
-      this.state.isFetching !== nextState.isFetching ||
-      this.state.isError !== nextState.isError ||
-      this.state.articles !== nextState.articles
-    );
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
       page: 'search',
     });
-  }
 
-  componentDidUpdate() {
-    if (!isEqual(this.props.filter, this.state.filter)) {
-      this.updateFilterAndRunSearch(this.props.filter);
-    }
-  }
+    return () => dispatch(resetSearchFilter());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  updateFilterAndRunSearch = (filter) => {
-    this.setState({...this.state, filter}, () => {
-      this.search();
+  useEffect(() => {
+    navigation.dangerouslyGetParent().setOptions({
+      headerTitle: () => (
+        <TextInput
+          style={Styles.searchInput}
+          multiline={false}
+          placeholder={'Paieška'}
+          numberOfLines={1}
+          onSubmitEditing={() => search()}
+          returnKeyType="search"
+          placeholderTextColor={EStyleSheet.value('$textColorDisabled')}
+          onChangeText={(text) => setQuery(text)}
+          value={query}
+        />
+      ),
+      headerRight: () => (
+        <View style={Styles.row}>
+          <ActionButton onPress={() => search()}>
+            <SearchIcon
+              size={EStyleSheet.value('$navBarIconSize')}
+              color={EStyleSheet.value('$headerTintColor')}
+            />
+          </ActionButton>
+          <ActionButton onPress={() => navigation.toggleDrawer()}>
+            <FilterIcon
+              size={EStyleSheet.value('$navBarIconSize')}
+              color={EStyleSheet.value('$headerTintColor')}
+            />
+          </ActionButton>
+        </View>
+      ),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, searchFilter]);
+
+  useEffect(() => {
+    search();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchFilter]);
+
+  const callApi = async () => {
+    const response = await fetch(searchArticles(query, searchFilter));
+    console.log(response);
+    const result = await response.json();
+    console.log('SEARCH ARTICLES RESPONSE', result);
+    return result;
   };
 
-  componentWillUnmount() {
-    this.props.dispatch(resetSearchFilter());
-  }
-
-  handleSearchPress = () => {
-    this.search();
-  };
-
-  search = () => {
-    this.setState({...this.state, isFetching: true, isError: false});
-    this.callApi()
+  const search = () => {
+    setLoadingState({isFetching: true, isError: false});
+    callApi()
       .then((response) => {
-        this.setState({
-          ...this.state,
+        setLoadingState({
           isFetching: false,
           isError: false,
-          articles: response.items,
         });
+        setArticles(response.items);
       })
       .catch((error) => {
-        this.setState({
-          ...this.state,
+        setLoadingState({
           isFetching: false,
           isError: true,
         });
       });
   };
 
-  async callApi() {
-    const response = await fetch(searchArticles(this.state.query, this.state.filter));
-    const result = await response.json();
-    console.log('SEARCH ARTICLES RESPONSE', result);
-    return result;
-  }
-
-  onArticlePressHandler = (article) => {
-    this.props.navigation.push('article', {articleId: article.id});
-  };
-
-  handleInputChange = (text) => {
-    this.setState({...this.state, query: text});
-
-    const parentNavigation = this.props.navigation.dangerouslyGetParent();
-    if (parentNavigation) {
-      parentNavigation.setParams({q: text});
-    }
-  };
-
-  renderItem = (val) => {
+  const renderItem = (val) => {
     return (
       <Article
         style={Styles.article}
         data={val.item}
         showDate={true}
-        onPress={(article) => this.onArticlePressHandler(article)}
+        onPress={(article) => navigation.navigate('Article', {articleId: article.id})}
         type={'multi'}
       />
     );
   };
 
-  renderLoading = () => {
+  const renderLoading = () => {
     return (
       <View style={Styles.loadingContainer}>
-        <ActivityIndicator size={'small'} animating={this.state.isFetching} />
+        <ActivityIndicator size={'small'} animating={loadingState.isFetching} />
       </View>
     );
   };
 
-  renderError = () => {
+  const renderError = () => {
     return (
       <View style={Styles.errorContainer}>
         <Text style={Styles.errorText}>{EStyleSheet.value('$error_no_connection')}</Text>
         <Button
           title={EStyleSheet.value('$tryAgain')}
           color={EStyleSheet.value('$primary')}
-          onPress={() => this.search()}
+          onPress={() => search(query, searchFilter)}
         />
       </View>
     );
   };
 
-  render() {
-    const {isFetching, isError, articles} = this.state;
-
-    let content;
-    if (isError === true) {
-      content = this.renderError();
-    } else if (isFetching === true) {
-      content = this.renderLoading();
-    } else {
-      content = (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          statusBarHeight={0}
-          data={articles}
-          windowSize={4}
-          numColumns={2}
-          extraData={{
-            orientation: getOrientation(),
-          }}
-          renderItem={this.renderItem}
-          removeClippedSubviews={false}
-          keyExtractor={(item, index) => String(index) + String(item)}
-        />
-      );
-    }
-
-    return (
-      <View style={Styles.root}>
-        <View style={Styles.container}>{content}</View>
-      </View>
+  let content;
+  if (loadingState.isError) {
+    content = renderError();
+  } else if (loadingState.isFetching) {
+    content = renderLoading();
+  } else {
+    content = (
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        statusBarHeight={0}
+        data={articles}
+        windowSize={4}
+        numColumns={2}
+        extraData={{
+          orientation: getOrientation(),
+        }}
+        renderItem={renderItem}
+        removeClippedSubviews={false}
+        keyExtractor={(item, index) => String(index) + String(item)}
+      />
     );
   }
-}
 
-const mapStateToProps = (state) => {
-  return {filter: state.navigation.filter};
+  return (
+    <View style={Styles.root}>
+      <View style={Styles.container}>{content}</View>
+    </View>
+  );
 };
 
-export default connect(mapStateToProps)(SearchScreen);
+export default React.memo(SearchScreen);

@@ -20,10 +20,11 @@ const styles = EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  input: {
-    padding: 4,
+  searchInput: {
+    paddingBottom: 2,
+    paddingTop: 2,
     margin: 4,
-    width: getSmallestDim() * 0.65,
+    width: getSmallestDim() * 0.5,
     fontFamily: 'SourceSansPro-Regular',
     fontSize: 15,
     color: '$textColor',

@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Linking} from 'react-native';
-import {connect} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import ScalableText from '../scalableText/ScalableText';
 import Styles from './styles';
 import {setSelectedCategory} from '../../redux/actions';
@@ -9,54 +9,19 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import {ScrollView} from 'react-native-gesture-handler';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {getIconForChannel} from '../../util/UI';
+import {selectDrawerData} from '../../redux/selectors';
 
-class Drawer extends React.PureComponent {
-  handleCategorySelection = (index) => {
-    this.props.navigation.closeDrawer();
-    this.props.dispatch(setSelectedCategory(index));
+const DrawerComponent = (props) => {
+  const {navigation} = props;
+  const dispatch = useDispatch();
+  const data = useSelector(selectDrawerData);
+
+  const handleCategorySelection = (index) => {
+    navigation.closeDrawer();
+    dispatch(setSelectedCategory(index));
   };
 
-  handleAboutPress = () => {
-    Linking.openURL(EStyleSheet.value('$about_url'));
-  };
-
-  handleContactsPress = () => {
-    Linking.openURL(EStyleSheet.value('$contacts_url'));
-  };
-
-  handleUploadPress = () => {
-    Linking.openURL(EStyleSheet.value('$upload_news_url'));
-  };
-
-  handlePagePress = (page) => {
-    this.props.navigation.push('customPage', {page});
-  };
-
-  handleSearchPress = () => {
-    this.props.navigation.navigate('search');
-  };
-
-  handleFeedbackPress = () => {
-    Linking.openURL(EStyleSheet.value('$feedback_url'));
-  };
-
-  onChannelPressHandler = (channelId) => {
-    this.props.navigation.push('channel', {channelId: channelId});
-  };
-
-  onProgramPressHandler = () => {
-    this.props.navigation.navigate('program');
-  };
-
-  onHistoryPressHandler = () => {
-    this.props.navigation.navigate('history');
-  };
-
-  onBookmarksPressHandler = () => {
-    this.props.navigation.navigate('bookmarks');
-  };
-
-  renderFooterItems() {
+  const renderFooterItems = () => {
     return (
       <View style={Styles.footerContainer}>
         <View style={Styles.line} />
@@ -64,38 +29,40 @@ class Drawer extends React.PureComponent {
           key={EStyleSheet.value('$upload')}
           text={EStyleSheet.value('$upload')}
           iconComponent={<FeatherIcon name="upload" size={22} color={EStyleSheet.value('$primaryDark')} />}
-          onPress={() => this.handleUploadPress()}
+          onPress={() => Linking.openURL(EStyleSheet.value('$upload_news_url'))}
         />
         <DrawerItem
           key={EStyleSheet.value('$feeback')}
           text={EStyleSheet.value('$feeback')}
           iconComponent={<FeatherIcon name="x-octagon" size={22} color={EStyleSheet.value('$primaryDark')} />}
-          onPress={() => this.handleFeedbackPress()}
+          onPress={() => Linking.openURL(EStyleSheet.value('$feedback_url'))}
         />
         <DrawerItem
           key={EStyleSheet.value('$contacts')}
           text={EStyleSheet.value('$contacts')}
           iconComponent={<FeatherIcon name="phone" size={22} color={EStyleSheet.value('$primaryDark')} />}
-          onPress={() => this.handleContactsPress()}
+          onPress={() => Linking.openURL(EStyleSheet.value('$contacts_url'))}
         />
         <DrawerItem
           key={EStyleSheet.value('$about')}
           text={EStyleSheet.value('$about')}
           iconComponent={<FeatherIcon name="info" size={22} color={EStyleSheet.value('$primaryDark')} />}
-          onPress={() => this.handleAboutPress()}
+          onPress={() => Linking.openURL(EStyleSheet.value('$about_url'))}
         />
       </View>
     );
-  }
+  };
 
-  renderChannelItems = (props) => {
-    const channels = props.channels.map((channel) => {
+  const renderChannelItems = () => {
+    const channels = data.channels.map((channel) => {
       return (
         <DrawerItem
           key={channel.channel_title}
           text={channel.channel_title}
           iconComponent={getIconForChannel(channel.channel, 22)}
-          onPress={() => this.onChannelPressHandler(channel.channel_id)}
+          onPress={() => {
+            navigation.navigate('Channel', {channelId: channel.channel_id});
+          }}
         />
       );
     });
@@ -107,60 +74,60 @@ class Drawer extends React.PureComponent {
     );
   };
 
-  renderSearch = () => {
+  const renderSearch = () => {
     return (
       <DrawerItem
         key={EStyleSheet.value('$search')}
         text={EStyleSheet.value('$search')}
         iconComponent={<FeatherIcon name="search" size={22} color={EStyleSheet.value('$primaryDark')} />}
-        onPress={() => this.handleSearchPress()}
+        onPress={() => navigation.navigate('Search')}
       />
     );
   };
 
-  renderProgram = () => {
+  const renderProgram = () => {
     return (
       <DrawerItem
         key={'program'}
         text={EStyleSheet.value('$tvProgram')}
         iconComponent={<FeatherIcon name="tv" size={22} color={EStyleSheet.value('$primaryDark')} />}
-        onPress={() => this.onProgramPressHandler()}
+        onPress={() => navigation.navigate('Program')}
       />
     );
   };
 
-  renderHistory = () => {
+  const renderHistory = () => {
     return (
       <DrawerItem
         key={'history'}
         text={EStyleSheet.value('$history')}
         iconComponent={<FeatherIcon name="clock" size={22} color={EStyleSheet.value('$primaryDark')} />}
-        onPress={() => this.onHistoryPressHandler()}
+        onPress={() => navigation.navigate('History')}
       />
     );
   };
 
-  renderBookmarks = () => {
+  const renderBookmarks = () => {
     return (
       <DrawerItem
         key={'bookmarks'}
         text={EStyleSheet.value('$bookmarks')}
         iconComponent={<FeatherIcon name="bookmark" size={22} color={EStyleSheet.value('$primaryDark')} />}
-        onPress={() => this.onBookmarksPressHandler()}
+        onPress={() => navigation.navigate('Bookmarks')}
       />
     );
   };
 
-  renderPages = () => {
-    const pages = this.props.pages;
+  const renderPages = () => {
+    const pages = data.pages;
 
     if (pages && pages.length > 0) {
-      const content = this.props.pages.map((page) => (
+      const content = pages.map((page) => (
         <DrawerItem
           key={page.key}
           text={page.title}
           iconComponent={<FeatherIcon name="globe" size={22} color={EStyleSheet.value('$primaryLight')} />}
-          onPress={() => this.handlePagePress(page)}
+          onPress={() => navigation.navigate('CustomPage', {page})}
         />
       ));
 
@@ -175,44 +142,32 @@ class Drawer extends React.PureComponent {
     }
   };
 
-  render() {
-    const content = this.props.routes.map((route, i) => {
-      return (
-        <DrawerItem key={route.key} text={route.title} onPress={() => this.handleCategorySelection(i)} />
-      );
-    });
+  const content = data.routes.map((route, i) => {
+    return <DrawerItem key={route.key} text={route.title} onPress={() => handleCategorySelection(i)} />;
+  });
 
-    return (
-      <View style={Styles.container}>
-        <ScrollView style={Styles.scroll} showsVerticalScrollIndicator={false}>
-          <View style={Styles.content}>
-            <View style={Styles.headerContainer}>
-              {this.renderSearch()}
-              {this.renderBookmarks()}
-              {this.renderHistory()}
-              {this.renderProgram()}
-            </View>
-            <View style={Styles.line} />
-            {this.renderChannelItems(this.props)}
-
-            <View style={Styles.line} />
-            <ScalableText style={Styles.title}>{EStyleSheet.value('$drawerMenu')}</ScalableText>
-            {content}
-            {this.renderPages()}
-            {this.renderFooterItems()}
+  return (
+    <View style={Styles.container}>
+      <ScrollView style={Styles.scroll} showsVerticalScrollIndicator={false}>
+        <View style={Styles.content}>
+          <View style={Styles.headerContainer}>
+            {renderSearch()}
+            {renderBookmarks()}
+            {renderHistory()}
+            {renderProgram()}
           </View>
-        </ScrollView>
-      </View>
-    );
-  }
-}
+          <View style={Styles.line} />
+          {renderChannelItems()}
 
-const mapStateToProps = (state) => {
-  return {
-    routes: state.navigation.routes,
-    pages: state.navigation.pages,
-    channels: state.articles.tvprog.items,
-  };
+          <View style={Styles.line} />
+          <ScalableText style={Styles.title}>{EStyleSheet.value('$drawerMenu')}</ScalableText>
+          {content}
+          {renderPages()}
+          {renderFooterItems()}
+        </View>
+      </ScrollView>
+    </View>
+  );
 };
 
-export default connect(mapStateToProps)(Drawer);
+export default DrawerComponent;
