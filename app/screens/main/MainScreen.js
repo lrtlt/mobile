@@ -1,7 +1,10 @@
 import React, {useEffect} from 'react';
 import {View, Dimensions} from 'react-native';
 import {TabView} from 'react-native-tab-view';
-import {StatusBar} from '../../components';
+import {StatusBar, ActionButton} from '../../components';
+import {SettingsIcon, Logo} from '../../components/svg';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {BorderlessButton} from 'react-native-gesture-handler';
 import Styles from './styles';
 import TabBar from './tabBar/TabBar';
 import {useDispatch, useSelector} from 'react-redux';
@@ -12,6 +15,9 @@ import NewestScreen from './tabScreen/newest/NewestScreen';
 import PopularScreen from './tabScreen/popular/PopularScreen';
 import TestScreen from '../testScreen/TestScreen';
 import Gemius from 'react-native-gemius-plugin';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {EventRegister} from 'react-native-event-listeners';
+import {EVENT_LOGO_PRESS} from '../../constants';
 
 import {
   ARTICLE_LIST_TYPE_HOME,
@@ -24,8 +30,40 @@ import {
 import {selectMainScreenState} from '../../redux/selectors';
 
 const MainScreen = (props) => {
+  const {navigation} = props;
+
   useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'main'});
+
+    navigation.dangerouslyGetParent().setOptions({
+      headerLeft: (_) => (
+        <ActionButton onPress={() => navigation.toggleDrawer()}>
+          <MaterialIcon
+            name="menu"
+            size={EStyleSheet.value('$navBarIconSize') - 2}
+            color={EStyleSheet.value('$headerTintColor')}
+          />
+        </ActionButton>
+      ),
+      headerRight: (_) => (
+        <ActionButton onPress={() => navigation.navigate('Settings')}>
+          <SettingsIcon
+            size={EStyleSheet.value('$navBarIconSize') - 2}
+            color={EStyleSheet.value('$headerTintColor')}
+          />
+        </ActionButton>
+      ),
+      headerTitle: (
+        <BorderlessButton
+          onPress={() => {
+            EventRegister.emit(EVENT_LOGO_PRESS, null);
+          }}>
+          <View style={{paddingStart: 12, paddingEnd: 12}}>
+            <Logo size={EStyleSheet.value('$navBarIconSize')} />
+          </View>
+        </BorderlessButton>
+      ),
+    });
   }, []);
 
   const state = useSelector(selectMainScreenState);

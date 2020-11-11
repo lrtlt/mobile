@@ -58,3 +58,7 @@ export const selectDrawerData = (state) => {
 export const selectSearchFilter = (state) => {
   return state.navigation.filter;
 };
+
+export const selectConfig = (state) => {
+  return state.config;
+};
