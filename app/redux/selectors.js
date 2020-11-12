@@ -101,6 +101,12 @@ export const selectProgramScreenState = (state) => {
   };
 };
 
+export const selectTVProgram = (state) => {
+  return {
+    tvProgram: state.articles.tvprog,
+  };
+};
+
 export const selectArticleBookmarked = (articleId) => (state) => {
   const {savedArticles} = state.articleStorage;
   return savedArticles && savedArticles.find((a) => a.id === articleId) !== undefined;

@@ -25,7 +25,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {selectHomeScreenState} from '../../../../redux/selectors';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 const HomeScreen = (props) => {
   const dispatch = useDispatch();
@@ -51,12 +51,14 @@ const HomeScreen = (props) => {
       callApi();
     });
 
+    return () => EventRegister.removeEventListener(listener);
+  });
+
+  useFocusEffect(() => {
     if (Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
       console.log('Home data expired!');
       callApi();
     }
-
-    return () => EventRegister.removeEventListener(listener);
   });
 
   const callApi = () => {

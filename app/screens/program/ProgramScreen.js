@@ -25,13 +25,14 @@ const ProgramScreen = (props) => {
   const dispatch = useDispatch();
 
   const state = useSelector(selectProgramScreenState);
+
   const {program, loadingState} = state;
 
-  if (!selectedDate) {
-    setSelectedDate(program.days[0]);
-  }
-
-  console.log('state', state);
+  useEffect(() => {
+    if (program) {
+      setSelectedDate(program.days[0]);
+    }
+  }, [program]);
 
   useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'program'});
@@ -54,7 +55,7 @@ const ProgramScreen = (props) => {
         return selectedDate ? (
           <ProgramDay style={Styles.dayHeader} textStyle={Styles.headerText} dateString={selectedDate} />
         ) : (
-          ''
+          <View />
         );
       },
     });

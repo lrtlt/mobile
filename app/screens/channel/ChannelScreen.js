@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text, Animated} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text} from 'react-native';
 import {
   VideoComponent,
   ProgramItem,
@@ -9,7 +9,7 @@ import {
   ScreenError,
 } from '../../components';
 import {channelGet} from '../../api';
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Styles from './styles';
@@ -17,8 +17,7 @@ import {getIconForChannel} from '../../util/UI';
 
 import {CHANNEL_TYPE_DEFAULT, CHANNEL_TYPE_LIVE, GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
-
-const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
+import {selectTVProgram} from '../../redux/selectors';
 
 const PROGRAM_ITEMS_VISIBLE = 2;
 
@@ -26,72 +25,71 @@ const STATE_LOADING = 'loading';
 const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
-const initialState = {
-  channel: null,
-  state: STATE_LOADING,
-};
+const ChannelScreen = (props) => {
+  const {navigation, route} = props;
 
-class ChannelScreen extends React.Component {
-  static navigationOptions = (navigationProps) => {
-    return {
-      title: EStyleSheet.value('$channelScreenTitle'),
-    };
-  };
+  const [state, setState] = useState({
+    channel: null,
+    loadingState: STATE_LOADING,
+  });
 
-  constructor(props) {
-    super(props);
-    this.state = initialState;
-  }
+  const [selectedChannel, setSelectedChannel] = useState(route.params.channelId);
 
-  componentDidMount() {
-    const {channelId} = this.props.navigation.state.params;
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      screen: 'channel',
-      channelId: channelId.toString(),
+  const {tvProgram} = useSelector(selectTVProgram);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: EStyleSheet.value('$channelScreenTitle'),
     });
 
-    this.loadChannel(channelId);
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  loadChannel = (id) => {
-    console.log('Loading channel:' + id);
-    this.callApi(id)
+  useEffect(() => {
+    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
+      screen: 'channel',
+      channelId: selectedChannel.toString(),
+    });
+
+    loadChannel();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedChannel]);
+
+  const loadChannel = () => {
+    console.log('Loading channel:' + selectedChannel);
+    callApi(selectedChannel)
       .then((response) =>
-        this.setState({
-          ...this.state,
+        setState({
           channel: response,
-          state: response.channel_info !== null ? STATE_READY : STATE_ERROR,
+          loadingState: response.channel_info ? STATE_READY : STATE_ERROR,
         }),
       )
-      .catch((error) => this.setState({...this.state, channel: null, state: STATE_ERROR}));
+      .catch((error) =>
+        setState({
+          channel: null,
+          loadingState: STATE_ERROR,
+        }),
+      );
   };
 
-  handleTvProgramPress = () => {
-    this.props.navigation.navigate('program');
-  };
-
-  isChannelLoaded = () => {
-    return this.state.channel !== null;
-  };
-
-  callApi = async (channelId) => {
+  const callApi = async (channelId) => {
     const response = await fetch(channelGet(channelId));
     const result = await response.json();
     console.log('CHANNEL API RESPONSE', result);
     return result;
   };
 
-  onChannelPressHandler = (channel) => {
+  const onChannelPressHandler = (channel) => {
     const {type, payload} = channel;
     switch (type) {
       case CHANNEL_TYPE_DEFAULT: {
         const channelId = payload.channel_id;
-        this.loadChannel(channelId);
+        setSelectedChannel(channelId);
         break;
       }
       case CHANNEL_TYPE_LIVE: {
         const channelId = payload.channel_id;
-        this.loadChannel(channelId);
+        setSelectedChannel(channelId);
         break;
       }
       default: {
@@ -100,24 +98,12 @@ class ChannelScreen extends React.Component {
     }
   };
 
-  renderLoading = (props) => (
-    <View style={Styles.player}>
-      <ScreenLoader />
-    </View>
-  );
-
-  renderError = (props) => (
-    <View style={Styles.player}>
-      <ScreenError text={EStyleSheet.value('$liveChanelError')} />
-    </View>
-  );
-
-  renderChannelComponent = (props) => {
-    const {channel_info} = this.state.channel;
+  const renderChannelComponent = () => {
+    const {channel_info} = state.channel;
 
     const channelIconComponent = getIconForChannel(channel_info.channel, 40);
 
-    const {prog} = this.state.channel;
+    const {prog} = state.channel;
 
     const programComponent = prog
       ? prog.map((item, i) => {
@@ -164,7 +150,7 @@ class ChannelScreen extends React.Component {
         <View style={Styles.programContainer}>
           {channelIconComponent}
           {programComponent}
-          <TouchableOpacity onPress={() => this.handleTvProgramPress()}>
+          <TouchableOpacity onPress={() => navigation.navigate('Program')}>
             <Text style={Styles.fullProgramText}>{EStyleSheet.value('$tvProgramButtonText')}</Text>
           </TouchableOpacity>
         </View>
@@ -172,50 +158,52 @@ class ChannelScreen extends React.Component {
     );
   };
 
-  render() {
-    const {state} = this.state;
+  const renderLoading = () => (
+    <View style={Styles.player}>
+      <ScreenLoader />
+    </View>
+  );
 
-    let content;
-    switch (state) {
-      case STATE_LOADING: {
-        content = this.renderLoading();
-        break;
-      }
-      case STATE_ERROR: {
-        content = this.renderError();
-        break;
-      }
-      case STATE_READY: {
-        content = this.renderChannelComponent();
-        break;
-      }
+  const renderError = () => (
+    <View style={Styles.player}>
+      <ScreenError text={EStyleSheet.value('$liveChanelError')} />
+    </View>
+  );
+
+  const {loadingState} = state;
+
+  let content;
+
+  switch (loadingState) {
+    case STATE_LOADING: {
+      content = renderLoading();
+      break;
     }
-
-    const tvBar =
-      state === STATE_READY || state === STATE_ERROR ? (
-        <ScrollingChannels
-          data={this.props.tvProgram}
-          onChannelPress={(channel) => this.onChannelPressHandler(channel)}
-        />
-      ) : null;
-
-    return (
-      <View style={Styles.screen}>
-        <AnimatedScrollView style={Styles.scrollContainer} scrollEventThrottle={16}>
-          <View style={Styles.container}>
-            {content}
-            {tvBar}
-          </View>
-        </AnimatedScrollView>
-      </View>
-    );
+    case STATE_ERROR: {
+      content = renderError();
+      break;
+    }
+    case STATE_READY: {
+      content = renderChannelComponent();
+      break;
+    }
   }
-}
 
-const mapStateToProps = (state) => {
-  return {
-    tvProgram: state.articles.tvprog,
-  };
+  const tvBar =
+    loadingState === STATE_READY || loadingState === STATE_ERROR ? (
+      <ScrollingChannels data={tvProgram} onChannelPress={(channel) => onChannelPressHandler(channel)} />
+    ) : null;
+
+  return (
+    <View style={Styles.screen}>
+      <ScrollView style={Styles.scrollContainer}>
+        <View style={Styles.container}>
+          {content}
+          {tvBar}
+        </View>
+      </ScrollView>
+    </View>
+  );
 };
 
-export default connect(mapStateToProps)(ChannelScreen);
+export default ChannelScreen;
