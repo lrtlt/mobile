@@ -1,33 +1,48 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {ScreenLoader, ProgramDay, ActionButton} from '../../components';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Styles from './styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {fetchProgram} from '../../redux/actions';
-import {connect} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Collapsible from 'react-native-collapsible';
 import ProgramTabs from './tabs/ProgramTabsScreen';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
+import {selectProgramScreenState} from '../../redux/selectors';
 
 const STATE_LOADING = 'loading';
 const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
-class ProgramScreen extends React.PureComponent {
-  static navigationOptions = ({navigation}) => {
-    const title = navigation.getParam('titleComponent', null);
-    return {
-      headerRight: (
-        <ActionButton
-          onPress={() => {
-            const {params} = navigation.state;
-            if (params && params.calendarHandler) {
-              params.calendarHandler();
-            }
-          }}>
+const ProgramScreen = (props) => {
+  const [headerExpanded, setHeaderExpanded] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(undefined);
+
+  const {navigation} = props;
+  const dispatch = useDispatch();
+
+  const state = useSelector(selectProgramScreenState);
+  const {program, loadingState} = state;
+
+  if (!selectedDate) {
+    setSelectedDate(program.days[0]);
+  }
+
+  console.log('state', state);
+
+  useEffect(() => {
+    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'program'});
+    dispatch(fetchProgram());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <ActionButton onPress={() => setHeaderExpanded(!headerExpanded)}>
           <Icon
             size={EStyleSheet.value('$navBarIconSize')}
             color={EStyleSheet.value('$headerTintColor')}
@@ -35,74 +50,26 @@ class ProgramScreen extends React.PureComponent {
           />
         </ActionButton>
       ),
-      headerTitle: title,
-    };
-  };
-
-  constructor(props) {
-    super(props);
-
-    props.navigation.setParams({calendarHandler: this.calendarClickHandler});
-
-    this.state = {
-      datesExpanded: false,
-      selectedDate: null,
-      selectedChannel: null,
-    };
-  }
-
-  calendarClickHandler = () => {
-    this.setState({
-      ...this.state,
-      datesExpanded: !this.state.datesExpanded,
-    });
-  };
-
-  componentDidMount() {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'program'});
-    this.props.dispatch(fetchProgram());
-  }
-
-  componentDidUpdate() {
-    const {program} = this.props;
-    if (this.state.selectedDate === null && program) {
-      const selectedDate = program.days[0];
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({...this.state, selectedDate});
-      this.props.navigation.setParams({
-        titleComponent: this.renderSelectedDayHeader(selectedDate),
-      });
-    }
-  }
-
-  onDaySelectedHandler = (day) => {
-    this.setState(
-      {
-        ...this.state,
-        selectedDate: day,
+      headerTitle: () => {
+        return selectedDate ? (
+          <ProgramDay style={Styles.dayHeader} textStyle={Styles.headerText} dateString={selectedDate} />
+        ) : (
+          ''
+        );
       },
-      () => {
-        this.calendarClickHandler();
-      },
-    );
-
-    this.props.navigation.setParams({
-      titleComponent: this.renderSelectedDayHeader(day),
     });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDate]);
 
-  renderSelectedDayHeader = (day) => {
-    if (day === null) {
-      return <View />;
-    }
-
-    return <ProgramDay style={Styles.dayHeader} textStyle={Styles.headerText} dateString={day} />;
-  };
-
-  renderDays = () => {
-    const daysComponent = this.props.program.days.map((day) => {
+  const renderDays = () => {
+    const daysComponent = program.days.map((day) => {
       return (
-        <TouchableOpacity onPress={() => this.onDaySelectedHandler(day)} key={day}>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedDate(day);
+            setHeaderExpanded(!headerExpanded);
+          }}
+          key={day}>
           <View>
             <ProgramDay style={Styles.dayListItem} dateString={day} />
             <View style={Styles.dayListSeparator} />
@@ -114,73 +81,47 @@ class ProgramScreen extends React.PureComponent {
     return <View>{daysComponent}</View>;
   };
 
-  renderLoading = () => {
+  const renderLoading = () => {
     return <ScreenLoader />;
   };
 
-  renderError = () => {
+  const renderError = () => {
     //TODO implement
     return <View style={Styles.flexContainer} />;
   };
 
-  renderChannelBar = () => {
-    <View style={Styles.flexContainer}>
-      <Collapsible collapsed={this.state.datesExpanded}>{this.renderDays()}</Collapsible>
-    </View>;
-  };
-
-  renderProgram = () => {
-    const {program} = this.props;
-
-    const selectedDay = this.state.selectedDate || program.days[0];
+  const renderProgram = () => {
+    const selectedDay = selectedDate || program.days[0];
     const selectedDayProgram = program[selectedDay];
     return (
       <View style={Styles.flexContainer}>
-        <Collapsible collapsed={!this.state.datesExpanded}>{this.renderDays()}</Collapsible>
+        <Collapsible collapsed={!headerExpanded}>{renderDays()}</Collapsible>
         <ProgramTabs program={selectedDayProgram} />
       </View>
     );
   };
 
-  render() {
-    const {screenState} = this.props;
-
-    let content;
-    switch (screenState) {
-      case STATE_LOADING: {
-        content = this.renderLoading();
-        break;
-      }
-      case STATE_ERROR: {
-        content = this.renderError();
-        break;
-      }
-      case STATE_READY: {
-        content = this.renderProgram();
-        break;
-      }
+  let content;
+  switch (loadingState) {
+    case STATE_LOADING: {
+      content = renderLoading();
+      break;
     }
-
-    return (
-      <View style={Styles.root}>
-        <View style={Styles.flexContainer}>{content}</View>
-      </View>
-    );
+    case STATE_ERROR: {
+      content = renderError();
+      break;
+    }
+    case STATE_READY: {
+      content = renderProgram();
+      break;
+    }
   }
-}
 
-const mapStateToProps = (state) => {
-  const prog = state.program;
-  const screenState = prog.isError
-    ? STATE_ERROR
-    : prog.isFetching || state.program.program === null
-    ? STATE_LOADING
-    : STATE_READY;
-
-  return {
-    screenState,
-    program: prog.program,
-  };
+  return (
+    <View style={Styles.root}>
+      <View style={Styles.flexContainer}>{content}</View>
+    </View>
+  );
 };
 
-export default connect(mapStateToProps)(ProgramScreen);
+export default ProgramScreen;

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {View, SectionList, RefreshControl} from 'react-native';
 import {
   ArticleRow,
@@ -30,7 +30,7 @@ import {useNavigation} from '@react-navigation/native';
 const HomeScreen = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const sectionListRef = useRef(null);
+  const listRef = useRef(null);
   const state = useSelector(selectHomeScreenState(props.type));
 
   useEffect(() => {
@@ -39,28 +39,25 @@ const HomeScreen = (props) => {
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
       page: pageName,
     });
-
-    if (Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
-      callApi();
-    }
-
-    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (data) => {
-      handleLogoPress();
-    });
-
-    return () => EventRegister.removeEventListener(listener);
   }, []);
 
-  const handleLogoPress = () => {
-    if (props.isCurrent) {
-      sectionListRef.current.scrollToLocation({
+  useEffect(() => {
+    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (data) => {
+      listRef.current.scrollToLocation({
         animated: true,
         sectionIndex: 0,
         itemIndex: 0,
       });
       callApi();
+    });
+
+    if (Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
+      console.log('Home data expired!');
+      callApi();
     }
-  };
+
+    return () => EventRegister.removeEventListener(listener);
+  });
 
   const callApi = () => {
     if (props.type === ARTICLE_LIST_TYPE_MEDIA) {
@@ -156,13 +153,12 @@ const HomeScreen = (props) => {
       <SectionList
         showsVerticalScrollIndicator={false}
         style={Styles.container}
-        ref={sectionListRef}
+        ref={listRef}
         extraData={{
           orientation: getOrientation(),
           lastFetchTime: lastFetchTime,
         }}
         renderItem={renderItem}
-        scrollEventThrottle={500}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => callApi()} />}
         renderSectionHeader={renderSectionHeader}
         sections={sections}
