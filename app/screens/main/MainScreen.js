@@ -35,7 +35,7 @@ const MainScreen = (props) => {
   useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'main'});
 
-    navigation.dangerouslyGetParent().setOptions({
+    navigation.setOptions({
       headerLeft: (_) => (
         <ActionButton onPress={() => navigation.toggleDrawer()}>
           <MaterialIcon

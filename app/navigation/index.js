@@ -52,7 +52,7 @@ const NavigatorComponent = () => {
           drawerType="front"
           hideStatusBar={false}
           drawerContent={() => <SearchFilterDrawer />}>
-          <SearchDrawer.Screen name="SearchScreen" component={SearchScreen} />
+          <SearchDrawer.Screen name="SearchScreen" component={SearchScreen} options={{headerShown: false}} />
         </SearchDrawer.Navigator>
       );
     };
@@ -77,7 +77,13 @@ const NavigatorComponent = () => {
               backgroundColor: EStyleSheet.value('$appBarBackground'),
             },
           }}>
-          <Stack.Screen name="Home" component={MainDrawerNavigator} />
+          <Stack.Screen
+            name="Home"
+            component={MainDrawerNavigator}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen name="Article" component={ArticleScreen} />
           <Stack.Screen name="Comments" component={CommentsScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />

@@ -10,6 +10,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {getIconForChannel} from '../../util/UI';
 import {selectDrawerData} from '../../redux/selectors';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const DrawerComponent = (props) => {
   const {navigation} = props;
@@ -148,24 +149,26 @@ const DrawerComponent = (props) => {
 
   return (
     <View style={Styles.container}>
-      <ScrollView style={Styles.scroll} showsVerticalScrollIndicator={false}>
-        <View style={Styles.content}>
-          <View style={Styles.headerContainer}>
-            {renderSearch()}
-            {renderBookmarks()}
-            {renderHistory()}
-            {renderProgram()}
-          </View>
-          <View style={Styles.line} />
-          {renderChannelItems()}
+      <SafeAreaView style={{flex: 1}} edges={['top', 'left']}>
+        <ScrollView style={Styles.scroll} showsVerticalScrollIndicator={false}>
+          <View style={Styles.content}>
+            <View style={Styles.headerContainer}>
+              {renderSearch()}
+              {renderBookmarks()}
+              {renderHistory()}
+              {renderProgram()}
+            </View>
+            <View style={Styles.line} />
+            {renderChannelItems()}
 
-          <View style={Styles.line} />
-          <ScalableText style={Styles.title}>{EStyleSheet.value('$drawerMenu')}</ScalableText>
-          {content}
-          {renderPages()}
-          {renderFooterItems()}
-        </View>
-      </ScrollView>
+            <View style={Styles.line} />
+            <ScalableText style={Styles.title}>{EStyleSheet.value('$drawerMenu')}</ScalableText>
+            {content}
+            {renderPages()}
+            {renderFooterItems()}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 };
