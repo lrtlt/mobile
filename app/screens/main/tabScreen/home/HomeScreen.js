@@ -25,20 +25,24 @@ import {useDispatch, useSelector} from 'react-redux';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {selectHomeScreenState} from '../../../../redux/selectors';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const HomeScreen = (props) => {
+  const {isCurrent, type} = props;
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const listRef = useRef(null);
-  const state = useSelector(selectHomeScreenState(props.type));
+  const state = useSelector(selectHomeScreenState(type));
+
+  const {sections, lastFetchTime, refreshing} = state;
 
   useEffect(() => {
-    const pageName = props.type === ARTICLE_LIST_TYPE_MEDIA ? 'mediateka' : 'home';
+    const pageName = type === ARTICLE_LIST_TYPE_MEDIA ? 'mediateka' : 'home';
 
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
       page: pageName,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -54,15 +58,18 @@ const HomeScreen = (props) => {
     return () => EventRegister.removeEventListener(listener);
   });
 
-  useFocusEffect(() => {
-    if (Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
-      console.log('Home data expired!');
-      callApi();
+  useEffect(() => {
+    if (isCurrent) {
+      if (!refreshing && Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
+        console.log('Home data expired!');
+        callApi();
+      }
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCurrent, refreshing, state.lastFetchTime]);
 
   const callApi = () => {
-    if (props.type === ARTICLE_LIST_TYPE_MEDIA) {
+    if (type === ARTICLE_LIST_TYPE_MEDIA) {
       dispatch(fetchMediateka());
     } else {
       dispatch(fetchArticles());
@@ -143,8 +150,6 @@ const HomeScreen = (props) => {
     ) : null;
 
   const renderLoading = () => <ScreenLoader style={Styles.loadingContainer} />;
-
-  const {sections, lastFetchTime, refreshing} = state;
 
   if (sections.length === 0) {
     return renderLoading();

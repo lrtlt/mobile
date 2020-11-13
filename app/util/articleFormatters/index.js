@@ -6,6 +6,10 @@ import template3Formatter from './articleFormatterTemplate3';
 import template999Formatter from './articleFormatterTemplate999';
 
 export const formatArticles = (template_id, articles, clipLast = true) => {
+  if (articles && articles.length === 0) {
+    return [];
+  }
+
   switch (template_id) {
     case 0: {
       return topFormatter(articles);

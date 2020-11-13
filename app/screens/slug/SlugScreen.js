@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Button, ActivityIndicator} from 'react-native';
 import Styles from './styles';
 import {ArticleRow} from '../../components';
-import {connect} from 'react-redux';
 import {getOrientation} from '../../util/UI';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {articleGetByTag} from '../../api';
@@ -11,130 +10,123 @@ import {ARTICLES_PER_PAGE_COUNT, GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {FlatList} from 'react-native-gesture-handler';
 
-const initialState = {
-  isFetching: true,
-  isError: false,
-  articles: [],
-};
+const SlugScreen = (props) => {
+  const {navigation, route} = props;
 
-class SlugScreen extends React.PureComponent {
-  static navigationOptions = ({navigation}) => {
-    return {
-      title: navigation.getParam('title', null),
-    };
-  };
+  const [state, setState] = useState({
+    isFetching: false,
+    isError: false,
+    articles: [],
+  });
 
-  constructor(props) {
-    super(props);
-    this.state = initialState;
-  }
+  const {category} = route.params;
 
-  componentDidMount() {
-    const {category} = this.props.navigation.state.params;
-
-    this.props.navigation.setParams({title: '#' + category.name});
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: category.name,
+    });
 
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
       page: 'slug',
       slugUrl: category.slug_url,
     });
 
-    this.startLoading();
-  }
+    startLoading();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  startLoading = () => {
-    this.setState({...this.state, isFetching: true, isError: false});
-    this.callApi()
+  const startLoading = () => {
+    setState({
+      isFetching: true,
+      isError: false,
+      articles: [],
+    });
+
+    callApi()
       .then((response) => {
         const formattedArticles = formatArticles(-1, response.articles);
-        this.setState({
+        setState({
           isFetching: false,
           isError: false,
           articles: formattedArticles,
         });
       })
       .catch((error) => {
-        this.setState({
-          ...this.state,
+        setState({
+          ...state,
           isFetching: false,
           isError: true,
         });
       });
   };
 
-  async callApi() {
-    const {category} = this.props.navigation.state.params;
+  const callApi = async () => {
     const urlSegments = category.slug_url.split('/');
     const tag = urlSegments[urlSegments.length - 1];
     const response = await fetch(articleGetByTag(tag, ARTICLES_PER_PAGE_COUNT * 3));
     const result = await response.json();
     console.log('ARTICLES BY TAG API RESPONSE', result);
     return result;
-  }
-
-  onArticlePressHandler = (article) => {
-    this.props.navigation.push('article', {articleId: article.id});
   };
 
-  renderItem = (val) => {
-    return <ArticleRow data={val.item} onArticlePress={(article) => this.onArticlePressHandler(article)} />;
+  const renderItem = (val) => {
+    return (
+      <ArticleRow
+        data={val.item}
+        onArticlePress={(article) => navigation.push('Article', {articleId: article.id})}
+      />
+    );
   };
 
-  renderLoading = () => {
+  const renderLoading = () => {
     return (
       <View style={Styles.loadingContainer}>
-        <ActivityIndicator size={'small'} animating={this.state.isFetching} />
+        <ActivityIndicator size={'small'} animating={state.isFetching} />
       </View>
     );
   };
 
-  renderError = () => {
+  const renderError = () => {
     return (
       <View style={Styles.errorContainer}>
         <Text style={Styles.errorText}>{EStyleSheet.value('$error_no_connection')}</Text>
         <Button
           title={EStyleSheet.value('$tryAgain')}
           color={EStyleSheet.value('$primary')}
-          onPress={() => this.startLoading()}
+          onPress={() => startLoading()}
         />
       </View>
     );
   };
 
-  render() {
-    const {isFetching, isError, articles} = this.state;
+  const {isFetching, isError, articles} = state;
 
-    let content;
-    if (isError === true) {
-      content = this.renderError();
-    } else if (isFetching === true) {
-      content = this.renderLoading();
-    } else {
-      content = (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={articles}
-          windowSize={4}
-          extraData={{
-            orientation: getOrientation(),
-          }}
-          renderItem={this.renderItem}
-          removeClippedSubviews={false}
-          keyExtractor={(item, index) => String(index) + String(item)}
-        />
-      );
-    }
-
-    return (
-      <View style={Styles.root}>
-        <View style={Styles.container}>{content}</View>
-      </View>
+  let content;
+  if (isError === true) {
+    content = renderError();
+  } else if (isFetching === true) {
+    content = renderLoading();
+  } else {
+    content = (
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={articles}
+        windowSize={4}
+        extraData={{
+          orientation: getOrientation(),
+        }}
+        renderItem={renderItem}
+        removeClippedSubviews={false}
+        keyExtractor={(item, index) => String(index) + String(item)}
+      />
     );
   }
-}
 
-const mapStateToProps = (state) => {
-  return {};
+  return (
+    <View style={Styles.root}>
+      <View style={Styles.container}>{content}</View>
+    </View>
+  );
 };
 
-export default connect(mapStateToProps)(SlugScreen);
+export default SlugScreen;

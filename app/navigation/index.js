@@ -93,6 +93,8 @@ const NavigatorComponent = () => {
           <Stack.Screen name="Bookmarks" component={BookmarksScreen} />
           <Stack.Screen name="History" component={HistoryScreen} />
           <Stack.Screen name="Program" component={ProgramScreen} />
+          <Stack.Screen name="Slug" component={SlugScreen} />
+          <Stack.Screen name="CustomPage" component={CustomPageScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );

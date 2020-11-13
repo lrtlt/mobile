@@ -53,7 +53,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         isLoading: true,
         isError: false,
-        isReady: false,
+        //  isReady: false,
       };
     }
     case API_HOME_RESULT:

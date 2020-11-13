@@ -165,4 +165,4 @@ const SearchScreen = (props) => {
   );
 };
 
-export default React.memo(SearchScreen);
+export default SearchScreen;

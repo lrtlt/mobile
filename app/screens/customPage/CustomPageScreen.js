@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Dimensions} from 'react-native';
 import {TabView} from 'react-native-tab-view';
 import Styles from './styles';
@@ -9,83 +9,59 @@ import Gemius from 'react-native-gemius-plugin';
 
 import {ARTICLE_LIST_TYPE_CATEGORY, GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 
-class CustomPageScreen extends React.Component {
-  static navigationOptions = ({navigation}) => {
-    return {
-      title: navigation.getParam('title', null),
-    };
-  };
+const CustomPageScreen = (props) => {
+  const {navigation, route} = props;
+  const {page} = route.params;
+  const [currentRouteIndex, setCurrentRouteIndex] = useState(0);
 
-  constructor(props) {
-    super(props);
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: page.title ?? '',
+    });
 
-    const emptyPage = {
-      key: '-',
-      title: '-',
-      type: 'page',
-      routes: [],
-    };
-
-    const page = props.navigation.getParam('page', emptyPage);
-
-    this.state = {
-      index: 0,
-      routes: page.routes,
-      title: page.title,
-    };
-  }
-
-  componentDidMount() {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
       screen: 'page',
-      page: this.state.title,
+      page: page.title,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page.title]);
 
-    this.props.navigation.setParams({title: this.state.title});
-  }
+  const renderTabBar = (tabBarProps) => <TabBar {...tabBarProps} />;
 
-  handleIndexChange = (index) => {
-    this.setState({
-      ...this.state,
-      index: index,
-    });
-  };
-
-  renderTabBar = (props) => <TabBar {...props} />;
-
-  renderScene = (props) => {
+  const renderScene = (sceneProps) => {
     //Render only 1 screen on each side
-    const routeIndex = this.state.routes.indexOf(props.route);
-    if (Math.abs(this.state.index - routeIndex) > 1) {
+    const routeIndex = page.routes.indexOf(sceneProps.route);
+    if (Math.abs(currentRouteIndex - routeIndex) > 1) {
       return <View />;
     }
 
-    const {type} = props.route;
+    const {type} = sceneProps.route;
 
     switch (type) {
       case ARTICLE_LIST_TYPE_CATEGORY:
-        return <CategoryScreen route={props.route} />;
+        return <CategoryScreen route={sceneProps.route} />;
       default:
         return <TestScreen text={'Unkown type: ' + type} />;
     }
   };
 
-  render() {
-    return (
-      <View style={Styles.container}>
-        <TabView
-          navigationState={this.state}
-          swipeEnabled={true}
-          renderScene={this.renderScene}
-          renderTabBar={this.renderTabBar}
-          onIndexChange={this.handleIndexChange}
-          lazy={true}
-          lazyPreloadDistance={0}
-          initialLayout={{height: 0, width: Dimensions.get('window').width}}
-        />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={Styles.container}>
+      <TabView
+        navigationState={{
+          index: currentRouteIndex,
+          routes: page.routes,
+        }}
+        swipeEnabled={true}
+        renderScene={renderScene}
+        renderTabBar={renderTabBar}
+        onIndexChange={(i) => setCurrentRouteIndex(i)}
+        lazy={true}
+        lazyPreloadDistance={0}
+        initialLayout={{height: 0, width: Dimensions.get('window').width}}
+      />
+    </View>
+  );
+};
 
 export default CustomPageScreen;
