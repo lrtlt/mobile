@@ -39,7 +39,13 @@ const NavigatorComponent = () => {
     const MainDrawerNavigator = () => {
       return (
         <MainDrawer.Navigator drawerContent={(props) => <Drawer {...props} />}>
-          <MainDrawer.Screen name="Main" component={MainScreen} />
+          <MainDrawer.Screen
+            name="Main"
+            component={MainScreen}
+            options={{
+              headerTitleAlign: 'center',
+            }}
+          />
         </MainDrawer.Navigator>
       );
     };
