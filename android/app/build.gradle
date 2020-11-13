@@ -137,6 +137,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 201500
         versionName "2.15.0"
+        multiDexEnabled true
     }
     splits {
         abi {
