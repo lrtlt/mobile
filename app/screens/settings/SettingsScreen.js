@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
-import {ScalableText, SettingsToggleButton, BackIcon} from '../../components';
+import {SettingsToggleButton, BackIcon, Text} from '../../components';
 import {SunIcon, MoonIcon, PhotoIcon} from '../../components/svg';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Styles from './styles';
 import {setConfig} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import {initTheme} from '../../ColorTheme';
@@ -42,7 +41,7 @@ const SettingsScreen = (props) => {
       headerTitle: EStyleSheet.value('$settings'),
       headerLeft: () => (
         <BorderlessButton onPress={goBack} rippleColor={EStyleSheet.value('$rippleColor')}>
-          <View style={Styles.backButtonContainer}>
+          <View style={styles.backButtonContainer}>
             <BackIcon
               size={EStyleSheet.value('$navBarIconSize') + 4}
               color={EStyleSheet.value('$headerTintColor')}
@@ -113,85 +112,98 @@ const SettingsScreen = (props) => {
   const {isDarkMode, textSizeMultiplier, imageMaxScaleFactor} = config;
 
   return (
-    <View style={Styles.root}>
+    <View style={styles.root}>
       <AndroidBackHandler onBackPress={onBackButtonPressAndroid}>
-        <View style={Styles.content}>
-          <View style={Styles.controls}>
-            <ScalableText style={Styles.title}>{EStyleSheet.value('$nightModeTitle')}</ScalableText>
-            <View style={Styles.buttonContainer}>
+        <View style={styles.content}>
+          <View style={styles.controls}>
+            <Text style={styles.title} type="secondary">
+              {EStyleSheet.value('$nightModeTitle')}
+            </Text>
+            <View style={styles.buttonContainer}>
               <SettingsToggleButton
-                style={Styles.toggleButton}
+                style={styles.toggleButton}
                 selected={!isDarkMode}
                 onPress={() => handleSetDarkMode(false)}>
                 <SunIcon size={20} selected={!isDarkMode} />
               </SettingsToggleButton>
-              <View style={Styles.space} />
+              <View style={styles.space} />
               <SettingsToggleButton
-                style={Styles.toggleButton}
+                style={styles.toggleButton}
                 selected={isDarkMode}
                 onPress={() => handleSetDarkMode(true)}>
                 <MoonIcon size={20} selected={isDarkMode} />
               </SettingsToggleButton>
             </View>
 
-            <View style={Styles.line} />
-
-            <ScalableText style={Styles.title}>{EStyleSheet.value('$textSizeTitle')}</ScalableText>
-            <View style={Styles.buttonContainer}>
+            <Text style={styles.title} type="secondary">
+              {EStyleSheet.value('$textSizeTitle')}
+            </Text>
+            <View style={styles.buttonContainer}>
               <SettingsToggleButton
-                style={Styles.toggleButton}
+                style={styles.toggleButton}
                 selected={textSizeMultiplier === TEXT_SIZE_NORMAL}
                 onPress={() => handleSetTextSize(TEXT_SIZE_NORMAL)}>
-                <Text style={Styles.textNormal} allowFontScaling={false}>
+                <Text
+                  style={styles.textNormal}
+                  allowFontScaling={false}
+                  scalingEnabled={false}
+                  type="secondary">
                   aA
                 </Text>
               </SettingsToggleButton>
-              <View style={Styles.space} />
+              <View style={styles.space} />
               <SettingsToggleButton
-                style={Styles.toggleButton}
+                style={styles.toggleButton}
                 selected={textSizeMultiplier === TEXT_SIZE_LARGE}
                 onPress={() => handleSetTextSize(TEXT_SIZE_LARGE)}>
-                <Text style={Styles.textLarge} allowFontScaling={false}>
+                <Text
+                  style={styles.textLarge}
+                  allowFontScaling={false}
+                  scalingEnabled={false}
+                  type="secondary">
                   aA
                 </Text>
               </SettingsToggleButton>
-              <View style={Styles.space} />
+              <View style={styles.space} />
               <SettingsToggleButton
-                style={Styles.toggleButton}
+                style={styles.toggleButton}
                 selected={textSizeMultiplier === TEXT_SIZE_EXTRALARGE}
                 onPress={() => handleSetTextSize(TEXT_SIZE_EXTRALARGE)}>
-                <Text style={Styles.textExtraLarge} allowFontScaling={false}>
+                <Text
+                  style={styles.textExtraLarge}
+                  allowFontScaling={false}
+                  scalingEnabled={false}
+                  type="secondary">
                   aA
                 </Text>
               </SettingsToggleButton>
             </View>
 
-            <View style={Styles.line} />
-
-            <ScalableText style={Styles.title}>{EStyleSheet.value('$imageQuality')}</ScalableText>
-            <View style={Styles.buttonContainer}>
+            <Text style={styles.title} type="secondary">
+              {EStyleSheet.value('$imageQuality')}
+            </Text>
+            <View style={styles.buttonContainer}>
               <SettingsToggleButton
-                style={Styles.toggleButton}
+                style={styles.toggleButton}
                 selected={imageMaxScaleFactor === IMAGE_QUALITY_NORMAL}
                 onPress={() => handleSetImageMaxScaleFactor(IMAGE_QUALITY_NORMAL)}>
                 <PhotoIcon size={22} />
               </SettingsToggleButton>
-              <View style={Styles.space} />
+              <View style={styles.space} />
               <SettingsToggleButton
-                style={Styles.toggleButton}
+                style={styles.toggleButton}
                 selected={imageMaxScaleFactor === IMAGE_QUALITY_HIGH}
                 onPress={() => handleSetImageMaxScaleFactor(IMAGE_QUALITY_HIGH)}>
                 <PhotoIcon size={30} />
               </SettingsToggleButton>
-              <View style={Styles.space} />
+              <View style={styles.space} />
               <SettingsToggleButton
-                style={Styles.toggleButton}
+                style={styles.toggleButton}
                 selected={imageMaxScaleFactor === IMAGE_QUALITY_EXTRA_HIGH}
                 onPress={() => handleSetImageMaxScaleFactor(IMAGE_QUALITY_EXTRA_HIGH)}>
                 <PhotoIcon size={36} />
               </SettingsToggleButton>
             </View>
-            <View style={Styles.line} />
           </View>
         </View>
       </AndroidBackHandler>
@@ -200,3 +212,66 @@ const SettingsScreen = (props) => {
 };
 
 export default SettingsScreen;
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  backButtonContainer: {
+    paddingLeft: 12,
+    paddingRight: 12,
+    justifyContent: 'center',
+    height: '100%',
+  },
+  toggleButton: {
+    width: 64,
+    height: 44,
+  },
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+  },
+  controls: {
+    width: '100%',
+  },
+  controlsLand: {
+    width: '100%',
+    marginStart: 100,
+  },
+  title: {
+    width: '100%',
+    padding: 2,
+    fontFamily: 'SourceSansPro-Regular',
+    letterSpacing: 1,
+    fontSize: 18,
+    height: 40,
+    marginTop: 12,
+  },
+  space: {
+    width: 8,
+    height: 8,
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 32,
+  },
+  textNormal: {
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 16,
+  },
+  textLarge: {
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 22,
+  },
+  textExtraLarge: {
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 30,
+  },
+
+  buttonContainer: {
+    flexDirection: 'row',
+    width: '100%',
+  },
+});

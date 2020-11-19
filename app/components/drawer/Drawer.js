@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, Linking, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import ScalableText from '../scalableText/ScalableText';
 import {setSelectedCategory} from '../../redux/actions';
 import DrawerItem from '../drawerItem/DrawerItem';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -74,7 +73,7 @@ const DrawerComponent = (props) => {
     });
     return (
       <View style={styles.channelContainer}>
-        <ScalableText style={styles.title}>{strings.liveChannelTitle}</ScalableText>
+        <TextComponent style={styles.title}>{strings.liveChannelTitle}</TextComponent>
         {channels}
       </View>
     );

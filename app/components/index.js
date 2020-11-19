@@ -22,7 +22,6 @@ export {default as ProgramDay} from './programDay/ProgramDay';
 export {default as ProgramItem} from './programItem/ProgramItem';
 export {default as OpusNowPlaying} from './opusNowPlaying/OpusNowPlaying';
 export {default as ProgressiveImage} from './progressiveImage/ProgressiveImage';
-export {default as ScalableText} from './scalableText/ScalableText';
 export {default as ScreenError} from './screenError/ScreenError';
 export {default as ScreenLoader} from './screenLoader/ScreenLoader';
 export {default as ScrollingChannels} from './scrollingChannels/ScrollingChannels';

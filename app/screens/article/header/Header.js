@@ -1,43 +1,47 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import {FacebookReactions, ScalableText} from '../../../components';
-import Styles from './styles';
+import {FacebookReactions, Text} from '../../../components';
+import {useTheme} from '../../../Theme';
 
-const articleHeader = (props) => {
+const ArticleHeader = (props) => {
+  const {colors} = useTheme();
+
   const subtitle = props.subtitle ? (
-    <ScalableText style={Styles.subtitle}>{props.subtitle}</ScalableText>
+    <Text style={styles.subtitle} type="error">
+      {props.subtitle}
+    </Text>
   ) : null;
 
   const facebookReactions =
     props.facebookReactions && props.facebookReactions > 0 ? (
-      <FacebookReactions style={Styles.facebookReactions} count={props.facebookReactions} />
+      <FacebookReactions style={styles.facebookReactions} count={props.facebookReactions} />
     ) : null;
 
   return (
-    <View style={Styles.root}>
-      <View style={Styles.categoryContainer}>
-        <ScalableText style={Styles.smallText}>{props.category}</ScalableText>
-        <View style={Styles.greyDot} />
-        <ScalableText style={Styles.smallText}>{props.date}</ScalableText>
+    <View style={styles.root}>
+      <View style={styles.categoryContainer}>
+        <Text style={styles.smallText}>{props.category}</Text>
+        <View style={{...styles.greyDot, backgroundColor: colors.buttonContent}} />
+        <Text style={styles.smallText}>{props.date}</Text>
       </View>
-      <ScalableText style={Styles.titleText} selectable={true}>
+      <Text style={styles.titleText} selectable={true}>
         {props.title}
-      </ScalableText>
+      </Text>
       {subtitle}
       {facebookReactions}
 
-      <View style={Styles.authorShareContainer}>
-        <View style={Styles.authorContainer}>
-          <Text style={Styles.smallTextBold}>{props.author}</Text>
-          {/* <Text style={Styles.smallText}>{props.date}</Text> */}
+      <View style={styles.authorShareContainer}>
+        <View style={styles.authorContainer}>
+          <Text style={styles.smallTextBold}>{props.author}</Text>
+          {/* <Text style={styles.smallText}>{props.date}</Text> */}
         </View>
       </View>
     </View>
   );
 };
 
-articleHeader.propTypes = {
+ArticleHeader.propTypes = {
   category: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -46,4 +50,55 @@ articleHeader.propTypes = {
   author: PropTypes.string,
 };
 
-export default React.memo(articleHeader);
+export default ArticleHeader;
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  categoryContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 32,
+    flexDirection: 'row',
+  },
+  facebookReactions: {
+    marginTop: 8,
+  },
+  smallText: {
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 14,
+  },
+  smallTextBold: {
+    fontFamily: 'SourceSansPro-SemiBold',
+    fontSize: 14,
+  },
+  authorShareContainer: {
+    flex: 1,
+    paddingTop: 24,
+    paddingBottom: 24,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  authorContainer: {
+    flex: 1,
+  },
+  greyDot: {
+    width: 4,
+    height: 4,
+    marginStart: 8,
+    marginEnd: 8,
+    marginTop: 2,
+    borderRadius: 2,
+  },
+  titleText: {
+    marginTop: 24,
+    fontFamily: 'PlayfairDisplay-Regular',
+    fontSize: 25,
+  },
+  subtitle: {
+    fontFamily: 'SourceSansPro-Regular',
+    marginTop: 4,
+    fontSize: 15,
+  },
+});

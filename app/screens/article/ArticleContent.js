@@ -2,15 +2,14 @@ import React from 'react';
 import {View, Dimensions, Animated, FlatList} from 'react-native';
 import Header from './header/Header';
 import {getOrientation} from '../../util/UI';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {
   ArticlePhoto,
   TouchableDebounce,
-  ScalableText,
   ArticleGallery,
   ArticleParagraph,
   VideoComponent,
   AudioComponent,
+  Text,
 } from '../../components';
 import {
   compose,
@@ -34,7 +33,7 @@ const getContentWidth = () => {
 const getItemKey = (item, index) => {
   const {type} = item;
 
-  if (type == TYPE_GALLERY || type == TYPE_HEADER || type == TYPE_SUMMARY) {
+  if (type === TYPE_GALLERY || type === TYPE_HEADER || type === TYPE_SUMMARY) {
     return String(index) + String(item) + getOrientation();
   } else {
     return String(index) + String(item);
@@ -71,9 +70,9 @@ const ArticleContent = (props) => {
 
     const renderSummary = () => {
       return (
-        <ScalableText style={Styles.summaryText} selectable={true}>
+        <Text style={Styles.summaryText} selectable={true}>
           {data.text}
-        </ScalableText>
+        </Text>
       );
     };
 

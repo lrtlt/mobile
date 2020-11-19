@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {NoteIcon} from '../svg';
 import firestore from '@react-native-firebase/firestore';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 
@@ -32,7 +31,7 @@ const OpusNowComponent = (props) => {
       <View style={{...styles.container, backgroundColor: colors.programProgress}}>
         <View style={styles.iconContainer}>
           <View style={{...styles.iconButton, backgroundColor: colors.lightGreyBackground}}>
-            <NoteIcon size={12} color={EStyleSheet.value('$darkIcon')} />
+            <NoteIcon size={12} color={colors.darkIcon} />
           </View>
         </View>
         <TextComponent style={styles.title}>{currentSong}</TextComponent>

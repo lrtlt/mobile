@@ -1,10 +1,11 @@
 import React from 'react';
 import Svg, {Defs, LinearGradient, Stop, RadialGradient, G, Path} from 'react-native-svg';
 
-import EStyleSheet from 'react-native-extended-stylesheet';
+import {useTheme} from '../../Theme';
 
 const SvgComponent = (props) => {
-  const color = EStyleSheet.value('$headerTintColor');
+  const {colors} = useTheme();
+  const color = colors.headerTint;
   return (
     <Svg {...props} className="logo__svg" width={props.size} height={props.size} viewBox="0 0 48 45">
       <Defs>
