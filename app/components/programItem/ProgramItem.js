@@ -1,27 +1,70 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import Style from './styles';
+import {View, StyleSheet} from 'react-native';
+import {useTheme} from '../../Theme';
 import {CameraIcon} from '../svg';
+import TextComponent from '../text/Text';
 
-const programItem = (props) => {
+const ProgramItem = (props) => {
+  const {colors} = useTheme();
+
   const proc = Math.max(0, Math.min(Number(props.percent), 100));
 
-  const titleStyle = proc === 0 ? Style.titleTextUpcoming : Style.titleText;
   const icon =
     proc < 100 && proc > 0 ? (
-      <View style={{paddingEnd: 8}}>
+      <View style={styles.cameraIconContainer}>
         <CameraIcon size={20} />
       </View>
     ) : null;
 
   return (
-    <View style={[Style.container, props.style]}>
-      <View style={{...Style.elapsedIndicator, width: proc + '%'}} />
-      <Text style={Style.timeText}>{props.startTime}</Text>
+    <View style={[styles.container, props.style, {backgroundColor: colors.programItem}]}>
+      <View
+        style={{...styles.elapsedIndicator, width: proc + '%', backgroundColor: colors.programProgress}}
+      />
+      <TextComponent style={styles.timeText} type="secondary">
+        {props.startTime}
+      </TextComponent>
       {icon}
-      <Text style={titleStyle}>{props.title}</Text>
+      {proc === 0 ? (
+        <TextComponent style={styles.titleText} type="secondary">
+          {props.title}
+        </TextComponent>
+      ) : (
+        <TextComponent style={styles.titleText}>{props.title}</TextComponent>
+      )}
     </View>
   );
 };
 
-export default programItem;
+export default ProgramItem;
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    height: 58,
+    width: '100%',
+    alignItems: 'center',
+  },
+  cameraIconContainer: {
+    paddingEnd: 8,
+  },
+  elapsedIndicator: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    start: 0,
+  },
+  timeText: {
+    paddingEnd: 8,
+    paddingStart: 8,
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 13,
+  },
+  titleText: {
+    flex: 1,
+    padding: 6,
+    paddingStart: 0,
+    fontFamily: 'SourceSansPro-SemiBold',
+    fontSize: 15,
+  },
+});

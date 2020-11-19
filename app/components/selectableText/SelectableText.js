@@ -8,7 +8,7 @@ import {Text} from 'react-native';
 
 const SelectableText = (props) => {
   return (
-    <Text {...props} selectable={true} textBreakStrategy="simple">
+    <Text {...props} selectable={true}>
       {props.children}
     </Text>
   );

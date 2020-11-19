@@ -29,11 +29,7 @@ const strings = {
   $upload: 'Įkelk',
   $about: 'Apie LRT',
   $contacts: 'Kontaktai',
-  $contacts_url: 'https://apie.lrt.lt/kontaktai/portalas-kontaktai',
-  $about_url: 'https://apie.lrt.lt/',
-  $upload_news_url: 'https://apie.lrt.lt/bendraukime/rasykite',
   $feeback: 'Pranešk apie klaidą',
-  $feedback_url: 'https://apie.lrt.lt/bendraukime/rasykite',
 
   //error messages
   $error_no_connection: 'Tinklo sutrikimas',
@@ -128,23 +124,11 @@ export const colorsDark = {
 
 const tvProgramTheme = {
   $tvSectionTextSize: 18,
-  $tvPadding: 2,
   $tvBackgroundColor: '$greyBackground',
-  $tvItemWidth: 180,
-  $tvChannelTitleTextSize: 12,
-  $tvTitleTextSize: 16,
-  $tvTimeTextSize: 12,
-  $tvBarHeight: 8,
 
   $tvLiveItemWidth: 230,
   $tvLiveItemHeight: 120,
   $tvLiveItemTextSize: 16,
-};
-
-const drawerTheme = {
-  $drawerPadding: 10,
-  $drawerTitleTextSize: 16,
-  $drawerItemTextSize: 15,
 };
 
 const articleListTheme = {
@@ -157,41 +141,20 @@ const articleListTheme = {
   $slugTitleTextSize: 14,
 
   $articlePadding: 8,
-  $articleExtraPaddingTop: 0,
-  $articleExtraPaddingBottom: 8,
 
   $titleTextColor: '$textColor',
-  //Full screen article title
-  $titleTextSize: 22,
+
   //Small article title
   $titleTextSizeSmall: 17,
   //Scrolling article title
   $titleTextSizeMedium: 19,
 
   $categoryTitleTextColor: '$textColorSecondary',
-  $categoryTextSize: 13.5,
   $categoryPaddingTop: 6,
 
   $mediaIndicatorSize: 36,
-  $mediaIndicatorIconSize: 14,
 
   $photoBadgePadding: 6,
-  $photoBadgeIconSize: 18,
-  $photoBadgeTextSize: 13.5,
-
-  $facebookIconSize: 20,
-};
-
-const articleTheme = {
-  $contentPadding: 12,
-  $articleTitleFontSize: 25,
-  $articleSubtitleFontSize: 15,
-  $articleSummaryTextSize: 22,
-  $articleSmallTextSize: 14,
-  $articleFontSize: 20,
-  $paragraphSpacing: 16,
-  $paragraphLineExtraSpacing: 6,
-  $galleryOpacity: 0.97,
 };
 
 export const initTheme = (config) => {
@@ -206,10 +169,8 @@ export const initTheme = (config) => {
     ...strings,
     ...staticColors,
     ...colors,
-    ...drawerTheme,
     ...articleListTheme,
     ...tvProgramTheme,
-    ...articleTheme,
   });
 };
 

@@ -1,8 +1,7 @@
 import React, {useEffect} from 'react';
-import {StatusBar, Platform} from 'react-native';
+import {StatusBar, Platform, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import PropTypes from 'prop-types';
-import Styles from './styles';
 import JWPlayer from 'react-native-jw-media-player';
 import Gemius from 'react-native-gemius-plugin';
 
@@ -92,14 +91,14 @@ const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, d
   };
 
   return (
-    <View style={[Styles.htmlContainer, style]}>
+    <View style={[styles.htmlContainer, style]}>
       <JWPlayer
         ref={(ref) => {
           if (playerRef === null || ref !== null) {
             playerRef = ref;
           }
         }}
-        style={{flex: 1}}
+        style={styles.flex}
         playlistItem={createPlaylistItem()}
         nativeFullScreen={true}
         nextUpDisplay={false}
@@ -150,3 +149,14 @@ JWPlayerNative.defaultProps = {
 };
 
 export default JWPlayerNative;
+
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+  htmlContainer: {
+    flex: 1,
+    overflow: 'hidden',
+    opacity: 0.99,
+  },
+});

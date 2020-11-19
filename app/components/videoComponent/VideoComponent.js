@@ -1,14 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {View, ActivityIndicator, Platform} from 'react-native';
+import {View, ActivityIndicator, StyleSheet} from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import Styles from './styles';
 import PropTypes from 'prop-types';
-
 import VideoCover from './VideoCover';
 import JWPlayerNative from './JWPlayerNative';
-
 import Gemius from 'react-native-gemius-plugin';
+import {useTheme} from '../../Theme';
 
 const initialState = {
   isLoading: false,
@@ -20,14 +17,6 @@ const initialState = {
   description: null,
 };
 
-const renderLoading = (animating) => {
-  return (
-    <View style={Styles.loaderContainer}>
-      <ActivityIndicator size="small" animating={animating} color={EStyleSheet.value('$primary')} />
-    </View>
-  );
-};
-
 const callApi = async (url) => {
   const response = await fetch(url);
   const result = await response.json();
@@ -36,6 +25,8 @@ const callApi = async (url) => {
 };
 
 const VideoComponent = (props) => {
+  const {colors} = useTheme();
+
   const [videoState, setVideoState] = useState(initialState);
 
   const handlePlayPress = () => {
@@ -81,6 +72,14 @@ const VideoComponent = (props) => {
     );
   };
 
+  const renderLoading = () => {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="small" animating={isLoading} color={colors.primary} />
+      </View>
+    );
+  };
+
   let content;
 
   const {streamUri, isLoading} = videoState;
@@ -113,3 +112,11 @@ VideoComponent.defaultProps = {
 };
 
 export default VideoComponent;
+
+const styles = StyleSheet.create({
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

@@ -1,14 +1,28 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import Styles from './styles';
+import {View, Text, StyleSheet} from 'react-native';
+import {useTheme} from '../../Theme';
 
-const badge = (props) => {
+const LiveBadge = (props) => {
+  const {colors, strings} = useTheme();
   return (
-    <View style={[Styles.container, props.style]}>
-      <Text style={Styles.text}> {EStyleSheet.value('$liveChannelTitle')} </Text>
+    <View style={[styles.container, props.style, {backgroundColor: colors.textError}]}>
+      <Text style={styles.text}> {strings.liveChannelTitle} </Text>
     </View>
   );
 };
 
-export default badge;
+export default LiveBadge;
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 4,
+    borderRadius: 4,
+    flexDirection: 'row',
+  },
+  text: {
+    flexWrap: 'wrap',
+    color: 'white',
+    fontFamily: 'SourceSansPro-SemiBold',
+    fontSize: 13,
+  },
+});

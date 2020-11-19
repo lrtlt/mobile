@@ -1,19 +1,17 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Image as DefaultRNImage} from 'react-native';
+import {View, Image as DefaultRNImage, StyleSheet, Dimensions} from 'react-native';
 import Image from '../coverImage/CoverImage';
 import ProgressiveImage from '../progressiveImage/ProgressiveImage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Text from '../scalableText/ScalableText';
-import Styles from './styles';
 import {IMG_SIZE_XS, buildArticleImageUri, getImageSizeForWidth} from '../../util/ImageUtil';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import TextComponent from '../text/Text';
+import {useTheme} from '../../Theme';
 
 const getHorizontalImageComponent = (props, imgSize, aspectRatio, photo) => {
   if (props.progressive === true) {
     return (
       <ProgressiveImage
-        style={{...Styles.image, aspectRatio}}
+        style={{...styles.image, aspectRatio}}
         source={{uri: buildArticleImageUri(imgSize, photo.path)}}
         thumbnailSource={{uri: buildArticleImageUri(IMG_SIZE_XS, photo.path)}}
         resizeMode={'cover'}
@@ -22,7 +20,7 @@ const getHorizontalImageComponent = (props, imgSize, aspectRatio, photo) => {
   } else {
     return (
       <Image
-        style={{...Styles.image, aspectRatio}}
+        style={{...styles.image, aspectRatio}}
         source={{uri: buildArticleImageUri(imgSize, photo.path)}}
       />
     );
@@ -34,7 +32,7 @@ const getVerticalImageComponent = (props, imgSize, aspectRatio, photo) => {
   if (props.progressive === true) {
     image = (
       <ProgressiveImage
-        style={{...Styles.imageVertical, aspectRatio}}
+        style={{...styles.imageVertical, aspectRatio}}
         source={{uri: buildArticleImageUri(imgSize, photo.path)}}
         thumbnailSource={{uri: buildArticleImageUri(IMG_SIZE_XS, photo.path)}}
         resizeMode={'cover'}
@@ -43,17 +41,17 @@ const getVerticalImageComponent = (props, imgSize, aspectRatio, photo) => {
   } else {
     image = (
       <Image
-        style={{...Styles.imageVertical, aspectRatio}}
+        style={{...styles.imageVertical, aspectRatio}}
         source={{uri: buildArticleImageUri(imgSize, photo.path)}}
       />
     );
   }
 
   return (
-    <View style={Styles.verticalImageContainer}>
+    <View style={styles.verticalImageContainer}>
       <DefaultRNImage
         resizeMode="stretch"
-        style={Styles.verticalImageBackground}
+        style={styles.verticalImageBackground}
         blurRadius={3}
         source={{uri: buildArticleImageUri(IMG_SIZE_XS, photo.path)}}
       />
@@ -62,8 +60,23 @@ const getVerticalImageComponent = (props, imgSize, aspectRatio, photo) => {
   );
 };
 
-const render = (props) => {
+const ArticlePhoto = (props) => {
+  const {colors} = useTheme();
   const {photo} = props;
+
+  const renderError = () => {
+    return (
+      <View {...props}>
+        <View style={styles.errorContainer}>
+          <Icon name={'broken-image'} size={40} color={colors.buttonContent} />
+        </View>
+      </View>
+    );
+  };
+
+  if (!photo) {
+    return renderError();
+  }
 
   let aspectRatio;
   if (props.imageAspectRatio) {
@@ -84,29 +97,43 @@ const render = (props) => {
   return (
     <View {...props}>
       {image}
-      <Text style={Styles.bottomText}>
+      <TextComponent style={styles.bottomText} type="secondary">
         {photo.title} / {photo.author}
-      </Text>
+      </TextComponent>
     </View>
   );
 };
 
-const renderError = (props) => {
-  return (
-    <View {...props}>
-      <View style={Styles.errorContainer}>
-        <Icon name={'broken-image'} size={40} color={EStyleSheet.value('$buttonContentColor')} />
-      </View>
-    </View>
-  );
-};
+export default ArticlePhoto;
 
-const articlePhoto = (props) => {
-  if (props.photo) {
-    return render(props);
-  } else {
-    return renderError(props);
-  }
-};
-
-export default React.memo(articlePhoto);
+const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+  },
+  imageVertical: {
+    width: '100%',
+    maxHeight: Dimensions.get('window').height * 0.6,
+  },
+  verticalImageContainer: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  verticalImageBackground: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  errorContainer: {
+    flex: 1,
+    height: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bottomText: {
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 13,
+    marginTop: 4,
+  },
+});

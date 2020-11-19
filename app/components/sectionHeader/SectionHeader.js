@@ -3,15 +3,15 @@ import DefaultHeader from './DefaultHeader';
 import SlugHeader from './SlugHeader';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const sectionHeader = (props) => {
+const SectionHeader = (props) => {
   const {category} = props;
-  const {backgroundColor, name} = category;
+  const {name} = category;
 
   const header =
     category.is_slug_block && category.is_slug_block === 1 ? (
-      <SlugHeader backgroundColor={backgroundColor} title={name} />
+      <SlugHeader title={name} />
     ) : (
-      <DefaultHeader backgroundColor={backgroundColor} title={name} />
+      <DefaultHeader title={name} />
     );
 
   return props.onPress ? (
@@ -21,4 +21,4 @@ const sectionHeader = (props) => {
   );
 };
 
-export default React.memo(sectionHeader);
+export default SectionHeader;

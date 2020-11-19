@@ -2,8 +2,6 @@ import React from 'react';
 import {Dimensions} from 'react-native';
 import WebView from 'react-native-autoheight-webview';
 
-const getWidth = () => Dimensions.get('window').width;
-
 const buildFrame = (url) => {
   return `<!DOCTYPE html>
         <html>
@@ -16,7 +14,7 @@ const buildFrame = (url) => {
             src="https://www.facebook.com/plugins/comments.php?href=${url}"
             scrolling="no" 
             frameborder="0" 
-            width="${getWidth()}"
+            width="${Dimensions.get('window').width}"
             height="5000"
             style="border:none; overflow:hidden;"
             allowTransparency="true">
@@ -25,7 +23,7 @@ const buildFrame = (url) => {
         </html>`;
 };
 
-const comments = (props) => {
+const FacebookComments = (props) => {
   const html = buildFrame(props.url);
   return (
     <WebView
@@ -46,4 +44,4 @@ const comments = (props) => {
   );
 };
 
-export default comments;
+export default FacebookComments;

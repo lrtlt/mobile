@@ -1,14 +1,22 @@
 import React from 'react';
-import {View, ActivityIndicator} from 'react-native';
-import Styles from './styles';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import {View, ActivityIndicator, StyleSheet} from 'react-native';
+import {useTheme} from '../../Theme';
 
-const loader = (props) => {
+const ScreenLoader = (props) => {
+  const {colors} = useTheme();
   return (
-    <View style={[Styles.container, props.style]}>
-      <ActivityIndicator size="large" animating={true} color={EStyleSheet.value('$buttonContentColor')} />
+    <View style={[styles.container, props.style]}>
+      <ActivityIndicator size="large" animating={true} color={colors.buttonContent} />
     </View>
   );
 };
 
-export default loader;
+export default ScreenLoader;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

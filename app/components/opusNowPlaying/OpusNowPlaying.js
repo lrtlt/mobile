@@ -1,12 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {NoteIcon} from '../svg';
-import Styles from './styles';
 import firestore from '@react-native-firebase/firestore';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import TextComponent from '../text/Text';
+import {useTheme} from '../../Theme';
 
-const component = (props) => {
+const OpusNowComponent = (props) => {
   const [currentSong, setCurrentSong] = useState('');
+
+  const {colors} = useTheme();
 
   useEffect(() => {
     const subscriber = firestore()
@@ -26,16 +29,46 @@ const component = (props) => {
   console.log('currectsong', currentSong);
   return (
     <View>
-      <View style={Styles.container}>
-        <View style={Styles.iconContainer}>
-          <View style={Styles.iconButton}>
+      <View style={{...styles.container, backgroundColor: colors.programProgress}}>
+        <View style={styles.iconContainer}>
+          <View style={{...styles.iconButton, backgroundColor: colors.lightGreyBackground}}>
             <NoteIcon size={12} color={EStyleSheet.value('$darkIcon')} />
           </View>
         </View>
-        <Text style={Styles.title}>{currentSong}</Text>
+        <TextComponent style={styles.title}>{currentSong}</TextComponent>
       </View>
     </View>
   );
 };
 
-export default component;
+export default OpusNowComponent;
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 4,
+    flexDirection: 'row',
+  },
+  iconContainer: {
+    width: 36,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconButton: {
+    padding: 4,
+    paddingStart: 8,
+    paddingEnd: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+  },
+  title: {
+    flex: 1,
+    padding: 4,
+    fontFamily: 'SourceSansPro-SemiBold',
+    fontSize: 13,
+  },
+});

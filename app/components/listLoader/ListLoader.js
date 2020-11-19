@@ -1,19 +1,22 @@
 import React from 'react';
-import {View, ActivityIndicator} from 'react-native';
-import Styles from './styles';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import {View, ActivityIndicator, StyleSheet} from 'react-native';
+import {useTheme} from '../../Theme';
 
-const loader = (props) => {
+const ListLoader = (props) => {
+  const {colors} = useTheme();
   return (
-    <View {...props} style={{...props.style, ...Styles.container}}>
-      <ActivityIndicator
-        style={Styles.loader}
-        size="large"
-        animating={true}
-        color={EStyleSheet.value('$primary')}
-      />
+    <View {...props} style={{...props.style, ...styles.container}}>
+      <ActivityIndicator size="large" animating={true} color={colors.primary} />
     </View>
   );
 };
 
-export default React.memo(loader);
+export default ListLoader;
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 32,
+  },
+});

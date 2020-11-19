@@ -1,20 +1,29 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {BorderlessButton} from 'react-native-gesture-handler';
-import Styles from './styles';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import {useTheme} from '../../Theme';
 
-const button = (props) => {
+const Button = (props) => {
+  const {colors} = useTheme();
+
   return (
     <View {...props}>
       <BorderlessButton
         onPress={props.onPress}
-        style={Styles.container}
-        underlayColor={EStyleSheet.value('$buttonBorderColor')}>
+        style={{...styles.container, borderColor: colors.buttonBorder}}
+        underlayColor={colors.buttonBorder}>
         <View>{props.children}</View>
       </BorderlessButton>
     </View>
   );
 };
 
-export default React.memo(button);
+export default Button;
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

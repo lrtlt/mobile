@@ -1,30 +1,37 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {connect} from 'react-redux';
+import {View, StyleSheet} from 'react-native';
 import {setSearchFilter} from '../../redux/actions';
+import {useSelector, useDispatch} from 'react-redux';
 import SelectableItem from './selectableItem/SelectableItem';
-import Styles from './styles';
 import {ScrollView} from 'react-native-gesture-handler';
-import styles from './styles';
+import {useTheme} from '../../Theme';
+import {selectSearchFilter} from '../../redux/selectors';
+import TextComponent from '../text/Text';
+import Divider from '../divider/Divider';
 
-const SearchFilterDrawer = (props) => {
+const SearchFilterDrawer = (_) => {
+  const {colors} = useTheme();
+
+  const dispatch = useDispatch();
+  const filter = useSelector(selectSearchFilter);
+
   const selectType = (type) => {
-    props.dispatch(setSearchFilter({...props.filter, type}));
+    dispatch(setSearchFilter({...filter, type}));
   };
 
   const selectSection = (section) => {
-    props.dispatch(setSearchFilter({...props.filter, section}));
+    dispatch(setSearchFilter({...filter, section}));
   };
 
   const selectDays = (days) => {
-    props.dispatch(setSearchFilter({...props.filter, days}));
+    dispatch(setSearchFilter({...filter, days}));
   };
 
   const renderTypeSelection = () => {
-    const {type} = props.filter;
+    const {type} = filter;
     return (
       <View>
-        <Text style={Styles.titleText}>TIPAS</Text>
+        <TextComponent style={styles.titleText}>TIPAS</TextComponent>
         <SelectableItem selected={type === 0} text={'Visi'} onPress={() => selectType(0)} />
         <SelectableItem selected={type === 1} text={'Naujienos'} onPress={() => selectType(1)} />
         <SelectableItem selected={type === 2} text={'Audio'} onPress={() => selectType(2)} />
@@ -35,10 +42,10 @@ const SearchFilterDrawer = (props) => {
   };
 
   const renderSectionSelection = () => {
-    const {section} = props.filter;
+    const {section} = filter;
     return (
       <View>
-        <Text style={Styles.titleText}>TEMA</Text>
+        <TextComponent style={styles.titleText}>TEMA</TextComponent>
         <SelectableItem selected={section === ''} text={'Visos'} onPress={() => selectSection('')} />
         <SelectableItem
           selected={section === 'aktualijos|lietuvoje|zinios|pasaulyje|panorama'}
@@ -80,10 +87,10 @@ const SearchFilterDrawer = (props) => {
   };
 
   const renderDateSelection = () => {
-    const {days} = props.filter;
+    const {days} = filter;
     return (
       <View>
-        <Text style={Styles.titleText}>DATA</Text>
+        <TextComponent style={styles.titleText}>DATA</TextComponent>
         <SelectableItem selected={days === ''} text={'Visos'} onPress={() => selectDays('')} />
         <SelectableItem selected={days === '1'} text={'Per 24 valandas'} onPress={() => selectDays('1')} />
         <SelectableItem selected={days === '7'} text={'Per savaite'} onPress={() => selectDays('7')} />
@@ -93,13 +100,13 @@ const SearchFilterDrawer = (props) => {
   };
 
   return (
-    <View style={Styles.root}>
+    <View style={{...styles.root, backgroundColor: colors.background}}>
       <ScrollView>
         <View>
           {renderTypeSelection()}
-          <View style={styles.separator} />
+          <Divider style={styles.divider} />
           {renderSectionSelection()}
-          <View style={styles.separator} />
+          <Divider style={styles.divider} />
           {renderDateSelection()}
         </View>
       </ScrollView>
@@ -107,8 +114,18 @@ const SearchFilterDrawer = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {filter: state.navigation.filter};
-};
+export default SearchFilterDrawer;
 
-export default connect(mapStateToProps)(SearchFilterDrawer);
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  titleText: {
+    fontFamily: 'SourceSansPro-SemiBold',
+    padding: 16,
+    fontSize: 16,
+  },
+  divider: {
+    marginTop: 16,
+  },
+});

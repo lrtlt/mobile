@@ -2,12 +2,6 @@ import React from 'react';
 import {View, StyleSheet, Animated, Image} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
-const styles = StyleSheet.create({
-  imageOverlay: {
-    ...StyleSheet.absoluteFill,
-  },
-});
-
 class ProgressiveImage extends React.Component {
   thumbnailAnimated = new Animated.Value(0);
 
@@ -47,3 +41,9 @@ class ProgressiveImage extends React.Component {
 }
 
 export default ProgressiveImage;
+
+const styles = StyleSheet.create({
+  imageOverlay: {
+    ...StyleSheet.absoluteFill,
+  },
+});

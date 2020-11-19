@@ -1,13 +1,14 @@
 import React from 'react';
-import {View} from 'react-native';
-import Styles from './styles';
+import {View, StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import ScalableText from '../scalableText/ScalableText';
 import Channel from './channel/Channel';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {CHANNEL_TYPE_DEFAULT, CHANNEL_TYPE_LIVE} from '../../constants';
+import {useTheme} from '../../Theme';
+import TextComponent from '../text/Text';
 
-const scrollingChannels = (props) => {
+const ScrollingChannels = (props) => {
+  const {colors, strings} = useTheme();
+
   const onChannelPressHandler = (channel) => {
     props.onChannelPress({type: CHANNEL_TYPE_DEFAULT, payload: channel});
   };
@@ -48,12 +49,12 @@ const scrollingChannels = (props) => {
     : null;
 
   return (
-    <View style={Styles.container}>
-      <View style={Styles.topHeader}>
-        <ScalableText style={Styles.leftText}>{EStyleSheet.value('$tvProgramTitle')}</ScalableText>
+    <View style={{...styles.container, backgroundColor: colors.slugBackground}}>
+      <View style={styles.topHeader}>
+        <TextComponent style={styles.leftText}>{strings.tvProgramTitle}</TextComponent>
       </View>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={Styles.scrollContent}>
+        <View style={styles.scrollContent}>
           {liveItemsContent}
           {itemsContent}
         </View>
@@ -62,7 +63,7 @@ const scrollingChannels = (props) => {
   );
 };
 
-const mockLiveItems = [
+const _mockLiveItems = [
   {
     channel: 'liveTest',
     channel_id: 15,
@@ -76,4 +77,32 @@ const mockLiveItems = [
   },
 ];
 
-export default scrollingChannels;
+export default ScrollingChannels;
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 2,
+    marginBottom: 2,
+    padding: 4,
+    paddingBottom: 8,
+  },
+
+  topHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  scrollContent: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+
+  leftText: {
+    fontSize: 18,
+    textTransform: 'uppercase',
+    margin: 8,
+    fontFamily: 'SourceSansPro-SemiBold',
+  },
+});

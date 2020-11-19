@@ -4,9 +4,7 @@ const styles = EStyleSheet.create({
   root: {
     flex: 1,
   },
-  contentContainer: {
-    //padding: '$contentPadding',
-  },
+  contentContainer: {},
   separator: {
     width: '100%',
     height: 1,

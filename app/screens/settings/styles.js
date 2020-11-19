@@ -19,7 +19,7 @@ export default EStyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '$contentPadding',
+    padding: 12,
   },
   controls: {
     width: '100%',

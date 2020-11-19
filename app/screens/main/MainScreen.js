@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
-import {View, Dimensions} from 'react-native';
+import {View, Dimensions, StatusBar} from 'react-native';
 import {TabView} from 'react-native-tab-view';
-import {StatusBar, ActionButton} from '../../components';
+import {ActionButton} from '../../components';
 import {SettingsIcon, Logo} from '../../components/svg';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BorderlessButton} from 'react-native-gesture-handler';
@@ -101,20 +101,22 @@ const MainScreen = (props) => {
   };
 
   return (
-    <View style={Styles.container}>
+    <>
       <StatusBar />
-      <TabView
-        navigationState={state}
-        swipeEnabled={true}
-        renderScene={renderScene}
-        renderTabBar={renderTabBar}
-        // removeClippedSubviews={true}
-        onIndexChange={handleIndexChange}
-        lazy={true}
-        lazyPreloadDistance={0}
-        initialLayout={{height: 0, width: Dimensions.get('window').width}}
-      />
-    </View>
+      <View style={Styles.container}>
+        <TabView
+          navigationState={state}
+          swipeEnabled={true}
+          renderScene={renderScene}
+          renderTabBar={renderTabBar}
+          // removeClippedSubviews={true}
+          onIndexChange={handleIndexChange}
+          lazy={true}
+          lazyPreloadDistance={0}
+          initialLayout={{height: 0, width: Dimensions.get('window').width}}
+        />
+      </View>
+    </>
   );
 };
 

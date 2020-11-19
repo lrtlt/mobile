@@ -32,3 +32,11 @@ export const GEMIUS_HIT_COLLECTOR_HOST = 'https://galt.hit.gemius.pl';
 
 //OneSignal.com
 export const ONE_SIGNAL_APP_ID = '1fcd7381-5e0f-4efb-9bad-8f3339daf73a';
+
+//Redirect urls
+export const URL_CONTACTS = 'https://apie.lrt.lt/kontaktai/portalas-kontaktai';
+export const URL_ABOUT = 'https://apie.lrt.lt/';
+export const URL_UPLOAD_NEWS = 'https://apie.lrt.lt/bendraukime/rasykite';
+export const URL_FEEDBACK = 'https://apie.lrt.lt/bendraukime/rasykite';
+
+export const VIDEO_ASPECT_RATIO = 16 / 9;

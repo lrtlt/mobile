@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
-import {View, Text, ActivityIndicator, Button} from 'react-native';
+import {View, Text, ActivityIndicator, Button, StatusBar} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {StatusBar} from '../../components';
 import {Logo} from '../../components/svg';
 import Styles from './styles';
 import {fetchArticles, fetchMenuItems, setSelectedCategory} from '../../redux/actions';
@@ -67,17 +66,19 @@ const SplashScreenComponent = (props) => {
   };
 
   return (
-    <View style={Styles.container}>
+    <>
       <StatusBar />
-      <Logo size={100} />
-      <ActivityIndicator
-        style={Styles.loader}
-        size="large"
-        animating={state.isReady !== true && state.isError === false}
-        color={EStyleSheet.value('$buttonContentColor')}
-      />
-      {state.isError && renderError()}
-    </View>
+      <View style={Styles.container}>
+        <Logo size={100} />
+        <ActivityIndicator
+          style={Styles.loader}
+          size="large"
+          animating={state.isReady !== true && state.isError === false}
+          color={EStyleSheet.value('$buttonContentColor')}
+        />
+        {state.isError && renderError()}
+      </View>
+    </>
   );
 };
 

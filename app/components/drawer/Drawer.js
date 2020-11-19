@@ -1,19 +1,24 @@
 import React from 'react';
-import {View, Linking} from 'react-native';
+import {View, Linking, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import ScalableText from '../scalableText/ScalableText';
-import Styles from './styles';
 import {setSelectedCategory} from '../../redux/actions';
 import DrawerItem from '../drawerItem/DrawerItem';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import {ScrollView} from 'react-native-gesture-handler';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {getIconForChannel} from '../../util/UI';
 import {selectDrawerData} from '../../redux/selectors';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {URL_ABOUT, URL_CONTACTS, URL_FEEDBACK, URL_UPLOAD_NEWS} from '../../constants';
+import {useTheme} from '../../Theme';
+import TextComponent from '../text/Text';
+import Divider from '../divider/Divider';
 
 const DrawerComponent = (props) => {
   const {navigation} = props;
+
+  const {colors, strings} = useTheme();
+
   const dispatch = useDispatch();
   const data = useSelector(selectDrawerData);
 
@@ -24,31 +29,31 @@ const DrawerComponent = (props) => {
 
   const renderFooterItems = () => {
     return (
-      <View style={Styles.footerContainer}>
-        <View style={Styles.line} />
+      <View style={styles.footerContainer}>
+        <Divider style={styles.line} />
         <DrawerItem
-          key={EStyleSheet.value('$upload')}
-          text={EStyleSheet.value('$upload')}
-          iconComponent={<FeatherIcon name="upload" size={22} color={EStyleSheet.value('$primaryDark')} />}
-          onPress={() => Linking.openURL(EStyleSheet.value('$upload_news_url'))}
+          key={strings.upload}
+          text={strings.upload}
+          iconComponent={<FeatherIcon name="upload" size={22} color={colors.primaryDark} />}
+          onPress={() => Linking.openURL(URL_UPLOAD_NEWS)}
         />
         <DrawerItem
-          key={EStyleSheet.value('$feeback')}
-          text={EStyleSheet.value('$feeback')}
-          iconComponent={<FeatherIcon name="x-octagon" size={22} color={EStyleSheet.value('$primaryDark')} />}
-          onPress={() => Linking.openURL(EStyleSheet.value('$feedback_url'))}
+          key={strings.feeback}
+          text={strings.feeback}
+          iconComponent={<FeatherIcon name="x-octagon" size={22} color={colors.primaryDark} />}
+          onPress={() => Linking.openURL(URL_FEEDBACK)}
         />
         <DrawerItem
-          key={EStyleSheet.value('$contacts')}
-          text={EStyleSheet.value('$contacts')}
-          iconComponent={<FeatherIcon name="phone" size={22} color={EStyleSheet.value('$primaryDark')} />}
-          onPress={() => Linking.openURL(EStyleSheet.value('$contacts_url'))}
+          key={strings.contacts}
+          text={strings.contacts}
+          iconComponent={<FeatherIcon name="phone" size={22} color={colors.primaryDark} />}
+          onPress={() => Linking.openURL(URL_CONTACTS)}
         />
         <DrawerItem
-          key={EStyleSheet.value('$about')}
-          text={EStyleSheet.value('$about')}
-          iconComponent={<FeatherIcon name="info" size={22} color={EStyleSheet.value('$primaryDark')} />}
-          onPress={() => Linking.openURL(EStyleSheet.value('$about_url'))}
+          key={strings.about}
+          text={strings.about}
+          iconComponent={<FeatherIcon name="info" size={22} color={colors.primaryDark} />}
+          onPress={() => Linking.openURL(URL_ABOUT)}
         />
       </View>
     );
@@ -68,8 +73,8 @@ const DrawerComponent = (props) => {
       );
     });
     return (
-      <View style={Styles.channelContainer}>
-        <ScalableText style={Styles.title}>{EStyleSheet.value('$liveChannelTitle')}</ScalableText>
+      <View style={styles.channelContainer}>
+        <ScalableText style={styles.title}>{strings.liveChannelTitle}</ScalableText>
         {channels}
       </View>
     );
@@ -78,9 +83,9 @@ const DrawerComponent = (props) => {
   const renderSearch = () => {
     return (
       <DrawerItem
-        key={EStyleSheet.value('$search')}
-        text={EStyleSheet.value('$search')}
-        iconComponent={<FeatherIcon name="search" size={22} color={EStyleSheet.value('$primaryDark')} />}
+        key={strings.search}
+        text={strings.search}
+        iconComponent={<FeatherIcon name="search" size={22} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('Search')}
       />
     );
@@ -89,9 +94,9 @@ const DrawerComponent = (props) => {
   const renderProgram = () => {
     return (
       <DrawerItem
-        key={'program'}
-        text={EStyleSheet.value('$tvProgram')}
-        iconComponent={<FeatherIcon name="tv" size={22} color={EStyleSheet.value('$primaryDark')} />}
+        key={strings.tvProgram}
+        text={strings.tvProgram}
+        iconComponent={<FeatherIcon name="tv" size={22} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('Program')}
       />
     );
@@ -100,9 +105,9 @@ const DrawerComponent = (props) => {
   const renderHistory = () => {
     return (
       <DrawerItem
-        key={'history'}
-        text={EStyleSheet.value('$history')}
-        iconComponent={<FeatherIcon name="clock" size={22} color={EStyleSheet.value('$primaryDark')} />}
+        key={strings.history}
+        text={strings.history}
+        iconComponent={<FeatherIcon name="clock" size={22} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('History')}
       />
     );
@@ -111,9 +116,9 @@ const DrawerComponent = (props) => {
   const renderBookmarks = () => {
     return (
       <DrawerItem
-        key={'bookmarks'}
-        text={EStyleSheet.value('$bookmarks')}
-        iconComponent={<FeatherIcon name="bookmark" size={22} color={EStyleSheet.value('$primaryDark')} />}
+        key={strings.bookmarks}
+        text={strings.bookmarks}
+        iconComponent={<FeatherIcon name="bookmark" size={22} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('Bookmarks')}
       />
     );
@@ -127,14 +132,14 @@ const DrawerComponent = (props) => {
         <DrawerItem
           key={page.key}
           text={page.title}
-          iconComponent={<FeatherIcon name="globe" size={22} color={EStyleSheet.value('$primaryLight')} />}
+          iconComponent={<FeatherIcon name="globe" size={22} color={colors.primaryLight} />}
           onPress={() => navigation.navigate('CustomPage', {page})}
         />
       ));
 
       return (
         <View>
-          <View style={Styles.line} />
+          <Divider style={styles.line} />
           {content}
         </View>
       );
@@ -148,21 +153,21 @@ const DrawerComponent = (props) => {
   });
 
   return (
-    <View style={Styles.container}>
+    <View style={{...styles.container, backgroundColor: colors.card}}>
       <SafeAreaView style={{flex: 1}} edges={['top', 'left']}>
-        <ScrollView style={Styles.scroll} showsVerticalScrollIndicator={false}>
-          <View style={Styles.content}>
-            <View style={Styles.headerContainer}>
+        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
+            <View style={styles.headerContainer}>
               {renderSearch()}
               {renderBookmarks()}
               {renderHistory()}
               {renderProgram()}
             </View>
-            <View style={Styles.line} />
+            <Divider style={styles.line} />
             {renderChannelItems()}
 
-            <View style={Styles.line} />
-            <ScalableText style={Styles.title}>{EStyleSheet.value('$drawerMenu')}</ScalableText>
+            <Divider style={styles.line} />
+            <TextComponent style={styles.title}>{strings.drawerMenu}</TextComponent>
             {content}
             {renderPages()}
             {renderFooterItems()}
@@ -174,3 +179,38 @@ const DrawerComponent = (props) => {
 };
 
 export default DrawerComponent;
+
+const drawerPadding = 10;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scroll: {
+    width: '100%',
+    height: '100%',
+  },
+  content: {
+    flex: 1,
+  },
+  title: {
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 16,
+    padding: drawerPadding * 2,
+    fontWeight: 'bold',
+  },
+  channelContainer: {
+    paddingBottom: drawerPadding,
+  },
+  headerContainer: {
+    paddingTop: drawerPadding,
+    paddingBottom: drawerPadding,
+  },
+  footerContainer: {
+    paddingBottom: drawerPadding,
+  },
+  line: {
+    marginStart: drawerPadding * 2,
+    marginEnd: drawerPadding * 2,
+  },
+});

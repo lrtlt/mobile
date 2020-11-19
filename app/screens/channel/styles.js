@@ -17,7 +17,7 @@ export default EStyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    padding: '$contentPadding',
+    padding: 12,
   },
   playerContainer: {
     width: '100%',

@@ -16,12 +16,12 @@ export default EStyleSheet.create({
   smallText: {
     color: '$textColor',
     fontFamily: 'SourceSansPro-Regular',
-    fontSize: '$articleSmallTextSize',
+    fontSize: 14,
   },
   smallTextBold: {
     color: '$textColor',
     fontFamily: 'SourceSansPro-SemiBold',
-    fontSize: '$articleSmallTextSize',
+    fontSize: 14,
   },
   authorShareContainer: {
     flex: 1,
@@ -46,12 +46,12 @@ export default EStyleSheet.create({
     marginTop: 24,
     color: '$titleTextColor',
     fontFamily: 'PlayfairDisplay-Regular',
-    fontSize: '$articleTitleFontSize',
+    fontSize: 25,
   },
   subtitle: {
     color: '$subtitleColor',
     fontFamily: 'SourceSansPro-Regular',
     marginTop: 4,
-    fontSize: '$articleSubtitleFontSize',
+    fontSize: 15,
   },
 });

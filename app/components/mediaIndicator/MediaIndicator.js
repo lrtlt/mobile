@@ -1,19 +1,23 @@
 import React from 'react';
-import {View} from 'react-native';
-import Styles from './styles';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import {View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {useTheme} from '../../Theme';
 
-const mediaIndicator = (props) => {
+const MediaIndicator = (props) => {
+  const {colors} = useTheme();
   return (
-    <View {...props} style={{...props.style, ...Styles.container}}>
-      <Icon
-        name="play"
-        size={EStyleSheet.value('$mediaIndicatorIconSize')}
-        color={EStyleSheet.value('$darkIcon')}
-      />
+    <View {...props} style={{...props.style, ...styles.container}}>
+      <Icon name="play" size={14} color={colors.darkIcon} />
     </View>
   );
 };
 
-export default React.memo(mediaIndicator);
+export default MediaIndicator;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

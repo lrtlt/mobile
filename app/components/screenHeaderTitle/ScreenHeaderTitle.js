@@ -1,10 +1,18 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {StyleSheet} from 'react-native';
+import {useTheme} from '../../Theme';
+import TextComponent from '../text/Text';
 
-import Styles from './styles';
-
-const title = (props) => {
-  return <Text style={Styles.text}>{props.children}</Text>;
+const HeaderTitle = (props) => {
+  const {colors} = useTheme();
+  return <TextComponent style={{...styles.text, color: colors.headerTint}}>{props.children}</TextComponent>;
 };
 
-export default title;
+export default HeaderTitle;
+
+const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'SourceSansPro-SemiBold',
+    fontSize: 16,
+  },
+});

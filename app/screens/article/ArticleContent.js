@@ -28,7 +28,7 @@ import Styles from './styles';
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const getContentWidth = () => {
-  return Dimensions.get('window').width - EStyleSheet.value('$contentPadding') * 2;
+  return Dimensions.get('window').width - 12 * 2;
 };
 
 const getItemKey = (item, index) => {

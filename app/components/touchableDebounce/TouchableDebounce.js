@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import {debounce} from 'lodash';
 
-const touchableDebounce = (props) => {
+const TouchableDebounce = (props) => {
   return (
     <TouchableOpacity
       {...props}
@@ -18,15 +18,15 @@ const touchableDebounce = (props) => {
   );
 };
 
-touchableDebounce.propTypes = {
+TouchableDebounce.propTypes = {
   onPress: PropTypes.func.isRequired,
   style: ViewPropTypes.style,
   activeOpacity: PropTypes.number,
   debounceTime: PropTypes.number,
 };
-touchableDebounce.defaultProps = {
+TouchableDebounce.defaultProps = {
   activeOpacity: 0.5,
   style: {},
   debounceTime: 500,
 };
-export default touchableDebounce;
+export default TouchableDebounce;

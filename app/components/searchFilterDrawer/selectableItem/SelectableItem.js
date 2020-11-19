@@ -1,23 +1,37 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
-import ScalableText from '../../scalableText/ScalableText';
-import Styles from './styles';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import {useTheme} from '../../../Theme';
+import TextComponent from '../../text/Text';
 
 const SelectableItem = (props) => {
+  const {colors} = useTheme();
+
   return (
-    <View style={props.selected === true ? Styles.rootSelected : Styles.root}>
-      <RectButton
-        onPress={props.onPress}
-        rippleColor={EStyleSheet.value('$rippleColor')}
-        underlayColor={EStyleSheet.value('$primary')}>
-        <View style={Styles.container}>
-          <ScalableText style={Styles.text}>{props.text}</ScalableText>
+    <View style={props.selected === true ? {backgroundColor: colors.slugBackground} : {}}>
+      <RectButton onPress={props.onPress} rippleColor={colors.ripple} underlayColor={colors.primary}>
+        <View style={styles.container}>
+          <TextComponent style={styles.text} type="secondary">
+            {props.text}
+          </TextComponent>
         </View>
       </RectButton>
     </View>
   );
 };
 
-export default React.memo(SelectableItem);
+export default SelectableItem;
+
+const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 15,
+    textTransform: 'uppercase',
+  },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+    marginStart: 8,
+  },
+});

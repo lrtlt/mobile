@@ -25,6 +25,7 @@ import {
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {selectNavigationIsReady} from '../redux/selectors';
+import {themeLight} from '../Theme';
 
 const Stack = createStackNavigator();
 const MainDrawer = createDrawerNavigator();
@@ -64,7 +65,7 @@ const NavigatorComponent = () => {
     };
 
     return (
-      <NavigationContainer>
+      <NavigationContainer theme={themeLight}>
         <Stack.Navigator
           headerMode={Platform.OS === 'android' ? 'screen' : 'float'}
           mode="card"
@@ -76,7 +77,7 @@ const NavigatorComponent = () => {
             headerTitleStyle: {
               color: EStyleSheet.value('$headerTintColor'),
               fontFamily: 'SourceSansPro-SemiBold',
-              fontSize: EStyleSheet.value('$screenTitleTextSize'),
+              fontSize: 16,
             },
             headerTintColor: EStyleSheet.value('$headerTintColor'),
             headerStyle: {

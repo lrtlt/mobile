@@ -10,7 +10,7 @@ export const compose = (article) => {
   const data = [];
   data.push(getHeaderData(article));
 
-  if (article.is_video != 1 && article.is_audio != 1) {
+  if (article.is_video !== 1 && article.is_audio !== 1) {
     data.push(getMainPhoto(article));
   }
 
@@ -22,7 +22,7 @@ export const compose = (article) => {
     data.push(...getParagraphs(article));
   }
 
-  if (article.is_video == 1) {
+  if (article.is_video === 1) {
     if (article.get_playlist_url) {
       data.push(getVideo(article));
     }
@@ -32,7 +32,7 @@ export const compose = (article) => {
     }
   }
 
-  if (article.is_audio == 1) {
+  if (article.is_audio === 1) {
     data.push(getAudio(article));
 
     if (article.content) {

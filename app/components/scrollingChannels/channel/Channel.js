@@ -1,16 +1,19 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {CoverImage, LiveBadge} from '../..';
 import MediaIcon from '../../mediaIndicator/MediaIndicator';
-import Styles from './styles';
 import IC_CAMERA from '../../svg/ic_camera';
 import IC_MICROPHONE from '../../svg/ic_microphone';
 import {getIconForChannel, getColorsForChannel} from '../../../util/UI';
 import {buildArticleImageUri, IMG_SIZE_L} from '../../../util/ImageUtil';
 
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
+import TextComponent from '../../text/Text';
+import {useTheme} from '../../../Theme';
 
-const channel = (props) => {
+const Channel = (props) => {
+  const {colors} = useTheme();
+
   const data = props.data;
   const proc = Math.max(0, Math.min(Number(data.proc), 100));
   const colorsSet = getColorsForChannel(data.channel);
@@ -28,39 +31,41 @@ const channel = (props) => {
   }
 
   const programTimeComponent = props.isLive ? (
-    <View style={Styles.timeText} />
+    <View style={styles.liveFooTimeView} />
   ) : (
-    <Text style={Styles.timeText}>{startEndTimeText}</Text>
+    <TextComponent style={{...styles.timeText, backgroundColor: colors.greyBackground}}>
+      {startEndTimeText}
+    </TextComponent>
   );
 
   const channelTitleComponent = props.isLive ? (
-    <View style={Styles.channelTitleContainer}>
-      <Text style={{...Styles.channelTitle, paddingStart: 2, padding: 2}} numberOfLines={2}>
+    <View style={styles.channelTitleContainer}>
+      <TextComponent style={{...styles.channelTitle, padding: 2}} numberOfLines={2}>
         LRT.LT
-      </Text>
+      </TextComponent>
     </View>
   ) : (
-    <View style={Styles.channelTitleContainer}>
+    <View style={styles.channelTitleContainer}>
       {icon}
-      <Text style={Styles.channelTitle} numberOfLines={2}>
+      <TextComponent style={styles.channelTitle} numberOfLines={2}>
         {data.channel_title}
-      </Text>
+      </TextComponent>
     </View>
   );
 
   const bottomBarContainer = props.isLive ? (
     <View />
   ) : (
-    <View style={Styles.bottomBarContainer}>
+    <View style={styles.bottomBarContainer}>
       <View
         style={{
-          ...Styles.bottomBar,
+          ...styles.bottomBar,
           backgroundColor: colorsSet.primary,
         }}
       />
       <View
         style={{
-          ...Styles.bottomBarOverlay,
+          ...styles.bottomBarOverlay,
           width: proc + '%',
           backgroundColor: colorsSet.secondary,
         }}
@@ -77,13 +82,13 @@ const channel = (props) => {
   return (
     <View>
       <TouchableDebounce debounceTime={500} onPress={() => props.onPress(props.data)}>
-        <View style={Styles.container}>
-          <View style={Styles.coverContainer}>
-            <CoverImage style={Styles.cover} source={{uri: coverUrl}} />
-            <View style={Styles.coverContentContainer}>
-              <View style={Styles.channelImageContainer}>{channelIcon}</View>
-              <View style={Styles.mediaIndicatorContainer}>
-                <MediaIcon style={Styles.mediaIndicator} />
+        <View style={styles.container}>
+          <View style={styles.coverContainer}>
+            <CoverImage style={styles.cover} source={{uri: coverUrl}} />
+            <View style={styles.coverContentContainer}>
+              <View style={styles.channelImageContainer}>{channelIcon}</View>
+              <View style={styles.mediaIndicatorContainer}>
+                <MediaIcon style={styles.mediaIndicator} />
               </View>
 
               {programTimeComponent}
@@ -94,13 +99,102 @@ const channel = (props) => {
           {channelTitleComponent}
           {liveBadge}
 
-          <Text style={Styles.title} numberOfLines={3}>
+          <TextComponent style={styles.title} numberOfLines={3}>
             {data.title}
-          </Text>
+          </TextComponent>
         </View>
       </TouchableDebounce>
     </View>
   );
 };
 
-export default React.memo(channel);
+export default Channel;
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 2,
+    borderRadius: 4,
+    width: 180,
+    alignSelf: 'center',
+    flexWrap: 'wrap',
+  },
+  coverContainer: {
+    flex: 1,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  coverContentContainer: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    flexWrap: 'wrap',
+    flexDirection: 'column',
+  },
+  cover: {
+    width: '100%',
+    aspectRatio: 0.66,
+  },
+  channelImageContainer: {
+    backgroundColor: 'white',
+    padding: 8,
+    borderBottomEndRadius: 4,
+    alignSelf: 'flex-start',
+  },
+  mediaIndicatorContainer: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mediaIndicator: {
+    opacity: 0.8,
+    width: 36,
+    height: 36,
+    paddingStart: 4,
+    borderRadius: 36 / 2,
+  },
+  channelTitleContainer: {
+    flexDirection: 'row',
+    paddingTop: 2,
+    alignItems: 'center',
+  },
+  channelTitle: {
+    fontSize: 12,
+    textTransform: 'uppercase',
+    paddingStart: 8,
+    fontFamily: 'SourceSansPro-Regular',
+  },
+  title: {
+    width: '100%',
+    fontSize: 16,
+    marginTop: 4,
+    fontFamily: 'PlayfairDisplay-Regular',
+  },
+  timeText: {
+    opacity: 0.8,
+    fontSize: 12,
+    fontFamily: 'SourceSansPro-Regular',
+    borderRadius: 4,
+    padding: 3,
+    margin: 8,
+    alignSelf: 'flex-end',
+  },
+  liveFooTimeView: {
+    height: 44,
+  },
+  bottomBarContainer: {
+    width: '100%',
+    height: 8,
+    borderBottomStartRadius: 4,
+    borderBottomEndRadius: 4,
+  },
+  bottomBar: {
+    width: '100%',
+    height: 8,
+    position: 'absolute',
+  },
+  bottomBarOverlay: {
+    height: 8,
+    position: 'absolute',
+  },
+});

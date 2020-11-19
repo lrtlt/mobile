@@ -1,21 +1,24 @@
-import React, {Fragment} from 'react';
-import {View, Text, Linking} from 'react-native';
-import SelectableText from '../selectableText/SelectableText';
+import React from 'react';
+import {View, Linking, StyleSheet} from 'react-native';
 import {WebView} from 'react-native-webview';
-import Styles from './styles';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import HTML from 'react-native-render-html';
 import {IGNORED_TAGS, alterNode, makeTableRenderer} from 'react-native-render-html-table-bridge';
 import Embed from './embeded/Embed';
+import TextComponent from '../text/Text';
+import {useTheme} from '../../Theme';
+
+/** Todo remove maybe? It introduces bugs (text not fitting) */
+const EXTRA_LINE_SPACING = 6;
 
 const renderBlockquote = (_, children, __, passProps) => {
   //console.log(children);
   return (
-    <View style={Styles.quoteContainer} key={passProps.key}>
-      <Text style={Styles.quoteSimbol}>”</Text>
-      <SelectableText style={([passProps.tagsStyles.blockquote], [Styles.quoteText])}>
+    <View style={styles.quoteContainer} key={passProps.key}>
+      <TextComponent style={styles.quoteSimbol}>”</TextComponent>
+      <TextComponent style={{...passProps.tagsStyles.blockquote, ...styles.quoteText}} selectable={true}>
         {children}
-      </SelectableText>
+      </TextComponent>
     </View>
   );
 };
@@ -24,14 +27,14 @@ const renderP = (_, children, __, passProps) => {
   // console.log('children', children);
   // console.log('passProps', passProps);
   return (
-    <SelectableText style={passProps.tagsStyles.baseFontStyle} key={passProps.key}>
+    <TextComponent style={passProps.tagsStyles.baseFontStyle} key={passProps.key} selectable={true}>
       {children}
-    </SelectableText>
+    </TextComponent>
   );
 };
 
 const getTextSize = () => {
-  return EStyleSheet.value('$articleFontSize') + EStyleSheet.value('$textSizeMultiplier');
+  return 20 + EStyleSheet.value('$textSizeMultiplier');
 };
 
 const tagsStyles = () => {
@@ -43,15 +46,6 @@ const tagsStyles = () => {
       fontFamily: 'SourceSansPro-LightItalic',
       fontSize: getTextSize() + 3,
     },
-  };
-};
-
-const baseFontStyle = () => {
-  return {
-    color: EStyleSheet.value('$textColor'),
-    fontFamily: 'SourceSansPro-Regular',
-    lineHeight: getTextSize() + EStyleSheet.value('$paragraphLineExtraSpacing'),
-    fontSize: getTextSize(),
   };
 };
 
@@ -71,11 +65,20 @@ const htmlConfig = {
   ignoredTags: IGNORED_TAGS,
 };
 
-const renderParagrah = (html) => {
+const ParagraphComponent = ({html}) => {
+  const {colors} = useTheme();
+
+  const baseFontStyle = {
+    color: colors.text,
+    fontFamily: 'SourceSansPro-Regular',
+    lineHeight: getTextSize() + EXTRA_LINE_SPACING,
+    fontSize: getTextSize(),
+  };
+
   return (
-    <View style={Styles.paragraphContainer}>
+    <View style={styles.paragraphContainer}>
       <HTML
-        baseFontStyle={baseFontStyle()}
+        baseFontStyle={baseFontStyle}
         html={html}
         tagsStyles={tagsStyles()}
         onLinkPress={(_, href) => Linking.openURL(href)}
@@ -85,7 +88,7 @@ const renderParagrah = (html) => {
   );
 };
 
-const renderEmbed = (embedArray, _itemSelectHandler) => {
+const EmbedComponent = ({embedArray, itemSelectHandler}) => {
   const groupedEmbeds = [];
   let i;
   for (i = 0; i < embedArray.length; i++) {
@@ -107,9 +110,9 @@ const renderEmbed = (embedArray, _itemSelectHandler) => {
   const content = groupedEmbeds.map((embeds, index) => {
     return (
       <Embed
-        style={Styles.embedContainer}
+        style={styles.embedContainer}
         data={embeds}
-        pressHandler={_itemSelectHandler}
+        pressHandler={itemSelectHandler}
         key={'embed-' + index}
       />
     );
@@ -118,19 +121,47 @@ const renderEmbed = (embedArray, _itemSelectHandler) => {
   return <View>{content}</View>;
 };
 
-const paragraph = (props) => {
+const ArticleParagraph = (props) => {
   const {p, embed} = props.data;
   const {itemSelectHandler} = props;
 
-  const textComponent = p ? renderParagrah(p) : null;
-  const embedComponent = embed ? renderEmbed(embed, itemSelectHandler) : null;
+  const textComponent = p ? <ParagraphComponent html={p} /> : null;
+  const embedComponent = embed ? (
+    <EmbedComponent embedArray={embed} itemSelectHandler={itemSelectHandler} />
+  ) : null;
 
   return (
-    <Fragment>
+    <>
       {textComponent}
       {embedComponent}
-    </Fragment>
+    </>
   );
 };
 
-export default React.memo(paragraph);
+export default ArticleParagraph;
+
+const styles = StyleSheet.create({
+  paragraphContainer: {
+    flex: 1,
+    paddingTop: 16,
+    paddingBottom: 16,
+  },
+  embedContainer: {
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  quoteText: {
+    flex: 1,
+  },
+  quoteContainer: {
+    width: '100%',
+    marginTop: 12,
+    flexDirection: 'row',
+  },
+  quoteSimbol: {
+    fontFamily: 'SourceSansPro-SemiBold',
+    fontSize: 80,
+    marginTop: -18,
+    paddingEnd: 12,
+  },
+});

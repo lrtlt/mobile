@@ -20,7 +20,7 @@ export default EStyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: '$contentPadding',
+    padding: 12,
   },
   gallery: {
     ...StyleSheet.absoluteFill,
@@ -31,7 +31,7 @@ export default EStyleSheet.create({
     marginBottom: 24,
     lineHeight: 32,
     fontFamily: 'SourceSansPro-Regular',
-    fontSize: '$articleSummaryTextSize',
+    fontSize: 22,
   },
   photo: {
     width: '100%',
@@ -48,7 +48,7 @@ export default EStyleSheet.create({
   },
   audioPlayer: {
     flex: 1,
-    marginTop: '$contentPadding',
+    marginTop: 12,
   },
   centerContainer: {
     flex: 1,
