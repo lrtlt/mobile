@@ -65,7 +65,6 @@ export const selectHomeScreenState = (type) => (state) => {
         index: i,
         category: b.category,
         data: b.items,
-        backgroundColor: EStyleSheet.value(b.category.backgroundColor),
       };
     });
   };

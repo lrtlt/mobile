@@ -29,7 +29,6 @@ import {
 
 import {ARTICLE_LIST_TYPE_CATEGORY} from '../../constants/';
 import {formatArticles as formatArticleBlock} from '../../util/articleFormatters';
-import EStyleSheet from 'react-native-extended-stylesheet';
 
 const initialNewestBlockState = {
   isFetching: false,
@@ -395,8 +394,7 @@ const parseArticles = (apiResponse) => {
   articleBlocks.push({
     category: {
       id: 0,
-      name: EStyleSheet.value('$mainWindow'),
-      backgroundColor: null,
+      name: 'Pagrindinis',
       template_id: 0,
       is_slug_block: 0,
     },
@@ -404,15 +402,12 @@ const parseArticles = (apiResponse) => {
   });
 
   apiResponse.articles_blocks.forEach((block, i) => {
-    const backgroundColor = block.is_slug_block || block.template_id === 999 ? '$slugBackground' : null;
-
     const category = {
       id: block.category_id,
       name: block.category_title || block.slug_title || block.block_title,
       template_id: block.template_id,
       is_slug_block: block.is_slug_block,
       slug_url: block.slug_url,
-      backgroundColor,
     };
 
     const articles = block.articles_list;

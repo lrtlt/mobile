@@ -22,8 +22,6 @@ import {
   CustomPageScreen,
 } from '../screens';
 
-import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {selectNavigationIsReady} from '../redux/selectors';
 import {themeLight} from '../Theme';
 
@@ -64,8 +62,10 @@ const NavigatorComponent = () => {
       );
     };
 
+    const theme = themeLight;
+
     return (
-      <NavigationContainer theme={themeLight}>
+      <NavigationContainer theme={theme}>
         <Stack.Navigator
           headerMode={Platform.OS === 'android' ? 'screen' : 'float'}
           mode="card"
@@ -75,13 +75,13 @@ const NavigatorComponent = () => {
             headerRightContainerStyle: {paddingEnd: 4},
             headerTitle: '',
             headerTitleStyle: {
-              color: EStyleSheet.value('$headerTintColor'),
+              color: theme.colors.headerTint,
               fontFamily: 'SourceSansPro-SemiBold',
               fontSize: 16,
             },
-            headerTintColor: EStyleSheet.value('$headerTintColor'),
+            headerTintColor: theme.colors.headerTint,
             headerStyle: {
-              backgroundColor: EStyleSheet.value('$appBarBackground'),
+              backgroundColor: theme.colors.card,
             },
           }}>
           <Stack.Screen

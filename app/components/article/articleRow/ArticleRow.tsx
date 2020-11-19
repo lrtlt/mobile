@@ -2,6 +2,7 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import Article from '../article/Article';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useTheme} from '../../../Theme';
 
 //TODO calculate for bigger screens.
 const articleFitCount = 2;
@@ -18,13 +19,16 @@ const getArticleType = (articleCount: number): string => {
 
 interface Props {
   data: any[];
-  backgroundColor: string;
+  isSlug?: boolean;
   onArticlePress: (article: any) => void;
 }
 
 const ArticleRow: React.FC<Props> = (props) => {
+  const {colors} = useTheme();
+
   const articles = props.data;
-  const backgroundColor = props.backgroundColor;
+
+  const backgroundColor = props.isSlug ? colors.slugBackground : null;
 
   const articleType = getArticleType(articles.length);
 

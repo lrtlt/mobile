@@ -1,11 +1,10 @@
 import React from 'react';
-import {View, Platform} from 'react-native';
+import {View, Platform, StyleSheet} from 'react-native';
 import {initTheme} from './app/ColorTheme';
 import {store} from './app/redux/store';
 import OneSignal from 'react-native-onesignal';
 import {version as appVersion} from './package.json';
 import Navigation from './app/navigation';
-import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {
   ONE_SIGNAL_APP_ID,
@@ -49,7 +48,7 @@ class App extends React.Component {
   }
 }
 
-const style = EStyleSheet.create({
+const style = StyleSheet.create({
   container: {
     flex: 1,
   },

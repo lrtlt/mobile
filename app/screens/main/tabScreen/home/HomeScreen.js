@@ -104,11 +104,12 @@ const HomeScreen = (props) => {
   const renderItem = (val) => {
     switch (val.item.type) {
       case LIST_DATA_TYPE_ARTICLES: {
+        const {category} = val.section;
         return (
           <ArticleRow
             data={val.item.data}
             onArticlePress={(article) => onArticlePressHandler(article)}
-            backgroundColor={val.section.backgroundColor}
+            isSlug={category.is_slug_block}
           />
         );
       }
@@ -125,7 +126,6 @@ const HomeScreen = (props) => {
           <ArticleFeedItem
             article={val.item.data[0]}
             onArticlePress={(article) => onArticlePressHandler(article)}
-            backgroundColor={val.section.backgroundColor}
           />
         );
       }
