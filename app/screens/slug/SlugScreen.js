@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, ActivityIndicator} from 'react-native';
-import Styles from './styles';
-import {ArticleRow} from '../../components';
+import {View, Button, ActivityIndicator, StyleSheet} from 'react-native';
+import {ArticleRow, Text} from '../../components';
 import {getOrientation} from '../../util/UI';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {articleGetByTag} from '../../api';
 import {formatArticles} from '../../util/articleFormatters';
 import {ARTICLES_PER_PAGE_COUNT, GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {FlatList} from 'react-native-gesture-handler';
+import {useTheme} from '../../Theme';
 
 const SlugScreen = (props) => {
+  const {colors, strings} = useTheme();
+
   const {navigation, route} = props;
 
   const [state, setState] = useState({
@@ -80,7 +81,7 @@ const SlugScreen = (props) => {
 
   const renderLoading = () => {
     return (
-      <View style={Styles.loadingContainer}>
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size={'small'} animating={state.isFetching} />
       </View>
     );
@@ -88,13 +89,11 @@ const SlugScreen = (props) => {
 
   const renderError = () => {
     return (
-      <View style={Styles.errorContainer}>
-        <Text style={Styles.errorText}>{EStyleSheet.value('$error_no_connection')}</Text>
-        <Button
-          title={EStyleSheet.value('$tryAgain')}
-          color={EStyleSheet.value('$primary')}
-          onPress={() => startLoading()}
-        />
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText} type="error">
+          {strings.error_no_connection}
+        </Text>
+        <Button title={strings.tryAgain} color={colors.primary} onPress={() => startLoading()} />
       </View>
     );
   };
@@ -123,10 +122,35 @@ const SlugScreen = (props) => {
   }
 
   return (
-    <View style={Styles.root}>
-      <View style={Styles.container}>{content}</View>
+    <View style={styles.root}>
+      <View style={styles.container}>{content}</View>
     </View>
   );
 };
 
 export default SlugScreen;
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    overflow: 'hidden',
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorText: {
+    fontFamily: 'SourceSansPro-Regular',
+    marginBottom: 20,
+    fontSize: 20,
+  },
+});

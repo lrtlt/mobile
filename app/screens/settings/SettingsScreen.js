@@ -3,7 +3,6 @@ import {View, StyleSheet} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {SettingsToggleButton, BackIcon, Text} from '../../components';
 import {SunIcon, MoonIcon, PhotoIcon} from '../../components/svg';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {setConfig} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import {initTheme} from '../../ColorTheme';
@@ -13,6 +12,7 @@ import {isEqual} from 'lodash';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {selectConfig} from '../../redux/selectors';
+import {useTheme} from '../../Theme';
 
 const TEXT_SIZE_NORMAL = 0;
 const TEXT_SIZE_LARGE = 2;
@@ -24,6 +24,8 @@ const IMAGE_QUALITY_EXTRA_HIGH = -1;
 
 const SettingsScreen = (props) => {
   const {navigation} = props;
+
+  const {colors, strings, dim} = useTheme();
   const dispatch = useDispatch();
 
   const savedConfig = useSelector(selectConfig);
@@ -38,14 +40,11 @@ const SettingsScreen = (props) => {
   //TODO remove probably after new theme implementation?
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: EStyleSheet.value('$settings'),
+      headerTitle: strings.settings,
       headerLeft: () => (
-        <BorderlessButton onPress={goBack} rippleColor={EStyleSheet.value('$rippleColor')}>
+        <BorderlessButton onPress={goBack} rippleColor={colors.ripple}>
           <View style={styles.backButtonContainer}>
-            <BackIcon
-              size={EStyleSheet.value('$navBarIconSize') + 4}
-              color={EStyleSheet.value('$headerTintColor')}
-            />
+            <BackIcon size={dim.appBarIconSize} color={colors.headerTint} />
           </View>
         </BorderlessButton>
       ),
@@ -117,7 +116,7 @@ const SettingsScreen = (props) => {
         <View style={styles.content}>
           <View style={styles.controls}>
             <Text style={styles.title} type="secondary">
-              {EStyleSheet.value('$nightModeTitle')}
+              {strings.nightModeTitle}
             </Text>
             <View style={styles.buttonContainer}>
               <SettingsToggleButton
@@ -136,7 +135,7 @@ const SettingsScreen = (props) => {
             </View>
 
             <Text style={styles.title} type="secondary">
-              {EStyleSheet.value('$textSizeTitle')}
+              {strings.textSizeTitle}
             </Text>
             <View style={styles.buttonContainer}>
               <SettingsToggleButton
@@ -180,7 +179,7 @@ const SettingsScreen = (props) => {
             </View>
 
             <Text style={styles.title} type="secondary">
-              {EStyleSheet.value('$imageQuality')}
+              {strings.imageQuality}
             </Text>
             <View style={styles.buttonContainer}>
               <SettingsToggleButton

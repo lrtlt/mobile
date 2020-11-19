@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react';
-import {View, Dimensions, StatusBar} from 'react-native';
+import {View, Dimensions, StatusBar, StyleSheet} from 'react-native';
 import {TabView} from 'react-native-tab-view';
 import {ActionButton} from '../../components';
 import {SettingsIcon, Logo} from '../../components/svg';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BorderlessButton} from 'react-native-gesture-handler';
-import Styles from './styles';
 import TabBar from './tabBar/TabBar';
 import {useDispatch, useSelector} from 'react-redux';
 import {setSelectedCategory} from '../../redux/actions';
@@ -15,7 +14,6 @@ import NewestScreen from './tabScreen/newest/NewestScreen';
 import PopularScreen from './tabScreen/popular/PopularScreen';
 import TestScreen from '../testScreen/TestScreen';
 import Gemius from 'react-native-gemius-plugin';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {EventRegister} from 'react-native-event-listeners';
 import {EVENT_LOGO_PRESS} from '../../constants';
 
@@ -28,9 +26,11 @@ import {
   ARTICLE_LIST_TYPE_POPULAR,
 } from '../../constants';
 import {selectMainScreenState} from '../../redux/selectors';
+import {useTheme} from '../../Theme';
 
 const MainScreen = (props) => {
   const {navigation} = props;
+  const {colors, dim} = useTheme();
 
   useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'main'});
@@ -38,19 +38,12 @@ const MainScreen = (props) => {
     navigation.setOptions({
       headerLeft: (_) => (
         <ActionButton onPress={() => navigation.toggleDrawer()}>
-          <MaterialIcon
-            name="menu"
-            size={EStyleSheet.value('$navBarIconSize') - 2}
-            color={EStyleSheet.value('$headerTintColor')}
-          />
+          <MaterialIcon name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
       headerRight: (_) => (
         <ActionButton onPress={() => navigation.navigate('Settings')}>
-          <SettingsIcon
-            size={EStyleSheet.value('$navBarIconSize') - 2}
-            color={EStyleSheet.value('$headerTintColor')}
-          />
+          <SettingsIcon name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
       headerTitle: (
@@ -58,16 +51,15 @@ const MainScreen = (props) => {
           onPress={() => {
             EventRegister.emit(EVENT_LOGO_PRESS, null);
           }}>
-          <View style={{paddingStart: 12, paddingEnd: 12}}>
-            <Logo size={EStyleSheet.value('$navBarIconSize')} />
+          <View style={styles.logoContainer}>
+            <Logo size={dim.appBarIconSize} />
           </View>
         </BorderlessButton>
       ),
     });
-  }, []);
+  }, [colors.headerTint, dim.appBarIconSize, navigation]);
 
   const state = useSelector(selectMainScreenState);
-
   const dispatch = useDispatch();
 
   const handleIndexChange = (index) => dispatch(setSelectedCategory(index));
@@ -103,7 +95,7 @@ const MainScreen = (props) => {
   return (
     <>
       <StatusBar />
-      <View style={Styles.container}>
+      <View style={styles.container}>
         <TabView
           navigationState={state}
           swipeEnabled={true}
@@ -121,3 +113,13 @@ const MainScreen = (props) => {
 };
 
 export default MainScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  logoContainer: {
+    paddingStart: 12,
+    paddingEnd: 12,
+  },
+});

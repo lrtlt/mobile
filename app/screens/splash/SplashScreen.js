@@ -1,15 +1,15 @@
 import React, {useEffect} from 'react';
-import {View, Text, ActivityIndicator, Button, StatusBar} from 'react-native';
+import {View, ActivityIndicator, Button, StatusBar, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {Logo} from '../../components/svg';
-import Styles from './styles';
 import {fetchArticles, fetchMenuItems, setSelectedCategory} from '../../redux/actions';
 
-import EStyleSheet from 'react-native-extended-stylesheet';
 import OneSignal from 'react-native-onesignal';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {selectSplashScreenState} from '../../redux/selectors';
+import {Text} from '../../components';
+import {useTheme} from '../../Theme';
 
 const onNotificationOpened = (openResult) => {
   console.log('Message: ', openResult.notification.payload.body);
@@ -18,7 +18,9 @@ const onNotificationOpened = (openResult) => {
   console.log('openResult: ', openResult);
 };
 
-const SplashScreenComponent = (props) => {
+const SplashScreenComponent = (_) => {
+  const {colors, strings} = useTheme();
+
   const state = useSelector(selectSplashScreenState);
   const dispatch = useDispatch();
 
@@ -54,13 +56,11 @@ const SplashScreenComponent = (props) => {
 
   const renderError = () => {
     return (
-      <View style={Styles.errorContainer}>
-        <Text style={Styles.errorText}>{EStyleSheet.value('$error_no_connection')}</Text>
-        <Button
-          title={EStyleSheet.value('$tryAgain')}
-          color={EStyleSheet.value('$primary')}
-          onPress={() => load(true)}
-        />
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText} type="error">
+          {strings.error_no_connection}
+        </Text>
+        <Button title={strings.tryAgain} color={colors.primary} onPress={() => load(true)} />
       </View>
     );
   };
@@ -68,13 +68,13 @@ const SplashScreenComponent = (props) => {
   return (
     <>
       <StatusBar />
-      <View style={Styles.container}>
+      <View style={styles.container}>
         <Logo size={100} />
         <ActivityIndicator
-          style={Styles.loader}
+          style={styles.loader}
           size="large"
           animating={state.isReady !== true && state.isError === false}
-          color={EStyleSheet.value('$buttonContentColor')}
+          color={colors.buttonContent}
         />
         {state.isError && renderError()}
       </View>
@@ -83,3 +83,32 @@ const SplashScreenComponent = (props) => {
 };
 
 export default SplashScreenComponent;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  errorContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: '20%',
+  },
+  loader: {
+    position: 'absolute',
+    bottom: '20%',
+  },
+  errorText: {
+    marginTop: 40,
+    fontFamily: 'SourceSansPro-Regular',
+    marginBottom: 20,
+    fontSize: 18,
+  },
+  buttonContainer: {
+    marginTop: 24,
+    width: '50%',
+  },
+});

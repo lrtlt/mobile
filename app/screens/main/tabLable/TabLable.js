@@ -1,23 +1,43 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import Styles from './styles';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import {View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
+import {Text} from '../../../components';
+import {useTheme} from '../../../Theme';
 
-const lable = (props) => {
-  const style = props.focused ? Styles.labelFocused : Styles.label;
+const Lable = (props) => {
+  const {colors, strings} = useTheme();
+
+  const color = props.focused ? colors.primary : colors.textSecondary;
 
   let content;
-  if (props.route.title === EStyleSheet.value('$mainWindow')) {
+  if (props.route.title === strings.mainWindow) {
     content = (
-      <View style={Styles.homeContainer}>
-        <Icon size={20} name={'home'} color={style.color} />
+      <View style={styles.homeContainer}>
+        <Icon size={20} name={'home'} color={color} />
       </View>
     );
   } else {
-    content = <Text style={style}>{props.route.title}</Text>;
+    content = <Text style={{...styles.label, color: color}}>{props.route.title}</Text>;
   }
-  return <View style={Styles.labelContainer}>{content}</View>;
+  return <View style={styles.labelContainer}>{content}</View>;
 };
 
-export default React.memo(lable);
+export default Lable;
+
+const styles = StyleSheet.create({
+  label: {
+    fontSize: 14,
+    fontFamily: 'SourceSansPro-Regular',
+    width: '100%',
+    textTransform: 'uppercase',
+  },
+  homeContainer: {
+    paddingStart: 6,
+    paddingEnd: 6,
+  },
+  labelContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

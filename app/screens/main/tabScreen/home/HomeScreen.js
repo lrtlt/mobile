@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {View, SectionList, RefreshControl} from 'react-native';
+import {View, SectionList, RefreshControl, StyleSheet} from 'react-native';
 import {
   ArticleRow,
   ScrollingChannels,
@@ -8,7 +8,6 @@ import {
   MoreArticlesButton,
   ScreenLoader,
 } from '../../../../components';
-import Styles from './styles';
 import {fetchArticles, fetchMediateka, openCategoryForName} from '../../../../redux/actions/index';
 import {getOrientation} from '../../../../util/UI';
 import {
@@ -149,17 +148,17 @@ const HomeScreen = (props) => {
       <SectionHeader category={section.category} onPress={(category) => onCategoryPressHandler(category)} />
     ) : null;
 
-  const renderLoading = () => <ScreenLoader style={Styles.loadingContainer} />;
+  const renderLoading = () => <ScreenLoader style={styles.loadingContainer} />;
 
   if (sections.length === 0) {
     return renderLoading();
   }
 
   return (
-    <View style={Styles.container}>
+    <View style={styles.container}>
       <SectionList
         showsVerticalScrollIndicator={false}
-        style={Styles.container}
+        style={styles.container}
         ref={listRef}
         extraData={{
           orientation: getOrientation(),
@@ -182,3 +181,14 @@ const HomeScreen = (props) => {
 };
 
 export default HomeScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

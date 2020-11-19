@@ -1,9 +1,15 @@
+import {Platform} from 'react-native';
 import {Theme, useTheme as useReactNavigationTheme} from '@react-navigation/native';
 
 interface AppTheme extends Theme {
   dark: boolean;
   colors: ColorScheme;
   strings: Dictionary;
+  dim: Dimensions;
+}
+
+interface Dimensions {
+  appBarIconSize: number;
 }
 
 //#region Strings
@@ -130,7 +136,6 @@ type ColorScheme = {
   buttonContent: string;
   androidTouchFeedback: string;
   actionButton: string;
-  actionButtonTint: string;
   programItem: string;
   toggleButtonSelected: string;
   programProgress: string;
@@ -173,7 +178,6 @@ const colorsLight: ColorScheme = {
   buttonContent: '#999',
   androidTouchFeedback: '#cadeeb',
   actionButton: 'primary',
-  actionButtonTint: 'white',
   programItem: 'white',
   toggleButtonSelected: '#DCE3E9',
   programProgress: '#dce3e9',
@@ -209,7 +213,6 @@ const colorsDark: ColorScheme = {
   tabLableSelected: 'primaryDark',
   headerTint: '#DADADA',
   actionButton: '#333',
-  actionButtonTint: 'white',
   greyBackground: '#2B3640',
   articleHighlight: '#2B364060',
   listSeparator: '#FFFFFF40',
@@ -228,16 +231,22 @@ const colorsDark: ColorScheme = {
 };
 //#endregion
 
+const dimensions: Dimensions = {
+  appBarIconSize: Platform.OS === 'android' ? 24 : 22,
+};
+
 export const themeLight: AppTheme = {
   dark: false,
   colors: colorsLight,
   strings: str,
+  dim: dimensions,
 };
 
 export const themeDark: AppTheme = {
   dark: true,
   colors: colorsDark,
   strings: str,
+  dim: dimensions,
 };
 
 /** Custom hook to retrieve a theme of type AppTheme */

@@ -1,11 +1,9 @@
 import React, {useEffect, useRef} from 'react';
-import {View, RefreshControl, Text, Button} from 'react-native';
-import {ArticleRow, DefaultSectionHeader, ScreenLoader} from '../../../../components';
-import Styles from './styles';
+import {View, RefreshControl, Button, StyleSheet} from 'react-native';
+import {ArticleRow, DefaultSectionHeader, ScreenLoader, Text} from '../../../../components';
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchPopular, refreshPopular} from '../../../../redux/actions';
 import {FlatList} from 'react-native-gesture-handler';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {
   ARTICLE_LIST_TYPE_POPULAR,
   ARTICLES_PER_PAGE_COUNT,
@@ -18,10 +16,13 @@ import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {selectPopularArticlesScreenState} from '../../../../redux/selectors';
 import {useNavigation} from '@react-navigation/native';
+import {useTheme} from '../../../../Theme';
 
 const PopularScreen = (props) => {
   const state = useSelector(selectPopularArticlesScreenState);
   const {isError, articles, isFetching, isRefreshing, lastFetchTime, title, page} = state;
+
+  const {colors, strings} = useTheme();
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -61,16 +62,14 @@ const PopularScreen = (props) => {
     />
   );
 
-  const renderLoading = () => <ScreenLoader style={Styles.loadingContainer} />;
+  const renderLoading = () => <ScreenLoader style={styles.loadingContainer} />;
 
   const renderError = () => (
-    <View style={Styles.errorContainer}>
-      <Text style={Styles.errorText}>{EStyleSheet.value('$error_no_connection')}</Text>
-      <Button
-        title={EStyleSheet.value('$tryAgain')}
-        color={EStyleSheet.value('$primary')}
-        onPress={() => callApi()}
-      />
+    <View style={styles.errorContainer}>
+      <Text style={styles.errorText} type="error">
+        {strings.error_no_connection}
+      </Text>
+      <Button title={strings.tryAgain} color={colors.primary} onPress={() => callApi()} />
     </View>
   );
 
@@ -89,11 +88,11 @@ const PopularScreen = (props) => {
   }
 
   return (
-    <View style={Styles.container}>
+    <View style={styles.container}>
       <FlatList
         ref={listRef}
         showsVerticalScrollIndicator={false}
-        style={Styles.container}
+        style={styles.container}
         data={articles}
         ListHeaderComponent={<DefaultSectionHeader title={title} />}
         windowSize={4}
@@ -114,3 +113,24 @@ const PopularScreen = (props) => {
 };
 
 export default PopularScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorText: {
+    fontFamily: 'SourceSansPro-Regular',
+    marginBottom: 20,
+    fontSize: 20,
+  },
+});

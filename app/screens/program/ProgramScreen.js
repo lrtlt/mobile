@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {ScreenLoader, ProgramDay, ActionButton} from '../../components';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import Styles from './styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {fetchProgram} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
@@ -12,6 +10,8 @@ import ProgramTabs from './tabs/ProgramTabsScreen';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {selectProgramScreenState} from '../../redux/selectors';
+import {useTheme} from '../../Theme';
+import Divider from '../../components/divider/Divider';
 
 const STATE_LOADING = 'loading';
 const STATE_ERROR = 'error';
@@ -22,6 +22,9 @@ const ProgramScreen = (props) => {
   const [selectedDate, setSelectedDate] = useState(undefined);
 
   const {navigation} = props;
+
+  const {colors, dim} = useTheme();
+
   const dispatch = useDispatch();
 
   const state = useSelector(selectProgramScreenState);
@@ -44,16 +47,16 @@ const ProgramScreen = (props) => {
     navigation.setOptions({
       headerRight: () => (
         <ActionButton onPress={() => setHeaderExpanded(!headerExpanded)}>
-          <Icon
-            size={EStyleSheet.value('$navBarIconSize')}
-            color={EStyleSheet.value('$headerTintColor')}
-            name="ios-calendar"
-          />
+          <Icon size={dim.appBarIconSize} color={colors.headerTint} name="ios-calendar" />
         </ActionButton>
       ),
       headerTitle: () => {
         return selectedDate ? (
-          <ProgramDay style={Styles.dayHeader} textStyle={Styles.headerText} dateString={selectedDate} />
+          <ProgramDay
+            style={styles.dayHeader}
+            textStyle={{...styles.headerText, color: colors.headerTint}}
+            dateString={selectedDate}
+          />
         ) : (
           <View />
         );
@@ -72,8 +75,8 @@ const ProgramScreen = (props) => {
           }}
           key={day}>
           <View>
-            <ProgramDay style={Styles.dayListItem} dateString={day} />
-            <View style={Styles.dayListSeparator} />
+            <ProgramDay style={styles.dayListItem} dateString={day} />
+            <Divider />
           </View>
         </TouchableOpacity>
       );
@@ -88,14 +91,14 @@ const ProgramScreen = (props) => {
 
   const renderError = () => {
     //TODO implement
-    return <View style={Styles.flexContainer} />;
+    return <View style={styles.flexContainer} />;
   };
 
   const renderProgram = () => {
     const selectedDay = selectedDate || program.days[0];
     const selectedDayProgram = program[selectedDay];
     return (
-      <View style={Styles.flexContainer}>
+      <View style={styles.root}>
         <Collapsible collapsed={!headerExpanded}>{renderDays()}</Collapsible>
         <ProgramTabs program={selectedDayProgram} />
       </View>
@@ -118,11 +121,25 @@ const ProgramScreen = (props) => {
     }
   }
 
-  return (
-    <View style={Styles.root}>
-      <View style={Styles.flexContainer}>{content}</View>
-    </View>
-  );
+  return <View style={styles.root}>{content}</View>;
 };
 
 export default ProgramScreen;
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  dayHeader: {
+    height: '100%',
+    justifyContent: 'center',
+  },
+  dayListItem: {
+    padding: 16,
+    justifyContent: 'center',
+  },
+  headerText: {
+    fontFamily: 'SourceSansPro-SemiBold',
+    fontSize: 16,
+  },
+});

@@ -1,21 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, ActivityIndicator, TextInput} from 'react-native';
+import {View, Button, ActivityIndicator, TextInput, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {resetSearchFilter} from '../../redux/actions';
-import {Article, ActionButton} from '../../components';
+import {Article, ActionButton, Text} from '../../components';
 import {SearchIcon, FilterIcon} from '../../components/svg';
-import Styles from './styles';
-import {getOrientation} from '../../util/UI';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import {getOrientation, getSmallestDim} from '../../util/UI';
 import {searchArticles} from '../../api';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {FlatList} from 'react-native-gesture-handler';
 import {selectSearchFilter} from '../../redux/selectors';
+import {useTheme} from '../../Theme';
 
 const SearchScreen = (props) => {
   const {navigation} = props;
   const searchFilter = useSelector(selectSearchFilter);
+
+  const {colors, strings, dim} = useTheme();
 
   const [loadingState, setLoadingState] = useState({
     isFetching: false,
@@ -40,36 +41,30 @@ const SearchScreen = (props) => {
     navigation.dangerouslyGetParent().setOptions({
       headerTitle: () => (
         <TextInput
-          style={Styles.searchInput}
+          style={{...styles.searchInput, color: colors.text}}
           multiline={false}
           placeholder={'Paieška'}
           numberOfLines={1}
           onSubmitEditing={() => search()}
           returnKeyType="search"
-          placeholderTextColor={EStyleSheet.value('$textColorDisabled')}
+          placeholderTextColor={colors.textDisbled}
           onChangeText={(text) => setQuery(text)}
           value={query}
         />
       ),
       headerRight: () => (
-        <View style={Styles.row}>
+        <View style={styles.row}>
           <ActionButton onPress={() => search()}>
-            <SearchIcon
-              size={EStyleSheet.value('$navBarIconSize')}
-              color={EStyleSheet.value('$headerTintColor')}
-            />
+            <SearchIcon size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
           <ActionButton onPress={() => navigation.toggleDrawer()}>
-            <FilterIcon
-              size={EStyleSheet.value('$navBarIconSize')}
-              color={EStyleSheet.value('$headerTintColor')}
-            />
+            <FilterIcon size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
         </View>
       ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, searchFilter]);
+  }, [query, searchFilter, colors]);
 
   useEffect(() => {
     search();
@@ -105,7 +100,7 @@ const SearchScreen = (props) => {
   const renderItem = (val) => {
     return (
       <Article
-        style={Styles.article}
+        style={styles.article}
         data={val.item}
         showDate={true}
         onPress={(article) => navigation.navigate('Article', {articleId: article.id})}
@@ -116,7 +111,7 @@ const SearchScreen = (props) => {
 
   const renderLoading = () => {
     return (
-      <View style={Styles.loadingContainer}>
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size={'small'} animating={loadingState.isFetching} />
       </View>
     );
@@ -124,13 +119,11 @@ const SearchScreen = (props) => {
 
   const renderError = () => {
     return (
-      <View style={Styles.errorContainer}>
-        <Text style={Styles.errorText}>{EStyleSheet.value('$error_no_connection')}</Text>
-        <Button
-          title={EStyleSheet.value('$tryAgain')}
-          color={EStyleSheet.value('$primary')}
-          onPress={() => search(query, searchFilter)}
-        />
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText} type="error">
+          {strings.error_no_connection}
+        </Text>
+        <Button title={strings.tryAgain} color={colors.primary} onPress={() => search(query, searchFilter)} />
       </View>
     );
   };
@@ -158,11 +151,43 @@ const SearchScreen = (props) => {
     );
   }
 
-  return (
-    <View style={Styles.root}>
-      <View style={Styles.container}>{content}</View>
-    </View>
-  );
+  return <View style={styles.root}>{content}</View>;
 };
 
 export default SearchScreen;
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  article: {
+    padding: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  searchInput: {
+    paddingBottom: 2,
+    paddingTop: 2,
+    margin: 4,
+    width: getSmallestDim() * 0.5,
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 15,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorText: {
+    fontFamily: 'SourceSansPro-Regular',
+    marginBottom: 20,
+    fontSize: 20,
+  },
+});

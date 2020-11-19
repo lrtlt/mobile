@@ -1,4 +1,3 @@
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {ARTICLE_LIST_TYPE_MEDIA, ARTICLE_LIST_TYPE_POPULAR, ARTICLE_LIST_TYPE_NEWEST} from '../constants';
 import {formatArticles} from '../util/articleFormatters';
 

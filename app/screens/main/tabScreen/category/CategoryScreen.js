@@ -1,30 +1,26 @@
 import React, {useEffect, useRef} from 'react';
-import {View, RefreshControl, Text, Button} from 'react-native';
-import {ArticleRow, ListLoader, DefaultSectionHeader, ScreenLoader} from '../../../../components';
-import Styles from './styles';
+import {View, RefreshControl, Button, StyleSheet} from 'react-native';
+import {ArticleRow, ListLoader, DefaultSectionHeader, ScreenLoader, Text} from '../../../../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchCategory, refreshCategory} from '../../../../redux/actions';
 import {FlatList} from 'react-native-gesture-handler';
 import {getOrientation} from '../../../../util/UI';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import {
-  ARTICLES_PER_PAGE_COUNT,
-  ARTICLE_EXPIRE_DURATION,
-  GEMIUS_VIEW_SCRIPT_ID,
-  EVENT_LOGO_PRESS,
-} from '../../../../constants';
+import {ARTICLES_PER_PAGE_COUNT, GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {selectCategoryScreenState} from '../../../../redux/selectors';
 import {useNavigation} from '@react-navigation/native';
+import {useTheme} from '../../../../Theme';
 
 const CategoryScreen = (props) => {
   const {categoryId} = props.route;
   const state = useSelector(selectCategoryScreenState(categoryId));
-  const {isError, articles, isFetching, isRefreshing, lastFetchTime, title, page, nextPage} = state.category;
+  const {isError, articles, isFetching, isRefreshing, lastFetchTime, title, nextPage} = state.category;
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  const {colors, strings} = useTheme();
 
   const listRef = useRef(null);
 
@@ -66,18 +62,16 @@ const CategoryScreen = (props) => {
   };
 
   const renderLoading = () => {
-    return <ScreenLoader style={Styles.loadingContainer} />;
+    return <ScreenLoader style={styles.loadingContainer} />;
   };
 
   const renderError = () => {
     return (
-      <View style={Styles.errorContainer}>
-        <Text style={Styles.errorText}>{EStyleSheet.value('$error_no_connection')}</Text>
-        <Button
-          title={EStyleSheet.value('$tryAgain')}
-          color={EStyleSheet.value('$primary')}
-          onPress={() => callApi()}
-        />
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText} type="error">
+          {strings.error_no_connection}
+        </Text>
+        <Button title={strings.tryAgain} color={colors.primary} onPress={() => callApi()} />
       </View>
     );
   };
@@ -98,11 +92,11 @@ const CategoryScreen = (props) => {
   }
 
   return (
-    <View style={Styles.container}>
+    <View style={styles.container}>
       <FlatList
         ref={listRef}
         showsVerticalScrollIndicator={false}
-        style={Styles.container}
+        style={styles.container}
         data={articles}
         ListHeaderComponent={<DefaultSectionHeader title={title} />}
         windowSize={4}
@@ -123,3 +117,24 @@ const CategoryScreen = (props) => {
 };
 
 export default CategoryScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorText: {
+    fontFamily: 'SourceSansPro-Regular',
+    marginBottom: 20,
+    fontSize: 20,
+  },
+});
