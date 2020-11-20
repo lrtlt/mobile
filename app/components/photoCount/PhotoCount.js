@@ -1,20 +1,17 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useSettings} from '../../settings/useSettings';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 
 const PhotoCount = (props) => {
   const {colors} = useTheme();
+  const {textSizeMultiplier} = useSettings();
 
   return (
     <View style={{...styles.container, backgroundColor: colors.lightGreyBackground, ...props.style}}>
-      <Icon
-        name="photo-camera"
-        size={18 + EStyleSheet.value('$textSizeMultiplier')}
-        color={colors.darkIcon}
-      />
+      <Icon name="photo-camera" size={20 + textSizeMultiplier} color={colors.darkIcon} />
       <TextComponent style={{...styles.countText, color: colors.darkIcon}}>{props.count}</TextComponent>
     </View>
   );
@@ -27,8 +24,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 3,
-    paddingBottom: 3,
+    paddingTop: 2,
+    paddingBottom: 2,
     paddingStart: 6,
     paddingEnd: 6,
   },

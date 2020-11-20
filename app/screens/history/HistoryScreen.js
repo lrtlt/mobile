@@ -1,23 +1,24 @@
 import React, {useEffect} from 'react';
-import {View} from 'react-native';
-import Styles from './styles';
+import {StyleSheet, View} from 'react-native';
 import {ArticleRow} from '../../components';
 import {useSelector} from 'react-redux';
 import {getOrientation} from '../../util/UI';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {FlatList} from 'react-native-gesture-handler';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {selectHistoryScreenState} from '../../redux/selectors';
+import {useTheme} from '../../Theme';
 
 const HistoryScreen = (props) => {
   const {navigation} = props;
   const state = useSelector(selectHistoryScreenState);
   const {articles} = state;
 
+  const {strings} = useTheme();
+
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: EStyleSheet.value('$history'),
+      headerTitle: strings.history,
     });
 
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
@@ -36,7 +37,7 @@ const HistoryScreen = (props) => {
   };
 
   return (
-    <View style={Styles.container}>
+    <View style={styles.container}>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={articles}
@@ -53,3 +54,9 @@ const HistoryScreen = (props) => {
 };
 
 export default HistoryScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

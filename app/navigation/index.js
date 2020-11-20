@@ -23,7 +23,8 @@ import {
 } from '../screens';
 
 import {selectNavigationIsReady} from '../redux/selectors';
-import {themeLight} from '../Theme';
+import {themeDark, themeLight} from '../Theme';
+import {useSettings} from '../settings/useSettings';
 
 const Stack = createStackNavigator();
 const MainDrawer = createDrawerNavigator();
@@ -31,6 +32,8 @@ const SearchDrawer = createDrawerNavigator();
 
 const NavigatorComponent = () => {
   const isNavigationReady = useSelector(selectNavigationIsReady);
+
+  const settings = useSettings();
 
   if (!isNavigationReady) {
     return <Splash />;
@@ -62,7 +65,9 @@ const NavigatorComponent = () => {
       );
     };
 
-    const theme = themeLight;
+    const theme = settings.isDarkMode ? themeDark : themeLight;
+
+    console.log('SETTINGS', settings);
 
     return (
       <NavigationContainer theme={theme}>

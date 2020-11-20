@@ -11,7 +11,7 @@ import {
   LogoLight,
 } from '../components/svg';
 
-import {channelColors} from '../ColorTheme';
+import {channelColors} from '../Theme';
 
 const DEFAULT_CHANNEL_ICON_SIZE = 25;
 

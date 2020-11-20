@@ -1,20 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {saveArticle, removeArticle, addArticleToHistory} from '../../redux/actions';
 import {articleGet} from '../../api';
 import ArticleContent from './ArticleContent';
 import {useDispatch, useSelector} from 'react-redux';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {CommentsIcon, ShareIcon, SaveIcon} from '../../components/svg';
 import Share from 'react-native-share';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Snackbar from 'react-native-snackbar';
-
 import {ScreenLoader, ScreenError, AdultContentWarning, ActionButton} from '../../components';
-
-import Styles from './styles';
 import {selectArticleBookmarked} from '../../redux/selectors';
+import {useTheme} from '../../Theme';
 
 const STATE_LOADING = 'loading';
 const STATE_ADULT_CONTENT_WARNING = 'adult-content-warning';
@@ -23,6 +20,8 @@ const STATE_READY = 'ready';
 
 const ArticleScreen = (props) => {
   const {navigation, route} = props;
+
+  const {colors, dim, strings} = useTheme();
 
   const dispatch = useDispatch();
 
@@ -52,7 +51,7 @@ const ArticleScreen = (props) => {
       } else {
         dispatch(saveArticle(article));
         Snackbar.show({
-          text: EStyleSheet.value('$articleHasBeenSaved'),
+          text: strings.articleHasBeenSaved,
           duration: Snackbar.LENGTH_SHORT,
         });
       }
@@ -71,25 +70,15 @@ const ArticleScreen = (props) => {
 
     navigation.setOptions({
       headerRight: () => (
-        <View style={Styles.row}>
+        <View style={styles.row}>
           <ActionButton onPress={() => _saveArticlePress()}>
-            <SaveIcon
-              size={EStyleSheet.value('$navBarIconSize')}
-              color={EStyleSheet.value('$headerTintColor')}
-              filled={isBookmarked}
-            />
+            <SaveIcon size={dim.appBarIconSize} color={colors.headerTint} filled={isBookmarked} />
           </ActionButton>
           <ActionButton onPress={() => _handleCommentsPress()}>
-            <CommentsIcon
-              size={EStyleSheet.value('$navBarIconSize')}
-              color={EStyleSheet.value('$headerTintColor')}
-            />
+            <CommentsIcon size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
           <ActionButton onPress={() => _handleSharePress()}>
-            <ShareIcon
-              size={EStyleSheet.value('$navBarIconSize')}
-              color={EStyleSheet.value('$headerTintColor')}
-            />
+            <ShareIcon size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
         </View>
       ),
@@ -157,20 +146,20 @@ const ArticleScreen = (props) => {
   };
 
   const renderLoading = () => (
-    <View style={Styles.screen}>
+    <View style={styles.screen}>
       <ScreenLoader />
     </View>
   );
 
   const renderError = () => (
-    <View style={Styles.screen}>
-      <ScreenError text={EStyleSheet.value('$articleError')} />
+    <View style={styles.screen}>
+      <ScreenError text={strings.articleError} />
     </View>
   );
 
   const renderAdultContentWarning = () => (
-    <View style={Styles.screen}>
-      <View style={Styles.centerContainer}>
+    <View style={styles.screen}>
+      <View style={styles.centerContainer}>
         <AdultContentWarning
           onAccept={() =>
             setState({
@@ -191,7 +180,7 @@ const ArticleScreen = (props) => {
     } else {
       articleComponent = <View />;
     }
-    return <View style={Styles.screen}>{articleComponent}</View>;
+    return <View style={styles.screen}>{articleComponent}</View>;
   };
 
   const _handleItemPress = (item) => {
@@ -236,3 +225,18 @@ const ArticleScreen = (props) => {
 };
 
 export default ArticleScreen;
+
+const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  screen: {
+    flex: 1,
+  },
+  centerContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

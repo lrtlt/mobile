@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Dimensions, Animated, FlatList} from 'react-native';
+import {View, Dimensions, FlatList, StyleSheet} from 'react-native';
 import Header from './header/Header';
-import {getOrientation} from '../../util/UI';
+import {getOrientation, getSmallestDim} from '../../util/UI';
 import {
   ArticlePhoto,
   TouchableDebounce,
@@ -21,10 +21,8 @@ import {
   TYPE_VIDEO,
   TYPE_AUDIO,
 } from './ArticleCompositor';
-
-import Styles from './styles';
-
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+import {VIDEO_ASPECT_RATIO} from '../../constants';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const getContentWidth = () => {
   return Dimensions.get('window').width - 12 * 2;
@@ -58,7 +56,7 @@ const ArticleContent = (props) => {
             })
           }>
           <ArticlePhoto
-            style={Styles.photo}
+            style={styles.photo}
             photo={data.photo}
             progressive={true}
             imageAspectRatio={1.5}
@@ -70,7 +68,7 @@ const ArticleContent = (props) => {
 
     const renderSummary = () => {
       return (
-        <Text style={Styles.summaryText} selectable={true}>
+        <Text style={styles.summaryText} selectable={true}>
           {data.text}
         </Text>
       );
@@ -82,16 +80,16 @@ const ArticleContent = (props) => {
 
     const renderVideo = () => {
       return (
-        <View style={Styles.playerContainer}>
-          <VideoComponent {...data} style={Styles.player} autoPlay={true} />
+        <View style={styles.playerContainer}>
+          <VideoComponent {...data} style={styles.player} autoPlay={true} />
         </View>
       );
     };
 
     const renderAudio = () => {
       return (
-        <View style={Styles.playerContainer}>
-          <AudioComponent {...data} style={Styles.player} />
+        <View style={styles.playerContainer}>
+          <AudioComponent {...data} style={styles.player} />
         </View>
       );
     };
@@ -129,14 +127,14 @@ const ArticleContent = (props) => {
         return renderAudio();
       }
       default: {
-        return <View style={{backgroundColor: 'red', height: 40}} />;
+        return <View />;
       }
     }
   };
 
   return (
-    <View style={Styles.container}>
-      <AnimatedFlatList
+    <SafeAreaView style={styles.container} edges={['left', 'right']}>
+      <FlatList
         data={articleData}
         extraData={{
           orientation: getOrientation(),
@@ -147,8 +145,35 @@ const ArticleContent = (props) => {
         removeClippedSubviews={false}
         keyExtractor={(item, index) => getItemKey(item, index)}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default ArticleContent;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 12,
+  },
+  summaryText: {
+    marginTop: 24,
+    marginBottom: 24,
+    lineHeight: 32,
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 22,
+  },
+  photo: {
+    width: '100%',
+  },
+  playerContainer: {
+    width: '100%',
+    backgroundColor: '#121212',
+    alignItems: 'center',
+  },
+  player: {
+    width: '100%',
+    aspectRatio: VIDEO_ASPECT_RATIO,
+    maxHeight: getSmallestDim() - 62,
+  },
+});

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {View, Dimensions} from 'react-native';
+import {View, Dimensions, StyleSheet} from 'react-native';
 import {TabView} from 'react-native-tab-view';
-import Styles from './styles';
 import TabBar from '../main/tabBar/TabBar';
 import CategoryScreen from '../main/tabScreen/category/CategoryScreen';
 import TestScreen from '../testScreen/TestScreen';
@@ -46,7 +45,7 @@ const CustomPageScreen = (props) => {
   };
 
   return (
-    <View style={Styles.container}>
+    <View style={styles.container}>
       <TabView
         navigationState={{
           index: currentRouteIndex,
@@ -65,3 +64,9 @@ const CustomPageScreen = (props) => {
 };
 
 export default CustomPageScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

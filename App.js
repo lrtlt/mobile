@@ -1,7 +1,5 @@
 import React from 'react';
 import {View, Platform, StyleSheet} from 'react-native';
-import {initTheme} from './app/ColorTheme';
-import {store} from './app/redux/store';
 import OneSignal from 'react-native-onesignal';
 import {version as appVersion} from './package.json';
 import Navigation from './app/navigation';
@@ -14,11 +12,11 @@ import {
   GEMIUS_PLAYER_SCRIPT_ID,
 } from './app/constants';
 import Gemius from 'react-native-gemius-plugin';
+import SettingsProvider from './app/settings/SettingsProvider';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    initTheme(store.getState().config);
 
     OneSignal.init(ONE_SIGNAL_APP_ID);
     OneSignal.inFocusDisplaying(2);
@@ -42,7 +40,9 @@ class App extends React.Component {
   render() {
     return (
       <View style={style.container}>
-        <Navigation />
+        <SettingsProvider>
+          <Navigation />
+        </SettingsProvider>
       </View>
     );
   }

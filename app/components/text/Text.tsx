@@ -1,8 +1,8 @@
 import React from 'react';
 import {Text, TextProps, TextStyle} from 'react-native';
 import SelectableText from '../selectableText/SelectableText';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {useTheme} from '../../Theme';
+import {useSettings} from '../../settings/useSettings';
 
 const DEFAULT_FONT_SIZE = 15;
 
@@ -15,6 +15,9 @@ interface Props extends TextProps {
 
 const TextComponent: React.FC<Props> = (props) => {
   const {colors} = useTheme();
+
+  const {textSizeMultiplier} = useSettings();
+
   const propsStyle = props.style as TextStyle;
 
   const getColorForType = () => {
@@ -34,7 +37,7 @@ const TextComponent: React.FC<Props> = (props) => {
 
   let fontSize = propsStyle?.fontSize ?? DEFAULT_FONT_SIZE;
   if (props.scalingEnabled) {
-    const multiplier = EStyleSheet.value('$textSizeMultiplier');
+    const multiplier = textSizeMultiplier;
     fontSize += multiplier ? multiplier : 0;
   }
 

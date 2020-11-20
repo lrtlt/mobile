@@ -3,16 +3,18 @@ import {View} from 'react-native';
 import LogoLight from './ic_logo_light';
 import LogoDark from './ic_logo_dark';
 import PropTypes from 'prop-types';
-import {isDarkTheme} from '../../ColorTheme';
+import {useSettings} from '../../settings/useSettings';
 
-const logoComponent = (props) => {
-  const logo = isDarkTheme() ? <LogoDark size={props.size} /> : <LogoLight size={props.size} />;
+const LogoComponent = (props) => {
+  const {isDarkMode} = useSettings();
+
+  const logo = isDarkMode ? <LogoDark size={props.size} /> : <LogoLight size={props.size} />;
 
   return <View {...props}>{logo}</View>;
 };
 
-logoComponent.propTypes = {
+LogoComponent.propTypes = {
   size: PropTypes.number.isRequired,
 };
 
-export default React.memo(logoComponent);
+export default LogoComponent;

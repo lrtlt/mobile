@@ -12,8 +12,6 @@ import {
 } from '../actions/actionTypes';
 import {ARTICLE_LIST_TYPE_HOME} from '../../constants';
 
-import EStyleSheet from 'react-native-extended-stylesheet';
-
 const defaultSearchFilter = {type: 0, section: '', days: ''};
 
 const initialState = {
@@ -115,9 +113,10 @@ const reducer = (state = initialState, action) => {
 const parseRoutes = (apiResponse) => {
   const routes = [];
 
+  //TODO update 'Pagrindinis' hardcode.
   routes.push({
     key: ARTICLE_LIST_TYPE_HOME,
-    title: EStyleSheet.value('$mainWindow'),
+    title: 'Pagrindinis',
     type: ARTICLE_LIST_TYPE_HOME,
   });
 
@@ -148,12 +147,12 @@ const parsePages = (apiResponse) => {
       return item.type === 'page';
     })
     .forEach((item) => {
-      const routes = item.categories.map((item) => {
+      const routes = item.categories.map((category) => {
         return {
-          key: item.name,
-          title: item.name,
+          key: category.name,
+          title: category.name,
           type: 'category',
-          categoryId: item.id,
+          categoryId: category.id,
         };
       });
 

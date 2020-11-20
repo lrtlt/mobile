@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Linking, StyleSheet} from 'react-native';
 import {WebView} from 'react-native-webview';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import HTML from 'react-native-render-html';
 import {IGNORED_TAGS, alterNode, makeTableRenderer} from 'react-native-render-html-table-bridge';
 import Embed from './embeded/Embed';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
+import {useSettings} from '../../settings/useSettings';
 
 /** Todo remove maybe? It introduces bugs (text not fitting) */
 const EXTRA_LINE_SPACING = 6;
@@ -33,22 +33,6 @@ const renderP = (_, children, __, passProps) => {
   );
 };
 
-const getTextSize = () => {
-  return 20 + EStyleSheet.value('$textSizeMultiplier');
-};
-
-const tagsStyles = () => {
-  return {
-    strong: {
-      fontFamily: 'SourceSansPro-SemiBold',
-    },
-    blockquote: {
-      fontFamily: 'SourceSansPro-LightItalic',
-      fontSize: getTextSize() + 3,
-    },
-  };
-};
-
 const config = {
   WebViewComponent: WebView,
 };
@@ -67,12 +51,25 @@ const htmlConfig = {
 
 const ParagraphComponent = ({html}) => {
   const {colors} = useTheme();
+  const {textSizeMultiplier} = useSettings();
+
+  const fontSize = 20 + textSizeMultiplier;
 
   const baseFontStyle = {
     color: colors.text,
     fontFamily: 'SourceSansPro-Regular',
-    lineHeight: getTextSize() + EXTRA_LINE_SPACING,
-    fontSize: getTextSize(),
+    lineHeight: fontSize + EXTRA_LINE_SPACING,
+    fontSize: fontSize,
+  };
+
+  const tagStyles = {
+    strong: {
+      fontFamily: 'SourceSansPro-SemiBold',
+    },
+    blockquote: {
+      fontFamily: 'SourceSansPro-LightItalic',
+      fontSize: fontSize + 3,
+    },
   };
 
   return (
@@ -80,7 +77,7 @@ const ParagraphComponent = ({html}) => {
       <HTML
         baseFontStyle={baseFontStyle}
         html={html}
-        tagsStyles={tagsStyles()}
+        tagsStyles={tagStyles}
         onLinkPress={(_, href) => Linking.openURL(href)}
         {...htmlConfig}
       />

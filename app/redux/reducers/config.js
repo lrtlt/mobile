@@ -4,7 +4,6 @@ import {
   SET_IMAGE_SCALE_FACTOR,
   SET_CONFIG,
 } from '../actions/actionTypes';
-import {initTheme} from '../../ColorTheme';
 
 const initialState = {
   isDarkMode: false,
@@ -21,7 +20,6 @@ const reducer = (state = initialState, action) => {
         ...state,
         isDarkMode,
       };
-      initTheme(newState);
       return newState;
     }
 
@@ -30,7 +28,6 @@ const reducer = (state = initialState, action) => {
         ...state,
         textSizeMultiplier: action.multiplier,
       };
-      initTheme(newState);
       return newState;
     }
 

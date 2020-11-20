@@ -93,7 +93,7 @@ type ChannelColorScheme = {
   color_set_opus: ChannelColor;
 };
 
-const channelColors: ChannelColorScheme = {
+export const channelColors: ChannelColorScheme = {
   color_set_lrtHD: {primary: '#80BCE6', secondary: '#00679C'},
   color_set_lrtPlius: {primary: '#A91B73', secondary: '#721F47'},
   color_set_lrt_world: {primary: '#6D9B36', secondary: '#007A3C'},
@@ -143,7 +143,6 @@ type ColorScheme = {
   darkIcon: '#222';
   ripple: '#99999940';
   lightGreyBackground: '#F9F9F9';
-  channelColors: ChannelColorScheme;
 };
 
 const colorsLight: ColorScheme = {
@@ -185,7 +184,6 @@ const colorsLight: ColorScheme = {
   darkIcon: '#222',
   lightGreyBackground: '#F9F9F9',
   ripple: '#99999940',
-  channelColors: channelColors,
 };
 
 const colorsDark: ColorScheme = {
@@ -227,7 +225,6 @@ const colorsDark: ColorScheme = {
   darkIcon: '#222',
   lightGreyBackground: '#F9F9F9',
   ripple: '#99999940',
-  channelColors: channelColors,
 };
 //#endregion
 

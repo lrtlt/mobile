@@ -1,18 +1,23 @@
 import React from 'react';
-import {View} from 'react-native';
-import Styles from './styles';
+import {StyleSheet, View} from 'react-native';
 import {FacebookComments} from '../../components';
-import EStyleSheet from 'react-native-extended-stylesheet';
 
 const CommentsScreen = (props) => {
   const {route} = props;
   const url = route.params.url;
 
   return (
-    <View style={[Styles.flex, {backgroundColor: EStyleSheet.value('$white')}]}>
+    <View style={styles.container}>
       <FacebookComments url={url} />
     </View>
   );
 };
 
 export default CommentsScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F8F8F8',
+  },
+});
