@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Dimensions, StatusBar, StyleSheet} from 'react-native';
+import {View, Dimensions, StyleSheet} from 'react-native';
 import {TabView} from 'react-native-tab-view';
 import {ActionButton} from '../../components';
 import {SettingsIcon, Logo} from '../../components/svg';
@@ -94,7 +94,6 @@ const MainScreen = (props) => {
 
   return (
     <>
-      <StatusBar />
       <View style={styles.container}>
         <TabView
           navigationState={state}

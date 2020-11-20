@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, ActivityIndicator, Button, StatusBar, StyleSheet} from 'react-native';
+import {View, ActivityIndicator, Button, StyleSheet, StatusBar} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {Logo} from '../../components/svg';
 import {fetchArticles, fetchMenuItems, setSelectedCategory} from '../../redux/actions';
@@ -9,7 +9,8 @@ import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {selectSplashScreenState} from '../../redux/selectors';
 import {Text} from '../../components';
-import {useTheme} from '../../Theme';
+import {themeDark, themeLight, useTheme} from '../../Theme';
+import {useSettings} from '../../settings/useSettings';
 
 const onNotificationOpened = (openResult) => {
   console.log('Message: ', openResult.notification.payload.body);
@@ -19,7 +20,10 @@ const onNotificationOpened = (openResult) => {
 };
 
 const SplashScreenComponent = (_) => {
-  const {colors, strings} = useTheme();
+  const {strings} = useTheme();
+
+  const {isDarkMode} = useSettings();
+  const colors = isDarkMode ? themeDark.colors : themeLight.colors;
 
   const state = useSelector(selectSplashScreenState);
   const dispatch = useDispatch();
@@ -67,8 +71,8 @@ const SplashScreenComponent = (_) => {
 
   return (
     <>
-      <StatusBar />
-      <View style={styles.container}>
+      <StatusBar backgroundColor={colors.background} />
+      <View style={{...styles.container, backgroundColor: colors.background}}>
         <Logo size={100} />
         <ActivityIndicator
           style={styles.loader}

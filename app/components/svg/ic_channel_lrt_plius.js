@@ -20,4 +20,4 @@ const SvgComponent = (props) => (
   </Svg>
 );
 
-export default React.memo(SvgComponent);
+export default SvgComponent;

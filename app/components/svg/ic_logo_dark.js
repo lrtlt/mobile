@@ -1,11 +1,14 @@
 import React from 'react';
 import Svg, {Defs, LinearGradient, Stop, RadialGradient, G, Path} from 'react-native-svg';
+import {useSettings} from '../../settings/useSettings';
 
-import {useTheme} from '../../Theme';
+import {themeDark, themeLight} from '../../Theme';
 
 const SvgComponent = (props) => {
-  const {colors} = useTheme();
+  const {isDarkMode} = useSettings();
+  const colors = isDarkMode ? themeDark.colors : themeLight.colors;
   const color = colors.headerTint;
+
   return (
     <Svg {...props} className="logo__svg" width={props.size} height={props.size} viewBox="0 0 48 45">
       <Defs>
@@ -105,4 +108,4 @@ const SvgComponent = (props) => {
   );
 };
 
-export default React.memo(SvgComponent);
+export default SvgComponent;

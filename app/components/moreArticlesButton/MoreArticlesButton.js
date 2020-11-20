@@ -12,8 +12,6 @@ const MoreArticlesButton = (props) => {
   const backgroundColor =
     category.is_slug_block || category.template_id === 999 ? colors.slugBackground : null;
 
-  console.log(props.category);
-
   const extraPadding = backgroundColor ? 8 : 0;
 
   return (
