@@ -46,7 +46,7 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (data) => {
-      listRef.current.scrollToLocation({
+      listRef.current?.scrollToLocation({
         animated: true,
         sectionIndex: 0,
         itemIndex: 0,
