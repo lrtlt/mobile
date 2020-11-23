@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Dimensions, FlatList, StyleSheet} from 'react-native';
+import {View, Dimensions, Animated, StyleSheet} from 'react-native';
 import Header from './header/Header';
 import {getOrientation, getSmallestDim} from '../../util/UI';
 import {
@@ -23,6 +23,8 @@ import {
 } from './ArticleCompositor';
 import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useCollapsibleHeader} from 'react-navigation-collapsible';
+import {useTheme} from '../../Theme';
 
 const getContentWidth = () => {
   return Dimensions.get('window').width - 12 * 2;
@@ -40,6 +42,8 @@ const getItemKey = (item, index) => {
 
 const ArticleContent = (props) => {
   const articleData = compose(props.article);
+
+  const {colors} = useTheme();
 
   console.log('composition', articleData);
 
@@ -132,9 +136,19 @@ const ArticleContent = (props) => {
     }
   };
 
+  const {onScroll, containerPaddingTop, scrollIndicatorInsetTop} = useCollapsibleHeader({
+    config: {
+      collapsedColor: colors.card,
+      elevation: 2,
+    },
+  });
+
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right']}>
-      <FlatList
+      <Animated.FlatList
+        onScroll={onScroll}
+        contentContainerStyle={{paddingTop: containerPaddingTop}}
+        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
         data={articleData}
         extraData={{
           orientation: getOrientation(),

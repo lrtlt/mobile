@@ -1,6 +1,5 @@
 package lt.mediapark.lrt;
 
-import android.app.Application;
 import android.content.Context;
 
 import androidx.multidex.MultiDexApplication;
@@ -14,6 +13,8 @@ import com.facebook.soloader.SoLoader;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
+import com.facebook.react.BuildConfig;
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
