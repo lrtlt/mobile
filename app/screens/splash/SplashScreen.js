@@ -71,7 +71,10 @@ const SplashScreenComponent = (_) => {
 
   return (
     <>
-      <StatusBar backgroundColor={colors.background} />
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={colors.background}
+      />
       <View style={{...styles.container, backgroundColor: colors.background}}>
         <Logo size={100} />
         <ActivityIndicator

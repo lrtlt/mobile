@@ -25,10 +25,26 @@ import {
 import {selectNavigationIsReady} from '../redux/selectors';
 import {themeDark, themeLight} from '../Theme';
 import {useSettings} from '../settings/useSettings';
+import {DEEP_LINKING_URL_PREFIX} from '../constants';
 
 const Stack = createStackNavigator();
 const MainDrawer = createDrawerNavigator();
 const SearchDrawer = createDrawerNavigator();
+
+const linking = {
+  prefixes: [DEEP_LINKING_URL_PREFIX],
+  config: {
+    initialRouteName: 'Home',
+    screens: {
+      Article: {
+        path: 'article/:articleId',
+      },
+      Channel: {
+        path: 'channel/:channelId',
+      },
+    },
+  },
+};
 
 const NavigatorComponent = () => {
   const isNavigationReady = useSelector(selectNavigationIsReady);
@@ -70,63 +86,59 @@ const NavigatorComponent = () => {
 
     return (
       <>
-        <StatusBar translucent={false} backgroundColor={theme.colors.statusBar} />
-        <View style={{...styles.root, backgroundColor: theme.colors.background}}>
-          <NavigationContainer theme={theme}>
-            <Stack.Navigator
-              headerMode={Platform.OS === 'android' ? 'screen' : 'float'}
-              mode="card"
-              screenOptions={{
-                cardShadowEnabled: false,
-                headerBackTitleVisible: false,
-                headerRightContainerStyle: {paddingEnd: 4},
-                headerTitle: '',
-                headerTitleStyle: {
-                  color: theme.colors.headerTint,
-                  fontFamily: 'SourceSansPro-SemiBold',
-                  fontSize: 16,
-                },
-                headerTintColor: theme.colors.headerTint,
-                headerStyle: {
-                  backgroundColor: theme.colors.card,
-                },
-              }}>
-              <Stack.Screen
-                name="Home"
-                component={MainDrawerNavigator}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen name="Article" component={ArticleScreen} />
-              <Stack.Screen name="Comments" component={CommentsScreen} />
-              <Stack.Screen name="Settings" component={SettingsScreen} />
-              <Stack.Screen
-                name="Gallery"
-                component={GalleryScreen}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen name="Channel" component={ChannelScreen} />
-              <Stack.Screen name="Search" component={SearchDrawerNavigator} />
-              <Stack.Screen name="Bookmarks" component={BookmarksScreen} />
-              <Stack.Screen name="History" component={HistoryScreen} />
-              <Stack.Screen name="Program" component={ProgramScreen} />
-              <Stack.Screen name="Slug" component={SlugScreen} />
-              <Stack.Screen name="CustomPage" component={CustomPageScreen} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </View>
+        <StatusBar
+          barStyle={settings.isDarkMode ? 'light-content' : 'dark-content'}
+          translucent={false}
+          backgroundColor={theme.colors.statusBar}
+        />
+        <NavigationContainer theme={theme} linking={linking}>
+          <Stack.Navigator
+            headerMode={Platform.OS === 'android' ? 'screen' : 'float'}
+            mode="card"
+            screenOptions={{
+              cardShadowEnabled: false,
+              headerBackTitleVisible: false,
+              headerRightContainerStyle: {paddingEnd: 4},
+              headerTitle: '',
+              headerTitleStyle: {
+                color: theme.colors.headerTint,
+                fontFamily: 'SourceSansPro-SemiBold',
+                fontSize: 16,
+              },
+              headerTintColor: theme.colors.headerTint,
+              headerStyle: {
+                backgroundColor: theme.colors.card,
+              },
+            }}>
+            <Stack.Screen
+              name="Home"
+              component={MainDrawerNavigator}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen name="Article" component={ArticleScreen} />
+            <Stack.Screen name="Comments" component={CommentsScreen} />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Screen
+              name="Gallery"
+              component={GalleryScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen name="Channel" component={ChannelScreen} />
+            <Stack.Screen name="Search" component={SearchDrawerNavigator} />
+            <Stack.Screen name="Bookmarks" component={BookmarksScreen} />
+            <Stack.Screen name="History" component={HistoryScreen} />
+            <Stack.Screen name="Program" component={ProgramScreen} />
+            <Stack.Screen name="Slug" component={SlugScreen} />
+            <Stack.Screen name="CustomPage" component={CustomPageScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
       </>
     );
   }
 };
 
 export default NavigatorComponent;
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
-});

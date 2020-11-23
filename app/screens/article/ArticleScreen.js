@@ -31,6 +31,8 @@ const ArticleScreen = (props) => {
   });
 
   const {articleId} = route.params;
+  console.log('articleId', articleId);
+
   const {article} = state;
 
   const isBookmarked = useSelector(selectArticleBookmarked(articleId));

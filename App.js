@@ -13,6 +13,7 @@ import {
 } from './app/constants';
 import Gemius from 'react-native-gemius-plugin';
 import SettingsProvider from './app/settings/SettingsProvider';
+import AppBackground from './app/components/appBackground/AppBackground';
 
 class App extends React.Component {
   constructor(props) {
@@ -41,7 +42,9 @@ class App extends React.Component {
     return (
       <View style={style.container}>
         <SettingsProvider>
-          <Navigation />
+          <AppBackground>
+            <Navigation />
+          </AppBackground>
         </SettingsProvider>
       </View>
     );

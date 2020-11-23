@@ -11,13 +11,11 @@ import {SafeAreaProvider, initialWindowMetrics} from 'react-native-safe-area-con
 
 YellowBox.ignoreWarnings(['componentWillMount is deprecated', 'componentWillReceiveProps']);
 
-const deep_linking_url_prefix = 'lrt://';
-
 const reduxProvider = () => (
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-        <App uriPrefix={deep_linking_url_prefix} />
+        <App />
       </SafeAreaProvider>
     </PersistGate>
   </Provider>
