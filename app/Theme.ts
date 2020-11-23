@@ -151,7 +151,7 @@ const colorsLight: ColorScheme = {
   background: '#FFFFFF',
   card: '#F9F9F9',
   text: '#121212',
-  border: '#333333',
+  border: '#AAA',
   notification: '#C00',
   //#endregion
 
@@ -192,7 +192,7 @@ const colorsDark: ColorScheme = {
   background: '#1C242D',
   card: '#242D36',
   text: '#F9F9F9',
-  border: '#AAAAAA',
+  border: '#111111',
   notification: '#C00',
   //#endregion
 

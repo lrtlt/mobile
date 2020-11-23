@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {View, SectionList, RefreshControl, StyleSheet} from 'react-native';
+import {View, SectionList, RefreshControl, StyleSheet, StatusBar} from 'react-native';
 import {
   ArticleRow,
   ScrollingChannels,
@@ -25,6 +25,7 @@ import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {selectHomeScreenState} from '../../../../redux/selectors';
 import {useNavigation} from '@react-navigation/native';
+import {useTheme} from '../../../../Theme';
 
 const HomeScreen = (props) => {
   const {isCurrent, type} = props;
@@ -32,6 +33,8 @@ const HomeScreen = (props) => {
   const navigation = useNavigation();
   const listRef = useRef(null);
   const state = useSelector(selectHomeScreenState(type));
+
+  const {colors, dark} = useTheme();
 
   const {sections, lastFetchTime, refreshing} = state;
 
@@ -155,28 +158,35 @@ const HomeScreen = (props) => {
   }
 
   return (
-    <View style={styles.container}>
-      <SectionList
-        showsVerticalScrollIndicator={false}
-        style={styles.container}
-        ref={listRef}
-        extraData={{
-          orientation: getOrientation(),
-          lastFetchTime: lastFetchTime,
-        }}
-        renderItem={renderItem}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => callApi()} />}
-        renderSectionHeader={renderSectionHeader}
-        sections={sections}
-        removeClippedSubviews={false}
-        windowSize={12}
-        updateCellsBatchingPeriod={20}
-        maxToRenderPerBatch={4}
-        initialNumToRender={8}
-        stickySectionHeadersEnabled={false}
-        keyExtractor={(item, index) => String(index) + String(item)}
+    <>
+      <StatusBar
+        barStyle={dark ? 'light-content' : 'dark-content'}
+        translucent={false}
+        backgroundColor={colors.statusBar}
       />
-    </View>
+      <View style={styles.container}>
+        <SectionList
+          showsVerticalScrollIndicator={false}
+          style={styles.container}
+          ref={listRef}
+          extraData={{
+            orientation: getOrientation(),
+            lastFetchTime: lastFetchTime,
+          }}
+          renderItem={renderItem}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => callApi()} />}
+          renderSectionHeader={renderSectionHeader}
+          sections={sections}
+          removeClippedSubviews={false}
+          windowSize={12}
+          updateCellsBatchingPeriod={20}
+          maxToRenderPerBatch={4}
+          initialNumToRender={8}
+          stickySectionHeadersEnabled={false}
+          keyExtractor={(item, index) => String(index) + String(item)}
+        />
+      </View>
+    </>
   );
 };
 
