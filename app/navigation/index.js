@@ -1,10 +1,11 @@
 import React from 'react';
-import {Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {Platform, StatusBar} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Drawer, SearchFilterDrawer} from '../components';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import SplashViewComponent from '../screens/splash/SplashScreenView';
 
 import {
   ProgramScreen,
@@ -91,7 +92,7 @@ const NavigatorComponent = () => {
           translucent={false}
           backgroundColor={theme.colors.statusBar}
         />
-        <NavigationContainer theme={theme} linking={linking}>
+        <NavigationContainer theme={theme} linking={linking} fallback={<SplashViewComponent />}>
           <Stack.Navigator
             headerMode={Platform.OS === 'android' ? 'screen' : 'float'}
             mode="card"
