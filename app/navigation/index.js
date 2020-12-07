@@ -63,6 +63,7 @@ const NavigatorComponent = () => {
             name="Main"
             component={MainScreen}
             options={{
+              headerShown: true,
               headerTitleAlign: 'center',
             }}
           />
@@ -78,7 +79,7 @@ const NavigatorComponent = () => {
           drawerType="front"
           hideStatusBar={false}
           drawerContent={() => <SearchFilterDrawer />}>
-          <SearchDrawer.Screen name="SearchScreen" component={SearchScreen} options={{headerShown: false}} />
+          <SearchDrawer.Screen name="SearchScreen" component={SearchScreen} options={{headerShown: true}} />
         </SearchDrawer.Navigator>
       );
     };
@@ -129,7 +130,7 @@ const NavigatorComponent = () => {
               }}
             />
             <Stack.Screen name="Channel" component={ChannelScreen} />
-            <Stack.Screen name="Search" component={SearchDrawerNavigator} />
+            <Stack.Screen name="Search" component={SearchDrawerNavigator} options={{headerShown: false}} />
             <Stack.Screen name="Bookmarks" component={BookmarksScreen} />
             <Stack.Screen name="History" component={HistoryScreen} />
             <Stack.Screen name="Program" component={ProgramScreen} />

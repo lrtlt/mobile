@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Button, ActivityIndicator, TextInput, StyleSheet} from 'react-native';
+import {HeaderBackButton} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
 import {resetSearchFilter} from '../../redux/actions';
 import {Article, ActionButton, Text} from '../../components';
@@ -38,7 +39,7 @@ const SearchScreen = (props) => {
   }, []);
 
   useEffect(() => {
-    navigation.dangerouslyGetParent().setOptions({
+    navigation.setOptions({
       headerTitle: () => (
         <TextInput
           style={{...styles.searchInput, color: colors.text}}
@@ -61,6 +62,14 @@ const SearchScreen = (props) => {
             <FilterIcon size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
         </View>
+      ),
+
+      headerLeft: () => (
+        <HeaderBackButton
+          labelVisible={false}
+          tintColor={colors.headerTint}
+          onPress={() => navigation.goBack()}
+        />
       ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
