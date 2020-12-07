@@ -122,6 +122,6 @@ export const getIconForChannelById = (channelId, size = DEFAULT_CHANNEL_ICON_SIZ
     case 6:
       return getIconForChannel('Opus', size);
     default:
-      return getIconForChannel('LTV1', size);
+      return <LogoLight size={size} />;
   }
 };
