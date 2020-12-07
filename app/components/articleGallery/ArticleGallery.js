@@ -47,8 +47,10 @@ const gallery = (props) => {
     return <View />;
   }
 
-  const lastPhoto = data[5]
-    ? renderPhotoWithOverlay(data[5], props.expectedWidth, props.itemSelectHandler, data.length)
+  const lastPhoto = data[6]
+    ? renderPhotoWithOverlay(data[5], props.expectedWidth, props.itemSelectHandler, data.length - 6)
+    : data[5]
+    ? renderPhoto(data[5], props.expectedWidth, props.itemSelectHandler)
     : null;
 
   return (
