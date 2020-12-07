@@ -7,6 +7,7 @@ import {
   SectionHeader,
   MoreArticlesButton,
   ScreenLoader,
+  Forecast,
 } from '../../../../components';
 import {fetchArticles, fetchMediateka, openCategoryForName} from '../../../../redux/actions/index';
 import {getOrientation} from '../../../../util/UI';
@@ -146,10 +147,20 @@ const HomeScreen = (props) => {
     }
   };
 
+  const renderForecast = () => {
+    if (type === ARTICLE_LIST_TYPE_MEDIA) {
+      return null;
+    } else {
+      return <Forecast />;
+    }
+  };
+
   const renderSectionHeader = ({section}) =>
     section.index !== 0 ? (
       <SectionHeader category={section.category} onPress={(category) => onCategoryPressHandler(category)} />
-    ) : null;
+    ) : (
+      renderForecast()
+    );
 
   const renderLoading = () => <ScreenLoader style={styles.loadingContainer} />;
 

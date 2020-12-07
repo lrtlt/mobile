@@ -23,6 +23,7 @@ import {
 import Gemius from 'react-native-gemius-plugin';
 import {selectTVProgram} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const PROGRAM_ITEMS_VISIBLE = 2;
 
@@ -204,14 +205,14 @@ const ChannelScreen = (props) => {
     ) : null;
 
   return (
-    <View style={styles.screen}>
+    <SafeAreaView style={styles.screen} edges={['left', 'right']}>
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.container}>
           {content}
           {tvBar}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

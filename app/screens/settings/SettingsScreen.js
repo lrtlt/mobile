@@ -8,6 +8,7 @@ import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {selectConfig} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const TEXT_SIZE_NORMAL = 0;
 const TEXT_SIZE_LARGE = 2;
@@ -51,7 +52,7 @@ const SettingsScreen = (props) => {
   const {isDarkMode, textSizeMultiplier, imageMaxScaleFactor} = config;
 
   return (
-    <View style={styles.root}>
+    <SafeAreaView style={styles.root} edges={['left', 'right']}>
       <View style={styles.content}>
         <View style={styles.controls}>
           <Text style={styles.title} type="secondary">
@@ -140,7 +141,7 @@ const SettingsScreen = (props) => {
           </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

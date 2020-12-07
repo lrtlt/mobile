@@ -27,6 +27,7 @@ import {
 } from '../../constants';
 import {selectMainScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const MainScreen = (props) => {
   const {navigation} = props;
@@ -34,7 +35,9 @@ const MainScreen = (props) => {
 
   useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'main'});
+  }, []);
 
+  useEffect(() => {
     navigation.setOptions({
       headerLeft: (_) => (
         <ActionButton onPress={() => navigation.toggleDrawer()}>
@@ -94,7 +97,7 @@ const MainScreen = (props) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['left', 'right']}>
         <TabView
           navigationState={state}
           swipeEnabled={true}
@@ -106,7 +109,7 @@ const MainScreen = (props) => {
           lazyPreloadDistance={0}
           initialLayout={{height: 0, width: Dimensions.get('window').width}}
         />
-      </View>
+      </SafeAreaView>
     </>
   );
 };
