@@ -15,6 +15,7 @@ export const LIST_DATA_TYPE_TVPROG = 'tv_prog';
 export const LIST_DATA_TYPE_MORE_FOOTER = 'more_footer';
 
 export const EVENT_LOGO_PRESS = 'logo-press';
+export const EVENT_SELECT_CATEGORY_INDEX = 'select-category-index';
 
 export const ARTICLES_PER_PAGE_COUNT = 15;
 

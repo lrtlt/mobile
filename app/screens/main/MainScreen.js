@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {TabView} from 'react-native-tab-view';
 import {ActionButton} from '../../components';
@@ -6,8 +6,7 @@ import {SettingsIcon, Logo} from '../../components/svg';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
-import {useDispatch, useSelector} from 'react-redux';
-import {setSelectedCategory} from '../../redux/actions';
+import {useSelector} from 'react-redux';
 import HomeScreen from './tabScreen/home/HomeScreen';
 import CategoryScreen from './tabScreen/category/CategoryScreen';
 import NewestScreen from './tabScreen/newest/NewestScreen';
@@ -15,7 +14,7 @@ import PopularScreen from './tabScreen/popular/PopularScreen';
 import TestScreen from '../testScreen/TestScreen';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
-import {EVENT_LOGO_PRESS} from '../../constants';
+import {EVENT_LOGO_PRESS, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 
 import {
   ARTICLE_LIST_TYPE_HOME,
@@ -30,18 +29,25 @@ import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const MainScreen = (props) => {
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+
   const {navigation} = props;
   const {colors, dim} = useTheme();
 
   const state = useSelector(selectMainScreenState);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'main'});
-
-    return () => dispatch(setSelectedCategory(0));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const listener = EventRegister.addEventListener(EVENT_SELECT_CATEGORY_INDEX, (data) => {
+      if (data.index) {
+        setSelectedTabIndex(data.index);
+      }
+    });
+    return () => EventRegister.removeEventListener(listener);
+  });
 
   useEffect(() => {
     navigation.setOptions({
@@ -68,18 +74,18 @@ const MainScreen = (props) => {
     });
   }, [colors.headerTint, dim.appBarIconSize, navigation]);
 
-  const handleIndexChange = (index) => dispatch(setSelectedCategory(index));
+  const handleIndexChange = (index) => setSelectedTabIndex(index);
 
   const renderTabBar = (tabBarProps) => <TabBar {...tabBarProps} />;
 
   const renderScene = (sceneProps) => {
     //Render only 1 screen on each side
     const routeIndex = state.routes.indexOf(sceneProps.route);
-    if (Math.abs(state.index - routeIndex) > 1) {
+    if (Math.abs(selectedTabIndex - routeIndex) > 1) {
       return <View />;
     }
 
-    const current = routeIndex === state.index;
+    const current = routeIndex === selectedTabIndex;
 
     const {type} = sceneProps.route;
     switch (type) {
@@ -102,11 +108,13 @@ const MainScreen = (props) => {
     <>
       <SafeAreaView style={styles.container} edges={['left', 'right']}>
         <TabView
-          navigationState={state}
+          navigationState={{
+            routes: state.routes,
+            index: selectedTabIndex,
+          }}
           swipeEnabled={true}
           renderScene={renderScene}
           renderTabBar={renderTabBar}
-          // removeClippedSubviews={true}
           onIndexChange={handleIndexChange}
           lazy={true}
           lazyPreloadDistance={0}

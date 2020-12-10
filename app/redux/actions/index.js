@@ -9,13 +9,7 @@ export {
   refreshPopular,
 } from './articles';
 
-export {
-  setSelectedCategory,
-  fetchMenuItems,
-  openCategoryForName,
-  setSearchFilter,
-  resetSearchFilter,
-} from './navigation';
+export {fetchMenuItems, openCategoryForName, setSearchFilter, resetSearchFilter} from './navigation';
 
 export {toggleDarkMode, setTextSizeMultiplier, setImageMaxScaleFactor, setConfig} from './config';
 

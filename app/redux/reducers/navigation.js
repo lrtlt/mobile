@@ -10,12 +10,12 @@ import {
   SET_SEARCH_FILTER,
   RESET_SEARCH_FILTER,
 } from '../actions/actionTypes';
-import {ARTICLE_LIST_TYPE_HOME} from '../../constants';
+import {ARTICLE_LIST_TYPE_HOME, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
+import {EventRegister} from 'react-native-event-listeners';
 
 const defaultSearchFilter = {type: 0, section: '', days: ''};
 
 const initialState = {
-  selectedCategory: 0,
   routes: [],
   pages: [],
   projects: null,
@@ -86,11 +86,6 @@ const reducer = (state = initialState, action) => {
         isError: true,
         isReady: false,
       };
-    case SET_SELECTED_CATEGORY:
-      return {
-        ...state,
-        selectedCategory: action.category,
-      };
     case OPEN_CATEGORY_FOR_NAME: {
       const {categoryName} = action;
       const index = state.routes.findIndex(
@@ -98,14 +93,11 @@ const reducer = (state = initialState, action) => {
       );
 
       if (index > 0) {
-        return {
-          ...state,
-          selectedCategory: index,
-        };
+        EventRegister.emit(EVENT_SELECT_CATEGORY_INDEX, {index});
       } else {
         console.warn('Index not found for route: ' + categoryName);
-        return state;
       }
+      return state;
     }
     default:
       return state;

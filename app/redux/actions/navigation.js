@@ -1,5 +1,4 @@
 import {
-  SET_SELECTED_CATEGORY,
   FETCH_MENU_ITEMS,
   OPEN_CATEGORY_FOR_NAME,
   SET_SEARCH_FILTER,
@@ -7,11 +6,6 @@ import {
 } from './actionTypes';
 
 export const fetchMenuItems = () => ({type: FETCH_MENU_ITEMS});
-
-export const setSelectedCategory = (category) => ({
-  type: SET_SELECTED_CATEGORY,
-  category,
-});
 
 export const openCategoryForName = (categoryName) => ({
   type: OPEN_CATEGORY_FOR_NAME,

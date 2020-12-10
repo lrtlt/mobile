@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {View, ActivityIndicator, Button, StyleSheet, StatusBar} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {Logo} from '../../components/svg';
-import {fetchArticles, fetchMenuItems, setSelectedCategory} from '../../redux/actions';
+import {fetchArticles, fetchMenuItems} from '../../redux/actions';
 
 import OneSignal from 'react-native-onesignal';
 import Gemius from 'react-native-gemius-plugin';
@@ -50,7 +50,6 @@ const SplashScreenComponent = (_) => {
 
     if (state.isLoading !== true) {
       if (state.hasMenuData) {
-        dispatch(setSelectedCategory(0));
         dispatch(fetchArticles());
       } else {
         dispatch(fetchMenuItems());

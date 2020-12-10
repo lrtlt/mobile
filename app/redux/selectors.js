@@ -16,7 +16,6 @@ export const selectSplashScreenState = (state) => {
 
 export const selectMainScreenState = (state) => {
   return {
-    index: state.navigation.selectedCategory,
     routes: state.navigation.routes,
   };
 };
