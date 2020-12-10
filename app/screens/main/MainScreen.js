@@ -33,8 +33,14 @@ const MainScreen = (props) => {
   const {navigation} = props;
   const {colors, dim} = useTheme();
 
+  const state = useSelector(selectMainScreenState);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'main'});
+
+    return () => dispatch(setSelectedCategory(0));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -61,9 +67,6 @@ const MainScreen = (props) => {
       ),
     });
   }, [colors.headerTint, dim.appBarIconSize, navigation]);
-
-  const state = useSelector(selectMainScreenState);
-  const dispatch = useDispatch();
 
   const handleIndexChange = (index) => dispatch(setSelectedCategory(index));
 
