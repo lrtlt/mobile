@@ -12,3 +12,4 @@ export {default as GalleryScreen} from './gallery/GalleryScreen';
 export {default as HistoryScreen} from './history/HistoryScreen';
 export {default as BookmarksScreen} from './bookmarks/BookmarksScreen';
 export {default as CustomPageScreen} from './customPage/CustomPageScreen';
+export {default as WebPageScreen} from './webPage/WebPageScreen';

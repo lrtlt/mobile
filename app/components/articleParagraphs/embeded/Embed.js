@@ -247,7 +247,6 @@ const styles = StyleSheet.create({
   embededHtmlContainer: {
     width: '100%',
     overflow: 'hidden',
-    opacity: 0.99,
   },
   embededVideoContainer: {
     backgroundColor: '#000000',

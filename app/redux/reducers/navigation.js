@@ -18,6 +18,7 @@ const initialState = {
   selectedCategory: 0,
   routes: [],
   pages: [],
+  projects: null,
   isLoading: false,
   isReady: false,
   isError: false,
@@ -73,6 +74,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         routes: parseRoutes(action.result),
         pages: parsePages(action.result),
+        projects: parseProjects(action.result),
         isLoading: false,
         isError: false,
         isReady: false,
@@ -169,6 +171,34 @@ const parsePages = (apiResponse) => {
   }
 
   return pages;
+};
+
+const parseProjects = (apiResponse) => {
+  let projects;
+
+  apiResponse.main_menu
+    .filter((item) => {
+      return item.type === 'webpages';
+    })
+    .forEach((item) => {
+      const routes = item.categories.map((category) => {
+        return {
+          key: category.name,
+          title: category.name,
+          type: 'webpage',
+          url: category.url,
+        };
+      });
+
+      projects = {
+        key: item.name,
+        title: item.name,
+        type: item.type,
+        routes,
+      };
+    });
+
+  return projects;
 };
 
 export default reducer;

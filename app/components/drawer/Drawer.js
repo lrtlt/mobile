@@ -123,6 +123,34 @@ const DrawerComponent = (props) => {
     );
   };
 
+  const renderProjects = () => {
+    const projects = data.projects;
+    if (!projects || !projects.routes || projects.routes.length <= 0) {
+      console.log('invalid projects data');
+      return null;
+    }
+
+    const content = projects.routes.map((project) => (
+      <DrawerItem
+        key={project.key}
+        text={project.title}
+        onPress={() =>
+          navigation.navigate('WebPage', {
+            url: project.url,
+            title: project.title,
+          })
+        }
+      />
+    ));
+
+    return (
+      <View>
+        <TextComponent style={styles.title}>{projects.title}</TextComponent>
+        {content}
+      </View>
+    );
+  };
+
   const renderPages = () => {
     const pages = data.pages;
 
@@ -164,7 +192,8 @@ const DrawerComponent = (props) => {
             </View>
             <Divider style={styles.line} />
             {renderChannelItems()}
-
+            <Divider style={styles.line} />
+            {renderProjects()}
             <Divider style={styles.line} />
             <TextComponent style={styles.title}>{strings.drawerMenu}</TextComponent>
             {content}
@@ -196,6 +225,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SourceSansPro-Regular',
     fontSize: 16,
     padding: drawerPadding * 2,
+    textTransform: 'uppercase',
     fontWeight: 'bold',
   },
   channelContainer: {

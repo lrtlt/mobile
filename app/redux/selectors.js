@@ -114,6 +114,7 @@ export const selectDrawerData = (state) => {
   return {
     routes: state.navigation.routes,
     pages: state.navigation.pages,
+    projects: state.navigation.projects,
     channels: state.articles.tvprog.items,
   };
 };

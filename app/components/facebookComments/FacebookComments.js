@@ -1,20 +1,19 @@
 import React from 'react';
-import {Dimensions} from 'react-native';
-import WebView from 'react-native-autoheight-webview';
+import {StyleSheet} from 'react-native';
+import WebView from 'react-native-webview';
 
 const buildFrame = (url) => {
   return `<!DOCTYPE html>
         <html>
           <head>
-            <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0"/>
-            <title>Komentarai</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
           </head>
         <body>
           <iframe 
-            src="https://www.facebook.com/plugins/comments.php?href=${url}"
+            src="https://www.facebook.com/plugins/comments.php?href=${url}&locale=lt_LT&mobile=true&numposts=10&order_by=reverse_time&sdk=joey&version=v4.0"
             scrolling="no" 
             frameborder="0" 
-            width="${Dimensions.get('window').width}"
+            width="100%"
             height="5000"
             style="border:none; overflow:hidden;"
             allowTransparency="true">
@@ -27,9 +26,9 @@ const FacebookComments = (props) => {
   const html = buildFrame(props.url);
   return (
     <WebView
+      style={styles.webView}
       originWhitelist={['*']}
       cacheEnabled={false}
-      scalesPageToFit={true}
       scrollEnabled={true}
       showsVerticalScrollIndicator={true}
       domStorageEnabled={true}
@@ -45,3 +44,10 @@ const FacebookComments = (props) => {
 };
 
 export default FacebookComments;
+
+const styles = StyleSheet.create({
+  webView: {
+    opacity: 0.99,
+    flex: 1,
+  },
+});

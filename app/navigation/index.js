@@ -21,6 +21,7 @@ import {
   HistoryScreen,
   BookmarksScreen,
   CustomPageScreen,
+  WebPageScreen,
 } from '../screens';
 
 import {selectNavigationIsReady} from '../redux/selectors';
@@ -136,6 +137,7 @@ const NavigatorComponent = () => {
             <Stack.Screen name="Program" component={ProgramScreen} />
             <Stack.Screen name="Slug" component={SlugScreen} />
             <Stack.Screen name="CustomPage" component={CustomPageScreen} />
+            <Stack.Screen name="WebPage" component={WebPageScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </>
