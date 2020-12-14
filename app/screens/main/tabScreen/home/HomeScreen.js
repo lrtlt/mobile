@@ -8,6 +8,7 @@ import {
   MoreArticlesButton,
   ScreenLoader,
   Forecast,
+  TouchableDebounce,
 } from '../../../../components';
 import {fetchArticles, fetchMediateka, openCategoryForName} from '../../../../redux/actions/index';
 import {getOrientation} from '../../../../util/UI';
@@ -151,7 +152,11 @@ const HomeScreen = (props) => {
     if (type === ARTICLE_LIST_TYPE_MEDIA) {
       return null;
     } else {
-      return <Forecast />;
+      return (
+        <TouchableDebounce debounceTime={500} onPress={() => navigation.navigate('Weather')}>
+          <Forecast />
+        </TouchableDebounce>
+      );
     }
   };
 

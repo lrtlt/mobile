@@ -28,6 +28,7 @@ import {selectNavigationIsReady} from '../redux/selectors';
 import {themeDark, themeLight} from '../Theme';
 import {useSettings} from '../settings/useSettings';
 import {DEEP_LINKING_URL_PREFIX} from '../constants';
+import WeatherScreen from '../screens/weather/WeatherScreen';
 
 const Stack = createStackNavigator();
 const MainDrawer = createDrawerNavigator();
@@ -138,6 +139,7 @@ const NavigatorComponent = () => {
             <Stack.Screen name="Slug" component={SlugScreen} />
             <Stack.Screen name="CustomPage" component={CustomPageScreen} />
             <Stack.Screen name="WebPage" component={WebPageScreen} />
+            <Stack.Screen name="Weather" component={WeatherScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </>

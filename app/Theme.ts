@@ -24,6 +24,8 @@ interface Dictionary {
   bookmarks: string;
   liveChannelTitle: string;
   channelScreenTitle: string;
+  weatherScreenTitle: string;
+  locationSearch: string;
   moreButtonText: string;
   tryAgain: string;
   nightModeTitle: string;
@@ -57,6 +59,8 @@ const str: Dictionary = {
   bookmarks: 'IŠSAUGOTI',
   liveChannelTitle: 'TIESIOGIAI',
   channelScreenTitle: 'LRT GYVAI',
+  weatherScreenTitle: 'ORAI',
+  locationSearch: 'Įveskite miestą',
   moreButtonText: 'DAUGIAU',
   tryAgain: 'Bandykite dar kartą',
   nightModeTitle: 'Nakties režimas',
@@ -172,7 +176,7 @@ const colorsLight: ColorScheme = {
   greyBackground: '#F4F6F8',
   playerBackground: '#888',
   articleHighlight: '#F4F6F820',
-  listSeparator: '#66666616',
+  listSeparator: '#66666636',
   buttonBorder: '#DEE4EA',
   buttonContent: '#999',
   androidTouchFeedback: '#cadeeb',

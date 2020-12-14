@@ -123,5 +123,14 @@ export const selectSearchFilter = (state) => {
 };
 
 export const selectConfig = (state) => {
-  return state.config;
+  const {isDarkMode, textSizeMultiplier, imageMaxScaleFactor} = state.config;
+  return {
+    isDarkMode,
+    textSizeMultiplier,
+    imageMaxScaleFactor,
+  };
+};
+
+export const selectForecastLocation = (state) => {
+  return state.config.forecastLocation;
 };

@@ -1,17 +1,20 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import {useTheme} from '../../Theme';
 
-const Button = (props) => {
+interface Props {
+  style?: ViewStyle;
+  onPress: () => void;
+}
+const Button: React.FC<Props> = (props) => {
   const {colors} = useTheme();
 
   return (
-    <View {...props}>
+    <View style={props.style}>
       <BorderlessButton
         onPress={props.onPress}
-        style={{...styles.container, borderColor: colors.buttonBorder}}
-        underlayColor={colors.buttonBorder}>
+        style={{...styles.container, borderColor: colors.buttonBorder}}>
         <View>{props.children}</View>
       </BorderlessButton>
     </View>

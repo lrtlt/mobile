@@ -1,10 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, ActivityIndicator} from 'react-native';
+import {useSelector} from 'react-redux';
+import {selectForecastLocation} from '../../redux/selectors';
+import {Location} from '../../screens/weather/Types';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 import {Forecast, getForecast} from './ForecastApi';
 
-interface Props {}
+interface Props {
+  location?: Location;
+}
 
 const INTERVAL = 1000 * 8;
 
@@ -12,13 +17,15 @@ const ForecastComponent: React.FC<Props> = (props) => {
   const [forecast, setForecast] = useState<Forecast | undefined>();
   const {colors} = useTheme();
 
+  const location = props.location ?? useSelector(selectForecastLocation);
+
   useEffect(() => {
-    if (forecast) {
+    if (forecast && forecast.location?.code === location?.c) {
       return;
     }
 
     const fetchForecast = async () => {
-      const data = await getForecast('vilnius');
+      const data = await getForecast(location ? location?.c ?? 'vilnius' : 'vilnius');
       setForecast(data);
     };
 
@@ -26,7 +33,7 @@ const ForecastComponent: React.FC<Props> = (props) => {
     const interval = setInterval(() => fetchForecast(), INTERVAL);
 
     return () => clearInterval(interval);
-  }, [forecast]);
+  }, [forecast, location]);
 
   const f = forecast?.forecast;
 
@@ -36,10 +43,10 @@ const ForecastComponent: React.FC<Props> = (props) => {
         {forecast?.location.name ? `${forecast?.location.name}:` : '-'}
       </TextComponent>
       <TextComponent style={styles.temperatureText}>
-        {f?.airTemperature ? `${f?.airTemperature}°C` : '-'}
+        {f?.airTemperature !== undefined ? `${f?.airTemperature}°C` : '-'}
       </TextComponent>
       <TextComponent style={styles.humidityText} type="secondary">
-        {f?.relativeHumidity ? `${f?.relativeHumidity}%` : ''}
+        {f?.relativeHumidity !== undefined ? `${f?.relativeHumidity}%` : ''}
       </TextComponent>
       {f === undefined ? <ActivityIndicator style={styles.loadingIndicator} size="small" /> : null}
     </View>

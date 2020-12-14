@@ -18,6 +18,7 @@ import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 import Divider from '../divider/Divider';
 import {EventRegister} from 'react-native-event-listeners';
+import {IconLituanica} from '../svg';
 
 const DrawerComponent = (props) => {
   const {navigation} = props;
@@ -164,17 +165,12 @@ const DrawerComponent = (props) => {
         <DrawerItem
           key={page.key}
           text={page.title}
-          iconComponent={<FeatherIcon name="globe" size={22} color={colors.primaryLight} />}
+          iconComponent={<IconLituanica size={22} color={colors.primaryLight} />}
           onPress={() => navigation.navigate('CustomPage', {page})}
         />
       ));
 
-      return (
-        <View>
-          <Divider style={styles.line} />
-          {content}
-        </View>
-      );
+      return <View>{content}</View>;
     } else {
       return null;
     }
@@ -200,9 +196,10 @@ const DrawerComponent = (props) => {
             <Divider style={styles.line} />
             {renderProjects()}
             <Divider style={styles.line} />
+            {renderPages()}
+            <Divider style={styles.line} />
             <TextComponent style={styles.title}>{strings.drawerMenu}</TextComponent>
             {content}
-            {renderPages()}
             {renderFooterItems()}
           </View>
         </ScrollView>

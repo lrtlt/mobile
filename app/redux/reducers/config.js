@@ -3,12 +3,14 @@ import {
   SET_TEXT_SIZE_MULTIPLIER,
   SET_IMAGE_SCALE_FACTOR,
   SET_CONFIG,
+  SET_FORECAST_LOCATION,
 } from '../actions/actionTypes';
 
 const initialState = {
   isDarkMode: false,
   textSizeMultiplier: 0,
   imageMaxScaleFactor: -0.1,
+  forecastLocation: undefined,
 };
 
 const reducer = (state = initialState, action) => {
@@ -39,6 +41,9 @@ const reducer = (state = initialState, action) => {
     }
     case SET_CONFIG: {
       return {...state, ...action.payload};
+    }
+    case SET_FORECAST_LOCATION: {
+      return {...state, forecastLocation: action.payload};
     }
     default:
       return state;

@@ -69,6 +69,13 @@ export const channelGet = (id) => {
 };
 
 /**
+ * Returns available locations for weather
+ */
+export const weatherLocationsGet = () => {
+  return 'https://www.lrt.lt/static/data/weather/places.json?v=1';
+};
+
+/**
  * Returns Mediateka screen's data. Same as for Home page data.
  */
 export const mediatekaGet = () => {

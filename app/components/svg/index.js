@@ -18,3 +18,4 @@ export {default as SettingsIcon} from './ic_settings';
 export {default as ShareIcon} from './ic_share';
 export {default as FilterIcon} from './ic_filter';
 export {default as SearchIcon} from './ic_search';
+export {default as IconLituanica} from './ic_lituanica';
