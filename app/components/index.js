@@ -6,8 +6,6 @@ export {default as ArticleGallery} from './articleGallery/ArticleGallery';
 export {default as ArticleParagraph} from './articleParagraphs/ArticleParagraph';
 export {default as ArticlePhoto} from './articlePhoto/ArticlePhoto';
 export {default as AudioComponent} from './audioComponent/AudioComponent';
-export {default as BackIcon} from './backIcon/BackIcon';
-export {default as Button} from './button/Button';
 export {default as CoverImage} from './coverImage/CoverImage';
 export {default as Drawer} from './drawer/Drawer';
 export {default as DrawerItem} from './drawerItem/DrawerItem';

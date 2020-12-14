@@ -4,7 +4,7 @@ import {View, StyleSheet} from 'react-native';
 import TextComponent from '../../components/text/Text';
 import Modal from 'react-native-modal';
 import {useTheme} from '../../Theme';
-import {Button} from '../../components';
+import {TouchableDebounce} from '../../components';
 
 interface Props {
   visible: boolean;
@@ -28,11 +28,13 @@ const ConfirmModal: React.FC<Props> = (props) => {
       <View style={{...styles.modalContentContainer, backgroundColor: colors.background}}>
         <TextComponent style={styles.titleText}>Įsiminti?</TextComponent>
         <View style={styles.row}>
-          <Button style={{...styles.button, borderColor: colors.buttonBorder}} onPress={props.onCancel}>
+          <TouchableDebounce
+            style={{...styles.button, borderColor: colors.buttonBorder}}
+            onPress={props.onCancel}>
             <TextComponent style={styles.buttonText}>Ne</TextComponent>
-          </Button>
+          </TouchableDebounce>
           <View style={styles.buttonSparator} />
-          <Button
+          <TouchableDebounce
             style={{
               ...styles.button,
               borderColor: colors.buttonBorder,
@@ -40,7 +42,7 @@ const ConfirmModal: React.FC<Props> = (props) => {
             }}
             onPress={props.onConfirm}>
             <TextComponent style={{...styles.buttonText, color: colors.onPrimary}}>Taip</TextComponent>
-          </Button>
+          </TouchableDebounce>
         </View>
       </View>
     </Modal>
@@ -76,6 +78,9 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 8,
     borderWidth: StyleSheet.hairlineWidth,
   },

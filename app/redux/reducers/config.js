@@ -4,6 +4,7 @@ import {
   SET_IMAGE_SCALE_FACTOR,
   SET_CONFIG,
   SET_FORECAST_LOCATION,
+  DEBUG_CLEAR_LOCATION,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -44,6 +45,9 @@ const reducer = (state = initialState, action) => {
     }
     case SET_FORECAST_LOCATION: {
       return {...state, forecastLocation: action.payload};
+    }
+    case DEBUG_CLEAR_LOCATION: {
+      return {...state, forecastLocation: undefined};
     }
     default:
       return state;

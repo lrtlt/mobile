@@ -17,11 +17,14 @@ const ForecastComponent: React.FC<Props> = (props) => {
   const [forecast, setForecast] = useState<Forecast | undefined>();
   const {colors} = useTheme();
 
-  const location = props.location ?? useSelector(selectForecastLocation);
+  const storedLocation = useSelector(selectForecastLocation);
+  const location = props.location ? props.location : storedLocation;
 
   useEffect(() => {
-    if (forecast && forecast.location?.code === location?.c) {
-      return;
+    if (forecast) {
+      if (!location || location.c === forecast.location.code) {
+        return;
+      }
     }
 
     const fetchForecast = async () => {
