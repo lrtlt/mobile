@@ -1,13 +1,13 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useTheme} from '../../Theme';
+import {IconPlay} from '../svg';
 
 const MediaIndicator = (props) => {
   const {colors} = useTheme();
   return (
     <View {...props} style={{...props.style, ...styles.container}}>
-      <Icon name="play" size={14} color={colors.darkIcon} />
+      <IconPlay size={14} color={colors.darkIcon} />
     </View>
   );
 };

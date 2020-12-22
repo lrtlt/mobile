@@ -25,6 +25,7 @@ const WebPageScreen = (props) => {
     <View style={styles.container}>
       <WebView
         style={styles.webView}
+        containerStyle={styles.webViewContainer}
         originWhitelist={['*']}
         cacheEnabled={false}
         scalesPageToFit={true}
@@ -49,10 +50,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8F8F8',
-    overflow: 'hidden',
   },
   webView: {
     flex: 1,
     opacity: 0.99,
+    minHeight: 200,
+  },
+  webViewContainer: {
+    overflow: 'hidden',
   },
 });

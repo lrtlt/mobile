@@ -1,8 +1,8 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useSettings} from '../../settings/useSettings';
 import {useTheme} from '../../Theme';
+import {IconPhotoCamera} from '../svg';
 import TextComponent from '../text/Text';
 
 const PhotoCount = (props) => {
@@ -11,7 +11,9 @@ const PhotoCount = (props) => {
 
   return (
     <View style={{...styles.container, backgroundColor: colors.lightGreyBackground, ...props.style}}>
-      <Icon name="photo-camera" size={20 + textSizeMultiplier} color={colors.darkIcon} />
+      <View style={styles.iconHolder}>
+        <IconPhotoCamera size={18 + textSizeMultiplier} color={colors.darkIcon} />
+      </View>
       <TextComponent style={{...styles.countText, color: colors.darkIcon}}>{props.count}</TextComponent>
     </View>
   );
@@ -28,6 +30,12 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
     paddingStart: 6,
     paddingEnd: 6,
+  },
+  iconHolder: {
+    width: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   countText: {
     paddingStart: 4,

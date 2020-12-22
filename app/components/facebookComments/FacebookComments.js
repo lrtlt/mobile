@@ -27,6 +27,7 @@ const FacebookComments = (props) => {
   return (
     <WebView
       style={styles.webView}
+      containerStyle={styles.webViewContainer}
       originWhitelist={['*']}
       cacheEnabled={false}
       scrollEnabled={true}
@@ -48,6 +49,10 @@ export default FacebookComments;
 const styles = StyleSheet.create({
   webView: {
     opacity: 0.99,
+    minHeight: 200,
     flex: 1,
+  },
+  webViewContainer: {
+    overflow: 'hidden',
   },
 });

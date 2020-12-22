@@ -75,6 +75,7 @@ const Embed = (props) => {
     const style = {
       width,
       opacity: 0.99, //Crashfix on some android devices.
+      minHeight: 100,
     };
 
     const content = data.map((item, i) => {
@@ -118,33 +119,33 @@ const Embed = (props) => {
       console.log(formatted);
 
       return (
-        <View style={styles.embededHtmlContainer} key={i}>
-          <WebView
-            style={style}
-            originWhitelist={['*']}
-            cacheEnabled={false}
-            scrollEnabled={false}
-            allowsFullscreenVideo={true}
-            domStorageEnabled={true}
-            javaScriptEnabled={true}
-            androidHardwareAccelerationDisabled={false}
-            automaticallyAdjustContentInsets={false}
-            mediaPlaybackRequiresUserAction={true}
-            collapsable={false}
-            bounces={false}
-            startInLoadingState={true}
-            source={{html: formatted}}
-            // onNavigationStateChange={event => {
-            //   console.log('onNavigationStateChange', event);
-            //   if (event.url !== 'about:blank') {
-            //     this.webview.stopLoading();
-            //     Linking.openURL(event.url).catch(err =>
-            //       console.warn('An error occurred', err),
-            //     );
-            //   }
-            // }}
-          />
-        </View>
+        <WebView
+          key={i}
+          style={style}
+          containerStyle={styles.embededHtmlContainer}
+          originWhitelist={['*']}
+          cacheEnabled={false}
+          scrollEnabled={false}
+          allowsFullscreenVideo={true}
+          domStorageEnabled={true}
+          javaScriptEnabled={true}
+          androidHardwareAccelerationDisabled={false}
+          automaticallyAdjustContentInsets={false}
+          mediaPlaybackRequiresUserAction={true}
+          collapsable={false}
+          bounces={false}
+          startInLoadingState={true}
+          source={{html: formatted}}
+          // onNavigationStateChange={event => {
+          //   console.log('onNavigationStateChange', event);
+          //   if (event.url !== 'about:blank') {
+          //     this.webview.stopLoading();
+          //     Linking.openURL(event.url).catch(err =>
+          //       console.warn('An error occurred', err),
+          //     );
+          //   }
+          // }}
+        />
       );
     });
     return <View>{content}</View>;

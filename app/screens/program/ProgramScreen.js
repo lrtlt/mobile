@@ -4,7 +4,6 @@ import {ScreenLoader, ProgramDay, ActionButton} from '../../components';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {fetchProgram} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Collapsible from 'react-native-collapsible';
 import ProgramTabs from './tabs/ProgramTabsScreen';
 import Gemius from 'react-native-gemius-plugin';
@@ -12,6 +11,7 @@ import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {selectProgramScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import Divider from '../../components/divider/Divider';
+import {IconCalendar} from '../../components/svg';
 
 const STATE_LOADING = 'loading';
 const STATE_ERROR = 'error';
@@ -47,7 +47,7 @@ const ProgramScreen = (props) => {
     navigation.setOptions({
       headerRight: () => (
         <ActionButton onPress={() => setHeaderExpanded(!headerExpanded)}>
-          <Icon size={dim.appBarIconSize} color={colors.headerTint} name="ios-calendar" />
+          <IconCalendar size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
       headerTitle: () => {
@@ -69,11 +69,11 @@ const ProgramScreen = (props) => {
     const daysComponent = program.days.map((day) => {
       return (
         <TouchableOpacity
+          key={day}
           onPress={() => {
             setSelectedDate(day);
             setHeaderExpanded(!headerExpanded);
-          }}
-          key={day}>
+          }}>
           <View>
             <ProgramDay style={styles.dayListItem} dateString={day} />
             <Divider />

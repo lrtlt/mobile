@@ -33,12 +33,15 @@ const renderP = (_, children, __, passProps) => {
   );
 };
 
-const config = {
-  WebViewComponent: WebView,
-};
-
 const renderers = {
-  table: makeTableRenderer(config),
+  table: makeTableRenderer({
+    WebViewComponent: WebView,
+    webViewProps: {
+      startInLoadingState: true,
+      containerStyle: {overflow: 'hidden'},
+      style: {opacity: 0.99},
+    },
+  }),
   blockquote: renderBlockquote,
   p: renderP,
 };

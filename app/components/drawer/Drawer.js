@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Linking, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import DrawerItem from '../drawerItem/DrawerItem';
-import FeatherIcon from 'react-native-vector-icons/Feather';
 import {ScrollView} from 'react-native-gesture-handler';
 import {getIconForChannel} from '../../util/UI';
 import {selectDrawerData} from '../../redux/selectors';
@@ -18,7 +17,17 @@ import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 import Divider from '../divider/Divider';
 import {EventRegister} from 'react-native-event-listeners';
-import {IconLituanica} from '../svg';
+import {
+  IconBookmark,
+  IconClock,
+  IconError,
+  IconInfo,
+  IconLituanica,
+  IconPhone,
+  IconSearch,
+  IconTelevision,
+  IconUpload,
+} from '../svg';
 
 const DrawerComponent = (props) => {
   const {navigation} = props;
@@ -39,25 +48,25 @@ const DrawerComponent = (props) => {
         <DrawerItem
           key={strings.upload}
           text={strings.upload}
-          iconComponent={<FeatherIcon name="upload" size={22} color={colors.primaryDark} />}
+          iconComponent={<IconUpload size={22} color={colors.primaryDark} />}
           onPress={() => Linking.openURL(URL_UPLOAD_NEWS)}
         />
         <DrawerItem
           key={strings.feeback}
           text={strings.feeback}
-          iconComponent={<FeatherIcon name="x-octagon" size={22} color={colors.primaryDark} />}
+          iconComponent={<IconError size={22} color={colors.primaryDark} />}
           onPress={() => Linking.openURL(URL_FEEDBACK)}
         />
         <DrawerItem
           key={strings.contacts}
           text={strings.contacts}
-          iconComponent={<FeatherIcon name="phone" size={22} color={colors.primaryDark} />}
+          iconComponent={<IconPhone size={22} color={colors.primaryDark} />}
           onPress={() => Linking.openURL(URL_CONTACTS)}
         />
         <DrawerItem
           key={strings.about}
           text={strings.about}
-          iconComponent={<FeatherIcon name="info" size={22} color={colors.primaryDark} />}
+          iconComponent={<IconInfo size={22} color={colors.primaryDark} />}
           onPress={() => Linking.openURL(URL_ABOUT)}
         />
       </View>
@@ -90,7 +99,7 @@ const DrawerComponent = (props) => {
       <DrawerItem
         key={strings.search}
         text={strings.search}
-        iconComponent={<FeatherIcon name="search" size={22} color={colors.primaryDark} />}
+        iconComponent={<IconSearch size={22} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('Search')}
       />
     );
@@ -101,7 +110,7 @@ const DrawerComponent = (props) => {
       <DrawerItem
         key={strings.tvProgram}
         text={strings.tvProgram}
-        iconComponent={<FeatherIcon name="tv" size={22} color={colors.primaryDark} />}
+        iconComponent={<IconTelevision size={22} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('Program')}
       />
     );
@@ -112,7 +121,7 @@ const DrawerComponent = (props) => {
       <DrawerItem
         key={strings.history}
         text={strings.history}
-        iconComponent={<FeatherIcon name="clock" size={22} color={colors.primaryDark} />}
+        iconComponent={<IconClock size={22} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('History')}
       />
     );
@@ -123,7 +132,7 @@ const DrawerComponent = (props) => {
       <DrawerItem
         key={strings.bookmarks}
         text={strings.bookmarks}
-        iconComponent={<FeatherIcon name="bookmark" size={22} color={colors.primaryDark} />}
+        iconComponent={<IconBookmark size={22} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('Bookmarks')}
       />
     );

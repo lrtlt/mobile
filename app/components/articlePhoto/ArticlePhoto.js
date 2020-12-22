@@ -2,10 +2,10 @@ import React from 'react';
 import {View, Image as DefaultRNImage, StyleSheet, Dimensions} from 'react-native';
 import Image from '../coverImage/CoverImage';
 import ProgressiveImage from '../progressiveImage/ProgressiveImage';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import {IMG_SIZE_XS, buildArticleImageUri, getImageSizeForWidth} from '../../util/ImageUtil';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
+import {Icon404} from '../svg';
 
 const getHorizontalImageComponent = (props, imgSize, aspectRatio, photo) => {
   if (props.progressive === true) {
@@ -68,7 +68,7 @@ const ArticlePhoto = (props) => {
     return (
       <View {...props}>
         <View style={styles.errorContainer}>
-          <Icon name={'broken-image'} size={40} color={colors.buttonContent} />
+          <Icon404 size={60} color={colors.buttonContent} />
         </View>
       </View>
     );

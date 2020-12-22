@@ -233,7 +233,7 @@ const colorsDark: ColorScheme = {
 //#endregion
 
 const dimensions: Dimensions = {
-  appBarIconSize: Platform.OS === 'android' ? 24 : 22,
+  appBarIconSize: Platform.OS === 'android' ? 20 : 20,
 };
 
 export const themeLight: AppTheme = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/Entypo';
 import {Text} from '../../../components';
+import {IconHome} from '../../../components/svg';
 import {useTheme} from '../../../Theme';
 
 const Lable = (props) => {
@@ -13,7 +13,7 @@ const Lable = (props) => {
   if (props.route.title === strings.mainWindow) {
     content = (
       <View style={styles.homeContainer}>
-        <Icon size={20} name={'home'} color={color} />
+        <IconHome size={18} color={color} />
       </View>
     );
   } else {

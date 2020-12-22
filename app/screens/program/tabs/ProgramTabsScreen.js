@@ -8,12 +8,12 @@ import Divider from '../../../components/divider/Divider';
 import {useTheme} from '../../../Theme';
 
 const TabsScreen = (props) => {
-  const [index, setIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const {colors} = useTheme();
 
   const navigationState = {
-    index,
+    index: currentIndex,
     routes: props.program.map((channel) => {
       return {
         key: channel.channel_id,
@@ -27,7 +27,7 @@ const TabsScreen = (props) => {
     const channelId = route.key;
     const title = route.title;
     return (
-      <View style={styles.centerContainer}>
+      <View key={`${channelId}-${title}`} style={styles.centerContainer}>
         {getIconForChannelById(channelId)}
         <Text style={styles.tabLable} scalingEnabled={false} type="secondary">
           {title}
@@ -53,16 +53,16 @@ const TabsScreen = (props) => {
   const renderProgramItem = (val) => {
     const item = val.item;
     return (
-      <View key={item.time_start + item.title}>
+      <View key={`${item.time_start}-${item.title}`}>
         <ProgramItem title={item.title} startTime={item.time_start} percent={item.proc} />
-        <Divider />
+        <Divider style={styles.programItemDivider} />
       </View>
     );
   };
 
   const renderScene = ({route}) => {
-    if (Math.abs(index - navigationState.routes.indexOf(route)) > 0) {
-      return <View />;
+    if (Math.abs(currentIndex - navigationState.routes.indexOf(route)) > 0) {
+      return <View key={`${route.key}-foo`} />;
     }
 
     const prog = route.program;
@@ -73,13 +73,14 @@ const TabsScreen = (props) => {
     });
 
     return (
-      <View>
+      <View key={`${route.key}`}>
         <FlatList
           showsVerticalScrollIndicator={false}
           data={prog}
           renderItem={renderProgramItem}
-          getItemLayout={(data, index) => ({length: 59, offset: 59 * index, index})}
+          getItemLayout={(_, index) => ({length: 58, offset: 58 * index, index})}
           initialScrollIndex={scrollToIndex}
+          contentContainerStyle={styles.scrollContainer}
           keyExtractor={(item, i) => String(i) + String(item)}
         />
       </View>
@@ -94,7 +95,7 @@ const TabsScreen = (props) => {
         renderScene={renderScene}
         renderTabBar={renderTabBar}
         lazy={true}
-        onIndexChange={(i) => setIndex(i)}
+        onIndexChange={(i) => setCurrentIndex(i)}
         initialLayout={{width: Dimensions.get('window').width}}
       />
     </View>
@@ -120,5 +121,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textTransform: 'uppercase',
     paddingTop: 6,
+  },
+  scrollContainer: {
+    minHeight: '100%',
+  },
+  programItemDivider: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 });

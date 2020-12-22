@@ -4,7 +4,7 @@ import {HeaderBackButton} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
 import {resetSearchFilter} from '../../redux/actions';
 import {Article, ActionButton, Text} from '../../components';
-import {SearchIcon, FilterIcon} from '../../components/svg';
+import {FilterIcon, IconFilter, IconSearch} from '../../components/svg';
 import {getOrientation, getSmallestDim} from '../../util/UI';
 import {searchArticles} from '../../api';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
@@ -56,10 +56,10 @@ const SearchScreen = (props) => {
       headerRight: () => (
         <View style={styles.row}>
           <ActionButton onPress={() => search()}>
-            <SearchIcon size={dim.appBarIconSize} color={colors.headerTint} />
+            <IconSearch size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
           <ActionButton onPress={() => navigation.toggleDrawer()}>
-            <FilterIcon size={dim.appBarIconSize} color={colors.headerTint} />
+            <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
         </View>
       ),

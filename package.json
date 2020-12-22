@@ -44,7 +44,6 @@
     "react-native-snackbar": "^2.2.4",
     "react-native-svg": "^12.1.0",
     "react-native-tab-view": "^2.15.2",
-    "react-native-vector-icons": "^7.1.0",
     "react-native-webview": "^11.0.2",
     "react-navigation-collapsible": "^5.8.1",
     "react-redux": "^7.2.2",

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Forecast} from '../../components';
+import {Forecast, WeatherEmbed} from '../../components';
 import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView} from 'react-native-gesture-handler';
 
@@ -42,7 +42,8 @@ const WeatherScreen = (props) => {
       <ScrollView style={styles.scrollContainer} nestedScrollEnabled={true}>
         <View style={styles.container}>
           <WeatherLocations style={styles.locations} onLocationSelect={(l) => handleSelectLocation(l)} />
-          <Forecast location={selectedLocation} />
+          <Forecast style={styles.forecast} location={selectedLocation} />
+          <WeatherEmbed style={styles.weatherEmbed} horizontalPadding={12} location={selectedLocation} />
         </View>
       </ScrollView>
       <ConfirmModal
@@ -73,6 +74,12 @@ const styles = StyleSheet.create({
   },
   locations: {
     width: '100%',
-    padding: 8,
+    paddingVertical: 12,
+  },
+  forecast: {
+    marginVertical: 12,
+  },
+  weatherEmbed: {
+    marginTop: 12,
   },
 });

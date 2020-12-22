@@ -8,6 +8,7 @@ const ProgramItem = (props) => {
   const {colors} = useTheme();
 
   const proc = Math.max(0, Math.min(Number(props.percent), 100));
+  const hasEnded = proc === 100;
 
   const icon =
     proc < 100 && proc > 0 ? (
@@ -15,6 +16,8 @@ const ProgramItem = (props) => {
         <CameraIcon size={20} />
       </View>
     ) : null;
+
+  const titleStyle = hasEnded ? styles.titleText : styles.titleTextUpcoming;
 
   return (
     <View style={[styles.container, props.style, {backgroundColor: colors.programItem}]}>
@@ -26,11 +29,11 @@ const ProgramItem = (props) => {
       </TextComponent>
       {icon}
       {proc === 0 ? (
-        <TextComponent style={styles.titleText} type="secondary">
+        <TextComponent style={titleStyle} type="secondary">
           {props.title}
         </TextComponent>
       ) : (
-        <TextComponent style={styles.titleText}>{props.title}</TextComponent>
+        <TextComponent style={titleStyle}>{props.title}</TextComponent>
       )}
     </View>
   );
@@ -60,11 +63,18 @@ const styles = StyleSheet.create({
     fontFamily: 'SourceSansPro-Regular',
     fontSize: 13,
   },
-  titleText: {
+  titleTextUpcoming: {
     flex: 1,
     padding: 6,
     paddingStart: 0,
     fontFamily: 'SourceSansPro-SemiBold',
+    fontSize: 15,
+  },
+  titleText: {
+    flex: 1,
+    padding: 6,
+    paddingStart: 0,
+    fontFamily: 'SourceSansPro-Regular',
     fontSize: 15,
   },
 });

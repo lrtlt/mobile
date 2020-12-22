@@ -153,7 +153,7 @@ const ArticleContent = (props) => {
         extraData={{
           orientation: getOrientation(),
         }}
-        windowSize={6}
+        windowSize={5}
         showsVerticalScrollIndicator={false}
         renderItem={renderItem}
         removeClippedSubviews={false}

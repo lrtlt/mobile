@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 import {useSettings} from '../../settings/useSettings';
+import {IconFacebook} from '../svg';
 
 const FacebookReactions = (props) => {
   const {colors} = useTheme();
@@ -12,7 +12,9 @@ const FacebookReactions = (props) => {
   return (
     <View style={{...styles.root, ...props.style}}>
       <View style={{...styles.container, borderColor: colors.buttonBorder}}>
-        <Icon style={styles.icon} name="facebook" size={20 + textSizeMultiplier} color={colors.facebook} />
+        <View style={styles.iconHolder}>
+          <IconFacebook size={16 + textSizeMultiplier} color={colors.facebook} />
+        </View>
         <TextComponent style={{...styles.countText, color: colors.facebook}}>{props.count}</TextComponent>
       </View>
     </View>
@@ -23,7 +25,7 @@ export default FacebookReactions;
 
 const styles = StyleSheet.create({
   root: {
-    alignSelf: 'baseline',
+    alignSelf: 'flex-start',
   },
   container: {
     flexDirection: 'row',
@@ -35,6 +37,12 @@ const styles = StyleSheet.create({
     paddingBottom: 1,
     paddingEnd: 4,
     borderRadius: 4,
+  },
+  iconHolder: {
+    width: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   countText: {
     paddingStart: 4,

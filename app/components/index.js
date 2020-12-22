@@ -34,3 +34,4 @@ export {default as HeaderTitle} from './screenHeaderTitle/ScreenHeaderTitle';
 export {default as SearchFilterDrawer} from './searchFilterDrawer/SearchFilterDrawer';
 export {default as Text} from './text/Text';
 export {default as Forecast} from './forecast/ForecastComponent';
+export {default as WeatherEmbed} from './weatherEmbed/WeatherEmbedComponent';

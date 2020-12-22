@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     margin: 4,
   },
   clickArea: {
-    height: '90%',
+    height: '100%',
     aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',

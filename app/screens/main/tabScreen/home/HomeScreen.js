@@ -154,7 +154,7 @@ const HomeScreen = (props) => {
     } else {
       return (
         <TouchableDebounce debounceTime={500} onPress={() => navigation.navigate('Weather')}>
-          <Forecast />
+          <Forecast style={styles.forecast} />
         </TouchableDebounce>
       );
     }
@@ -216,5 +216,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  forecast: {
+    margin: 8,
   },
 });

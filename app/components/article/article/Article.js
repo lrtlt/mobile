@@ -184,7 +184,6 @@ const styles = StyleSheet.create({
     borderRadius: 36 / 2,
   },
   bottomBadgeRow: {
-    width: '100%',
     paddingTop: 8,
     flexDirection: 'row',
   },

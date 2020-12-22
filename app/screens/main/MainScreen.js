@@ -2,8 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {TabView} from 'react-native-tab-view';
 import {ActionButton} from '../../components';
-import {SettingsIcon, Logo} from '../../components/svg';
-import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Logo, IconDrawerMenu, IconSettings} from '../../components/svg';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
 import {useSelector} from 'react-redux';
@@ -53,12 +52,12 @@ const MainScreen = (props) => {
     navigation.setOptions({
       headerLeft: (_) => (
         <ActionButton onPress={() => navigation.toggleDrawer()}>
-          <MaterialIcon name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
+          <IconDrawerMenu size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
       headerRight: (_) => (
         <ActionButton onPress={() => navigation.navigate('Settings')}>
-          <SettingsIcon name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
+          <IconSettings name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
       headerTitle: (
@@ -67,7 +66,7 @@ const MainScreen = (props) => {
             EventRegister.emit(EVENT_LOGO_PRESS, null);
           }}>
           <View style={styles.logoContainer}>
-            <Logo size={dim.appBarIconSize} />
+            <Logo size={dim.appBarIconSize + 4} />
           </View>
         </BorderlessButton>
       ),
@@ -134,5 +133,8 @@ const styles = StyleSheet.create({
   logoContainer: {
     paddingStart: 12,
     paddingEnd: 12,
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

@@ -43,4 +43,6 @@ export const URL_ABOUT = 'https://apie.lrt.lt/';
 export const URL_UPLOAD_NEWS = 'https://apie.lrt.lt/bendraukime/rasykite';
 export const URL_FEEDBACK = 'https://apie.lrt.lt/bendraukime/rasykite';
 
+export const DEFAULT_FORECAST_LOCATION = 'vilnius';
+
 export const VIDEO_ASPECT_RATIO = 16 / 9;

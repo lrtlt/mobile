@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-
 import Gemius from 'react-native-gemius-plugin';
 import GallerySwiper from 'react-native-gallery-swiper';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
@@ -10,6 +8,7 @@ import {BorderlessButton} from 'react-native-gesture-handler';
 import {Text} from '../../components';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {IconClose} from '../../components/svg';
 
 /**
  * Formats images array so that the element at given index starts at the beggening. Trailing images appended to the end of the array.
@@ -28,7 +27,7 @@ const formatImages = (imagesArray, index) => {
 const GalleryScreen = (props) => {
   const {route, navigation} = props;
 
-  const {colors} = useTheme();
+  const {colors, dim} = useTheme();
 
   const [state, setState] = useState(() => {
     const selectedImage = route.params.selectedImage ?? null;
@@ -75,7 +74,7 @@ const GalleryScreen = (props) => {
         <SafeAreaView edges={['top', 'left']}>
           <View style={styles.backButtonContainer}>
             <BorderlessButton onPress={() => navigation.goBack()}>
-              <Icon name="close" color={colors.headerTint} size={30} />
+              <IconClose color={colors.headerTint} size={dim.appBarIconSize} />
             </BorderlessButton>
           </View>
         </SafeAreaView>
@@ -118,10 +117,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   backButtonContainer: {
-    margin: 16,
-    padding: 6,
+    margin: 8,
+    padding: 16,
     borderRadius: 40,
-    backgroundColor: '#FFFFFF20',
+    backgroundColor: '#FFFFFF30',
   },
   detailsContainer: {
     padding: 16,

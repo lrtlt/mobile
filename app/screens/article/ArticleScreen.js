@@ -4,7 +4,7 @@ import {saveArticle, removeArticle, addArticleToHistory} from '../../redux/actio
 import {articleGet} from '../../api';
 import ArticleContent from './ArticleContent';
 import {useDispatch, useSelector} from 'react-redux';
-import {CommentsIcon, ShareIcon, SaveIcon} from '../../components/svg';
+import {CommentsIcon, ShareIcon, SaveIcon, IconComments} from '../../components/svg';
 import Share from 'react-native-share';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
@@ -77,7 +77,7 @@ const ArticleScreen = (props) => {
             <SaveIcon size={dim.appBarIconSize} color={colors.headerTint} filled={isBookmarked} />
           </ActionButton>
           <ActionButton onPress={() => _handleCommentsPress()}>
-            <CommentsIcon size={dim.appBarIconSize} color={colors.headerTint} />
+            <IconComments size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
           <ActionButton onPress={() => _handleSharePress()}>
             <ShareIcon size={dim.appBarIconSize} color={colors.headerTint} />
