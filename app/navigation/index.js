@@ -78,10 +78,16 @@ const NavigatorComponent = () => {
         <SearchDrawer.Navigator
           backBehavior="initialRoute"
           drawerPosition="right"
-          drawerType="front"
+          drawerType="slide"
           hideStatusBar={false}
           drawerContent={() => <SearchFilterDrawer />}>
-          <SearchDrawer.Screen name="SearchScreen" component={SearchScreen} options={{headerShown: true}} />
+          <SearchDrawer.Screen
+            name="SearchScreen"
+            component={SearchScreen}
+            options={{
+              headerShown: true,
+            }}
+          />
         </SearchDrawer.Navigator>
       );
     };

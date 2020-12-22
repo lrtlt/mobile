@@ -4,7 +4,7 @@ import {saveArticle, removeArticle, addArticleToHistory} from '../../redux/actio
 import {articleGet} from '../../api';
 import ArticleContent from './ArticleContent';
 import {useDispatch, useSelector} from 'react-redux';
-import {CommentsIcon, ShareIcon, SaveIcon, IconComments} from '../../components/svg';
+import {ShareIcon, SaveIcon, IconComments} from '../../components/svg';
 import Share from 'react-native-share';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';

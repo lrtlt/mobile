@@ -129,6 +129,7 @@ const Article = (props) => {
 };
 
 Article.propTypes = {
+  style: PropTypes.object,
   data: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
   showDate: PropTypes.bool,

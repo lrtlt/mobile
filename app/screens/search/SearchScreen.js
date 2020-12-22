@@ -1,17 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {View, Button, ActivityIndicator, TextInput, StyleSheet} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, Button, ActivityIndicator, TextInput, StyleSheet, Animated} from 'react-native';
 import {HeaderBackButton} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
 import {resetSearchFilter} from '../../redux/actions';
 import {Article, ActionButton, Text} from '../../components';
-import {FilterIcon, IconFilter, IconSearch} from '../../components/svg';
-import {getOrientation, getSmallestDim} from '../../util/UI';
+import {IconFilter, IconSearch} from '../../components/svg';
 import {searchArticles} from '../../api';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
-import {FlatList} from 'react-native-gesture-handler';
 import {selectSearchFilter} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
+import {CollapsibleSubHeaderAnimator, useCollapsibleSubHeader} from 'react-navigation-collapsible';
+import {BorderlessButton} from 'react-native-gesture-handler';
 
 const SearchScreen = (props) => {
   const {navigation} = props;
@@ -40,24 +40,10 @@ const SearchScreen = (props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: () => (
-        <TextInput
-          style={{...styles.searchInput, color: colors.text}}
-          multiline={false}
-          placeholder={'Paieška'}
-          numberOfLines={1}
-          onSubmitEditing={() => search()}
-          returnKeyType="search"
-          placeholderTextColor={colors.textDisbled}
-          onChangeText={(text) => setQuery(text)}
-          value={query}
-        />
-      ),
+      headerTitle: '',
+
       headerRight: () => (
         <View style={styles.row}>
-          <ActionButton onPress={() => search()}>
-            <IconSearch size={dim.appBarIconSize} color={colors.headerTint} />
-          </ActionButton>
           <ActionButton onPress={() => navigation.toggleDrawer()}>
             <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
@@ -73,23 +59,24 @@ const SearchScreen = (props) => {
       ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, searchFilter, colors]);
+  }, []);
 
   useEffect(() => {
     search();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchFilter]);
 
-  const callApi = async () => {
-    const response = await fetch(searchArticles(query, searchFilter));
-    console.log(response);
-    const result = await response.json();
-    console.log('SEARCH ARTICLES RESPONSE', result);
-    return result;
-  };
-
-  const search = () => {
+  const search = useCallback(() => {
     setLoadingState({isFetching: true, isError: false});
+
+    const callApi = async () => {
+      const response = await fetch(searchArticles(query, searchFilter));
+      console.log(response);
+      const result = await response.json();
+      console.log('SEARCH ARTICLES RESPONSE', result);
+      return result;
+    };
+
     callApi()
       .then((response) => {
         setLoadingState({
@@ -104,7 +91,7 @@ const SearchScreen = (props) => {
           isError: true,
         });
       });
-  };
+  }, [query, searchFilter]);
 
   const renderItem = (val) => {
     return (
@@ -137,6 +124,31 @@ const SearchScreen = (props) => {
     );
   };
 
+  const renderSearchBar = () => {
+    return (
+      <View style={{...styles.searchBar, backgroundColor: colors.card}}>
+        <View style={{...styles.searchInputHolder, backgroundColor: colors.background}}>
+          <TextInput
+            style={{...styles.searchInput, color: colors.text}}
+            multiline={false}
+            placeholder={'Paieška'}
+            numberOfLines={1}
+            onSubmitEditing={() => search()}
+            returnKeyType="search"
+            placeholderTextColor={colors.textDisbled}
+            onChangeText={(text) => setQuery(text)}
+            value={query}
+          />
+          <BorderlessButton style={styles.searchButton} onPress={() => search()}>
+            <IconSearch size={dim.appBarIconSize} color={colors.headerTint} />
+          </BorderlessButton>
+        </View>
+      </View>
+    );
+  };
+
+  const {onScroll, containerPaddingTop, scrollIndicatorInsetTop, translateY} = useCollapsibleSubHeader();
+
   let content;
   if (loadingState.isError) {
     content = renderError();
@@ -144,23 +156,26 @@ const SearchScreen = (props) => {
     content = renderLoading();
   } else {
     content = (
-      <FlatList
+      <Animated.FlatList
+        onScroll={onScroll}
+        contentContainerStyle={{paddingTop: containerPaddingTop}}
+        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
         showsVerticalScrollIndicator={false}
-        statusBarHeight={0}
         data={articles}
         windowSize={4}
         numColumns={2}
-        extraData={{
-          orientation: getOrientation(),
-        }}
         renderItem={renderItem}
-        removeClippedSubviews={false}
         keyExtractor={(item, index) => String(index) + String(item)}
       />
     );
   }
 
-  return <View style={styles.root}>{content}</View>;
+  return (
+    <View style={styles.root}>
+      {content}
+      <CollapsibleSubHeaderAnimator translateY={translateY}>{renderSearchBar()}</CollapsibleSubHeaderAnimator>
+    </View>
+  );
 };
 
 export default SearchScreen;
@@ -180,14 +195,45 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  searchBar: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 8,
+    paddingVertical: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  searchInputHolder: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
   searchInput: {
-    paddingBottom: 2,
-    paddingTop: 2,
-    margin: 4,
-    width: getSmallestDim() * 0.5,
+    padding: 12,
     fontFamily: 'SourceSansPro-Regular',
-    fontSize: 15,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    fontSize: 17,
+    flex: 1,
+  },
+  searchButton: {
+    height: '100%',
+    aspectRatio: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   errorContainer: {
     flex: 1,
