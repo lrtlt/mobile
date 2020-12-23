@@ -135,8 +135,8 @@ android {
         applicationId "lt.mediapark.lrt"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 201600
-        versionName "2.16.0"
+        versionCode 201601
+        versionName "2.16.1"
         multiDexEnabled true
     }
     splits {
