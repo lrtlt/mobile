@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Easing} from 'react-native';
 import {ScreenLoader, ProgramDay, ActionButton} from '../../components';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {fetchProgram} from '../../redux/actions';
@@ -99,7 +99,9 @@ const ProgramScreen = (props) => {
     const selectedDayProgram = program[selectedDay];
     return (
       <View style={styles.root}>
-        <Collapsible collapsed={!headerExpanded}>{renderDays()}</Collapsible>
+        <Collapsible collapsed={!headerExpanded} align="bottom" duration={250} easing={Easing.ease}>
+          {renderDays()}
+        </Collapsible>
         <ProgramTabs program={selectedDayProgram} />
       </View>
     );

@@ -53,6 +53,6 @@ export default ProgramDay;
 const styles = StyleSheet.create({
   text: {
     fontFamily: 'SourceSansPro-Regular',
-    fontSize: 16,
+    fontSize: 15,
   },
 });

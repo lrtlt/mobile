@@ -102,7 +102,7 @@ const TabsScreen = (props) => {
   );
 };
 
-export default TabsScreen;
+export default React.memo(TabsScreen);
 
 const styles = StyleSheet.create({
   root: {
