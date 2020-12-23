@@ -9,6 +9,17 @@ import {
   ChannelLRTWorldIcon,
   ChannelOpusIcon,
   LogoLight,
+  IconWeatherCloud,
+  IconWeatherCloudy,
+  IconWeatherDayCloudy,
+  IconWeatherDaySunny,
+  IconWeatherFog,
+  IconWeatherRain,
+  IconWeatherRainMix,
+  IconWeatherShowers,
+  IconWeatherSnow,
+  IconWeatherSnowWind,
+  IconWeatherSprinkle,
 } from '../components/svg';
 
 import {channelColors} from '../Theme';
@@ -123,5 +134,35 @@ export const getIconForChannelById = (channelId, size = DEFAULT_CHANNEL_ICON_SIZ
       return getIconForChannel('Opus', size);
     default:
       return <LogoLight size={size} />;
+  }
+};
+
+export const getIconForWeatherConditions = (conditions, size, color) => {
+  switch (conditions) {
+    case 'isolated-clouds':
+      return <IconWeatherCloud size={size} color={color} />;
+    case 'overcast':
+      return <IconWeatherCloudy size={size} color={color} />;
+    case 'scattered-clouds':
+      return <IconWeatherDayCloudy size={size} color={color} />;
+    case 'clear':
+      return <IconWeatherDaySunny size={size} color={color} />;
+    case 'fog':
+      return <IconWeatherFog size={size} color={color} />;
+    case 'heavy-rain':
+      return <IconWeatherRain size={size} color={color} />;
+    case 'sleet':
+      return <IconWeatherRainMix size={size} color={color} />;
+    case 'moderate-rain':
+      return <IconWeatherShowers size={size} color={color} />;
+    case 'light-snow':
+    case 'moderate-snow':
+      return <IconWeatherSnow size={size} color={color} />;
+    case 'heavy-snow':
+      return <IconWeatherSnowWind size={size} color={color} />;
+    case 'light-rain':
+      return <IconWeatherSprinkle size={size} color={color} />;
+    default:
+      return null;
   }
 };

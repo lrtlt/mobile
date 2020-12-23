@@ -5,6 +5,7 @@ import {DEFAULT_FORECAST_LOCATION} from '../../constants';
 import {selectForecastLocation} from '../../redux/selectors';
 import {Location} from '../../screens/weather/Types';
 import {useTheme} from '../../Theme';
+import {getIconForWeatherConditions} from '../../util/UI';
 import TextComponent from '../text/Text';
 import {Forecast, getForecast} from './ForecastApi';
 
@@ -44,14 +45,28 @@ const ForecastComponent: React.FC<Props> = (props) => {
 
   const f = forecast?.forecast;
 
-  const temperatureText = typeof f?.airTemperature === 'number' ? `${Math.round(f.airTemperature)}°C` : '-';
+  const getSunColor = (): string => {
+    if (f?.localDateTime) {
+      const hour = new Date(f?.localDateTime).getHours();
+      if (hour > 6 && hour < 22) {
+        return '#fbdf82';
+      } else {
+        return '#585d97';
+      }
+    }
+    return '#fbdf82';
+  };
+
+  const temperatureText = typeof f?.airTemperature === 'number' ? `${Math.round(f.airTemperature)}°` : '-';
   const humidityText = typeof f?.relativeHumidity === 'number' ? `${f?.relativeHumidity}%` : '';
   return (
     <View style={{...styles.container, backgroundColor: colors.slugBackground, ...props.style}}>
       <TextComponent style={styles.cityText}>
-        {forecast?.location.name ? `${forecast?.location.name}:` : '-'}
+        {forecast?.location.name ? forecast?.location.name : '-'}
       </TextComponent>
+      <View style={{...styles.sun, borderColor: colors.background, backgroundColor: getSunColor()}} />
       <TextComponent style={styles.temperatureText}>{temperatureText}</TextComponent>
+      {getIconForWeatherConditions(f?.conditionCode, 26, colors.textSecondary)}
       <TextComponent style={styles.humidityText} type="secondary">
         {humidityText}
       </TextComponent>
@@ -68,24 +83,32 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     alignItems: 'center',
     borderRadius: 4,
-    padding: 8,
+    padding: 4,
+    paddingHorizontal: 8,
   },
   loadingIndicator: {
-    height: 15,
+    height: 16,
   },
   cityText: {
     fontFamily: 'SourceSansPro-Regular',
-    fontSize: 14,
+    fontSize: 15,
     flex: 1,
   },
   temperatureText: {
-    marginLeft: 12,
+    marginLeft: 8,
+    marginRight: 24,
     fontFamily: 'SourceSansPro-SemiBold',
-    fontSize: 14,
+    fontSize: 15,
   },
   humidityText: {
-    marginLeft: 12,
+    marginLeft: 8,
     fontFamily: 'SourceSansPro-Regular',
-    fontSize: 14,
+    fontSize: 15,
+  },
+  sun: {
+    width: 18,
+    height: 18,
+    borderRadius: 16,
+    borderWidth: 3,
   },
 });
