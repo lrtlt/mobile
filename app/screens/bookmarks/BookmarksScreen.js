@@ -3,8 +3,6 @@ import {StyleSheet, View} from 'react-native';
 import {ArticleRow} from '../../components';
 import {useSelector} from 'react-redux';
 import {getOrientation} from '../../util/UI';
-import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
-import Gemius from 'react-native-gemius-plugin';
 import {FlatList} from 'react-native-gesture-handler';
 import {selectBookmarksScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
@@ -19,10 +17,6 @@ const BookmarksScreen = (props) => {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: strings.bookmarks,
-    });
-
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      page: 'bookmarks',
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

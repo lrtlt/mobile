@@ -11,7 +11,6 @@ import CategoryScreen from './tabScreen/category/CategoryScreen';
 import NewestScreen from './tabScreen/newest/NewestScreen';
 import PopularScreen from './tabScreen/popular/PopularScreen';
 import TestScreen from '../testScreen/TestScreen';
-import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {EVENT_LOGO_PRESS, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 
@@ -20,7 +19,6 @@ import {
   ARTICLE_LIST_TYPE_CATEGORY,
   ARTICLE_LIST_TYPE_MEDIA,
   ARTICLE_LIST_TYPE_NEWEST,
-  GEMIUS_VIEW_SCRIPT_ID,
   ARTICLE_LIST_TYPE_POPULAR,
 } from '../../constants';
 import {selectMainScreenState} from '../../redux/selectors';
@@ -34,10 +32,6 @@ const MainScreen = (props) => {
   const {colors, dim} = useTheme();
 
   const state = useSelector(selectMainScreenState);
-
-  useEffect(() => {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'main'});
-  }, []);
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_SELECT_CATEGORY_INDEX, (data) => {

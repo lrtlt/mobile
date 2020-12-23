@@ -6,8 +6,6 @@ import {resetSearchFilter} from '../../redux/actions';
 import {Article, ActionButton, Text} from '../../components';
 import {IconFilter, IconSearch} from '../../components/svg';
 import {searchArticles} from '../../api';
-import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
-import Gemius from 'react-native-gemius-plugin';
 import {selectSearchFilter} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {CollapsibleSubHeaderAnimator, useCollapsibleSubHeader} from 'react-navigation-collapsible';
@@ -30,10 +28,6 @@ const SearchScreen = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      page: 'search',
-    });
-
     return () => dispatch(resetSearchFilter());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

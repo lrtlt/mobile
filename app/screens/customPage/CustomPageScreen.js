@@ -4,9 +4,8 @@ import {TabView} from 'react-native-tab-view';
 import TabBar from '../main/tabBar/TabBar';
 import CategoryScreen from '../main/tabScreen/category/CategoryScreen';
 import TestScreen from '../testScreen/TestScreen';
-import Gemius from 'react-native-gemius-plugin';
 
-import {ARTICLE_LIST_TYPE_CATEGORY, GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
+import {ARTICLE_LIST_TYPE_CATEGORY} from '../../constants';
 
 const CustomPageScreen = (props) => {
   const {navigation, route} = props;
@@ -16,11 +15,6 @@ const CustomPageScreen = (props) => {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: page.title ?? '',
-    });
-
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      screen: 'page',
-      page: page.title,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page.title]);

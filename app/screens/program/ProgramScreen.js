@@ -6,8 +6,6 @@ import {fetchProgram} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import Collapsible from 'react-native-collapsible';
 import ProgramTabs from './tabs/ProgramTabsScreen';
-import Gemius from 'react-native-gemius-plugin';
-import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {selectProgramScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import Divider from '../../components/divider/Divider';
@@ -38,7 +36,6 @@ const ProgramScreen = (props) => {
   }, [program]);
 
   useEffect(() => {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'program'});
     dispatch(fetchProgram());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

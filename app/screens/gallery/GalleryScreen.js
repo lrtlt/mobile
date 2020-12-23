@@ -1,8 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import Gemius from 'react-native-gemius-plugin';
 import GallerySwiper from 'react-native-gallery-swiper';
-import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import {Text} from '../../components';
@@ -44,10 +42,6 @@ const GalleryScreen = (props) => {
       images: formatImages(images, initialIndex),
     };
   });
-
-  useEffect(() => {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'gallery'});
-  }, []);
 
   const renderDetails = () => {
     const image = state.images[state.index];

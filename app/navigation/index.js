@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {Platform, StatusBar} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Drawer, SearchFilterDrawer} from '../components';
@@ -6,6 +6,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import SplashViewComponent from '../screens/splash/SplashScreenView';
+
+import crashlytics from '@react-native-firebase/crashlytics';
 
 import {
   ProgramScreen,
@@ -27,8 +29,9 @@ import {
 import {selectNavigationIsReady} from '../redux/selectors';
 import {themeDark, themeLight} from '../Theme';
 import {useSettings} from '../settings/useSettings';
-import {DEEP_LINKING_URL_PREFIX} from '../constants';
+import {DEEP_LINKING_URL_PREFIX, GEMIUS_VIEW_SCRIPT_ID} from '../constants';
 import WeatherScreen from '../screens/weather/WeatherScreen';
+import Gemius from '../../react-native-gemius-plugin';
 
 const Stack = createStackNavigator();
 const MainDrawer = createDrawerNavigator();
@@ -54,6 +57,30 @@ const NavigatorComponent = () => {
 
   const settings = useSettings();
   console.log('SETTINGS', settings);
+
+  const routeNameRef = useRef();
+  const navRef = useRef(null);
+
+  const onNavigationReady = () => {
+    routeNameRef.current = navRef.current?.getCurrentRoute()?.name;
+  };
+
+  const onNavigationStateChange = () => {
+    const currentRoute = navRef.current?.getCurrentRoute();
+    const currentRouteName = currentRoute?.name;
+
+    if (currentRouteName && routeNameRef.current !== currentRouteName) {
+      const currentScreen = currentRouteName.toLowerCase();
+      const params = {
+        screen: currentScreen,
+        params: JSON.stringify(currentRoute.params),
+      };
+      //console.log('Current screen: ', params);
+      crashlytics().log(`Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
+      Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, params);
+    }
+    routeNameRef.current = currentRouteName;
+  };
 
   if (!isNavigationReady) {
     return <Splash />;
@@ -101,7 +128,13 @@ const NavigatorComponent = () => {
           translucent={false}
           backgroundColor={theme.colors.statusBar}
         />
-        <NavigationContainer theme={theme} linking={linking} fallback={<SplashViewComponent />}>
+        <NavigationContainer
+          ref={navRef}
+          theme={theme}
+          linking={linking}
+          fallback={<SplashViewComponent />}
+          onReady={onNavigationReady}
+          onStateChange={onNavigationStateChange}>
           <Stack.Navigator
             headerMode={Platform.OS === 'android' ? 'screen' : 'float'}
             mode="card"
@@ -143,7 +176,7 @@ const NavigatorComponent = () => {
             <Stack.Screen name="History" component={HistoryScreen} />
             <Stack.Screen name="Program" component={ProgramScreen} />
             <Stack.Screen name="Slug" component={SlugScreen} />
-            <Stack.Screen name="CustomPage" component={CustomPageScreen} />
+            <Stack.Screen name="Page" component={CustomPageScreen} />
             <Stack.Screen name="WebPage" component={WebPageScreen} />
             <Stack.Screen name="Weather" component={WeatherScreen} />
           </Stack.Navigator>

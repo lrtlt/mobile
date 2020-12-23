@@ -4,8 +4,6 @@ import {Forecast, WeatherEmbed} from '../../components';
 import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView} from 'react-native-gesture-handler';
 
-import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
-import Gemius from 'react-native-gemius-plugin';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import WeatherLocations from './WeatherLocations';
@@ -22,10 +20,6 @@ const WeatherScreen = (props) => {
   const {strings} = useTheme();
 
   useEffect(() => {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      screen: 'weather',
-    });
-
     props.navigation.setOptions({
       headerTitle: strings.weatherScreenTitle,
     });

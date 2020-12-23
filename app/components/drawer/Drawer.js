@@ -175,7 +175,7 @@ const DrawerComponent = (props) => {
           key={page.key}
           text={page.title}
           iconComponent={<IconLituanica size={22} color={colors.primaryLight} />}
-          onPress={() => navigation.navigate('CustomPage', {page})}
+          onPress={() => navigation.navigate('Page', {page})}
         />
       ));
 

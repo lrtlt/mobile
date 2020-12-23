@@ -4,8 +4,6 @@ import {SettingsToggleButton, Text} from '../../components';
 import {SunIcon, MoonIcon, PhotoIcon} from '../../components/svg';
 import {setConfig} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
-import Gemius from 'react-native-gemius-plugin';
-import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {selectConfig} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -25,10 +23,6 @@ const SettingsScreen = (props) => {
   const dispatch = useDispatch();
 
   const config = useSelector(selectConfig);
-
-  useEffect(() => {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'settings'});
-  }, []);
 
   useEffect(() => {
     navigation.setOptions({

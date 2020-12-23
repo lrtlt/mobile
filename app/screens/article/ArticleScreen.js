@@ -6,8 +6,6 @@ import ArticleContent from './ArticleContent';
 import {useDispatch, useSelector} from 'react-redux';
 import {ShareIcon, SaveIcon, IconComments} from '../../components/svg';
 import Share from 'react-native-share';
-import Gemius from 'react-native-gemius-plugin';
-import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import Snackbar from 'react-native-snackbar';
 import {ScreenLoader, ScreenError, AdultContentWarning, ActionButton} from '../../components';
 import {selectArticleBookmarked} from '../../redux/selectors';
@@ -96,21 +94,6 @@ const ArticleScreen = (props) => {
   };
 
   const loadArticle = () => {
-    try {
-      Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-        screen: 'article',
-        articleId: articleId.toString(),
-      });
-    } catch (e) {
-      console.log(e);
-      setState({
-        ...state,
-        article: null,
-        loadingState: STATE_ERROR,
-      });
-      return;
-    }
-
     setState({
       ...state,
       article: null,

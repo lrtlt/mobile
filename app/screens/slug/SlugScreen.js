@@ -4,8 +4,7 @@ import {ArticleRow, Text} from '../../components';
 import {getOrientation} from '../../util/UI';
 import {articleGetByTag} from '../../api';
 import {formatArticles} from '../../util/articleFormatters';
-import {ARTICLES_PER_PAGE_COUNT, GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
-import Gemius from 'react-native-gemius-plugin';
+import {ARTICLES_PER_PAGE_COUNT} from '../../constants';
 import {FlatList} from 'react-native-gesture-handler';
 import {useTheme} from '../../Theme';
 
@@ -25,11 +24,6 @@ const SlugScreen = (props) => {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: category.name,
-    });
-
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      page: 'slug',
-      slugUrl: category.slug_url,
     });
 
     startLoading();
