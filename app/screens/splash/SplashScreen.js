@@ -9,7 +9,7 @@ import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {selectSplashScreenState} from '../../redux/selectors';
 import {Text} from '../../components';
-import {themeDark, themeLight, useTheme} from '../../Theme';
+import {themeDark, themeLight} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
 
 const onNotificationOpened = (openResult) => {
@@ -20,8 +20,6 @@ const onNotificationOpened = (openResult) => {
 };
 
 const SplashScreenComponent = (_) => {
-  const {strings} = useTheme();
-
   const {isDarkMode} = useSettings();
   const colors = isDarkMode ? themeDark.colors : themeLight.colors;
 
@@ -61,9 +59,9 @@ const SplashScreenComponent = (_) => {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText} type="error">
-          {strings.error_no_connection}
+          Tinklo sutrikimas
         </Text>
-        <Button title={strings.tryAgain} color={colors.primary} onPress={() => load(true)} />
+        <Button title="Bandykite dar kartą" color={colors.primary} onPress={() => load(true)} />
       </View>
     );
   };
