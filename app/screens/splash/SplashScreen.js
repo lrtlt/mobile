@@ -4,20 +4,12 @@ import {useSelector, useDispatch} from 'react-redux';
 import {Logo} from '../../components/svg';
 import {fetchArticles, fetchMenuItems} from '../../redux/actions';
 
-import OneSignal from 'react-native-onesignal';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {selectSplashScreenState} from '../../redux/selectors';
 import {Text} from '../../components';
 import {themeDark, themeLight} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
-
-const onNotificationOpened = (openResult) => {
-  console.log('Message: ', openResult.notification.payload.body);
-  console.log('Data: ', openResult.notification.payload.additionalData);
-  console.log('isActive: ', openResult.notification.isAppInFocus);
-  console.log('openResult: ', openResult);
-};
 
 const SplashScreenComponent = (_) => {
   const {isDarkMode} = useSettings();
@@ -28,10 +20,6 @@ const SplashScreenComponent = (_) => {
 
   useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'splash'});
-    OneSignal.addEventListener('opened', onNotificationOpened);
-    return () => {
-      OneSignal.removeEventListener('opened', onNotificationOpened);
-    };
   }, []);
 
   useEffect(() => {

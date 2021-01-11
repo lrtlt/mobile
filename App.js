@@ -19,23 +19,19 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    OneSignal.init(ONE_SIGNAL_APP_ID);
-    OneSignal.inFocusDisplaying(2);
+    OneSignal.setAppId(ONE_SIGNAL_APP_ID);
+    OneSignal.getDeviceState()
+      .then((deviceState) => console.log('OneSignal device state: ', deviceState))
+      .catch((e) => console.log('OneSignal device error: ', e));
 
-    OneSignal.addEventListener('ids', this.onIds);
+    OneSignal.setNotificationOpenedHandler((openedEvent) => {
+      console.log('OneSignal: notification opened:', openedEvent);
+    });
 
     Gemius.setAppInfo(GEMIUS_APP_NAME, appVersion, GEMIUS_HIT_COLLECTOR_HOST, GEMIUS_VIEW_SCRIPT_ID);
 
     const playerId = 'lrt-player-' + Platform.OS;
     Gemius.setPlayerInfo(playerId, GEMIUS_HIT_COLLECTOR_HOST, GEMIUS_PLAYER_SCRIPT_ID);
-  }
-
-  componentWillUnmount() {
-    OneSignal.removeEventListener('ids', this.onIds);
-  }
-
-  onIds(device) {
-    console.log('OneSignal device info: ', device);
   }
 
   render() {

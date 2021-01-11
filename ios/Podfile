@@ -24,7 +24,7 @@ target 'lrtApp' do
 end
 
 target 'OneSignalNotificationServiceExtension' do
-  pod 'OneSignal', '>= 2.9.3', '< 3.0'
+  pod 'OneSignal', '>= 2.9.3', '< 5.0'
 end
 
 target 'lrtApp-tvOS' do
