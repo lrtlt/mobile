@@ -23,6 +23,10 @@ Once you have all  the tools installed open youre IDE (we prefer VSCode) and run
 
 ```yarn run-android```  - build & run android application
 
+```yarn clean-build``` - cleans node_module folder & re-downloads required dependencies. Also runs ```pod install``` for iOS
+
+```yarn clean-build-win``` - cleans node_module folder & re-downloads required dependencies on Windows. Also runs ```./gradlew clean``` for Android project
+
 ### Helpful scripts
 
 ```react-native run-ios --configuration Release``` build & run iOS application in release mode.
