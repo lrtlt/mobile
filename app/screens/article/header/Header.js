@@ -1,11 +1,35 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import {FacebookReactions, Text} from '../../../components';
+import {FacebookReactions, Text, TouchableDebounce} from '../../../components';
 import {useTheme} from '../../../Theme';
+import {IconVolume} from '../../../components/svg';
 
 const ArticleHeader = (props) => {
+  const [text2SpeechEnabled, setText2SpeechEnabled] = useState(false);
+
   const {colors} = useTheme();
+
+  const text2Speech = props.text2SpeechEnabled ? (
+    <TouchableDebounce
+      // eslint-disable-next-line react-native/no-inline-styles
+      style={{
+        alignSelf: 'flex-end',
+      }}
+      onPress={() => {
+        setText2SpeechEnabled(!text2SpeechEnabled);
+        props.onTextToSpeechClick(!text2SpeechEnabled);
+      }}>
+      <View
+        style={{
+          ...styles.iconButton,
+          borderColor: colors.buttonBorder,
+          backgroundColor: text2SpeechEnabled ? colors.primary : undefined,
+        }}>
+        <IconVolume size={22} color={text2SpeechEnabled ? colors.onPrimary : colors.buttonContent} />
+      </View>
+    </TouchableDebounce>
+  ) : null;
 
   const subtitle = props.subtitle ? (
     <Text style={styles.subtitle} type="error">
@@ -34,8 +58,8 @@ const ArticleHeader = (props) => {
       <View style={styles.authorShareContainer}>
         <View style={styles.authorContainer}>
           <Text style={styles.smallTextBold}>{props.author}</Text>
-          {/* <Text style={styles.smallText}>{props.date}</Text> */}
         </View>
+        {text2Speech}
       </View>
     </View>
   );
@@ -75,13 +99,14 @@ const styles = StyleSheet.create({
   },
   authorShareContainer: {
     flex: 1,
-    paddingTop: 24,
-    paddingBottom: 24,
+    paddingBottom: 16,
+    paddingTop: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   authorContainer: {
     flex: 1,
+    justifyContent: 'flex-end',
   },
   greyDot: {
     width: 4,
@@ -100,5 +125,12 @@ const styles = StyleSheet.create({
     fontFamily: 'SourceSansPro-Regular',
     marginTop: 4,
     fontSize: 15,
+  },
+  iconButton: {
+    padding: 10,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
   },
 });

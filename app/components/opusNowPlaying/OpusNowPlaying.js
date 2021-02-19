@@ -28,7 +28,7 @@ const OpusNowComponent = (props) => {
   console.log('currectsong', currentSong);
   return (
     <View>
-      <View style={{...styles.container, backgroundColor: colors.primaryLightest}}>
+      <View style={{...styles.container, backgroundColor: colors.primaryLight}}>
         <View style={styles.iconContainer}>
           <View style={{...styles.iconButton, backgroundColor: colors.lightGreyBackground}}>
             <IconNote size={12} color={colors.darkIcon} />

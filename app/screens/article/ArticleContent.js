@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Dimensions, Animated, StyleSheet} from 'react-native';
 import Header from './header/Header';
 import {getOrientation, getSmallestDim} from '../../util/UI';
@@ -20,6 +20,7 @@ import {
   TYPE_GALLERY,
   TYPE_VIDEO,
   TYPE_AUDIO,
+  TYPE_TEXT_TO_SPEECH,
 } from './ArticleCompositor';
 import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -41,6 +42,8 @@ const getItemKey = (item, index) => {
 };
 
 const ArticleContent = (props) => {
+  const [isTextToSpeechPlaying, setTextToSpeechPlaying] = useState(false);
+
   const articleData = compose(props.article);
 
   const {colors} = useTheme();
@@ -51,6 +54,11 @@ const ArticleContent = (props) => {
     const {type, data} = item.item;
 
     const renderMainPhoto = () => {
+      if (isTextToSpeechPlaying) {
+        //We will render text2Speech component instead
+        return null;
+      }
+
       return (
         <TouchableDebounce
           onPress={() =>
@@ -98,6 +106,16 @@ const ArticleContent = (props) => {
       );
     };
 
+    const renderText2Speech = () => {
+      return (
+        isTextToSpeechPlaying && (
+          <View style={styles.playerContainer}>
+            <AudioComponent {...data} style={styles.playerTextToSpeech} autoPlay={true} />
+          </View>
+        )
+      );
+    };
+
     const renderGallery = () => {
       return (
         <ArticleGallery
@@ -110,7 +128,7 @@ const ArticleContent = (props) => {
 
     switch (type) {
       case TYPE_HEADER: {
-        return <Header {...data} />;
+        return <Header {...data} onTextToSpeechClick={(enabled) => setTextToSpeechPlaying(enabled)} />;
       }
       case TYPE_MAIN_PHOTO: {
         return renderMainPhoto();
@@ -129,6 +147,9 @@ const ArticleContent = (props) => {
       }
       case TYPE_AUDIO: {
         return renderAudio();
+      }
+      case TYPE_TEXT_TO_SPEECH: {
+        return renderText2Speech();
       }
       default: {
         return <View />;
@@ -188,6 +209,11 @@ const styles = StyleSheet.create({
   player: {
     width: '100%',
     aspectRatio: VIDEO_ASPECT_RATIO,
+    maxHeight: getSmallestDim() - 62,
+  },
+  playerTextToSpeech: {
+    width: '100%',
+    aspectRatio: 1.5,
     maxHeight: getSmallestDim() - 62,
   },
 });

@@ -28,12 +28,14 @@ const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, d
 
       sendClose();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const image = backgroundImage ? backgroundImage : DEFAULT_BACKGROUND_IMAGE;
 
   const createPlaylistItem = () => {
     return {
+      //playerStyle: 'lrt',
       title: title,
       mediaId: mediaId,
       image: image,
@@ -100,6 +102,7 @@ const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, d
       <JWPlayer
         ref={playerRef}
         style={styles.flex}
+        //playerStyle="lrt"
         playlistItem={createPlaylistItem()}
         nativeFullScreen={true}
         nextUpDisplay={false}

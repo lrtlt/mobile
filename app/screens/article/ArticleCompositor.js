@@ -5,6 +5,7 @@ export const TYPE_GALLERY = 'content_gallery';
 export const TYPE_PARAGRAPH = 'content_paragraph';
 export const TYPE_VIDEO = 'content_video';
 export const TYPE_AUDIO = 'content_audio';
+export const TYPE_TEXT_TO_SPEECH = 'content_text2speech';
 
 export const compose = (article) => {
   const data = [];
@@ -12,6 +13,10 @@ export const compose = (article) => {
 
   if (article.is_video !== 1 && article.is_audio !== 1) {
     data.push(getMainPhoto(article));
+  }
+
+  if (article.text2speech_file_url) {
+    data.push(getTextToSpeech(article));
   }
 
   if (article.article_summary) {
@@ -64,6 +69,7 @@ const getHeaderData = (article) => {
       subtitle: article.article_subtitle || article.subtitle,
       facebookReactions: article.reactions_count,
       author: author,
+      text2SpeechEnabled: Boolean(article.text2speech_file_url),
     },
   };
 };
@@ -127,6 +133,18 @@ const getAudio = (article) => {
     data: {
       cover: article.main_photo,
       streamUri: article.stream_url,
+    },
+  };
+};
+
+const getTextToSpeech = (article) => {
+  console.log('file: ', article.text2speech_file_url);
+  return {
+    type: TYPE_TEXT_TO_SPEECH,
+    data: {
+      cover: article.main_photo,
+      streamUri: article.text2speech_file_url,
+      mediaId: article.text2speech_file_url,
     },
   };
 };

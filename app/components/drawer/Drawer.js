@@ -29,6 +29,8 @@ import {
   IconUpload,
 } from '../svg';
 
+const ICON_SIZE = 18;
+
 const DrawerComponent = (props) => {
   const {navigation} = props;
 
@@ -48,25 +50,25 @@ const DrawerComponent = (props) => {
         <DrawerItem
           key={strings.upload}
           text={strings.upload}
-          iconComponent={<IconUpload size={22} color={colors.primaryDark} />}
+          iconComponent={<IconUpload size={ICON_SIZE} color={colors.primaryDark} />}
           onPress={() => Linking.openURL(URL_UPLOAD_NEWS)}
         />
         <DrawerItem
           key={strings.feeback}
           text={strings.feeback}
-          iconComponent={<IconError size={22} color={colors.primaryDark} />}
+          iconComponent={<IconError size={ICON_SIZE} color={colors.primaryDark} />}
           onPress={() => Linking.openURL(URL_FEEDBACK)}
         />
         <DrawerItem
           key={strings.contacts}
           text={strings.contacts}
-          iconComponent={<IconPhone size={22} color={colors.primaryDark} />}
+          iconComponent={<IconPhone size={ICON_SIZE} color={colors.primaryDark} />}
           onPress={() => Linking.openURL(URL_CONTACTS)}
         />
         <DrawerItem
           key={strings.about}
           text={strings.about}
-          iconComponent={<IconInfo size={22} color={colors.primaryDark} />}
+          iconComponent={<IconInfo size={ICON_SIZE} color={colors.primaryDark} />}
           onPress={() => Linking.openURL(URL_ABOUT)}
         />
       </View>
@@ -79,7 +81,7 @@ const DrawerComponent = (props) => {
         <DrawerItem
           key={channel.channel_title}
           text={channel.channel_title}
-          iconComponent={getIconForChannel(channel.channel, 22)}
+          iconComponent={getIconForChannel(channel.channel, ICON_SIZE)}
           onPress={() => {
             navigation.navigate('Channel', {channelId: channel.channel_id});
           }}
@@ -99,7 +101,7 @@ const DrawerComponent = (props) => {
       <DrawerItem
         key={strings.search}
         text={strings.search}
-        iconComponent={<IconSearch size={22} color={colors.primaryDark} />}
+        iconComponent={<IconSearch size={ICON_SIZE} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('Search')}
       />
     );
@@ -110,7 +112,7 @@ const DrawerComponent = (props) => {
       <DrawerItem
         key={strings.tvProgram}
         text={strings.tvProgram}
-        iconComponent={<IconTelevision size={22} color={colors.primaryDark} />}
+        iconComponent={<IconTelevision size={ICON_SIZE} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('Program')}
       />
     );
@@ -121,7 +123,7 @@ const DrawerComponent = (props) => {
       <DrawerItem
         key={strings.history}
         text={strings.history}
-        iconComponent={<IconClock size={22} color={colors.primaryDark} />}
+        iconComponent={<IconClock size={ICON_SIZE} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('History')}
       />
     );
@@ -132,7 +134,7 @@ const DrawerComponent = (props) => {
       <DrawerItem
         key={strings.bookmarks}
         text={strings.bookmarks}
-        iconComponent={<IconBookmark size={22} color={colors.primaryDark} />}
+        iconComponent={<IconBookmark size={ICON_SIZE} color={colors.primaryDark} />}
         onPress={() => navigation.navigate('Bookmarks')}
       />
     );
@@ -174,7 +176,7 @@ const DrawerComponent = (props) => {
         <DrawerItem
           key={page.key}
           text={page.title}
-          iconComponent={<IconLituanica size={22} color={colors.primaryLight} />}
+          iconComponent={<IconLituanica size={ICON_SIZE} />}
           onPress={() => navigation.navigate('Page', {page})}
         />
       ));

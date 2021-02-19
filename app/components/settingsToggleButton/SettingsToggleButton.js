@@ -24,7 +24,7 @@ export default ToggleButton;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderRadius: 4,
   },
   touchArea: {

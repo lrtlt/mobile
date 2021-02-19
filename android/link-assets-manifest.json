@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/font/PlayfairDisplay-Regular.ttf",
+      "sha1": "e3e9e9b588f5743c1040ace2844c73ce1293e1f6"
+    },
+    {
+      "path": "assets/font/SourceSansPro-LightItalic.ttf",
+      "sha1": "566c5951f9f80fb1240e96b019b14c0d1d78ab75"
+    },
+    {
+      "path": "assets/font/SourceSansPro-Regular.ttf",
+      "sha1": "17c25475c0369f7f8c8462af9cf127a4cf6f1332"
+    },
+    {
+      "path": "assets/font/SourceSansPro-SemiBold.ttf",
+      "sha1": "cc116f72a3684fd57b8852a41828889fbe079560"
+    }
+  ]
+}
