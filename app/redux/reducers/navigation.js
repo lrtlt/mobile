@@ -1,5 +1,4 @@
 import {
-  SET_SELECTED_CATEGORY,
   API_HOME_RESULT,
   API_HOME_ERROR,
   API_MENU_ITEMS_RESULT,
@@ -9,9 +8,11 @@ import {
   FETCH_HOME,
   SET_SEARCH_FILTER,
   RESET_SEARCH_FILTER,
+  OPEN_LINKING_URL,
 } from '../actions/actionTypes';
 import {ARTICLE_LIST_TYPE_HOME, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 import {EventRegister} from 'react-native-event-listeners';
+import {Linking} from 'react-native';
 
 const defaultSearchFilter = {type: 0, section: '', days: ''};
 
@@ -23,6 +24,7 @@ const initialState = {
   isReady: false,
   isError: false,
   filter: defaultSearchFilter,
+  linkingOpenUrl: undefined,
 };
 
 const reducer = (state = initialState, action) => {
@@ -56,11 +58,18 @@ const reducer = (state = initialState, action) => {
       };
     }
     case API_HOME_RESULT:
+      if (state.linkingOpenUrl) {
+        if (Linking.canOpenURL(state.linkingOpenUrl)) {
+          Linking.openURL(state.linkingOpenUrl);
+        }
+      }
+
       return {
         ...state,
         isLoading: false,
         isError: false,
         isReady: true,
+        linkingOpenUrl: undefined,
       };
     case API_HOME_ERROR:
       return {
@@ -98,6 +107,20 @@ const reducer = (state = initialState, action) => {
         console.warn('Index not found for route: ' + categoryName);
       }
       return state;
+    }
+    case OPEN_LINKING_URL: {
+      const {url} = action;
+      if (state.isReady) {
+        if (Linking.canOpenURL(url)) {
+          Linking.openURL(url);
+        }
+        return state;
+      } else {
+        return {
+          ...state,
+          linkingOpenUrl: url,
+        };
+      }
     }
     default:
       return state;
