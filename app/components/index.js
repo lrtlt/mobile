@@ -35,3 +35,4 @@ export {default as SearchFilterDrawer} from './searchFilterDrawer/SearchFilterDr
 export {default as Text} from './text/Text';
 export {default as Forecast} from './forecast/ForecastComponent';
 export {default as WeatherEmbed} from './weatherEmbed/WeatherEmbedComponent';
+export {default as TopAudioArticle} from './audioteka/TopArticle';

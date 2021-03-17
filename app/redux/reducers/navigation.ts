@@ -10,24 +10,55 @@ import {
   RESET_SEARCH_FILTER,
   OPEN_LINKING_URL,
 } from '../actions/actionTypes';
-import {ARTICLE_LIST_TYPE_HOME, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
+import {EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 import {EventRegister} from 'react-native-event-listeners';
 import {Linking} from 'react-native';
+import {NavigationActionType} from '../actions';
+import {
+  MenuItem,
+  MenuItemCategory,
+  MenuItemPage,
+  MenuItemProjects,
+  MenuResponse,
+  ROUTE_TYPE_HOME,
+  ROUTE_TYPE_TYPE_AUDIOTEKA,
+  ROUTE_TYPE_TYPE_CATEGORY,
+  ROUTE_TYPE_TYPE_MEDIA,
+  ROUTE_TYPE_TYPE_NEWEST,
+  ROUTE_TYPE_TYPE_PAGE,
+  ROUTE_TYPE_TYPE_POPULAR,
+  ROUTE_TYPE_TYPE_WEBPAGES,
+  SearchFilter,
+  SEARCH_TYPE_ALL,
+} from '../../api/Types';
 
-const defaultSearchFilter = {type: 0, section: '', days: ''};
+export type NavigationState = {
+  routes: (MenuItem | MenuItemCategory)[];
+  pages: MenuItemPage[];
+  projects: MenuItemProjects[];
+  isLoading: boolean;
+  isReady: boolean;
+  isError: boolean;
+  filter: SearchFilter;
+  linkingOpenUrl?: string;
+};
 
-const initialState = {
+const initialState: NavigationState = {
   routes: [],
   pages: [],
-  projects: null,
+  projects: [],
   isLoading: false,
   isReady: false,
   isError: false,
-  filter: defaultSearchFilter,
+  filter: {
+    type: SEARCH_TYPE_ALL,
+    section: '',
+    days: '',
+  },
   linkingOpenUrl: undefined,
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: NavigationActionType): NavigationState => {
   switch (action.type) {
     case SET_SEARCH_FILTER: {
       return {
@@ -38,7 +69,11 @@ const reducer = (state = initialState, action) => {
     case RESET_SEARCH_FILTER: {
       return {
         ...state,
-        filter: defaultSearchFilter,
+        filter: {
+          type: SEARCH_TYPE_ALL,
+          section: '',
+          days: '',
+        },
       };
     }
     case FETCH_MENU_ITEMS: {
@@ -54,7 +89,6 @@ const reducer = (state = initialState, action) => {
         ...state,
         isLoading: true,
         isError: false,
-        //  isReady: false,
       };
     }
     case API_HOME_RESULT:
@@ -81,9 +115,9 @@ const reducer = (state = initialState, action) => {
     case API_MENU_ITEMS_RESULT:
       return {
         ...state,
-        routes: parseRoutes(action.result),
-        pages: parsePages(action.result),
-        projects: parseProjects(action.result),
+        routes: parseRoutes(action.data),
+        pages: parsePages(action.data),
+        projects: parseProjects(action.data),
         isLoading: false,
         isError: false,
         isReady: false,
@@ -98,9 +132,8 @@ const reducer = (state = initialState, action) => {
     case OPEN_CATEGORY_FOR_NAME: {
       const {categoryName} = action;
       const index = state.routes.findIndex(
-        (route) => route.title.toLowerCase() === categoryName.toLowerCase(),
+        (route) => route.name.toLowerCase() === categoryName.toLowerCase(),
       );
-
       if (index > 0) {
         EventRegister.emit(EVENT_SELECT_CATEGORY_INDEX, {index});
       } else {
@@ -127,93 +160,36 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-const parseRoutes = (apiResponse) => {
-  const routes = [];
+const parseRoutes = (apiResponse: MenuResponse): (MenuItem | MenuItemCategory)[] => {
+  const availableTypes = [
+    ROUTE_TYPE_HOME,
+    ROUTE_TYPE_TYPE_AUDIOTEKA,
+    ROUTE_TYPE_TYPE_MEDIA,
+    ROUTE_TYPE_TYPE_NEWEST,
+    ROUTE_TYPE_TYPE_POPULAR,
+    ROUTE_TYPE_TYPE_CATEGORY,
+  ];
 
-  //TODO update 'Pagrindinis' hardcode.
-  routes.push({
-    key: ARTICLE_LIST_TYPE_HOME,
-    title: 'Pagrindinis',
-    type: ARTICLE_LIST_TYPE_HOME,
+  const routes = apiResponse.main_menu.filter((item): item is MenuItem | MenuItemCategory => {
+    return availableTypes.includes(item.type);
   });
-
-  const availableTypes = ['mediateka', 'newest', 'popular', 'category'];
-
-  apiResponse.main_menu
-    .filter((item) => {
-      return availableTypes.includes(item.type);
-    })
-    .forEach((item, i) => {
-      routes.push({
-        key: item.name,
-        title: item.name,
-        type: item.type,
-        categoryId: item.id,
-      });
-    });
-
-  console.log(routes);
+  routes.unshift({
+    type: ROUTE_TYPE_HOME,
+    name: 'Pagrindinis',
+  });
   return routes;
 };
 
-const parsePages = (apiResponse) => {
-  const pages = [];
-
-  apiResponse.main_menu
-    .filter((item) => {
-      return item.type === 'page';
-    })
-    .forEach((item) => {
-      const routes = item.categories.map((category) => {
-        return {
-          key: category.name,
-          title: category.name,
-          type: 'category',
-          categoryId: category.id,
-        };
-      });
-
-      pages.push({
-        key: item.name,
-        title: item.name,
-        type: item.type,
-        routes,
-      });
-    });
-
-  if (pages.length > 0) {
-    console.log('Found pages', pages);
-  }
-
-  return pages;
+const parsePages = (apiResponse: MenuResponse): MenuItemPage[] => {
+  return apiResponse.main_menu.filter((item): item is MenuItemPage => {
+    return item.type === ROUTE_TYPE_TYPE_PAGE;
+  });
 };
 
-const parseProjects = (apiResponse) => {
-  let projects;
-
-  apiResponse.main_menu
-    .filter((item) => {
-      return item.type === 'webpages';
-    })
-    .forEach((item) => {
-      const routes = item.categories.map((category) => {
-        return {
-          key: category.name,
-          title: category.name,
-          type: 'webpage',
-          url: category.url,
-        };
-      });
-
-      projects = {
-        key: item.name,
-        title: item.name,
-        type: item.type,
-        routes,
-      };
-    });
-
-  return projects;
+const parseProjects = (apiResponse: MenuResponse): MenuItemProjects[] => {
+  return apiResponse.main_menu.filter((item): item is MenuItemProjects => {
+    return item.type === ROUTE_TYPE_TYPE_WEBPAGES;
+  });
 };
 
 export default reducer;

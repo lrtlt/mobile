@@ -10,10 +10,9 @@ import {
   Forecast,
   TouchableDebounce,
 } from '../../../../components';
-import {fetchArticles, fetchMediateka, openCategoryForName} from '../../../../redux/actions/index';
+import {fetchHome, fetchMediateka, openCategoryForName} from '../../../../redux/actions/index';
 import {getOrientation} from '../../../../util/UI';
 import {
-  ARTICLE_LIST_TYPE_MEDIA,
   ARTICLE_EXPIRE_DURATION,
   GEMIUS_VIEW_SCRIPT_ID,
   LIST_DATA_TYPE_ARTICLES,
@@ -28,6 +27,7 @@ import {EventRegister} from 'react-native-event-listeners';
 import {selectHomeScreenState} from '../../../../redux/selectors';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../../../Theme';
+import {ROUTE_TYPE_TYPE_MEDIA} from '../../../../api/Types';
 
 const HomeScreen = (props) => {
   const {isCurrent, type} = props;
@@ -41,22 +41,22 @@ const HomeScreen = (props) => {
   const {sections, lastFetchTime, refreshing} = state;
 
   useEffect(() => {
-    const pageName = type === ARTICLE_LIST_TYPE_MEDIA ? 'mediateka' : 'home';
-
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      page: pageName,
+      page: type,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (data) => {
-      listRef.current?.scrollToLocation({
-        animated: true,
-        sectionIndex: 0,
-        itemIndex: 0,
-      });
-      callApi();
+      if (isCurrent) {
+        listRef.current?.scrollToLocation({
+          animated: true,
+          sectionIndex: 0,
+          itemIndex: 0,
+        });
+        callApi();
+      }
     });
 
     return () => EventRegister.removeEventListener(listener);
@@ -65,7 +65,7 @@ const HomeScreen = (props) => {
   useEffect(() => {
     if (isCurrent) {
       if (!refreshing && Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
-        console.log('Home data expired!');
+        console.log(`${type} data expired!`);
         callApi();
       }
     }
@@ -73,10 +73,10 @@ const HomeScreen = (props) => {
   }, [isCurrent, refreshing, state.lastFetchTime]);
 
   const callApi = () => {
-    if (type === ARTICLE_LIST_TYPE_MEDIA) {
+    if (type === ROUTE_TYPE_TYPE_MEDIA) {
       dispatch(fetchMediateka());
     } else {
-      dispatch(fetchArticles());
+      dispatch(fetchHome());
     }
   };
 
@@ -149,7 +149,7 @@ const HomeScreen = (props) => {
   };
 
   const renderForecast = () => {
-    if (type === ARTICLE_LIST_TYPE_MEDIA) {
+    if (type === ROUTE_TYPE_TYPE_MEDIA) {
       return null;
     } else {
       return (

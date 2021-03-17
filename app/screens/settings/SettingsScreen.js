@@ -4,7 +4,7 @@ import {SettingsToggleButton, Text} from '../../components';
 import {SunIcon, MoonIcon, PhotoIcon} from '../../components/svg';
 import {setConfig} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
-import {selectConfig} from '../../redux/selectors';
+import {selectSettings} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -22,7 +22,7 @@ const SettingsScreen = (props) => {
   const {strings} = useTheme();
   const dispatch = useDispatch();
 
-  const config = useSelector(selectConfig);
+  const config = useSelector(selectSettings);
 
   useEffect(() => {
     navigation.setOptions({

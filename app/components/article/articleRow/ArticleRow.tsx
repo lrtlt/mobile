@@ -28,7 +28,7 @@ const ArticleRow: React.FC<Props> = (props) => {
 
   const articles = props.data;
 
-  const backgroundColor = props.isSlug ? colors.slugBackground : null;
+  const backgroundColor = props.isSlug ? colors.slugBackground : undefined;
 
   const articleType = getArticleType(articles.length);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, Platform} from 'react-native';
+import {Dimensions} from 'react-native';
 
 import {
   ChannelLRadioIcon,
@@ -42,31 +42,7 @@ export const getSmallestDim = () => {
   return Math.min(dim.width, dim.height);
 };
 
-/**
- * Taken from react-navigation/stack
- * https://github.com/react-navigation/stack/blob/master/src/views/Header/HeaderSegment.tsx
- */
-export const getDefaultHeaderHeight = () => {
-  const isLandscape = isPortrait() === false;
-
-  let headerHeight;
-
-  if (Platform.OS === 'ios') {
-    if (isLandscape && !Platform.isPad) {
-      headerHeight = 32;
-    } else {
-      headerHeight = 44;
-    }
-  } else if (Platform.OS === 'android') {
-    headerHeight = 56;
-  } else {
-    headerHeight = 64;
-  }
-
-  return headerHeight;
-};
-
-export const getColorsForChannel = (channel) => {
+export const getColorsForChannel = (channel: string) => {
   switch (channel) {
     case 'LTV1': {
       return channelColors.color_set_lrtHD;
@@ -92,7 +68,7 @@ export const getColorsForChannel = (channel) => {
   }
 };
 
-export const getIconForChannel = (channel, size = DEFAULT_CHANNEL_ICON_SIZE) => {
+export const getIconForChannel = (channel: string, size = DEFAULT_CHANNEL_ICON_SIZE) => {
   switch (channel.toLowerCase()) {
     case 'ltv1': {
       return <ChannelLRTHDIcon size={size} />;
@@ -118,7 +94,7 @@ export const getIconForChannel = (channel, size = DEFAULT_CHANNEL_ICON_SIZE) => 
   }
 };
 
-export const getIconForChannelById = (channelId, size = DEFAULT_CHANNEL_ICON_SIZE) => {
+export const getIconForChannelById = (channelId: number, size = DEFAULT_CHANNEL_ICON_SIZE) => {
   switch (channelId) {
     case 1:
       return getIconForChannel('LTV1', size);
@@ -137,7 +113,7 @@ export const getIconForChannelById = (channelId, size = DEFAULT_CHANNEL_ICON_SIZ
   }
 };
 
-export const getIconForWeatherConditions = (conditions, size, color) => {
+export const getIconForWeatherConditions = (conditions: string | undefined, size: number, color: string) => {
   switch (conditions) {
     case 'isolated-clouds':
       return <IconWeatherCloud size={size} color={color} />;

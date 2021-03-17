@@ -1,18 +1,5 @@
-export {
-  fetchArticles,
-  fetchMediateka,
-  fetchCategory,
-  refreshCategory,
-  fetchNewest,
-  refreshNewest,
-  fetchPopular,
-  refreshPopular,
-} from './articles';
-
-export {fetchMenuItems, openCategoryForName, setSearchFilter, resetSearchFilter} from './navigation';
-
-export {toggleDarkMode, setTextSizeMultiplier, setImageMaxScaleFactor, setConfig} from './config';
-
-export {fetchProgram} from './program';
-
-export {addArticleToHistory, saveArticle, removeArticle} from './articleStorage';
+export * from './articles';
+export * from './navigation';
+export * from './config';
+export * from './program';
+export * from './articleStorage';

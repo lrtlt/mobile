@@ -16,7 +16,7 @@ export default MediaIndicator;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFFFFFCC',
     alignItems: 'center',
     justifyContent: 'center',
   },

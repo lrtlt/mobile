@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Button, ActivityIndicator, StyleSheet} from 'react-native';
 import {ArticleRow, Text} from '../../components';
 import {getOrientation} from '../../util/UI';
-import {articleGetByTag} from '../../api';
+import {fetchArticlesByTag} from '../../api';
 import {formatArticles} from '../../util/articleFormatters';
 import {ARTICLES_PER_PAGE_COUNT} from '../../constants';
 import {FlatList} from 'react-native-gesture-handler';
@@ -58,10 +58,7 @@ const SlugScreen = (props) => {
   const callApi = async () => {
     const urlSegments = category.slug_url.split('/');
     const tag = urlSegments[urlSegments.length - 1];
-    const response = await fetch(articleGetByTag(tag, ARTICLES_PER_PAGE_COUNT * 3));
-    const result = await response.json();
-    console.log('ARTICLES BY TAG API RESPONSE', result);
-    return result;
+    return await fetchArticlesByTag(tag, ARTICLES_PER_PAGE_COUNT * 3);
   };
 
   const renderItem = (val) => {

@@ -26,7 +26,7 @@ const reducer = (state = initialState, action) => {
       return {
         isFetching: false,
         isError: false,
-        program: action.result.all_programs,
+        program: action.data.all_programs,
       };
     }
     default:

@@ -8,6 +8,13 @@ import {useTheme} from '../../Theme';
 import {selectSearchFilter} from '../../redux/selectors';
 import TextComponent from '../text/Text';
 import Divider from '../divider/Divider';
+import {
+  SEARCH_TYPE_ALL,
+  SEARCH_TYPE_AUDIO,
+  SEARCH_TYPE_NEWS,
+  SEARCH_TYPE_VIDEO,
+  SEARCH_TYPE_VIDEO_SUBTITLES,
+} from '../../api/Types';
 
 const SearchFilterDrawer = (_) => {
   const {colors} = useTheme();
@@ -32,11 +39,19 @@ const SearchFilterDrawer = (_) => {
     return (
       <View>
         <TextComponent style={styles.titleText}>TIPAS</TextComponent>
-        <SelectableItem selected={type === 0} text={'Visi'} onPress={() => selectType(0)} />
-        <SelectableItem selected={type === 1} text={'Naujienos'} onPress={() => selectType(1)} />
-        <SelectableItem selected={type === 2} text={'Audio'} onPress={() => selectType(2)} />
-        <SelectableItem selected={type === 3} text={'Video'} onPress={() => selectType(3)} />
-        <SelectableItem selected={type === 4} text={'Video + titrai'} onPress={() => selectType(4)} />
+        <SelectableItem selected={type === 0} text={'Visi'} onPress={() => selectType(SEARCH_TYPE_ALL)} />
+        <SelectableItem
+          selected={type === 1}
+          text={'Naujienos'}
+          onPress={() => selectType(SEARCH_TYPE_NEWS)}
+        />
+        <SelectableItem selected={type === 2} text={'Audio'} onPress={() => selectType(SEARCH_TYPE_AUDIO)} />
+        <SelectableItem selected={type === 3} text={'Video'} onPress={() => selectType(SEARCH_TYPE_VIDEO)} />
+        <SelectableItem
+          selected={type === 4}
+          text={'Video + titrai'}
+          onPress={() => selectType(SEARCH_TYPE_VIDEO_SUBTITLES)}
+        />
       </View>
     );
   };

@@ -4,8 +4,9 @@ import template1Formatter from './articleFormatterTemplate1';
 import template2Formatter from './articleFormatterTemplate2';
 import template3Formatter from './articleFormatterTemplate3';
 import template999Formatter from './articleFormatterTemplate999';
+import {Article} from '../../../Types';
 
-export const formatArticles = (template_id, articles, clipLast = true) => {
+export const formatArticles = (template_id: number, articles: Article[], clipLast = true): Article[][] => {
   if (articles && articles.length === 0) {
     return [];
   }

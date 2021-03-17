@@ -5,10 +5,13 @@ import config from './config';
 import program from './program';
 import articleStorage from './articleStorage';
 
-export default combineReducers({
+export type RootState = ReturnType<typeof reducer>;
+
+const reducer = combineReducers({
   articles,
   articleStorage,
   navigation,
   program,
   config,
 });
+export default reducer;

@@ -1,13 +1,13 @@
 import {takeEvery, call, put} from 'redux-saga/effects';
 import {
-  homeGet,
-  menuGet,
-  categoryGet,
-  categoryTopsGet,
-  newestArticlesGet,
-  popularArticlesGet,
-  mediatekaGet,
-  programGet,
+  fetchHomeApi,
+  fetchAudiotekaApi,
+  fetchCategoryApi,
+  fetchMediatekaApi,
+  fetchMenuItemsApi,
+  fetchNewestApi,
+  fetchPopularApi,
+  fetchProgramApi,
 } from '../api';
 import {
   FETCH_HOME,
@@ -34,30 +34,15 @@ import {
   API_PROGRAM_RESULT,
   API_PROGRAM_ERROR,
   FETCH_PROGRAM,
+  FETCH_AUDIOTEKA,
+  API_AUDIOTEKA_RESULT,
+  API_AUDIOTEKA_ERROR,
 } from './actions/actionTypes';
-
-const fetchMenuItemsApi = () => fetch(menuGet());
-
-const fetchArticlesApi = () => fetch(homeGet());
-
-const fetchProgramApi = () => fetch(programGet());
-
-const fetchMediatekaApi = () => fetch(mediatekaGet());
-
-const fetchNewestAPI = (page, count) => fetch(newestArticlesGet(count, page));
-
-const fetchPopularApi = (page, count) => fetch(popularArticlesGet(count, page));
-
-const fetchCategoryAPI = (categoryId, count, page) => fetch(categoryGet(categoryId, count, page));
-
-const fetchCategoryTopsAPI = (categoryId, count) => fetch(categoryTopsGet(categoryId, count));
 
 function* fetchMenuItems() {
   try {
-    const response = yield call(fetchMenuItemsApi);
-    const result = yield response.json();
-    console.log('API RESPONSE MENU', result);
-    yield put({type: API_MENU_ITEMS_RESULT, result});
+    const data = yield call(fetchMenuItemsApi);
+    yield put({type: API_MENU_ITEMS_RESULT, data});
   } catch (e) {
     console.log('Saga error', e);
     yield put({type: API_MENU_ITEMS_ERROR});
@@ -66,10 +51,8 @@ function* fetchMenuItems() {
 
 function* fetchArticlesData() {
   try {
-    const response = yield call(fetchArticlesApi);
-    const result = yield response.json();
-    console.log('API RESPONSE ARTICLES', result);
-    yield put({type: API_HOME_RESULT, result});
+    const data = yield call(fetchHomeApi);
+    yield put({type: API_HOME_RESULT, data});
   } catch (e) {
     console.log('Saga error', e);
     yield put({type: API_HOME_ERROR});
@@ -78,22 +61,28 @@ function* fetchArticlesData() {
 
 function* fetchMediatekaData() {
   try {
-    const response = yield call(fetchMediatekaApi);
-    const result = yield response.json();
-    console.log('API RESPONSE MEDIATEKA', result);
-    yield put({type: API_MEDIATEKA_RESULT, result});
+    const data = yield call(fetchMediatekaApi);
+    yield put({type: API_MEDIATEKA_RESULT, data});
   } catch (e) {
     console.log('Saga error', e);
     yield put({type: API_MEDIATEKA_ERROR});
   }
 }
 
+function* fetchAudiotekaData() {
+  try {
+    const data = yield call(fetchAudiotekaApi);
+    yield put({type: API_AUDIOTEKA_RESULT, data});
+  } catch (e) {
+    console.log('Saga error', e);
+    yield put({type: API_AUDIOTEKA_ERROR});
+  }
+}
+
 function* fetchProgramData() {
   try {
-    const response = yield call(fetchProgramApi);
-    const result = yield response.json();
-    console.log('API RESPONSE PROGRAM', result);
-    yield put({type: API_PROGRAM_RESULT, result});
+    const data = yield call(fetchProgramApi);
+    yield put({type: API_PROGRAM_RESULT, data});
   } catch (e) {
     console.log('Saga error', e);
     yield put({type: API_PROGRAM_ERROR});
@@ -103,11 +92,9 @@ function* fetchProgramData() {
 function* fetchCategoryData(action) {
   try {
     const {categoryId, count, page} = action.payload;
-    const response = yield call(() => fetchCategoryAPI(categoryId, count, page));
-    const result = yield response.json();
-    result.refresh = false;
-    console.log('API RESPONSE', result);
-    yield put({type: API_CATEGORY_RESULT, result});
+    const data = yield call(async () => await fetchCategoryApi(categoryId, count, page));
+    data.refresh = false;
+    yield put({type: API_CATEGORY_RESULT, data});
   } catch (e) {
     console.log('Saga error', e);
     yield put({type: API_CATEGORY_ERROR, payload: action.payload});
@@ -117,11 +104,9 @@ function* fetchCategoryData(action) {
 function* refreshCategoryData(action) {
   try {
     const {categoryId, count} = action.payload;
-    const response = yield call(() => fetchCategoryAPI(categoryId, count, 1));
-    const result = yield response.json();
-    result.refresh = true;
-    console.log('API RESPONSE', result);
-    yield put({type: API_CATEGORY_RESULT, result});
+    const data = yield call(async () => await fetchCategoryApi(categoryId, count, 1));
+    data.refresh = true;
+    yield put({type: API_CATEGORY_RESULT, data});
   } catch (e) {
     console.log('Saga error', e);
     yield put({type: API_CATEGORY_ERROR, payload: action.payload});
@@ -131,11 +116,9 @@ function* refreshCategoryData(action) {
 function* fetchNewestData(action) {
   try {
     const {page, count} = action.payload;
-    const response = yield call(() => fetchNewestAPI(page, count));
-    const result = yield response.json();
-    result.refresh = false;
-    console.log('API RESPONSE NEWEST', result);
-    yield put({type: API_NEWEST_RESULT, result});
+    const data = yield call(() => fetchNewestApi(page, count));
+    data.refresh = false;
+    yield put({type: API_NEWEST_RESULT, data});
   } catch (e) {
     console.log('Saga error', e);
     yield put({type: API_NEWEST_ERROR});
@@ -145,11 +128,9 @@ function* fetchNewestData(action) {
 function* refreshNewestData(action) {
   try {
     const {count} = action.payload;
-    const response = yield call(() => fetchNewestAPI(1, count));
-    const result = yield response.json();
-    result.refresh = true;
-    console.log('API RESPONSE _REFRESH', result);
-    yield put({type: API_NEWEST_RESULT, result});
+    const data = yield call(() => fetchNewestApi(1, count));
+    data.refresh = true;
+    yield put({type: API_NEWEST_RESULT, data});
   } catch (e) {
     console.log('Saga error', e);
     yield put({type: API_NEWEST_ERROR});
@@ -159,11 +140,9 @@ function* refreshNewestData(action) {
 function* fetchPopularData(action) {
   try {
     const {page, count} = action.payload;
-    const response = yield call(() => fetchPopularApi(page, count));
-    const result = yield response.json();
-    result.refresh = false;
-    console.log('API RESPONSE POPULAR', result);
-    yield put({type: API_POPULAR_RESULT, result});
+    const data = yield call(() => fetchPopularApi(page, count));
+    data.refresh = false;
+    yield put({type: API_POPULAR_RESULT, data});
   } catch (e) {
     console.log('Saga error', e);
     yield put({type: API_POPULAR_ERROR});
@@ -173,27 +152,12 @@ function* fetchPopularData(action) {
 function* refreshPopularData(action) {
   try {
     const {count} = action.payload;
-    const response = yield call(() => fetchPopularApi(1, count));
-    const result = yield response.json();
-    result.refresh = true;
-    console.log('API RESPONSE _REFRESH', result);
-    yield put({type: API_POPULAR_RESULT, result});
+    const data = yield call(() => fetchPopularApi(1, count));
+    data.refresh = true;
+    yield put({type: API_POPULAR_RESULT, data});
   } catch (e) {
     console.log('Saga error', e);
     yield put({type: API_POPULAR_ERROR});
-  }
-}
-
-function* fetchCategoryTopsData(action) {
-  try {
-    const {categoryId, count} = action.payload;
-    const response = yield call(() => fetchCategoryTopsAPI(categoryId, count));
-    const result = yield response.json();
-    console.log('API RESPONSE CATEGORY TOPS', result);
-    yield put({type: API_CATEGORY_RESULT, result});
-  } catch (e) {
-    console.log('Saga error', e);
-    yield put({type: API_CATEGORY_ERROR});
   }
 }
 
@@ -207,5 +171,6 @@ export default function* rootSaga() {
   yield takeEvery(FETCH_POPULAR, fetchPopularData);
   yield takeEvery(REFRESH_POPULAR, refreshPopularData);
   yield takeEvery(FETCH_MEDIATEKA, fetchMediatekaData);
+  yield takeEvery(FETCH_AUDIOTEKA, fetchAudiotekaData);
   yield takeEvery(FETCH_PROGRAM, fetchProgramData);
 }

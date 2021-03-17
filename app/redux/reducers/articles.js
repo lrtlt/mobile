@@ -18,6 +18,9 @@ import {
   FETCH_MEDIATEKA,
   API_MEDIATEKA_RESULT,
   API_MEDIATEKA_ERROR,
+  FETCH_AUDIOTEKA,
+  API_AUDIOTEKA_RESULT,
+  API_AUDIOTEKA_ERROR,
 } from '../actions/actionTypes';
 
 import {
@@ -27,8 +30,8 @@ import {
   LIST_DATA_TYPE_MORE_FOOTER,
 } from '../../constants';
 
-import {ARTICLE_LIST_TYPE_CATEGORY} from '../../constants/';
 import {formatArticles as formatArticleBlock} from '../../util/articleFormatters';
+import {ROUTE_TYPE_TYPE_CATEGORY} from '../../api/Types';
 
 const initialNewestBlockState = {
   isFetching: false,
@@ -48,11 +51,27 @@ const initialHomeBlockState = {
 
 const initialMediatekaBlockState = initialHomeBlockState;
 
+const initialAudiotekaBlockState = {
+  isFetching: false,
+  isError: false,
+  lastFetchTime: 0,
+  data: {
+    articles: [],
+    articles_blocks: [],
+    new_articles: {
+      by_channel: [],
+      all_articles: [],
+    },
+    popular_articles: [],
+  },
+};
+
 const initialState = {
   homeItems: [],
   home: initialHomeBlockState,
   lastHomeDataFetchTime: 0,
   mediateka: initialMediatekaBlockState,
+  audioteka: initialAudiotekaBlockState,
   categories: [],
   newest: initialNewestBlockState,
   popular: initialNewestBlockState,
@@ -72,7 +91,7 @@ const reducer = (state = initialState, action) => {
     case API_MENU_ITEMS_RESULT:
       return {
         ...state,
-        categories: parseCategoriesFromMenu(action.result),
+        categories: parseCategoriesFromMenu(action.data),
       };
     case FETCH_CATEGORY: {
       const {categoryId} = action.payload;
@@ -161,10 +180,10 @@ const reducer = (state = initialState, action) => {
       };
     }
     case API_HOME_RESULT: {
-      const articleBlocks = parseArticles(action.result);
+      const articleBlocks = parseArticles(action.data);
       const formattedArticleBlocks = formatArticles(articleBlocks);
       const homeItems = prepareHomeScreenData(formattedArticleBlocks);
-      insertTvProg(action.result, homeItems);
+      insertTvProg(action.data, homeItems);
       insertMoreFooters(homeItems);
 
       console.log('HOME ITEMS', homeItems);
@@ -180,7 +199,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         home,
-        tvprog: action.result.tvprog,
+        tvprog: action.data.tvprog,
       };
     }
     case FETCH_MEDIATEKA: {
@@ -194,22 +213,20 @@ const reducer = (state = initialState, action) => {
       };
     }
     case API_MEDIATEKA_RESULT: {
-      const articleBlocks = parseArticles(action.result);
+      const articleBlocks = parseArticles(action.data);
       const formattedArticleBlocks = formatArticles(articleBlocks);
       const mediatekaItems = prepareHomeScreenData(formattedArticleBlocks);
-      insertTvProg(action.result, mediatekaItems);
-
-      const mediateka = {
-        isFetching: false,
-        isError: false,
-        lastFetchTime: Date.now(),
-        items: mediatekaItems,
-      };
+      insertTvProg(action.data, mediatekaItems);
 
       return {
         ...state,
-        mediateka,
-        tvprog: action.result.tvprog,
+        mediateka: {
+          isFetching: false,
+          isError: false,
+          lastFetchTime: Date.now(),
+          items: mediatekaItems,
+        },
+        tvprog: action.data.tvprog,
       };
     }
     case API_MEDIATEKA_ERROR: {
@@ -222,17 +239,48 @@ const reducer = (state = initialState, action) => {
         },
       };
     }
+    case FETCH_AUDIOTEKA: {
+      return {
+        ...state,
+        audioteka: {
+          ...state.audioteka,
+          lastFetchTime: Date.now(),
+          isError: false,
+          isFetching: true,
+        },
+      };
+    }
+    case API_AUDIOTEKA_RESULT: {
+      return {
+        ...state,
+        audioteka: {
+          data: action.data,
+          isError: false,
+          isFetching: false,
+        },
+      };
+    }
+    case API_AUDIOTEKA_ERROR: {
+      return {
+        ...state,
+        audioteka: {
+          ...state.audioteka,
+          isError: true,
+          isFetching: false,
+        },
+      };
+    }
     case API_CATEGORY_RESULT: {
-      const {category_id} = action.result.category_info;
-      const articles = formatArticleBlock(-1, action.result.articles);
+      const {category_id} = action.data.category_info;
+      const articles = formatArticleBlock(-1, action.data.articles);
 
       //Reset page to 1 if it's after refresh
-      const page = action.result.page;
-      const nextPage = action.result.next_page;
+      const page = action.data.page;
+      const nextPage = action.data.next_page;
 
       const newCategories = state.categories.map((c) => {
         if (c.id === category_id) {
-          const articlesList = action.result.refresh === true ? articles : c.articles.concat(articles);
+          const articlesList = action.data.refresh === true ? articles : c.articles.concat(articles);
 
           return {
             isFetching: false,
@@ -256,12 +304,12 @@ const reducer = (state = initialState, action) => {
       };
     }
     case API_NEWEST_RESULT: {
-      const formattedArticles = formatArticleBlock(-1, action.result.articles);
+      const formattedArticles = formatArticleBlock(-1, action.data.articles);
 
       const articles =
-        action.result.refresh === true ? formattedArticles : state.newest.articles.concat(formattedArticles);
+        action.data.refresh === true ? formattedArticles : state.newest.articles.concat(formattedArticles);
 
-      const page = action.result.refresh === true ? 1 : state.newest.page + 1;
+      const page = action.data.refresh === true ? 1 : state.newest.page + 1;
 
       return {
         ...state,
@@ -276,12 +324,12 @@ const reducer = (state = initialState, action) => {
       };
     }
     case API_POPULAR_RESULT: {
-      const formattedArticles = formatArticleBlock(-1, action.result.articles);
+      const formattedArticles = formatArticleBlock(-1, action.data.articles);
 
       const articles =
-        action.result.refresh === true ? formattedArticles : state.popular.articles.concat(formattedArticles);
+        action.data.refresh === true ? formattedArticles : state.popular.articles.concat(formattedArticles);
 
-      const page = action.result.refresh === true ? 1 : state.popular.page + 1;
+      const page = action.data.refresh === true ? 1 : state.popular.page + 1;
 
       return {
         ...state,
@@ -347,7 +395,7 @@ const parseCategoriesFromMenu = (apiResponse) => {
   const categories = [];
 
   const categoryMenuItems = apiResponse.main_menu.filter((menuItem) => {
-    return menuItem.type === ARTICLE_LIST_TYPE_CATEGORY;
+    return menuItem.type === ROUTE_TYPE_TYPE_CATEGORY;
   });
 
   categoryMenuItems.forEach((item) => {

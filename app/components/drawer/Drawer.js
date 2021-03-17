@@ -142,19 +142,20 @@ const DrawerComponent = (props) => {
 
   const renderProjects = () => {
     const projects = data.projects;
-    if (!projects || !projects.routes || projects.routes.length <= 0) {
+
+    if (!projects || !projects.categories || projects.categories.length <= 0) {
       console.log('invalid projects data');
       return null;
     }
 
-    const content = projects.routes.map((project) => (
+    const content = projects.categories.map((project) => (
       <DrawerItem
-        key={project.key}
-        text={project.title}
+        key={project.name}
+        text={project.name}
         onPress={() =>
           navigation.navigate('WebPage', {
             url: project.url,
-            title: project.title,
+            title: project.name,
           })
         }
       />
@@ -162,7 +163,7 @@ const DrawerComponent = (props) => {
 
     return (
       <View>
-        <TextComponent style={styles.title}>{projects.title}</TextComponent>
+        <TextComponent style={styles.title}>{projects.name}</TextComponent>
         {content}
       </View>
     );
@@ -174,8 +175,8 @@ const DrawerComponent = (props) => {
     if (pages && pages.length > 0) {
       const content = pages.map((page) => (
         <DrawerItem
-          key={page.key}
-          text={page.title}
+          key={page.name}
+          text={page.name}
           iconComponent={<IconLituanica size={ICON_SIZE} />}
           onPress={() => navigation.navigate('Page', {page})}
         />
@@ -188,7 +189,7 @@ const DrawerComponent = (props) => {
   };
 
   const content = data.routes.map((route, i) => {
-    return <DrawerItem key={route.key} text={route.title} onPress={() => handleCategorySelection(i)} />;
+    return <DrawerItem key={route.name} text={route.name} onPress={() => handleCategorySelection(i)} />;
   });
 
   return (

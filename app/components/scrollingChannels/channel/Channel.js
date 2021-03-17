@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {CoverImage, LiveBadge} from '../..';
+import CoverImage from '../../coverImage/CoverImage';
+import LiveBadge from '../../liveBadge/LiveBadge';
 import MediaIcon from '../../mediaIndicator/MediaIndicator';
 import IC_CAMERA from '../../svg/ic_camera';
 import IC_MICROPHONE from '../../svg/ic_microphone';

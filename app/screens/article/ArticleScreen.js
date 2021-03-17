@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {saveArticle, removeArticle, addArticleToHistory} from '../../redux/actions';
-import {articleGet} from '../../api';
+import {fetchArticle} from '../../api';
 import ArticleContent from './ArticleContent';
 import {useDispatch, useSelector} from 'react-redux';
 import {ShareIcon, SaveIcon, IconComments} from '../../components/svg';
@@ -10,6 +10,7 @@ import Snackbar from 'react-native-snackbar';
 import {ScreenLoader, ScreenError, AdultContentWarning, ActionButton} from '../../components';
 import {selectArticleBookmarked} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const STATE_LOADING = 'loading';
 const STATE_ADULT_CONTENT_WARNING = 'adult-content-warning';
@@ -86,13 +87,6 @@ const ArticleScreen = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [article, isBookmarked]);
 
-  const callApi = async () => {
-    const response = await fetch(articleGet(articleId));
-    const result = await response.json();
-    console.log('ARTICLE API RESPONSE', result);
-    return result;
-  };
-
   const loadArticle = () => {
     setState({
       ...state,
@@ -100,7 +94,7 @@ const ArticleScreen = (props) => {
       loadingState: STATE_LOADING,
     });
 
-    callApi(articleId)
+    fetchArticle(articleId)
       .then((a) => parseArticle(a.article))
       .catch((e) => {
         console.log(e);
@@ -165,7 +159,11 @@ const ArticleScreen = (props) => {
     } else {
       articleComponent = <View />;
     }
-    return <View style={styles.screen}>{articleComponent}</View>;
+    return (
+      <SafeAreaView style={styles.screen} edges={['bottom']}>
+        {articleComponent}
+      </SafeAreaView>
+    );
   };
 
   const _handleItemPress = (item) => {

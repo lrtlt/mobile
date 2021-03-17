@@ -133,6 +133,7 @@ Article.propTypes = {
   data: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
   showDate: PropTypes.bool,
+  onPress: PropTypes.func,
 };
 
 export default Article;

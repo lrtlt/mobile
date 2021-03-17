@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {View, ActivityIndicator, Button, StyleSheet, StatusBar} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {Logo} from '../../components/svg';
-import {fetchArticles, fetchMenuItems} from '../../redux/actions';
+import {fetchHome, fetchMenuItems} from '../../redux/actions';
 
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
@@ -36,7 +36,7 @@ const SplashScreen = (_) => {
 
     if (state.isLoading !== true) {
       if (state.hasMenuData) {
-        dispatch(fetchArticles());
+        dispatch(fetchHome());
       } else {
         dispatch(fetchMenuItems());
       }

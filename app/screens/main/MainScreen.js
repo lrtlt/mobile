@@ -13,17 +13,18 @@ import PopularScreen from './tabScreen/popular/PopularScreen';
 import TestScreen from '../testScreen/TestScreen';
 import {EventRegister} from 'react-native-event-listeners';
 import {EVENT_LOGO_PRESS, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
-
-import {
-  ARTICLE_LIST_TYPE_HOME,
-  ARTICLE_LIST_TYPE_CATEGORY,
-  ARTICLE_LIST_TYPE_MEDIA,
-  ARTICLE_LIST_TYPE_NEWEST,
-  ARTICLE_LIST_TYPE_POPULAR,
-} from '../../constants';
 import {selectMainScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import AudiotekaScreen from './tabScreen/audioteka/AudiotekaScreen';
+import {
+  ROUTE_TYPE_HOME,
+  ROUTE_TYPE_TYPE_AUDIOTEKA,
+  ROUTE_TYPE_TYPE_CATEGORY,
+  ROUTE_TYPE_TYPE_MEDIA,
+  ROUTE_TYPE_TYPE_NEWEST,
+  ROUTE_TYPE_TYPE_POPULAR,
+} from '../../api/Types';
 
 const MainScreen = (props) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
@@ -74,23 +75,27 @@ const MainScreen = (props) => {
   const renderScene = (sceneProps) => {
     //Render only 1 screen on each side
     const routeIndex = state.routes.indexOf(sceneProps.route);
+
     if (Math.abs(selectedTabIndex - routeIndex) > 1) {
       return <View />;
     }
+    console.log('routeIndex', routeIndex);
 
     const current = routeIndex === selectedTabIndex;
 
     const {type} = sceneProps.route;
     switch (type) {
-      case ARTICLE_LIST_TYPE_HOME:
-        return <HomeScreen type={ARTICLE_LIST_TYPE_HOME} isCurrent={current} />;
-      case ARTICLE_LIST_TYPE_MEDIA:
-        return <HomeScreen type={ARTICLE_LIST_TYPE_MEDIA} isCurrent={current} />;
-      case ARTICLE_LIST_TYPE_CATEGORY:
+      case ROUTE_TYPE_HOME:
+        return <HomeScreen type={ROUTE_TYPE_HOME} isCurrent={current} />;
+      case ROUTE_TYPE_TYPE_MEDIA:
+        return <HomeScreen type={ROUTE_TYPE_TYPE_MEDIA} isCurrent={current} />;
+      case ROUTE_TYPE_TYPE_AUDIOTEKA:
+        return <AudiotekaScreen isCurrent={current} />;
+      case ROUTE_TYPE_TYPE_CATEGORY:
         return <CategoryScreen route={sceneProps.route} isCurrent={current} />;
-      case ARTICLE_LIST_TYPE_NEWEST:
+      case ROUTE_TYPE_TYPE_NEWEST:
         return <NewestScreen isCurrent={current} />;
-      case ARTICLE_LIST_TYPE_POPULAR:
+      case ROUTE_TYPE_TYPE_POPULAR:
         return <PopularScreen isCurrent={current} />;
       default:
         return <TestScreen text={'Unkown type: ' + type} />;

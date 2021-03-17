@@ -1,33 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
-import {weatherLocationsGet} from '../../api';
+import {fetchWeatherLocations} from '../../api';
+import {ForecastLocation} from '../../api/Types';
 import {TouchableDebounce} from '../../components';
 import TextComponent from '../../components/text/Text';
 import {useTheme} from '../../Theme';
-import {Location} from './Types';
 
 interface Props {
   style?: ViewStyle;
-  onLocationSelect: (location: Location) => void;
+  onLocationSelect: (location: ForecastLocation) => void;
 }
 
 const WeatherLocations: React.FC<Props> = (props) => {
   const [inputValue, setInputValue] = useState('');
-  const [locations, setLocations] = useState<Location[]>([]);
-  const [searchResults, setSearchResults] = useState<Location[]>([]);
+  const [locations, setLocations] = useState<ForecastLocation[]>([]);
+  const [searchResults, setSearchResults] = useState<ForecastLocation[]>([]);
 
   const {colors, strings} = useTheme();
 
   useEffect(() => {
-    const callApi = async () => {
-      const response = await fetch(weatherLocationsGet());
-      const result = await response.json();
-      //console.log('LOCATIONS API RESPONSE', result);
-      return result;
-    };
-
-    callApi()
+    fetchWeatherLocations()
       .then((response) => setLocations(response))
       .catch((error) => console.log(error));
   }, []);
@@ -46,7 +39,7 @@ const WeatherLocations: React.FC<Props> = (props) => {
     }
   }, [inputValue, locations]);
 
-  const handleLocationSelect = (l: Location) => {
+  const handleLocationSelect = (l: ForecastLocation) => {
     props.onLocationSelect(l);
     setInputValue('');
   };

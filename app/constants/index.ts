@@ -1,10 +1,3 @@
-//Article list types:
-export const ARTICLE_LIST_TYPE_HOME = 'home';
-export const ARTICLE_LIST_TYPE_CATEGORY = 'category';
-export const ARTICLE_LIST_TYPE_NEWEST = 'newest';
-export const ARTICLE_LIST_TYPE_POPULAR = 'popular';
-export const ARTICLE_LIST_TYPE_MEDIA = 'mediateka';
-
 export const ARTICLE_HISTORY_COUNT = 15;
 export const ARTICLE_SAVED_MAX_COUNT = 51;
 
@@ -13,6 +6,9 @@ export const LIST_DATA_TYPE_ARTICLES = 'article';
 export const LIST_DATA_TYPE_ARTICLES_FEED = 'article_feed';
 export const LIST_DATA_TYPE_TVPROG = 'tv_prog';
 export const LIST_DATA_TYPE_MORE_FOOTER = 'more_footer';
+
+export const LIST_DATA_TYPE_TOP_AUDIO_ARTICLE = 'topAudioArticle';
+export const LIST_DATA_TYPE_TOP_AUDIO_CATEGORY = 'audioCategory';
 
 export const EVENT_LOGO_PRESS = 'logo-press';
 export const EVENT_SELECT_CATEGORY_INDEX = 'select-category-index';
@@ -46,3 +42,8 @@ export const URL_FEEDBACK = 'https://apie.lrt.lt/bendraukime/rasykite';
 export const DEFAULT_FORECAST_LOCATION = 'vilnius';
 
 export const VIDEO_ASPECT_RATIO = 16 / 9;
+
+//Article types
+export const ARTICLE_TYPE_TEXT = 1;
+export const ARTICLE_TYPE_VIDEO = 6;
+export const ARTICLE_TYPE_AUDIO = 7;

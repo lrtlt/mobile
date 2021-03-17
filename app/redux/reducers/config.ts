@@ -1,11 +1,19 @@
+import {ForecastLocation} from '../../api/Types';
+import {ConfigActionType} from '../actions';
 import {
   TOGGLE_DARK_MODE,
   SET_TEXT_SIZE_MULTIPLIER,
   SET_IMAGE_SCALE_FACTOR,
   SET_CONFIG,
   SET_FORECAST_LOCATION,
-  DEBUG_CLEAR_LOCATION,
 } from '../actions/actionTypes';
+
+export type ConfigState = {
+  isDarkMode: boolean;
+  textSizeMultiplier: number;
+  imageMaxScaleFactor: number;
+  forecastLocation?: ForecastLocation;
+};
 
 const initialState = {
   isDarkMode: false,
@@ -14,7 +22,7 @@ const initialState = {
   forecastLocation: undefined,
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state: ConfigState = initialState, action: ConfigActionType): ConfigState => {
   switch (action.type) {
     case TOGGLE_DARK_MODE: {
       const isDarkMode = !state.isDarkMode;
@@ -45,9 +53,6 @@ const reducer = (state = initialState, action) => {
     }
     case SET_FORECAST_LOCATION: {
       return {...state, forecastLocation: action.payload};
-    }
-    case DEBUG_CLEAR_LOCATION: {
-      return {...state, forecastLocation: undefined};
     }
     default:
       return state;

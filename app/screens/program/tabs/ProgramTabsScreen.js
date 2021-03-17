@@ -14,9 +14,9 @@ const TabsScreen = (props) => {
 
   const navigationState = {
     index: currentIndex,
-    routes: props.program.map((channel) => {
+    routes: props.program.map((channel, i) => {
       return {
-        key: channel.channel_id,
+        key: channel.channel_id || `unkown-channel-${i}`,
         title: channel.title,
         program: channel.prog,
       };

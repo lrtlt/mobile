@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, ActivityIndicator, ViewStyle} from 'react-native';
 import {useSelector} from 'react-redux';
+import {fetchForecast} from '../../api';
+import {Forecast, ForecastLocation} from '../../api/Types';
 import {DEFAULT_FORECAST_LOCATION} from '../../constants';
 import {selectForecastLocation} from '../../redux/selectors';
-import {Location} from '../../screens/weather/Types';
 import {useTheme} from '../../Theme';
 import {getIconForWeatherConditions} from '../../util/UI';
 import TextComponent from '../text/Text';
-import {Forecast, getForecast} from './ForecastApi';
 
 interface Props {
   style?: ViewStyle;
-  location?: Location;
+  location?: ForecastLocation;
 }
 
 const INTERVAL = 1000 * 8;
@@ -21,7 +21,7 @@ const ForecastComponent: React.FC<Props> = (props) => {
   const {colors} = useTheme();
 
   const storedLocation = useSelector(selectForecastLocation);
-  const location = props.location ? props.location : storedLocation;
+  const location = (props.location ? props.location : storedLocation) as ForecastLocation;
 
   useEffect(() => {
     if (forecast) {
@@ -30,15 +30,17 @@ const ForecastComponent: React.FC<Props> = (props) => {
       }
     }
 
-    const fetchForecast = async () => {
-      const data = await getForecast(
-        location ? location?.c ?? DEFAULT_FORECAST_LOCATION : DEFAULT_FORECAST_LOCATION,
-      );
-      setForecast(data);
+    const callApi = async () => {
+      const cityCode = location?.c ? location.c : DEFAULT_FORECAST_LOCATION;
+      try {
+        const response = await fetchForecast(cityCode);
+        setForecast(response.current ?? response.default);
+      } catch (e) {
+        setForecast(undefined);
+      }
     };
-
-    fetchForecast();
-    const interval = setInterval(() => fetchForecast(), INTERVAL);
+    callApi();
+    const interval = setInterval(() => callApi(), INTERVAL);
 
     return () => clearInterval(interval);
   }, [forecast, location]);
@@ -48,7 +50,7 @@ const ForecastComponent: React.FC<Props> = (props) => {
   const getSunColor = (): string => {
     if (f?.localDateTime) {
       const hour = new Date(f?.localDateTime).getHours();
-      if (hour > 6 && hour < 22) {
+      if (hour > 6 && hour < 23) {
         return '#fbdf82';
       } else {
         return '#585d97';

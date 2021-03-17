@@ -5,7 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {resetSearchFilter} from '../../redux/actions';
 import {Article, ActionButton, Text} from '../../components';
 import {IconFilter, IconSearch} from '../../components/svg';
-import {searchArticles} from '../../api';
+import {fetchArticleSearch} from '../../api';
 import {selectSearchFilter} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {CollapsibleSubHeaderAnimator, useCollapsibleSubHeader} from 'react-navigation-collapsible';
@@ -62,16 +62,7 @@ const SearchScreen = (props) => {
 
   const search = useCallback(() => {
     setLoadingState({isFetching: true, isError: false});
-
-    const callApi = async () => {
-      const response = await fetch(searchArticles(query, searchFilter));
-      console.log(response);
-      const result = await response.json();
-      console.log('SEARCH ARTICLES RESPONSE', result);
-      return result;
-    };
-
-    callApi()
+    fetchArticleSearch(query, searchFilter)
       .then((response) => {
         setLoadingState({
           isFetching: false,

@@ -9,7 +9,7 @@ import {
   ScreenError,
   Text,
 } from '../../components';
-import {channelGet} from '../../api';
+import {fetchChannel} from '../../api';
 import {useSelector} from 'react-redux';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import {getIconForChannel, getSmallestDim} from '../../util/UI';
@@ -64,8 +64,7 @@ const ChannelScreen = (props) => {
   }, [selectedChannel]);
 
   const loadChannel = () => {
-    console.log('Loading channel:' + selectedChannel);
-    callApi(selectedChannel)
+    fetchChannel(selectedChannel)
       .then((response) =>
         setState({
           channel: response,
@@ -78,13 +77,6 @@ const ChannelScreen = (props) => {
           loadingState: STATE_ERROR,
         }),
       );
-  };
-
-  const callApi = async (channelId) => {
-    const response = await fetch(channelGet(channelId));
-    const result = await response.json();
-    console.log('CHANNEL API RESPONSE', result);
-    return result;
   };
 
   const onChannelPressHandler = (channel) => {

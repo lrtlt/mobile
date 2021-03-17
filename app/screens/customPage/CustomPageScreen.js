@@ -4,8 +4,7 @@ import {TabView} from 'react-native-tab-view';
 import TabBar from '../main/tabBar/TabBar';
 import CategoryScreen from '../main/tabScreen/category/CategoryScreen';
 import TestScreen from '../testScreen/TestScreen';
-
-import {ARTICLE_LIST_TYPE_CATEGORY} from '../../constants';
+import {ROUTE_TYPE_TYPE_CATEGORY} from '../../api/Types';
 
 const CustomPageScreen = (props) => {
   const {navigation, route} = props;
@@ -31,7 +30,7 @@ const CustomPageScreen = (props) => {
     const {type} = sceneProps.route;
 
     switch (type) {
-      case ARTICLE_LIST_TYPE_CATEGORY:
+      case ROUTE_TYPE_TYPE_CATEGORY:
         return <CategoryScreen route={sceneProps.route} />;
       default:
         return <TestScreen text={'Unkown type: ' + type} />;

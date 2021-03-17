@@ -8,8 +8,10 @@
  * ...
  */
 
-const formatter = (articles) => {
-  const groupedArticles = [];
+import {Article} from '../../../Types';
+
+const formatter = (articles: Article[]): Article[][] => {
+  const groupedArticles: Article[][] = [];
 
   articles.forEach((article, i) => {
     //Take only first 5.

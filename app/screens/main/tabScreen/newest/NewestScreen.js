@@ -4,12 +4,7 @@ import {ArticleRow, DefaultSectionHeader, ScreenLoader, Text} from '../../../../
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchNewest, refreshNewest} from '../../../../redux/actions';
 import {FlatList} from 'react-native-gesture-handler';
-import {
-  ARTICLE_LIST_TYPE_NEWEST,
-  ARTICLES_PER_PAGE_COUNT,
-  GEMIUS_VIEW_SCRIPT_ID,
-  EVENT_LOGO_PRESS,
-} from '../../../../constants';
+import {ARTICLES_PER_PAGE_COUNT, GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS} from '../../../../constants';
 import {ListLoader} from '../../../../components';
 import {getOrientation} from '../../../../util/UI';
 import Gemius from 'react-native-gemius-plugin';
@@ -17,6 +12,7 @@ import {EventRegister} from 'react-native-event-listeners';
 import {useNavigation} from '@react-navigation/native';
 import {selectNewestArticlesScreenState} from '../../../../redux/selectors';
 import {useTheme} from '../../../../Theme';
+import {ROUTE_TYPE_TYPE_NEWEST} from '../../../../api/Types';
 
 const NewestScreen = (props) => {
   const state = useSelector(selectNewestArticlesScreenState);
@@ -31,7 +27,7 @@ const NewestScreen = (props) => {
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      page: ARTICLE_LIST_TYPE_NEWEST,
+      page: ROUTE_TYPE_TYPE_NEWEST,
     });
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
