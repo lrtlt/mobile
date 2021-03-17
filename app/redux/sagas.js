@@ -47,6 +47,7 @@ function* fetchMenuItems() {
     console.log('Saga error', e);
     yield put({type: API_MENU_ITEMS_ERROR});
   }
+  return 0;
 }
 
 function* fetchArticlesData() {
@@ -57,6 +58,7 @@ function* fetchArticlesData() {
     console.log('Saga error', e);
     yield put({type: API_HOME_ERROR});
   }
+  return 0;
 }
 
 function* fetchMediatekaData() {
@@ -67,6 +69,7 @@ function* fetchMediatekaData() {
     console.log('Saga error', e);
     yield put({type: API_MEDIATEKA_ERROR});
   }
+  return 0;
 }
 
 function* fetchAudiotekaData() {
@@ -77,6 +80,7 @@ function* fetchAudiotekaData() {
     console.log('Saga error', e);
     yield put({type: API_AUDIOTEKA_ERROR});
   }
+  return 0;
 }
 
 function* fetchProgramData() {
@@ -87,6 +91,7 @@ function* fetchProgramData() {
     console.log('Saga error', e);
     yield put({type: API_PROGRAM_ERROR});
   }
+  return 0;
 }
 
 function* fetchCategoryData(action) {
@@ -99,6 +104,7 @@ function* fetchCategoryData(action) {
     console.log('Saga error', e);
     yield put({type: API_CATEGORY_ERROR, payload: action.payload});
   }
+  return 0;
 }
 
 function* refreshCategoryData(action) {
@@ -111,6 +117,7 @@ function* refreshCategoryData(action) {
     console.log('Saga error', e);
     yield put({type: API_CATEGORY_ERROR, payload: action.payload});
   }
+  return 0;
 }
 
 function* fetchNewestData(action) {
@@ -123,6 +130,7 @@ function* fetchNewestData(action) {
     console.log('Saga error', e);
     yield put({type: API_NEWEST_ERROR});
   }
+  return 0;
 }
 
 function* refreshNewestData(action) {
@@ -135,6 +143,7 @@ function* refreshNewestData(action) {
     console.log('Saga error', e);
     yield put({type: API_NEWEST_ERROR});
   }
+  return 0;
 }
 
 function* fetchPopularData(action) {
@@ -147,6 +156,7 @@ function* fetchPopularData(action) {
     console.log('Saga error', e);
     yield put({type: API_POPULAR_ERROR});
   }
+  return 0;
 }
 
 function* refreshPopularData(action) {
@@ -159,6 +169,7 @@ function* refreshPopularData(action) {
     console.log('Saga error', e);
     yield put({type: API_POPULAR_ERROR});
   }
+  return 0;
 }
 
 export default function* rootSaga() {

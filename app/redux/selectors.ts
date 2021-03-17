@@ -85,7 +85,6 @@ export const selectHomeScreenState = (type: HomePageType) => (state: any) => {
 
 export const selectAudiotekaScreenState = (state: any) => {
   const {isFetching, lastFetchTime, data} = state.articles.audioteka;
-  console.log('data', data);
   return {isFetching, lastFetchTime, data};
 };
 

@@ -10,10 +10,11 @@ import {selectSearchFilter} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {CollapsibleSubHeaderAnimator, useCollapsibleSubHeader} from 'react-navigation-collapsible';
 import {BorderlessButton} from 'react-native-gesture-handler';
+import {checkEqual} from '../../util/LodashEqualityCheck';
 
 const SearchScreen = (props) => {
   const {navigation} = props;
-  const searchFilter = useSelector(selectSearchFilter);
+  const searchFilter = useSelector(selectSearchFilter, checkEqual);
 
   const {colors, strings, dim} = useTheme();
 

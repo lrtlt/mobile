@@ -15,12 +15,13 @@ import {
   SEARCH_TYPE_VIDEO,
   SEARCH_TYPE_VIDEO_SUBTITLES,
 } from '../../api/Types';
+import {checkEqual} from '../../util/LodashEqualityCheck';
 
 const SearchFilterDrawer = (_) => {
   const {colors} = useTheme();
 
   const dispatch = useDispatch();
-  const filter = useSelector(selectSearchFilter);
+  const filter = useSelector(selectSearchFilter, checkEqual);
 
   const selectType = (type) => {
     dispatch(setSearchFilter({...filter, type}));

@@ -32,7 +32,11 @@ const MainScreen = (props) => {
   const {navigation} = props;
   const {colors, dim} = useTheme();
 
-  const state = useSelector(selectMainScreenState);
+  const state = useSelector(selectMainScreenState, (left, right) => {
+    return left.routes.length === right.routes.length;
+  });
+
+  console.log('render main screen');
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_SELECT_CATEGORY_INDEX, (data) => {
@@ -79,8 +83,6 @@ const MainScreen = (props) => {
     if (Math.abs(selectedTabIndex - routeIndex) > 0) {
       return <View />;
     }
-    console.log('routeIndex', routeIndex);
-
     const current = routeIndex === selectedTabIndex;
 
     const {type} = sceneProps.route;

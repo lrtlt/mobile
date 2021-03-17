@@ -10,12 +10,13 @@ import {selectSplashScreenState} from '../../redux/selectors';
 import {Text} from '../../components';
 import {useTheme} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
+import {checkEqual} from '../../util/LodashEqualityCheck';
 
 const SplashScreen = (_) => {
   const {isDarkMode} = useSettings();
   const {colors, strings} = useTheme();
 
-  const state = useSelector(selectSplashScreenState);
+  const state = useSelector(selectSplashScreenState, checkEqual);
   const dispatch = useDispatch();
 
   useEffect(() => {

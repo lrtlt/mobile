@@ -28,6 +28,7 @@ import {
   IconTelevision,
   IconUpload,
 } from '../svg';
+import {checkEqual} from '../../util/LodashEqualityCheck';
 
 const ICON_SIZE = 18;
 
@@ -36,7 +37,7 @@ const DrawerComponent = (props) => {
 
   const {colors, strings} = useTheme();
 
-  const data = useSelector(selectDrawerData);
+  const data = useSelector(selectDrawerData, checkEqual);
 
   const handleCategorySelection = (index) => {
     navigation.closeDrawer();

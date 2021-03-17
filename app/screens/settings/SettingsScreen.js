@@ -7,6 +7,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {selectSettings} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {checkEqual} from '../../util/LodashEqualityCheck';
 
 const TEXT_SIZE_NORMAL = 0;
 const TEXT_SIZE_LARGE = 2;
@@ -22,7 +23,7 @@ const SettingsScreen = (props) => {
   const {strings} = useTheme();
   const dispatch = useDispatch();
 
-  const config = useSelector(selectSettings);
+  const config = useSelector(selectSettings, checkEqual);
 
   useEffect(() => {
     navigation.setOptions({
