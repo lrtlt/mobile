@@ -73,10 +73,10 @@ const MainScreen = (props) => {
   const renderTabBar = (tabBarProps) => <TabBar {...tabBarProps} />;
 
   const renderScene = (sceneProps) => {
-    //Render only 1 screen on each side
-    const routeIndex = state.routes.indexOf(sceneProps.route);
+    const routeIndex = state.routes.findIndex((r) => r.key === sceneProps.route.key);
 
-    if (Math.abs(selectedTabIndex - routeIndex) > 1) {
+    //Render only 1 screen on each side
+    if (Math.abs(selectedTabIndex - routeIndex) > 0) {
       return <View />;
     }
     console.log('routeIndex', routeIndex);
