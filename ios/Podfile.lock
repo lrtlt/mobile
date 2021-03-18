@@ -565,6 +565,8 @@ PODS:
   - react-native-onesignal (4.0.4):
     - OneSignal (= 3.2.1)
     - React (< 1.0.0, >= 0.13.0)
+  - react-native-pager-view (5.1.2):
+    - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
   - react-native-webview (11.3.1):
@@ -712,6 +714,7 @@ DEPENDENCIES:
   - react-native-gemius-plugin (from `../node_modules/react-native-gemius-plugin`)
   - react-native-jw-media-player (from `../node_modules/react-native-jw-media-player/ios`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
+  - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -815,6 +818,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-jw-media-player/ios"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
+  react-native-pager-view:
+    :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-webview:
@@ -918,6 +923,7 @@ SPEC CHECKSUMS:
   react-native-gemius-plugin: 6d03b49c8e5df6e5d70d02c4dfc4f46c9fb5f30c
   react-native-jw-media-player: 5841c971cb52239ff59026e048da32064338e9b7
   react-native-onesignal: 1de5a24906823ec20fb2a6576c7a4e2df869bfc3
+  react-native-pager-view: c1ec84a464024641ccb1102e9ec12be020d3d74c
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-webview: 07fca3f4378bd6ea26254bf63119bfd70f4fabeb
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
