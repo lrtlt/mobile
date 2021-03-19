@@ -1,8 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {SplashScreen} from '../screens/';
+import {SplashScreen} from '../screens';
 
-const SplashStack = createStackNavigator();
+export type SplashStackParamList = {
+  Splash: undefined;
+};
+const SplashStack = createStackNavigator<SplashStackParamList>();
 
 export default () => {
   return (

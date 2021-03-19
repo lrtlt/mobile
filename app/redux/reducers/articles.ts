@@ -68,7 +68,7 @@ type CategoryState = {
   id: number;
 } & PagingState;
 
-type Category = {
+export type Category = {
   id?: number;
   name: string;
   template_id: number;

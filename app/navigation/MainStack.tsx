@@ -22,8 +22,42 @@ import {Platform} from 'react-native';
 import {Drawer, SearchFilterDrawer} from '../components';
 import {useSettings} from '../settings/useSettings';
 import {themeDark, themeLight} from '../Theme';
+import {Category} from '../redux/reducers/articles';
+import {MenuItemPage} from '../api/Types';
 
-const Stack = createStackNavigator();
+export type MainStackParamList = {
+  Home: undefined;
+  Settings: undefined;
+  Article: {
+    articleId: number;
+  };
+  Comments: {
+    url: string;
+  };
+  Gallery: {
+    images: any;
+  };
+  Channel: {
+    channelId: number;
+  };
+  Search: undefined;
+  Bookmarks: undefined;
+  History: undefined;
+  Program: undefined;
+  Slug: {
+    category: Category;
+  };
+  Page: {
+    page: MenuItemPage;
+  };
+  WebPage: {
+    url: string;
+    title: string;
+  };
+  Weather: undefined;
+};
+
+const Stack = createStackNavigator<MainStackParamList>();
 const MainDrawer = createDrawerNavigator();
 const SearchDrawer = createDrawerNavigator();
 

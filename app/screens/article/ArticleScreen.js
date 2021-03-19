@@ -204,6 +204,9 @@ const ArticleScreen = (props) => {
     case STATE_READY: {
       return renderArticleComponent();
     }
+    default: {
+      return renderLoading();
+    }
   }
 };
 

@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import {StatusBar} from 'react-native';
 import {useSelector} from 'react-redux';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
 import SplashViewComponent from '../screens/splash/SplashScreenView';
 
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -35,8 +35,8 @@ const NavigatorComponent = () => {
   const settings = useSettings();
   console.log('SETTINGS', settings);
 
-  const routeNameRef = useRef();
-  const navRef = useRef(null);
+  const routeNameRef = useRef<string>();
+  const navRef = useRef<NavigationContainerRef>(null);
 
   const onNavigationReady = () => {
     routeNameRef.current = navRef.current?.getCurrentRoute()?.name;
@@ -50,7 +50,7 @@ const NavigatorComponent = () => {
       const currentScreen = currentRouteName.toLowerCase();
       const params = {
         screen: currentScreen,
-        params: JSON.stringify(currentRoute.params),
+        params: currentRoute?.params && JSON.stringify(currentRoute.params),
       };
       //console.log('Current screen: ', params);
       crashlytics().log(`Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
