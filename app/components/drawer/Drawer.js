@@ -1,8 +1,7 @@
 import React from 'react';
-import {View, Linking, StyleSheet} from 'react-native';
+import {View, Linking, StyleSheet, ScrollView} from 'react-native';
 import {useSelector} from 'react-redux';
 import DrawerItem from '../drawerItem/DrawerItem';
-import {ScrollView} from 'react-native-gesture-handler';
 import {getIconForChannel} from '../../util/UI';
 import {selectDrawerData} from '../../redux/selectors';
 import {SafeAreaView} from 'react-native-safe-area-context';

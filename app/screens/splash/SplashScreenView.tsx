@@ -5,7 +5,7 @@ import {Logo} from '../../components/svg';
 import {themeDark, themeLight} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
 
-const SplashViewComponent = (_) => {
+const SplashViewComponent: React.FC = () => {
   const {isDarkMode} = useSettings();
   const colors = isDarkMode ? themeDark.colors : themeLight.colors;
 

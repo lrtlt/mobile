@@ -1,9 +1,10 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import Article from '../article/Article';
+import ArticleComponent from '../article/Article';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useTheme} from '../../../Theme';
-import {Article as ArticleType} from '../../../../Types';
+import {Article} from '../../../../Types';
+import {SavedArticle} from '../../../redux/reducers/articleStorage';
 
 //TODO calculate for bigger screens.
 const articleFitCount = 2;
@@ -19,9 +20,9 @@ const getArticleType = (articleCount: number): string => {
 };
 
 interface Props {
-  data: ArticleType[];
+  data: (Article | SavedArticle)[];
   isSlug?: boolean;
-  onArticlePress: (article: ArticleType) => void;
+  onArticlePress: (article: Article) => void;
 }
 
 const ArticleRow: React.FC<Props> = (props) => {
@@ -33,10 +34,10 @@ const ArticleRow: React.FC<Props> = (props) => {
 
   const content = data.map((a, i) => {
     return (
-      <Article
+      <ArticleComponent
         style={styles.article}
         data={a}
-        onPress={(article: ArticleType) => onArticlePress(article)}
+        onPress={(article: Article) => onArticlePress(article)}
         type={articleType}
         key={i}
       />

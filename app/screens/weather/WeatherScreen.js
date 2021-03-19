@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
 import {Forecast, WeatherEmbed} from '../../components';
 import {useSelector, useDispatch} from 'react-redux';
-import {ScrollView} from 'react-native-gesture-handler';
 
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';

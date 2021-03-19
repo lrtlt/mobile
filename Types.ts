@@ -1,4 +1,3 @@
-import {ScreenStackHeaderConfigProps} from 'react-native-screens';
 import {ROUTE_TYPE_HOME, ROUTE_TYPE_TYPE_MEDIA} from './app/api/Types';
 import {ARTICLE_TYPE_AUDIO, ARTICLE_TYPE_TEXT, ARTICLE_TYPE_VIDEO} from './app/constants';
 

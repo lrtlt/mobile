@@ -3,13 +3,22 @@ import {View, Dimensions, StyleSheet} from 'react-native';
 import {Route, TabView} from 'react-native-tab-view';
 import TabBar from '../main/tabBar/TabBar';
 import CategoryScreen from '../main/tabScreen/category/CategoryScreen';
-import {MenuItemPage} from '../../api/Types';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MainStackParamList} from '../../navigation/MainStack';
 
-const CustomPageScreen = (props: any) => {
-  const {navigation, route} = props;
+type ScreenRouteProp = RouteProp<MainStackParamList, 'Page'>;
+type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Page'>;
+
+type Props = {
+  route: ScreenRouteProp;
+  navigation: ScreenNavigationProp;
+};
+
+const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
   const [currentRouteIndex, setCurrentRouteIndex] = useState(0);
+  const {page} = route.params;
 
-  const page = route.params.page as MenuItemPage;
   const routes: Route[] = page.categories.map((c) => ({
     categoryId: c.id,
     key: c.name,
