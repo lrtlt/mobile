@@ -108,6 +108,8 @@ const MainScreen = (props) => {
     <>
       <SafeAreaView style={styles.container} edges={['left', 'right']}>
         <TabView
+          renderLazyPlaceholder={() => <View />}
+          tabBarPosition="top"
           navigationState={{
             routes: state.routes,
             index: selectedTabIndex,
