@@ -650,13 +650,13 @@ PODS:
     - Firebase/Firestore (~> 7.6.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (1.9.0):
+  - RNGestureHandler (1.10.3):
     - React-Core
   - RNReanimated (1.13.2):
     - React-Core
   - RNScreens (2.15.0):
     - React-Core
-  - RNShare (5.1.1):
+  - RNShare (5.1.4):
     - React-Core
   - RNSnackbar (2.4.0):
     - React-Core
@@ -942,10 +942,10 @@ SPEC CHECKSUMS:
   RNFBApp: 97b618641633d6d23187a9d0537c3893482c483f
   RNFBCrashlytics: bce8050df4a789ceba3984fbb66c4fc12158fdfd
   RNFBFirestore: 859fc78b3dc89ef10e430b39cd9f14e07ef4e158
-  RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
+  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: 2ad555d4d9fa10b91bb765ca07fe9b29d59573f0
-  RNShare: 6779fdd48e6246a8c79276a5b5e74a0f0d61a1ec
+  RNShare: 8af5349f05fc042d230674dd650d19789187ff9c
   RNSnackbar: be3333a21a453ccc272f41a8add5a71f7d44dfcd
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
