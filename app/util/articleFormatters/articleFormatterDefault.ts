@@ -8,10 +8,8 @@
  * ...
  */
 
-import {Article} from '../../../Types';
-
-const formatter = (articles: Article[], clipLast: boolean = false): Article[][] => {
-  const groupedArticles: Article[][] = [];
+const formatter = <T>(articles: T[], clipLast: boolean = false): T[][] => {
+  const groupedArticles: T[][] = [];
 
   let currentColumn = 0;
   let maxColumns = 0;
@@ -28,7 +26,7 @@ const formatter = (articles: Article[], clipLast: boolean = false): Article[][] 
       }
     }
 
-    let rowContainer: Article[];
+    let rowContainer: T[];
     if (currentColumn === 0) {
       if (i === articles.length - 1 && clipLast === true) {
         //Ignore last article because it does not fit.

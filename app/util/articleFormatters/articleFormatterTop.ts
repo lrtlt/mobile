@@ -13,10 +13,8 @@
  * [13][14]
  */
 
-import {Article} from '../../../Types';
-
-const formatter = (articles: Article[]): Article[][] => {
-  const groupedArticles: Article[][] = [];
+const formatter = <T>(articles: T[]): T[][] => {
+  const groupedArticles: T[][] = [];
 
   let currentColumn = 0;
   let maxColumns = 0;
@@ -35,7 +33,7 @@ const formatter = (articles: Article[]): Article[][] => {
       }
     }
 
-    let rowContainer: Article[];
+    let rowContainer: T[];
     if (currentColumn === 0) {
       if (i === articles.length - 1) {
         //Ignore last article because it does not fit.

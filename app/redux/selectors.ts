@@ -1,12 +1,9 @@
 import {HomePageType} from '../../Types';
-import {
-  ROUTE_TYPE_TYPE_CATEGORY,
-  ROUTE_TYPE_TYPE_MEDIA,
-  ROUTE_TYPE_TYPE_NEWEST,
-  ROUTE_TYPE_TYPE_POPULAR,
-} from '../api/Types';
+import {ROUTE_TYPE_TYPE_CATEGORY, ROUTE_TYPE_TYPE_MEDIA} from '../api/Types';
 import {formatArticles} from '../util/articleFormatters';
 import {RootState} from './reducers';
+import {HomeBlock} from './reducers/articles';
+import {SavedArticle} from './reducers/articleStorage';
 
 export const selectNavigationIsReady = (state: RootState) => {
   return state.navigation.isReady && state.navigation.routes.length !== 0;
@@ -36,40 +33,23 @@ export const selectMainScreenState = (state: RootState) => {
 };
 
 export const selectNewestArticlesScreenState = (state: RootState) => {
-  const {newest} = state.articles;
-  const newestRoute = state.navigation.routes.find((r) => r.type === ROUTE_TYPE_TYPE_NEWEST);
-  return {
-    ...newest,
-    title: newestRoute?.name,
-  };
+  return state.articles.newest;
 };
 
 export const selectPopularArticlesScreenState = (state: RootState) => {
-  const {popular} = state.articles;
-  const popularRoute = state.navigation.routes.find((r) => r.type === ROUTE_TYPE_TYPE_POPULAR);
-  return {
-    ...popular,
-    title: popularRoute?.name,
-  };
+  return state.articles.popular;
 };
 
-export const selectCategoryScreenState = (categoryId: number) => (state: any) => {
-  const category = state.articles.categories.find((val: any) => {
-    return val.id === categoryId;
-  });
-
-  return {
-    category,
-  };
+export const selectCategoryScreenState = (categoryId: number) => (state: RootState) => {
+  return state.articles.categories.find((category) => category.id === categoryId);
 };
 
-export const selectHomeScreenState = (type: HomePageType) => (state: any) => {
+export const selectHomeScreenState = (type: HomePageType) => (state: RootState) => {
   const block = type === ROUTE_TYPE_TYPE_MEDIA ? state.articles.mediateka : state.articles.home;
 
-  const mapSections = (items: any[]) => {
-    return items.map((b, i) => {
+  const mapSections = (items: HomeBlock[]) => {
+    return items.map((b) => {
       return {
-        index: i,
         category: b.category,
         data: b.items,
       };
@@ -83,26 +63,27 @@ export const selectHomeScreenState = (type: HomePageType) => (state: any) => {
   };
 };
 
-export const selectAudiotekaScreenState = (state: any) => {
+export const selectAudiotekaScreenState = (state: RootState) => {
   const {isFetching, lastFetchTime, data} = state.articles.audioteka;
   return {isFetching, lastFetchTime, data};
 };
 
-export const selectBookmarksScreenState = (state: any) => {
+export const selectBookmarksScreenState = (state: RootState) => {
   const {savedArticles} = state.articleStorage;
   return {articles: formatArticles(-1, savedArticles, false)};
 };
 
-export const selectHistoryScreenState = (state: any) => {
+export const selectHistoryScreenState = (state: RootState) => {
   const {history} = state.articleStorage;
   return {articles: formatArticles(-1, history, false)};
 };
 
-export const selectProgramScreenState = (state: any) => {
+export const selectProgramScreenState = (state: RootState) => {
   const prog = state.program;
+
   const loadingState = prog.isError
     ? 'error'
-    : prog.isFetching || state.program.program === null
+    : prog.isFetching || !state.program.program
     ? 'loading'
     : 'ready';
 
@@ -112,15 +93,13 @@ export const selectProgramScreenState = (state: any) => {
   };
 };
 
-export const selectTVProgram = (state: any) => {
-  return {
-    tvProgram: state.articles.tvprog,
-  };
+export const selectHomeChannels = (state: RootState) => {
+  return state.articles.channels;
 };
 
-export const selectArticleBookmarked = (articleId: string | number) => (state: any) => {
+export const selectArticleBookmarked = (articleId: string | number) => (state: RootState) => {
   const {savedArticles} = state.articleStorage;
-  return savedArticles && savedArticles.find((a: any) => a.id === articleId) !== undefined;
+  return Boolean(savedArticles && savedArticles.find((article: SavedArticle) => article.id === articleId));
 };
 
 export const selectDrawerData = (state: RootState) => {
@@ -130,7 +109,7 @@ export const selectDrawerData = (state: RootState) => {
     routes: navigation.routes,
     pages: navigation.pages,
     projects: projects && projects.length > 0 ? projects[0] : undefined,
-    channels: state.articles.tvprog.items,
+    channels: state.articles.channels.items,
   };
 };
 

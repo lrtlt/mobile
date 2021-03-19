@@ -1,4 +1,3 @@
-import {Article} from '../../../Types';
 import defaultFormatter from './articleFormatterDefault';
 
 /**
@@ -10,7 +9,7 @@ import defaultFormatter from './articleFormatterDefault';
 
 const REQUIRED_LENGTH = 1;
 
-const formatter = (articles: Article[]): Article[][] => {
+const formatter = <T>(articles: T[]): T[][] => {
   if (articles.length < REQUIRED_LENGTH) {
     console.error(
       'Incorrect article array length: ' + articles.length + '. Minimum required is ' + REQUIRED_LENGTH,

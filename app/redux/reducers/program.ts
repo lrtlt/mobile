@@ -1,12 +1,20 @@
+import {ProgramResponse} from '../../api/Types';
+import {ProgramActionType} from '../actions';
 import {FETCH_PROGRAM, API_PROGRAM_RESULT, API_PROGRAM_ERROR} from '../actions/actionTypes';
 
-const initialState = {
-  program: null,
-  isFetching: false,
-  isError: false,
+export type ProgramState = {
+  isFetching: boolean;
+  isError: boolean;
+  program?: ProgramResponse;
 };
 
-const reducer = (state = initialState, action) => {
+const initialState: ProgramState = {
+  isFetching: false,
+  isError: false,
+  program: undefined,
+};
+
+const reducer = (state = initialState, action: ProgramActionType): ProgramState => {
   switch (action.type) {
     case FETCH_PROGRAM: {
       return {
@@ -26,7 +34,7 @@ const reducer = (state = initialState, action) => {
       return {
         isFetching: false,
         isError: false,
-        program: action.data.all_programs,
+        program: action.data,
       };
     }
     default:

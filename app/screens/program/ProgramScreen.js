@@ -20,14 +20,12 @@ const ProgramScreen = (props) => {
   const [selectedDate, setSelectedDate] = useState(undefined);
 
   const {navigation} = props;
-
   const {colors, dim} = useTheme();
-
   const dispatch = useDispatch();
 
   const state = useSelector(selectProgramScreenState);
-
-  const {program, loadingState} = state;
+  const loadingState = state.loadingState;
+  const program = state.program?.all_programs;
 
   useEffect(() => {
     if (program) {
@@ -60,7 +58,7 @@ const ProgramScreen = (props) => {
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate]);
+  }, [headerExpanded, selectedDate]);
 
   const renderDays = () => {
     const daysComponent = program.days.map((day) => {
@@ -69,7 +67,7 @@ const ProgramScreen = (props) => {
           key={day}
           onPress={() => {
             setSelectedDate(day);
-            setHeaderExpanded(!headerExpanded);
+            setHeaderExpanded(false);
           }}>
           <View>
             <ProgramDay style={styles.dayListItem} dateString={day} />

@@ -74,17 +74,38 @@ export type TVChannel = {
   allow_lt?: 0 | 1;
 };
 
+export type LiveChannel = {
+  channel_id: number;
+  channel: string;
+  title: string;
+  get_streams_url: string;
+  href: string;
+  stream_embed: string;
+  photo: string;
+  photo_id: number;
+  w_h: string;
+};
+
+export type HomeArticlesBlock = {
+  template_id: number;
+  block_title?: string;
+  category_title?: string;
+  slug_title?: string;
+  slug_url?: string;
+  is_slug_block?: 1 | 0;
+  category_id?: number;
+  articles_list: Article[];
+};
+
+export type HomeChannels = {
+  items: TVChannel[];
+  live_items?: LiveChannel[];
+};
+
 export type HomeDataResponse = {
   articles: Article[];
-  tvprog: {
-    items: TVChannel[];
-    live_items?: any[];
-  };
-  article_blocks: {
-    template_id: number;
-    block_title: string;
-    articles_list: Article[];
-  }[];
+  tvprog: HomeChannels;
+  articles_blocks: HomeArticlesBlock[];
 };
 
 export type SearchFilter = {
@@ -229,33 +250,59 @@ export type ArticlePhoto = {
   author: string;
 };
 
+export type ArticleContentDefault = {
+  article_id: number;
+  article_title: string;
+  article_subtitle?: string;
+  article_url?: string;
+  article_date: string;
+  article_summary: string;
+  article_photos: ArticlePhoto[];
+  main_photo: ArticlePhoto;
+  article_authors: {
+    name: string;
+    slug: string;
+  }[];
+  article_keywords: {
+    name: string;
+    slug: string;
+  }[];
+  category_id?: number;
+  category_url?: string;
+  category_title?: string;
+  text2speech_file_url?: string;
+  reactions_count?: string;
+  paragraphs: {
+    p: string;
+    embed?: any;
+  }[];
+  is_video?: 0 | 1;
+};
+
+export type ArticleContentMedia = {
+  id: number;
+  title: string;
+  subtitle?: string;
+  date: string;
+  category_id: number;
+  category_title: string;
+  get_playlist_url: string;
+  age_restriction: null;
+  url?: string;
+  authors: {
+    name: string;
+    slug: string;
+  }[];
+  content: string;
+  main_photo: ArticlePhoto;
+  is_video?: 0 | 1;
+  is_audio?: 0 | 1;
+};
+
+export type ArticleContent = ArticleContentDefault | ArticleContentMedia;
+
 export type ArticleContentResponse = {
-  article: {
-    article_id: number;
-    article_title: string;
-    article_url: string;
-    article_date: string;
-    article_summary: string;
-    article_photos: ArticlePhoto[];
-    main_photo: ArticlePhoto;
-    article_authors: {
-      name: string;
-      slug: string;
-    }[];
-    article_keywords: {
-      name: string;
-      slug: string;
-    }[];
-    category_id: number;
-    category_url: string;
-    category_title: string;
-    text2speech_file_url?: string;
-    reactions_count?: string;
-    paragraphs: {
-      p: string;
-      embed?: any;
-    }[];
-  };
+  article: ArticleContent;
 };
 
 export type ProgramItem = {
@@ -271,7 +318,7 @@ export type ProgramItem = {
 
 export type ProgramResponse = {
   all_programs: {
-    //days: string[];
+    days: any;
     [key: string]: {
       channel_id: number;
       title: string;

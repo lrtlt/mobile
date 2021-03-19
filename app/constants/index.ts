@@ -1,10 +1,10 @@
-export const ARTICLE_HISTORY_COUNT = 15;
+export const ARTICLE_HISTORY_COUNT = 50;
 export const ARTICLE_SAVED_MAX_COUNT = 51;
 
 //Article list item types:
 export const LIST_DATA_TYPE_ARTICLES = 'article';
 export const LIST_DATA_TYPE_ARTICLES_FEED = 'article_feed';
-export const LIST_DATA_TYPE_TVPROG = 'tv_prog';
+export const LIST_DATA_TYPE_CHANNELS = 'channels';
 export const LIST_DATA_TYPE_MORE_FOOTER = 'more_footer';
 
 export const LIST_DATA_TYPE_TOP_AUDIO_ARTICLE = 'topAudioArticle';

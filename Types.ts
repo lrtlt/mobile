@@ -1,3 +1,4 @@
+import {ScreenStackHeaderConfigProps} from 'react-native-screens';
 import {ROUTE_TYPE_HOME, ROUTE_TYPE_TYPE_MEDIA} from './app/api/Types';
 import {ARTICLE_TYPE_AUDIO, ARTICLE_TYPE_TEXT, ARTICLE_TYPE_VIDEO} from './app/constants';
 
@@ -11,9 +12,7 @@ export type Article = {
   subtitle?: string;
   category_title: string;
   channel_logo?: string;
-  article_has_audiovideo?: any;
-  has_subtitles?: any;
-  age_restriction?: any;
+  age_restriction?: string;
   article_type?: ArticleType;
   photo_aspectratio?: string;
   channel_bg_img?: string;
@@ -34,9 +33,12 @@ export type Article = {
   photo_title?: string;
   lrt_show_id?: number;
   channel_title?: string;
+  item_time?: string;
   item_date?: string;
   fb_badge?: 1 | 0;
   reactions?: string;
+  article_has_audiovideo?: 1 | 0;
+  has_subtitles?: 1 | 0;
   is_video?: 1 | 0;
   is_audio?: 1 | 0;
 };

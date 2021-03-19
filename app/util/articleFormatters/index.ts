@@ -4,31 +4,30 @@ import template1Formatter from './articleFormatterTemplate1';
 import template2Formatter from './articleFormatterTemplate2';
 import template3Formatter from './articleFormatterTemplate3';
 import template999Formatter from './articleFormatterTemplate999';
-import {Article} from '../../../Types';
 
-export const formatArticles = (template_id: number, articles: Article[], clipLast = true): Article[][] => {
+export const formatArticles = <T>(template_id: number, articles: T[], clipLast = true): T[][] => {
   if (articles && articles.length === 0) {
     return [];
   }
 
   switch (template_id) {
     case 0: {
-      return topFormatter(articles);
+      return topFormatter<T>(articles);
     }
     case 1: {
-      return template1Formatter(articles);
+      return template1Formatter<T>(articles);
     }
     case 2: {
-      return template2Formatter(articles);
+      return template2Formatter<T>(articles);
     }
     case 3: {
-      return template3Formatter(articles);
+      return template3Formatter<T>(articles);
     }
     case 999: {
-      return template999Formatter(articles);
+      return template999Formatter<T>(articles);
     }
     default: {
-      return defaultFormatter(articles, clipLast);
+      return defaultFormatter<T>(articles, clipLast);
     }
   }
 };

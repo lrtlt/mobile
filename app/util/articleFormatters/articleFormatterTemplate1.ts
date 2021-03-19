@@ -1,4 +1,3 @@
-import {Article} from '../../../Types';
 import defaultFormatter from './articleFormatterDefault';
 
 /**
@@ -12,7 +11,7 @@ import defaultFormatter from './articleFormatterDefault';
  */
 const REQUIRED_LENGTH = 13;
 
-const formatter = (articles: Article[]): Article[][] => {
+const formatter = <T>(articles: T[]): T[][] => {
   if (articles.length < REQUIRED_LENGTH) {
     console.error(
       'Incorrect article array length: ' + articles.length + '. Minimum required is ' + REQUIRED_LENGTH,
@@ -21,7 +20,7 @@ const formatter = (articles: Article[]): Article[][] => {
     return defaultFormatter(articles);
   }
 
-  const groupedArticles: Article[][] = [];
+  const groupedArticles: T[][] = [];
 
   let currentColumn = 0;
   let maxColumns = 0;
@@ -50,7 +49,7 @@ const formatter = (articles: Article[]): Article[][] => {
       }
     }
 
-    let rowContainer: Article[];
+    let rowContainer: T[];
     if (currentColumn === 0) {
       if (i === articles.length - 1) {
         //Ignore last article because it does not fit.

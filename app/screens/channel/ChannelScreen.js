@@ -10,7 +10,6 @@ import {
   Text,
 } from '../../components';
 import {fetchChannel} from '../../api';
-import {useSelector} from 'react-redux';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import {getIconForChannel, getSmallestDim} from '../../util/UI';
 
@@ -21,10 +20,8 @@ import {
   VIDEO_ASPECT_RATIO,
 } from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
-import {selectTVProgram} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {checkEqual} from '../../util/LodashEqualityCheck';
 
 const PROGRAM_ITEMS_VISIBLE = 2;
 
@@ -43,8 +40,6 @@ const ChannelScreen = (props) => {
   });
 
   const [selectedChannel, setSelectedChannel] = useState(route.params.channelId);
-
-  const {tvProgram} = useSelector(selectTVProgram, checkEqual);
 
   useEffect(() => {
     navigation.setOptions({
@@ -194,7 +189,7 @@ const ChannelScreen = (props) => {
 
   const tvBar =
     loadingState === STATE_READY || loadingState === STATE_ERROR ? (
-      <ScrollingChannels data={tvProgram} onChannelPress={(channel) => onChannelPressHandler(channel)} />
+      <ScrollingChannels onChannelPress={(channel) => onChannelPressHandler(channel)} />
     ) : null;
 
   return (

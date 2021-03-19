@@ -19,7 +19,7 @@ export type FetchMenuItemsResultAction = {
   type: typeof API_MENU_ITEMS_RESULT;
   data: MenuResponse;
 };
-export const fetchMenuItemsResult = (data: any): FetchMenuItemsResultAction => ({
+export const fetchMenuItemsResult = (data: MenuResponse): FetchMenuItemsResultAction => ({
   type: API_MENU_ITEMS_RESULT,
   data,
 });

@@ -14,8 +14,9 @@ import {useTheme} from '../../../../Theme';
 
 const CategoryScreen = (props) => {
   const {categoryId} = props.route;
-  const state = useSelector(selectCategoryScreenState(categoryId));
-  const {isError, articles, isFetching, isRefreshing, lastFetchTime, title, nextPage} = state.category;
+  const {isError, articles, isFetching, isRefreshing, lastFetchTime, title, nextPage} = useSelector(
+    selectCategoryScreenState(categoryId),
+  );
 
   const dispatch = useDispatch();
   const navigation = useNavigation();

@@ -16,7 +16,7 @@ import {
   ARTICLE_EXPIRE_DURATION,
   GEMIUS_VIEW_SCRIPT_ID,
   LIST_DATA_TYPE_ARTICLES,
-  LIST_DATA_TYPE_TVPROG,
+  LIST_DATA_TYPE_CHANNELS,
   LIST_DATA_TYPE_ARTICLES_FEED,
   LIST_DATA_TYPE_MORE_FOOTER,
   EVENT_LOGO_PRESS,
@@ -117,21 +117,12 @@ const HomeScreen = (props) => {
           />
         );
       }
-      case LIST_DATA_TYPE_TVPROG: {
-        return (
-          <ScrollingChannels
-            data={val.item.data}
-            onChannelPress={(channel) => onChannelPressHandler(channel)}
-          />
-        );
+      case LIST_DATA_TYPE_CHANNELS: {
+        return <ScrollingChannels onChannelPress={(channel) => onChannelPressHandler(channel)} />;
       }
       case LIST_DATA_TYPE_ARTICLES_FEED: {
-        return (
-          <ArticleFeedItem
-            article={val.item.data[0]}
-            onArticlePress={(article) => onArticlePressHandler(article)}
-          />
-        );
+        const article = val.item.data[0];
+        return <ArticleFeedItem article={article} onPress={() => onArticlePressHandler(article)} />;
       }
       case LIST_DATA_TYPE_MORE_FOOTER: {
         return (
@@ -160,12 +151,14 @@ const HomeScreen = (props) => {
     }
   };
 
-  const renderSectionHeader = ({section}) =>
-    section.index !== 0 ? (
-      <SectionHeader category={section.category} onPress={(category) => onCategoryPressHandler(category)} />
-    ) : (
+  const renderSectionHeader = ({section}) => {
+    const {category} = section;
+    return category.id === 0 ? (
       renderForecast()
+    ) : (
+      <SectionHeader category={category} onPress={() => onCategoryPressHandler(category)} />
     );
+  };
 
   const renderLoading = () => <ScreenLoader style={styles.loadingContainer} />;
 

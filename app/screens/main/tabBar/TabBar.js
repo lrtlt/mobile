@@ -6,10 +6,12 @@ import {useTheme} from '../../../Theme';
 
 const TabBarComponent = (props) => {
   const {colors} = useTheme();
+
   return (
     <TabBar
       {...props}
       scrollEnabled={true}
+      pressOpacity={0.6}
       pressColor={colors.androidTouchFeedback}
       renderLabel={(labelProps) => <TabLable {...labelProps} />}
       indicatorStyle={{backgroundColor: colors.primaryDark}}
