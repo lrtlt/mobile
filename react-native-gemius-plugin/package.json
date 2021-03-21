@@ -4,6 +4,7 @@
   "version": "1.5.1",
   "description": "Gemius plugin for react-native",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
