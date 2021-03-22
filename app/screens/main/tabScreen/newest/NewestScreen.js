@@ -12,7 +12,7 @@ import {EventRegister} from 'react-native-event-listeners';
 import {useNavigation} from '@react-navigation/native';
 import {selectNewestArticlesScreenState} from '../../../../redux/selectors';
 import {useTheme} from '../../../../Theme';
-import {ROUTE_TYPE_TYPE_NEWEST} from '../../../../api/Types';
+import {ROUTE_TYPE_NEWEST} from '../../../../api/Types';
 
 const NewestScreen = (props) => {
   const state = useSelector(selectNewestArticlesScreenState);
@@ -27,7 +27,7 @@ const NewestScreen = (props) => {
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      page: ROUTE_TYPE_TYPE_NEWEST,
+      page: ROUTE_TYPE_NEWEST,
     });
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps

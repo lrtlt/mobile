@@ -2,13 +2,13 @@ import {Article} from '../../Types';
 
 //Route types from menu api
 export const ROUTE_TYPE_HOME = 'home';
-export const ROUTE_TYPE_TYPE_CATEGORY = 'category';
-export const ROUTE_TYPE_TYPE_NEWEST = 'newest';
-export const ROUTE_TYPE_TYPE_POPULAR = 'popular';
-export const ROUTE_TYPE_TYPE_MEDIA = 'mediateka';
-export const ROUTE_TYPE_TYPE_AUDIOTEKA = 'audioteka';
-export const ROUTE_TYPE_TYPE_PAGE = 'page';
-export const ROUTE_TYPE_TYPE_WEBPAGES = 'webpages';
+export const ROUTE_TYPE_CATEGORY = 'category';
+export const ROUTE_TYPE_NEWEST = 'newest';
+export const ROUTE_TYPE_POPULAR = 'popular';
+export const ROUTE_TYPE_MEDIA = 'mediateka';
+export const ROUTE_TYPE_AUDIOTEKA = 'audioteka';
+export const ROUTE_TYPE_PAGE = 'page';
+export const ROUTE_TYPE_WEBPAGES = 'webpages';
 
 export const SEARCH_TYPE_ALL = 0;
 export const SEARCH_TYPE_NEWS = 1;
@@ -19,21 +19,21 @@ export const SEARCH_TYPE_VIDEO_SUBTITLES = 4;
 export type MenuItem = {
   type:
     | typeof ROUTE_TYPE_HOME
-    | typeof ROUTE_TYPE_TYPE_NEWEST
-    | typeof ROUTE_TYPE_TYPE_POPULAR
-    | typeof ROUTE_TYPE_TYPE_MEDIA
-    | typeof ROUTE_TYPE_TYPE_AUDIOTEKA;
+    | typeof ROUTE_TYPE_NEWEST
+    | typeof ROUTE_TYPE_POPULAR
+    | typeof ROUTE_TYPE_MEDIA
+    | typeof ROUTE_TYPE_AUDIOTEKA;
   name: string;
 };
 
 export type MenuItemCategory = {
-  type: typeof ROUTE_TYPE_TYPE_CATEGORY;
+  type: typeof ROUTE_TYPE_CATEGORY;
   name: string;
   id: number;
 };
 
 export type MenuItemProjects = {
-  type: typeof ROUTE_TYPE_TYPE_WEBPAGES;
+  type: typeof ROUTE_TYPE_WEBPAGES;
   name: string;
   categories: {
     name: string;
@@ -42,7 +42,7 @@ export type MenuItemProjects = {
 };
 
 export type MenuItemPage = {
-  type: typeof ROUTE_TYPE_TYPE_PAGE;
+  type: typeof ROUTE_TYPE_PAGE;
   name: string;
   categories: {
     name: string;

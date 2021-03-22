@@ -21,13 +21,13 @@ import {
   MenuItemProjects,
   MenuResponse,
   ROUTE_TYPE_HOME,
-  ROUTE_TYPE_TYPE_AUDIOTEKA,
-  ROUTE_TYPE_TYPE_CATEGORY,
-  ROUTE_TYPE_TYPE_MEDIA,
-  ROUTE_TYPE_TYPE_NEWEST,
-  ROUTE_TYPE_TYPE_PAGE,
-  ROUTE_TYPE_TYPE_POPULAR,
-  ROUTE_TYPE_TYPE_WEBPAGES,
+  ROUTE_TYPE_AUDIOTEKA,
+  ROUTE_TYPE_CATEGORY,
+  ROUTE_TYPE_MEDIA,
+  ROUTE_TYPE_NEWEST,
+  ROUTE_TYPE_PAGE,
+  ROUTE_TYPE_POPULAR,
+  ROUTE_TYPE_WEBPAGES,
   SearchFilter,
   SEARCH_TYPE_ALL,
 } from '../../api/Types';
@@ -163,11 +163,11 @@ const reducer = (state = initialState, action: NavigationActionType): Navigation
 const parseRoutes = (apiResponse: MenuResponse): (MenuItem | MenuItemCategory)[] => {
   const availableTypes = [
     ROUTE_TYPE_HOME,
-    ROUTE_TYPE_TYPE_AUDIOTEKA,
-    ROUTE_TYPE_TYPE_MEDIA,
-    ROUTE_TYPE_TYPE_NEWEST,
-    ROUTE_TYPE_TYPE_POPULAR,
-    ROUTE_TYPE_TYPE_CATEGORY,
+    ROUTE_TYPE_AUDIOTEKA,
+    ROUTE_TYPE_MEDIA,
+    ROUTE_TYPE_NEWEST,
+    ROUTE_TYPE_POPULAR,
+    ROUTE_TYPE_CATEGORY,
   ];
 
   const routes = apiResponse.main_menu.filter((item): item is MenuItem | MenuItemCategory => {
@@ -182,13 +182,13 @@ const parseRoutes = (apiResponse: MenuResponse): (MenuItem | MenuItemCategory)[]
 
 const parsePages = (apiResponse: MenuResponse): MenuItemPage[] => {
   return apiResponse.main_menu.filter((item): item is MenuItemPage => {
-    return item.type === ROUTE_TYPE_TYPE_PAGE;
+    return item.type === ROUTE_TYPE_PAGE;
   });
 };
 
 const parseProjects = (apiResponse: MenuResponse): MenuItemProjects[] => {
   return apiResponse.main_menu.filter((item): item is MenuItemProjects => {
-    return item.type === ROUTE_TYPE_TYPE_WEBPAGES;
+    return item.type === ROUTE_TYPE_WEBPAGES;
   });
 };
 

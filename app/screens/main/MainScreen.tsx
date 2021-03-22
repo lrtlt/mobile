@@ -19,11 +19,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import AudiotekaScreen from './tabScreen/audioteka/AudiotekaScreen';
 import {
   ROUTE_TYPE_HOME,
-  ROUTE_TYPE_TYPE_AUDIOTEKA,
-  ROUTE_TYPE_TYPE_CATEGORY,
-  ROUTE_TYPE_TYPE_MEDIA,
-  ROUTE_TYPE_TYPE_NEWEST,
-  ROUTE_TYPE_TYPE_POPULAR,
+  ROUTE_TYPE_AUDIOTEKA,
+  ROUTE_TYPE_CATEGORY,
+  ROUTE_TYPE_MEDIA,
+  ROUTE_TYPE_NEWEST,
+  ROUTE_TYPE_POPULAR,
 } from '../../api/Types';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {MainDrawerParamList, MainStackParamList} from '../../navigation/MainStack';
@@ -91,7 +91,7 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
     const routeIndex = state.routes.findIndex((r) => r.key === route.key);
 
     //Render only 1 screen on each side
-    if (Math.abs(selectedTabIndex - routeIndex) > 0) {
+    if (Math.abs(selectedTabIndex - routeIndex) > 1) {
       return <View />;
     }
     const current = routeIndex === selectedTabIndex;
@@ -99,15 +99,15 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
     switch (route.type) {
       case ROUTE_TYPE_HOME:
         return <HomeScreen type={ROUTE_TYPE_HOME} isCurrent={current} />;
-      case ROUTE_TYPE_TYPE_MEDIA:
-        return <HomeScreen type={ROUTE_TYPE_TYPE_MEDIA} isCurrent={current} />;
-      case ROUTE_TYPE_TYPE_AUDIOTEKA:
+      case ROUTE_TYPE_MEDIA:
+        return <HomeScreen type={ROUTE_TYPE_MEDIA} isCurrent={current} />;
+      case ROUTE_TYPE_AUDIOTEKA:
         return <AudiotekaScreen isCurrent={current} />;
-      case ROUTE_TYPE_TYPE_CATEGORY:
+      case ROUTE_TYPE_CATEGORY:
         return <CategoryScreen route={route} isCurrent={current} />;
-      case ROUTE_TYPE_TYPE_NEWEST:
+      case ROUTE_TYPE_NEWEST:
         return <NewestScreen isCurrent={current} />;
-      case ROUTE_TYPE_TYPE_POPULAR:
+      case ROUTE_TYPE_POPULAR:
         return <PopularScreen isCurrent={current} />;
       default:
         return <TestScreen text={'Unkown type: ' + JSON.stringify(route)} />;

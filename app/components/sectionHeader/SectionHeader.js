@@ -14,7 +14,7 @@ const SectionHeader = (props) => {
       <DefaultHeader title={name} />
     );
 
-  return props.onPress ? <TouchableOpacity onPress={onPress}>{header}</TouchableOpacity> : {header};
+  return props.onPress ? <TouchableOpacity onPress={onPress}>{header}</TouchableOpacity> : header;
 };
 
 export default SectionHeader;

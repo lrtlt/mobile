@@ -12,7 +12,7 @@ import {EventRegister} from 'react-native-event-listeners';
 import {selectPopularArticlesScreenState} from '../../../../redux/selectors';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../../../Theme';
-import {ROUTE_TYPE_TYPE_POPULAR} from '../../../../api/Types';
+import {ROUTE_TYPE_POPULAR} from '../../../../api/Types';
 
 const PopularScreen = (props) => {
   const state = useSelector(selectPopularArticlesScreenState);
@@ -27,7 +27,7 @@ const PopularScreen = (props) => {
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      page: ROUTE_TYPE_TYPE_POPULAR,
+      page: ROUTE_TYPE_POPULAR,
     });
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps

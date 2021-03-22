@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {View, SectionList, RefreshControl, StyleSheet, StatusBar} from 'react-native';
 import {
   ArticleRow,
@@ -27,14 +27,19 @@ import {EventRegister} from 'react-native-event-listeners';
 import {selectHomeScreenState} from '../../../../redux/selectors';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../../../Theme';
-import {ROUTE_TYPE_TYPE_MEDIA} from '../../../../api/Types';
+import {ROUTE_TYPE_HOME, ROUTE_TYPE_MEDIA} from '../../../../api/Types';
+import {Category} from '../../../../redux/reducers/articles';
 
-const HomeScreen = (props) => {
-  const {isCurrent, type} = props;
+interface Props {
+  isCurrent: boolean;
+  type: typeof ROUTE_TYPE_HOME | typeof ROUTE_TYPE_MEDIA;
+}
+
+const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const listRef = useRef(null);
-  const state = useSelector(selectHomeScreenState(type));
+  const listRef = useRef<SectionList>(null);
+  const state = useSelector(selectHomeScreenState(type), (l, r) => l.lastFetchTime === r.lastFetchTime);
 
   const {colors, dark} = useTheme();
 
@@ -59,7 +64,9 @@ const HomeScreen = (props) => {
       }
     });
 
-    return () => EventRegister.removeEventListener(listener);
+    return () => {
+      EventRegister.removeEventListener(listener as string);
+    };
   });
 
   useEffect(() => {
@@ -72,57 +79,59 @@ const HomeScreen = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCurrent, refreshing, state.lastFetchTime]);
 
-  const callApi = () => {
-    if (type === ROUTE_TYPE_TYPE_MEDIA) {
+  const callApi = useCallback(() => {
+    if (type === ROUTE_TYPE_MEDIA) {
       dispatch(fetchMediateka());
     } else {
       dispatch(fetchHome());
     }
-  };
+  }, [type]);
 
-  const onArticlePressHandler = (article) => {
-    navigation.navigate('Article', {articleId: article.id});
-  };
-
-  const onChannelPressHandler = (channel) => {
-    const {channel_id} = channel.payload;
-    navigation.navigate('Channel', {channelId: channel_id});
-  };
-
-  const onCategoryPressHandler = (category) => {
+  const onCategoryPressHandler = useCallback((category: Category) => {
     console.log('CategoryPressed', category);
-
-    let name = category.name;
-    if (name === 'Naujienų srautas') {
-      //TODO update this hardcode later
-      name = 'Naujausi';
-    }
 
     if (category.is_slug_block === 1) {
       navigation.navigate('Slug', {category: category});
     } else {
-      dispatch(openCategoryForName(name));
+      //TODO update this hardcode later
+      if (category.name === 'Naujienų srautas') {
+        //TODO update this hardcode later
+        dispatch(openCategoryForName('Naujausi'));
+      } else {
+        dispatch(openCategoryForName(category.name));
+      }
     }
-  };
+  }, []);
 
-  const renderItem = (val) => {
+  const renderItem = (val: any) => {
     switch (val.item.type) {
       case LIST_DATA_TYPE_ARTICLES: {
         const {category} = val.section;
         return (
           <ArticleRow
             data={val.item.data}
-            onArticlePress={(article) => onArticlePressHandler(article)}
+            onArticlePress={(article) => navigation.navigate('Article', {articleId: article.id})}
             isSlug={category.is_slug_block}
           />
         );
       }
       case LIST_DATA_TYPE_CHANNELS: {
-        return <ScrollingChannels onChannelPress={(channel) => onChannelPressHandler(channel)} />;
+        return (
+          <ScrollingChannels
+            onChannelPress={(channel) =>
+              navigation.navigate('Channel', {channelId: channel.payload.channel_id})
+            }
+          />
+        );
       }
       case LIST_DATA_TYPE_ARTICLES_FEED: {
         const article = val.item.data[0];
-        return <ArticleFeedItem article={article} onPress={() => onArticlePressHandler(article)} />;
+        return (
+          <ArticleFeedItem
+            article={article}
+            onPress={() => navigation.navigate('Article', {articleId: article.id})}
+          />
+        );
       }
       case LIST_DATA_TYPE_MORE_FOOTER: {
         return (
@@ -140,7 +149,7 @@ const HomeScreen = (props) => {
   };
 
   const renderForecast = () => {
-    if (type === ROUTE_TYPE_TYPE_MEDIA) {
+    if (type === ROUTE_TYPE_MEDIA) {
       return null;
     } else {
       return (
@@ -151,19 +160,8 @@ const HomeScreen = (props) => {
     }
   };
 
-  const renderSectionHeader = ({section}) => {
-    const {category} = section;
-    return category.id === 0 ? (
-      renderForecast()
-    ) : (
-      <SectionHeader category={category} onPress={() => onCategoryPressHandler(category)} />
-    );
-  };
-
-  const renderLoading = () => <ScreenLoader style={styles.loadingContainer} />;
-
   if (sections.length === 0) {
-    return renderLoading();
+    return <ScreenLoader style={styles.loadingContainer} />;
   }
 
   return (
@@ -183,8 +181,15 @@ const HomeScreen = (props) => {
             lastFetchTime: lastFetchTime,
           }}
           renderItem={renderItem}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => callApi()} />}
-          renderSectionHeader={renderSectionHeader}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={callApi} />}
+          renderSectionHeader={({section}) => {
+            const {category} = section;
+            return category.id === 0 ? (
+              renderForecast()
+            ) : (
+              <SectionHeader category={category} onPress={() => onCategoryPressHandler(category)} />
+            );
+          }}
           sections={sections}
           removeClippedSubviews={false}
           windowSize={12}

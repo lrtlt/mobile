@@ -1,5 +1,5 @@
 import {HomePageType} from '../../Types';
-import {ROUTE_TYPE_TYPE_CATEGORY, ROUTE_TYPE_TYPE_MEDIA} from '../api/Types';
+import {ROUTE_TYPE_CATEGORY, ROUTE_TYPE_MEDIA} from '../api/Types';
 import {formatArticles} from '../util/articleFormatters';
 import {RootState} from './reducers';
 import {HomeBlock} from './reducers/articles';
@@ -23,7 +23,7 @@ export const selectMainScreenState = (state: RootState) => {
   const {navigation} = state;
   return {
     routes: navigation.routes.map((r) => {
-      if (r.type === ROUTE_TYPE_TYPE_CATEGORY) {
+      if (r.type === ROUTE_TYPE_CATEGORY) {
         return {type: r.type, key: r.name, title: r.name, categoryId: r.id};
       } else {
         return {type: r.type, key: r.name, title: r.name};
@@ -45,7 +45,7 @@ export const selectCategoryScreenState = (categoryId: number) => (state: RootSta
 };
 
 export const selectHomeScreenState = (type: HomePageType) => (state: RootState) => {
-  const block = type === ROUTE_TYPE_TYPE_MEDIA ? state.articles.mediateka : state.articles.home;
+  const block = type === ROUTE_TYPE_MEDIA ? state.articles.mediateka : state.articles.home;
 
   const mapSections = (items: HomeBlock[]) => {
     return items.map((b) => {
