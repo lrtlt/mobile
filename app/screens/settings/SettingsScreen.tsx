@@ -8,6 +8,17 @@ import {selectSettings} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {checkEqual} from '../../util/LodashEqualityCheck';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MainStackParamList} from '../../navigation/MainStack';
+
+type ScreenRouteProp = RouteProp<MainStackParamList, 'Slug'>;
+type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Slug'>;
+
+type Props = {
+  route: ScreenRouteProp;
+  navigation: ScreenNavigationProp;
+};
 
 const TEXT_SIZE_NORMAL = 0;
 const TEXT_SIZE_LARGE = 2;
@@ -17,9 +28,7 @@ const IMAGE_QUALITY_NORMAL = -0.1;
 const IMAGE_QUALITY_HIGH = -0.5;
 const IMAGE_QUALITY_EXTRA_HIGH = -1;
 
-const SettingsScreen = (props) => {
-  const {navigation} = props;
-
+const SettingsScreen: React.FC<Props> = ({navigation}) => {
   const {strings} = useTheme();
   const dispatch = useDispatch();
 
@@ -32,15 +41,15 @@ const SettingsScreen = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config]);
 
-  const handleSetDarkMode = (value) => {
+  const handleSetDarkMode = (value: boolean) => {
     dispatch(setConfig({...config, isDarkMode: value}));
   };
 
-  const handleSetTextSize = (value) => {
+  const handleSetTextSize = (value: number) => {
     dispatch(setConfig({...config, textSizeMultiplier: value}));
   };
 
-  const handleSetImageMaxScaleFactor = (value) => {
+  const handleSetImageMaxScaleFactor = (value: number) => {
     dispatch(setConfig({...config, imageMaxScaleFactor: value}));
   };
 

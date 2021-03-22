@@ -11,8 +11,19 @@ import {Text} from '../../components';
 import {useTheme} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
 import {checkEqual} from '../../util/LodashEqualityCheck';
+import {SplashStackParamList} from '../../navigation/SplashStack';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
-const SplashScreen = (_) => {
+type ScreenRouteProp = RouteProp<SplashStackParamList, 'Splash'>;
+type ScreenNavigationProp = StackNavigationProp<SplashStackParamList, 'Splash'>;
+
+type Props = {
+  route: ScreenRouteProp;
+  navigation: ScreenNavigationProp;
+};
+
+const SplashScreen: React.FC<Props> = (_props) => {
   const {isDarkMode} = useSettings();
   const {colors, strings} = useTheme();
 

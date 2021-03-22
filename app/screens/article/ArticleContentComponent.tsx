@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, Dimensions, Animated, StyleSheet} from 'react-native';
+import React, {useMemo, useState} from 'react';
+import {View, Dimensions, Animated, StyleSheet, ListRenderItemInfo} from 'react-native';
 import Header from './header/Header';
 import {getOrientation, getSmallestDim} from '../../util/UI';
 import {
@@ -21,36 +21,40 @@ import {
   TYPE_VIDEO,
   TYPE_AUDIO,
   TYPE_TEXT_TO_SPEECH,
+  ArticleContentItem,
 } from './ArticleCompositor';
 import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useCollapsibleHeader} from 'react-navigation-collapsible';
 import {useTheme} from '../../Theme';
+import {ArticleContent} from '../../api/Types';
 
 const getContentWidth = () => {
   return Dimensions.get('window').width - 12 * 2;
 };
 
-const getItemKey = (item, index) => {
+const getItemKey = (item: ArticleContentItem, index: number) => {
   const {type} = item;
-
   if (type === TYPE_GALLERY || type === TYPE_HEADER || type === TYPE_SUMMARY) {
-    return String(index) + String(item) + getOrientation();
+    return String(index) + String(type) + getOrientation();
   } else {
-    return String(index) + String(item);
+    return String(index) + String(type);
   }
 };
 
-const ArticleContent = (props) => {
+interface Props {
+  article: ArticleContent;
+  itemPressHandler: (item: {type: 'photo' | 'article'; item: any}) => void;
+}
+
+const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) => {
   const [isTextToSpeechPlaying, setTextToSpeechPlaying] = useState(false);
-
-  const articleData = compose(props.article);
-
   const {colors} = useTheme();
 
+  const articleData = useMemo(() => compose(article), [article]);
   console.log('composition', articleData);
 
-  const renderItem = (item) => {
+  const renderItem = (item: ListRenderItemInfo<ArticleContentItem>): React.ReactElement | null => {
     const {type, data} = item.item;
 
     const renderMainPhoto = () => {
@@ -62,7 +66,7 @@ const ArticleContent = (props) => {
       return (
         <TouchableDebounce
           onPress={() =>
-            props.itemPressHandler({
+            itemPressHandler({
               type: 'photo',
               item: data.photo,
             })
@@ -87,7 +91,7 @@ const ArticleContent = (props) => {
     };
 
     const renderParagraph = () => {
-      return <ArticleParagraph data={data} itemSelectHandler={props.itemPressHandler} />;
+      return <ArticleParagraph data={data} itemSelectHandler={itemPressHandler} />;
     };
 
     const renderVideo = () => {
@@ -107,13 +111,11 @@ const ArticleContent = (props) => {
     };
 
     const renderText2Speech = () => {
-      return (
-        isTextToSpeechPlaying && (
-          <View style={styles.playerContainer}>
-            <AudioComponent {...data} style={styles.playerTextToSpeech} autoPlay={true} />
-          </View>
-        )
-      );
+      return isTextToSpeechPlaying ? (
+        <View style={styles.playerContainer}>
+          <AudioComponent {...data} style={styles.playerTextToSpeech} autoPlay={true} />
+        </View>
+      ) : null;
     };
 
     const renderGallery = () => {
@@ -121,14 +123,16 @@ const ArticleContent = (props) => {
         <ArticleGallery
           data={data.photos}
           expectedWidth={getContentWidth()}
-          itemSelectHandler={props.itemPressHandler}
+          itemSelectHandler={itemPressHandler}
         />
       );
     };
 
     switch (type) {
       case TYPE_HEADER: {
-        return <Header {...data} onTextToSpeechClick={(enabled) => setTextToSpeechPlaying(enabled)} />;
+        return (
+          <Header {...data} onTextToSpeechClick={(enabled: boolean) => setTextToSpeechPlaying(enabled)} />
+        );
       }
       case TYPE_MAIN_PHOTO: {
         return renderMainPhoto();
@@ -184,7 +188,7 @@ const ArticleContent = (props) => {
   );
 };
 
-export default ArticleContent;
+export default ArticleContentComponent;
 
 const styles = StyleSheet.create({
   container: {

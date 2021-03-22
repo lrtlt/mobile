@@ -10,16 +10,26 @@ import {selectProgramScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import Divider from '../../components/divider/Divider';
 import {IconCalendar} from '../../components/svg';
+import {MainStackParamList} from '../../navigation/MainStack';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+
+type ScreenRouteProp = RouteProp<MainStackParamList, 'Slug'>;
+type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Slug'>;
+
+type Props = {
+  route: ScreenRouteProp;
+  navigation: ScreenNavigationProp;
+};
 
 const STATE_LOADING = 'loading';
 const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
-const ProgramScreen = (props) => {
+const ProgramScreen: React.FC<Props> = ({navigation}) => {
   const [headerExpanded, setHeaderExpanded] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(undefined);
+  const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined);
 
-  const {navigation} = props;
   const {colors, dim} = useTheme();
   const dispatch = useDispatch();
 
@@ -48,7 +58,6 @@ const ProgramScreen = (props) => {
       headerTitle: () => {
         return selectedDate ? (
           <ProgramDay
-            style={styles.dayHeader}
             textStyle={{...styles.headerText, color: colors.headerTint}}
             dateString={selectedDate}
           />
@@ -61,7 +70,7 @@ const ProgramScreen = (props) => {
   }, [headerExpanded, selectedDate]);
 
   const renderDays = () => {
-    const daysComponent = program.days.map((day) => {
+    const daysComponent = program?.days.map((day: string) => {
       return (
         <TouchableOpacity
           key={day}
@@ -80,40 +89,27 @@ const ProgramScreen = (props) => {
     return <View>{daysComponent}</View>;
   };
 
-  const renderLoading = () => {
-    return <ScreenLoader />;
-  };
-
-  const renderError = () => {
-    //TODO implement
-    return <View style={styles.flexContainer} />;
-  };
-
-  const renderProgram = () => {
-    const selectedDay = selectedDate || program.days[0];
-    const selectedDayProgram = program[selectedDay];
-    return (
-      <View style={styles.root}>
-        <Collapsible collapsed={!headerExpanded} align="bottom" duration={250} easing={Easing.ease}>
-          {renderDays()}
-        </Collapsible>
-        <ProgramTabs program={selectedDayProgram} />
-      </View>
-    );
-  };
-
   let content;
   switch (loadingState) {
     case STATE_LOADING: {
-      content = renderLoading();
+      content = <ScreenLoader />;
       break;
     }
     case STATE_ERROR: {
-      content = renderError();
+      content = <View style={styles.root} />;
       break;
     }
     case STATE_READY: {
-      content = renderProgram();
+      const selectedDay = selectedDate || program?.days[0];
+      const selectedDayProgram = program![selectedDay];
+      content = (
+        <View style={styles.root}>
+          <Collapsible collapsed={!headerExpanded} align="bottom" duration={250} easing={Easing.ease}>
+            {renderDays()}
+          </Collapsible>
+          <ProgramTabs program={selectedDayProgram} />
+        </View>
+      );
       break;
     }
   }
@@ -126,10 +122,6 @@ export default ProgramScreen;
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-  },
-  dayHeader: {
-    height: '100%',
-    justifyContent: 'center',
   },
   dayListItem: {
     padding: 16,

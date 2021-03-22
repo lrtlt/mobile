@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {saveArticle, removeArticle, addArticleToHistory} from '../../redux/actions';
 import {fetchArticle} from '../../api';
-import ArticleContent from './ArticleContent';
+import ArticleContentComponent from './ArticleContentComponent';
 import {useDispatch, useSelector} from 'react-redux';
 import {ShareIcon, SaveIcon, IconComments} from '../../components/svg';
 import Share from 'react-native-share';
@@ -11,21 +11,40 @@ import {ScreenLoader, ScreenError, AdultContentWarning, ActionButton} from '../.
 import {selectArticleBookmarked} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {ArticleContent, isDefaultArticle} from '../../api/Types';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MainStackParamList} from '../../navigation/MainStack';
+
+type ScreenRouteProp = RouteProp<MainStackParamList, 'Article'>;
+type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Article'>;
+
+type Props = {
+  route: ScreenRouteProp;
+  navigation: ScreenNavigationProp;
+};
+
+type ScreenState = {
+  article?: ArticleContent;
+  loadingState:
+    | typeof STATE_LOADING
+    | typeof STATE_ERROR
+    | typeof STATE_READY
+    | typeof STATE_ADULT_CONTENT_WARNING;
+};
 
 const STATE_LOADING = 'loading';
 const STATE_ADULT_CONTENT_WARNING = 'adult-content-warning';
 const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
-const ArticleScreen = (props) => {
-  const {navigation, route} = props;
-
+const ArticleScreen: React.FC<Props> = ({navigation, route}) => {
   const {colors, dim, strings} = useTheme();
 
   const dispatch = useDispatch();
 
-  const [state, setState] = useState({
-    article: null,
+  const [state, setState] = useState<ScreenState>({
+    article: undefined,
     loadingState: STATE_LOADING,
   });
 
@@ -37,8 +56,7 @@ const ArticleScreen = (props) => {
   const isBookmarked = useSelector(selectArticleBookmarked(articleId));
 
   useEffect(() => {
-    loadArticle(articleId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    loadArticle();
   }, [articleId]);
 
   useEffect(() => {
@@ -48,7 +66,11 @@ const ArticleScreen = (props) => {
 
     const _saveArticlePress = () => {
       if (isBookmarked) {
-        dispatch(removeArticle(article.article_id));
+        if (isDefaultArticle(article)) {
+          dispatch(removeArticle(article.article_id));
+        } else {
+          dispatch(removeArticle(article.id));
+        }
       } else {
         dispatch(saveArticle(article));
         Snackbar.show({
@@ -59,13 +81,20 @@ const ArticleScreen = (props) => {
     };
 
     const _handleSharePress = () => {
-      const url = `https://lrt.lt${article.article_url || article.url}`;
-      Share.open({url});
+      if (isDefaultArticle(article)) {
+        const url = `https://lrt.lt${article.article_url}`;
+        Share.open({url});
+      } else {
+        const url = `https://lrt.lt${article.url}`;
+        Share.open({url});
+      }
     };
 
     const _handleCommentsPress = () => {
-      if (article.article_url) {
+      if (isDefaultArticle(article)) {
         navigation.navigate('Comments', {url: `https://lrt.lt${article.article_url}`});
+      } else {
+        navigation.navigate('Comments', {url: `https://lrt.lt${article.url}`});
       }
     };
 
@@ -90,38 +119,34 @@ const ArticleScreen = (props) => {
   const loadArticle = () => {
     setState({
       ...state,
-      article: null,
+      article: undefined,
       loadingState: STATE_LOADING,
     });
 
     fetchArticle(articleId)
-      .then((a) => parseArticle(a.article))
+      .then((response) => {
+        const article = response.article;
+        const loadingState = !article
+          ? STATE_ERROR
+          : article['n-18']
+          ? STATE_ADULT_CONTENT_WARNING
+          : STATE_READY;
+
+        setState({
+          ...state,
+          article,
+          loadingState: loadingState,
+        });
+        dispatch(addArticleToHistory(article));
+      })
       .catch((e) => {
         console.log(e);
         setState({
           ...state,
-          article: null,
+          article: undefined,
           loadingState: STATE_ERROR,
         });
       });
-  };
-
-  const parseArticle = (articleFromApi) => {
-    const loadingState =
-      articleFromApi === null
-        ? STATE_ERROR
-        : articleFromApi['n-18']
-        ? STATE_ADULT_CONTENT_WARNING
-        : STATE_READY;
-
-    setState({
-      ...state,
-      isLoading: false,
-      article: articleFromApi,
-      loadingState: loadingState,
-    });
-
-    dispatch(addArticleToHistory(articleFromApi));
   };
 
   const renderLoading = () => (
@@ -152,45 +177,6 @@ const ArticleScreen = (props) => {
     </View>
   );
 
-  const renderArticleComponent = () => {
-    let articleComponent;
-    if (article) {
-      articleComponent = <ArticleContent article={article} itemPressHandler={_handleItemPress} />;
-    } else {
-      articleComponent = <View />;
-    }
-    return (
-      <SafeAreaView style={styles.screen} edges={['bottom']}>
-        {articleComponent}
-      </SafeAreaView>
-    );
-  };
-
-  const _handleItemPress = (item) => {
-    switch (item.type) {
-      case 'photo': {
-        const images = article.article_photos;
-        if (!images) {
-          return;
-        }
-
-        navigation.navigate('Gallery', {
-          images,
-          selectedImage: item.item,
-        });
-        break;
-      }
-      case 'article': {
-        navigation.push('Article', {articleId: item.item.id});
-        break;
-      }
-      default: {
-        console.warn('Unkown type selected ' + item.type);
-        break;
-      }
-    }
-  };
-
   switch (state.loadingState) {
     case STATE_LOADING: {
       return renderLoading();
@@ -202,7 +188,35 @@ const ArticleScreen = (props) => {
       return renderAdultContentWarning();
     }
     case STATE_READY: {
-      return renderArticleComponent();
+      return (
+        <SafeAreaView style={styles.screen} edges={['bottom']}>
+          <ArticleContentComponent
+            article={article!}
+            itemPressHandler={(item) => {
+              switch (item.type) {
+                case 'photo': {
+                  const images = isDefaultArticle(article) ? article.article_photos : undefined;
+                  if (images) {
+                    navigation.navigate('Gallery', {
+                      images,
+                      selectedImage: item.item,
+                    });
+                  }
+                  break;
+                }
+                case 'article': {
+                  navigation.push('Article', {articleId: item.item.id});
+                  break;
+                }
+                default: {
+                  console.warn('Unkown type selected ' + item.type);
+                  break;
+                }
+              }
+            }}
+          />
+        </SafeAreaView>
+      );
     }
     default: {
       return renderLoading();

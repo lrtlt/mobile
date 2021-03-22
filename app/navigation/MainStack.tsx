@@ -23,7 +23,7 @@ import {Drawer, SearchFilterDrawer} from '../components';
 import {useSettings} from '../settings/useSettings';
 import {themeDark, themeLight} from '../Theme';
 import {Category} from '../redux/reducers/articles';
-import {MenuItemPage} from '../api/Types';
+import {ArticlePhoto, MenuItemPage} from '../api/Types';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -35,7 +35,8 @@ export type MainStackParamList = {
     url: string;
   };
   Gallery: {
-    images: any;
+    images: ArticlePhoto[];
+    selectedImage: ArticlePhoto;
   };
   Channel: {
     channelId: number;
@@ -58,8 +59,17 @@ export type MainStackParamList = {
 };
 
 const Stack = createStackNavigator<MainStackParamList>();
-const MainDrawer = createDrawerNavigator();
-const SearchDrawer = createDrawerNavigator();
+
+export type MainDrawerParamList = {
+  Main: undefined;
+};
+const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
+
+export type SearchDrawerParamList = {
+  SearchScreen: undefined;
+};
+
+const SearchDrawer = createDrawerNavigator<SearchDrawerParamList>();
 
 export default () => {
   const settings = useSettings();

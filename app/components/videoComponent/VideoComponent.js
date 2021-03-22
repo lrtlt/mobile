@@ -91,8 +91,10 @@ const VideoComponent = (props) => {
 VideoComponent.propTypes = {
   ...VideoCover.propTypes,
   ...JWPlayerNative.propTypes,
+  style: PropTypes.object,
   mediaId: PropTypes.string,
   streamUrl: PropTypes.string,
+  embedUrl: PropTypes.string,
   title: PropTypes.string,
   isLiveStream: PropTypes.bool,
   isAudioOnly: PropTypes.bool,

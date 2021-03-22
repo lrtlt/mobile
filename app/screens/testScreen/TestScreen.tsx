@@ -2,7 +2,11 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text} from '../../components';
 
-const TestScreen = (props) => {
+export interface Props {
+  text: string;
+}
+
+const TestScreen: React.FC<Props> = (props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text} type="secondary">

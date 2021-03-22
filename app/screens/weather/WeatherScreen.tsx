@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {Forecast, WeatherEmbed} from '../../components';
 import {useSelector, useDispatch} from 'react-redux';
@@ -9,8 +9,20 @@ import WeatherLocations from './WeatherLocations';
 import ConfirmModal from './ConfirmModal';
 import {setForecastLocation} from '../../redux/actions/config';
 import {selectForecastLocation} from '../../redux/selectors';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MainStackParamList} from '../../navigation/MainStack';
+import {ForecastLocation} from '../../api/Types';
 
-const WeatherScreen = (props) => {
+type ScreenRouteProp = RouteProp<MainStackParamList, 'Weather'>;
+type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Weather'>;
+
+type Props = {
+  route: ScreenRouteProp;
+  navigation: ScreenNavigationProp;
+};
+
+const WeatherScreen: React.FC<Props> = ({navigation}) => {
   const [selectedLocation, setSelectedLocation] = useState(useSelector(selectForecastLocation));
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
 
@@ -19,16 +31,15 @@ const WeatherScreen = (props) => {
   const {strings} = useTheme();
 
   useEffect(() => {
-    props.navigation.setOptions({
+    navigation.setOptions({
       headerTitle: strings.weatherScreenTitle,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSelectLocation = (location) => {
+  const handleSelectLocation = useCallback((location: ForecastLocation) => {
     setSelectedLocation(location);
     setConfirmModalVisible(true);
-  };
+  }, []);
 
   return (
     <SafeAreaView style={styles.screen} edges={['left', 'right']}>

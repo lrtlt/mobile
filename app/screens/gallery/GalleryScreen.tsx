@@ -7,26 +7,21 @@ import {Text} from '../../components';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {IconClose} from '../../components/svg';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MainStackParamList} from '../../navigation/MainStack';
+import formatImages from './formatImages';
 
-/**
- * Formats images array so that the element at given index starts at the beggening. Trailing images appended to the end of the array.
- * This is a workaround for issue in gallery swiper https://github.com/Luehang/react-native-gallery-swiper/issues/26
- */
-const formatImages = (imagesArray, index) => {
-  if (!index || index === 0 || imagesArray.length <= 1) {
-    return imagesArray;
-  }
+type ScreenRouteProp = RouteProp<MainStackParamList, 'Gallery'>;
+type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Gallery'>;
 
-  const start = imagesArray.slice(index, imagesArray.length);
-  const end = imagesArray.slice(0, index);
-  return start.concat(end);
+type Props = {
+  route: ScreenRouteProp;
+  navigation: ScreenNavigationProp;
 };
 
-const GalleryScreen = (props) => {
-  const {route, navigation} = props;
-
-  const {colors, dim} = useTheme();
-
+const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
+  console.log('render gallery');
   const [state, setState] = useState(() => {
     const selectedImage = route.params.selectedImage ?? null;
     const images = route.params.images ?? [];
@@ -36,49 +31,22 @@ const GalleryScreen = (props) => {
       initialIndex = images.findIndex((img) => img.path === selectedImage.path);
       initialIndex = Math.max(0, initialIndex);
     }
+
+    const formattedImages = formatImages(images, initialIndex);
     return {
-      index: initialIndex,
+      selectedIndex: initialIndex,
       initialIndex,
-      images: formatImages(images, initialIndex),
+      images: formattedImages,
+      imageUrls: formattedImages.map((img) => ({
+        uri: buildArticleImageUri(IMG_SIZE_XXL, img.path),
+      })),
     };
   });
 
-  const renderDetails = () => {
-    const image = state.images[state.index];
-    return (
-      <View style={{...styles.detailsContainer, backgroundColor: colors.background}}>
-        <SafeAreaView edges={['bottom']}>
-          <View style={styles.row}>
-            <Text style={styles.authorText} type="secondary">
-              {image.author}
-            </Text>
-            <Text style={styles.authorText} type="secondary">
-              {state.index + 1} / {state.images.length}
-            </Text>
-          </View>
-          <Text style={styles.title}>{image.title}</Text>
-        </SafeAreaView>
-      </View>
-    );
-  };
+  const {images, selectedIndex, imageUrls} = state;
+  const {colors, dim} = useTheme();
 
-  const renderExitButton = () => {
-    return (
-      <View style={styles.absoluteLayout}>
-        <SafeAreaView edges={['top', 'left']}>
-          <View style={styles.backButtonContainer}>
-            <BorderlessButton onPress={() => navigation.goBack()}>
-              <IconClose color={colors.headerTint} size={dim.appBarIconSize} />
-            </BorderlessButton>
-          </View>
-        </SafeAreaView>
-      </View>
-    );
-  };
-
-  const imageUrls = state.images.map((img) => ({
-    uri: buildArticleImageUri(IMG_SIZE_XXL, img.path),
-  }));
+  const image = images[selectedIndex];
 
   return (
     <View style={styles.container}>
@@ -89,10 +57,30 @@ const GalleryScreen = (props) => {
         initialNumToRender={2}
         //initialPage={state.initialIndex}
         pageMargin={4}
-        onPageSelected={(i) => setState({...state, index: i})}
+        onPageSelected={(i) => setState({...state, selectedIndex: i})}
       />
-      {renderDetails()}
-      {renderExitButton()}
+      <View style={{...styles.detailsContainer, backgroundColor: colors.background}}>
+        <SafeAreaView edges={['bottom']}>
+          <View style={styles.row}>
+            <Text style={styles.authorText} type="secondary">
+              {image.author}
+            </Text>
+            <Text style={styles.authorText} type="secondary">
+              {`${selectedIndex + 1} / ${images.length}`}
+            </Text>
+          </View>
+          <Text style={styles.title}>{image.title}</Text>
+        </SafeAreaView>
+      </View>
+      <View style={styles.absoluteLayout}>
+        <SafeAreaView edges={['top', 'left']}>
+          <View style={styles.backButtonContainer}>
+            <BorderlessButton onPress={() => navigation.goBack()}>
+              <IconClose color={colors.headerTint} size={dim.appBarIconSize} />
+            </BorderlessButton>
+          </View>
+        </SafeAreaView>
+      </View>
     </View>
   );
 };

@@ -22,6 +22,24 @@ import {
 import Gemius from 'react-native-gemius-plugin';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {RouteProp} from '@react-navigation/native';
+import {MainStackParamList} from '../../navigation/MainStack';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {ChannelResponse} from '../../api/Types';
+import {ChannelDataType} from '../../components/scrollingChannels/ScrollingChannels';
+
+type ScreenRouteProp = RouteProp<MainStackParamList, 'Channel'>;
+type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Channel'>;
+
+type Props = {
+  route: ScreenRouteProp;
+  navigation: ScreenNavigationProp;
+};
+
+type ScreenState = {
+  channel?: ChannelResponse;
+  loadingState: typeof STATE_LOADING | typeof STATE_ERROR | typeof STATE_READY;
+};
 
 const PROGRAM_ITEMS_VISIBLE = 2;
 
@@ -29,13 +47,11 @@ const STATE_LOADING = 'loading';
 const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
-const ChannelScreen = (props) => {
-  const {navigation, route} = props;
-
+const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
   const {colors, strings} = useTheme();
 
-  const [state, setState] = useState({
-    channel: null,
+  const [state, setState] = useState<ScreenState>({
+    channel: undefined,
     loadingState: STATE_LOADING,
   });
 
@@ -45,7 +61,6 @@ const ChannelScreen = (props) => {
     navigation.setOptions({
       headerTitle: strings.channelScreenTitle,
     });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -67,15 +82,15 @@ const ChannelScreen = (props) => {
           loadingState: response.channel_info ? STATE_READY : STATE_ERROR,
         }),
       )
-      .catch((error) =>
+      .catch(() =>
         setState({
-          channel: null,
+          channel: undefined,
           loadingState: STATE_ERROR,
         }),
       );
   };
 
-  const onChannelPressHandler = (channel) => {
+  const onChannelPressHandler = (channel: ChannelDataType) => {
     const {type, payload} = channel;
     switch (type) {
       case CHANNEL_TYPE_DEFAULT: {
@@ -95,11 +110,11 @@ const ChannelScreen = (props) => {
   };
 
   const renderChannelComponent = () => {
-    const {channel_info} = state.channel;
+    const {channel_info} = state.channel!;
 
     const channelIconComponent = getIconForChannel(channel_info.channel, 40);
 
-    const {prog} = state.channel;
+    const {prog} = state.channel!;
 
     const programComponent = prog
       ? prog.map((item, i) => {
@@ -107,7 +122,7 @@ const ChannelScreen = (props) => {
             return;
           }
 
-          let opusNowPlayingComponent = null;
+          let opusNowPlayingComponent;
           if (i === 0 && channel_info.channel.toLowerCase().includes('opus')) {
             opusNowPlayingComponent = <OpusNowPlaying />;
           }
@@ -125,15 +140,15 @@ const ChannelScreen = (props) => {
             </View>
           );
         })
-      : null;
+      : undefined;
 
     return (
       <View>
         <View style={styles.playerContainer}>
           <VideoComponent
             key={channel_info.stream_embed}
-            mediaId={channel_info.channel_id ? channel_info.channel_id.toString() : null}
             style={styles.player}
+            mediaId={channel_info.channel_id ? channel_info.channel_id.toString() : undefined}
             autoPlay={true}
             backgroundImage={channel_info.player_background_image}
             isLiveStream={true}
@@ -156,29 +171,25 @@ const ChannelScreen = (props) => {
     );
   };
 
-  const renderLoading = () => (
-    <View style={styles.player}>
-      <ScreenLoader />
-    </View>
-  );
-
-  const renderError = () => (
-    <View style={styles.player}>
-      <ScreenError text={strings.liveChanelError} />
-    </View>
-  );
-
   const {loadingState} = state;
 
   let content;
 
   switch (loadingState) {
     case STATE_LOADING: {
-      content = renderLoading();
+      content = (
+        <View style={styles.player}>
+          <ScreenLoader />
+        </View>
+      );
       break;
     }
     case STATE_ERROR: {
-      content = renderError();
+      content = (
+        <View style={styles.player}>
+          <ScreenError text={strings.liveChanelError} />
+        </View>
+      );
       break;
     }
     case STATE_READY: {
@@ -190,7 +201,7 @@ const ChannelScreen = (props) => {
   const tvBar =
     loadingState === STATE_READY || loadingState === STATE_ERROR ? (
       <ScrollingChannels onChannelPress={(channel) => onChannelPressHandler(channel)} />
-    ) : null;
+    ) : undefined;
 
   return (
     <SafeAreaView style={styles.screen} edges={['left', 'right']}>

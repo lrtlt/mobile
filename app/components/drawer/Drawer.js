@@ -1,21 +1,14 @@
 import React from 'react';
 import {View, Linking, StyleSheet, ScrollView} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import DrawerItem from '../drawerItem/DrawerItem';
 import {getIconForChannel} from '../../util/UI';
 import {selectDrawerData} from '../../redux/selectors';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {
-  EVENT_SELECT_CATEGORY_INDEX,
-  URL_ABOUT,
-  URL_CONTACTS,
-  URL_FEEDBACK,
-  URL_UPLOAD_NEWS,
-} from '../../constants';
+import {URL_ABOUT, URL_CONTACTS, URL_FEEDBACK, URL_UPLOAD_NEWS} from '../../constants';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 import Divider from '../divider/Divider';
-import {EventRegister} from 'react-native-event-listeners';
 import {
   IconBookmark,
   IconClock,
@@ -28,6 +21,7 @@ import {
   IconUpload,
 } from '../svg';
 import {checkEqual} from '../../util/LodashEqualityCheck';
+import {openCategoryForName} from '../../redux/actions';
 
 const ICON_SIZE = 18;
 
@@ -37,11 +31,7 @@ const DrawerComponent = (props) => {
   const {colors, strings} = useTheme();
 
   const data = useSelector(selectDrawerData, checkEqual);
-
-  const handleCategorySelection = (index) => {
-    navigation.closeDrawer();
-    EventRegister.emit(EVENT_SELECT_CATEGORY_INDEX, {index});
-  };
+  const dispatch = useDispatch();
 
   const renderFooterItems = () => {
     return (
@@ -189,7 +179,16 @@ const DrawerComponent = (props) => {
   };
 
   const content = data.routes.map((route, i) => {
-    return <DrawerItem key={route.name} text={route.name} onPress={() => handleCategorySelection(i)} />;
+    return (
+      <DrawerItem
+        key={route.name}
+        text={route.name}
+        onPress={() => {
+          navigation.closeDrawer();
+          dispatch(openCategoryForName(route.name));
+        }}
+      />
+    );
   });
 
   return (

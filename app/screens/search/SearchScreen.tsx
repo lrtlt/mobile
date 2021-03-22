@@ -1,9 +1,17 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Button, ActivityIndicator, TextInput, StyleSheet, Animated} from 'react-native';
-import {HeaderBackButton} from '@react-navigation/stack';
+import {
+  View,
+  Button,
+  ActivityIndicator,
+  TextInput,
+  StyleSheet,
+  Animated,
+  ListRenderItemInfo,
+} from 'react-native';
+import {HeaderBackButton, StackNavigationProp} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
 import {resetSearchFilter} from '../../redux/actions';
-import {Article, ActionButton, Text} from '../../components';
+import {Article as ArticleComponent, ActionButton, Text} from '../../components';
 import {IconFilter, IconSearch} from '../../components/svg';
 import {fetchArticleSearch} from '../../api';
 import {selectSearchFilter} from '../../redux/selectors';
@@ -11,26 +19,40 @@ import {useTheme} from '../../Theme';
 import {CollapsibleSubHeaderAnimator, useCollapsibleSubHeader} from 'react-navigation-collapsible';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import {checkEqual} from '../../util/LodashEqualityCheck';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {MainStackParamList, SearchDrawerParamList} from '../../navigation/MainStack';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import {Article} from '../../../Types';
 
-const SearchScreen = (props) => {
-  const {navigation} = props;
-  const searchFilter = useSelector(selectSearchFilter, checkEqual);
+type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
-  const {colors, strings, dim} = useTheme();
+type ScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MainStackParamList, 'Search'>,
+  DrawerNavigationProp<SearchDrawerParamList, 'SearchScreen'>
+>;
 
+type Props = {
+  route: ScreenRouteProp;
+  navigation: ScreenNavigationProp;
+};
+
+const SearchScreen: React.FC<Props> = ({navigation}) => {
+  const [query, setQuery] = useState<string>('');
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loadingState, setLoadingState] = useState({
     isFetching: false,
     isError: false,
   });
 
-  const [query, setQuery] = useState('');
-  const [articles, setArticles] = useState([]);
+  const searchFilter = useSelector(selectSearchFilter, checkEqual);
 
+  const {colors, strings, dim} = useTheme();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    return () => dispatch(resetSearchFilter());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      dispatch(resetSearchFilter());
+    };
   }, []);
 
   useEffect(() => {
@@ -71,7 +93,7 @@ const SearchScreen = (props) => {
         });
         setArticles(response.items);
       })
-      .catch((error) => {
+      .catch(() => {
         setLoadingState({
           isFetching: false,
           isError: true,
@@ -79,11 +101,11 @@ const SearchScreen = (props) => {
       });
   }, [query, searchFilter]);
 
-  const renderItem = (val) => {
+  const renderItem = (item: ListRenderItemInfo<Article>) => {
     return (
-      <Article
+      <ArticleComponent
         style={styles.article}
-        data={val.item}
+        data={item.item}
         showDate={true}
         onPress={(article) => navigation.navigate('Article', {articleId: article.id})}
         type={'multi'}
@@ -105,7 +127,7 @@ const SearchScreen = (props) => {
         <Text style={styles.errorText} type="error">
           {strings.error_no_connection}
         </Text>
-        <Button title={strings.tryAgain} color={colors.primary} onPress={() => search(query, searchFilter)} />
+        <Button title={strings.tryAgain} color={colors.primary} onPress={() => search()} />
       </View>
     );
   };

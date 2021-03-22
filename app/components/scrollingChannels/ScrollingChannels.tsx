@@ -8,16 +8,33 @@ import TextComponent from '../text/Text';
 import {useSelector} from 'react-redux';
 import {selectHomeChannels} from '../../redux/selectors';
 import {checkEqual} from '../../util/LodashEqualityCheck';
+import {LiveChannel, TVChannel} from '../../api/Types';
 
-const ScrollingChannels = (props) => {
+type LiveChannelData = {
+  type: typeof CHANNEL_TYPE_LIVE;
+  payload: LiveChannel;
+};
+
+type DefaultChannelData = {
+  type: typeof CHANNEL_TYPE_DEFAULT;
+  payload: TVChannel;
+};
+
+export type ChannelDataType = DefaultChannelData | LiveChannelData;
+
+interface Props {
+  onChannelPress: (channel: ChannelDataType) => void;
+}
+
+const ScrollingChannels: React.FC<Props> = (props) => {
   const {colors, strings} = useTheme();
   const channels = useSelector(selectHomeChannels, checkEqual);
 
-  const onChannelPressHandler = (channel) => {
+  const onChannelPressHandler = (channel: TVChannel) => {
     props.onChannelPress({type: CHANNEL_TYPE_DEFAULT, payload: channel});
   };
 
-  const onLiveItemPressHandler = (liveItem) => {
+  const onLiveItemPressHandler = (liveItem: LiveChannel) => {
     props.onChannelPress({type: CHANNEL_TYPE_LIVE, payload: liveItem});
   };
 
@@ -36,7 +53,7 @@ const ScrollingChannels = (props) => {
           data={liveItem}
           key={liveItem.title}
           isLive={true}
-          onPress={(liveChannel) => onLiveItemPressHandler(liveChannel)}
+          onPress={(liveChannel: LiveChannel) => onLiveItemPressHandler(liveChannel)}
         />
       );
     });
@@ -48,7 +65,7 @@ const ScrollingChannels = (props) => {
         <Channel
           data={item}
           key={`${i}-${item.proc}`}
-          onPress={(channel) => onChannelPressHandler(channel)}
+          onPress={(channel: TVChannel) => onChannelPressHandler(channel)}
         />
       );
     });

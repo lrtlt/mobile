@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
-import {TabView} from 'react-native-tab-view';
+import {SceneRendererProps, TabView} from 'react-native-tab-view';
 import {ActionButton} from '../../components';
 import {Logo, IconDrawerMenu, IconSettings} from '../../components/svg';
 import {BorderlessButton} from 'react-native-gesture-handler';
@@ -25,18 +25,30 @@ import {
   ROUTE_TYPE_TYPE_NEWEST,
   ROUTE_TYPE_TYPE_POPULAR,
 } from '../../api/Types';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {MainDrawerParamList, MainStackParamList} from '../../navigation/MainStack';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 
-const MainScreen = (props) => {
+type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
+
+type ScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MainStackParamList, 'Home'>,
+  DrawerNavigationProp<MainDrawerParamList, 'Main'>
+>;
+
+type Props = {
+  route: ScreenRouteProp;
+  navigation: ScreenNavigationProp;
+};
+
+const MainScreen: React.FC<Props> = ({navigation}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-
-  const {navigation} = props;
   const {colors, dim} = useTheme();
 
   const state = useSelector(selectMainScreenState, (left, right) => {
     return left.routes.length === right.routes.length;
   });
-
-  console.log('render main screen');
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_SELECT_CATEGORY_INDEX, (data) => {
@@ -44,17 +56,19 @@ const MainScreen = (props) => {
         setSelectedTabIndex(data.index);
       }
     });
-    return () => EventRegister.removeEventListener(listener);
-  });
+    return () => {
+      EventRegister.removeEventListener(listener as string);
+    };
+  }, [state]);
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (_) => (
+      headerLeft: () => (
         <ActionButton onPress={() => navigation.toggleDrawer()}>
           <IconDrawerMenu size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
-      headerRight: (_) => (
+      headerRight: () => (
         <ActionButton onPress={() => navigation.navigate('Settings')}>
           <IconSettings name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
@@ -72,12 +86,9 @@ const MainScreen = (props) => {
     });
   }, [colors.headerTint, dim.appBarIconSize, navigation]);
 
-  const handleIndexChange = (index) => setSelectedTabIndex(index);
-
-  const renderTabBar = (tabBarProps) => <TabBar {...tabBarProps} />;
-
-  const renderScene = (sceneProps) => {
-    const routeIndex = state.routes.findIndex((r) => r.key === sceneProps.route.key);
+  const renderScene = (sceneProps: SceneRendererProps & {route: typeof state.routes[0]}) => {
+    const {route} = sceneProps;
+    const routeIndex = state.routes.findIndex((r) => r.key === route.key);
 
     //Render only 1 screen on each side
     if (Math.abs(selectedTabIndex - routeIndex) > 0) {
@@ -85,8 +96,7 @@ const MainScreen = (props) => {
     }
     const current = routeIndex === selectedTabIndex;
 
-    const {type} = sceneProps.route;
-    switch (type) {
+    switch (route.type) {
       case ROUTE_TYPE_HOME:
         return <HomeScreen type={ROUTE_TYPE_HOME} isCurrent={current} />;
       case ROUTE_TYPE_TYPE_MEDIA:
@@ -94,13 +104,13 @@ const MainScreen = (props) => {
       case ROUTE_TYPE_TYPE_AUDIOTEKA:
         return <AudiotekaScreen isCurrent={current} />;
       case ROUTE_TYPE_TYPE_CATEGORY:
-        return <CategoryScreen route={sceneProps.route} isCurrent={current} />;
+        return <CategoryScreen route={route} isCurrent={current} />;
       case ROUTE_TYPE_TYPE_NEWEST:
         return <NewestScreen isCurrent={current} />;
       case ROUTE_TYPE_TYPE_POPULAR:
         return <PopularScreen isCurrent={current} />;
       default:
-        return <TestScreen text={'Unkown type: ' + type} />;
+        return <TestScreen text={'Unkown type: ' + JSON.stringify(route)} />;
     }
   };
 
@@ -116,8 +126,8 @@ const MainScreen = (props) => {
           }}
           swipeEnabled={true}
           renderScene={renderScene}
-          renderTabBar={renderTabBar}
-          onIndexChange={handleIndexChange}
+          renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
+          onIndexChange={(index) => setSelectedTabIndex(index)}
           lazy={true}
           lazyPreloadDistance={0}
           initialLayout={{height: 0, width: Dimensions.get('window').width}}

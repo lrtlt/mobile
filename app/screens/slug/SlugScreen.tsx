@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Button, ActivityIndicator, StyleSheet} from 'react-native';
+import {View, Button, ActivityIndicator, StyleSheet, ListRenderItemInfo} from 'react-native';
 import {ArticleRow, Text} from '../../components';
 import {getOrientation} from '../../util/UI';
 import {fetchArticlesByTag} from '../../api';
@@ -7,13 +7,29 @@ import {formatArticles} from '../../util/articleFormatters';
 import {ARTICLES_PER_PAGE_COUNT} from '../../constants';
 import {FlatList} from 'react-native-gesture-handler';
 import {useTheme} from '../../Theme';
+import {MainStackParamList} from '../../navigation/MainStack';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {Article} from '../../../Types';
 
-const SlugScreen = (props) => {
+type ScreenRouteProp = RouteProp<MainStackParamList, 'Slug'>;
+type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Slug'>;
+
+type Props = {
+  route: ScreenRouteProp;
+  navigation: ScreenNavigationProp;
+};
+
+type ScreenState = {
+  isFetching: boolean;
+  isError: boolean;
+  articles: Article[][];
+};
+
+const SlugScreen: React.FC<Props> = ({navigation, route}) => {
   const {colors, strings} = useTheme();
 
-  const {navigation, route} = props;
-
-  const [state, setState] = useState({
+  const [state, setState] = useState<ScreenState>({
     isFetching: false,
     isError: false,
     articles: [],
@@ -27,7 +43,6 @@ const SlugScreen = (props) => {
     });
 
     startLoading();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startLoading = () => {
@@ -37,7 +52,20 @@ const SlugScreen = (props) => {
       articles: [],
     });
 
-    callApi()
+    const urlSegments = category.slug_url?.split('/');
+
+    if (!urlSegments || urlSegments.length === 0) {
+      setState({
+        ...state,
+        isFetching: false,
+        isError: true,
+      });
+      return;
+    }
+
+    const tag = urlSegments[urlSegments.length - 1];
+
+    fetchArticlesByTag(tag, ARTICLES_PER_PAGE_COUNT * 3)
       .then((response) => {
         const formattedArticles = formatArticles(-1, response.articles);
         setState({
@@ -53,21 +81,6 @@ const SlugScreen = (props) => {
           isError: true,
         });
       });
-  };
-
-  const callApi = async () => {
-    const urlSegments = category.slug_url.split('/');
-    const tag = urlSegments[urlSegments.length - 1];
-    return await fetchArticlesByTag(tag, ARTICLES_PER_PAGE_COUNT * 3);
-  };
-
-  const renderItem = (val) => {
-    return (
-      <ArticleRow
-        data={val.item}
-        onArticlePress={(article) => navigation.push('Article', {articleId: article.id})}
-      />
-    );
   };
 
   const renderLoading = () => {
@@ -92,9 +105,9 @@ const SlugScreen = (props) => {
   const {isFetching, isError, articles} = state;
 
   let content;
-  if (isError === true) {
+  if (isError) {
     content = renderError();
-  } else if (isFetching === true) {
+  } else if (isFetching) {
     content = renderLoading();
   } else {
     content = (
@@ -105,7 +118,14 @@ const SlugScreen = (props) => {
         extraData={{
           orientation: getOrientation(),
         }}
-        renderItem={renderItem}
+        renderItem={(item) => {
+          return (
+            <ArticleRow
+              data={item.item}
+              onArticlePress={(article) => navigation.push('Article', {articleId: article.id})}
+            />
+          );
+        }}
         removeClippedSubviews={false}
         keyExtractor={(item, index) => String(index) + String(item)}
       />

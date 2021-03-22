@@ -45,9 +45,9 @@ export const setConfig = (value: ConfigState): SetConfigAction => ({
 
 export interface SetForecastLocationAction {
   type: typeof SET_FORECAST_LOCATION;
-  payload: ForecastLocation;
+  payload?: ForecastLocation;
 }
-export const setForecastLocation = (value: ForecastLocation): SetForecastLocationAction => ({
+export const setForecastLocation = (value?: ForecastLocation): SetForecastLocationAction => ({
   type: SET_FORECAST_LOCATION,
   payload: value,
 });

@@ -272,10 +272,12 @@ export type ArticleContentDefault = {
   category_title?: string;
   text2speech_file_url?: string;
   reactions_count?: string;
+
   paragraphs: {
     p: string;
     embed?: any;
   }[];
+  'n-18'?: 0 | 1;
   is_video?: 0 | 1;
 };
 
@@ -286,8 +288,11 @@ export type ArticleContentMedia = {
   date: string;
   category_id: number;
   category_title: string;
+  //Stream api url for video info
   get_playlist_url: string;
-  age_restriction: null;
+  //Stream url for audio
+  stream_url: string;
+  age_restriction: string;
   url?: string;
   authors: {
     name: string;
@@ -295,8 +300,19 @@ export type ArticleContentMedia = {
   }[];
   content: string;
   main_photo: ArticlePhoto;
+  'n-18'?: 0 | 1;
   is_video?: 0 | 1;
   is_audio?: 0 | 1;
+};
+
+export const isMediaArticle = (article?: ArticleContent): article is ArticleContentMedia => {
+  const a = article as ArticleContentMedia | undefined;
+  return Boolean(a?.id);
+};
+
+export const isDefaultArticle = (article?: ArticleContent): article is ArticleContentDefault => {
+  const a = article as ArticleContentDefault | undefined;
+  return Boolean(a?.article_id);
 };
 
 export type ArticleContent = ArticleContentDefault | ArticleContentMedia;
@@ -340,4 +356,19 @@ export type ChannelResponse = {
     is_radio?: 0 | 1;
   };
   prog: ProgramItem[];
+};
+
+export type SearchResponse = {
+  page: number;
+  q: string;
+  total_found: string;
+  items: Article[];
+};
+
+export type SlugArticlesResponse = {
+  articles: Article[];
+  slug: {
+    title: string;
+    slug: string;
+  };
 };

@@ -10,7 +10,7 @@ import {selectNavigationIsReady} from '../redux/selectors';
 import {themeDark, themeLight} from '../Theme';
 import {useSettings} from '../settings/useSettings';
 import {DEEP_LINKING_URL_PREFIX, GEMIUS_VIEW_SCRIPT_ID} from '../constants';
-import Gemius from '../../react-native-gemius-plugin';
+import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
 import MainStack from './MainStack';
 import SplashStack from './SplashStack';
 
@@ -48,11 +48,11 @@ const NavigatorComponent = () => {
 
     if (currentRouteName && routeNameRef.current !== currentRouteName) {
       const currentScreen = currentRouteName.toLowerCase();
-      const params = {
+      const params: GemiusParams = {
         screen: currentScreen,
         params: currentRoute?.params && JSON.stringify(currentRoute.params),
       };
-      //console.log('Current screen: ', params);
+      console.log(`Current route:`, currentRoute);
       crashlytics().log(`Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
       Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, params);
     }

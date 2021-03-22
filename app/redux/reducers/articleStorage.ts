@@ -1,7 +1,7 @@
 import {ADD_ARTICLE_TO_HISTORY, SAVE_ARTICLE, REMOVE_ARTICLE} from '../actions/actionTypes';
 import {ARTICLE_HISTORY_COUNT, ARTICLE_SAVED_MAX_COUNT} from '../../constants';
 import {ArticleStorageActionType} from '../actions';
-import {ArticleContent, ArticleContentMedia} from '../../api/Types';
+import {ArticleContent, ArticleContentMedia, isMediaArticle} from '../../api/Types';
 
 export type SavedArticle = {
   id: number;
@@ -69,11 +69,7 @@ const reducer = (state = initialState, action: ArticleStorageActionType): Articl
 };
 
 const mapArticleData = (article: ArticleContent): SavedArticle => {
-  const isMedia = (a: any): a is ArticleContentMedia => {
-    return Boolean(a.id);
-  };
-
-  if (isMedia(article)) {
+  if (isMediaArticle(article)) {
     return {
       id: article.id,
       category_title: article.category_title,

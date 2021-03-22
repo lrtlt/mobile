@@ -29,6 +29,8 @@ import {
   PopularArticlesResponse,
   ProgramResponse,
   SearchFilter,
+  SearchResponse,
+  SlugArticlesResponse,
   VideoDataDefault,
   VideoDataLiveStream,
 } from './Types';
@@ -43,10 +45,10 @@ export const fetchArticle = (articleId: number | string) =>
   get<ArticleContentResponse>(articleGet(articleId));
 
 export const fetchArticlesByTag = (tag: string, count: number) =>
-  get<Article[]>(articlesGetByTag(tag, count));
+  get<SlugArticlesResponse>(articlesGetByTag(tag, count));
 
 export const fetchArticleSearch = (q: string, filter: SearchFilter) =>
-  get<Article[]>(searchArticles(q, filter));
+  get<SearchResponse>(searchArticles(q, filter));
 
 export const fetchVideoData = (streamUrl: string) => get<VideoDataLiveStream | VideoDataDefault>(streamUrl);
 
