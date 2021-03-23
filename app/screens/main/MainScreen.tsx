@@ -90,8 +90,8 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
     const {route} = sceneProps;
     const routeIndex = state.routes.findIndex((r) => r.key === route.key);
 
-    //Render only 1 screen on each side
-    if (Math.abs(selectedTabIndex - routeIndex) > 1) {
+    //Render only selected screen
+    if (Math.abs(selectedTabIndex - routeIndex) > 0) {
       return <View />;
     }
     const current = routeIndex === selectedTabIndex;
