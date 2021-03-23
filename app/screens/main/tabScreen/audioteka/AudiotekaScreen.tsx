@@ -117,7 +117,7 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
           }
           data={data}
           removeClippedSubviews={false}
-          windowSize={12}
+          windowSize={8}
           updateCellsBatchingPeriod={20}
           maxToRenderPerBatch={4}
           ListFooterComponent={<SafeAreaView edges={['bottom']} />}
