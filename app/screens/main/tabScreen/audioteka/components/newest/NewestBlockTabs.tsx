@@ -15,6 +15,7 @@ const NewestBlockTabs: React.FC<Props> = ({data, onCategorySelected}) => {
 
   const tabs = data.categories.map((c, i) => (
     <Tab
+      key={c.title}
       category={c}
       isSelected={i === selectedIndex}
       onPress={() => {
