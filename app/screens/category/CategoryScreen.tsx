@@ -5,6 +5,7 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import CategoryTabScreen from '../main/tabScreen/category/CategoryTabScreen';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Category'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Category'>;
@@ -24,9 +25,9 @@ const CategoryScreen: React.FC<Props> = ({navigation, route}) => {
   }, []);
 
   return (
-    <View style={styles.screen}>
+    <SafeAreaView style={styles.screen} edges={['left', 'right']}>
       <CategoryTabScreen categoryId={id} categoryTitle={name} />
-    </View>
+    </SafeAreaView>
   );
 };
 
