@@ -52,7 +52,7 @@ const Tab: React.FC<TabProps> = ({category, isSelected, onPress}) => {
           ...styles.tabContainer,
           backgroundColor: isSelected ? category['background-color-active'] : category['background-color'],
         }}>
-        <Text numberOfLines={1} style={{...styles.tabText, color: isSelected ? 'white' : colors.text}}>
+        <Text numberOfLines={1} style={{...styles.tabText, color: isSelected ? 'white' : '#121212'}}>
           {category.title}
         </Text>
       </View>
