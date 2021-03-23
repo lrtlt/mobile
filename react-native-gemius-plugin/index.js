@@ -1,4 +1,4 @@
-import {NativeModules, Platform} from 'react-native';
+import {NativeModules} from 'react-native';
 
 const {GemiusPlugin} = NativeModules;
 
@@ -50,10 +50,6 @@ export default class Gemius {
 
   static sendSeek(clipId, offset) {
     GemiusPlugin.sendSeek(clipId, offset);
-  }
-
-  static sendComplete(clipId, offset) {
-    GemiusPlugin.sendComplete(clipId, offset);
   }
 
   static sendPartialPageViewedEvent(gemiusPrismIdentifier, extraParameters = null) {

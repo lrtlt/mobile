@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {StyleSheet, useWindowDimensions, ViewStyle} from 'react-native';
-import {Location} from '../../screens/weather/Types';
 import WebView from 'react-native-autoheight-webview';
+import {ForecastLocation} from '../../api/Types';
 import {DEFAULT_FORECAST_LOCATION} from '../../constants';
 
 interface Props {
   style?: ViewStyle;
-  location?: Location;
+  location?: ForecastLocation;
   horizontalPadding?: number;
 }
 

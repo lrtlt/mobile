@@ -4,12 +4,7 @@ import {ArticleRow, DefaultSectionHeader, ScreenLoader, Text} from '../../../../
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchPopular, refreshPopular} from '../../../../redux/actions';
 import {FlatList} from 'react-native-gesture-handler';
-import {
-  ARTICLE_LIST_TYPE_POPULAR,
-  ARTICLES_PER_PAGE_COUNT,
-  GEMIUS_VIEW_SCRIPT_ID,
-  EVENT_LOGO_PRESS,
-} from '../../../../constants';
+import {ARTICLES_PER_PAGE_COUNT, GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS} from '../../../../constants';
 import {ListLoader} from '../../../../components';
 import {getOrientation} from '../../../../util/UI';
 import Gemius from 'react-native-gemius-plugin';
@@ -17,6 +12,7 @@ import {EventRegister} from 'react-native-event-listeners';
 import {selectPopularArticlesScreenState} from '../../../../redux/selectors';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../../../Theme';
+import {ROUTE_TYPE_POPULAR} from '../../../../api/Types';
 
 const PopularScreen = (props) => {
   const state = useSelector(selectPopularArticlesScreenState);
@@ -31,7 +27,7 @@ const PopularScreen = (props) => {
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
-      page: ARTICLE_LIST_TYPE_POPULAR,
+      page: ROUTE_TYPE_POPULAR,
     });
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps

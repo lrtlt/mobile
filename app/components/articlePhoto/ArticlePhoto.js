@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   imageVertical: {
     width: '100%',
-    maxHeight: Dimensions.get('window').height * 0.6,
+    maxHeight: Dimensions.get('screen').height * 0.6,
   },
   verticalImageContainer: {
     alignItems: 'center',

@@ -4,7 +4,7 @@ import SlugHeader from './SlugHeader';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const SectionHeader = (props) => {
-  const {category} = props;
+  const {category, onPress} = props;
   const {name} = category;
 
   const header =
@@ -14,11 +14,7 @@ const SectionHeader = (props) => {
       <DefaultHeader title={name} />
     );
 
-  return props.onPress ? (
-    <TouchableOpacity onPress={() => props.onPress(category)}>{header}</TouchableOpacity>
-  ) : (
-    {header}
-  );
+  return props.onPress ? <TouchableOpacity onPress={onPress}>{header}</TouchableOpacity> : header;
 };
 
 export default SectionHeader;

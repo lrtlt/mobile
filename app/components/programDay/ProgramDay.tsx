@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TextStyle} from 'react-native';
+import {View, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 import moment from 'moment';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
@@ -24,8 +24,9 @@ const weekDays: WeekDays[] = [
 ];
 
 interface Props {
+  style?: ViewStyle;
   dateString: string;
-  textStyle: TextStyle;
+  textStyle?: TextStyle;
 }
 
 const ProgramDay: React.FC<Props> = (props) => {

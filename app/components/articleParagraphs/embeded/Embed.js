@@ -11,7 +11,7 @@ import {VIDEO_ASPECT_RATIO} from '../../../constants';
 import TextComponent from '../../text/Text';
 import {useTheme} from '../../../Theme';
 
-const getScreenWidth = () => Dimensions.get('window').width;
+const getScreenWidth = () => Dimensions.get('screen').width;
 
 const Embed = (props) => {
   const {colors, strings} = useTheme();

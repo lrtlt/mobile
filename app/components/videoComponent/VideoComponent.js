@@ -6,6 +6,7 @@ import VideoCover from './VideoCover';
 import JWPlayerNative from './JWPlayerNative';
 import Gemius from 'react-native-gemius-plugin';
 import {useTheme} from '../../Theme';
+import {fetchVideoData} from '../../api';
 
 const initialState = {
   isLoading: false,
@@ -17,13 +18,6 @@ const initialState = {
   description: null,
 };
 
-const callApi = async (url) => {
-  const response = await fetch(url);
-  const result = await response.json();
-  console.log('VIDEO API RESPONSE', result);
-  return result;
-};
-
 const VideoComponent = (props) => {
   const {colors} = useTheme();
 
@@ -31,7 +25,7 @@ const VideoComponent = (props) => {
 
   const handlePlayPress = () => {
     setVideoState({...initialState, isLoading: true});
-    callApi(props.streamUrl).then((response) => {
+    fetchVideoData(props.streamUrl).then((response) => {
       const newState = {...videoState};
       newState.isLoading = false;
       newState.embedUrl = response.full_url;
@@ -97,8 +91,10 @@ const VideoComponent = (props) => {
 VideoComponent.propTypes = {
   ...VideoCover.propTypes,
   ...JWPlayerNative.propTypes,
+  style: PropTypes.object,
   mediaId: PropTypes.string,
   streamUrl: PropTypes.string,
+  embedUrl: PropTypes.string,
   title: PropTypes.string,
   isLiveStream: PropTypes.bool,
   isAudioOnly: PropTypes.bool,

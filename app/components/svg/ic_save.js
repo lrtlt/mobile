@@ -1,5 +1,6 @@
 import React from 'react';
-import {IconBookmark, IconBookmarkFilled} from '.';
+import IconBookmark from './ic_bookmark';
+import IconBookmarkFilled from './ic_bookmark_filled';
 
 const SvgComponent = (props) => {
   if (props.filled) {

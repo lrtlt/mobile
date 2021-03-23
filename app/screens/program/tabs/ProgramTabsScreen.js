@@ -14,9 +14,9 @@ const TabsScreen = (props) => {
 
   const navigationState = {
     index: currentIndex,
-    routes: props.program.map((channel) => {
+    routes: props.program.map((channel, i) => {
       return {
-        key: channel.channel_id,
+        key: channel.channel_id || `unkown-channel-${i}`,
         title: channel.title,
         program: channel.prog,
       };
@@ -96,7 +96,7 @@ const TabsScreen = (props) => {
         renderTabBar={renderTabBar}
         lazy={true}
         onIndexChange={(i) => setCurrentIndex(i)}
-        initialLayout={{width: Dimensions.get('window').width}}
+        initialLayout={{width: Dimensions.get('screen').width}}
       />
     </View>
   );

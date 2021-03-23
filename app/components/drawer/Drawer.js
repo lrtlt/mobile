@@ -1,22 +1,14 @@
 import React from 'react';
-import {View, Linking, StyleSheet} from 'react-native';
-import {useSelector} from 'react-redux';
+import {View, Linking, StyleSheet, ScrollView} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import DrawerItem from '../drawerItem/DrawerItem';
-import {ScrollView} from 'react-native-gesture-handler';
 import {getIconForChannel} from '../../util/UI';
 import {selectDrawerData} from '../../redux/selectors';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {
-  EVENT_SELECT_CATEGORY_INDEX,
-  URL_ABOUT,
-  URL_CONTACTS,
-  URL_FEEDBACK,
-  URL_UPLOAD_NEWS,
-} from '../../constants';
+import {URL_ABOUT, URL_CONTACTS, URL_FEEDBACK, URL_UPLOAD_NEWS} from '../../constants';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 import Divider from '../divider/Divider';
-import {EventRegister} from 'react-native-event-listeners';
 import {
   IconBookmark,
   IconClock,
@@ -28,6 +20,8 @@ import {
   IconTelevision,
   IconUpload,
 } from '../svg';
+import {checkEqual} from '../../util/LodashEqualityCheck';
+import {openCategoryForName} from '../../redux/actions';
 
 const ICON_SIZE = 18;
 
@@ -36,12 +30,8 @@ const DrawerComponent = (props) => {
 
   const {colors, strings} = useTheme();
 
-  const data = useSelector(selectDrawerData);
-
-  const handleCategorySelection = (index) => {
-    navigation.closeDrawer();
-    EventRegister.emit(EVENT_SELECT_CATEGORY_INDEX, {index});
-  };
+  const data = useSelector(selectDrawerData, checkEqual);
+  const dispatch = useDispatch();
 
   const renderFooterItems = () => {
     return (
@@ -142,19 +132,20 @@ const DrawerComponent = (props) => {
 
   const renderProjects = () => {
     const projects = data.projects;
-    if (!projects || !projects.routes || projects.routes.length <= 0) {
+
+    if (!projects || !projects.categories || projects.categories.length <= 0) {
       console.log('invalid projects data');
       return null;
     }
 
-    const content = projects.routes.map((project) => (
+    const content = projects.categories.map((project) => (
       <DrawerItem
-        key={project.key}
-        text={project.title}
+        key={project.name}
+        text={project.name}
         onPress={() =>
           navigation.navigate('WebPage', {
             url: project.url,
-            title: project.title,
+            title: project.name,
           })
         }
       />
@@ -162,7 +153,7 @@ const DrawerComponent = (props) => {
 
     return (
       <View>
-        <TextComponent style={styles.title}>{projects.title}</TextComponent>
+        <TextComponent style={styles.title}>{projects.name}</TextComponent>
         {content}
       </View>
     );
@@ -174,8 +165,8 @@ const DrawerComponent = (props) => {
     if (pages && pages.length > 0) {
       const content = pages.map((page) => (
         <DrawerItem
-          key={page.key}
-          text={page.title}
+          key={page.name}
+          text={page.name}
           iconComponent={<IconLituanica size={ICON_SIZE} />}
           onPress={() => navigation.navigate('Page', {page})}
         />
@@ -188,7 +179,16 @@ const DrawerComponent = (props) => {
   };
 
   const content = data.routes.map((route, i) => {
-    return <DrawerItem key={route.key} text={route.title} onPress={() => handleCategorySelection(i)} />;
+    return (
+      <DrawerItem
+        key={route.name}
+        text={route.name}
+        onPress={() => {
+          navigation.closeDrawer();
+          dispatch(openCategoryForName(route.name));
+        }}
+      />
+    );
   });
 
   return (
