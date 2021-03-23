@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import ArticleComponent from '../article/Article';
+import ArticleComponent, {ArticleStyleType} from '../article/ArticleComponent';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useTheme} from '../../../Theme';
 import {Article} from '../../../../Types';
@@ -9,7 +9,7 @@ import {SavedArticle} from '../../../redux/reducers/articleStorage';
 //TODO calculate for bigger screens.
 const articleFitCount = 2;
 
-const getArticleType = (articleCount: number): string => {
+const getArticleStyleType = (articleCount: number): ArticleStyleType => {
   if (articleCount === 1) {
     return 'single';
   } else if (articleCount <= articleFitCount) {
@@ -30,24 +30,24 @@ const ArticleRow: React.FC<Props> = (props) => {
   const {colors} = useTheme();
 
   const backgroundColor = isSlug ? colors.slugBackground : undefined;
-  const articleType = getArticleType(data.length);
+  const articleStyleType = getArticleStyleType(data.length);
 
   const content = data.map((a, i) => {
     return (
       <ArticleComponent
         style={styles.article}
-        data={a}
+        article={a as Article}
         onPress={(article: Article) => onArticlePress(article)}
-        type={articleType}
+        styleType={articleStyleType}
         key={i}
       />
     );
   });
 
-  if (articleType === 'scroll') {
+  if (articleStyleType === 'scroll') {
     return (
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={{...styles.container, backgroundColor}}>{content}</View>
+      <ScrollView style={{backgroundColor}} horizontal={true} showsHorizontalScrollIndicator={false}>
+        <View style={{...styles.container}}>{content}</View>
       </ScrollView>
     );
   } else {

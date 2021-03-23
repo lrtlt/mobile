@@ -237,5 +237,4 @@ export type ArticlesActionType =
   | FetchPopularArticlesAction
   | FetchPopularArticlesResultAction
   | RefreshPopularArticlesAction
-  | FetchPopularArticlesErrorAction
-  | FetchMenuItemsResultAction;
+  | FetchPopularArticlesErrorAction;

@@ -29,6 +29,8 @@ import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../../../Theme';
 import {ROUTE_TYPE_HOME, ROUTE_TYPE_MEDIA} from '../../../../api/Types';
 import {Category} from '../../../../redux/reducers/articles';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MainStackParamList} from '../../../../navigation/MainStack';
 
 interface Props {
   isCurrent: boolean;
@@ -37,7 +39,7 @@ interface Props {
 
 const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const listRef = useRef<SectionList>(null);
   const state = useSelector(selectHomeScreenState(type), (l, r) => l.lastFetchTime === r.lastFetchTime);
 
@@ -91,7 +93,10 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
     console.log('CategoryPressed', category);
 
     if (category.is_slug_block === 1) {
-      navigation.navigate('Slug', {category: category});
+      navigation.navigate('Slug', {
+        name: category.name,
+        slugUrl: category.slug_url,
+      });
     } else {
       //TODO update this hardcode later
       if (category.name === 'Naujienų srautas') {
@@ -107,6 +112,7 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
     switch (val.item.type) {
       case LIST_DATA_TYPE_ARTICLES: {
         const {category} = val.section;
+
         return (
           <ArticleRow
             data={val.item.data}
@@ -134,9 +140,12 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
         );
       }
       case LIST_DATA_TYPE_MORE_FOOTER: {
+        const category = val.item.data as Category;
         return (
           <MoreArticlesButton
-            category={val.item.data}
+            backgroundColor={
+              category.is_slug_block || category.template_id === 999 ? colors.slugBackground : undefined
+            }
             onPress={() => onCategoryPressHandler(val.item.data)}
           />
         );

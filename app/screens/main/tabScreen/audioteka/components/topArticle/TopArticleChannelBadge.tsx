@@ -8,7 +8,6 @@ interface TopArticleChannelBadgeProps {
 }
 
 const TopArticleChannelBadge = (props: TopArticleChannelBadgeProps) => {
-  console.log('logo', props.logoUri);
   return (
     <View style={{...styles.container, ...props.style}}>
       <SvgUri width={32} height={32} uri={props.logoUri ?? null} />

@@ -30,7 +30,7 @@ export const ORIENTATION_PORTRAIT = 'portrait';
 export const ORIENTATION_LANDSCAPE = 'landscape';
 
 export const isPortrait = () => {
-  return Dimensions.get('window').height > Dimensions.get('window').width;
+  return Dimensions.get('screen').height > Dimensions.get('screen').width;
 };
 
 export const getOrientation = () => {
@@ -38,7 +38,7 @@ export const getOrientation = () => {
 };
 
 export const getSmallestDim = () => {
-  const dim = Dimensions.get('window');
+  const dim = Dimensions.get('screen');
   return Math.min(dim.width, dim.height);
 };
 

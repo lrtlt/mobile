@@ -15,13 +15,13 @@ const VideoCover = ({cover, coverComponent}) => {
     return (
       <View style={styles.videoImageContainer}>
         <Image style={styles.photo} resizeMode="contain" source={{uri}} thumbnailSource={{uri: thumbUri}} />
-        <MediaIndicator style={styles.mediaIndicator} />
+        <MediaIndicator style={styles.mediaIndicator} size="big" />
       </View>
     );
   };
 
   if (cover) {
-    const imgSize = getImageSizeForWidth(Dimensions.get('window').width);
+    const imgSize = getImageSizeForWidth(Dimensions.get('screen').width);
     if (cover.path) {
       return renderImage(
         buildArticleImageUri(imgSize, cover.path),
@@ -60,11 +60,7 @@ const styles = StyleSheet.create({
   },
 
   mediaIndicator: {
-    width: 44,
-    height: 44,
     position: 'absolute',
     alignSelf: 'center',
-    paddingStart: 4,
-    borderRadius: 22,
   },
 });

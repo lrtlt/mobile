@@ -39,7 +39,11 @@ export const buildImageUri = (size: ImageSize, prefix?: string, postfix?: string
   return BASE_IMG_URL + prefix + size.width + 'x' + size.height + postfix;
 };
 
-export const buildArticleImageUri = (size: ImageSize, url: string) => {
-  const s = size.width + 'x' + size.height;
-  return BASE_IMG_URL + url.replace('{WxH}', s);
+export const buildArticleImageUri = (size: ImageSize, url?: string) => {
+  if (url) {
+    const s = size.width + 'x' + size.height;
+    return BASE_IMG_URL + url.replace('{WxH}', s);
+  } else {
+    return undefined;
+  }
 };

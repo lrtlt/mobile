@@ -1,26 +1,27 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ColorValue} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
+import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 
-const MoreArticlesButton = (props) => {
+interface Props {
+  backgroundColor?: ColorValue;
+  onPress: () => void;
+}
+
+const MoreArticlesButton: React.FC<Props> = ({backgroundColor, onPress}) => {
   const {colors, strings} = useTheme();
-
-  const {category} = props;
-
-  const backgroundColor =
-    category.is_slug_block || category.template_id === 999 ? colors.slugBackground : null;
 
   const extraPadding = backgroundColor ? 8 : 0;
 
   return (
-    <View style={{backgroundColor}}>
-      <TouchableOpacity onPress={props.onPress}>
+    <View style={{backgroundColor: backgroundColor}}>
+      <TouchableDebounce debounceTime={500} onPress={onPress}>
         <View style={{...styles.container, padding: extraPadding, backgroundColor: colors.greyBackground}}>
           <TextComponent style={styles.title}>{strings.moreButtonText}</TextComponent>
         </View>
-      </TouchableOpacity>
+      </TouchableDebounce>
     </View>
   );
 };

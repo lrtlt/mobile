@@ -1,8 +1,9 @@
 import * as React from 'react';
 import {Image, StyleSheet, View, ViewStyle} from 'react-native';
-import {Article} from '../../../Types';
-import {BASE_IMG_URL} from '../../util/ImageUtil';
+
 import LinearGradient from 'react-native-linear-gradient';
+import {Article} from '../../../../../../../Types';
+import {BASE_IMG_URL} from '../../../../../../util/ImageUtil';
 
 interface TopArticleBackgroundProps {
   style: ViewStyle;

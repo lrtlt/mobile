@@ -96,7 +96,7 @@ const TabsScreen = (props) => {
         renderTabBar={renderTabBar}
         lazy={true}
         onIndexChange={(i) => setCurrentIndex(i)}
-        initialLayout={{width: Dimensions.get('window').width}}
+        initialLayout={{width: Dimensions.get('screen').width}}
       />
     </View>
   );

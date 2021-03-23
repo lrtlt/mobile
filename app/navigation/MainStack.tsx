@@ -2,22 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
-import {
-  ProgramScreen,
-  ArticleScreen,
-  ChannelScreen,
-  MainScreen,
-  SettingsScreen,
-  CommentsScreen,
-  SlugScreen,
-  SearchScreen,
-  GalleryScreen,
-  HistoryScreen,
-  BookmarksScreen,
-  CustomPageScreen,
-  WebPageScreen,
-  WeatherScreen,
-} from '../screens';
+import * as Screens from '../screens';
 import {Platform} from 'react-native';
 import {Drawer, SearchFilterDrawer} from '../components';
 import {useSettings} from '../settings/useSettings';
@@ -46,7 +31,8 @@ export type MainStackParamList = {
   History: undefined;
   Program: undefined;
   Slug: {
-    category: Category;
+    name: string;
+    slugUrl?: string;
   };
   Page: {
     page: MenuItemPage;
@@ -56,6 +42,10 @@ export type MainStackParamList = {
     title: string;
   };
   Weather: undefined;
+  Category: {
+    id: number;
+    name: string;
+  };
 };
 
 const Stack = createStackNavigator<MainStackParamList>();
@@ -79,7 +69,7 @@ export default () => {
       <MainDrawer.Navigator drawerContent={(props) => <Drawer {...props} />}>
         <MainDrawer.Screen
           name="Main"
-          component={MainScreen}
+          component={Screens.MainScreen}
           options={{
             headerShown: true,
             headerTitleAlign: 'center',
@@ -99,7 +89,7 @@ export default () => {
         drawerContent={() => <SearchFilterDrawer />}>
         <SearchDrawer.Screen
           name="SearchScreen"
-          component={SearchScreen}
+          component={Screens.SearchScreen}
           options={{
             headerShown: true,
           }}
@@ -136,25 +126,26 @@ export default () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="Article" component={ArticleScreen} />
-      <Stack.Screen name="Comments" component={CommentsScreen} />
-      <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="Article" component={Screens.ArticleScreen} />
+      <Stack.Screen name="Comments" component={Screens.CommentsScreen} />
+      <Stack.Screen name="Settings" component={Screens.SettingsScreen} />
       <Stack.Screen
         name="Gallery"
-        component={GalleryScreen}
+        component={Screens.GalleryScreen}
         options={{
           headerShown: false,
         }}
       />
-      <Stack.Screen name="Channel" component={ChannelScreen} />
+      <Stack.Screen name="Channel" component={Screens.ChannelScreen} />
       <Stack.Screen name="Search" component={SearchDrawerNavigator} options={{headerShown: false}} />
-      <Stack.Screen name="Bookmarks" component={BookmarksScreen} />
-      <Stack.Screen name="History" component={HistoryScreen} />
-      <Stack.Screen name="Program" component={ProgramScreen} />
-      <Stack.Screen name="Slug" component={SlugScreen} />
-      <Stack.Screen name="Page" component={CustomPageScreen} />
-      <Stack.Screen name="WebPage" component={WebPageScreen} />
-      <Stack.Screen name="Weather" component={WeatherScreen} />
+      <Stack.Screen name="Bookmarks" component={Screens.BookmarksScreen} />
+      <Stack.Screen name="History" component={Screens.HistoryScreen} />
+      <Stack.Screen name="Program" component={Screens.ProgramScreen} />
+      <Stack.Screen name="Slug" component={Screens.SlugScreen} />
+      <Stack.Screen name="Page" component={Screens.CustomPageScreen} />
+      <Stack.Screen name="WebPage" component={Screens.WebPageScreen} />
+      <Stack.Screen name="Weather" component={Screens.WeatherScreen} />
+      <Stack.Screen name="Category" component={Screens.CategoryScreen} />
     </Stack.Navigator>
   );
 };

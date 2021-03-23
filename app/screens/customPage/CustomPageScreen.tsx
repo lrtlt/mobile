@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {Route, TabView} from 'react-native-tab-view';
 import TabBar from '../main/tabBar/TabBar';
-import CategoryScreen from '../main/tabScreen/category/CategoryScreen';
+import CategoryTabScreen from '../main/tabScreen/category/CategoryTabScreen';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
@@ -19,7 +19,7 @@ const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
   const [currentRouteIndex, setCurrentRouteIndex] = useState(0);
   const {page} = route.params;
 
-  const routes: Route[] = page.categories.map((c) => ({
+  const routes = page.categories.map((c) => ({
     categoryId: c.id,
     key: c.name,
     title: c.name,
@@ -43,20 +43,21 @@ const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
         }}
         swipeEnabled={true}
         renderScene={(sceneProps) => {
-          //Render only 1 screen on each side
           const routeIndex = routes.indexOf(sceneProps.route);
-          if (Math.abs(currentRouteIndex - routeIndex) > 1) {
+          if (Math.abs(currentRouteIndex - routeIndex) > 0) {
             return <View />;
           } else {
-            console.log('route', sceneProps.route);
-            return <CategoryScreen route={sceneProps.route} />;
+            const {route} = sceneProps;
+            return (
+              <CategoryTabScreen categoryId={route.categoryId} categoryTitle={route.title} showTitle={true} />
+            );
           }
         }}
         renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
         onIndexChange={(i) => setCurrentRouteIndex(i)}
         lazy={true}
         lazyPreloadDistance={0}
-        initialLayout={{height: 0, width: Dimensions.get('window').width}}
+        initialLayout={{height: 0, width: Dimensions.get('screen').width}}
       />
     </View>
   );

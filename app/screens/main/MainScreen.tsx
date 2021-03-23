@@ -7,7 +7,7 @@ import {BorderlessButton} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
 import {useSelector} from 'react-redux';
 import HomeScreen from './tabScreen/home/HomeScreen';
-import CategoryScreen from './tabScreen/category/CategoryScreen';
+import CategoryTabScreen from './tabScreen/category/CategoryTabScreen';
 import NewestScreen from './tabScreen/newest/NewestScreen';
 import PopularScreen from './tabScreen/popular/PopularScreen';
 import TestScreen from '../testScreen/TestScreen';
@@ -104,7 +104,14 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
       case ROUTE_TYPE_AUDIOTEKA:
         return <AudiotekaScreen isCurrent={current} />;
       case ROUTE_TYPE_CATEGORY:
-        return <CategoryScreen route={route} isCurrent={current} />;
+        return (
+          <CategoryTabScreen
+            categoryId={route.categoryId}
+            categoryTitle={route.title}
+            isCurrent={current}
+            showTitle={true}
+          />
+        );
       case ROUTE_TYPE_NEWEST:
         return <NewestScreen isCurrent={current} />;
       case ROUTE_TYPE_POPULAR:
@@ -130,7 +137,7 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
           onIndexChange={(index) => setSelectedTabIndex(index)}
           lazy={true}
           lazyPreloadDistance={0}
-          initialLayout={{height: 0, width: Dimensions.get('window').width}}
+          initialLayout={{height: 0, width: Dimensions.get('screen').width}}
         />
       </SafeAreaView>
     </>

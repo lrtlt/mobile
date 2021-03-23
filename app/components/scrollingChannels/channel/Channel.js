@@ -2,7 +2,6 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import CoverImage from '../../coverImage/CoverImage';
 import LiveBadge from '../../liveBadge/LiveBadge';
-import MediaIcon from '../../mediaIndicator/MediaIndicator';
 import IC_CAMERA from '../../svg/ic_camera';
 import IC_MICROPHONE from '../../svg/ic_microphone';
 import {getIconForChannel, getColorsForChannel} from '../../../util/UI';
@@ -11,6 +10,7 @@ import {buildArticleImageUri, IMG_SIZE_L} from '../../../util/ImageUtil';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import TextComponent from '../../text/Text';
 import {useTheme} from '../../../Theme';
+import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 
 const Channel = (props) => {
   const {colors} = useTheme();
@@ -89,9 +89,8 @@ const Channel = (props) => {
             <View style={styles.coverContentContainer}>
               <View style={styles.channelImageContainer}>{channelIcon}</View>
               <View style={styles.mediaIndicatorContainer}>
-                <MediaIcon style={styles.mediaIndicator} />
+                <MediaIndicator size="small" />
               </View>
-
               {programTimeComponent}
               {bottomBarContainer}
             </View>
@@ -146,13 +145,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  mediaIndicator: {
-    opacity: 0.8,
-    width: 36,
-    height: 36,
-    paddingStart: 4,
-    borderRadius: 36 / 2,
   },
   channelTitleContainer: {
     flexDirection: 'row',

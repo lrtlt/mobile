@@ -1,31 +1,35 @@
 import React, {useEffect, useRef} from 'react';
-import {View, SectionList, RefreshControl, StyleSheet, StatusBar} from 'react-native';
-import {SectionHeader, ScreenLoader, TopAudioArticle} from '../../../../components';
+import {View, RefreshControl, StyleSheet, StatusBar, FlatList, ListRenderItemInfo} from 'react-native';
+import {ScreenLoader} from '../../../../components';
 import {fetchAudioteka} from '../../../../redux/actions/index';
 import {getOrientation} from '../../../../util/UI';
-import {
-  GEMIUS_VIEW_SCRIPT_ID,
-  EVENT_LOGO_PRESS,
-  ARTICLE_EXPIRE_DURATION,
-  LIST_DATA_TYPE_TOP_AUDIO_ARTICLE,
-} from '../../../../constants';
+import {GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
 import {useDispatch, useSelector} from 'react-redux';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
-import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../../../Theme';
 import {selectAudiotekaScreenState} from '../../../../redux/selectors';
+import {AudiotekaTemplate} from '../../../../api/Types';
+import TopArticle from './components/topArticle/TopArticle';
+import PodcastsBlock from './components/podcasts/PodcastsBlock';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import CategoryBlock from './components/category/CategoryBlock';
 
-const AudiotekaScreen = (props) => {
-  const {isCurrent} = props;
+import PopularBlock from './components/popular/PopularBlock';
+import NewestBlock from './components/newest/NewestBlock';
+
+interface Props {
+  isCurrent: boolean;
+}
+
+const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
+  console.log('render audioteka');
   const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const listRef = useRef(null);
-
+  const listRef = useRef<FlatList>(null);
   const {colors, dark} = useTheme();
 
   const state = useSelector(selectAudiotekaScreenState);
-  const {refreshing, lastFetchTime, sections, loading} = state;
+  const {refreshing, lastFetchTime, data} = state;
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
@@ -36,15 +40,16 @@ const AudiotekaScreen = (props) => {
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (data) => {
       if (isCurrent) {
-        listRef.current?.scrollToLocation({
+        listRef.current?.scrollToIndex({
           animated: true,
-          sectionIndex: 0,
-          itemIndex: 0,
+          index: 0,
         });
         dispatch(fetchAudioteka());
       }
     });
-    return () => EventRegister.removeEventListener(listener);
+    return () => {
+      EventRegister.removeEventListener(listener as string);
+    };
   });
 
   useEffect(() => {
@@ -57,28 +62,36 @@ const AudiotekaScreen = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCurrent, refreshing, lastFetchTime]);
 
-  const onArticlePressHandler = (article) => {
-    navigation.navigate('Article', {articleId: article.id});
-  };
+  const renderItem = (listItem: ListRenderItemInfo<AudiotekaTemplate>) => {
+    const {item} = listItem;
 
-  const onCategoryPressHandler = (category) => {
-    console.log('CategoryPressed', category);
-  };
-
-  const renderItem = (val) => {
-    console.log('render', val);
-    switch (val.item.type) {
-      case LIST_DATA_TYPE_TOP_AUDIO_ARTICLE: {
-        return <TopAudioArticle article={val.item.article} />;
+    switch (item.template) {
+      case 'top': {
+        return <TopArticle article={item.article} />;
+      }
+      case 'newest': {
+        return <NewestBlock data={item} />;
+      }
+      case 'podcasts': {
+        return <PodcastsBlock data={item} />;
+      }
+      case 'popular': {
+        return <PopularBlock data={item} />;
+      }
+      case 'category':
+      case 'slug': {
+        if (item.articles_list) {
+          return <CategoryBlock data={item} />;
+        }
       }
       default: {
-        console.warn('Uknown list item type: ' + val.item.type);
+        console.warn('Uknown list item type: ' + item.template);
         return <View />;
       }
     }
   };
 
-  if (loading) {
+  if (data.length === 0) {
     return <ScreenLoader style={styles.loadingContainer} />;
   }
 
@@ -90,7 +103,7 @@ const AudiotekaScreen = (props) => {
         backgroundColor={colors.statusBar}
       />
       <View style={styles.container}>
-        <SectionList
+        <FlatList
           showsVerticalScrollIndicator={false}
           style={styles.container}
           ref={listRef}
@@ -102,25 +115,13 @@ const AudiotekaScreen = (props) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={() => dispatch(fetchAudioteka())} />
           }
-          renderSectionHeader={({section}) => {
-            if (section.type === LIST_DATA_TYPE_TOP_AUDIO_ARTICLE) {
-              return null;
-            }
-
-            return (
-              <SectionHeader
-                category={section.category}
-                onPress={(category) => onCategoryPressHandler(category)}
-              />
-            );
-          }}
-          sections={sections}
+          data={data}
           removeClippedSubviews={false}
           windowSize={12}
           updateCellsBatchingPeriod={20}
           maxToRenderPerBatch={4}
+          ListFooterComponent={<SafeAreaView edges={['bottom']} />}
           initialNumToRender={8}
-          stickySectionHeadersEnabled={false}
           keyExtractor={(item, index) => String(index) + String(item)}
         />
       </View>

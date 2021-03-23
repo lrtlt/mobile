@@ -35,11 +35,11 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
     articles: [],
   });
 
-  const {category} = route.params;
+  const {name, slugUrl} = route.params;
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: category.name,
+      headerTitle: name,
     });
 
     startLoading();
@@ -52,7 +52,7 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
       articles: [],
     });
 
-    const urlSegments = category.slug_url?.split('/');
+    const urlSegments = slugUrl?.split('/');
 
     if (!urlSegments || urlSegments.length === 0) {
       setState({

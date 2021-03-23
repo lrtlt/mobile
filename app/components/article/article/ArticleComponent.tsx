@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {View, StyleSheet, Dimensions, ViewStyle} from 'react-native';
 
 import CoverImage from '../../coverImage/CoverImage';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
@@ -7,15 +7,15 @@ import PhotoCountBadge from '../../photoCount/PhotoCount';
 import FacebookReactions from '../../facebookReactions/FacebookReactions';
 import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 
-import PropTypes from 'prop-types';
-
 import {CameraIcon, MicIcon} from '../../svg';
 
 import {getImageSizeForWidth, buildImageUri, buildArticleImageUri} from '../../../util/ImageUtil';
 import {useTheme} from '../../../Theme';
 import TextComponent from '../../text/Text';
+import {Article} from '../../../../Types';
+import {getSmallestDim} from '../../../util/UI';
 
-const getArticleStyle = (type) => {
+const getArticleStyle = (type: ArticleStyleType) => {
   switch (type) {
     case 'single':
       return styles;
@@ -26,75 +26,95 @@ const getArticleStyle = (type) => {
   }
 };
 
-const Article = (props) => {
+export type ArticleStyleType = 'single' | 'scroll' | 'multi';
+
+interface Props {
+  style?: ViewStyle;
+  article: Article;
+  styleType: ArticleStyleType;
+  dateEnabled?: boolean;
+  onPress: (article: Article) => void;
+}
+
+const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType, dateEnabled, onPress}) => {
   const [dimensions, setDimensions] = useState({width: 0, height: 0});
   const {colors} = useTheme();
 
-  const style = getArticleStyle(props.type);
+  const style = getArticleStyle(styleType);
 
-  const subtitle = props.data.subtitle ? (
+  const subtitle = article.subtitle ? (
     <TextComponent style={style.subtitle} type="error">
-      {props.data.subtitle}
+      {article.subtitle}
     </TextComponent>
   ) : null;
 
   const date =
-    props.data.date && props.showDate === true ? (
+    article.date && dateEnabled ? (
       <TextComponent style={style.categoryTitle} type="secondary">
-        {props.data.date}
+        {article.date}
       </TextComponent>
     ) : null;
 
   const photoCount =
-    props.data.photo && String(props.data.photo).length < 10 ? (
+    article.photo && String(article.photo).length < 10 ? (
       <View>
-        <PhotoCountBadge style={style.photoBadge} count={props.data.photo_count} />
+        <PhotoCountBadge style={style.photoBadge} count={article.photo_count} />
       </View>
     ) : null;
 
-  const facebookReactions = props.data.reactions ? (
-    props.data.fb_badge === 1 ? (
-      <FacebookReactions count={props.data.reactions} />
+  const facebookReactions = article.reactions ? (
+    article.fb_badge === 1 ? (
+      <FacebookReactions count={article.reactions} />
     ) : null
   ) : null;
 
   const space = photoCount && facebookReactions ? <View style={style.badgeSpace} /> : null;
 
   const mediaIndicator =
-    props.data.is_video === 1 || props.data.is_audio === 1 ? (
-      <MediaIndicator style={style.mediaIndicator} />
+    article.is_video === 1 || article.is_audio === 1 ? (
+      <MediaIndicator style={style.mediaIndicator} size={styleType === 'single' ? 'big' : 'small'} />
     ) : null;
 
-  const mediaIcon =
-    props.data.is_video === 1 ? (
-      <View style={style.mediaIconContainer}>
-        <CameraIcon size={20} />
-      </View>
-    ) : props.data.is_audio === 1 ? (
-      <View style={style.mediaIconContainer}>
-        <MicIcon size={20} />
-      </View>
-    ) : null;
+  const mediaIcon = article.is_audio ? (
+    <View style={style.mediaIconContainer}>
+      <MicIcon size={18} />
+    </View>
+  ) : article.is_video ? (
+    <View style={style.mediaIconContainer}>
+      <CameraIcon size={18} />
+    </View>
+  ) : null;
+
+  const mediaDuration = article.media_duration ? (
+    <TextComponent style={{...style.mediaDurationText, color: '#333'}}>
+      {article.media_duration}
+    </TextComponent>
+  ) : null;
 
   let imgUri = null;
   if (dimensions.width > 0) {
-    if (props.data.img_path_prefix && props.data.img_path_postfix) {
+    if (article.img_path_prefix && article.img_path_postfix) {
       imgUri = buildImageUri(
         getImageSizeForWidth(dimensions.width),
-        props.data.img_path_prefix,
-        props.data.img_path_postfix,
+        article.img_path_prefix,
+        article.img_path_postfix,
       );
-    } else if (props.data.photo) {
-      imgUri = buildArticleImageUri(getImageSizeForWidth(dimensions.width), props.data.photo);
+    } else if (article.photo) {
+      imgUri = buildArticleImageUri(getImageSizeForWidth(dimensions.width), article.photo);
     }
   }
 
   return (
-    <View style={[props.style, style.container]}>
-      <TouchableDebounce debounceTime={500} onPress={() => props.onPress(props.data)}>
+    <View style={[styleProp, style.container]}>
+      <TouchableDebounce debounceTime={500} onPress={() => onPress(article)}>
         <View>
           <View
-            style={{...style.imageContainer, backgroundColor: colors.greyBackground}}
+            style={{
+              ...style.imageContainer,
+              backgroundColor: colors.greyBackground,
+              borderRadius: article.is_audio ? 8 : 0,
+              overflow: 'hidden',
+            }}
             onLayout={(event) => {
               const {width, height} = event.nativeEvent.layout;
               setDimensions({width: width, height: height});
@@ -106,16 +126,17 @@ const Article = (props) => {
               }}
             />
             {mediaIndicator}
+            {mediaDuration}
           </View>
           <View style={style.categoryTitleContainer}>
             {mediaIcon}
             <TextComponent style={style.categoryTitle} type="secondary">
-              {props.data.category_title}
+              {article.category_title}
             </TextComponent>
           </View>
           <View style={style.dateContainer}>{date}</View>
 
-          <TextComponent style={style.title}>{props.data.title}</TextComponent>
+          <TextComponent style={style.title}>{article.title}</TextComponent>
           <View style={style.bottomBadgeRow}>
             {photoCount}
             {space}
@@ -128,22 +149,20 @@ const Article = (props) => {
   );
 };
 
-Article.propTypes = {
-  style: PropTypes.object,
-  data: PropTypes.object.isRequired,
-  type: PropTypes.string.isRequired,
-  showDate: PropTypes.bool,
-  onPress: PropTypes.func,
-};
+export default ArticleComponent;
 
-export default Article;
+ArticleComponent.defaultProps = {
+  dateEnabled: true,
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    borderRadius: 8,
   },
   image: {
     flex: 1,
+    overflow: 'hidden',
   },
   imageContainer: {
     justifyContent: 'center',
@@ -178,12 +197,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   mediaIndicator: {
-    width: 36,
-    height: 36,
     position: 'absolute',
     alignSelf: 'center',
-    paddingStart: 4,
-    borderRadius: 36 / 2,
+  },
+  mediaDurationText: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    paddingVertical: 1,
+    paddingHorizontal: 8,
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 13,
+    backgroundColor: 'white',
   },
   bottomBadgeRow: {
     paddingTop: 8,
@@ -203,7 +228,8 @@ const styles = StyleSheet.create({
 const stylesScroll = {
   ...styles,
   container: {
-    width: Math.min(Dimensions.get('window').width, Dimensions.get('window').height) * 0.7,
+    flex: 1,
+    width: 300,
   },
   title: {
     marginTop: 4,

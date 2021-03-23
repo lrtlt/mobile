@@ -150,47 +150,72 @@ export type VideoDataDefault = {
 
 export type AudiotekaResponse = AudiotekaTemplate[];
 
-type AudiotekaTemplate = AudiotekaTopArticle | AudiotekaNewest | AudiotekaPodcasts | AudiotekaCategory;
+export type AudiotekaTemplate =
+  | AudiotekaTopArticle
+  | AudiotekaNewest
+  | AudiotekaPopular
+  | AudiotekaPodcasts
+  | AudiotekaCategory
+  | AudiotekaSlug;
 
-type AudiotekaTopArticle = {
+export type AudiotekaTopArticle = {
   template: 'top';
   article: Article;
   backgroundImage?: string;
   icon?: string;
 };
 
-type AudiotekaNewest = {
-  templte: 'newest';
+export type AudiotekaNewestCategory = {
+  id: number;
   title: string;
-  categories: {
-    id: number;
-    title: string;
-    color: string;
-    'color-active': string;
-    'background-color-active': string;
-    'background-color': string;
-    articles: Article[];
-  }[];
+  color: string;
+  'color-active': string;
+  'background-color-active': string;
+  'background-color': string;
+  articles: Article[];
 };
 
-type AudiotekaPodcasts = {
+export type AudiotekaNewest = {
+  template: 'newest';
+  title: string;
+  categories: AudiotekaNewestCategory[];
+};
+
+export type AudiotekaPopular = {
+  template: 'popular';
+  title: string;
+  articles: Article[];
+};
+
+export type Podcast = {
+  id: number;
+  title: string;
+  backgroundImage: string;
+  category_url: string;
+  category_id: number;
+};
+
+export type AudiotekaPodcasts = {
   template: 'podcasts';
   title: string;
-  podcasts: {
-    id: number;
-    title: string;
-    backgroundImage: string;
-    category_url: string;
-    category_id: string;
-  }[];
+  podcasts: Podcast[];
 };
 
-type AudiotekaCategory = {
+export type AudiotekaCategory = {
+  template: 'category';
   category_title: string;
   category_url: string;
-  category_id: string;
+  category_id: number;
   template_id: number;
   articles_list: Article[];
+};
+
+export type AudiotekaSlug = {
+  template: 'slug';
+  is_slug_block: 1;
+  articles_list: Article[];
+  slug_title: string;
+  slug_url: string;
 };
 
 export type ForecastLocation = {

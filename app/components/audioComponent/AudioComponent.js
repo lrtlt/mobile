@@ -9,7 +9,7 @@ const AudioComponent = (props) => {
 
   Gemius.setProgramData(mediaId, props.title, 0, false);
 
-  const imgSize = getImageSizeForWidth(Dimensions.get('window').width);
+  const imgSize = getImageSizeForWidth(Dimensions.get('screen').width);
   const imgUri = props.cover ? buildArticleImageUri(imgSize, props.cover.path) : null;
 
   return (

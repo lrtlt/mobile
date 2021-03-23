@@ -30,7 +30,7 @@ import {useTheme} from '../../Theme';
 import {ArticleContent} from '../../api/Types';
 
 const getContentWidth = () => {
-  return Dimensions.get('window').width - 12 * 2;
+  return Dimensions.get('screen').width - 12 * 2;
 };
 
 const getItemKey = (item: ArticleContentItem, index: number) => {

@@ -11,7 +11,7 @@ import {
 import {HeaderBackButton, StackNavigationProp} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
 import {resetSearchFilter} from '../../redux/actions';
-import {Article as ArticleComponent, ActionButton, Text} from '../../components';
+import {ArticleComponent, ActionButton, Text} from '../../components';
 import {IconFilter, IconSearch} from '../../components/svg';
 import {fetchArticleSearch} from '../../api';
 import {selectSearchFilter} from '../../redux/selectors';
@@ -105,10 +105,10 @@ const SearchScreen: React.FC<Props> = ({navigation}) => {
     return (
       <ArticleComponent
         style={styles.article}
-        data={item.item}
-        showDate={true}
+        article={item.item}
+        dateEnabled={true}
         onPress={(article) => navigation.navigate('Article', {articleId: article.id})}
-        type={'multi'}
+        styleType={'multi'}
       />
     );
   };

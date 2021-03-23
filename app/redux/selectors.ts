@@ -40,8 +40,22 @@ export const selectPopularArticlesScreenState = (state: RootState) => {
   return state.articles.popular;
 };
 
-export const selectCategoryScreenState = (categoryId: number) => (state: RootState) => {
-  return state.articles.categories.find((category) => category.id === categoryId);
+export const selectCategoryScreenState = (categoryId: number, categoryTitle?: string) => (
+  state: RootState,
+) => {
+  return (
+    state.articles.categories.find((category) => category.id === categoryId) ?? {
+      id: categoryId,
+      title: categoryTitle,
+      articles: [],
+      isFetching: false,
+      isRefreshing: false,
+      isError: false,
+      lastFetchTime: 0,
+      page: 0,
+      nextPage: 1,
+    }
+  );
 };
 
 export const selectHomeScreenState = (type: HomePageType) => (state: RootState) => {
@@ -57,15 +71,19 @@ export const selectHomeScreenState = (type: HomePageType) => (state: RootState) 
   };
 
   return {
-    refreshing: block.isFetching && block.items.length !== 0,
+    refreshing: block.isFetching && block.items.length > 0,
     lastFetchTime: block.lastFetchTime,
     sections: mapSections(block.items),
   };
 };
 
 export const selectAudiotekaScreenState = (state: RootState) => {
-  const {isFetching, lastFetchTime, data} = state.articles.audioteka;
-  return {isFetching, lastFetchTime, data};
+  const block = state.articles.audioteka;
+  return {
+    refreshing: block.isFetching && block.data.length > 0,
+    lastFetchTime: block.lastFetchTime,
+    data: block.data,
+  };
 };
 
 export const selectBookmarksScreenState = (state: RootState) => {

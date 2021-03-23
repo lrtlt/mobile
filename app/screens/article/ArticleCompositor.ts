@@ -156,6 +156,7 @@ const getAudio = (article: ArticleContentMedia): ArticleContentItem => {
     data: {
       cover: article.main_photo,
       streamUri: article.stream_url,
+      mediaId: article.stream_url,
     },
   };
 };

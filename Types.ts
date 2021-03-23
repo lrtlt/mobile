@@ -28,12 +28,13 @@ export type Article = {
   photo_count?: number;
   photo_horizontal?: 1 | 0;
   photo_horizontal_small?: 1 | 0;
-  photo?: 1 | string;
+  photo?: string;
   photo_title?: string;
   lrt_show_id?: number;
   channel_title?: string;
   item_time?: string;
   item_date?: string;
+  date?: string;
   fb_badge?: 1 | 0;
   reactions?: string;
   article_has_audiovideo?: 1 | 0;
