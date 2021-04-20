@@ -1,21 +1,27 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 import {useTheme} from '../../Theme';
 import {CameraIcon} from '../svg';
 import TextComponent from '../text/Text';
 
-const ProgramItem = (props) => {
+interface Props {
+  style?: ViewStyle;
+  title: string;
+  startTime: string;
+  percent: string;
+}
+
+const ProgramItem: React.FC<Props> = (props) => {
   const {colors} = useTheme();
 
   const proc = Math.max(0, Math.min(Number(props.percent), 100));
   const hasEnded = proc === 100;
 
-  const icon =
-    proc < 100 && proc > 0 ? (
-      <View style={styles.cameraIconContainer}>
-        <CameraIcon size={20} />
-      </View>
-    ) : null;
+  const icon = proc < 100 && proc > 0 && (
+    <View style={styles.cameraIconContainer}>
+      <CameraIcon size={20} />
+    </View>
+  );
 
   const titleStyle = hasEnded ? styles.titleText : styles.titleTextUpcoming;
 

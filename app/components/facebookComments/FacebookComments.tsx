@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import WebView from 'react-native-webview';
 
-const buildFrame = (url) => {
+const buildFrame = (url: string) => {
   return `<!DOCTYPE html>
         <html>
           <head>
@@ -22,7 +22,11 @@ const buildFrame = (url) => {
         </html>`;
 };
 
-const FacebookComments = (props) => {
+interface Props {
+  url: string;
+}
+
+const FacebookComments: React.FC<Props> = (props) => {
   const html = buildFrame(props.url);
   return (
     <WebView

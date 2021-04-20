@@ -5,24 +5,24 @@ import firestore from '@react-native-firebase/firestore';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 
-const OpusNowComponent = (props) => {
+const OpusNowComponent: React.FC = () => {
   const [currentSong, setCurrentSong] = useState('');
 
   const {colors} = useTheme();
 
   useEffect(() => {
-    const subscriber = firestore()
-      .collection('rds')
+    const unsubscribe = firestore()
+      .collection<any>('rds')
       .doc('opus')
       .onSnapshot((documentSnapshot) => {
-        if (documentSnapshot != null) {
+        if (documentSnapshot) {
           const {info} = documentSnapshot.data();
           setCurrentSong(info);
         } else {
           console.warn('documentSnapshot is null from firestore');
         }
       });
-    return () => subscriber();
+    return unsubscribe;
   }, []);
 
   console.log('currectsong', currentSong);

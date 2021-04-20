@@ -1,11 +1,16 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 
 import {useTheme} from '../../Theme';
 import {IconScreenError} from '../svg';
 import TextComponent from '../text/Text';
 
-const ScreenError = (props) => {
+interface Props {
+  style?: ViewStyle;
+  text: string;
+}
+
+const ScreenError: React.FC<Props> = (props) => {
   const {colors} = useTheme();
   return (
     <View style={[styles.container, props.style]}>

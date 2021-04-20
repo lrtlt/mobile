@@ -108,13 +108,15 @@ export type HomeDataResponse = {
   articles_blocks: HomeArticlesBlock[];
 };
 
+export type SearchFilterTypes =
+  | typeof SEARCH_TYPE_ALL
+  | typeof SEARCH_TYPE_NEWS
+  | typeof SEARCH_TYPE_AUDIO
+  | typeof SEARCH_TYPE_VIDEO
+  | typeof SEARCH_TYPE_VIDEO_SUBTITLES;
+
 export type SearchFilter = {
-  type:
-    | typeof SEARCH_TYPE_ALL
-    | typeof SEARCH_TYPE_NEWS
-    | typeof SEARCH_TYPE_AUDIO
-    | typeof SEARCH_TYPE_VIDEO
-    | typeof SEARCH_TYPE_VIDEO_SUBTITLES;
+  type: SearchFilterTypes;
   section: string;
   days: string;
 };

@@ -26,7 +26,9 @@ const ArticleFeedItem: React.FC<Props> = (props) => {
   );
 };
 
-export default ArticleFeedItem;
+export default React.memo(ArticleFeedItem, (prevProps, nextProps) => {
+  return prevProps.article.title === nextProps.article.title;
+});
 
 const styles = StyleSheet.create({
   container: {

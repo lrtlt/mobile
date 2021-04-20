@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {ProgramItem, Text} from '../../../components';
@@ -23,7 +23,7 @@ const TabsScreen = (props) => {
     }),
   };
 
-  const renderTabLable = ({route}) => {
+  const renderTabLable = useCallback(({route}) => {
     const channelId = route.key;
     const title = route.title;
     return (
@@ -34,9 +34,9 @@ const TabsScreen = (props) => {
         </Text>
       </View>
     );
-  };
+  }, []);
 
-  const renderTabBar = (tabBarProps) => {
+  const renderTabBar = useCallback((tabBarProps) => {
     return (
       <TabBar
         {...tabBarProps}
@@ -48,9 +48,9 @@ const TabsScreen = (props) => {
         tabStyle={styles.tab}
       />
     );
-  };
+  }, []);
 
-  const renderProgramItem = (val) => {
+  const renderProgramItem = useCallback((val) => {
     const item = val.item;
     return (
       <View key={`${item.time_start}-${item.title}`}>
@@ -58,34 +58,37 @@ const TabsScreen = (props) => {
         <Divider style={styles.programItemDivider} />
       </View>
     );
-  };
+  }, []);
 
-  const renderScene = ({route}) => {
-    if (Math.abs(currentIndex - navigationState.routes.indexOf(route)) > 0) {
-      return <View key={`${route.key}-foo`} />;
-    }
+  const renderScene = useCallback(
+    ({route}) => {
+      if (Math.abs(currentIndex - navigationState.routes.indexOf(route)) > 0) {
+        return <View key={`${route.key}-foo`} />;
+      }
 
-    const prog = route.program;
+      const prog = route.program;
 
-    const scrollToIndex = prog.findIndex((i) => {
-      const proc = Math.max(0, Math.min(Number(i.proc), 100));
-      return proc < 100;
-    });
+      const scrollToIndex = prog.findIndex((i) => {
+        const proc = Math.max(0, Math.min(Number(i.proc), 100));
+        return proc < 100;
+      });
 
-    return (
-      <View key={`${route.key}`}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={prog}
-          renderItem={renderProgramItem}
-          getItemLayout={(_, index) => ({length: 58, offset: 58 * index, index})}
-          initialScrollIndex={scrollToIndex}
-          contentContainerStyle={styles.scrollContainer}
-          keyExtractor={(item, i) => String(i) + String(item)}
-        />
-      </View>
-    );
-  };
+      return (
+        <View key={`${route.key}`}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={prog}
+            renderItem={renderProgramItem}
+            getItemLayout={(_, index) => ({length: 58, offset: 58 * index, index})}
+            initialScrollIndex={scrollToIndex}
+            contentContainerStyle={styles.scrollContainer}
+            keyExtractor={(item, i) => String(i) + String(item)}
+          />
+        </View>
+      );
+    },
+    [currentIndex],
+  );
 
   return (
     <View style={styles.root}>

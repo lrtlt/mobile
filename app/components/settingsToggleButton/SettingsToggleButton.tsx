@@ -1,17 +1,22 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
 import {useTheme} from '../../Theme';
 
-const ToggleButton = (props) => {
+interface Props {
+  style?: ViewStyle;
+  selected: boolean;
+  onPress: () => void;
+}
+const ToggleButton: React.FC<Props> = ({style, selected, onPress, ...props}) => {
   const {colors} = useTheme();
 
-  const backgroundColor = props.selected ? colors.toggleButtonSelected : colors.background;
+  const backgroundColor = selected ? colors.toggleButtonSelected : colors.background;
 
   return (
-    <View {...props}>
+    <View style={style}>
       <View style={{...styles.container, backgroundColor, borderColor: colors.buttonBorder}}>
-        <RectButton style={styles.touchArea} rippleColor={colors.ripple} onPress={props.onPress}>
+        <RectButton style={styles.touchArea} rippleColor={colors.ripple} onPress={onPress}>
           {props.children}
         </RectButton>
       </View>

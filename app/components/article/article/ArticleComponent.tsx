@@ -44,35 +44,35 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
     onPress(article);
   }, [onPress, article]);
 
-  const subtitle = article.subtitle && (
+  const subtitle = Boolean(article.subtitle) && (
     <TextComponent style={style.subtitle} type="error">
       {article.subtitle}
     </TextComponent>
   );
 
-  const date = article.date && dateEnabled && (
+  const date = Boolean(article.date) && Boolean(dateEnabled) && (
     <TextComponent style={style.categoryTitle} type="secondary">
       {article.date}
     </TextComponent>
   );
 
-  const photoCount = article.photo && String(article.photo).length < 10 && (
+  const photoCount = Boolean(article.photo) && String(article.photo).length < 10 && (
     <View>
       <PhotoCountBadge style={style.photoBadge} count={article.photo_count} />
     </View>
   );
 
-  const facebookReactions = article.reactions && article.fb_badge === 1 && (
+  const facebookReactions = Boolean(article.reactions) && Boolean(article.fb_badge) && (
     <FacebookReactions count={article.reactions} />
   );
 
-  const space = photoCount && facebookReactions ? <View style={style.badgeSpace} /> : null;
+  const space = photoCount && facebookReactions && <View style={style.badgeSpace} />;
 
-  const mediaIndicator = (article.is_video === 1 || article.is_audio === 1) && (
+  const mediaIndicator = (Boolean(article.is_video) || Boolean(article.is_audio)) && (
     <MediaIndicator style={style.mediaIndicator} size={styleType === 'single' ? 'big' : 'small'} />
   );
 
-  const mediaIcon = article.is_audio ? (
+  const mediaIcon = Boolean(article.is_audio) ? (
     <View style={style.mediaIconContainer}>
       <MicIcon size={18} />
     </View>
@@ -82,7 +82,7 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
     </View>
   ) : undefined;
 
-  const mediaDuration = article.media_duration && (
+  const mediaDuration = Boolean(article.media_duration) && (
     <TextComponent style={{...style.mediaDurationText, color: '#333'}}>
       {article.media_duration}
     </TextComponent>
@@ -146,7 +146,13 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
   );
 };
 
-export default ArticleComponent;
+export default React.memo(ArticleComponent, (prevProps, nextProps) => {
+  return (
+    prevProps.styleType === nextProps.styleType &&
+    prevProps.article.title === nextProps.article.title &&
+    prevProps.article.subtitle === nextProps.article.subtitle
+  );
+});
 
 ArticleComponent.defaultProps = {
   dateEnabled: true,

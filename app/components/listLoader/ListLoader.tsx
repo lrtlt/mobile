@@ -2,10 +2,10 @@ import React from 'react';
 import {View, ActivityIndicator, StyleSheet} from 'react-native';
 import {useTheme} from '../../Theme';
 
-const ListLoader = (props) => {
+const ListLoader: React.FC = () => {
   const {colors} = useTheme();
   return (
-    <View {...props} style={{...props.style, ...styles.container}}>
+    <View style={styles.container}>
       <ActivityIndicator size="large" animating={true} color={colors.primary} />
     </View>
   );

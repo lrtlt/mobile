@@ -71,7 +71,7 @@ const CategoryTabScreen: React.FC<Props> = ({categoryId, categoryTitle, isCurren
   }
 
   if (isFetching === true && articles.length === 0) {
-    return <ScreenLoader style={styles.loadingContainer} />;
+    return <ScreenLoader />;
   }
 
   return (
@@ -116,11 +116,6 @@ export default CategoryTabScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   errorContainer: {
     flex: 1,

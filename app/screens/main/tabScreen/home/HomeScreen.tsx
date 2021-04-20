@@ -174,7 +174,7 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
   };
 
   if (sections.length === 0) {
-    return <ScreenLoader style={styles.loadingContainer} />;
+    return <ScreenLoader />;
   }
 
   return (
@@ -222,11 +222,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   forecast: {
     margin: 8,

@@ -1,9 +1,10 @@
+import React from 'react';
 import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
-import * as React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+
+import {View, StyleSheet} from 'react-native';
 import {AudiotekaPopular} from '../../../../../../api/Types';
-import {ArticleRow, SectionHeader} from '../../../../../../components';
+import {ArticleRow} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import BlockTitle from '../BlockTitle';
 

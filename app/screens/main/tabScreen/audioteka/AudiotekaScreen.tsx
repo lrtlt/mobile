@@ -92,7 +92,7 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
   };
 
   if (data.length === 0) {
-    return <ScreenLoader style={styles.loadingContainer} />;
+    return <ScreenLoader />;
   }
 
   return (
@@ -134,10 +134,5 @@ export default AudiotekaScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

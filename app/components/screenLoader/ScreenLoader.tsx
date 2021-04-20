@@ -1,8 +1,12 @@
 import React from 'react';
-import {View, ActivityIndicator, StyleSheet} from 'react-native';
+import {View, ActivityIndicator, StyleSheet, ViewStyle} from 'react-native';
 import {useTheme} from '../../Theme';
 
-const ScreenLoader = (props) => {
+interface Props {
+  style?: ViewStyle;
+}
+
+const ScreenLoader: React.FC<Props> = (props) => {
   const {colors} = useTheme();
   return (
     <View style={[styles.container, props.style]}>

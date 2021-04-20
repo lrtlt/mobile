@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
 import ArticleComponent, {ArticleStyleType} from '../article/ArticleComponent';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -37,7 +37,7 @@ const ArticleRow: React.FC<Props> = (props) => {
       <ArticleComponent
         style={styles.article}
         article={a as Article}
-        onPress={(article: Article) => onArticlePress(article)}
+        onPress={onArticlePress}
         styleType={articleStyleType}
         key={i}
       />

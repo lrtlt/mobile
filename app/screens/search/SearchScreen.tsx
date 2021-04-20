@@ -11,7 +11,7 @@ import {
 import {HeaderBackButton, StackNavigationProp} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
 import {resetSearchFilter} from '../../redux/actions';
-import {ArticleComponent, ActionButton, Text} from '../../components';
+import {ArticleComponent, ActionButton, Text, ScreenLoader} from '../../components';
 import {IconFilter, IconSearch} from '../../components/svg';
 import {fetchArticleSearch} from '../../api';
 import {selectSearchFilter} from '../../redux/selectors';
@@ -101,25 +101,24 @@ const SearchScreen: React.FC<Props> = ({navigation}) => {
       });
   }, [query, searchFilter]);
 
-  const renderItem = (item: ListRenderItemInfo<Article>) => {
-    return (
-      <ArticleComponent
-        style={styles.article}
-        article={item.item}
-        dateEnabled={true}
-        onPress={(article) => navigation.navigate('Article', {articleId: article.id})}
-        styleType={'multi'}
-      />
-    );
-  };
+  const articlePressHandler = useCallback((article: Article) => {
+    navigation.navigate('Article', {articleId: article.id});
+  }, []);
 
-  const renderLoading = () => {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size={'small'} animating={loadingState.isFetching} />
-      </View>
-    );
-  };
+  const renderItem = useCallback(
+    (item: ListRenderItemInfo<Article>) => {
+      return (
+        <ArticleComponent
+          style={styles.article}
+          article={item.item}
+          dateEnabled={true}
+          onPress={articlePressHandler}
+          styleType={'multi'}
+        />
+      );
+    },
+    [articlePressHandler],
+  );
 
   const renderError = () => {
     return (
@@ -127,7 +126,7 @@ const SearchScreen: React.FC<Props> = ({navigation}) => {
         <Text style={styles.errorText} type="error">
           {strings.error_no_connection}
         </Text>
-        <Button title={strings.tryAgain} color={colors.primary} onPress={() => search()} />
+        <Button title={strings.tryAgain} color={colors.primary} onPress={search} />
       </View>
     );
   };
@@ -161,7 +160,7 @@ const SearchScreen: React.FC<Props> = ({navigation}) => {
   if (loadingState.isError) {
     content = renderError();
   } else if (loadingState.isFetching) {
-    content = renderLoading();
+    content = <ScreenLoader />;
   } else {
     content = (
       <Animated.FlatList
@@ -198,11 +197,7 @@ const styles = StyleSheet.create({
   article: {
     padding: 8,
   },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+
   searchBar: {
     alignItems: 'center',
     justifyContent: 'center',

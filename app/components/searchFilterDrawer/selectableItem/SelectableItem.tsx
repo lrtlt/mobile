@@ -4,7 +4,13 @@ import {RectButton} from 'react-native-gesture-handler';
 import {useTheme} from '../../../Theme';
 import TextComponent from '../../text/Text';
 
-const SelectableItem = (props) => {
+interface Props {
+  selected: boolean;
+  text: string;
+  onPress: () => void;
+}
+
+const SelectableItem: React.FC<Props> = (props) => {
   const {colors} = useTheme();
 
   return (

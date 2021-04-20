@@ -30,7 +30,6 @@ export {default as TouchableDebounce} from './touchableDebounce/TouchableDebounc
 export {default as JWPlayer} from './videoComponent/JWPlayerNative';
 export {default as VideoComponent} from './videoComponent/VideoComponent';
 export {default as ActionButton} from './actionButton/ActionButton';
-export {default as HeaderTitle} from './screenHeaderTitle/ScreenHeaderTitle';
 export {default as SearchFilterDrawer} from './searchFilterDrawer/SearchFilterDrawer';
 export {default as Text} from './text/Text';
 export {default as Forecast} from './forecast/ForecastComponent';

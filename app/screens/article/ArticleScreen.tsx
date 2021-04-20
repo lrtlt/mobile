@@ -149,43 +149,37 @@ const ArticleScreen: React.FC<Props> = ({navigation, route}) => {
       });
   };
 
-  const renderLoading = () => (
-    <View style={styles.screen}>
-      <ScreenLoader />
-    </View>
-  );
-
-  const renderError = () => (
-    <View style={styles.screen}>
-      <ScreenError text={strings.articleError} />
-    </View>
-  );
-
-  const renderAdultContentWarning = () => (
-    <View style={styles.screen}>
-      <View style={styles.centerContainer}>
-        <AdultContentWarning
-          onAccept={() =>
-            setState({
-              ...state,
-              loadingState: STATE_READY,
-            })
-          }
-          onDecline={() => navigation.goBack()}
-        />
-      </View>
-    </View>
-  );
-
   switch (state.loadingState) {
     case STATE_LOADING: {
-      return renderLoading();
+      return (
+        <View style={styles.screen}>
+          <ScreenLoader />
+        </View>
+      );
     }
     case STATE_ERROR: {
-      return renderError();
+      return (
+        <View style={styles.screen}>
+          <ScreenError text={strings.articleError} />
+        </View>
+      );
     }
     case STATE_ADULT_CONTENT_WARNING: {
-      return renderAdultContentWarning();
+      return (
+        <View style={styles.screen}>
+          <View style={styles.centerContainer}>
+            <AdultContentWarning
+              onAccept={() =>
+                setState({
+                  ...state,
+                  loadingState: STATE_READY,
+                })
+              }
+              onDecline={() => navigation.goBack()}
+            />
+          </View>
+        </View>
+      );
     }
     case STATE_READY: {
       return (
@@ -219,7 +213,11 @@ const ArticleScreen: React.FC<Props> = ({navigation, route}) => {
       );
     }
     default: {
-      return renderLoading();
+      return (
+        <View style={styles.screen}>
+          <ScreenLoader />
+        </View>
+      );
     }
   }
 };

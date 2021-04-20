@@ -3,9 +3,12 @@ import {View, StyleSheet} from 'react-native';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 
-const DefaultHeader = (props) => {
+interface Props {
+  title?: string;
+}
+
+const DefaultHeader: React.FC<Props> = ({title}) => {
   const {colors} = useTheme();
-  const {title} = props;
 
   return (
     <View>

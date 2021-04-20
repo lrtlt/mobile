@@ -3,23 +3,19 @@ import {View, StyleSheet} from 'react-native';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 
-const SlugHeader = (props) => {
+interface Props {
+  title: string;
+}
+const SlugHeader: React.FC<Props> = ({title}) => {
   const {colors} = useTheme();
-  const {title} = props;
-
-  const renderSlugTitle = () => {
-    return (
-      <View style={styles.slugContainer}>
-        <TextComponent style={styles.slugText}>{`#${title}`}</TextComponent>
-      </View>
-    );
-  };
 
   return (
     <View style={{backgroundColor: colors.slugBackground}}>
       <View style={styles.sectionHeaderContainer}>
         <TextComponent style={styles.sectionHeaderText}>{title}</TextComponent>
-        {renderSlugTitle()}
+        <View style={{...styles.slugContainer, borderColor: colors.border}}>
+          <TextComponent style={styles.slugText}>{`# ${title}`}</TextComponent>
+        </View>
       </View>
     </View>
   );
@@ -53,15 +49,16 @@ const styles = StyleSheet.create({
   },
 
   slugContainer: {
-    padding: 6,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     borderRadius: 4,
-    marginTop: 8,
+    marginTop: 16,
     marginBottom: 8,
     alignSelf: 'baseline',
     borderWidth: 1,
   },
   slugText: {
     fontFamily: 'SourceSansPro-Regular',
-    fontSize: 14,
+    fontSize: 15,
   },
 });

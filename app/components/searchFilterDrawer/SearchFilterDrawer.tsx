@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {setSearchFilter} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
@@ -9,6 +9,7 @@ import {selectSearchFilter} from '../../redux/selectors';
 import TextComponent from '../text/Text';
 import Divider from '../divider/Divider';
 import {
+  SearchFilterTypes,
   SEARCH_TYPE_ALL,
   SEARCH_TYPE_AUDIO,
   SEARCH_TYPE_NEWS,
@@ -17,26 +18,36 @@ import {
 } from '../../api/Types';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 
-const SearchFilterDrawer = (_) => {
+const SearchFilterDrawer: React.FC = () => {
   const {colors} = useTheme();
 
   const dispatch = useDispatch();
+
   const filter = useSelector(selectSearchFilter, checkEqual);
+  const {days, section, type} = filter;
 
-  const selectType = (type) => {
-    dispatch(setSearchFilter({...filter, type}));
-  };
+  const selectType = useCallback(
+    (type: SearchFilterTypes) => {
+      dispatch(setSearchFilter({...filter, type}));
+    },
+    [filter],
+  );
 
-  const selectSection = (section) => {
-    dispatch(setSearchFilter({...filter, section}));
-  };
+  const selectSection = useCallback(
+    (section: string) => {
+      dispatch(setSearchFilter({...filter, section}));
+    },
+    [filter],
+  );
 
-  const selectDays = (days) => {
-    dispatch(setSearchFilter({...filter, days}));
-  };
+  const selectDays = useCallback(
+    (days: string) => {
+      dispatch(setSearchFilter({...filter, days}));
+    },
+    [filter],
+  );
 
-  const renderTypeSelection = () => {
-    const {type} = filter;
+  const renderTypeSelection = useCallback(() => {
     return (
       <View>
         <TextComponent style={styles.titleText}>TIPAS</TextComponent>
@@ -55,10 +66,9 @@ const SearchFilterDrawer = (_) => {
         />
       </View>
     );
-  };
+  }, [type]);
 
-  const renderSectionSelection = () => {
-    const {section} = filter;
+  const renderSectionSelection = useCallback(() => {
     return (
       <View>
         <TextComponent style={styles.titleText}>TEMA</TextComponent>
@@ -100,10 +110,9 @@ const SearchFilterDrawer = (_) => {
         />
       </View>
     );
-  };
+  }, [section]);
 
-  const renderDateSelection = () => {
-    const {days} = filter;
+  const renderDateSelection = useCallback(() => {
     return (
       <View>
         <TextComponent style={styles.titleText}>DATA</TextComponent>
@@ -113,7 +122,7 @@ const SearchFilterDrawer = (_) => {
         <SelectableItem selected={days === '30'} text={'Per 30 d.'} onPress={() => selectDays('30')} />
       </View>
     );
-  };
+  }, [days]);
 
   return (
     <View style={{...styles.root, backgroundColor: colors.background}}>
@@ -135,6 +144,7 @@ export default SearchFilterDrawer;
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    minWidth: 200,
   },
   titleText: {
     fontFamily: 'SourceSansPro-SemiBold',
