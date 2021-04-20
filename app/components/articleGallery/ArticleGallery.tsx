@@ -1,36 +1,50 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import Image from '../coverImage/CoverImage';
+import CoverImage from '../coverImage/CoverImage';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import {buildArticleImageUri, getImageSizeForWidth} from '../../util/ImageUtil';
+import {ArticlePhoto as ArticlePhotoType} from '../../api/Types';
 
-const renderPhoto = (photo, width, pressHandler) => {
+const PhotoComponent = (photo: ArticlePhotoType, width: number, pressHandler?: (photo: any) => void) => {
   let img;
   if (photo) {
     const imgSize = getImageSizeForWidth(width);
     const aspectRatio = 3 / 2;
     img = (
-      <Image
+      <CoverImage
         style={{...styles.image, aspectRatio}}
         source={{uri: buildArticleImageUri(imgSize, photo.path)}}
       />
     );
   }
 
+  const onPressHandler = useCallback(() => {
+    pressHandler && pressHandler({type: 'photo', item: photo});
+  }, []);
+
   return (
     <View style={styles.imageContainer}>
-      <TouchableDebounce onPress={() => pressHandler({type: 'photo', item: photo})}>
+      <TouchableDebounce onPress={onPressHandler}>
         <View>{img}</View>
       </TouchableDebounce>
     </View>
   );
 };
 
-const renderPhotoWithOverlay = (photo, width, pressHandler, count) => {
+const PhotoWithOverlayComponent = (
+  photo: ArticlePhotoType,
+  width: number,
+  pressHandler: (photo: any) => void,
+  count: number,
+) => {
+  const onPressHandler = useCallback(() => {
+    pressHandler && pressHandler({type: 'photo', item: photo});
+  }, []);
+
   return (
-    <TouchableDebounce onPress={() => pressHandler({type: 'photo', item: photo})}>
+    <TouchableDebounce onPress={onPressHandler}>
       <View style={styles.imageContainer}>
-        {renderPhoto(photo, width, null)}
+        {PhotoComponent(photo, width, undefined)}
 
         <View style={styles.imageCountOverlay}>
           <Text style={styles.imageCountOverlayText}>+{count}</Text>
@@ -40,31 +54,34 @@ const renderPhotoWithOverlay = (photo, width, pressHandler, count) => {
   );
 };
 
-const gallery = (props) => {
-  const {data} = props;
-
+interface Props {
+  data: ArticlePhotoType[];
+  expectedWidth: number;
+  itemSelectHandler: (photo: {type: 'photo'; item: ArticlePhotoType}) => void;
+}
+const ArticleGallery: React.FC<Props> = ({data, expectedWidth, itemSelectHandler}) => {
   if (data.length === 0) {
     return <View />;
   }
 
   const lastPhoto = data[6]
-    ? renderPhotoWithOverlay(data[5], props.expectedWidth, props.itemSelectHandler, data.length - 6)
+    ? PhotoWithOverlayComponent(data[5], expectedWidth, itemSelectHandler, data.length - 6)
     : data[5]
-    ? renderPhoto(data[5], props.expectedWidth, props.itemSelectHandler)
+    ? PhotoComponent(data[5], expectedWidth, itemSelectHandler)
     : null;
 
   return (
     <View style={styles.container}>
-      {renderPhoto(data[0], props.expectedWidth, props.itemSelectHandler)}
+      {PhotoComponent(data[0], expectedWidth, itemSelectHandler)}
       <View style={styles.row}>
-        {renderPhoto(data[1], props.expectedWidth / 2, props.itemSelectHandler)}
+        {PhotoComponent(data[1], expectedWidth / 2, itemSelectHandler)}
         <View style={styles.space} />
-        {renderPhoto(data[2], props.expectedWidth / 2, props.itemSelectHandler)}
+        {PhotoComponent(data[2], expectedWidth / 2, itemSelectHandler)}
       </View>
       <View style={styles.row}>
-        {renderPhoto(data[3], props.expectedWidth / 2, props.itemSelectHandler)}
+        {PhotoComponent(data[3], expectedWidth / 2, itemSelectHandler)}
         <View style={styles.space} />
-        {renderPhoto(data[4], props.expectedWidth / 2, props.itemSelectHandler)}
+        {PhotoComponent(data[4], expectedWidth / 2, itemSelectHandler)}
       </View>
       <View style={styles.space} />
       {lastPhoto}
@@ -72,7 +89,7 @@ const gallery = (props) => {
   );
 };
 
-export default gallery;
+export default ArticleGallery;
 
 const styles = StyleSheet.create({
   container: {

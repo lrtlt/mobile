@@ -1,20 +1,25 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 import {useSettings} from '../../settings/useSettings';
 import {useTheme} from '../../Theme';
 import {IconPhotoCamera} from '../svg';
 import TextComponent from '../text/Text';
 
-const PhotoCount = (props) => {
+interface Props {
+  style?: ViewStyle;
+  count?: number | string;
+}
+
+const PhotoCount: React.FC<Props> = ({style, count}) => {
   const {colors} = useTheme();
   const {textSizeMultiplier} = useSettings();
 
   return (
-    <View style={{...styles.container, backgroundColor: colors.lightGreyBackground, ...props.style}}>
+    <View style={{...styles.container, backgroundColor: colors.lightGreyBackground, ...style}}>
       <View style={styles.iconHolder}>
         <IconPhotoCamera size={18 + textSizeMultiplier} color={colors.darkIcon} />
       </View>
-      <TextComponent style={{...styles.countText, color: colors.darkIcon}}>{props.count}</TextComponent>
+      <TextComponent style={{...styles.countText, color: colors.darkIcon}}>{count}</TextComponent>
     </View>
   );
 };

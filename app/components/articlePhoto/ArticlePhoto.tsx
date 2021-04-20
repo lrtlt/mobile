@@ -1,14 +1,27 @@
 import React from 'react';
-import {View, Image as DefaultRNImage, StyleSheet, Dimensions} from 'react-native';
-import Image from '../coverImage/CoverImage';
+import {View, Image as ReactNativeImage, StyleSheet, Dimensions, ViewStyle} from 'react-native';
+import CoverImage from '../coverImage/CoverImage';
 import ProgressiveImage from '../progressiveImage/ProgressiveImage';
-import {IMG_SIZE_XS, buildArticleImageUri, getImageSizeForWidth} from '../../util/ImageUtil';
+import {IMG_SIZE_XS, buildArticleImageUri, getImageSizeForWidth, ImageSize} from '../../util/ImageUtil';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 import {Icon404} from '../svg';
+import {ArticlePhoto as ArticlePhotoType} from '../../api/Types';
 
-const getHorizontalImageComponent = (props, imgSize, aspectRatio, photo) => {
-  if (props.progressive === true) {
+interface ImageWrapperProps {
+  progressive?: boolean;
+  photo: ArticlePhotoType;
+  aspectRatio: number;
+  imgSize: ImageSize;
+}
+
+const HorizontalImageComponent: React.FC<ImageWrapperProps> = ({
+  progressive,
+  photo,
+  aspectRatio,
+  imgSize,
+}) => {
+  if (progressive) {
     return (
       <ProgressiveImage
         style={{...styles.image, aspectRatio}}
@@ -19,7 +32,7 @@ const getHorizontalImageComponent = (props, imgSize, aspectRatio, photo) => {
     );
   } else {
     return (
-      <Image
+      <CoverImage
         style={{...styles.image, aspectRatio}}
         source={{uri: buildArticleImageUri(imgSize, photo.path)}}
       />
@@ -27,9 +40,9 @@ const getHorizontalImageComponent = (props, imgSize, aspectRatio, photo) => {
   }
 };
 
-const getVerticalImageComponent = (props, imgSize, aspectRatio, photo) => {
+const VerticalImageComponent: React.FC<ImageWrapperProps> = ({progressive, photo, aspectRatio, imgSize}) => {
   let image;
-  if (props.progressive === true) {
+  if (progressive === true) {
     image = (
       <ProgressiveImage
         style={{...styles.imageVertical, aspectRatio}}
@@ -40,7 +53,7 @@ const getVerticalImageComponent = (props, imgSize, aspectRatio, photo) => {
     );
   } else {
     image = (
-      <Image
+      <CoverImage
         style={{...styles.imageVertical, aspectRatio}}
         source={{uri: buildArticleImageUri(imgSize, photo.path)}}
       />
@@ -49,7 +62,7 @@ const getVerticalImageComponent = (props, imgSize, aspectRatio, photo) => {
 
   return (
     <View style={styles.verticalImageContainer}>
-      <DefaultRNImage
+      <ReactNativeImage
         resizeMode="stretch"
         style={styles.verticalImageBackground}
         blurRadius={3}
@@ -60,42 +73,48 @@ const getVerticalImageComponent = (props, imgSize, aspectRatio, photo) => {
   );
 };
 
-const ArticlePhoto = (props) => {
-  const {colors} = useTheme();
-  const {photo} = props;
+interface Props {
+  style?: ViewStyle;
+  expectedWidth: number;
+  photo?: ArticlePhotoType;
+  imageAspectRatio?: number;
+  progressive?: boolean;
+}
 
-  const renderError = () => {
+const ArticlePhoto: React.FC<Props> = ({photo, style, expectedWidth, imageAspectRatio, ...props}) => {
+  const {colors} = useTheme();
+
+  if (!photo) {
     return (
-      <View {...props}>
+      <View style={style}>
         <View style={styles.errorContainer}>
           <Icon404 size={60} color={colors.buttonContent} />
         </View>
       </View>
     );
-  };
-
-  if (!photo) {
-    return renderError();
   }
 
-  let aspectRatio;
-  if (props.imageAspectRatio) {
-    aspectRatio = props.imageAspectRatio;
-  } else {
-    aspectRatio = parseFloat(photo.w_h);
-  }
+  const aspectRatio = imageAspectRatio ?? parseFloat(photo.w_h);
 
-  let image;
+  let image: React.ReactNode;
   if (aspectRatio < 1) {
-    const imgSize = getImageSizeForWidth(props.expectedWidth / aspectRatio);
-    image = getVerticalImageComponent(props, imgSize, aspectRatio, photo);
+    image = VerticalImageComponent({
+      photo,
+      aspectRatio,
+      imgSize: getImageSizeForWidth(expectedWidth / aspectRatio),
+      progressive: props.progressive,
+    });
   } else {
-    const imgSize = getImageSizeForWidth(props.expectedWidth);
-    image = getHorizontalImageComponent(props, imgSize, aspectRatio, photo);
+    image = HorizontalImageComponent({
+      photo,
+      aspectRatio,
+      imgSize: getImageSizeForWidth(expectedWidth),
+      progressive: props.progressive,
+    });
   }
 
   return (
-    <View {...props}>
+    <View style={style}>
       {image}
       <TextComponent style={styles.bottomText} type="secondary">
         {photo.title} / {photo.author}
@@ -104,7 +123,11 @@ const ArticlePhoto = (props) => {
   );
 };
 
-export default ArticlePhoto;
+export default React.memo(ArticlePhoto, (prevProps, nextProps) => {
+  return (
+    prevProps.expectedWidth === nextProps.expectedWidth && prevProps.photo?.path === nextProps.photo?.path
+  );
+});
 
 const styles = StyleSheet.create({
   image: {

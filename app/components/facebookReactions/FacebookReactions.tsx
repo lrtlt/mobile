@@ -1,21 +1,26 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 import {useSettings} from '../../settings/useSettings';
 import {IconFacebook} from '../svg';
 
-const FacebookReactions = (props) => {
+interface Props {
+  style?: ViewStyle;
+  count?: number | string;
+}
+
+const FacebookReactions: React.FC<Props> = ({style, count}) => {
   const {colors} = useTheme();
   const {textSizeMultiplier} = useSettings();
 
   return (
-    <View style={{...styles.root, ...props.style}}>
+    <View style={{...styles.root, ...style}}>
       <View style={{...styles.container, borderColor: colors.buttonBorder}}>
         <View style={styles.iconHolder}>
           <IconFacebook size={16 + textSizeMultiplier} color={colors.facebook} />
         </View>
-        <TextComponent style={{...styles.countText, color: colors.facebook}}>{props.count}</TextComponent>
+        <TextComponent style={{...styles.countText, color: colors.facebook}}>{count}</TextComponent>
       </View>
     </View>
   );

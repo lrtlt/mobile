@@ -8,7 +8,7 @@ interface Props {
   onAccept: () => void;
   onDecline: () => void;
 }
-const AdultContentWarningComponent: React.FC<Props> = (props) => {
+const AdultContentWarningComponent: React.FC<Props> = ({onAccept, onDecline}) => {
   const {colors} = useTheme();
 
   return (
@@ -26,7 +26,7 @@ const AdultContentWarningComponent: React.FC<Props> = (props) => {
           style={styles.button}
           rippleColor={colors.ripple}
           underlayColor={colors.primary}
-          onPress={props.onAccept}>
+          onPress={onAccept}>
           <View style={styles.buttonPositive}>
             <TextComponent style={styles.buttonPositiveText}>MAN JAU YRA 18 METŲ</TextComponent>
           </View>
@@ -36,7 +36,7 @@ const AdultContentWarningComponent: React.FC<Props> = (props) => {
           style={styles.button}
           rippleColor={colors.ripple}
           underlayColor={colors.primary}
-          onPress={props.onDecline}>
+          onPress={onDecline}>
           <View style={styles.buttonNegative}>
             <TextComponent style={styles.buttonNegativeText}>MAN DAR NĖRA 18 METŲ</TextComponent>
           </View>

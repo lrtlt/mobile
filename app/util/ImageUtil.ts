@@ -2,7 +2,7 @@ import {store} from '../redux/store';
 
 export const BASE_IMG_URL = 'https://www.lrt.lt';
 
-type ImageSize = {
+export type ImageSize = {
   width: number;
   height: number;
   aspectRatio: number;

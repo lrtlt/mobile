@@ -9,7 +9,7 @@ import {useTheme} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
 
 /** Todo remove maybe? It introduces bugs (text not fitting) */
-const EXTRA_LINE_SPACING = 6;
+const EXTRA_LINE_SPACING = 7;
 
 const renderBlockquote = (_, children, __, passProps) => {
   //console.log(children);
@@ -65,22 +65,20 @@ const ParagraphComponent = ({html}) => {
     fontSize: fontSize,
   };
 
-  const tagStyles = {
-    strong: {
-      fontFamily: 'SourceSansPro-SemiBold',
-    },
-    blockquote: {
-      fontFamily: 'SourceSansPro-LightItalic',
-      fontSize: fontSize + 3,
-    },
-  };
-
   return (
     <View style={styles.paragraphContainer}>
       <HTML
         baseFontStyle={baseFontStyle}
         html={html}
-        tagsStyles={tagStyles}
+        tagsStyles={{
+          strong: {
+            fontFamily: 'SourceSansPro-SemiBold',
+          },
+          blockquote: {
+            fontFamily: 'SourceSansPro-LightItalic',
+            fontSize: fontSize + 3,
+          },
+        }}
         onLinkPress={(_, href) => Linking.openURL(href)}
         {...htmlConfig}
       />
@@ -125,15 +123,10 @@ const ArticleParagraph = (props) => {
   const {p, embed} = props.data;
   const {itemSelectHandler} = props;
 
-  const textComponent = p ? <ParagraphComponent html={p} /> : null;
-  const embedComponent = embed ? (
-    <EmbedComponent embedArray={embed} itemSelectHandler={itemSelectHandler} />
-  ) : null;
-
   return (
     <>
-      {textComponent}
-      {embedComponent}
+      {p && <ParagraphComponent html={p} />}
+      {embed && <EmbedComponent embedArray={embed} itemSelectHandler={itemSelectHandler} />}
     </>
   );
 };

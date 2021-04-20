@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Article} from '../../../../../../../Types';
 import TopArticleBackground from './TopArticleBackground';
@@ -20,10 +20,12 @@ interface TopArticleProps {
 const TopArticle: React.FC<TopArticleProps> = ({article}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
+  const onPressHandler = useCallback(() => {
+    navigation.navigate('Article', {articleId: article.id});
+  }, [article]);
+
   return (
-    <TouchableDebounce
-      debounceTime={500}
-      onPress={() => navigation.navigate('Article', {articleId: article.id})}>
+    <TouchableDebounce debounceTime={500} onPress={onPressHandler}>
       <TopArticleBackground style={styles.container} article={article}>
         <TopArticleChannelBadge style={styles.channelLogoBadge} logoUri={article.channel_logo} />
         <View style={styles.imageContainer}>

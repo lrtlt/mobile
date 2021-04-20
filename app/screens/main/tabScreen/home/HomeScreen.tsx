@@ -108,7 +108,11 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
     }
   }, []);
 
-  const renderItem = (val: any) => {
+  const onForecastPressHandler = useCallback(() => {
+    navigation.navigate('Weather');
+  }, []);
+
+  const renderItem = useCallback((val: any) => {
     switch (val.item.type) {
       case LIST_DATA_TYPE_ARTICLES: {
         const {category} = val.section;
@@ -155,14 +159,14 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
         return <View />;
       }
     }
-  };
+  }, []);
 
   const renderForecast = () => {
     if (type === ROUTE_TYPE_MEDIA) {
       return null;
     } else {
       return (
-        <TouchableDebounce debounceTime={500} onPress={() => navigation.navigate('Weather')}>
+        <TouchableDebounce debounceTime={500} onPress={onForecastPressHandler}>
           <Forecast style={styles.forecast} />
         </TouchableDebounce>
       );

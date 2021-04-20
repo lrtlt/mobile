@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Dimensions, ViewStyle} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 
 import CoverImage from '../../coverImage/CoverImage';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
@@ -13,7 +13,6 @@ import {getImageSizeForWidth, buildImageUri, buildArticleImageUri} from '../../.
 import {useTheme} from '../../../Theme';
 import TextComponent from '../../text/Text';
 import {Article} from '../../../../Types';
-import {getSmallestDim} from '../../../util/UI';
 
 const getArticleStyle = (type: ArticleStyleType) => {
   switch (type) {
@@ -39,41 +38,39 @@ interface Props {
 const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType, dateEnabled, onPress}) => {
   const [dimensions, setDimensions] = useState({width: 0, height: 0});
   const {colors} = useTheme();
-
   const style = getArticleStyle(styleType);
 
-  const subtitle = article.subtitle ? (
+  const onPressHandler = useCallback(() => {
+    onPress(article);
+  }, [onPress, article]);
+
+  const subtitle = article.subtitle && (
     <TextComponent style={style.subtitle} type="error">
       {article.subtitle}
     </TextComponent>
-  ) : null;
+  );
 
-  const date =
-    article.date && dateEnabled ? (
-      <TextComponent style={style.categoryTitle} type="secondary">
-        {article.date}
-      </TextComponent>
-    ) : null;
+  const date = article.date && dateEnabled && (
+    <TextComponent style={style.categoryTitle} type="secondary">
+      {article.date}
+    </TextComponent>
+  );
 
-  const photoCount =
-    article.photo && String(article.photo).length < 10 ? (
-      <View>
-        <PhotoCountBadge style={style.photoBadge} count={article.photo_count} />
-      </View>
-    ) : null;
+  const photoCount = article.photo && String(article.photo).length < 10 && (
+    <View>
+      <PhotoCountBadge style={style.photoBadge} count={article.photo_count} />
+    </View>
+  );
 
-  const facebookReactions = article.reactions ? (
-    article.fb_badge === 1 ? (
-      <FacebookReactions count={article.reactions} />
-    ) : null
-  ) : null;
+  const facebookReactions = article.reactions && article.fb_badge === 1 && (
+    <FacebookReactions count={article.reactions} />
+  );
 
   const space = photoCount && facebookReactions ? <View style={style.badgeSpace} /> : null;
 
-  const mediaIndicator =
-    article.is_video === 1 || article.is_audio === 1 ? (
-      <MediaIndicator style={style.mediaIndicator} size={styleType === 'single' ? 'big' : 'small'} />
-    ) : null;
+  const mediaIndicator = (article.is_video === 1 || article.is_audio === 1) && (
+    <MediaIndicator style={style.mediaIndicator} size={styleType === 'single' ? 'big' : 'small'} />
+  );
 
   const mediaIcon = article.is_audio ? (
     <View style={style.mediaIconContainer}>
@@ -83,15 +80,15 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
     <View style={style.mediaIconContainer}>
       <CameraIcon size={18} />
     </View>
-  ) : null;
+  ) : undefined;
 
-  const mediaDuration = article.media_duration ? (
+  const mediaDuration = article.media_duration && (
     <TextComponent style={{...style.mediaDurationText, color: '#333'}}>
       {article.media_duration}
     </TextComponent>
-  ) : null;
+  );
 
-  let imgUri = null;
+  let imgUri = undefined;
   if (dimensions.width > 0) {
     if (article.img_path_prefix && article.img_path_postfix) {
       imgUri = buildImageUri(
@@ -106,7 +103,7 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
 
   return (
     <View style={[styleProp, style.container]}>
-      <TouchableDebounce debounceTime={500} onPress={() => onPress(article)}>
+      <TouchableDebounce debounceTime={500} onPress={onPressHandler}>
         <View>
           <View
             style={{

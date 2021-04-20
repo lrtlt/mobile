@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
 import CoverImage from '../../coverImage/CoverImage';
 import LiveBadge from '../../liveBadge/LiveBadge';
@@ -80,9 +80,13 @@ const Channel = (props) => {
     </View>
   ) : null;
 
+  const onPressHandler = useCallback(() => {
+    props.onPress(props.data);
+  }, [props.onPress]);
+
   return (
     <View>
-      <TouchableDebounce debounceTime={500} onPress={() => props.onPress(props.data)}>
+      <TouchableDebounce debounceTime={500} onPress={onPressHandler}>
         <View style={styles.container}>
           <View style={styles.coverContainer}>
             <CoverImage style={styles.cover} source={{uri: coverUrl}} />

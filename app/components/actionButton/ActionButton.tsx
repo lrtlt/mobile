@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {BorderlessButton} from 'react-native-gesture-handler';
-import PropTypes from 'prop-types';
 
 interface Props {
   onPress: () => void;
@@ -13,10 +12,6 @@ const ActionButton: React.FC<Props> = (props) => {
       <View style={styles.clickArea}>{props.children}</View>
     </BorderlessButton>
   );
-};
-
-ActionButton.propTypes = {
-  onPress: PropTypes.func.isRequired,
 };
 
 export default ActionButton;

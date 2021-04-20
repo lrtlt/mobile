@@ -1,9 +1,7 @@
-import {cps} from '@redux-saga/core/effects';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {AudiotekaNewest, AudiotekaNewestCategory} from '../../../../../../api/Types';
 import {Text, TouchableDebounce} from '../../../../../../components';
-import {useTheme} from '../../../../../../Theme';
 
 interface Props {
   data: AudiotekaNewest;
@@ -44,7 +42,6 @@ interface TabProps {
   onPress: () => void;
 }
 const Tab: React.FC<TabProps> = ({category, isSelected, onPress}) => {
-  const {colors} = useTheme();
   return (
     <TouchableDebounce debounceTime={500} onPress={onPress}>
       <View
