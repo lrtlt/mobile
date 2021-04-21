@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {useMemo} from 'react';
+import {View, StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {AudiotekaPodcasts} from '../../../../../../api/Types';
 import BlockTitle from '../BlockTitle';
@@ -12,9 +13,13 @@ interface Props {
 const PodcastsBlock: React.FC<Props> = (props) => {
   const {title, podcasts} = props.data;
 
-  const podcastComponents = podcasts.map((p) => {
-    return <PodcastListItem key={p.id} style={styles.listItem} podcast={p} />;
-  });
+  const podcastComponents = useMemo(
+    () =>
+      podcasts.map((p) => {
+        return <PodcastListItem key={p.id} style={styles.listItem} podcast={p} />;
+      }),
+    [podcasts],
+  );
 
   return (
     <View style={styles.container}>

@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {AudiotekaNewest, AudiotekaNewestCategory} from '../../../../../../api/Types';
 import {Text, TouchableDebounce} from '../../../../../../components';
@@ -11,17 +11,21 @@ interface Props {
 const NewestBlockTabs: React.FC<Props> = ({data, onCategorySelected}) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const tabs = data.categories.map((c, i) => (
-    <Tab
-      key={c.title}
-      category={c}
-      isSelected={i === selectedIndex}
-      onPress={() => {
-        setSelectedIndex(i);
-        onCategorySelected(c);
-      }}
-    />
-  ));
+  const tabs = useMemo(
+    () =>
+      data.categories.map((c, i) => (
+        <Tab
+          key={c.title}
+          category={c}
+          isSelected={i === selectedIndex}
+          onPress={() => {
+            setSelectedIndex(i);
+            onCategorySelected(c);
+          }}
+        />
+      )),
+    [data.categories, selectedIndex],
+  );
 
   return (
     <ScrollView

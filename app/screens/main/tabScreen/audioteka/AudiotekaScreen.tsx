@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {View, RefreshControl, StyleSheet, StatusBar, FlatList, ListRenderItemInfo} from 'react-native';
 import {ScreenLoader} from '../../../../components';
 import {fetchAudioteka} from '../../../../redux/actions/index';
@@ -62,7 +62,7 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCurrent, refreshing, lastFetchTime]);
 
-  const renderItem = (listItem: ListRenderItemInfo<AudiotekaTemplate>) => {
+  const renderItem = useCallback((listItem: ListRenderItemInfo<AudiotekaTemplate>) => {
     const {item} = listItem;
 
     switch (item.template) {
@@ -89,7 +89,7 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
         return <View />;
       }
     }
-  };
+  }, []);
 
   if (data.length === 0) {
     return <ScreenLoader />;

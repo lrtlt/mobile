@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
 import ArticleComponent, {ArticleStyleType} from '../article/ArticleComponent';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -32,17 +32,21 @@ const ArticleRow: React.FC<Props> = (props) => {
   const backgroundColor = isSlug ? colors.slugBackground : undefined;
   const articleStyleType = getArticleStyleType(data.length);
 
-  const content = data.map((a, i) => {
-    return (
-      <ArticleComponent
-        style={styles.article}
-        article={a as Article}
-        onPress={onArticlePress}
-        styleType={articleStyleType}
-        key={i}
-      />
-    );
-  });
+  const content = useMemo(
+    () =>
+      data.map((a, i) => {
+        return (
+          <ArticleComponent
+            style={styles.article}
+            article={a as Article}
+            onPress={onArticlePress}
+            styleType={articleStyleType}
+            key={i}
+          />
+        );
+      }),
+    [data],
+  );
 
   if (articleStyleType === 'scroll') {
     return (

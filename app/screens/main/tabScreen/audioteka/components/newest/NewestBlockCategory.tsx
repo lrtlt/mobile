@@ -1,7 +1,8 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
+import {Article} from '../../../../../../../Types';
 import {AudiotekaNewestCategory} from '../../../../../../api/Types';
 import {ArticleRow} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
@@ -13,15 +14,22 @@ interface Props {
 
 const NewestBlockCategory: React.FC<Props> = ({data}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const articles = formatArticles(-1, data.articles);
 
-  const content = articles.map((a) => (
-    <ArticleRow
-      key={a.map((article) => article.id).join('-')}
-      data={a}
-      onArticlePress={(article) => navigation.navigate('Article', {articleId: article.id})}
-    />
-  ));
+  const onArticlePressHandler = useCallback((article: Article) => {
+    navigation.navigate('Article', {articleId: article.id});
+  }, []);
+
+  const content = useMemo(() => {
+    const articles = formatArticles(-1, data.articles);
+    return articles.map((a) => (
+      <ArticleRow
+        key={a.map((article) => article.id).join('-')}
+        data={a}
+        onArticlePress={onArticlePressHandler}
+      />
+    ));
+  }, [data.articles]);
+
   return <View style={styles.container}>{content}</View>;
 };
 

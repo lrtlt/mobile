@@ -7,7 +7,7 @@ interface TopArticleChannelBadgeProps {
   logoUri?: string;
 }
 
-const TopArticleChannelBadge = (props: TopArticleChannelBadgeProps) => {
+const TopArticleChannelBadge: React.FC<TopArticleChannelBadgeProps> = (props) => {
   return (
     <View style={{...styles.container, ...props.style}}>
       <SvgUri width={32} height={32} uri={props.logoUri ?? null} />

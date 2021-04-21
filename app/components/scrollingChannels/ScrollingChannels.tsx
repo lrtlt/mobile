@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Channel from './channel/Channel';
@@ -30,13 +30,19 @@ const ScrollingChannels: React.FC<Props> = (props) => {
   const {colors, strings} = useTheme();
   const channels = useSelector(selectHomeChannels, checkEqual);
 
-  const onChannelPressHandler = (channel: TVChannel) => {
-    props.onChannelPress({type: CHANNEL_TYPE_DEFAULT, payload: channel});
-  };
+  const onChannelPressHandler = useCallback(
+    (channel: TVChannel) => {
+      props.onChannelPress({type: CHANNEL_TYPE_DEFAULT, payload: channel});
+    },
+    [props.onChannelPress],
+  );
 
-  const onLiveItemPressHandler = (liveItem: LiveChannel) => {
-    props.onChannelPress({type: CHANNEL_TYPE_LIVE, payload: liveItem});
-  };
+  const onLiveItemPressHandler = useCallback(
+    (liveItem: LiveChannel) => {
+      props.onChannelPress({type: CHANNEL_TYPE_LIVE, payload: liveItem});
+    },
+    [props.onChannelPress],
+  );
 
   if (!channels || channels.items.length === 0) {
     return <View />;
@@ -48,26 +54,13 @@ const ScrollingChannels: React.FC<Props> = (props) => {
   const liveItemsContent =
     live_items &&
     live_items.map((liveItem) => {
-      return (
-        <Channel
-          data={liveItem}
-          key={liveItem.title}
-          isLive={true}
-          onPress={(liveChannel: LiveChannel) => onLiveItemPressHandler(liveChannel)}
-        />
-      );
+      return <Channel data={liveItem} key={liveItem.title} isLive={true} onPress={onLiveItemPressHandler} />;
     });
 
   const itemsContent =
     items &&
     items.map((item, i) => {
-      return (
-        <Channel
-          data={item}
-          key={`${i}-${item.proc}`}
-          onPress={(channel: TVChannel) => onChannelPressHandler(channel)}
-        />
-      );
+      return <Channel data={item} key={`${i}-${item.proc}`} onPress={onChannelPressHandler} />;
     });
 
   return (
