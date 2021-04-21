@@ -46,6 +46,7 @@ interface Dictionary {
   about_episode: string;
   about_show: string;
   no_search_results: string;
+  previous_songs: string;
   //error messages
   error_no_connection: string;
   error_no_search_query: string;
@@ -83,6 +84,7 @@ const str: Dictionary = {
   feeback: 'Pranešk apie klaidą',
   about_episode: 'APIE EPIZODĄ',
   about_show: 'APIE LAIDĄ',
+  previous_songs: 'ANKSTESNI',
   no_search_results: 'Deja, rezultatų pagal šią užklausą rasti nepavyko.',
   error_no_connection: 'Tinklo sutrikimas',
   error_no_search_query: 'Įveskite paieškos tekstą',

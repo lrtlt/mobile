@@ -10,6 +10,7 @@ import {
   mediatekaGet,
   menuGet,
   newestArticlesGet,
+  opusPlaylistGet,
   popularArticlesGet,
   programGet,
   searchArticles,
@@ -26,6 +27,7 @@ import {
   HomeDataResponse,
   MenuResponse,
   NewestArticlesResponse,
+  OpusPlaylistResponse,
   PopularArticlesResponse,
   ProgramResponse,
   SearchFilter,
@@ -70,3 +72,5 @@ export const fetchCategoryApi = (categoryId: number, count: number, page: number
 export const fetchWeatherLocations = () => get<ForecastLocation[]>(weatherLocationsGet());
 
 export const fetchForecast = (cityCode: string) => get<ForecastResponse>(forecastGet(cityCode));
+
+export const fetchOpusPlaylist = () => get<OpusPlaylistResponse>(opusPlaylistGet());

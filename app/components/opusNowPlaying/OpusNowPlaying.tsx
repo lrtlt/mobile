@@ -1,14 +1,19 @@
-import React, {useState, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {IconNote} from '../svg';
 import firestore from '@react-native-firebase/firestore';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
+import Text from '../text/Text';
+import {useNavigation} from '@react-navigation/core';
+import OpusPlaylistModal from '../opusPlaylistModal/OpusPlaylistModal';
 
 const OpusNowComponent: React.FC = () => {
   const [currentSong, setCurrentSong] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const {colors} = useTheme();
+  const navigation = useNavigation();
+  const {colors, strings} = useTheme();
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -25,18 +30,33 @@ const OpusNowComponent: React.FC = () => {
     return unsubscribe;
   }, []);
 
+  const previousSongsPressHandler = useCallback(() => {
+    setModalVisible(true);
+  }, []);
+
+  const cancelModalHandler = useCallback(() => {
+    setModalVisible(false);
+  }, []);
+
   console.log('currectsong', currentSong);
   return (
-    <View>
-      <View style={{...styles.container, backgroundColor: colors.primaryLight}}>
-        <View style={styles.iconContainer}>
-          <View style={{...styles.iconButton, backgroundColor: colors.lightGreyBackground}}>
-            <IconNote size={12} color={colors.darkIcon} />
-          </View>
+    <>
+      <View>
+        <View style={{...styles.container, backgroundColor: 'rgba(242,177,46,.3)'}}>
+          <TextComponent style={styles.title}>Eteryje</TextComponent>
+          <TextComponent style={styles.song}>{currentSong.replace('Eteryje: ', '')}</TextComponent>
+          <TouchableOpacity onPress={previousSongsPressHandler}>
+            <View style={{...styles.previousSongsButton, backgroundColor: 'rgba(242,177,46,.3)'}}>
+              <View style={styles.iconContainer}>
+                <IconNote size={12} color={colors.text} />
+              </View>
+              <Text style={styles.previousSongsButtonText}>{strings.previous_songs}</Text>
+            </View>
+          </TouchableOpacity>
         </View>
-        <TextComponent style={styles.title}>{currentSong}</TextComponent>
       </View>
-    </View>
+      <OpusPlaylistModal visible={modalVisible} currentSong={currentSong} onCancel={cancelModalHandler} />
+    </>
   );
 };
 
@@ -45,29 +65,39 @@ export default OpusNowComponent;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 4,
-    flexDirection: 'row',
+    padding: 8,
+    paddingVertical: 16,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
   },
   iconContainer: {
-    width: 36,
-    height: 28,
+    width: 32,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  iconButton: {
-    padding: 4,
-    paddingStart: 8,
-    paddingEnd: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
   },
   title: {
-    flex: 1,
-    padding: 4,
     fontFamily: 'SourceSansPro-SemiBold',
-    fontSize: 13,
+    fontSize: 15,
+  },
+  song: {
+    flex: 1,
+    marginVertical: 8,
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 14,
+  },
+  previousSongsButton: {
+    width: '100%',
+    minWidth: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 8,
+  },
+  previousSongsButtonText: {
+    textAlign: 'center',
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 16,
   },
 });

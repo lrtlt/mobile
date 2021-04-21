@@ -99,6 +99,13 @@ export const programGet = () => {
 };
 
 /**
+ * Returns previously played songs
+ */
+export const opusPlaylistGet = () => {
+  return `${BASE_URL}rds?station=opus`;
+};
+
+/**
  * Returns forecast for selected city
  */
 export const forecastGet = (cityCode: string) => {

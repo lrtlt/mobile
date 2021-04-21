@@ -404,3 +404,12 @@ export type SlugArticlesResponse = {
     slug: string;
   };
 };
+
+export type OpusPlayListItem = {
+  dt: string;
+  song: string;
+};
+
+export type OpusPlaylistResponse = {
+  rds: OpusPlayListItem[];
+};

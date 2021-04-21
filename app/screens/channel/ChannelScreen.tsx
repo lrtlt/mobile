@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {
   VideoComponent,
@@ -24,7 +24,7 @@ import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RouteProp} from '@react-navigation/native';
 import {MainStackParamList} from '../../navigation/MainStack';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {StackNavigationProp, useCardAnimation} from '@react-navigation/stack';
 import {ChannelResponse} from '../../api/Types';
 import {ChannelDataType} from '../../components/scrollingChannels/ScrollingChannels';
 
@@ -70,27 +70,27 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
       channelId: selectedChannel.toString(),
     });
 
+    const loadChannel = () => {
+      fetchChannel(selectedChannel)
+        .then((response) =>
+          setState({
+            channel: response,
+            loadingState: response.channel_info ? STATE_READY : STATE_ERROR,
+          }),
+        )
+        .catch(() =>
+          setState({
+            channel: undefined,
+            loadingState: STATE_ERROR,
+          }),
+        );
+    };
+
     loadChannel();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChannel]);
 
-  const loadChannel = () => {
-    fetchChannel(selectedChannel)
-      .then((response) =>
-        setState({
-          channel: response,
-          loadingState: response.channel_info ? STATE_READY : STATE_ERROR,
-        }),
-      )
-      .catch(() =>
-        setState({
-          channel: undefined,
-          loadingState: STATE_ERROR,
-        }),
-      );
-  };
-
-  const onChannelPressHandler = (channel: ChannelDataType) => {
+  const onChannelPressHandler = useCallback((channel: ChannelDataType) => {
     const {type, payload} = channel;
     switch (type) {
       case CHANNEL_TYPE_DEFAULT: {
@@ -107,7 +107,11 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
         console.warn('Unkown channel type: ' + channel);
       }
     }
-  };
+  }, []);
+
+  const onProgramPressHandler = useCallback(() => {
+    navigation.navigate('Program');
+  }, []);
 
   const renderChannelComponent = () => {
     const {channel_info} = state.channel!;
@@ -159,9 +163,9 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
           />
         </View>
         <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>
-          {channelIconComponent}
+          <View style={styles.channelIconHolder}>{channelIconComponent}</View>
           {programComponent}
-          <TouchableOpacity onPress={() => navigation.navigate('Program')}>
+          <TouchableOpacity onPress={onProgramPressHandler}>
             <Text style={{...styles.fullProgramText, backgroundColor: colors.background}}>
               {strings.tvProgramButtonText}
             </Text>
@@ -200,7 +204,7 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
 
   const tvBar =
     loadingState === STATE_READY || loadingState === STATE_ERROR ? (
-      <ScrollingChannels onChannelPress={(channel) => onChannelPressHandler(channel)} />
+      <ScrollingChannels onChannelPress={onChannelPressHandler} />
     ) : undefined;
 
   return (
@@ -258,5 +262,8 @@ const styles = StyleSheet.create({
   },
   photo: {
     width: '100%',
+  },
+  channelIconHolder: {
+    marginVertical: 8,
   },
 });
