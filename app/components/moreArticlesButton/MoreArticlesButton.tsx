@@ -6,10 +6,11 @@ import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 
 interface Props {
   backgroundColor?: ColorValue;
+  customText?: string;
   onPress: () => void;
 }
 
-const MoreArticlesButton: React.FC<Props> = ({backgroundColor, onPress}) => {
+const MoreArticlesButton: React.FC<Props> = ({backgroundColor, customText, onPress}) => {
   const {colors, strings} = useTheme();
 
   const extraPadding = backgroundColor ? 8 : 0;
@@ -18,7 +19,7 @@ const MoreArticlesButton: React.FC<Props> = ({backgroundColor, onPress}) => {
     <View style={{backgroundColor: backgroundColor}}>
       <TouchableDebounce debounceTime={500} onPress={onPress}>
         <View style={{...styles.container, padding: extraPadding, backgroundColor: colors.greyBackground}}>
-          <TextComponent style={styles.title}>{strings.moreButtonText}</TextComponent>
+          <TextComponent style={styles.title}>{customText ?? strings.moreButtonText}</TextComponent>
         </View>
       </TouchableDebounce>
     </View>

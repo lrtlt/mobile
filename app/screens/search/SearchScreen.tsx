@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {HeaderBackButton, StackNavigationProp} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
-import {resetSearchFilter} from '../../redux/actions';
+import {resetSearchFilter, setSearchFilter} from '../../redux/actions';
 import {ArticleComponent, ActionButton, Text, ScreenLoader} from '../../components';
 import {IconFilter, IconSearch} from '../../components/svg';
 import {fetchArticleSearch} from '../../api';
@@ -36,7 +36,11 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const SearchScreen: React.FC<Props> = ({navigation}) => {
+const SearchScreen: React.FC<Props> = ({navigation, route}) => {
+  const [useNavigationPropFilter, setUseNavigationPropFilter] = useState(
+    Boolean(route?.params?.filter || route?.params?.q),
+  );
+
   const [query, setQuery] = useState<string>('');
   const [articles, setArticles] = useState<Article[]>([]);
   const [loadingState, setLoadingState] = useState({
@@ -50,6 +54,14 @@ const SearchScreen: React.FC<Props> = ({navigation}) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (route?.params?.q) {
+      setQuery(route.params.q);
+    }
+
+    if (route?.params?.filter) {
+      dispatch(setSearchFilter(route.params.filter));
+    }
+
     return () => {
       dispatch(resetSearchFilter());
     };
@@ -79,11 +91,18 @@ const SearchScreen: React.FC<Props> = ({navigation}) => {
   }, []);
 
   useEffect(() => {
+    if (useNavigationPropFilter) {
+      if (!checkEqual(searchFilter, route?.params?.filter) || query !== route?.params?.q) {
+        return;
+      } else {
+        setUseNavigationPropFilter(false);
+      }
+    }
     search();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchFilter]);
 
-  const search = useCallback(() => {
+  const search = () => {
     setLoadingState({isFetching: true, isError: false});
     fetchArticleSearch(query, searchFilter)
       .then((response) => {
@@ -99,7 +118,7 @@ const SearchScreen: React.FC<Props> = ({navigation}) => {
           isError: true,
         });
       });
-  }, [query, searchFilter]);
+  };
 
   const articlePressHandler = useCallback((article: Article) => {
     navigation.navigate('Article', {articleId: article.id});

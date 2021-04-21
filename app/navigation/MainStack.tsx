@@ -7,8 +7,8 @@ import {Platform} from 'react-native';
 import {Drawer, SearchFilterDrawer} from '../components';
 import {useSettings} from '../settings/useSettings';
 import {themeDark, themeLight} from '../Theme';
-import {Category} from '../redux/reducers/articles';
-import {ArticlePhoto, MenuItemPage} from '../api/Types';
+import {ArticlePhoto, MenuItemPage, SearchFilter} from '../api/Types';
+import {NavigatorScreenParams} from '@react-navigation/native';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -26,7 +26,7 @@ export type MainStackParamList = {
   Channel: {
     channelId: number;
   };
-  Search: undefined;
+  Search: NavigatorScreenParams<SearchDrawerParamList>;
   Bookmarks: undefined;
   History: undefined;
   Program: undefined;
@@ -56,7 +56,10 @@ export type MainDrawerParamList = {
 const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
 
 export type SearchDrawerParamList = {
-  SearchScreen: undefined;
+  SearchScreen: {
+    q?: string;
+    filter?: SearchFilter;
+  };
 };
 
 const SearchDrawer = createDrawerNavigator<SearchDrawerParamList>();

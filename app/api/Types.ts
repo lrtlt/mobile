@@ -118,7 +118,7 @@ export type SearchFilterTypes =
 export type SearchFilter = {
   type: SearchFilterTypes;
   section: string;
-  days: string;
+  days: '' | '1' | '7' | '30';
 };
 
 export type VideoDataLiveStream = {

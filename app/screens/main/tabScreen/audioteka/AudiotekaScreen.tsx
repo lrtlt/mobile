@@ -17,6 +17,7 @@ import CategoryBlock from './components/category/CategoryBlock';
 
 import PopularBlock from './components/popular/PopularBlock';
 import NewestBlock from './components/newest/NewestBlock';
+import AudiotekaSearch from './components/search/AudiotekaSearch';
 
 interface Props {
   isCurrent: boolean;
@@ -70,7 +71,12 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
         return <TopArticle article={item.article} />;
       }
       case 'newest': {
-        return <NewestBlock data={item} />;
+        return (
+          <View>
+            <AudiotekaSearch />
+            <NewestBlock data={item} />
+          </View>
+        );
       }
       case 'podcasts': {
         return <PodcastsBlock data={item} />;

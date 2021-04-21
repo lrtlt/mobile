@@ -38,6 +38,7 @@ interface Dictionary {
   articleHasBeenSaved: string;
   liveChanelError: string;
   search: string;
+  audiotekaSearchPlaceholder: string;
   upload: string;
   about: string;
   contacts: string;
@@ -73,6 +74,7 @@ const str: Dictionary = {
   articleHasBeenSaved: 'Straipsnis išsaugotas',
   liveChanelError: 'Kanalas nepasiekiamas',
   search: 'PAIEŠKA',
+  audiotekaSearchPlaceholder: 'Ieškoti įrašų',
   upload: 'Įkelk',
   about: 'Apie LRT',
   contacts: 'Kontaktai',

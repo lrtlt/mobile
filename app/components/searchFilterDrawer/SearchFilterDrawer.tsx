@@ -41,7 +41,7 @@ const SearchFilterDrawer: React.FC = () => {
   );
 
   const selectDays = useCallback(
-    (days: string) => {
+    (days: '' | '1' | '7' | '30') => {
       dispatch(setSearchFilter({...filter, days}));
     },
     [filter],
