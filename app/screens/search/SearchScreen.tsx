@@ -23,6 +23,7 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {MainStackParamList, SearchDrawerParamList} from '../../navigation/MainStack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Article} from '../../../Types';
+import {string} from 'prop-types';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -189,6 +190,11 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
         showsVerticalScrollIndicator={false}
         data={articles}
         windowSize={4}
+        ListEmptyComponent={
+          <View style={styles.noResultsContainer}>
+            <Text style={styles.noResultsText}>{strings.no_search_results}</Text>
+          </View>
+        }
         numColumns={2}
         renderItem={renderItem}
         keyExtractor={(item, index) => String(index) + String(item)}
@@ -265,6 +271,15 @@ const styles = StyleSheet.create({
   errorText: {
     fontFamily: 'SourceSansPro-Regular',
     marginBottom: 20,
+    fontSize: 20,
+  },
+  noResultsContainer: {
+    paddingVertical: 64,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noResultsText: {
+    fontFamily: 'PlayfairDisplay-Regular',
     fontSize: 20,
   },
 });

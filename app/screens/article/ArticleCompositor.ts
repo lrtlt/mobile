@@ -13,6 +13,7 @@ export const TYPE_GALLERY = 'content_gallery';
 export const TYPE_PARAGRAPH = 'content_paragraph';
 export const TYPE_VIDEO = 'content_video';
 export const TYPE_AUDIO = 'content_audio';
+export const TYPE_AUDIO_CONTENT = 'content_audio_content';
 export const TYPE_TEXT_TO_SPEECH = 'content_text2speech';
 
 export type ArticleContentItem = {
@@ -24,6 +25,7 @@ export type ArticleContentItem = {
     | typeof TYPE_PARAGRAPH
     | typeof TYPE_VIDEO
     | typeof TYPE_AUDIO
+    | typeof TYPE_AUDIO_CONTENT
     | typeof TYPE_TEXT_TO_SPEECH;
   data: any;
 };
@@ -63,9 +65,11 @@ const composeMedia = (article: ArticleContentMedia) => {
   }
   if (article.is_audio === 1) {
     data.push(getAudio(article));
-  }
-  if (article.content) {
-    data.push(getContentForMedia(article));
+    data.push(getAudioContent(article));
+  } else {
+    if (article.content) {
+      data.push(getContentForMedia(article));
+    }
   }
 
   return data;
@@ -137,6 +141,17 @@ const getContentForMedia = (article: ArticleContentMedia): ArticleContentItem =>
   return {
     type: TYPE_PARAGRAPH,
     data: {p: article.content},
+  };
+};
+
+const getAudioContent = (article: ArticleContentMedia): ArticleContentItem => {
+  return {
+    type: TYPE_AUDIO_CONTENT,
+    data: {
+      about_episode: article.content,
+      about_show: article.category_decription,
+      image: article.category_img_info,
+    },
   };
 };
 

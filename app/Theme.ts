@@ -43,7 +43,9 @@ interface Dictionary {
   about: string;
   contacts: string;
   feeback: string;
-
+  about_episode: string;
+  about_show: string;
+  no_search_results: string;
   //error messages
   error_no_connection: string;
   error_no_search_query: string;
@@ -79,6 +81,9 @@ const str: Dictionary = {
   about: 'Apie LRT',
   contacts: 'Kontaktai',
   feeback: 'Pranešk apie klaidą',
+  about_episode: 'APIE EPIZODĄ',
+  about_show: 'APIE LAIDĄ',
+  no_search_results: 'Deja, rezultatų pagal šią užklausą rasti nepavyko.',
   error_no_connection: 'Tinklo sutrikimas',
   error_no_search_query: 'Įveskite paieškos tekstą',
 };

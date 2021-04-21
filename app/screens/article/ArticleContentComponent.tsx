@@ -22,12 +22,14 @@ import {
   TYPE_AUDIO,
   TYPE_TEXT_TO_SPEECH,
   ArticleContentItem,
+  TYPE_AUDIO_CONTENT,
 } from './ArticleCompositor';
 import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useCollapsibleHeader} from 'react-navigation-collapsible';
 import {useTheme} from '../../Theme';
 import {ArticleContent} from '../../api/Types';
+import AudioContent from './audioContent/AudioContent';
 
 const getContentWidth = () => {
   return Dimensions.get('screen').width - 12 * 2;
@@ -129,6 +131,10 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
         );
       };
 
+      const renderAudioContent = () => {
+        return <AudioContent {...data} />;
+      };
+
       switch (type) {
         case TYPE_HEADER: {
           return (
@@ -152,6 +158,9 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
         }
         case TYPE_AUDIO: {
           return renderAudio();
+        }
+        case TYPE_AUDIO_CONTENT: {
+          return renderAudioContent();
         }
         case TYPE_TEXT_TO_SPEECH: {
           return renderText2Speech();

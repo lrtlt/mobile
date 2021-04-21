@@ -315,6 +315,11 @@ export type ArticleContentMedia = {
   date: string;
   category_id: number;
   category_title: string;
+  category_decription?: string;
+  category_img_info?: {
+    path: string;
+    w_h: string;
+  };
   //Stream api url for video info
   get_playlist_url: string;
   //Stream url for audio
