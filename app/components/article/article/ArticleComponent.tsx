@@ -3,8 +3,6 @@ import {View, StyleSheet, ViewStyle} from 'react-native';
 
 import CoverImage from '../../coverImage/CoverImage';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
-import PhotoCountBadge from '../../photoCount/PhotoCount';
-import FacebookReactions from '../../facebookReactions/FacebookReactions';
 import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 
 import {CameraIcon, MicIcon} from '../../svg';
@@ -13,6 +11,8 @@ import {getImageSizeForWidth, buildImageUri, buildArticleImageUri} from '../../.
 import {useTheme} from '../../../Theme';
 import TextComponent from '../../text/Text';
 import {Article} from '../../../../Types';
+import ArticleBadges from './ArticleBadges';
+import ListenCount from './ListenCount';
 
 const getArticleStyle = (type: ArticleStyleType) => {
   switch (type) {
@@ -44,29 +44,11 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
     onPress(article);
   }, [onPress, article]);
 
-  const subtitle = Boolean(article.subtitle) && (
-    <TextComponent style={style.subtitle} type="error">
-      {article.subtitle}
-    </TextComponent>
-  );
-
   const date = Boolean(article.date) && Boolean(dateEnabled) && (
     <TextComponent style={style.categoryTitle} type="secondary">
       {article.date}
     </TextComponent>
   );
-
-  const photoCount = Boolean(article.photo) && String(article.photo).length < 10 && (
-    <View>
-      <PhotoCountBadge style={style.photoBadge} count={article.photo_count} />
-    </View>
-  );
-
-  const facebookReactions = Boolean(article.reactions) && Boolean(article.fb_badge) && (
-    <FacebookReactions count={article.reactions} />
-  );
-
-  const space = photoCount && facebookReactions && <View style={style.badgeSpace} />;
 
   const mediaIndicator = (Boolean(article.is_video) || Boolean(article.is_audio)) && (
     <MediaIndicator style={style.mediaIndicator} size={styleType === 'single' ? 'big' : 'small'} />
@@ -123,7 +105,9 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
               }}
             />
             {mediaIndicator}
+
             {mediaDuration}
+            <ListenCount style={style.listenCount} article={article} visible={styleType === 'single'} />
           </View>
           <View style={style.categoryTitleContainer}>
             {mediaIcon}
@@ -134,12 +118,12 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
           <View style={style.dateContainer}>{date}</View>
 
           <TextComponent style={style.title}>{article.title}</TextComponent>
-          <View style={style.bottomBadgeRow}>
-            {photoCount}
-            {space}
-            {facebookReactions}
-          </View>
-          {subtitle}
+          <ArticleBadges style={style.badges} article={article} />
+          {Boolean(article.subtitle) && (
+            <TextComponent style={style.subtitle} type="error">
+              {article.subtitle}
+            </TextComponent>
+          )}
         </View>
       </TouchableDebounce>
     </View>
@@ -196,7 +180,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: 'SourceSansPro-Regular',
-    marginTop: 2,
+    marginTop: 4,
     fontSize: 14,
   },
   mediaIndicator: {
@@ -213,18 +197,16 @@ const styles = StyleSheet.create({
     fontSize: 13,
     backgroundColor: 'white',
   },
-  bottomBadgeRow: {
+  badges: {
     paddingTop: 8,
-    flexDirection: 'row',
-  },
-  photoBadge: {
-    borderRadius: 4,
-  },
-  badgeSpace: {
-    width: 8,
   },
   mediaIconContainer: {
     paddingEnd: 8,
+  },
+  listenCount: {
+    position: 'absolute',
+    bottom: 8,
+    left: 8,
   },
 });
 
