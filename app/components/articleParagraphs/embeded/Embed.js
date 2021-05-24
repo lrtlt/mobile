@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import WebView from 'react-native-autoheight-webview';
 import ArticlePhoto from '../../articlePhoto/ArticlePhoto';
-import JWPlayer from '../../videoComponent/JWPlayerNative';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import VideoComponent from '../../videoComponent/VideoComponent';
 
@@ -10,6 +9,7 @@ import {getSmallestDim} from '../../../util/UI';
 import {VIDEO_ASPECT_RATIO} from '../../../constants';
 import TextComponent from '../../text/Text';
 import {useTheme} from '../../../Theme';
+import AudioComponent from '../../audioComponent/AudioComponent';
 
 const getScreenWidth = () => Dimensions.get('screen').width;
 
@@ -61,8 +61,10 @@ const Embed = (props) => {
         <View style={styles.embededVideoContainer} key={i}>
           <VideoComponent
             style={styles.player}
+            cover={{cover: item.el}}
             cover={item.el}
             streamUrl={item.el.get_playlist_url || item.el.get_streams_url}
+            autoPlay={false}
           />
         </View>
       );
@@ -152,15 +154,16 @@ const Embed = (props) => {
   };
 
   const renderAudioPlayer = () => {
-    const {stream_url, id, title} = data[0].el;
+    //TODO implement rerecord_offset usage
+    const {stream_url, id, title, record_offset} = data[0].el;
     return (
       <View style={styles.embededAudioContainer}>
-        <JWPlayer
-          streamUri={stream_url}
-          mediaId={id ? id.toString() : '0'}
-          title={title}
-          autoPlay={false}
+        <AudioComponent
           style={styles.player}
+          streamUri={stream_url}
+          mediaId={id ? id.toString() : '-1'}
+          title={title}
+          autoStart={false}
         />
       </View>
     );
@@ -174,9 +177,7 @@ const Embed = (props) => {
             style={styles.player}
             cover={item.el}
             streamUrl={item.el.get_streams_url}
-            isLiveStream={true}
             autoPlay={false}
-            mediaId={'-1'}
           />
         </View>
       );

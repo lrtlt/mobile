@@ -100,7 +100,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
       const renderVideo = () => {
         return (
           <View style={styles.playerContainer}>
-            <VideoComponent {...data} style={styles.player} autoPlay={true} />
+            <VideoComponent {...data} style={styles.player} autoPlay={false} />
           </View>
         );
       };
@@ -108,7 +108,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
       const renderAudio = () => {
         return (
           <View style={styles.playerContainer}>
-            <AudioComponent {...data} style={styles.player} />
+            <AudioComponent {...data} style={styles.player} autoStart={false} />
           </View>
         );
       };
@@ -116,7 +116,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
       const renderText2Speech = () => {
         return isTextToSpeechPlaying ? (
           <View style={styles.playerContainer}>
-            <AudioComponent {...data} style={styles.playerTextToSpeech} autoPlay={true} />
+            <AudioComponent {...data} style={styles.playerTextToSpeech} autoStart={true} />
           </View>
         ) : null;
       };

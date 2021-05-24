@@ -347,6 +347,12 @@ export const isDefaultArticle = (article?: ArticleContent): article is ArticleCo
   return Boolean(a?.article_id);
 };
 
+export const isVideoLiveStream = (
+  response: VideoDataDefault | VideoDataLiveStream,
+): response is VideoDataLiveStream => {
+  return Boolean((response as VideoDataLiveStream)?.response?.data);
+};
+
 export type ArticleContent = ArticleContentDefault | ArticleContentMedia;
 
 export type ArticleContentResponse = {

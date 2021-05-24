@@ -152,14 +152,11 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
           <VideoComponent
             key={channel_info.stream_embed}
             style={styles.player}
-            mediaId={channel_info.channel_id ? channel_info.channel_id.toString() : undefined}
             autoPlay={true}
             backgroundImage={channel_info.player_background_image}
-            isLiveStream={true}
             isAudioOnly={channel_info.is_radio === 1}
             title={channel_info.title}
             streamUrl={channel_info.get_streams_url}
-            embedUrl={channel_info.stream_embed}
           />
         </View>
         <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>

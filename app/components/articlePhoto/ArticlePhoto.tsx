@@ -27,7 +27,6 @@ const HorizontalImageComponent: React.FC<ImageWrapperProps> = ({
         style={{...styles.image, aspectRatio}}
         source={{uri: buildArticleImageUri(imgSize, photo.path)}}
         thumbnailSource={{uri: buildArticleImageUri(IMG_SIZE_XS, photo.path)}}
-        resizeMode={'cover'}
       />
     );
   } else {
@@ -48,7 +47,6 @@ const VerticalImageComponent: React.FC<ImageWrapperProps> = ({progressive, photo
         style={{...styles.imageVertical, aspectRatio}}
         source={{uri: buildArticleImageUri(imgSize, photo.path)}}
         thumbnailSource={{uri: buildArticleImageUri(IMG_SIZE_XS, photo.path)}}
-        resizeMode={'cover'}
       />
     );
   } else {

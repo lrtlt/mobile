@@ -1,20 +1,29 @@
-import React, {useEffect, useRef} from 'react';
-import {StatusBar, Platform, StyleSheet} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import {StatusBar, Platform, StyleSheet, ViewStyle} from 'react-native';
 import {View} from 'react-native';
-import PropTypes from 'prop-types';
 import JWPlayer from 'react-native-jw-media-player';
 import Gemius from 'react-native-gemius-plugin';
 
 const DEFAULT_BACKGROUND_IMAGE =
   'https://yt3.ggpht.com/a/AGF-l78bfgG98j-GH2Yw816bbYmnXho-wUselvJM6A=s288-c-k-c0xffffffff-no-rj-mo';
 
-const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, description, style}) => {
-  const playerRef = useRef(null);
+interface Props {
+  style?: ViewStyle;
+  streamUri: string;
+  mediaId: string;
+  title: string;
+  backgroundImage?: string;
+  autoStart: boolean;
+}
 
-  const showStatusBar = () => {
-    StatusBar.setHidden(false, true);
+const JWPlayerNative: React.FC<Props> = (props) => {
+  const {style, streamUri, mediaId, title, backgroundImage, autoStart} = props;
+  const playerRef = useRef<JWPlayer>(null);
+
+  const showStatusBar = useCallback(() => {
+    StatusBar.setHidden(false, 'slide');
     StatusBar.setBarStyle('dark-content', true);
-  };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -25,77 +34,77 @@ const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, d
       if (Platform.OS === 'android') {
         showStatusBar();
       }
-
       sendClose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const image = backgroundImage ? backgroundImage : DEFAULT_BACKGROUND_IMAGE;
+  const sendPlay = useCallback(() => {
+    console.log('JWPlayer event: play');
+    playerRef.current?.position().then((pos) => {
+      Gemius.sendPlay(mediaId, pos ? pos : 0);
+      console.log('play sent');
+    });
+  }, [playerRef, mediaId]);
 
-  const createPlaylistItem = () => {
+  const sendPause = useCallback(() => {
+    console.log('JWPlayer event: pause');
+    playerRef.current?.position().then((pos) => {
+      Gemius.sendPause(mediaId, pos ? pos : 0);
+      console.log('pause sent');
+    });
+  }, [playerRef, mediaId]);
+
+  const sendClose = useCallback(() => {
+    console.log('JWPlayer event: close');
+    playerRef.current?.position().then((pos) => {
+      Gemius.sendClose(mediaId, pos ? pos : 0);
+      console.log('close sent');
+    });
+  }, [playerRef, mediaId]);
+
+  const sendBuffer = useCallback(() => {
+    console.log('JWPlayer event: buffering');
+    playerRef.current?.position().then((pos) => {
+      Gemius.sendBuffer(mediaId, pos ? pos : 0);
+      console.log('buffering sent');
+    });
+  }, [playerRef, mediaId]);
+
+  const sendComplete = useCallback(() => {
+    console.log('JWPlayer event: complete');
+    playerRef.current?.position().then((pos) => {
+      Gemius.sendComplete(mediaId, pos ? pos : 0);
+      console.log('complete sent');
+    });
+  }, [playerRef, mediaId]);
+
+  const sendSeek = useCallback(
+    (position) => {
+      console.log('JWPlayer event: seek ' + position);
+      Gemius.sendSeek(mediaId, position);
+      console.log('seek sent');
+    },
+    [playerRef, mediaId],
+  );
+
+  const playlistItem = useMemo(() => {
     return {
       //playerStyle: 'lrt',
       title: title,
       mediaId: mediaId,
-      image: image,
-      desc: description,
+      image: backgroundImage ?? DEFAULT_BACKGROUND_IMAGE,
+      desc: undefined,
       time: 0,
       file: streamUri,
-      autostart: autoPlay,
+      autostart: autoStart,
       controls: true,
       repeat: false,
       displayDescription: false,
       displayTitle: false,
       backgroundAudioEnabled: true,
     };
-  };
-
-  const sendPlay = () => {
-    console.log('JWPlayer event: play');
-    playerRef.current?.position().then((pos) => {
-      Gemius.sendPlay(mediaId, pos ? pos : 0);
-      console.log('play sent');
-    });
-  };
-
-  const sendPause = () => {
-    console.log('JWPlayer event: pause');
-    playerRef.current?.position().then((pos) => {
-      Gemius.sendPause(mediaId, pos ? pos : 0);
-      console.log('pause sent');
-    });
-  };
-
-  const sendClose = () => {
-    console.log('JWPlayer event: close');
-    playerRef.current?.position().then((pos) => {
-      Gemius.sendClose(mediaId, pos ? pos : 0);
-      console.log('close sent');
-    });
-  };
-
-  const sendBuffer = () => {
-    console.log('JWPlayer event: buffering');
-    playerRef.current?.position().then((pos) => {
-      Gemius.sendBuffer(mediaId, pos ? pos : 0);
-      console.log('buffering sent');
-    });
-  };
-
-  const sendComplete = () => {
-    console.log('JWPlayer event: complete');
-    playerRef.current?.position().then((pos) => {
-      Gemius.sendComplete(mediaId, pos ? pos : 0);
-      console.log('complete sent');
-    });
-  };
-
-  const sendSeek = (position) => {
-    console.log('JWPlayer event: seek ' + position);
-    Gemius.sendSeek(mediaId, position);
-    console.log('seek sent');
-  };
+  }, [title, mediaId, streamUri, autoStart, backgroundImage]);
 
   return (
     <View style={[styles.htmlContainer, style]}>
@@ -103,7 +112,7 @@ const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, d
         ref={playerRef}
         style={styles.flex}
         //playerStyle="lrt"
-        playlistItem={createPlaylistItem()}
+        playlistItem={playlistItem}
         nativeFullScreen={true}
         nextUpDisplay={false}
         //landscapeOnFullScreen={true}
@@ -113,11 +122,13 @@ const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, d
         onPlay={() => sendPlay()}
         onPause={() => sendPause()}
         onSeeked={(e) => {
+          console.log('onSeekedEvent', e);
           if (Platform.OS === 'android') {
             sendSeek(e.nativeEvent.position);
           }
         }}
         onSeek={(e) => {
+          console.log('onSeekEvent', e);
           if (Platform.OS === 'ios') {
             sendSeek(e.nativeEvent.offset);
           }
@@ -126,7 +137,7 @@ const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, d
         onComplete={() => sendComplete()}
         onFullScreen={() => {
           if (Platform.OS === 'android') {
-            StatusBar.setHidden(true, true);
+            StatusBar.setHidden(true, 'slide');
           }
         }}
         onFullScreenExit={() => {
@@ -139,20 +150,11 @@ const JWPlayerNative = ({streamUri, mediaId, autoPlay, title, backgroundImage, d
   );
 };
 
-JWPlayerNative.propTypes = {
-  autoPlay: PropTypes.bool,
-  streamUri: PropTypes.string,
-  mediaId: PropTypes.string,
-  title: PropTypes.string,
-  backgroundImage: PropTypes.string,
-  description: PropTypes.string,
-};
+export default JWPlayerNative;
 
 JWPlayerNative.defaultProps = {
-  autoPlay: true,
+  autoStart: true,
 };
-
-export default JWPlayerNative;
 
 const styles = StyleSheet.create({
   flex: {

@@ -10,7 +10,7 @@ interface Props {
   source: {
     uri?: string;
   };
-  useFastImage: boolean;
+  useFastImage?: boolean;
 }
 
 const ProgressiveImage: React.FC<Props> = ({style, thumbnailSource, source, useFastImage}) => {
