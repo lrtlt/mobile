@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {View, Dimensions, Animated, StyleSheet, ListRenderItemInfo} from 'react-native';
+import {View, Animated, StyleSheet, ListRenderItemInfo, useWindowDimensions} from 'react-native';
 import Header from './header/Header';
 import {getOrientation, getSmallestDim} from '../../util/UI';
 import {
@@ -31,8 +31,9 @@ import {useTheme} from '../../Theme';
 import {ArticleContent} from '../../api/Types';
 import AudioContent from './audioContent/AudioContent';
 
-const getContentWidth = () => {
-  return Dimensions.get('screen').width - 12 * 2;
+export type ArticleSelectableItem = {
+  type: 'photo' | 'article';
+  item: any;
 };
 
 const getItemKey = (item: ArticleContentItem, index: number) => {
@@ -46,12 +47,15 @@ const getItemKey = (item: ArticleContentItem, index: number) => {
 
 interface Props {
   article: ArticleContent;
-  itemPressHandler: (item: {type: 'photo' | 'article'; item: any}) => void;
+  itemPressHandler: (item: ArticleSelectableItem) => void;
 }
 
 const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) => {
   const [isTextToSpeechPlaying, setTextToSpeechPlaying] = useState(false);
   const {colors} = useTheme();
+
+  const {width: screenWidth} = useWindowDimensions();
+  const contentWidth = screenWidth - 12 * 2;
 
   const articleData = useMemo(() => compose(article), [article]);
   console.log('composition', articleData);
@@ -79,7 +83,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
               photo={data.photo}
               progressive={true}
               imageAspectRatio={1.5}
-              expectedWidth={getContentWidth()}
+              expectedWidth={contentWidth}
             />
           </TouchableDebounce>
         );
@@ -125,7 +129,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
         return (
           <ArticleGallery
             data={data.photos}
-            expectedWidth={getContentWidth()}
+            expectedWidth={contentWidth}
             itemSelectHandler={itemPressHandler}
           />
         );
@@ -170,7 +174,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
         }
       }
     },
-    [isTextToSpeechPlaying],
+    [contentWidth, isTextToSpeechPlaying, itemPressHandler],
   );
 
   const {onScroll, containerPaddingTop, scrollIndicatorInsetTop} = useCollapsibleHeader({
@@ -194,7 +198,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
         showsVerticalScrollIndicator={false}
         renderItem={renderItem}
         removeClippedSubviews={false}
-        keyExtractor={(item, index) => getItemKey(item, index)}
+        keyExtractor={useCallback((item, index) => getItemKey(item, index), [])}
       />
     </SafeAreaView>
   );
