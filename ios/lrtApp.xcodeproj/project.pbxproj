@@ -672,10 +672,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-lrtApp-lrtAppTests/Pods-lrtApp-lrtAppTests-frameworks.sh",
 				"${PODS_ROOT}/JWPlayer-SDK/JWPlayer_iOS_SDK.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignal/OneSignal.framework/OneSignal",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JWPlayer_iOS_SDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneSignal.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -690,10 +692,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-lrtApp/Pods-lrtApp-frameworks.sh",
 				"${PODS_ROOT}/JWPlayer-SDK/JWPlayer_iOS_SDK.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OneSignal/OneSignal.framework/OneSignal",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JWPlayer_iOS_SDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneSignal.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

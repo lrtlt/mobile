@@ -387,6 +387,7 @@ PODS:
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - OneSignal (3.2.3)
+  - OneSignalXCFramework (3.4.4)
   - OpenSSL-Universal (1.0.2.20):
     - OpenSSL-Universal/Static (= 1.0.2.20)
   - OpenSSL-Universal/Static (1.0.2.20)
@@ -564,10 +565,10 @@ PODS:
     - google-cast-sdk (~> 4.4.5)
     - JWPlayer-SDK
     - React
-  - react-native-onesignal (4.0.5):
-    - OneSignal (= 3.2.3)
+  - react-native-onesignal (4.1.1):
+    - OneSignalXCFramework (= 3.4.4)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-pager-view (5.1.9):
+  - react-native-pager-view (5.1.10):
     - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
@@ -774,6 +775,7 @@ SPEC REPOS:
     - libwebp
     - nanopb
     - OneSignal
+    - OneSignalXCFramework
     - OpenSSL-Universal
     - PromisesObjC
     - Protobuf
@@ -909,6 +911,7 @@ SPEC CHECKSUMS:
   libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OneSignal: 6f152411fc436071461af3514b58731fd8e38b9f
+  OneSignalXCFramework: eaf286b7438aa1f030f03e5fa9f1c79ede5d8f04
   OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
@@ -924,8 +927,8 @@ SPEC CHECKSUMS:
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-gemius-plugin: 4286c513d65942e7602da9555c95584b24922a5e
   react-native-jw-media-player: 24f199494bb5041d1c1ed83e8831cbf84797ba5a
-  react-native-onesignal: e071e143c92345aaccddaa7d9f49ef22952994e8
-  react-native-pager-view: 14653de580178af7e65aa7e3fa08b4f243c86d4d
+  react-native-onesignal: 2a7c3a5f2aa1c599d94cda6cc583205e1548828d
+  react-native-pager-view: 967d50ce0f1b72e434a2d9f3b739ddbf7d5bbf83
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-webview: 4c85a3e5de574ee8c2c0985b4bebbdd240f49304
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
