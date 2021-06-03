@@ -34,6 +34,7 @@ const WeatherScreen: React.FC<Props> = ({navigation}) => {
     navigation.setOptions({
       headerTitle: strings.weatherScreenTitle,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelectLocation = useCallback((location: ForecastLocation) => {

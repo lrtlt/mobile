@@ -1,4 +1,3 @@
-import {FetchMenuItemsResultAction} from '.';
 import {
   AudiotekaResponse,
   CategoryArticlesResponse,

@@ -10,7 +10,7 @@ interface OpusPaylistListProps {
   currentSong: string;
 }
 
-const OpusPaylistList: React.FC<OpusPaylistListProps> = ({currentSong, items}) => {
+const OpusPaylistList: React.FC<OpusPaylistListProps> = ({items}) => {
   const {colors} = useTheme();
 
   const keyExtractor = useCallback((item: OpusPlayListItem, index: number) => {
@@ -34,7 +34,7 @@ const OpusPaylistList: React.FC<OpusPaylistListProps> = ({currentSong, items}) =
   return (
     <View style={{...styles.container, borderColor: colors.border, backgroundColor: colors.background}}>
       <FlatList
-        style={{flex: 1}}
+        style={styles.flex}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         data={items}
@@ -53,6 +53,9 @@ const OpusPaylistList: React.FC<OpusPaylistListProps> = ({currentSong, items}) =
 export default OpusPaylistList;
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     marginTop: 16,

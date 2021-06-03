@@ -11,6 +11,7 @@ const MediaIndicator: React.FC<Props> = ({style, size}) => {
   const {colors} = useTheme();
   return (
     <View
+      // eslint-disable-next-line react-native/no-inline-styles
       style={{
         width: size === 'small' ? 36 : 48,
         height: size === 'small' ? 36 : 48,

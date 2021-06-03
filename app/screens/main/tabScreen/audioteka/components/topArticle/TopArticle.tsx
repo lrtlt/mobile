@@ -22,7 +22,7 @@ const TopArticle: React.FC<TopArticleProps> = ({article}) => {
 
   const onPressHandler = useCallback(() => {
     navigation.navigate('Article', {articleId: article.id});
-  }, [article]);
+  }, [article.id, navigation]);
 
   return (
     <TouchableDebounce debounceTime={500} onPress={onPressHandler}>

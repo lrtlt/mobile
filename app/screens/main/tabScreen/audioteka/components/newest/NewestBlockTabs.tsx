@@ -1,7 +1,8 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {AudiotekaNewest, AudiotekaNewestCategory} from '../../../../../../api/Types';
 import {Text, TouchableDebounce} from '../../../../../../components';
+import {themeLight} from '../../../../../../Theme';
 
 interface Props {
   data: AudiotekaNewest;
@@ -24,7 +25,7 @@ const NewestBlockTabs: React.FC<Props> = ({data, onCategorySelected}) => {
           }}
         />
       )),
-    [data.categories, selectedIndex],
+    [data.categories, onCategorySelected, selectedIndex],
   );
 
   return (
@@ -53,7 +54,12 @@ const Tab: React.FC<TabProps> = ({category, isSelected, onPress}) => {
           ...styles.tabContainer,
           backgroundColor: isSelected ? category['background-color-active'] : category['background-color'],
         }}>
-        <Text numberOfLines={1} style={{...styles.tabText, color: isSelected ? 'white' : '#121212'}}>
+        <Text
+          numberOfLines={1}
+          style={{
+            ...styles.tabText,
+            color: isSelected ? themeLight.colors.onPrimary : themeLight.colors.text,
+          }}>
           {category.title}
         </Text>
       </View>

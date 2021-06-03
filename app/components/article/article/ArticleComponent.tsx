@@ -8,7 +8,7 @@ import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 import {CameraIcon, MicIcon} from '../../svg';
 
 import {getImageSizeForWidth, buildImageUri, buildArticleImageUri} from '../../../util/ImageUtil';
-import {useTheme} from '../../../Theme';
+import {themeLight, useTheme} from '../../../Theme';
 import TextComponent from '../../text/Text';
 import {Article} from '../../../../Types';
 import ArticleBadges from './ArticleBadges';
@@ -54,7 +54,7 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
     <MediaIndicator style={style.mediaIndicator} size={styleType === 'single' ? 'big' : 'small'} />
   );
 
-  const mediaIcon = Boolean(article.is_audio) ? (
+  const mediaIcon = article.is_audio ? (
     <View style={style.mediaIconContainer}>
       <MicIcon size={18} />
     </View>
@@ -65,12 +65,12 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
   ) : undefined;
 
   const mediaDuration = Boolean(article.media_duration) && (
-    <TextComponent style={{...style.mediaDurationText, color: '#333'}}>
+    <TextComponent style={{...style.mediaDurationText, color: themeLight.colors.text}}>
       {article.media_duration}
     </TextComponent>
   );
 
-  let imgUri = undefined;
+  let imgUri;
   if (dimensions.width > 0) {
     if (article.img_path_prefix && article.img_path_postfix) {
       imgUri = buildImageUri(
@@ -88,11 +88,11 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
       <TouchableDebounce debounceTime={500} onPress={onPressHandler}>
         <View>
           <View
+            // eslint-disable-next-line react-native/no-inline-styles
             style={{
               ...style.imageContainer,
               backgroundColor: colors.greyBackground,
               borderRadius: article.is_audio ? 8 : 0,
-              overflow: 'hidden',
             }}
             onLayout={(event) => {
               const {width, height} = event.nativeEvent.layout;
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     justifyContent: 'center',
     aspectRatio: 3 / 2,
+    overflow: 'hidden',
   },
   categoryTitle: {
     fontSize: 13.5,

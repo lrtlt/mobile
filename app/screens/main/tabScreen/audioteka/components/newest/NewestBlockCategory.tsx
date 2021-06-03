@@ -15,9 +15,12 @@ interface Props {
 const NewestBlockCategory: React.FC<Props> = ({data}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
-  const onArticlePressHandler = useCallback((article: Article) => {
-    navigation.navigate('Article', {articleId: article.id});
-  }, []);
+  const onArticlePressHandler = useCallback(
+    (article: Article) => {
+      navigation.navigate('Article', {articleId: article.id});
+    },
+    [navigation],
+  );
 
   const content = useMemo(() => {
     const articles = formatArticles(-1, data.articles);
@@ -28,7 +31,7 @@ const NewestBlockCategory: React.FC<Props> = ({data}) => {
         onArticlePress={onArticlePressHandler}
       />
     ));
-  }, [data.articles]);
+  }, [data.articles, onArticlePressHandler]);
 
   return <View style={styles.container}>{content}</View>;
 };

@@ -1,9 +1,8 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {View, RefreshControl, Button, StyleSheet, ListRenderItemInfo, FlatList} from 'react-native';
+import {View, RefreshControl, Button, StyleSheet, FlatList} from 'react-native';
 import {ArticleRow, ListLoader, DefaultSectionHeader, ScreenLoader, Text} from '../../../../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchCategory, refreshCategory} from '../../../../redux/actions';
-import {getOrientation} from '../../../../util/UI';
 import {ARTICLES_PER_PAGE_COUNT, GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
@@ -27,7 +26,7 @@ const CategoryTabScreen: React.FC<Props> = ({categoryId, categoryTitle, isCurren
   const listRef = useRef<FlatList>(null);
 
   const category = useSelector(selectCategoryScreenState(categoryId, categoryTitle));
-  const {isError, articles, isFetching, isRefreshing, lastFetchTime, title, nextPage} = category;
+  const {isError, articles, isFetching, isRefreshing, title, nextPage} = category;
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
@@ -40,7 +39,7 @@ const CategoryTabScreen: React.FC<Props> = ({categoryId, categoryTitle, isCurren
   }, []);
 
   useEffect(() => {
-    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (data) => {
+    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {
       if (isCurrent) {
         refresh();
       }
@@ -53,11 +52,20 @@ const CategoryTabScreen: React.FC<Props> = ({categoryId, categoryTitle, isCurren
   const refresh = useCallback(() => {
     listRef.current?.scrollToOffset({offset: 0});
     dispatch(refreshCategory(categoryId, ARTICLES_PER_PAGE_COUNT));
-  }, [listRef]);
+  }, [categoryId, dispatch]);
 
   const callApi = useCallback(() => {
     dispatch(fetchCategory(categoryId, ARTICLES_PER_PAGE_COUNT, nextPage));
-  }, [categoryId, nextPage]);
+  }, [categoryId, dispatch, nextPage]);
+
+  const onListEndReachedHandler = useCallback(() => {
+    //When nextPage === null the end is reached.
+    if (isFetching === false && nextPage !== null) {
+      callApi();
+    }
+  }, [callApi, isFetching, nextPage]);
+
+  const keyExtractor = useCallback((item, index) => String(index) + String(item), []);
 
   if (isError === true) {
     return (
@@ -83,18 +91,9 @@ const CategoryTabScreen: React.FC<Props> = ({categoryId, categoryTitle, isCurren
         data={articles}
         ListHeaderComponent={showTitle ? <DefaultSectionHeader title={title} /> : undefined}
         windowSize={4}
-        extraData={{
-          orientation: getOrientation(),
-          lastFetchTime,
-        }}
-        onEndReachedThreshold={0.2}
+        onEndReachedThreshold={0.3}
         ListFooterComponent={isFetching ? <ListLoader /> : null}
-        onEndReached={() => {
-          //When nextPage === null the end is reached.
-          if (isFetching === false && nextPage !== null) {
-            callApi();
-          }
-        }}
+        onEndReached={onListEndReachedHandler}
         renderItem={(item) => {
           return (
             <ArticleRow
@@ -105,7 +104,7 @@ const CategoryTabScreen: React.FC<Props> = ({categoryId, categoryTitle, isCurren
         }}
         refreshControl={<RefreshControl refreshing={isRefreshing === true} onRefresh={refresh} />}
         removeClippedSubviews={false}
-        keyExtractor={(item, index) => String(index) + String(item)}
+        keyExtractor={keyExtractor}
       />
     </View>
   );

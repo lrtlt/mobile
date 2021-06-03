@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Button, ActivityIndicator, StyleSheet, ListRenderItemInfo} from 'react-native';
+import {View, Button, ActivityIndicator, StyleSheet} from 'react-native';
 import {ArticleRow, Text} from '../../components';
 import {getOrientation} from '../../util/UI';
 import {fetchArticlesByTag} from '../../api';
@@ -43,6 +43,7 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
     });
 
     startLoading();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startLoading = () => {
@@ -75,6 +76,7 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
         });
       })
       .catch((error) => {
+        console.log('Error:', error);
         setState({
           ...state,
           isFetching: false,

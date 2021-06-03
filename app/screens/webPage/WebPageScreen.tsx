@@ -20,6 +20,7 @@ const WebPageScreen: React.FC<Props> = ({route, navigation}) => {
     navigation.setOptions({
       headerTitle: title || '',
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

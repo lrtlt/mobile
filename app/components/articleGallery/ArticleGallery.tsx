@@ -5,7 +5,11 @@ import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import {buildArticleImageUri, getImageSizeForWidth} from '../../util/ImageUtil';
 import {ArticlePhoto as ArticlePhotoType} from '../../api/Types';
 
-const PhotoComponent = (photo: ArticlePhotoType, width: number, pressHandler?: (photo: any) => void) => {
+const PhotoComponent = (
+  photo: ArticlePhotoType,
+  width: number,
+  pressHandler?: (selectedPhoto: any) => void,
+) => {
   let img;
   if (photo) {
     const imgSize = getImageSizeForWidth(width);
@@ -20,7 +24,7 @@ const PhotoComponent = (photo: ArticlePhotoType, width: number, pressHandler?: (
 
   const onPressHandler = useCallback(() => {
     pressHandler && pressHandler({type: 'photo', item: photo});
-  }, []);
+  }, [photo, pressHandler]);
 
   return (
     <View style={styles.imageContainer}>
@@ -34,12 +38,12 @@ const PhotoComponent = (photo: ArticlePhotoType, width: number, pressHandler?: (
 const PhotoWithOverlayComponent = (
   photo: ArticlePhotoType,
   width: number,
-  pressHandler: (photo: any) => void,
+  pressHandler: (selectedPhoto: any) => void,
   count: number,
 ) => {
   const onPressHandler = useCallback(() => {
     pressHandler && pressHandler({type: 'photo', item: photo});
-  }, []);
+  }, [photo, pressHandler]);
 
   return (
     <TouchableDebounce onPress={onPressHandler}>

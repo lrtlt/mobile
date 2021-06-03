@@ -52,7 +52,7 @@ const NavigatorComponent = () => {
         screen: currentScreen,
         params: currentRoute?.params && JSON.stringify(currentRoute.params),
       };
-      console.log(`Current route:`, currentRoute);
+      console.log('Current route:', currentRoute);
       crashlytics().log(`Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
       Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, params);
     }

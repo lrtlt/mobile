@@ -26,22 +26,22 @@ interface Props {
   onChannelPress: (channel: ChannelDataType) => void;
 }
 
-const ScrollingChannels: React.FC<Props> = (props) => {
+const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
   const {colors, strings} = useTheme();
   const channels = useSelector(selectHomeChannels, checkEqual);
 
   const onChannelPressHandler = useCallback(
     (channel: TVChannel) => {
-      props.onChannelPress({type: CHANNEL_TYPE_DEFAULT, payload: channel});
+      onChannelPress({type: CHANNEL_TYPE_DEFAULT, payload: channel});
     },
-    [props.onChannelPress],
+    [onChannelPress],
   );
 
   const onLiveItemPressHandler = useCallback(
     (liveItem: LiveChannel) => {
-      props.onChannelPress({type: CHANNEL_TYPE_LIVE, payload: liveItem});
+      onChannelPress({type: CHANNEL_TYPE_LIVE, payload: liveItem});
     },
-    [props.onChannelPress],
+    [onChannelPress],
   );
 
   if (!channels || channels.items.length === 0) {

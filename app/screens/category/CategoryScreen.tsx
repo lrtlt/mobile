@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -22,7 +22,7 @@ const CategoryScreen: React.FC<Props> = ({navigation, route}) => {
     navigation.setOptions({
       headerTitle: name,
     });
-  }, []);
+  }, [name, navigation]);
 
   return (
     <SafeAreaView style={styles.screen} edges={['left', 'right']}>

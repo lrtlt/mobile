@@ -39,7 +39,7 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
   }, []);
 
   useEffect(() => {
-    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (data) => {
+    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {
       if (isCurrent) {
         listRef.current?.scrollToIndex({
           animated: true,
@@ -88,10 +88,13 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
       case 'slug': {
         if (item.articles_list) {
           return <CategoryBlock data={item} />;
+        } else {
+          console.warn('No articles in audioteka slug category');
+          return <View />;
         }
       }
       default: {
-        console.warn('Uknown list item type: ' + item.template);
+        console.warn('Uknown list item: ' + item);
         return <View />;
       }
     }

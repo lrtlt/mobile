@@ -14,7 +14,6 @@ import {
   API_POPULAR_RESULT,
   FETCH_POPULAR,
   REFRESH_POPULAR,
-  API_MENU_ITEMS_RESULT,
   FETCH_MEDIATEKA,
   API_MEDIATEKA_RESULT,
   API_MEDIATEKA_ERROR,
@@ -31,17 +30,9 @@ import {
 } from '../../constants';
 
 import {formatArticles as formatArticleBlock} from '../../util/articleFormatters';
-import {
-  AudiotekaResponse,
-  HomeChannels,
-  HomeDataResponse,
-  MenuItemCategory,
-  MenuItemPage,
-  MenuResponse,
-} from '../../api/Types';
+import {AudiotekaResponse, HomeChannels, HomeDataResponse} from '../../api/Types';
 import {Article} from '../../../Types';
 import {ArticlesActionType} from '../actions';
-import {castArray} from 'lodash';
 
 type BaseBlockState = {
   isFetching: boolean;

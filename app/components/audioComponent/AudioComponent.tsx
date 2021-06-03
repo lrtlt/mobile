@@ -24,7 +24,9 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
 }) => {
   useEffect(() => {
     Gemius.setProgramData(mediaId, title, 0, false);
-  }, [mediaId]);
+  }, [mediaId, title]);
+
+  const windowWidth = useWindowDimensions().width;
 
   return (
     <View style={style}>
@@ -34,9 +36,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
         title={title}
         autoStart={autoStart}
         backgroundImage={
-          cover
-            ? buildArticleImageUri(getImageSizeForWidth(useWindowDimensions().width), cover.path)
-            : undefined
+          cover ? buildArticleImageUri(getImageSizeForWidth(windowWidth), cover.path) : undefined
         }
         {...restProps}
       />

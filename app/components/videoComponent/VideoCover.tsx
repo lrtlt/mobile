@@ -24,8 +24,10 @@ const VideoCover: React.FC<VideoCoverType> = (props) => {
     );
   }, []);
 
+  const windowWidth = useWindowDimensions().width;
+
   if (props) {
-    const imgSize = getImageSizeForWidth(useWindowDimensions().width);
+    const imgSize = getImageSizeForWidth(windowWidth);
     if (isArticlePhoto(props)) {
       return renderImage(
         buildArticleImageUri(imgSize, props.path),

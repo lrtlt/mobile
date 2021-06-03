@@ -1,17 +1,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {
-  VideoComponent,
-  ProgramItem,
-  OpusNowPlaying,
-  ScrollingChannels,
-  ScreenLoader,
-  ScreenError,
-  Text,
-} from '../../components';
+import {ScrollingChannels, ScreenLoader, ScreenError} from '../../components';
 import {fetchChannel} from '../../api';
-import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
-import {getIconForChannel, getSmallestDim} from '../../util/UI';
+import {ScrollView} from 'react-native-gesture-handler';
+import {getSmallestDim} from '../../util/UI';
 
 import {
   CHANNEL_TYPE_DEFAULT,
@@ -24,9 +16,10 @@ import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RouteProp} from '@react-navigation/native';
 import {MainStackParamList} from '../../navigation/MainStack';
-import {StackNavigationProp, useCardAnimation} from '@react-navigation/stack';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {ChannelResponse} from '../../api/Types';
 import {ChannelDataType} from '../../components/scrollingChannels/ScrollingChannels';
+import ChannelComponent from './ChannelComponent';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Channel'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Channel'>;
@@ -41,28 +34,24 @@ type ScreenState = {
   loadingState: typeof STATE_LOADING | typeof STATE_ERROR | typeof STATE_READY;
 };
 
-const PROGRAM_ITEMS_VISIBLE = 2;
-
 const STATE_LOADING = 'loading';
 const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
 const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
-  const {colors, strings} = useTheme();
-
   const [state, setState] = useState<ScreenState>({
     channel: undefined,
     loadingState: STATE_LOADING,
   });
-
   const [selectedChannel, setSelectedChannel] = useState(route.params.channelId);
+
+  const {strings} = useTheme();
 
   useEffect(() => {
     navigation.setOptions({
       headerTitle: strings.channelScreenTitle,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [navigation, strings.channelScreenTitle]);
 
   useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
@@ -87,7 +76,6 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
     };
 
     loadChannel();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChannel]);
 
   const onChannelPressHandler = useCallback((channel: ChannelDataType) => {
@@ -108,69 +96,6 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
       }
     }
   }, []);
-
-  const onProgramPressHandler = useCallback(() => {
-    navigation.navigate('Program');
-  }, []);
-
-  const renderChannelComponent = () => {
-    const {channel_info} = state.channel!;
-
-    const channelIconComponent = getIconForChannel(channel_info.channel, 40);
-
-    const {prog} = state.channel!;
-
-    const programComponent = prog
-      ? prog.map((item, i) => {
-          if (i >= PROGRAM_ITEMS_VISIBLE) {
-            return;
-          }
-
-          let opusNowPlayingComponent;
-          if (i === 0 && channel_info.channel.toLowerCase().includes('opus')) {
-            opusNowPlayingComponent = <OpusNowPlaying />;
-          }
-
-          const marginTop = i > 0 ? 8 : 0;
-          return (
-            <View key={item.time_start + item.title}>
-              <ProgramItem
-                style={{marginTop}}
-                title={item.title}
-                startTime={item.time_start}
-                percent={item.proc}
-              />
-              {opusNowPlayingComponent}
-            </View>
-          );
-        })
-      : undefined;
-
-    return (
-      <View>
-        <View style={styles.playerContainer}>
-          <VideoComponent
-            key={channel_info.stream_embed}
-            style={styles.player}
-            autoPlay={true}
-            backgroundImage={channel_info.player_background_image}
-            isAudioOnly={channel_info.is_radio === 1}
-            title={channel_info.title}
-            streamUrl={channel_info.get_streams_url}
-          />
-        </View>
-        <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>
-          <View style={styles.channelIconHolder}>{channelIconComponent}</View>
-          {programComponent}
-          <TouchableOpacity onPress={onProgramPressHandler}>
-            <Text style={{...styles.fullProgramText, backgroundColor: colors.background}}>
-              {strings.tvProgramButtonText}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
 
   const {loadingState} = state;
 
@@ -194,7 +119,7 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
       break;
     }
     case STATE_READY: {
-      content = renderChannelComponent();
+      content = <ChannelComponent channelData={state.channel!} />;
       break;
     }
   }
@@ -230,37 +155,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
   },
-  playerContainer: {
-    width: '100%',
-    minWidth: '100%',
-    alignItems: 'center',
-    backgroundColor: 'black',
-  },
-  programContainer: {
-    width: '100%',
-    minWidth: '100%',
-    alignItems: 'center',
-    padding: 8,
-    paddingTop: 8,
-  },
   player: {
     width: '100%',
     aspectRatio: VIDEO_ASPECT_RATIO,
     maxHeight: getSmallestDim() - 62,
-  },
-  fullProgramText: {
-    width: '100%',
-    minWidth: '100%',
-    textAlign: 'center',
-    padding: 16,
-    marginTop: 8,
-    fontFamily: 'SourceSansPro-Regular',
-    fontSize: 16,
-  },
-  photo: {
-    width: '100%',
-  },
-  channelIconHolder: {
-    marginVertical: 8,
   },
 });

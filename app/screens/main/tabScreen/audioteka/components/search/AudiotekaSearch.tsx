@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useState} from 'react';
-import {View, StyleSheet, KeyboardAvoidingView} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {SEARCH_TYPE_AUDIO} from '../../../../../../api/Types';
 import {MoreArticlesButton} from '../../../../../../components';
@@ -31,7 +31,7 @@ const AudiotekaSearch: React.FC<AudiotekaSearchProps> = () => {
         },
       },
     });
-  }, [inputValue]);
+  }, [inputValue, navigation]);
 
   return (
     <View style={styles.container}>

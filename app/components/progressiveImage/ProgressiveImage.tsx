@@ -25,7 +25,7 @@ const ProgressiveImage: React.FC<Props> = ({style, thumbnailSource, source, useF
       duration: 150,
       useNativeDriver: true,
     }).start();
-  }, []);
+  }, [thumbnailAnimated]);
 
   const handleMainImageLoad = useCallback(() => {
     Animated.timing(imageAnimated, {
@@ -33,7 +33,7 @@ const ProgressiveImage: React.FC<Props> = ({style, thumbnailSource, source, useF
       duration: 250,
       useNativeDriver: true,
     }).start();
-  }, []);
+  }, [imageAnimated]);
 
   return (
     <View style={style}>

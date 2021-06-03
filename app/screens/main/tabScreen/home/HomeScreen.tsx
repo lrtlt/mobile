@@ -55,7 +55,7 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
   }, []);
 
   useEffect(() => {
-    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (data) => {
+    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {
       if (isCurrent) {
         listRef.current?.scrollToLocation({
           animated: true,
@@ -87,81 +87,87 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
     } else {
       dispatch(fetchHome());
     }
-  }, [type]);
+  }, [dispatch, type]);
 
-  const onCategoryPressHandler = useCallback((category: Category) => {
-    console.log('CategoryPressed', category);
+  const onCategoryPressHandler = useCallback(
+    (category: Category) => {
+      console.log('CategoryPressed', category);
 
-    if (category.is_slug_block === 1) {
-      navigation.navigate('Slug', {
-        name: category.name,
-        slugUrl: category.slug_url,
-      });
-    } else {
-      //TODO update this hardcode later
-      if (category.name === 'Naujienų srautas') {
-        //TODO update this hardcode later
-        dispatch(openCategoryForName('Naujausi'));
+      if (category.is_slug_block === 1) {
+        navigation.navigate('Slug', {
+          name: category.name,
+          slugUrl: category.slug_url,
+        });
       } else {
-        dispatch(openCategoryForName(category.name));
+        //TODO update this hardcode later
+        if (category.name === 'Naujienų srautas') {
+          //TODO update this hardcode later
+          dispatch(openCategoryForName('Naujausi'));
+        } else {
+          dispatch(openCategoryForName(category.name));
+        }
       }
-    }
-  }, []);
+    },
+    [dispatch, navigation],
+  );
 
   const onForecastPressHandler = useCallback(() => {
     navigation.navigate('Weather');
-  }, []);
+  }, [navigation]);
 
-  const renderItem = useCallback((val: any) => {
-    switch (val.item.type) {
-      case LIST_DATA_TYPE_ARTICLES: {
-        const {category} = val.section;
+  const renderItem = useCallback(
+    (val: any) => {
+      switch (val.item.type) {
+        case LIST_DATA_TYPE_ARTICLES: {
+          const {category} = val.section;
 
-        return (
-          <ArticleRow
-            data={val.item.data}
-            onArticlePress={(article) => navigation.navigate('Article', {articleId: article.id})}
-            isSlug={category.is_slug_block}
-          />
-        );
+          return (
+            <ArticleRow
+              data={val.item.data}
+              onArticlePress={(article) => navigation.navigate('Article', {articleId: article.id})}
+              isSlug={category.is_slug_block}
+            />
+          );
+        }
+        case LIST_DATA_TYPE_CHANNELS: {
+          return (
+            <ScrollingChannels
+              onChannelPress={(channel) =>
+                navigation.navigate('Channel', {channelId: channel.payload.channel_id})
+              }
+            />
+          );
+        }
+        case LIST_DATA_TYPE_ARTICLES_FEED: {
+          const article = val.item.data[0];
+          return (
+            <ArticleFeedItem
+              article={article}
+              onPress={() => navigation.navigate('Article', {articleId: article.id})}
+            />
+          );
+        }
+        case LIST_DATA_TYPE_MORE_FOOTER: {
+          const category = val.item.data as Category;
+          return (
+            <MoreArticlesButton
+              backgroundColor={
+                category.is_slug_block || category.template_id === 999 ? colors.slugBackground : undefined
+              }
+              onPress={() => onCategoryPressHandler(val.item.data)}
+            />
+          );
+        }
+        default: {
+          console.warn('Uknown list item type: ' + val.item.type);
+          return <View />;
+        }
       }
-      case LIST_DATA_TYPE_CHANNELS: {
-        return (
-          <ScrollingChannels
-            onChannelPress={(channel) =>
-              navigation.navigate('Channel', {channelId: channel.payload.channel_id})
-            }
-          />
-        );
-      }
-      case LIST_DATA_TYPE_ARTICLES_FEED: {
-        const article = val.item.data[0];
-        return (
-          <ArticleFeedItem
-            article={article}
-            onPress={() => navigation.navigate('Article', {articleId: article.id})}
-          />
-        );
-      }
-      case LIST_DATA_TYPE_MORE_FOOTER: {
-        const category = val.item.data as Category;
-        return (
-          <MoreArticlesButton
-            backgroundColor={
-              category.is_slug_block || category.template_id === 999 ? colors.slugBackground : undefined
-            }
-            onPress={() => onCategoryPressHandler(val.item.data)}
-          />
-        );
-      }
-      default: {
-        console.warn('Uknown list item type: ' + val.item.type);
-        return <View />;
-      }
-    }
-  }, []);
+    },
+    [colors.slugBackground, navigation, onCategoryPressHandler],
+  );
 
-  const renderForecast = () => {
+  const renderForecast = useCallback(() => {
     if (type === ROUTE_TYPE_MEDIA) {
       return null;
     } else {
@@ -171,7 +177,21 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
         </TouchableDebounce>
       );
     }
-  };
+  }, [onForecastPressHandler, type]);
+
+  const keyExtractor = useCallback((item, index) => String(index) + String(item), []);
+
+  const renderSectionHeader = useCallback(
+    ({section}) => {
+      const {category} = section;
+      return category.id === 0 ? (
+        renderForecast()
+      ) : (
+        <SectionHeader category={category} onPress={() => onCategoryPressHandler(category)} />
+      );
+    },
+    [onCategoryPressHandler, renderForecast],
+  );
 
   if (sections.length === 0) {
     return <ScreenLoader />;
@@ -195,14 +215,7 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
           }}
           renderItem={renderItem}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={callApi} />}
-          renderSectionHeader={({section}) => {
-            const {category} = section;
-            return category.id === 0 ? (
-              renderForecast()
-            ) : (
-              <SectionHeader category={category} onPress={() => onCategoryPressHandler(category)} />
-            );
-          }}
+          renderSectionHeader={renderSectionHeader}
           sections={sections}
           removeClippedSubviews={false}
           windowSize={8}
@@ -210,7 +223,7 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
           maxToRenderPerBatch={4}
           initialNumToRender={8}
           stickySectionHeadersEnabled={false}
-          keyExtractor={(item, index) => String(index) + String(item)}
+          keyExtractor={keyExtractor}
         />
       </View>
     </>

@@ -21,7 +21,7 @@ const PodcastListItem: React.FC<Props> = ({style, podcast}) => {
       id: podcast.category_id,
       name: podcast.title,
     });
-  }, [podcast]);
+  }, [navigation, podcast.category_id, podcast.title]);
 
   return (
     <TouchableDebounce debounceTime={500} onPress={onPressHandler}>

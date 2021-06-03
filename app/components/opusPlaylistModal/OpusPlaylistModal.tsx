@@ -45,7 +45,7 @@ const OpusPlaylistModal: React.FC<OpusPlaylistModalProps> = ({visible, currentSo
       backdropOpacity={0.8}
       onBackdropPress={onCancel}
       onBackButtonPress={onCancel}>
-      <View style={{flex: 1}}>
+      <View style={styles.flex}>
         <TouchableOpacity style={{...styles.closeButton, borderColor: colors.border}} onPress={onCancel}>
           <View style={styles.closeButtonContainer}>
             <IconClose size={8} color={colors.textSecondary} />
@@ -63,6 +63,9 @@ const OpusPlaylistModal: React.FC<OpusPlaylistModalProps> = ({visible, currentSo
 export default OpusPlaylistModal;
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   modal: {
     flex: 1,
     borderRadius: 8,

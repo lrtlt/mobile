@@ -22,9 +22,12 @@ const CategoryBlock: React.FC<Props> = ({data}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const title = data.template === 'slug' ? data.slug_title : data.category_title;
 
-  const onArticlePressHandler = useCallback((article: Article) => {
-    navigation.navigate('Article', {articleId: article.id});
-  }, []);
+  const onArticlePressHandler = useCallback(
+    (article: Article) => {
+      navigation.navigate('Article', {articleId: article.id});
+    },
+    [navigation],
+  );
 
   const openCategoryHandler = useCallback(() => {
     if (data.template === 'category') {
@@ -38,7 +41,7 @@ const CategoryBlock: React.FC<Props> = ({data}) => {
         slugUrl: data.slug_url,
       });
     }
-  }, [data]);
+  }, [data, navigation]);
 
   return (
     <View style={styles.container}>

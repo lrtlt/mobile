@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
-import {Route, TabView} from 'react-native-tab-view';
+import {TabView} from 'react-native-tab-view';
 import TabBar from '../main/tabBar/TabBar';
 import CategoryTabScreen from '../main/tabScreen/category/CategoryTabScreen';
 import {RouteProp} from '@react-navigation/native';
@@ -47,9 +47,13 @@ const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
           if (Math.abs(currentRouteIndex - routeIndex) > 0) {
             return <View />;
           } else {
-            const {route} = sceneProps;
+            const {route: sceneRounte} = sceneProps;
             return (
-              <CategoryTabScreen categoryId={route.categoryId} categoryTitle={route.title} showTitle={true} />
+              <CategoryTabScreen
+                categoryId={sceneRounte.categoryId}
+                categoryTitle={sceneRounte.title}
+                showTitle={true}
+              />
             );
           }
         }}

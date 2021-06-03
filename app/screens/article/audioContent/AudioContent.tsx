@@ -43,18 +43,15 @@ const AudioContent: React.FC<AudioContentProps> = ({about_episode, about_show, i
           </Text>
         </TouchableOpacity>
         {about_show && (
-          <>
-            <View style={{width: 32}} />
-            <TouchableOpacity onPress={onShowPressHandler}>
-              <Text
-                style={{
-                  ...(selectedContent === 'show' ? styles.textTitleSelected : styles.textTitle),
-                  color: selectedContent === 'show' ? colors.text : colors.textSecondary,
-                }}>
-                {strings.about_show}
-              </Text>
-            </TouchableOpacity>
-          </>
+          <TouchableOpacity style={styles.aboutShowTextContainer} onPress={onShowPressHandler}>
+            <Text
+              style={{
+                ...(selectedContent === 'show' ? styles.textTitleSelected : styles.textTitle),
+                color: selectedContent === 'show' ? colors.text : colors.textSecondary,
+              }}>
+              {strings.about_show}
+            </Text>
+          </TouchableOpacity>
         )}
       </View>
       {selectedContent === 'show' && image && (
@@ -101,7 +98,9 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 130,
-    maxHeight: 200,
-    borderRadius: 8,
+    maxHeight: 170,
+  },
+  aboutShowTextContainer: {
+    marginLeft: 32,
   },
 });

@@ -85,7 +85,7 @@ const JWPlayerNative: React.FC<Props> = (props) => {
       Gemius.sendSeek(mediaId, position);
       console.log('seek sent');
     },
-    [playerRef, mediaId],
+    [mediaId],
   );
 
   const playlistItem = useMemo(() => {

@@ -5,14 +5,14 @@ import firestore from '@react-native-firebase/firestore';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 import Text from '../text/Text';
-import {useNavigation} from '@react-navigation/core';
 import OpusPlaylistModal from '../opusPlaylistModal/OpusPlaylistModal';
+
+const OPUS_COLOR = 'rgba(242,177,46,.3)';
 
 const OpusNowComponent: React.FC = () => {
   const [currentSong, setCurrentSong] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
-  const navigation = useNavigation();
   const {colors, strings} = useTheme();
 
   useEffect(() => {
@@ -42,11 +42,11 @@ const OpusNowComponent: React.FC = () => {
   return (
     <>
       <View>
-        <View style={{...styles.container, backgroundColor: 'rgba(242,177,46,.3)'}}>
+        <View style={{...styles.container, backgroundColor: OPUS_COLOR}}>
           <TextComponent style={styles.title}>Eteryje</TextComponent>
           <TextComponent style={styles.song}>{currentSong.replace('Eteryje: ', '')}</TextComponent>
           <TouchableOpacity onPress={previousSongsPressHandler}>
-            <View style={{...styles.previousSongsButton, backgroundColor: 'rgba(242,177,46,.3)'}}>
+            <View style={{...styles.previousSongsButton, backgroundColor: OPUS_COLOR}}>
               <View style={styles.iconContainer}>
                 <IconNote size={12} color={colors.text} />
               </View>

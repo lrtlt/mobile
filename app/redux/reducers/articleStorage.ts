@@ -1,7 +1,7 @@
 import {ADD_ARTICLE_TO_HISTORY, SAVE_ARTICLE, REMOVE_ARTICLE} from '../actions/actionTypes';
 import {ARTICLE_HISTORY_COUNT, ARTICLE_SAVED_MAX_COUNT} from '../../constants';
 import {ArticleStorageActionType} from '../actions';
-import {ArticleContent, ArticleContentMedia, isMediaArticle} from '../../api/Types';
+import {ArticleContent, isMediaArticle} from '../../api/Types';
 
 export type SavedArticle = {
   id: number;
