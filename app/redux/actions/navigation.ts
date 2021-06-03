@@ -4,7 +4,6 @@ import {
   OPEN_CATEGORY_FOR_NAME,
   SET_SEARCH_FILTER,
   RESET_SEARCH_FILTER,
-  OPEN_LINKING_URL,
   API_MENU_ITEMS_RESULT,
   API_MENU_ITEMS_ERROR,
 } from './actionTypes';
@@ -56,15 +55,6 @@ export const resetSearchFilter = (): ResetSearchFilterAction => ({
   type: RESET_SEARCH_FILTER,
 });
 
-export type OpenLinkingUrlAction = {
-  type: typeof OPEN_LINKING_URL;
-  url: string;
-};
-export const openLinkingUrl = (url: string): OpenLinkingUrlAction => ({
-  type: OPEN_LINKING_URL,
-  url,
-});
-
 export type NavigationActionType =
   | FetchMenuItemsAction
   | FetchMenuItemsResultAction
@@ -72,7 +62,6 @@ export type NavigationActionType =
   | OpenCategoryByNameAction
   | SetSearchFilterAction
   | ResetSearchFilterAction
-  | OpenLinkingUrlAction
   | FetchHomeAction
   | FetchHomeResultAction
   | FetchHomeErrorAction;

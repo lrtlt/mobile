@@ -14,12 +14,8 @@ import {
 import Gemius from 'react-native-gemius-plugin';
 import SettingsProvider from './app/settings/SettingsProvider';
 import AppBackground from './app/components/appBackground/AppBackground';
-import {useDispatch} from 'react-redux';
-import {openLinkingUrl} from './app/redux/actions/navigation';
 
 const App = () => {
-  const dispatch = useDispatch();
-
   //#region Setup OneSignal
   useEffect(() => {
     OneSignal.setAppId(ONE_SIGNAL_APP_ID);
@@ -29,12 +25,7 @@ const App = () => {
 
     OneSignal.setNotificationOpenedHandler((openedEvent) => {
       console.log('OneSignal: notification opened:', openedEvent);
-      const {launchURL} = openedEvent.notification;
-      if (launchURL) {
-        dispatch(openLinkingUrl(launchURL));
-      }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   //#endregion
 

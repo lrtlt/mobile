@@ -8,11 +8,9 @@ import {
   FETCH_HOME,
   SET_SEARCH_FILTER,
   RESET_SEARCH_FILTER,
-  OPEN_LINKING_URL,
 } from '../actions/actionTypes';
 import {EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 import {EventRegister} from 'react-native-event-listeners';
-import {Linking} from 'react-native';
 import {NavigationActionType} from '../actions';
 import {
   MenuItem,
@@ -40,7 +38,6 @@ export type NavigationState = {
   isReady: boolean;
   isError: boolean;
   filter: SearchFilter;
-  linkingOpenUrl?: string;
 };
 
 const initialState: NavigationState = {
@@ -55,7 +52,6 @@ const initialState: NavigationState = {
     section: '',
     days: '',
   },
-  linkingOpenUrl: undefined,
 };
 
 const reducer = (state = initialState, action: NavigationActionType): NavigationState => {
@@ -92,18 +88,11 @@ const reducer = (state = initialState, action: NavigationActionType): Navigation
       };
     }
     case API_HOME_RESULT:
-      if (state.linkingOpenUrl) {
-        if (Linking.canOpenURL(state.linkingOpenUrl)) {
-          Linking.openURL(state.linkingOpenUrl);
-        }
-      }
-
       return {
         ...state,
         isLoading: false,
         isError: false,
         isReady: true,
-        linkingOpenUrl: undefined,
       };
     case API_HOME_ERROR:
       return {
@@ -141,20 +130,7 @@ const reducer = (state = initialState, action: NavigationActionType): Navigation
       }
       return state;
     }
-    case OPEN_LINKING_URL: {
-      const {url} = action;
-      if (state.isReady) {
-        if (Linking.canOpenURL(url)) {
-          Linking.openURL(url);
-        }
-        return state;
-      } else {
-        return {
-          ...state,
-          linkingOpenUrl: url,
-        };
-      }
-    }
+
     default:
       return state;
   }
