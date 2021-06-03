@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {setSearchFilter} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
@@ -17,6 +17,8 @@ import {
   SEARCH_TYPE_VIDEO_SUBTITLES,
 } from '../../api/Types';
 import {checkEqual} from '../../util/LodashEqualityCheck';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import CheckBox from '../checkBox/CheckBox';
 
 const SearchFilterDrawer: React.FC = () => {
   const {colors} = useTheme();
@@ -27,27 +29,76 @@ const SearchFilterDrawer: React.FC = () => {
   const {days, section, type} = filter;
 
   const selectType = useCallback(
-    (type: SearchFilterTypes) => {
-      dispatch(setSearchFilter({...filter, type}));
+    (selectedType: SearchFilterTypes) => {
+      dispatch(setSearchFilter({...filter, type: selectedType}));
     },
-    [filter],
+    [dispatch, filter],
   );
 
   const selectSection = useCallback(
-    (section: string) => {
-      dispatch(setSearchFilter({...filter, section}));
+    (selectedSection: string) => {
+      dispatch(setSearchFilter({...filter, section: selectedSection}));
     },
-    [filter],
+    [dispatch, filter],
   );
 
   const selectDays = useCallback(
-    (days: '' | '1' | '7' | '30') => {
-      dispatch(setSearchFilter({...filter, days}));
+    (selecedDays: '' | '1' | '7' | '30') => {
+      dispatch(setSearchFilter({...filter, days: selecedDays}));
     },
-    [filter],
+    [dispatch, filter],
   );
 
-  const renderTypeSelection = useCallback(() => {
+  const handlePhraseCheckboxClick = useCallback(
+    (value: boolean) => {
+      console.log('Phrase: ', value);
+      dispatch(
+        setSearchFilter({
+          ...filter,
+          searchExactPhrase: value,
+        }),
+      );
+    },
+    [dispatch, filter],
+  );
+
+  const handleHeritageCheckboxClick = useCallback(
+    (value: boolean) => {
+      console.log('Heritage: ', value);
+      dispatch(
+        setSearchFilter({
+          ...filter,
+          searchOnlyHeritage: value,
+        }),
+      );
+    },
+    [dispatch, filter],
+  );
+
+  const checkBoxes = useMemo(() => {
+    return (
+      <View style={styles.checkBoxesContainer}>
+        <CheckBox
+          value={filter.searchExactPhrase}
+          onValueChange={handlePhraseCheckboxClick}
+          label={'Ieškoti tikslios frazės'}
+        />
+        <CheckBox
+          style={styles.topMargin}
+          value={filter.searchOnlyHeritage}
+          onValueChange={handleHeritageCheckboxClick}
+          label={'Ieškoti tik pavelde'}
+        />
+      </View>
+    );
+  }, [
+    filter.searchExactPhrase,
+    filter.searchOnlyHeritage,
+    handleHeritageCheckboxClick,
+    handlePhraseCheckboxClick,
+  ]);
+
+  const typeSelection = useMemo(() => {
     return (
       <View>
         <TextComponent style={styles.titleText}>TIPAS</TextComponent>
@@ -66,9 +117,9 @@ const SearchFilterDrawer: React.FC = () => {
         />
       </View>
     );
-  }, [type]);
+  }, [selectType, type]);
 
-  const renderSectionSelection = useCallback(() => {
+  const sectionSelection = useMemo(() => {
     return (
       <View>
         <TextComponent style={styles.titleText}>TEMA</TextComponent>
@@ -110,9 +161,9 @@ const SearchFilterDrawer: React.FC = () => {
         />
       </View>
     );
-  }, [section]);
+  }, [section, selectSection]);
 
-  const renderDateSelection = useCallback(() => {
+  const dateSelection = useMemo(() => {
     return (
       <View>
         <TextComponent style={styles.titleText}>DATA</TextComponent>
@@ -122,18 +173,19 @@ const SearchFilterDrawer: React.FC = () => {
         <SelectableItem selected={days === '30'} text={'Per 30 d.'} onPress={() => selectDays('30')} />
       </View>
     );
-  }, [days]);
+  }, [days, selectDays]);
 
   return (
     <View style={{...styles.root, backgroundColor: colors.background}}>
       <ScrollView>
-        <View>
-          {renderTypeSelection()}
+        <SafeAreaView edges={['top', 'bottom']}>
+          {checkBoxes}
+          {typeSelection}
           <Divider style={styles.divider} />
-          {renderSectionSelection()}
+          {sectionSelection}
           <Divider style={styles.divider} />
-          {renderDateSelection()}
-        </View>
+          {dateSelection}
+        </SafeAreaView>
       </ScrollView>
     </View>
   );
@@ -145,6 +197,12 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     minWidth: 200,
+  },
+  checkBoxesContainer: {
+    padding: 8,
+  },
+  topMargin: {
+    marginTop: 8,
   },
   titleText: {
     fontFamily: 'SourceSansPro-SemiBold',

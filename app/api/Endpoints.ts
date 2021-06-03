@@ -45,8 +45,17 @@ export const articlesGetByTag = (tag: string, count: number) => {
 /**
  * Return array of articles by search filter
  */
-export const searchArticles = (query: string, filter: SearchFilter = {type: 0, section: '', days: ''}) => {
-  return `${BASE_URL}search?q=${query}&type=${filter.type}&section=${filter.section}&days=${filter.days}`;
+export const searchArticles = (query: string, filter: SearchFilter) => {
+  let url = `${BASE_URL}search?q=${query}&type=${filter.type}&section=${filter.section}&days=${filter.days}`;
+
+  if (filter.searchExactPhrase) {
+    url += '&exact=1';
+  }
+  if (filter.searchOnlyHeritage) {
+    url += '&heritage=1';
+  }
+
+  return url;
 };
 
 /**

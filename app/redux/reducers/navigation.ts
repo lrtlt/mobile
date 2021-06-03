@@ -40,6 +40,14 @@ export type NavigationState = {
   filter: SearchFilter;
 };
 
+const initialSarchState: SearchFilter = {
+  searchExactPhrase: true,
+  searchOnlyHeritage: false,
+  type: SEARCH_TYPE_ALL,
+  section: '',
+  days: '',
+};
+
 const initialState: NavigationState = {
   routes: [],
   pages: [],
@@ -47,11 +55,7 @@ const initialState: NavigationState = {
   isLoading: false,
   isReady: false,
   isError: false,
-  filter: {
-    type: SEARCH_TYPE_ALL,
-    section: '',
-    days: '',
-  },
+  filter: initialSarchState,
 };
 
 const reducer = (state = initialState, action: NavigationActionType): NavigationState => {
@@ -65,11 +69,7 @@ const reducer = (state = initialState, action: NavigationActionType): Navigation
     case RESET_SEARCH_FILTER: {
       return {
         ...state,
-        filter: {
-          type: SEARCH_TYPE_ALL,
-          section: '',
-          days: '',
-        },
+        filter: initialSarchState,
       };
     }
     case FETCH_MENU_ITEMS: {

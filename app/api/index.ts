@@ -1,4 +1,3 @@
-import {Article} from '../../Types';
 import {
   articleGet,
   articlesGetByTag,

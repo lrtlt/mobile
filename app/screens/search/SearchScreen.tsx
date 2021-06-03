@@ -1,13 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-  View,
-  Button,
-  ActivityIndicator,
-  TextInput,
-  StyleSheet,
-  Animated,
-  ListRenderItemInfo,
-} from 'react-native';
+import {View, Button, TextInput, StyleSheet, Animated, ListRenderItemInfo} from 'react-native';
 import {HeaderBackButton, StackNavigationProp} from '@react-navigation/stack';
 import {useSelector, useDispatch} from 'react-redux';
 import {resetSearchFilter, setSearchFilter} from '../../redux/actions';
@@ -23,7 +15,6 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {MainStackParamList, SearchDrawerParamList} from '../../navigation/MainStack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Article} from '../../../Types';
-import {string} from 'prop-types';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -66,6 +57,7 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
     return () => {
       dispatch(resetSearchFilter());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -121,9 +113,12 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
       });
   };
 
-  const articlePressHandler = useCallback((article: Article) => {
-    navigation.navigate('Article', {articleId: article.id});
-  }, []);
+  const articlePressHandler = useCallback(
+    (article: Article) => {
+      navigation.navigate('Article', {articleId: article.id});
+    },
+    [navigation],
+  );
 
   const renderItem = useCallback(
     (item: ListRenderItemInfo<Article>) => {

@@ -23,6 +23,8 @@ const AudiotekaSearch: React.FC<AudiotekaSearchProps> = () => {
       params: {
         q: inputValue,
         filter: {
+          searchExactPhrase: true,
+          searchOnlyHeritage: false,
           type: SEARCH_TYPE_AUDIO,
           section: '',
           days: '',

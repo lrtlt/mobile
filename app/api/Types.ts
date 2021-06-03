@@ -119,6 +119,8 @@ export type SearchFilter = {
   type: SearchFilterTypes;
   section: string;
   days: '' | '1' | '7' | '30';
+  searchExactPhrase: boolean;
+  searchOnlyHeritage: boolean;
 };
 
 export type VideoDataLiveStream = {
