@@ -1,8 +1,8 @@
 import React, {useCallback, useState} from 'react';
 import {View, StyleSheet, Pressable, ViewStyle} from 'react-native';
-import {Text} from '..';
 import {useTheme} from '../../Theme';
 import {IconCheck} from '../svg';
+import TextComponent from '../text/Text';
 
 interface Props {
   style?: ViewStyle;
@@ -44,9 +44,9 @@ const CheckBox: React.FC<Props> = ({style, value, onValueChange, label}) => {
         ]}>
         {value && <IconCheck size={14} color={colors.onPrimary} />}
       </View>
-      <Text style={styles.label} type="secondary">
+      <TextComponent style={styles.label} type="secondary">
         {label}
-      </Text>
+      </TextComponent>
     </Pressable>
   );
 };

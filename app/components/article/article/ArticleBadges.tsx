@@ -1,7 +1,8 @@
 import React from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
-import {FacebookReactions, PhotoCountBadge} from '../..';
 import {Article} from '../../../../Types';
+import FacebookReactions from '../../facebookReactions/FacebookReactions';
+import PhotoCountBadge from '../../photoCount/PhotoCount';
 
 interface ArticleBadgesProps {
   style?: ViewStyle;

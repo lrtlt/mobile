@@ -1,9 +1,9 @@
 import React, {useCallback} from 'react';
 import {View, StyleSheet, FlatList, ListRenderItemInfo} from 'react-native';
-import {Text} from '..';
 import {OpusPlayListItem} from '../../api/Types';
 import {useTheme} from '../../Theme';
 import Divider from '../divider/Divider';
+import TextComponent from '../text/Text';
 
 interface OpusPaylistListProps {
   items: OpusPlayListItem[];
@@ -21,8 +21,8 @@ const OpusPaylistList: React.FC<OpusPaylistListProps> = ({items}) => {
     const {item} = itemInfo;
     return (
       <View style={styles.listItem}>
-        <Text style={styles.timeText}>{item.dt}</Text>
-        <Text style={styles.songText}>{item.song}</Text>
+        <TextComponent style={styles.timeText}>{item.dt}</TextComponent>
+        <TextComponent style={styles.songText}>{item.song}</TextComponent>
       </View>
     );
   }, []);

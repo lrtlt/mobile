@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
-import {Text} from '../..';
 import {Article} from '../../../../Types';
 import {ARTICLE_TYPE_AUDIO} from '../../../constants';
 import {useTheme} from '../../../Theme';
 import {IconAudioReadCount} from '../../svg';
+import TextComponent from '../../text/Text';
 
 interface ListenCountProps {
   style?: ViewStyle;
@@ -26,7 +26,9 @@ const ListenCount: React.FC<ListenCountProps> = ({style, visible, article}) => {
           style,
         ]}>
         <IconAudioReadCount size={18} color={colors.darkIcon} />
-        <Text style={{...styles.countText, color: colors.darkIcon}}>{article.read_count}</Text>
+        <TextComponent style={{...styles.countText, color: colors.darkIcon}}>
+          {article.read_count}
+        </TextComponent>
       </View>
     );
   } else {
