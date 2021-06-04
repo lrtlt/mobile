@@ -23,6 +23,10 @@ const App = () => {
       .then((deviceState) => console.log('OneSignal device state: ', deviceState))
       .catch((e) => console.log('OneSignal device error: ', e));
 
+    OneSignal.promptForPushNotificationsWithUserResponse((response) => {
+      console.log('OneSignal prompt response:', response);
+    });
+
     OneSignal.setNotificationOpenedHandler((openedEvent) => {
       console.log('OneSignal: notification opened:', openedEvent);
     });
