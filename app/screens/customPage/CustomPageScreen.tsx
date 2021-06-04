@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {TabView} from 'react-native-tab-view';
 import TabBar from '../main/tabBar/TabBar';
@@ -32,10 +32,14 @@ const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page.name]);
 
+  const renderLazyPlaceHolder = useCallback(() => {
+    return <View />;
+  }, []);
+
   return (
     <View style={styles.container}>
       <TabView
-        renderLazyPlaceholder={() => <View />}
+        renderLazyPlaceholder={renderLazyPlaceHolder}
         tabBarPosition="top"
         navigationState={{
           index: currentRouteIndex,
@@ -57,8 +61,13 @@ const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
             );
           }
         }}
-        renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
-        onIndexChange={(i) => setCurrentRouteIndex(i)}
+        renderTabBar={useCallback(
+          (tabBarProps) => (
+            <TabBar {...tabBarProps} />
+          ),
+          [],
+        )}
+        onIndexChange={setCurrentRouteIndex}
         lazy={true}
         lazyPreloadDistance={0}
         initialLayout={{height: 0, width: Dimensions.get('screen').width}}

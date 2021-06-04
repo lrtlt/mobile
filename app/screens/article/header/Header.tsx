@@ -1,80 +1,88 @@
-import React, {useState} from 'react';
+import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
-import PropTypes from 'prop-types';
 import {FacebookReactions, Text, TouchableDebounce} from '../../../components';
 import {useTheme} from '../../../Theme';
 import {IconVolume} from '../../../components/svg';
+import {checkEqual} from '../../../util/LodashEqualityCheck';
 
-const ArticleHeader = (props) => {
-  const [text2SpeechEnabled, setText2SpeechEnabled] = useState(false);
+interface Props {
+  category: string;
+  date?: string;
+  title: string;
+  subtitle?: string;
+  facebookReactions?: string;
+  author: string;
 
+  //Text 2 speech params. Maybe move it elsewhere later on?
+  text2SpeechEnabled: boolean;
+  isText2SpeechPlaying: boolean;
+  onPlayStateChange: (play: boolean) => void;
+}
+
+const ArticleHeader: React.FC<Props> = ({
+  author,
+  category,
+  title,
+  date,
+  facebookReactions,
+  subtitle,
+  text2SpeechEnabled,
+  isText2SpeechPlaying,
+  onPlayStateChange,
+}) => {
   const {colors} = useTheme();
 
-  const text2Speech = props.text2SpeechEnabled ? (
-    <TouchableDebounce
-      // eslint-disable-next-line react-native/no-inline-styles
-      style={{
-        alignSelf: 'flex-end',
-      }}
-      onPress={() => {
-        setText2SpeechEnabled(!text2SpeechEnabled);
-        props.onTextToSpeechClick(!text2SpeechEnabled);
-      }}>
+  const text2SpeechPlayHander = useCallback(() => {
+    onPlayStateChange(!isText2SpeechPlaying);
+  }, [isText2SpeechPlaying, onPlayStateChange]);
+
+  const text2SpeechComponent = text2SpeechEnabled ? (
+    <TouchableDebounce style={styles.text2SpeechContainer} onPress={text2SpeechPlayHander}>
       <View
         style={{
           ...styles.iconButton,
           borderColor: colors.buttonBorder,
-          backgroundColor: text2SpeechEnabled ? colors.primary : undefined,
+          backgroundColor: isText2SpeechPlaying ? colors.primary : undefined,
         }}>
-        <IconVolume size={22} color={text2SpeechEnabled ? colors.onPrimary : colors.buttonContent} />
+        <IconVolume size={22} color={isText2SpeechPlaying ? colors.onPrimary : colors.buttonContent} />
       </View>
     </TouchableDebounce>
   ) : null;
 
-  const subtitle = props.subtitle ? (
+  const subtitleComponent = subtitle ? (
     <Text style={styles.subtitle} type="error">
-      {props.subtitle}
+      {subtitle}
     </Text>
   ) : null;
 
-  const facebookReactions =
-    props.facebookReactions && props.facebookReactions > 0 ? (
-      <FacebookReactions style={styles.facebookReactions} count={props.facebookReactions} />
-    ) : null;
+  const facebookReactionsComponent = facebookReactions ? (
+    <FacebookReactions style={styles.facebookReactions} count={facebookReactions} />
+  ) : null;
 
   return (
     <View style={styles.root}>
       <View style={styles.categoryContainer}>
-        <Text style={styles.smallText}>{props.category}</Text>
+        <Text style={styles.smallText}>{category}</Text>
         <View style={{...styles.greyDot, backgroundColor: colors.buttonContent}} />
-        <Text style={styles.smallText}>{props.date}</Text>
+        <Text style={styles.smallText}>{date}</Text>
       </View>
       <Text style={styles.titleText} selectable={true}>
-        {props.title}
+        {title}
       </Text>
-      {subtitle}
-      {facebookReactions}
+      {subtitleComponent}
+      {facebookReactionsComponent}
 
       <View style={styles.authorShareContainer}>
         <View style={styles.authorContainer}>
-          <Text style={styles.smallTextBold}>{props.author}</Text>
+          <Text style={styles.smallTextBold}>{author}</Text>
         </View>
-        {text2Speech}
+        {text2SpeechComponent}
       </View>
     </View>
   );
 };
 
-ArticleHeader.propTypes = {
-  category: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  facebookReactions: PropTypes.string,
-  subtitle: PropTypes.string,
-  author: PropTypes.string,
-};
-
-export default ArticleHeader;
+export default React.memo(ArticleHeader, (prevProps, nextProps) => checkEqual(prevProps, nextProps));
 
 const styles = StyleSheet.create({
   root: {
@@ -132,5 +140,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 4,
+  },
+  text2SpeechContainer: {
+    alignSelf: 'flex-end',
   },
 });

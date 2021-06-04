@@ -142,7 +142,11 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
       switch (type) {
         case TYPE_HEADER: {
           return (
-            <Header {...data} onTextToSpeechClick={(enabled: boolean) => setTextToSpeechPlaying(enabled)} />
+            <Header
+              {...data}
+              isText2SpeechPlaying={isTextToSpeechPlaying}
+              onPlayStateChange={setTextToSpeechPlaying}
+            />
           );
         }
         case TYPE_MAIN_PHOTO: {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
 import {ActionButton} from '../../components';
@@ -52,7 +52,7 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_SELECT_CATEGORY_INDEX, (data) => {
-      if (data.index) {
+      if (data.index !== -1) {
         setSelectedTabIndex(data.index);
       }
     });
@@ -86,46 +86,53 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
     });
   }, [colors.headerTint, dim.appBarIconSize, navigation]);
 
-  const renderScene = (sceneProps: SceneRendererProps & {route: typeof state.routes[0]}) => {
-    const {route} = sceneProps;
-    const routeIndex = state.routes.findIndex((r) => r.key === route.key);
+  const renderScene = useCallback(
+    (sceneProps: SceneRendererProps & {route: typeof state.routes[0]}) => {
+      const {route} = sceneProps;
+      const routeIndex = state.routes.findIndex((r) => r.key === route.key);
 
-    //Render only selected screen
-    if (Math.abs(selectedTabIndex - routeIndex) > 0) {
-      return <View />;
-    }
-    const current = routeIndex === selectedTabIndex;
+      //Render only selected screen
+      if (Math.abs(selectedTabIndex - routeIndex) > 0) {
+        return <View />;
+      }
+      const current = routeIndex === selectedTabIndex;
 
-    switch (route.type) {
-      case ROUTE_TYPE_HOME:
-        return <HomeScreen type={ROUTE_TYPE_HOME} isCurrent={current} />;
-      case ROUTE_TYPE_MEDIA:
-        return <HomeScreen type={ROUTE_TYPE_MEDIA} isCurrent={current} />;
-      case ROUTE_TYPE_AUDIOTEKA:
-        return <AudiotekaScreen isCurrent={current} />;
-      case ROUTE_TYPE_CATEGORY:
-        return (
-          <CategoryTabScreen
-            categoryId={route.categoryId}
-            categoryTitle={route.title}
-            isCurrent={current}
-            showTitle={true}
-          />
-        );
-      case ROUTE_TYPE_NEWEST:
-        return <NewestScreen isCurrent={current} />;
-      case ROUTE_TYPE_POPULAR:
-        return <PopularScreen isCurrent={current} />;
-      default:
-        return <TestScreen text={'Unkown type: ' + JSON.stringify(route)} />;
-    }
-  };
+      switch (route.type) {
+        case ROUTE_TYPE_HOME:
+          return <HomeScreen type={ROUTE_TYPE_HOME} isCurrent={current} />;
+        case ROUTE_TYPE_MEDIA:
+          return <HomeScreen type={ROUTE_TYPE_MEDIA} isCurrent={current} />;
+        case ROUTE_TYPE_AUDIOTEKA:
+          return <AudiotekaScreen isCurrent={current} />;
+        case ROUTE_TYPE_CATEGORY:
+          return (
+            <CategoryTabScreen
+              categoryId={route.categoryId}
+              categoryTitle={route.title}
+              isCurrent={current}
+              showTitle={true}
+            />
+          );
+        case ROUTE_TYPE_NEWEST:
+          return <NewestScreen isCurrent={current} />;
+        case ROUTE_TYPE_POPULAR:
+          return <PopularScreen isCurrent={current} />;
+        default:
+          return <TestScreen text={'Unkown type: ' + JSON.stringify(route)} />;
+      }
+    },
+    [selectedTabIndex, state],
+  );
+
+  const renderLazyPlaceHolder = useCallback(() => {
+    return <View />;
+  }, []);
 
   return (
     <>
       <SafeAreaView style={styles.container} edges={['left', 'right']}>
         <TabView
-          renderLazyPlaceholder={() => <View />}
+          renderLazyPlaceholder={renderLazyPlaceHolder}
           tabBarPosition="top"
           navigationState={{
             routes: state.routes,
@@ -133,8 +140,13 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
           }}
           swipeEnabled={true}
           renderScene={renderScene}
-          renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
-          onIndexChange={(index) => setSelectedTabIndex(index)}
+          renderTabBar={useCallback(
+            (tabBarProps) => (
+              <TabBar {...tabBarProps} />
+            ),
+            [],
+          )}
+          onIndexChange={setSelectedTabIndex}
           lazy={true}
           lazyPreloadDistance={0}
           initialLayout={{height: 0, width: Dimensions.get('screen').width}}

@@ -1,11 +1,17 @@
-import React from 'react';
-import {TabBar} from 'react-native-tab-view';
-import TabLable from '../tabLable/TabLable';
+import React, {useCallback} from 'react';
+import {NavigationState, Route, SceneRendererProps, TabBar} from 'react-native-tab-view';
 import {StyleSheet} from 'react-native';
 import {useTheme} from '../../../Theme';
+import TabLabel, {TabLabelProps} from '../tabLabel/TabLabel';
 
-const TabBarComponent = (props) => {
+type TabBarComponentProps = SceneRendererProps & {
+  navigationState: NavigationState<Route>;
+};
+
+const TabBarComponent: React.FC<TabBarComponentProps> = (props) => {
   const {colors} = useTheme();
+
+  const renderLabel = useCallback((labelProps: TabLabelProps) => <TabLabel {...labelProps} />, []);
 
   return (
     <TabBar
@@ -13,7 +19,7 @@ const TabBarComponent = (props) => {
       scrollEnabled={true}
       pressOpacity={0.6}
       pressColor={colors.androidTouchFeedback}
-      renderLabel={(labelProps) => <TabLable {...labelProps} />}
+      renderLabel={renderLabel}
       indicatorStyle={{backgroundColor: colors.primaryDark}}
       style={{backgroundColor: colors.background}}
       tabStyle={styles.tab}

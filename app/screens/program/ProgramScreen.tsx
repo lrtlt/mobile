@@ -69,26 +69,6 @@ const ProgramScreen: React.FC<Props> = ({navigation}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerExpanded, selectedDate]);
 
-  const renderDays = () => {
-    const daysComponent = program?.days.map((day: string) => {
-      return (
-        <TouchableOpacity
-          key={day}
-          onPress={() => {
-            setSelectedDate(day);
-            setHeaderExpanded(false);
-          }}>
-          <View>
-            <ProgramDay style={styles.dayListItem} dateString={day} />
-            <Divider />
-          </View>
-        </TouchableOpacity>
-      );
-    });
-
-    return <View>{daysComponent}</View>;
-  };
-
   let content;
   switch (loadingState) {
     case STATE_LOADING: {
@@ -105,7 +85,21 @@ const ProgramScreen: React.FC<Props> = ({navigation}) => {
       content = (
         <View style={styles.root}>
           <Collapsible collapsed={!headerExpanded} align="bottom" duration={250} easing={Easing.ease}>
-            {renderDays()}
+            <View>
+              {program?.days.map((day: string) => (
+                <TouchableOpacity
+                  key={day}
+                  onPress={() => {
+                    setSelectedDate(day);
+                    setHeaderExpanded(false);
+                  }}>
+                  <View>
+                    <ProgramDay style={styles.dayListItem} dateString={day} />
+                    <Divider />
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
           </Collapsible>
           <ProgramTabs program={selectedDayProgram} />
         </View>

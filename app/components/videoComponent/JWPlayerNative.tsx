@@ -20,11 +20,6 @@ const JWPlayerNative: React.FC<Props> = (props) => {
   const {style, streamUri, mediaId, title, backgroundImage, autoStart} = props;
   const playerRef = useRef<JWPlayer>(null);
 
-  const showStatusBar = useCallback(() => {
-    StatusBar.setHidden(false, 'slide');
-    StatusBar.setBarStyle('dark-content', true);
-  }, []);
-
   useEffect(() => {
     return () => {
       //Cleanup
@@ -32,7 +27,8 @@ const JWPlayerNative: React.FC<Props> = (props) => {
       /* This fixes the bug on android where user presses back button
        * while video is in fullscreen and status bar does not show up */
       if (Platform.OS === 'android') {
-        showStatusBar();
+        StatusBar.setHidden(false, 'slide');
+        StatusBar.setBarStyle('dark-content', true);
       }
       sendClose();
     };
@@ -119,32 +115,51 @@ const JWPlayerNative: React.FC<Props> = (props) => {
         //exitFullScreenOnPortrait={true}
         //fullScreenOnLandscape={true}
         //landscapeOnFullScreen={true}
-        onPlay={() => sendPlay()}
-        onPause={() => sendPause()}
-        onSeeked={(e) => {
-          console.log('onSeekedEvent', e);
-          if (Platform.OS === 'android') {
-            sendSeek(e.nativeEvent.position);
-          }
-        }}
-        onSeek={(e) => {
-          console.log('onSeekEvent', e);
-          if (Platform.OS === 'ios') {
-            sendSeek(e.nativeEvent.offset);
-          }
-        }}
-        onBuffer={() => sendBuffer()}
-        onComplete={() => sendComplete()}
-        onFullScreen={() => {
+        onPlay={sendPlay}
+        onPause={sendPause}
+        onSeeked={useCallback(
+          (e: any) => {
+            //Works on android
+            //Also works on iOS but does not have position & offset parameters
+            console.log('onSeekedEvent', e?.nativeEvent);
+            if (Platform.OS === 'android') {
+              if (e.nativeEvent.position !== undefined) {
+                sendSeek(e.nativeEvent.position);
+              } else {
+                console.warn('onSeeked event has no position param');
+              }
+            }
+          },
+          [sendSeek],
+        )}
+        onSeek={useCallback(
+          (e: any) => {
+            //WORKS ON IOS
+            //Also works on android but onSeeked event is more reliable
+            console.log('onSeekEvent', e?.nativeEvent);
+            if (Platform.OS === 'ios') {
+              if (e.nativeEvent.offset !== undefined) {
+                sendSeek(e.nativeEvent.offset);
+              } else {
+                console.warn('onSeek event has no offset param');
+              }
+            }
+          },
+          [sendSeek],
+        )}
+        onBuffer={sendBuffer}
+        onComplete={sendComplete}
+        onFullScreen={useCallback(() => {
           if (Platform.OS === 'android') {
             StatusBar.setHidden(true, 'slide');
           }
-        }}
-        onFullScreenExit={() => {
+        }, [])}
+        onFullScreenExit={useCallback(() => {
           if (Platform.OS === 'android') {
-            showStatusBar();
+            StatusBar.setHidden(false, 'slide');
+            StatusBar.setBarStyle('dark-content', true);
           }
-        }}
+        }, [])}
       />
     </View>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {View, Linking, StyleSheet, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import DrawerItem from '../drawerItem/DrawerItem';
@@ -22,10 +22,13 @@ import {
 } from '../svg';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 import {openCategoryForName} from '../../redux/actions';
+import {DrawerContentComponentProps, DrawerContentOptions} from '@react-navigation/drawer';
 
 const ICON_SIZE = 18;
 
-const DrawerComponent = (props) => {
+type Props = DrawerContentComponentProps<DrawerContentOptions>;
+
+const DrawerComponent: React.FC<Props> = (props) => {
   const {navigation} = props;
 
   const {colors, strings} = useTheme();
@@ -33,7 +36,7 @@ const DrawerComponent = (props) => {
   const data = useSelector(selectDrawerData, checkEqual);
   const dispatch = useDispatch();
 
-  const renderFooterItems = () => {
+  const footerItems = useMemo(() => {
     return (
       <View style={styles.footerContainer}>
         <Divider style={styles.line} />
@@ -63,30 +66,29 @@ const DrawerComponent = (props) => {
         />
       </View>
     );
-  };
+  }, [colors.primaryDark, strings.about, strings.contacts, strings.feeback, strings.upload]);
 
-  const renderChannelItems = () => {
-    const channels = data.channels.map((channel) => {
-      return (
-        <DrawerItem
-          key={channel.channel_title}
-          text={channel.channel_title}
-          iconComponent={getIconForChannel(channel.channel, ICON_SIZE)}
-          onPress={() => {
-            navigation.navigate('Channel', {channelId: channel.channel_id});
-          }}
-        />
-      );
-    });
+  const channelItems = useMemo(() => {
     return (
       <View style={styles.channelContainer}>
         <TextComponent style={styles.title}>{strings.liveChannelTitle}</TextComponent>
-        {channels}
+        {data.channels.map((channel) => {
+          return (
+            <DrawerItem
+              key={channel.channel_title}
+              text={channel.channel_title}
+              iconComponent={getIconForChannel(channel.channel, ICON_SIZE)}
+              onPress={() => {
+                navigation.navigate('Channel', {channelId: channel.channel_id});
+              }}
+            />
+          );
+        })}
       </View>
     );
-  };
+  }, [data.channels, navigation, strings.liveChannelTitle]);
 
-  const renderSearch = () => {
+  const searchItem = useMemo(() => {
     return (
       <DrawerItem
         key={strings.search}
@@ -95,9 +97,9 @@ const DrawerComponent = (props) => {
         onPress={() => navigation.navigate('Search')}
       />
     );
-  };
+  }, [colors.primaryDark, navigation, strings.search]);
 
-  const renderProgram = () => {
+  const programItem = useMemo(() => {
     return (
       <DrawerItem
         key={strings.tvProgram}
@@ -106,9 +108,9 @@ const DrawerComponent = (props) => {
         onPress={() => navigation.navigate('Program')}
       />
     );
-  };
+  }, [colors.primaryDark, navigation, strings.tvProgram]);
 
-  const renderHistory = () => {
+  const historyItem = useMemo(() => {
     return (
       <DrawerItem
         key={strings.history}
@@ -117,9 +119,9 @@ const DrawerComponent = (props) => {
         onPress={() => navigation.navigate('History')}
       />
     );
-  };
+  }, [colors.primaryDark, navigation, strings.history]);
 
-  const renderBookmarks = () => {
+  const bookmarksItem = useMemo(() => {
     return (
       <DrawerItem
         key={strings.bookmarks}
@@ -128,9 +130,9 @@ const DrawerComponent = (props) => {
         onPress={() => navigation.navigate('Bookmarks')}
       />
     );
-  };
+  }, [colors.primaryDark, navigation, strings.bookmarks]);
 
-  const renderProjects = () => {
+  const projectItems = useMemo(() => {
     const projects = data.projects;
 
     if (!projects || !projects.categories || projects.categories.length <= 0) {
@@ -138,47 +140,47 @@ const DrawerComponent = (props) => {
       return null;
     }
 
-    const content = projects.categories.map((project) => (
-      <DrawerItem
-        key={project.name}
-        text={project.name}
-        onPress={() =>
-          navigation.navigate('WebPage', {
-            url: project.url,
-            title: project.name,
-          })
-        }
-      />
-    ));
-
     return (
       <View>
         <TextComponent style={styles.title}>{projects.name}</TextComponent>
-        {content}
+        {projects.categories.map((project) => (
+          <DrawerItem
+            key={project.name}
+            text={project.name}
+            onPress={() =>
+              navigation.navigate('WebPage', {
+                url: project.url,
+                title: project.name,
+              })
+            }
+          />
+        ))}
       </View>
     );
-  };
+  }, [data.projects, navigation]);
 
-  const renderPages = () => {
+  const pageItems = useMemo(() => {
     const pages = data.pages;
 
     if (pages && pages.length > 0) {
-      const content = pages.map((page) => (
-        <DrawerItem
-          key={page.name}
-          text={page.name}
-          iconComponent={<IconLituanica size={ICON_SIZE} />}
-          onPress={() => navigation.navigate('Page', {page})}
-        />
-      ));
-
-      return <View>{content}</View>;
+      return (
+        <View>
+          {pages.map((page) => (
+            <DrawerItem
+              key={page.name}
+              text={page.name}
+              iconComponent={<IconLituanica size={ICON_SIZE} />}
+              onPress={() => navigation.navigate('Page', {page})}
+            />
+          ))}
+        </View>
+      );
     } else {
       return null;
     }
-  };
+  }, [data.pages, navigation]);
 
-  const content = data.routes.map((route, i) => {
+  const content = data.routes.map((route) => {
     return (
       <DrawerItem
         key={route.name}
@@ -193,25 +195,25 @@ const DrawerComponent = (props) => {
 
   return (
     <View style={{...styles.container, backgroundColor: colors.card}}>
-      <SafeAreaView style={{flex: 1}} edges={['top', 'left']}>
+      <SafeAreaView edges={['top', 'left']}>
         <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
           <View style={styles.content}>
             <View style={styles.headerContainer}>
-              {renderSearch()}
-              {renderBookmarks()}
-              {renderHistory()}
-              {renderProgram()}
+              {searchItem}
+              {bookmarksItem}
+              {historyItem}
+              {programItem}
             </View>
             <Divider style={styles.line} />
-            {renderChannelItems()}
+            {channelItems}
             <Divider style={styles.line} />
-            {renderProjects()}
+            {projectItems}
             <Divider style={styles.line} />
-            {renderPages()}
+            {pageItems}
             <Divider style={styles.line} />
             <TextComponent style={styles.title}>{strings.drawerMenu}</TextComponent>
             {content}
-            {renderFooterItems()}
+            {footerItems}
           </View>
         </ScrollView>
       </SafeAreaView>

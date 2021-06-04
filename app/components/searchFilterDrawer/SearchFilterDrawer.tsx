@@ -84,7 +84,7 @@ const SearchFilterDrawer: React.FC = () => {
           label={'Ieškoti tikslios frazės'}
         />
         <CheckBox
-          style={styles.topMargin}
+          style={styles.checkBoxMargin}
           value={filter.searchOnlyHeritage}
           onValueChange={handleHeritageCheckboxClick}
           label={'Ieškoti tik pavelde'}
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   checkBoxesContainer: {
     padding: 8,
   },
-  topMargin: {
+  checkBoxMargin: {
     marginTop: 8,
   },
   titleText: {

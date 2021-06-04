@@ -42,7 +42,7 @@ const CheckBox: React.FC<Props> = ({style, value, onValueChange, label}) => {
             backgroundColor: value || pressedIn ? colors.primaryDark : undefined,
           },
         ]}>
-        {value && <IconCheck size={16} color={colors.onPrimary} />}
+        {value && <IconCheck size={14} color={colors.onPrimary} />}
       </View>
       <Text style={styles.label} type="secondary">
         {label}
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   root: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 32,
+    height: 28,
   },
   clickArea: {
     height: '100%',
