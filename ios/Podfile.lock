@@ -559,6 +559,8 @@ PODS:
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
   - React-jsinspector (0.63.4)
+  - react-native-flipper (0.86.0):
+    - React-Core
   - react-native-gemius-plugin (1.5.2):
     - React
   - react-native-jw-media-player (0.1.55):
@@ -682,7 +684,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Flipper (~> 0.54.0)
   - Flipper-DoubleConversion (= 1.1.7)
-  - Flipper-Folly (= 2.3.0)
+  - Flipper-Folly (~> 2.2)
   - Flipper-Glog (= 0.3.6)
   - Flipper-PeerTalk (~> 0.0.4)
   - Flipper-RSocket (~> 1.1)
@@ -714,6 +716,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-gemius-plugin (from `../node_modules/react-native-gemius-plugin`)
   - react-native-jw-media-player (from `../node_modules/react-native-jw-media-player/ios`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
@@ -816,6 +819,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-flipper:
+    :path: "../node_modules/react-native-flipper"
   react-native-gemius-plugin:
     :path: "../node_modules/react-native-gemius-plugin"
   react-native-jw-media-player:
@@ -925,6 +930,7 @@ SPEC CHECKSUMS:
   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
+  react-native-flipper: d3d2f95926f5059ec268d59921c218adaa821eb5
   react-native-gemius-plugin: 4286c513d65942e7602da9555c95584b24922a5e
   react-native-jw-media-player: 24f199494bb5041d1c1ed83e8831cbf84797ba5a
   react-native-onesignal: 2a7c3a5f2aa1c599d94cda6cc583205e1548828d
@@ -958,6 +964,6 @@ SPEC CHECKSUMS:
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 2f32b04addbdc631b3611d221a5af3edae325192
+PODFILE CHECKSUM: 1c07aa4f0341217b1a25b23079cf9cad646d0e43
 
 COCOAPODS: 1.10.1

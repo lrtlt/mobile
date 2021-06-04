@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {createStore, applyMiddleware, compose} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import {persistStore, persistReducer} from 'redux-persist';
 import createSagaMiddleware from 'redux-saga';
+import {composeWithDevTools} from 'redux-devtools-extension';
 import rootSaga from './sagas';
 import rootReducer from './reducers';
 
@@ -14,16 +15,19 @@ const persistConfig = {
 };
 
 let saggaMiddleWare = createSagaMiddleware();
-let composeEnhancers = compose;
+let composeEnhancers = composeWithDevTools({});
 
-if (__DEV__) {
-  composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const middlewaresToApply = [saggaMiddleWare];
+
+if (__DEV__ && !process.env.JEST_WORKER_ID) {
+  const createFlipperDebugger = require('redux-flipper').default;
+  middlewaresToApply.push(createFlipperDebugger());
 }
 
 // Middleware: Redux Persist Persisted Reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const store = createStore(persistedReducer, composeEnhancers(applyMiddleware(saggaMiddleWare)));
+const store = createStore(persistedReducer, composeEnhancers(applyMiddleware(...middlewaresToApply)));
 
 let persistor = persistStore(store);
 
