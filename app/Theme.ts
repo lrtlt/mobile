@@ -52,7 +52,7 @@ interface Dictionary {
   error_no_search_query: string;
 }
 
-const str: Dictionary = {
+export const strings: Dictionary = {
   today: 'Šiandien',
   drawerMenu: 'NAUJIENOS',
   mainWindow: 'Pagrindinis',
@@ -245,14 +245,14 @@ const dimensions: Dimensions = {
 export const themeLight: AppTheme = {
   dark: false,
   colors: colorsLight,
-  strings: str,
+  strings,
   dim: dimensions,
 };
 
 export const themeDark: AppTheme = {
   dark: true,
   colors: colorsDark,
-  strings: str,
+  strings,
   dim: dimensions,
 };
 

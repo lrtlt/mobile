@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {StatusBar} from 'react-native';
+import {Linking, StatusBar} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
 import SplashViewComponent from '../screens/splash/SplashScreenView';
@@ -12,7 +12,7 @@ import {useSettings} from '../settings/useSettings';
 import {DEEP_LINKING_URL_PREFIX, GEMIUS_VIEW_SCRIPT_ID} from '../constants';
 import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
 import MainStack from './MainStack';
-import SplashStack from './SplashStack';
+import {SplashScreen} from '../screens';
 
 const linking = {
   prefixes: [DEEP_LINKING_URL_PREFIX],
@@ -42,6 +42,10 @@ const NavigatorComponent = () => {
     routeNameRef.current = navRef.current?.getCurrentRoute()?.name;
   };
 
+  Linking.getInitialURL().then((initialUrl) => {
+    console.log('INITIAL URL:', initialUrl);
+  });
+
   const onNavigationStateChange = () => {
     const currentRoute = navRef.current?.getCurrentRoute();
     const currentRouteName = currentRoute?.name;
@@ -59,6 +63,10 @@ const NavigatorComponent = () => {
     routeNameRef.current = currentRouteName;
   };
 
+  if (!isNavigationReady) {
+    return <SplashScreen />;
+  }
+
   const theme = settings.isDarkMode ? themeDark : themeLight;
   return (
     <>
@@ -74,7 +82,7 @@ const NavigatorComponent = () => {
         fallback={<SplashViewComponent />}
         onReady={onNavigationReady}
         onStateChange={onNavigationStateChange}>
-        {isNavigationReady ? <MainStack /> : <SplashStack />}
+        <MainStack />
       </NavigationContainer>
     </>
   );

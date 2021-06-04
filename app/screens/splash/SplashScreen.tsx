@@ -1,38 +1,21 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {View, ActivityIndicator, Button, StyleSheet, StatusBar} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {Logo} from '../../components/svg';
 import {fetchHome, fetchMenuItems} from '../../redux/actions';
 
-import Gemius from 'react-native-gemius-plugin';
-import {GEMIUS_VIEW_SCRIPT_ID} from '../../constants';
 import {selectSplashScreenState} from '../../redux/selectors';
 import {Text} from '../../components';
-import {useTheme} from '../../Theme';
+import {strings, themeDark, themeLight} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
 import {checkEqual} from '../../util/LodashEqualityCheck';
-import {SplashStackParamList} from '../../navigation/SplashStack';
-import {RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 
-type ScreenRouteProp = RouteProp<SplashStackParamList, 'Splash'>;
-type ScreenNavigationProp = StackNavigationProp<SplashStackParamList, 'Splash'>;
-
-type Props = {
-  route: ScreenRouteProp;
-  navigation: ScreenNavigationProp;
-};
-
-const SplashScreen: React.FC<Props> = (_props) => {
+const SplashScreen: React.FC = () => {
   const {isDarkMode} = useSettings();
-  const {colors, strings} = useTheme();
+  const {colors} = isDarkMode ? themeDark : themeLight;
 
   const state = useSelector(selectSplashScreenState, checkEqual);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {screen: 'splash'});
-  }, []);
 
   useEffect(() => {
     if (state.isReady !== true) {
@@ -41,30 +24,22 @@ const SplashScreen: React.FC<Props> = (_props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.hasMenuData]);
 
-  const load = (ignoreError = false) => {
-    if (state.isError && ignoreError === false) {
-      return;
-    }
-
-    if (state.isLoading !== true) {
-      if (state.hasMenuData) {
-        dispatch(fetchHome());
-      } else {
-        dispatch(fetchMenuItems());
+  const load = useCallback(
+    (ignoreError = false) => {
+      if (state.isError && ignoreError === false) {
+        return;
       }
-    }
-  };
 
-  const renderError = () => {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText} type="error">
-          {strings.error_no_connection}
-        </Text>
-        <Button title={strings.tryAgain} color={colors.primary} onPress={() => load(true)} />
-      </View>
-    );
-  };
+      if (state.isLoading !== true) {
+        if (state.hasMenuData) {
+          dispatch(fetchHome());
+        } else {
+          dispatch(fetchMenuItems());
+        }
+      }
+    },
+    [dispatch, state.hasMenuData, state.isError, state.isLoading],
+  );
 
   return (
     <>
@@ -80,7 +55,14 @@ const SplashScreen: React.FC<Props> = (_props) => {
           animating={state.isReady !== true && state.isError === false}
           color={colors.buttonContent}
         />
-        {state.isError && renderError()}
+        {state.isError && (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText} type="error">
+              {strings.error_no_connection}
+            </Text>
+            <Button title={strings.tryAgain} color={colors.primary} onPress={() => load(true)} />
+          </View>
+        )}
       </View>
     </>
   );
