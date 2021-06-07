@@ -1,6 +1,6 @@
 {
   "name": "lrtApp",
-  "version": "2.18.3",
+  "version": "2.19.1",
   "private": true,
   "scripts": {
     "run-ios": "react-native run-ios",

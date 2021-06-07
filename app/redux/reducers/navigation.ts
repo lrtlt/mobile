@@ -8,6 +8,8 @@ import {
   FETCH_HOME,
   SET_SEARCH_FILTER,
   RESET_SEARCH_FILTER,
+  SET_LAUNCH_URL,
+  CLEAR_LAUNCH_URL,
 } from '../actions/actionTypes';
 import {EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 import {EventRegister} from 'react-native-event-listeners';
@@ -38,6 +40,7 @@ export type NavigationState = {
   isReady: boolean;
   isError: boolean;
   filter: SearchFilter;
+  launchUrl?: string;
 };
 
 const initialSarchState: SearchFilter = {
@@ -131,7 +134,18 @@ const reducer = (state = initialState, action: NavigationActionType): Navigation
       }
       return state;
     }
-
+    case SET_LAUNCH_URL: {
+      return {
+        ...state,
+        launchUrl: action.url,
+      };
+    }
+    case CLEAR_LAUNCH_URL: {
+      return {
+        ...state,
+        launchUrl: undefined,
+      };
+    }
     default:
       return state;
   }

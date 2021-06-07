@@ -5,7 +5,7 @@ import {RootState} from './reducers';
 import {HomeBlock} from './reducers/articles';
 import {SavedArticle} from './reducers/articleStorage';
 
-export const selectNavigationIsReady = (state: RootState) => {
+export const selectAppIsReady = (state: RootState) => {
   return state.navigation.isReady && state.navigation.routes.length !== 0;
 };
 

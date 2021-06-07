@@ -6,6 +6,8 @@ import {
   RESET_SEARCH_FILTER,
   API_MENU_ITEMS_RESULT,
   API_MENU_ITEMS_ERROR,
+  SET_LAUNCH_URL,
+  CLEAR_LAUNCH_URL,
 } from './actionTypes';
 import {FetchHomeAction, FetchHomeErrorAction, FetchHomeResultAction} from './articles';
 
@@ -55,6 +57,24 @@ export const resetSearchFilter = (): ResetSearchFilterAction => ({
   type: RESET_SEARCH_FILTER,
 });
 
+export type SetLaunchUrl = {
+  type: typeof SET_LAUNCH_URL;
+  url: string;
+};
+
+export const setLaunchUrl = (url: string): SetLaunchUrl => ({
+  type: SET_LAUNCH_URL,
+  url,
+});
+
+export type ClearLaunchUrl = {
+  type: typeof CLEAR_LAUNCH_URL;
+};
+
+export const clearLaunchUrl = (): ClearLaunchUrl => ({
+  type: CLEAR_LAUNCH_URL,
+});
+
 export type NavigationActionType =
   | FetchMenuItemsAction
   | FetchMenuItemsResultAction
@@ -64,4 +84,6 @@ export type NavigationActionType =
   | ResetSearchFilterAction
   | FetchHomeAction
   | FetchHomeResultAction
-  | FetchHomeErrorAction;
+  | FetchHomeErrorAction
+  | SetLaunchUrl
+  | ClearLaunchUrl;

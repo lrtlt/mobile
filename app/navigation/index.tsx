@@ -1,18 +1,19 @@
-import React, {useRef} from 'react';
-import {Linking, StatusBar} from 'react-native';
+import React, {useCallback, useRef, useState} from 'react';
+import {StatusBar} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
 import SplashViewComponent from '../screens/splash/SplashScreenView';
 
 import crashlytics from '@react-native-firebase/crashlytics';
 
-import {selectNavigationIsReady} from '../redux/selectors';
+import {selectAppIsReady} from '../redux/selectors';
 import {themeDark, themeLight} from '../Theme';
 import {useSettings} from '../settings/useSettings';
 import {DEEP_LINKING_URL_PREFIX, GEMIUS_VIEW_SCRIPT_ID} from '../constants';
 import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
 import MainStack from './MainStack';
 import {SplashScreen} from '../screens';
+import useHandleLaunchUrl from './useHandleLaunchUrl';
 
 const linking = {
   prefixes: [DEEP_LINKING_URL_PREFIX],
@@ -29,8 +30,9 @@ const linking = {
   },
 };
 
-const NavigatorComponent = () => {
-  const isNavigationReady = useSelector(selectNavigationIsReady);
+const NavigatorComponent: React.FC = () => {
+  const [isNavigatorReady, setNavigatorReady] = useState(false);
+  const isAppReady = useSelector(selectAppIsReady);
 
   const settings = useSettings();
   console.log('SETTINGS', settings);
@@ -38,15 +40,14 @@ const NavigatorComponent = () => {
   const routeNameRef = useRef<string>();
   const navRef = useRef<NavigationContainerRef>(null);
 
-  const onNavigationReady = () => {
+  useHandleLaunchUrl(isNavigatorReady);
+
+  const onNavigationReady = useCallback(() => {
     routeNameRef.current = navRef.current?.getCurrentRoute()?.name;
-  };
+    setNavigatorReady(true);
+  }, []);
 
-  Linking.getInitialURL().then((initialUrl) => {
-    console.log('INITIAL URL:', initialUrl);
-  });
-
-  const onNavigationStateChange = () => {
+  const onNavigationStateChange = useCallback(() => {
     const currentRoute = navRef.current?.getCurrentRoute();
     const currentRouteName = currentRoute?.name;
 
@@ -61,9 +62,9 @@ const NavigatorComponent = () => {
       Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, params);
     }
     routeNameRef.current = currentRouteName;
-  };
+  }, []);
 
-  if (!isNavigationReady) {
+  if (!isAppReady) {
     return <SplashScreen />;
   }
 

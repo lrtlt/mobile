@@ -55,6 +55,21 @@ export type MainDrawerParamList = {
 };
 const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
 
+const MainDrawerNavigator: React.FC = () => {
+  return (
+    <MainDrawer.Navigator drawerContent={(props) => <Drawer {...props} />}>
+      <MainDrawer.Screen
+        name="Main"
+        component={Screens.MainScreen}
+        options={{
+          headerShown: true,
+          headerTitleAlign: 'center',
+        }}
+      />
+    </MainDrawer.Navigator>
+  );
+};
+
 export type SearchDrawerParamList = {
   SearchScreen: {
     q?: string;
@@ -64,42 +79,27 @@ export type SearchDrawerParamList = {
 
 const SearchDrawer = createDrawerNavigator<SearchDrawerParamList>();
 
+const SearchDrawerNavigator: React.FC = () => {
+  return (
+    <SearchDrawer.Navigator
+      backBehavior="initialRoute"
+      drawerPosition="right"
+      drawerType="slide"
+      hideStatusBar={false}
+      drawerContent={() => <SearchFilterDrawer />}>
+      <SearchDrawer.Screen
+        name="SearchScreen"
+        component={Screens.SearchScreen}
+        options={{
+          headerShown: true,
+        }}
+      />
+    </SearchDrawer.Navigator>
+  );
+};
+
 export default () => {
   const settings = useSettings();
-
-  const MainDrawerNavigator = () => {
-    return (
-      <MainDrawer.Navigator drawerContent={(props) => <Drawer {...props} />}>
-        <MainDrawer.Screen
-          name="Main"
-          component={Screens.MainScreen}
-          options={{
-            headerShown: true,
-            headerTitleAlign: 'center',
-          }}
-        />
-      </MainDrawer.Navigator>
-    );
-  };
-
-  const SearchDrawerNavigator = () => {
-    return (
-      <SearchDrawer.Navigator
-        backBehavior="initialRoute"
-        drawerPosition="right"
-        drawerType="slide"
-        hideStatusBar={false}
-        drawerContent={() => <SearchFilterDrawer />}>
-        <SearchDrawer.Screen
-          name="SearchScreen"
-          component={Screens.SearchScreen}
-          options={{
-            headerShown: true,
-          }}
-        />
-      </SearchDrawer.Navigator>
-    );
-  };
 
   const theme = settings.isDarkMode ? themeDark : themeLight;
 

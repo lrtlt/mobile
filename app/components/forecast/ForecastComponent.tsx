@@ -81,11 +81,11 @@ export default ForecastComponent;
 
 const styles = StyleSheet.create({
   container: {
+    height: 36,
     flexDirection: 'row',
     marginBottom: 0,
     alignItems: 'center',
     borderRadius: 4,
-    padding: 4,
     paddingHorizontal: 8,
   },
   loadingIndicator: {
