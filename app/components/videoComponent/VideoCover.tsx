@@ -3,7 +3,7 @@ import {View, StyleSheet, useWindowDimensions} from 'react-native';
 import {getImageSizeForWidth, buildArticleImageUri, buildImageUri, IMG_SIZE_XS} from '../../util/ImageUtil';
 import Image from '../progressiveImage/ProgressiveImage';
 import MediaIndicator from '../mediaIndicator/MediaIndicator';
-import {VIDEO_ASPECT_RATIO} from '../../constants';
+import {VIDEO_ASPECT_RATIO, VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 import {ArticlePhoto} from '../../api/Types';
 
 /** Comes from embeded element within the articles paragraphs */
@@ -39,6 +39,8 @@ const VideoCover: React.FC<VideoCoverType> = (props) => {
           buildImageUri(imgSize, props.img_path_prefix, props.img_path_postfix),
           buildImageUri(IMG_SIZE_XS, props.img_path_prefix, props.img_path_postfix),
         );
+      } else {
+        return renderImage(VIDEO_DEFAULT_BACKGROUND_IMAGE, undefined);
       }
     }
   }

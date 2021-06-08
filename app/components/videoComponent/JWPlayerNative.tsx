@@ -3,9 +3,7 @@ import {StatusBar, Platform, StyleSheet, ViewStyle} from 'react-native';
 import {View} from 'react-native';
 import JWPlayer from 'react-native-jw-media-player';
 import Gemius from 'react-native-gemius-plugin';
-
-const DEFAULT_BACKGROUND_IMAGE =
-  'https://yt3.ggpht.com/a/AGF-l78bfgG98j-GH2Yw816bbYmnXho-wUselvJM6A=s288-c-k-c0xffffffff-no-rj-mo';
+import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 
 interface Props {
   style?: ViewStyle;
@@ -89,7 +87,7 @@ const JWPlayerNative: React.FC<Props> = (props) => {
       //playerStyle: 'lrt',
       title: title,
       mediaId: mediaId,
-      image: backgroundImage ?? DEFAULT_BACKGROUND_IMAGE,
+      image: backgroundImage ?? VIDEO_DEFAULT_BACKGROUND_IMAGE,
       desc: undefined,
       time: 0,
       file: streamUri,
