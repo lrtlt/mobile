@@ -6,8 +6,6 @@ import {
   FETCH_MENU_ITEMS,
   OPEN_CATEGORY_FOR_NAME,
   FETCH_HOME,
-  SET_SEARCH_FILTER,
-  RESET_SEARCH_FILTER,
   SET_LAUNCH_URL,
   CLEAR_LAUNCH_URL,
 } from '../actions/actionTypes';
@@ -28,8 +26,6 @@ import {
   ROUTE_TYPE_PAGE,
   ROUTE_TYPE_POPULAR,
   ROUTE_TYPE_WEBPAGES,
-  SearchFilter,
-  SEARCH_TYPE_ALL,
 } from '../../api/Types';
 
 export type NavigationState = {
@@ -39,16 +35,7 @@ export type NavigationState = {
   isLoading: boolean;
   isReady: boolean;
   isError: boolean;
-  filter: SearchFilter;
   launchUrl?: string;
-};
-
-const initialSarchState: SearchFilter = {
-  searchExactPhrase: true,
-  searchOnlyHeritage: false,
-  type: SEARCH_TYPE_ALL,
-  section: '',
-  days: '',
 };
 
 const initialState: NavigationState = {
@@ -58,23 +45,10 @@ const initialState: NavigationState = {
   isLoading: false,
   isReady: false,
   isError: false,
-  filter: initialSarchState,
 };
 
 const reducer = (state = initialState, action: NavigationActionType): NavigationState => {
   switch (action.type) {
-    case SET_SEARCH_FILTER: {
-      return {
-        ...state,
-        filter: action.filter,
-      };
-    }
-    case RESET_SEARCH_FILTER: {
-      return {
-        ...state,
-        filter: initialSarchState,
-      };
-    }
     case FETCH_MENU_ITEMS: {
       return {
         ...state,

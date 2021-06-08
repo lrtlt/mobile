@@ -131,10 +131,6 @@ export const selectDrawerData = (state: RootState) => {
   };
 };
 
-export const selectSearchFilter = (state: RootState) => {
-  return state.navigation.filter;
-};
-
 export const selectSettings = (state: RootState) => {
   const {config} = state;
 

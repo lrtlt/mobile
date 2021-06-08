@@ -1,9 +1,7 @@
-import {MenuResponse, SearchFilter} from '../../api/Types';
+import {MenuResponse} from '../../api/Types';
 import {
   FETCH_MENU_ITEMS,
   OPEN_CATEGORY_FOR_NAME,
-  SET_SEARCH_FILTER,
-  RESET_SEARCH_FILTER,
   API_MENU_ITEMS_RESULT,
   API_MENU_ITEMS_ERROR,
   SET_LAUNCH_URL,
@@ -41,22 +39,6 @@ export const openCategoryForName = (categoryName: string): OpenCategoryByNameAct
   categoryName,
 });
 
-export type SetSearchFilterAction = {
-  type: typeof SET_SEARCH_FILTER;
-  filter: SearchFilter;
-};
-export const setSearchFilter = (filter: SearchFilter): SetSearchFilterAction => ({
-  type: SET_SEARCH_FILTER,
-  filter,
-});
-
-export type ResetSearchFilterAction = {
-  type: typeof RESET_SEARCH_FILTER;
-};
-export const resetSearchFilter = (): ResetSearchFilterAction => ({
-  type: RESET_SEARCH_FILTER,
-});
-
 export type SetLaunchUrl = {
   type: typeof SET_LAUNCH_URL;
   url: string;
@@ -80,8 +62,6 @@ export type NavigationActionType =
   | FetchMenuItemsResultAction
   | FetchMenuItemsErrorAction
   | OpenCategoryByNameAction
-  | SetSearchFilterAction
-  | ResetSearchFilterAction
   | FetchHomeAction
   | FetchHomeResultAction
   | FetchHomeErrorAction

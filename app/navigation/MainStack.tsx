@@ -9,6 +9,7 @@ import {useSettings} from '../settings/useSettings';
 import {themeDark, themeLight} from '../Theme';
 import {ArticlePhoto, MenuItemPage, SearchFilter} from '../api/Types';
 import {NavigatorScreenParams} from '@react-navigation/native';
+import SearchContextProvider from '../screens/search/context/SearchContextProvider';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -81,20 +82,22 @@ const SearchDrawer = createDrawerNavigator<SearchDrawerParamList>();
 
 const SearchDrawerNavigator: React.FC = () => {
   return (
-    <SearchDrawer.Navigator
-      backBehavior="initialRoute"
-      drawerPosition="right"
-      drawerType="slide"
-      hideStatusBar={false}
-      drawerContent={() => <SearchFilterDrawer />}>
-      <SearchDrawer.Screen
-        name="SearchScreen"
-        component={Screens.SearchScreen}
-        options={{
-          headerShown: true,
-        }}
-      />
-    </SearchDrawer.Navigator>
+    <SearchContextProvider>
+      <SearchDrawer.Navigator
+        backBehavior="initialRoute"
+        drawerPosition="right"
+        drawerType="slide"
+        hideStatusBar={false}
+        drawerContent={() => <SearchFilterDrawer />}>
+        <SearchDrawer.Screen
+          name="SearchScreen"
+          component={Screens.SearchScreen}
+          options={{
+            headerShown: true,
+          }}
+        />
+      </SearchDrawer.Navigator>
+    </SearchContextProvider>
   );
 };
 

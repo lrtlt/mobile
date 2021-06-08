@@ -1,11 +1,8 @@
 import React, {useCallback, useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {setSearchFilter} from '../../redux/actions';
-import {useSelector, useDispatch} from 'react-redux';
 import SelectableItem from './selectableItem/SelectableItem';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useTheme} from '../../Theme';
-import {selectSearchFilter} from '../../redux/selectors';
 import TextComponent from '../text/Text';
 import Divider from '../divider/Divider';
 import {
@@ -16,63 +13,49 @@ import {
   SEARCH_TYPE_VIDEO,
   SEARCH_TYPE_VIDEO_SUBTITLES,
 } from '../../api/Types';
-import {checkEqual} from '../../util/LodashEqualityCheck';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CheckBox from '../checkBox/CheckBox';
+import useSearch from '../../screens/search/context/useSearch';
 
 const SearchFilterDrawer: React.FC = () => {
   const {colors} = useTheme();
 
-  const dispatch = useDispatch();
-
-  const filter = useSelector(selectSearchFilter, checkEqual);
+  const {filter, setFilter} = useSearch();
   const {days, section, type} = filter;
 
   const selectType = useCallback(
     (selectedType: SearchFilterTypes) => {
-      dispatch(setSearchFilter({...filter, type: selectedType}));
+      setFilter({...filter, type: selectedType});
     },
-    [dispatch, filter],
+    [filter, setFilter],
   );
 
   const selectSection = useCallback(
     (selectedSection: string) => {
-      dispatch(setSearchFilter({...filter, section: selectedSection}));
+      setFilter({...filter, section: selectedSection});
     },
-    [dispatch, filter],
+    [filter, setFilter],
   );
 
   const selectDays = useCallback(
     (selecedDays: '' | '1' | '7' | '30') => {
-      dispatch(setSearchFilter({...filter, days: selecedDays}));
+      setFilter({...filter, days: selecedDays});
     },
-    [dispatch, filter],
+    [filter, setFilter],
   );
 
   const handlePhraseCheckboxClick = useCallback(
     (value: boolean) => {
-      console.log('Phrase: ', value);
-      dispatch(
-        setSearchFilter({
-          ...filter,
-          searchExactPhrase: value,
-        }),
-      );
+      setFilter({...filter, searchExactPhrase: value});
     },
-    [dispatch, filter],
+    [filter, setFilter],
   );
 
   const handleHeritageCheckboxClick = useCallback(
     (value: boolean) => {
-      console.log('Heritage: ', value);
-      dispatch(
-        setSearchFilter({
-          ...filter,
-          searchOnlyHeritage: value,
-        }),
-      );
+      setFilter({...filter, searchOnlyHeritage: value});
     },
-    [dispatch, filter],
+    [filter, setFilter],
   );
 
   const checkBoxes = useMemo(() => {

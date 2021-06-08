@@ -1,12 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, Button, TextInput, StyleSheet, Animated, ListRenderItemInfo} from 'react-native';
 import {HeaderBackButton, StackNavigationProp} from '@react-navigation/stack';
-import {useSelector, useDispatch} from 'react-redux';
-import {resetSearchFilter, setSearchFilter} from '../../redux/actions';
 import {ArticleComponent, ActionButton, Text, ScreenLoader} from '../../components';
 import {IconFilter, IconSearch} from '../../components/svg';
-import {fetchArticleSearch} from '../../api';
-import {selectSearchFilter} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {CollapsibleSubHeaderAnimator, useCollapsibleSubHeader} from 'react-navigation-collapsible';
 import {BorderlessButton} from 'react-native-gesture-handler';
@@ -15,6 +11,8 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {MainStackParamList, SearchDrawerParamList} from '../../navigation/MainStack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Article} from '../../../Types';
+import useSearch from './context/useSearch';
+import useSearchApi from './useSearchApi';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -33,17 +31,9 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
     Boolean(route?.params?.filter || route?.params?.q),
   );
 
-  const [query, setQuery] = useState<string>('');
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loadingState, setLoadingState] = useState({
-    isFetching: false,
-    isError: false,
-  });
-
-  const searchFilter = useSelector(selectSearchFilter, checkEqual);
-
+  const {query, setQuery, filter, setFilter} = useSearch();
+  const {loadingState, searchResults, callSearch} = useSearchApi(query, filter);
   const {colors, strings, dim} = useTheme();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (route?.params?.q) {
@@ -51,12 +41,8 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
     }
 
     if (route?.params?.filter) {
-      dispatch(setSearchFilter(route.params.filter));
+      setFilter(route.params.filter);
     }
-
-    return () => {
-      dispatch(resetSearchFilter());
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -85,33 +71,15 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
 
   useEffect(() => {
     if (useNavigationPropFilter) {
-      if (!checkEqual(searchFilter, route?.params?.filter) || query !== route?.params?.q) {
+      if (!checkEqual(filter, route?.params?.filter) || query !== route?.params?.q) {
         return;
       } else {
         setUseNavigationPropFilter(false);
       }
     }
-    search();
+    callSearch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchFilter]);
-
-  const search = () => {
-    setLoadingState({isFetching: true, isError: false});
-    fetchArticleSearch(query, searchFilter)
-      .then((response) => {
-        setLoadingState({
-          isFetching: false,
-          isError: false,
-        });
-        setArticles(response.items);
-      })
-      .catch(() => {
-        setLoadingState({
-          isFetching: false,
-          isError: true,
-        });
-      });
-  };
+  }, [filter]);
 
   const articlePressHandler = useCallback(
     (article: Article) => {
@@ -135,18 +103,14 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
     [articlePressHandler],
   );
 
-  const renderError = () => {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText} type="error">
-          {strings.error_no_connection}
-        </Text>
-        <Button title={strings.tryAgain} color={colors.primary} onPress={search} />
-      </View>
-    );
-  };
+  const handleQueryInput = useCallback(
+    (text) => {
+      setQuery(text);
+    },
+    [setQuery],
+  );
 
-  const renderSearchBar = () => {
+  const renderSearchBar = useCallback(() => {
     return (
       <View style={{...styles.searchBar, backgroundColor: colors.card}}>
         <View style={{...styles.searchInputHolder, backgroundColor: colors.background}}>
@@ -155,25 +119,42 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
             multiline={false}
             placeholder={'Paieška'}
             numberOfLines={1}
-            onSubmitEditing={() => search()}
+            onSubmitEditing={callSearch}
             returnKeyType="search"
             placeholderTextColor={colors.textDisbled}
-            onChangeText={(text) => setQuery(text)}
+            onChangeText={handleQueryInput}
             value={query}
           />
-          <BorderlessButton style={styles.searchButton} onPress={() => search()}>
+          <BorderlessButton style={styles.searchButton} onPress={callSearch}>
             <IconSearch size={dim.appBarIconSize} color={colors.headerTint} />
           </BorderlessButton>
         </View>
       </View>
     );
-  };
+  }, [
+    colors.background,
+    colors.card,
+    colors.headerTint,
+    colors.text,
+    colors.textDisbled,
+    dim.appBarIconSize,
+    handleQueryInput,
+    query,
+    callSearch,
+  ]);
 
   const {onScroll, containerPaddingTop, scrollIndicatorInsetTop, translateY} = useCollapsibleSubHeader();
 
   let content;
   if (loadingState.isError) {
-    content = renderError();
+    content = (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText} type="error">
+          {strings.error_no_connection}
+        </Text>
+        <Button title={strings.tryAgain} color={colors.primary} onPress={callSearch} />
+      </View>
+    );
   } else if (loadingState.isFetching) {
     content = <ScreenLoader />;
   } else {
@@ -183,7 +164,7 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
         contentContainerStyle={{paddingTop: containerPaddingTop}}
         scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
         showsVerticalScrollIndicator={false}
-        data={articles}
+        data={searchResults}
         windowSize={4}
         ListEmptyComponent={
           <View style={styles.noResultsContainer}>
