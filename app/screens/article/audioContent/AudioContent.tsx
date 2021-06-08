@@ -1,10 +1,11 @@
 import React, {useCallback, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {ArticleParagraph, Text} from '../../../components';
 import Image from 'react-native-fast-image';
 import {useTheme} from '../../../Theme';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
+import {Text} from '../../../components';
+import ArticleParagraph from '../../../components/articleParagraphs/paragraph/ArticleParagraph';
 
 interface AudioContentProps {
   about_episode: string;
@@ -64,11 +65,7 @@ const AudioContent: React.FC<AudioContentProps> = ({about_episode, about_show, i
           />
         </View>
       )}
-      <ArticleParagraph
-        data={{
-          p: selectedContent === 'episode' ? about_episode : about_show,
-        }}
-      />
+      <ArticleParagraph htmlText={selectedContent === 'episode' ? about_episode : about_show} />
     </View>
   );
 };

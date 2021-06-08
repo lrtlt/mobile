@@ -82,7 +82,7 @@ const Channel = (props) => {
 
   const onPressHandler = useCallback(() => {
     props.onPress(props.data);
-  }, [props.onPress]);
+  }, [props]);
 
   return (
     <View>

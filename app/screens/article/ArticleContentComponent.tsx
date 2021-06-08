@@ -6,10 +6,10 @@ import {
   ArticlePhoto,
   TouchableDebounce,
   ArticleGallery,
-  ArticleParagraph,
   VideoComponent,
   AudioComponent,
   Text,
+  ArticleContentItem,
 } from '../../components';
 import {
   compose,
@@ -21,7 +21,7 @@ import {
   TYPE_VIDEO,
   TYPE_AUDIO,
   TYPE_TEXT_TO_SPEECH,
-  ArticleContentItem,
+  ArticleContentItemType,
   TYPE_AUDIO_CONTENT,
 } from './ArticleCompositor';
 import {VIDEO_ASPECT_RATIO} from '../../constants';
@@ -36,7 +36,7 @@ export type ArticleSelectableItem = {
   item: any;
 };
 
-const getItemKey = (item: ArticleContentItem, index: number) => {
+const getItemKey = (item: ArticleContentItemType, index: number) => {
   const {type} = item;
   if (type === TYPE_GALLERY || type === TYPE_HEADER || type === TYPE_SUMMARY) {
     return String(index) + String(type) + getOrientation();
@@ -61,7 +61,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
   console.log('composition', articleData);
 
   const renderItem = useCallback(
-    (item: ListRenderItemInfo<ArticleContentItem>): React.ReactElement | null => {
+    (item: ListRenderItemInfo<ArticleContentItemType>): React.ReactElement | null => {
       const {type, data} = item.item;
 
       const renderMainPhoto = () => {
@@ -98,7 +98,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
       };
 
       const renderParagraph = () => {
-        return <ArticleParagraph data={data} itemSelectHandler={itemPressHandler} />;
+        return <ArticleContentItem data={data} itemPressHandler={itemPressHandler} />;
       };
 
       const renderVideo = () => {

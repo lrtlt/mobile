@@ -24,7 +24,6 @@ interface Props {
 }
 
 const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
-  console.log('render audioteka');
   const dispatch = useDispatch();
   const listRef = useRef<FlatList>(null);
   const {colors, dark} = useTheme();
@@ -128,9 +127,9 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
           removeClippedSubviews={false}
           windowSize={4}
           updateCellsBatchingPeriod={20}
-          maxToRenderPerBatch={4}
+          maxToRenderPerBatch={2}
           ListFooterComponent={<SafeAreaView edges={['bottom']} />}
-          initialNumToRender={8}
+          initialNumToRender={6}
           keyExtractor={(item, index) => String(index) + String(item)}
         />
       </View>

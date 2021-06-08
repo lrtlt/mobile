@@ -1,7 +1,7 @@
 import {Platform} from 'react-native';
 import {Theme, useTheme as useReactNavigationTheme} from '@react-navigation/native';
 
-interface AppTheme extends Theme {
+export interface AppTheme extends Theme {
   dark: boolean;
   colors: ColorScheme;
   strings: Dictionary;

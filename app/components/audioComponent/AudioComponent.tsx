@@ -12,6 +12,7 @@ interface AudioComponentProps {
   title: string;
   cover?: ArticlePhoto;
   autoStart: boolean;
+  startTime?: number;
 }
 
 const AudioComponent: React.FC<AudioComponentProps> = ({
@@ -20,6 +21,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
   title,
   cover,
   autoStart,
+  startTime,
   ...restProps
 }) => {
   useEffect(() => {
@@ -35,6 +37,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
         mediaId={mediaId}
         title={title}
         autoStart={autoStart}
+        startTime={startTime}
         backgroundImage={
           cover ? buildArticleImageUri(getImageSizeForWidth(windowWidth), cover.path) : undefined
         }

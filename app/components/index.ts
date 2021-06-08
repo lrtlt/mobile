@@ -3,7 +3,7 @@ export {default as ArticleComponent} from './article/article/ArticleComponent';
 export {default as ArticleFeedItem} from './article/articleFeedItem/ArticleFeedItem';
 export {default as ArticleRow} from './article/articleRow/ArticleRow';
 export {default as ArticleGallery} from './articleGallery/ArticleGallery';
-export {default as ArticleParagraph} from './articleParagraphs/ArticleParagraph';
+export {default as ArticleContentItem} from './articleParagraphs/ArticleContentItem';
 export {default as ArticlePhoto} from './articlePhoto/ArticlePhoto';
 export {default as AudioComponent} from './audioComponent/AudioComponent';
 export {default as CoverImage} from './coverImage/CoverImage';

@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {StatusBar, Platform, StyleSheet, ViewStyle} from 'react-native';
 import {View} from 'react-native';
-import JWPlayer from 'react-native-jw-media-player';
+import JWPlayer, {PlaylistItem} from 'react-native-jw-media-player';
 import Gemius from 'react-native-gemius-plugin';
 import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 
@@ -12,10 +12,11 @@ interface Props {
   title: string;
   backgroundImage?: string;
   autoStart: boolean;
+  startTime?: number;
 }
 
 const JWPlayerNative: React.FC<Props> = (props) => {
-  const {style, streamUri, mediaId, title, backgroundImage, autoStart} = props;
+  const {style, streamUri, mediaId, title, backgroundImage, autoStart, startTime} = props;
   const playerRef = useRef<JWPlayer>(null);
 
   useEffect(() => {
@@ -82,7 +83,7 @@ const JWPlayerNative: React.FC<Props> = (props) => {
     [mediaId],
   );
 
-  const playlistItem = useMemo(() => {
+  const playlistItem: PlaylistItem = useMemo(() => {
     return {
       //playerStyle: 'lrt',
       title: title,
@@ -95,10 +96,11 @@ const JWPlayerNative: React.FC<Props> = (props) => {
       controls: true,
       repeat: false,
       displayDescription: false,
+      startTime,
       displayTitle: false,
       backgroundAudioEnabled: true,
     };
-  }, [title, mediaId, streamUri, autoStart, backgroundImage]);
+  }, [title, mediaId, streamUri, autoStart, backgroundImage, startTime]);
 
   return (
     <View style={[styles.htmlContainer, style]}>

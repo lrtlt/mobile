@@ -15,6 +15,7 @@ interface Props {
   title: string;
   isAudioOnly: boolean;
   autoPlay: boolean;
+  startTime?: number;
 }
 
 const VideoComponent: React.FC<Props> = (props) => {
@@ -50,6 +51,7 @@ const VideoComponent: React.FC<Props> = (props) => {
         title={data.title}
         autoStart={true}
         backgroundImage={props.backgroundImage}
+        startTime={props.startTime}
       />
     );
   } else if (isLoading) {

@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
 import FastImage, {Source} from 'react-native-fast-image';
+import {checkEqual} from '../../util/LodashEqualityCheck';
 
 interface Props {
   style?: ViewStyle;
@@ -20,4 +21,4 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-export default CoverImage;
+export default React.memo(CoverImage, checkEqual);

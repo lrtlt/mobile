@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     margin: 8,
     padding: 16,
     borderRadius: 40,
-    backgroundColor: '#FFFFFF30',
+    backgroundColor: '#FFFFFF16',
   },
   detailsContainer: {
     padding: 16,

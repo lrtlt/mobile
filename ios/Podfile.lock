@@ -563,7 +563,7 @@ PODS:
     - React-Core
   - react-native-gemius-plugin (1.5.2):
     - React
-  - react-native-jw-media-player (0.1.55):
+  - react-native-jw-media-player (0.1.56):
     - google-cast-sdk (~> 4.4.5)
     - JWPlayer-SDK
     - React
@@ -932,7 +932,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-flipper: d3d2f95926f5059ec268d59921c218adaa821eb5
   react-native-gemius-plugin: 4286c513d65942e7602da9555c95584b24922a5e
-  react-native-jw-media-player: 24f199494bb5041d1c1ed83e8831cbf84797ba5a
+  react-native-jw-media-player: 366aa6d0578f8ebaa8e505728d653fb803e2cecf
   react-native-onesignal: 2a7c3a5f2aa1c599d94cda6cc583205e1548828d
   react-native-pager-view: 967d50ce0f1b72e434a2d9f3b739ddbf7d5bbf83
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79

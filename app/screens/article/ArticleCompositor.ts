@@ -16,7 +16,7 @@ export const TYPE_AUDIO = 'content_audio';
 export const TYPE_AUDIO_CONTENT = 'content_audio_content';
 export const TYPE_TEXT_TO_SPEECH = 'content_text2speech';
 
-export type ArticleContentItem = {
+export type ArticleContentItemType = {
   type:
     | typeof TYPE_HEADER
     | typeof TYPE_MAIN_PHOTO
@@ -75,7 +75,7 @@ const composeMedia = (article: ArticleContentMedia) => {
   return data;
 };
 
-const getHeaderData = (article: ArticleContent): ArticleContentItem => {
+const getHeaderData = (article: ArticleContent): ArticleContentItemType => {
   let author = null;
   try {
     if (isDefaultArticle(article)) {
@@ -101,7 +101,7 @@ const getHeaderData = (article: ArticleContent): ArticleContentItem => {
   };
 };
 
-const getMainPhoto = (article: ArticleContent): ArticleContentItem => {
+const getMainPhoto = (article: ArticleContent): ArticleContentItemType => {
   return {
     type: TYPE_MAIN_PHOTO,
     data: {
@@ -110,7 +110,7 @@ const getMainPhoto = (article: ArticleContent): ArticleContentItem => {
   };
 };
 
-const getSummary = (article: ArticleContentDefault): ArticleContentItem => {
+const getSummary = (article: ArticleContentDefault): ArticleContentItemType => {
   return {
     type: TYPE_SUMMARY,
     data: {
@@ -119,7 +119,7 @@ const getSummary = (article: ArticleContentDefault): ArticleContentItem => {
   };
 };
 
-const getGallery = (article: ArticleContentDefault): ArticleContentItem => {
+const getGallery = (article: ArticleContentDefault): ArticleContentItemType => {
   return {
     type: TYPE_GALLERY,
     data: {
@@ -128,7 +128,7 @@ const getGallery = (article: ArticleContentDefault): ArticleContentItem => {
   };
 };
 
-const getParagraphs = (article: ArticleContentDefault): ArticleContentItem[] => {
+const getParagraphs = (article: ArticleContentDefault): ArticleContentItemType[] => {
   return article.paragraphs.map((p) => {
     return {
       type: TYPE_PARAGRAPH,
@@ -137,14 +137,14 @@ const getParagraphs = (article: ArticleContentDefault): ArticleContentItem[] => 
   });
 };
 
-const getContentForMedia = (article: ArticleContentMedia): ArticleContentItem => {
+const getContentForMedia = (article: ArticleContentMedia): ArticleContentItemType => {
   return {
     type: TYPE_PARAGRAPH,
     data: {p: article.content},
   };
 };
 
-const getAudioContent = (article: ArticleContentMedia): ArticleContentItem => {
+const getAudioContent = (article: ArticleContentMedia): ArticleContentItemType => {
   return {
     type: TYPE_AUDIO_CONTENT,
     data: {
@@ -155,7 +155,7 @@ const getAudioContent = (article: ArticleContentMedia): ArticleContentItem => {
   };
 };
 
-const getVideo = (article: ArticleContentMedia): ArticleContentItem => {
+const getVideo = (article: ArticleContentMedia): ArticleContentItemType => {
   return {
     type: TYPE_VIDEO,
     data: {
@@ -165,7 +165,7 @@ const getVideo = (article: ArticleContentMedia): ArticleContentItem => {
   };
 };
 
-const getAudio = (article: ArticleContentMedia): ArticleContentItem => {
+const getAudio = (article: ArticleContentMedia): ArticleContentItemType => {
   return {
     type: TYPE_AUDIO,
     data: {
@@ -176,7 +176,7 @@ const getAudio = (article: ArticleContentMedia): ArticleContentItem => {
   };
 };
 
-const getTextToSpeech = (article: ArticleContentDefault): ArticleContentItem => {
+const getTextToSpeech = (article: ArticleContentDefault): ArticleContentItemType => {
   return {
     type: TYPE_TEXT_TO_SPEECH,
     data: {

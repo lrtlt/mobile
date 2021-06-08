@@ -279,6 +279,80 @@ export type ArticlePhoto = {
   author: string;
 };
 
+export type ArticleEmbedType =
+  | ArticleEmbedPhotoType
+  | ArticleEmbedArticleType
+  | ArticleEmbedVideoType
+  | ArticleEmbedAudioType
+  | ArticleEmbedBroadcastType
+  | ArticleEmbedHTMLType;
+
+export type ArticleEmbedPhotoType = {
+  embed_type: 'photo';
+  el: ArticlePhoto;
+};
+
+export type ArticleEmbedArticleType = {
+  embed_type: 'article';
+  el: {
+    id: number;
+    title: string;
+    date: string;
+    url: string;
+  };
+};
+
+export type ArticleEmbedVideoType = {
+  embed_type: 'video';
+  el: {
+    article_id?: number;
+    article_url?: string;
+    date?: string;
+    get_playlist_url?: string;
+    get_streams_url?: string;
+    img_path_postfix?: string;
+    img_path_prefix?: string;
+    is_video?: 1 | 0;
+    photo_aspectratio: string;
+    photo_id: number;
+    record_offset?: number;
+    title: string;
+  };
+};
+
+export type ArticleEmbedAudioType = {
+  embed_type: 'audio';
+  el: {
+    id: number;
+    date: string;
+    record_offset?: number;
+    stream_url: string;
+    title: string;
+  };
+};
+
+export type ArticleEmbedHTMLType = {
+  embed_type: 'html';
+  el: {
+    html?: string;
+  };
+};
+
+export type ArticleEmbedBroadcastType = {
+  embed_type: 'broadcast';
+  el: {
+    channel: string;
+    channel_id: number;
+    title: string;
+    get_streams_url: string;
+    img_path_postfix?: string;
+    img_path_prefix?: string;
+    photo_id?: number;
+    url?: string;
+    w_h?: number;
+  };
+};
+
 export type ArticleContentDefault = {
   article_id: number;
   article_title: string;
@@ -304,7 +378,7 @@ export type ArticleContentDefault = {
 
   paragraphs: {
     p: string;
-    embed?: any;
+    embed?: ArticleEmbedType[];
   }[];
   'n-18'?: 0 | 1;
   is_video?: 0 | 1;
