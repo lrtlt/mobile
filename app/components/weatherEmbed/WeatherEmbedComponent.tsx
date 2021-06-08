@@ -1,8 +1,9 @@
-import * as React from 'react';
-import {StyleSheet, useWindowDimensions, ViewStyle} from 'react-native';
-import WebView from 'react-native-autoheight-webview';
+import React, {useCallback} from 'react';
+import {useWindowDimensions, ViewStyle} from 'react-native';
 import {ForecastLocation} from '../../api/Types';
 import {DEFAULT_FORECAST_LOCATION} from '../../constants';
+import SafeAutoHeightWebView from '../safeWebView/SafeAutoHeightWebView';
+import ScreenLoader from '../screenLoader/ScreenLoader';
 
 interface Props {
   style?: ViewStyle;
@@ -20,33 +21,20 @@ const WeatherEmbedComponent: React.FC<Props> = (props) => {
   const uri = `https://www.lrt.lt/orai?embed&city=${locationCode}`;
 
   return (
-    <WebView
-      style={styles.webview}
-      originWhitelist={['*']}
-      cacheEnabled={false}
+    <SafeAutoHeightWebView
       scrollEnabled={false}
-      containerStyle={[styles.container, props.style]}
-      domStorageEnabled={true}
-      javaScriptEnabled={true}
-      automaticallyAdjustContentInsets={false}
-      collapsable={false}
-      bounces={false}
-      scalesPageToFit={true}
+      containerStyle={props.style}
       viewportContent={`width=${width}, user-scalable=no`}
       startInLoadingState={true}
+      renderLoading={useCallback(
+        () => (
+          <ScreenLoader />
+        ),
+        [],
+      )}
       source={{uri: uri}}
     />
   );
 };
 
 export default WeatherEmbedComponent;
-
-const styles = StyleSheet.create({
-  container: {
-    overflow: 'hidden',
-  },
-  webview: {
-    opacity: 0.99,
-    minHeight: 200,
-  },
-});

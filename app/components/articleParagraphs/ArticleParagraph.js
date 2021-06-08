@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Linking, StyleSheet} from 'react-native';
-import {WebView} from 'react-native-webview';
 import HTML from 'react-native-render-html';
 import {IGNORED_TAGS, alterNode, makeTableRenderer} from 'react-native-render-html-table-bridge';
 import Embed from './embeded/Embed';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
+import SafeWebView from '../safeWebView/SafeWebView';
 
 /** Todo remove maybe? It introduces bugs (text not fitting) */
 const EXTRA_LINE_SPACING = 7;
@@ -35,12 +35,7 @@ const renderP = (_, children, __, passProps) => {
 
 const renderers = {
   table: makeTableRenderer({
-    WebViewComponent: WebView,
-    webViewProps: {
-      startInLoadingState: true,
-      containerStyle: {overflow: 'hidden'},
-      style: {opacity: 0.99},
-    },
+    WebViewComponent: SafeWebView,
   }),
   blockquote: renderBlockquote,
   p: renderP,

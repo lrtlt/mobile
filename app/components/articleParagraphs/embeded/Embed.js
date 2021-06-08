@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
-import WebView from 'react-native-autoheight-webview';
 import ArticlePhoto from '../../articlePhoto/ArticlePhoto';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import VideoComponent from '../../videoComponent/VideoComponent';
@@ -10,8 +9,9 @@ import {VIDEO_ASPECT_RATIO} from '../../../constants';
 import TextComponent from '../../text/Text';
 import {useTheme} from '../../../Theme';
 import AudioComponent from '../../audioComponent/AudioComponent';
+import SafeAutoHeightWebView from '../../safeWebView/SafeAutoHeightWebView';
 
-const getScreenWidth = () => Dimensions.get('screen').width;
+const getScreenWidth = () => Dimensions.get('window').width;
 
 const Embed = (props) => {
   const {colors, strings} = useTheme();
@@ -61,7 +61,6 @@ const Embed = (props) => {
         <View style={styles.embededVideoContainer} key={i}>
           <VideoComponent
             style={styles.player}
-            cover={{cover: item.el}}
             cover={item.el}
             streamUrl={item.el.get_playlist_url || item.el.get_streams_url}
             autoPlay={false}
@@ -74,11 +73,6 @@ const Embed = (props) => {
 
   const renderHtml = () => {
     const width = getScreenWidth() - 12 * 2;
-    const style = {
-      width,
-      opacity: 0.99, //Crashfix on some android devices.
-      minHeight: 100,
-    };
 
     const content = data.map((item, i) => {
       //Facebook video
@@ -121,32 +115,16 @@ const Embed = (props) => {
       console.log(formatted);
 
       return (
-        <WebView
+        <SafeAutoHeightWebView
           key={i}
-          style={style}
+          style={{width}}
           containerStyle={styles.embededHtmlContainer}
-          originWhitelist={['*']}
-          cacheEnabled={false}
           scrollEnabled={false}
           allowsFullscreenVideo={true}
-          domStorageEnabled={true}
-          javaScriptEnabled={true}
-          androidHardwareAccelerationDisabled={false}
-          automaticallyAdjustContentInsets={false}
           mediaPlaybackRequiresUserAction={true}
-          collapsable={false}
-          bounces={false}
           startInLoadingState={true}
+          viewportContent={`width=${width}, user-scalable=no`}
           source={{html: formatted}}
-          // onNavigationStateChange={event => {
-          //   console.log('onNavigationStateChange', event);
-          //   if (event.url !== 'about:blank') {
-          //     this.webview.stopLoading();
-          //     Linking.openURL(event.url).catch(err =>
-          //       console.warn('An error occurred', err),
-          //     );
-          //   }
-          // }}
         />
       );
     });
@@ -248,7 +226,6 @@ const styles = StyleSheet.create({
   },
   embededHtmlContainer: {
     width: '100%',
-    overflow: 'hidden',
   },
   embededVideoContainer: {
     backgroundColor: '#000000',

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import GallerySwiper from 'react-native-gallery-swiper';
 import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
@@ -21,8 +21,7 @@ type Props = {
 };
 
 const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
-  console.log('render gallery');
-  const [state, setState] = useState(() => {
+  const [state] = useState(() => {
     const selectedImage = route.params.selectedImage ?? null;
     const images = route.params.images ?? [];
 
@@ -34,7 +33,6 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
 
     const formattedImages = formatImages(images, initialIndex);
     return {
-      selectedIndex: initialIndex,
       initialIndex,
       images: formattedImages,
       imageUrls: formattedImages.map((img) => ({
@@ -43,7 +41,13 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
     };
   });
 
-  const {images, selectedIndex, imageUrls} = state;
+  const [selectedIndex, setSelectedIndex] = useState(state.initialIndex);
+
+  const goBackHandler = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
+  const {images, imageUrls} = state;
   const {colors, dim} = useTheme();
 
   const image = images[selectedIndex];
@@ -57,7 +61,7 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
         initialNumToRender={2}
         //initialPage={state.initialIndex}
         pageMargin={4}
-        onPageSelected={(i) => setState({...state, selectedIndex: i})}
+        onPageSelected={setSelectedIndex}
       />
       <View style={{...styles.detailsContainer, backgroundColor: colors.background}}>
         <SafeAreaView edges={['bottom']}>
@@ -75,7 +79,7 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
       <View style={styles.absoluteLayout}>
         <SafeAreaView edges={['top', 'left']}>
           <View style={styles.backButtonContainer}>
-            <BorderlessButton onPress={() => navigation.goBack()}>
+            <BorderlessButton onPress={goBackHandler} hitSlop={{left: 12, right: 12, top: 12, bottom: 12}}>
               <IconClose color={colors.headerTint} size={dim.appBarIconSize} />
             </BorderlessButton>
           </View>

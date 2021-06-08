@@ -2,7 +2,7 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
-import WebView from 'react-native-webview';
+import {SafeWebView} from '../../components';
 import {MainStackParamList} from '../../navigation/MainStack';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'WebPage'>;
@@ -25,21 +25,10 @@ const WebPageScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <WebView
+      <SafeWebView
         style={styles.webView}
-        containerStyle={styles.webViewContainer}
-        originWhitelist={['*']}
-        cacheEnabled={false}
-        scalesPageToFit={true}
         scrollEnabled={true}
         showsVerticalScrollIndicator={true}
-        domStorageEnabled={true}
-        javaScriptEnabled={true}
-        androidHardwareAccelerationDisabled={true}
-        automaticallyAdjustContentInsets={true}
-        collapsable={false}
-        bounces={false}
-        startInLoadingState={true}
         source={{uri: url}}
       />
     </View>
@@ -55,10 +44,5 @@ const styles = StyleSheet.create({
   },
   webView: {
     flex: 1,
-    opacity: 0.99,
-    minHeight: 200,
-  },
-  webViewContainer: {
-    overflow: 'hidden',
   },
 });

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet} from 'react-native';
-import WebView from 'react-native-webview';
+import SafeWebView from '../safeWebView/SafeWebView';
+import ScreenLoader from '../screenLoader/ScreenLoader';
 
 const buildFrame = (url: string) => {
   return `<!DOCTYPE html>
@@ -29,20 +30,12 @@ interface Props {
 const FacebookComments: React.FC<Props> = (props) => {
   const html = buildFrame(props.url);
   return (
-    <WebView
+    <SafeWebView
       style={styles.webView}
-      containerStyle={styles.webViewContainer}
-      originWhitelist={['*']}
-      cacheEnabled={false}
-      scrollEnabled={true}
-      showsVerticalScrollIndicator={true}
-      domStorageEnabled={true}
-      javaScriptEnabled={true}
-      androidHardwareAccelerationDisabled={true}
-      automaticallyAdjustContentInsets={true}
-      collapsable={false}
-      bounces={false}
       startInLoadingState={true}
+      renderLoading={useCallback(() => {
+        return <ScreenLoader />;
+      }, [])}
       source={{html}}
     />
   );
@@ -52,11 +45,6 @@ export default FacebookComments;
 
 const styles = StyleSheet.create({
   webView: {
-    opacity: 0.99,
-    minHeight: 200,
     flex: 1,
-  },
-  webViewContainer: {
-    overflow: 'hidden',
   },
 });
