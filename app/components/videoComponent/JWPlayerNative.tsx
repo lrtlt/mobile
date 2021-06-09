@@ -96,11 +96,11 @@ const JWPlayerNative: React.FC<Props> = (props) => {
       controls: true,
       repeat: false,
       displayDescription: false,
-      startTime,
+      startTime: startTime ? startTime : undefined,
       displayTitle: false,
       backgroundAudioEnabled: true,
     };
-  }, [title, mediaId, streamUri, autoStart, backgroundImage, startTime]);
+  }, [title, mediaId, backgroundImage, streamUri, autoStart, startTime]);
 
   return (
     <View style={[styles.htmlContainer, style]}>

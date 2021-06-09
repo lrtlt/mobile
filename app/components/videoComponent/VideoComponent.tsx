@@ -51,7 +51,7 @@ const VideoComponent: React.FC<Props> = (props) => {
         title={data.title}
         autoStart={true}
         backgroundImage={props.backgroundImage}
-        startTime={props.startTime}
+        startTime={props.startTime || data.offset}
       />
     );
   } else if (isLoading) {

@@ -9,6 +9,7 @@ type VideoState = {
     streamUri: string;
     mediaId: string;
     title: string;
+    offset?: number;
   };
 };
 
@@ -34,6 +35,7 @@ const useVideoData = (): ReturnState => {
             streamUri: data.content.trim(),
             title: title ?? 'untitled-live-stream',
             mediaId: data.content,
+            offset: undefined,
           },
         });
       } else {
@@ -45,6 +47,7 @@ const useVideoData = (): ReturnState => {
             streamUri: playlist_item.file.trim(),
             mediaId: playlist_item.mediaid ? playlist_item.mediaid.toString() : 'no-media-id',
             title: response.title,
+            offset: response.offset,
           },
         });
       }
