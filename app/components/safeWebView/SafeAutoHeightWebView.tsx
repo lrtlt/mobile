@@ -16,12 +16,13 @@ const SafeAutoHeightWebView: React.FC<Props> = forwardRef<WebView, Props>((props
         cacheEnabled={false}
         domStorageEnabled={true}
         javaScriptEnabled={true}
-        androidHardwareAccelerationDisabled={true}
+        //TODO: check crashes if there is none - good to go.
+        androidHardwareAccelerationDisabled={false}
         androidLayerType="hardware"
         automaticallyAdjustContentInsets={false}
         bounces={false}
         {...props}
-        style={styles.webView}
+        style={[styles.webView, props.style]}
         containerStyle={styles.webViewContainer}
       />
     </View>
