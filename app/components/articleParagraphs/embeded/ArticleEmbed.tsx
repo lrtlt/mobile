@@ -90,7 +90,7 @@ const ArticleEmbed: React.FC<Props> = ({embedArray, itemPressHandler}) => {
                 );
               }
               default: {
-                console.warn('Unkown embed type ' + e[0]!.embed_type);
+                console.warn('Unkown embed:' + e);
                 return null;
               }
             }

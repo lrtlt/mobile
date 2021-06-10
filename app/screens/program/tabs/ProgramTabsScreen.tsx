@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {ProgramItem, Text} from '../../../components';
@@ -6,26 +6,37 @@ import {TabView, TabBar} from 'react-native-tab-view';
 import {getIconForChannelById} from '../../../util/UI';
 import Divider from '../../../components/divider/Divider';
 import {useTheme} from '../../../Theme';
+import {ProgramItemType, SingleDayProgram} from '../../../api/Types';
+import {Scene} from 'react-native-tab-view/lib/typescript/src/types';
 
-const TabsScreen = (props) => {
+interface Props {
+  program: SingleDayProgram[];
+}
+
+type Route = {
+  key: string;
+  channelId: number;
+  title: string;
+  program: ProgramItemType[];
+};
+
+const TabsScreen: React.FC<Props> = ({program}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const {colors} = useTheme();
 
-  const navigationState = {
-    index: currentIndex,
-    routes: props.program.map((channel, i) => {
+  const routes: Route[] = useMemo(() => {
+    return program.map((channel, i) => {
       return {
-        key: channel.channel_id || `unkown-channel-${i}`,
+        key: String(channel.channel_id || `unkown-channel-${i}`),
+        channelId: channel.channel_id ?? -1,
         title: channel.title,
         program: channel.prog,
       };
-    }),
-  };
+    });
+  }, [program]);
 
-  const renderTabLable = useCallback(({route}) => {
-    const channelId = route.key;
-    const title = route.title;
+  const renderTabLable = useCallback(({route}: Scene<Route>) => {
+    const {channelId, title} = route;
     return (
       <View key={`${channelId}-${title}`} style={styles.centerContainer}>
         {getIconForChannelById(channelId)}
@@ -36,19 +47,23 @@ const TabsScreen = (props) => {
     );
   }, []);
 
-  const renderTabBar = useCallback((tabBarProps) => {
-    return (
-      <TabBar
-        {...tabBarProps}
-        scrollEnabled={true}
-        pressColor={colors.androidTouchFeedback}
-        renderLabel={(labelProps) => renderTabLable(labelProps)}
-        indicatorStyle={{backgroundColor: colors.primary}}
-        style={{backgroundColor: colors.background}}
-        tabStyle={styles.tab}
-      />
-    );
-  }, []);
+  const renderTabBar = useCallback(
+    (tabBarProps) => {
+      return (
+        <TabBar
+          {...tabBarProps}
+          scrollEnabled={true}
+          pressColor={colors.androidTouchFeedback}
+          renderLabel={renderTabLable}
+          indicatorStyle={{backgroundColor: colors.primary}}
+          style={{backgroundColor: colors.background}}
+          tabStyle={styles.tab}
+        />
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [renderTabLable],
+  );
 
   const renderProgramItem = useCallback((val) => {
     const item = val.item;
@@ -60,15 +75,19 @@ const TabsScreen = (props) => {
     );
   }, []);
 
+  const keyExtractor = useCallback((item, i) => String(i) + String(item), []);
+
+  const calculateProgramItemLayout = useCallback((_, index) => ({length: 58, offset: 58 * index, index}), []);
+
   const renderScene = useCallback(
     ({route}) => {
-      if (Math.abs(currentIndex - navigationState.routes.indexOf(route)) > 0) {
+      if (Math.abs(currentIndex - routes.indexOf(route)) > 0) {
         return <View key={`${route.key}-foo`} />;
       }
 
-      const prog = route.program;
+      const programItems = (route as Route).program;
 
-      const scrollToIndex = prog.findIndex((i) => {
+      const scrollToIndex = programItems.findIndex((i) => {
         const proc = Math.max(0, Math.min(Number(i.proc), 100));
         return proc < 100;
       });
@@ -77,28 +96,31 @@ const TabsScreen = (props) => {
         <View key={`${route.key}`}>
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={prog}
+            data={programItems}
             renderItem={renderProgramItem}
-            getItemLayout={(_, index) => ({length: 58, offset: 58 * index, index})}
+            getItemLayout={calculateProgramItemLayout}
             initialScrollIndex={scrollToIndex}
             contentContainerStyle={styles.scrollContainer}
-            keyExtractor={(item, i) => String(i) + String(item)}
+            keyExtractor={keyExtractor}
           />
         </View>
       );
     },
-    [currentIndex],
+    [calculateProgramItemLayout, currentIndex, keyExtractor, renderProgramItem, routes],
   );
 
   return (
     <View style={styles.root}>
       <TabView
-        navigationState={navigationState}
+        navigationState={{
+          index: currentIndex,
+          routes: routes,
+        }}
         swipeEnabled={true}
         renderScene={renderScene}
         renderTabBar={renderTabBar}
         lazy={true}
-        onIndexChange={(i) => setCurrentIndex(i)}
+        onIndexChange={setCurrentIndex}
         initialLayout={{width: Dimensions.get('screen').width}}
       />
     </View>

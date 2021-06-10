@@ -435,26 +435,29 @@ export type ArticleContentResponse = {
   article: ArticleContent;
 };
 
-export type ProgramItem = {
+export type ProgramItemType = {
   title: string;
   channel_title: string;
   proc: string;
   time_start: string;
   time_end: string;
+  certification?: string;
+  record_article_id?: string;
   is_radio?: 0 | 1;
   allow_lt?: 0 | 1;
   block_all?: 0 | 1;
 };
 
+export type SingleDayProgram = {
+  channel_id: number;
+  title: string;
+  prog: ProgramItemType[];
+};
+
 export type ProgramResponse = {
   all_programs: {
     days: any;
-    [key: string]: {
-      channel_id: number;
-      title: string;
-      certification: string;
-      prog: ProgramItem[];
-    };
+    [key: string]: SingleDayProgram[];
   };
 };
 
@@ -469,7 +472,7 @@ export type ChannelResponse = {
     is_permanent?: 0 | 1;
     is_radio?: 0 | 1;
   };
-  prog: ProgramItem[];
+  prog: ProgramItemType[];
 };
 
 export type SearchResponse = {
