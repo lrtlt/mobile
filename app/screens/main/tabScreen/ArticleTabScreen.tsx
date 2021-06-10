@@ -2,12 +2,13 @@ import React, {useEffect, useMemo} from 'react';
 
 import Gemius from 'react-native-gemius-plugin';
 import {ROUTE_TYPE_CATEGORY, ROUTE_TYPE_NEWEST, ROUTE_TYPE_POPULAR} from '../../../api/Types';
-import {GEMIUS_VIEW_SCRIPT_ID} from '../../../constants';
+import {EVENT_LOGO_PRESS, GEMIUS_VIEW_SCRIPT_ID} from '../../../constants';
 import useNewestArticlesProvider from './useNewestArticlesProvider';
 import usePopularArticlesProvider from './usePopularArticlesProvider';
 import TabScreenContent from './ArticleTabScreenContent';
 import {ArticleScreenAdapter} from './Types';
 import useCategoryArticlesProvider from './useCategoryArticlesProvider';
+import {EventRegister} from 'react-native-event-listeners';
 
 interface Props {
   isCurrent: boolean;
@@ -42,10 +43,23 @@ const ArticleTabScreen: React.FC<Props> = ({isCurrent, type, showTitle, category
     refresh();
   }, [categoryId, refresh, type]);
 
+  useEffect(() => {
+    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {
+      if (isCurrent) {
+        refresh();
+      }
+    });
+
+    if (typeof listener === 'string') {
+      return () => {
+        EventRegister.removeEventListener(listener);
+      };
+    }
+  }, [isCurrent, refresh]);
+
   return (
     <TabScreenContent
       data={state}
-      isCurrent={isCurrent}
       requestNextPage={loadNextPage}
       requestRefresh={refresh}
       showTitle={showTitle}

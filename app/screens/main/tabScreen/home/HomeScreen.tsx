@@ -216,7 +216,7 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
           renderSectionHeader={renderSectionHeader}
           sections={sections}
           removeClippedSubviews={false}
-          windowSize={8}
+          windowSize={6}
           updateCellsBatchingPeriod={20}
           maxToRenderPerBatch={4}
           initialNumToRender={8}

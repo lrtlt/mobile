@@ -2,10 +2,8 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useRef} from 'react';
 import {View, StyleSheet, FlatList, ListRenderItemInfo, Button, RefreshControl} from 'react-native';
-import {EventRegister} from 'react-native-event-listeners';
 import {Article} from '../../../../Types';
 import {ArticleRow, DefaultSectionHeader, ListLoader, ScreenLoader, Text} from '../../../components';
-import {EVENT_LOGO_PRESS} from '../../../constants';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import {PagingState} from '../../../redux/reducers/articles';
 import {useTheme} from '../../../Theme';
@@ -13,12 +11,11 @@ import {useTheme} from '../../../Theme';
 interface Props {
   data: PagingState;
   showTitle: boolean;
-  isCurrent: boolean;
   requestNextPage: () => void;
   requestRefresh: () => void;
 }
 
-const TabScreenContent: React.FC<Props> = ({data, showTitle, isCurrent, requestNextPage, requestRefresh}) => {
+const TabScreenContent: React.FC<Props> = ({data, showTitle, requestNextPage, requestRefresh}) => {
   const {isError, articles, isFetching, isRefreshing, title} = data;
   const {colors, strings} = useTheme();
 
@@ -26,19 +23,11 @@ const TabScreenContent: React.FC<Props> = ({data, showTitle, isCurrent, requestN
   const listRef = useRef<FlatList>(null);
 
   useEffect(() => {
-    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {
-      if (isCurrent) {
-        listRef.current?.scrollToOffset({offset: 0});
-        requestRefresh();
-      }
-    });
-
-    if (typeof listener === 'string') {
-      return () => {
-        EventRegister.removeEventListener(listener);
-      };
+    //Scroll to top when it's finished refreshing
+    if (!isRefreshing) {
+      listRef.current?.scrollToOffset({animated: true, offset: 0});
     }
-  }, [isCurrent, requestRefresh]);
+  }, [isRefreshing]);
 
   const openArticleHandler = useCallback(
     (article: Article) => navigation.push('Article', {articleId: article.id}),
