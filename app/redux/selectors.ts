@@ -1,5 +1,5 @@
 import {HomePageType} from '../../Types';
-import {ROUTE_TYPE_CATEGORY, ROUTE_TYPE_MEDIA} from '../api/Types';
+import {HomeChannels, ROUTE_TYPE_CATEGORY, ROUTE_TYPE_MEDIA} from '../api/Types';
 import {formatArticles} from '../util/articleFormatters';
 import {RootState} from './reducers';
 import {HomeBlock} from './reducers/articles';
@@ -111,7 +111,7 @@ export const selectProgramScreenState = (state: RootState) => {
   };
 };
 
-export const selectHomeChannels = (state: RootState) => {
+export const selectHomeChannels = (state: RootState): HomeChannels => {
   return state.articles.channels;
 };
 

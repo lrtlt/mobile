@@ -429,6 +429,10 @@ export const isVideoLiveStream = (
   return Boolean((response as VideoDataLiveStream)?.response?.data);
 };
 
+export const isLiveChannel = (channel: TVChannel | LiveChannel): channel is LiveChannel => {
+  return Boolean((channel as LiveChannel).photo);
+};
+
 export type ArticleContent = ArticleContentDefault | ArticleContentMedia;
 
 export type ArticleContentResponse = {

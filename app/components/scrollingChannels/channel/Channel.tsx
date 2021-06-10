@@ -11,50 +11,42 @@ import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import TextComponent from '../../text/Text';
 import {useTheme} from '../../../Theme';
 import MediaIndicator from '../../mediaIndicator/MediaIndicator';
+import {isLiveChannel, LiveChannel, TVChannel} from '../../../api/Types';
 
-const Channel = (props) => {
+interface Props {
+  data: TVChannel | LiveChannel;
+  onPress: (channel: TVChannel | LiveChannel) => void;
+}
+
+const Channel: React.FC<Props> = ({data, onPress}) => {
   const {colors} = useTheme();
 
-  const data = props.data;
-  const proc = Math.max(0, Math.min(Number(data.proc), 100));
   const colorsSet = getColorsForChannel(data.channel);
   const channelIcon = getIconForChannel(data.channel, 32);
+  const coverUrl = isLiveChannel(data) ? buildArticleImageUri(IMG_SIZE_L, data.photo) : data.cover_url;
 
-  const icon = data.is_radio ? <IC_MICROPHONE size={20} /> : <IC_CAMERA size={20} />;
-
-  const startEndTimeText = data.time_start + ' - ' + data.time_end;
-
-  let coverUrl = null;
-  if (props.isLive) {
-    coverUrl = buildArticleImageUri(IMG_SIZE_L, data.photo);
-  } else {
-    coverUrl = data.cover_url;
-  }
-
-  const programTimeComponent = props.isLive ? (
+  const programTimeComponent = isLiveChannel(data) ? (
     <View style={styles.liveFooTimeView} />
   ) : (
     <TextComponent style={{...styles.timeText, backgroundColor: colors.greyBackground}}>
-      {startEndTimeText}
+      {data.time_start + ' - ' + data.time_end}
     </TextComponent>
   );
 
-  const channelTitleComponent = props.isLive ? (
+  const channelTitleComponent = isLiveChannel(data) ? (
     <View style={styles.channelTitleContainer}>
-      <TextComponent style={{...styles.channelTitle, padding: 2}} numberOfLines={2}>
-        LRT.LT
-      </TextComponent>
+      <TextComponent style={styles.channelTitleLive}>LRT.LT</TextComponent>
     </View>
   ) : (
     <View style={styles.channelTitleContainer}>
-      {icon}
+      {data.is_radio ? <IC_MICROPHONE size={20} /> : <IC_CAMERA size={20} />}
       <TextComponent style={styles.channelTitle} numberOfLines={2}>
         {data.channel_title}
       </TextComponent>
     </View>
   );
 
-  const bottomBarContainer = props.isLive ? (
+  const bottomBarContainer = isLiveChannel(data) ? (
     <View />
   ) : (
     <View style={styles.bottomBarContainer}>
@@ -67,22 +59,18 @@ const Channel = (props) => {
       <View
         style={{
           ...styles.bottomBarOverlay,
-          width: proc + '%',
+          width: Math.max(0, Math.min(Number(data.proc), 100)) + '%',
           backgroundColor: colorsSet.secondary,
         }}
       />
     </View>
   );
 
-  const liveBadge = props.isLive ? (
-    <View style={{flexWrap: 'wrap'}}>
-      <LiveBadge />
-    </View>
-  ) : null;
+  const liveBadge = isLiveChannel(data) ? <LiveBadge style={styles.liveBadge} /> : null;
 
   const onPressHandler = useCallback(() => {
-    props.onPress(props.data);
-  }, [props]);
+    onPress(data);
+  }, [data, onPress]);
 
   return (
     <View>
@@ -160,6 +148,17 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     paddingStart: 8,
     fontFamily: 'SourceSansPro-Regular',
+  },
+  channelTitleLive: {
+    fontSize: 12,
+    textTransform: 'uppercase',
+    paddingStart: 2,
+    paddingVertical: 1,
+    fontFamily: 'SourceSansPro-Regular',
+  },
+  liveBadge: {
+    alignSelf: 'flex-start',
+    marginTop: 4,
   },
   title: {
     width: '100%',

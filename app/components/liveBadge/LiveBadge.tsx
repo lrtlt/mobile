@@ -1,11 +1,15 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ViewStyle} from 'react-native';
 import {useTheme} from '../../Theme';
 
-const LiveBadge: React.FC = () => {
+interface Props {
+  style?: ViewStyle;
+}
+
+const LiveBadge: React.FC<Props> = (props) => {
   const {colors, strings} = useTheme();
   return (
-    <View style={[styles.container, {backgroundColor: colors.textError}]}>
+    <View style={[styles.container, {backgroundColor: colors.textError}, props.style]}>
       <Text style={styles.text}> {strings.liveChannelTitle} </Text>
     </View>
   );
@@ -15,7 +19,7 @@ export default LiveBadge;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 4,
+    padding: 3,
     borderRadius: 4,
     flexDirection: 'row',
   },

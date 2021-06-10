@@ -8,7 +8,7 @@ import TextComponent from '../text/Text';
 import {useSelector} from 'react-redux';
 import {selectHomeChannels} from '../../redux/selectors';
 import {checkEqual} from '../../util/LodashEqualityCheck';
-import {LiveChannel, TVChannel} from '../../api/Types';
+import {isLiveChannel, LiveChannel, TVChannel} from '../../api/Types';
 
 type LiveChannelData = {
   type: typeof CHANNEL_TYPE_LIVE;
@@ -31,15 +31,12 @@ const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
   const channels = useSelector(selectHomeChannels, checkEqual);
 
   const onChannelPressHandler = useCallback(
-    (channel: TVChannel) => {
-      onChannelPress({type: CHANNEL_TYPE_DEFAULT, payload: channel});
-    },
-    [onChannelPress],
-  );
-
-  const onLiveItemPressHandler = useCallback(
-    (liveItem: LiveChannel) => {
-      onChannelPress({type: CHANNEL_TYPE_LIVE, payload: liveItem});
+    (channel: TVChannel | LiveChannel) => {
+      if (isLiveChannel(channel)) {
+        onChannelPress({type: CHANNEL_TYPE_LIVE, payload: channel});
+      } else {
+        onChannelPress({type: CHANNEL_TYPE_DEFAULT, payload: channel});
+      }
     },
     [onChannelPress],
   );
@@ -54,7 +51,7 @@ const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
   const liveItemsContent =
     live_items &&
     live_items.map((liveItem) => {
-      return <Channel data={liveItem} key={liveItem.title} isLive={true} onPress={onLiveItemPressHandler} />;
+      return <Channel data={liveItem} key={liveItem.title} onPress={onChannelPressHandler} />;
     });
 
   const itemsContent =
