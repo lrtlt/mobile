@@ -2,10 +2,11 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {TabView} from 'react-native-tab-view';
 import TabBar from '../main/tabBar/TabBar';
-import CategoryTabScreen from '../main/tabScreen/category/CategoryTabScreen';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
+import ArticleTabScreen from '../main/tabScreen/ArticleTabScreen';
+import {ROUTE_TYPE_CATEGORY} from '../../api/Types';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Page'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Page'>;
@@ -53,10 +54,12 @@ const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
           } else {
             const {route: sceneRounte} = sceneProps;
             return (
-              <CategoryTabScreen
+              <ArticleTabScreen
+                type={ROUTE_TYPE_CATEGORY}
+                showTitle={true}
+                isCurrent={false}
                 categoryId={sceneRounte.categoryId}
                 categoryTitle={sceneRounte.title}
-                showTitle={true}
               />
             );
           }

@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useRef} from 'react';
 import {View, RefreshControl, StyleSheet, StatusBar, FlatList, ListRenderItemInfo} from 'react-native';
 import {ScreenLoader} from '../../../../components';
 import {fetchAudioteka} from '../../../../redux/actions/index';
-import {getOrientation} from '../../../../util/UI';
 import {GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
 import {useDispatch, useSelector} from 'react-redux';
 import Gemius from 'react-native-gemius-plugin';
@@ -116,7 +115,6 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
           style={styles.container}
           ref={listRef}
           extraData={{
-            orientation: getOrientation(),
             lastFetchTime: lastFetchTime,
           }}
           renderItem={renderItem}

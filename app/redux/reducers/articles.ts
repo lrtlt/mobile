@@ -49,13 +49,13 @@ type AudiotekaState = {
   data: AudiotekaResponse;
 } & BaseBlockState;
 
-type PagingState = {
+export type PagingState = {
   title: string;
   articles: Article[][];
   page: number;
 } & BaseBlockState;
 
-type CategoryState = {
+export type CategoryState = {
   nextPage: number;
   id: number;
 } & PagingState;

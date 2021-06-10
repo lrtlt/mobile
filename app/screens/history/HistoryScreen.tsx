@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {FlatList, ListRenderItemInfo, StyleSheet, View} from 'react-native';
 import {ArticleRow} from '../../components';
 import {useSelector} from 'react-redux';
-import {getOrientation} from '../../util/UI';
 import {selectHistoryScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {RouteProp} from '@react-navigation/native';
@@ -46,9 +45,6 @@ const HistoryScreen: React.FC<Props> = ({navigation}) => {
         showsVerticalScrollIndicator={false}
         data={articles}
         windowSize={4}
-        extraData={{
-          orientation: getOrientation(),
-        }}
         renderItem={renderItem}
         removeClippedSubviews={false}
         keyExtractor={(item, index) => `${index}-${item.map((i) => i.id)}`}

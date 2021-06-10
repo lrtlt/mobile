@@ -29,14 +29,6 @@ const DEFAULT_CHANNEL_ICON_SIZE = 25;
 export const ORIENTATION_PORTRAIT = 'portrait';
 export const ORIENTATION_LANDSCAPE = 'landscape';
 
-export const isPortrait = () => {
-  return Dimensions.get('screen').height > Dimensions.get('screen').width;
-};
-
-export const getOrientation = () => {
-  return isPortrait() === true ? ORIENTATION_PORTRAIT : ORIENTATION_LANDSCAPE;
-};
-
 export const getSmallestDim = () => {
   const dim = Dimensions.get('screen');
   return Math.min(dim.width, dim.height);

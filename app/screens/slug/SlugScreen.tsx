@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Button, ActivityIndicator, StyleSheet} from 'react-native';
 import {ArticleRow, Text} from '../../components';
-import {getOrientation} from '../../util/UI';
 import {fetchArticlesByTag} from '../../api';
 import {formatArticles} from '../../util/articleFormatters';
 import {ARTICLES_PER_PAGE_COUNT} from '../../constants';
@@ -117,9 +116,6 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
         showsVerticalScrollIndicator={false}
         data={articles}
         windowSize={4}
-        extraData={{
-          orientation: getOrientation(),
-        }}
         renderItem={(item) => {
           return (
             <ArticleRow

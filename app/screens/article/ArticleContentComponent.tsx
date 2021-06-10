@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {View, Animated, StyleSheet, ListRenderItemInfo, useWindowDimensions} from 'react-native';
 import Header from './header/Header';
-import {getOrientation, getSmallestDim} from '../../util/UI';
+import {getSmallestDim} from '../../util/UI';
 import {
   ArticlePhoto,
   TouchableDebounce,
@@ -34,15 +34,6 @@ import AudioContent from './audioContent/AudioContent';
 export type ArticleSelectableItem = {
   type: 'photo' | 'article';
   item: any;
-};
-
-const getItemKey = (item: ArticleContentItemType, index: number) => {
-  const {type} = item;
-  if (type === TYPE_GALLERY || type === TYPE_HEADER || type === TYPE_SUMMARY) {
-    return String(index) + String(type) + getOrientation();
-  } else {
-    return String(index) + String(type);
-  }
 };
 
 interface Props {
@@ -195,14 +186,13 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
         contentContainerStyle={{paddingTop: containerPaddingTop}}
         scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
         data={articleData}
-        extraData={{
-          orientation: getOrientation(),
-        }}
-        windowSize={5}
+        windowSize={6}
         showsVerticalScrollIndicator={false}
         renderItem={renderItem}
         removeClippedSubviews={false}
-        keyExtractor={useCallback((item, index) => getItemKey(item, index), [])}
+        keyExtractor={useCallback((item, index) => {
+          return String(index) + String(item.type);
+        }, [])}
       />
     </SafeAreaView>
   );

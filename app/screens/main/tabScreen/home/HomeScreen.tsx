@@ -11,7 +11,6 @@ import {
   TouchableDebounce,
 } from '../../../../components';
 import {fetchHome, fetchMediateka, openCategoryForName} from '../../../../redux/actions/index';
-import {getOrientation} from '../../../../util/UI';
 import {
   ARTICLE_EXPIRE_DURATION,
   GEMIUS_VIEW_SCRIPT_ID,
@@ -210,7 +209,6 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
           style={styles.container}
           ref={listRef}
           extraData={{
-            orientation: getOrientation(),
             lastFetchTime: lastFetchTime,
           }}
           renderItem={renderItem}

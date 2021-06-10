@@ -7,9 +7,6 @@ import {BorderlessButton} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
 import {useSelector} from 'react-redux';
 import HomeScreen from './tabScreen/home/HomeScreen';
-import CategoryTabScreen from './tabScreen/category/CategoryTabScreen';
-import NewestScreen from './tabScreen/newest/NewestScreen';
-import PopularScreen from './tabScreen/popular/PopularScreen';
 import TestScreen from '../testScreen/TestScreen';
 import {EventRegister} from 'react-native-event-listeners';
 import {EVENT_LOGO_PRESS, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
@@ -29,6 +26,7 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {MainDrawerParamList, MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
+import ArticleTabScreen from './tabScreen/ArticleTabScreen';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -106,17 +104,18 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
           return <AudiotekaScreen isCurrent={current} />;
         case ROUTE_TYPE_CATEGORY:
           return (
-            <CategoryTabScreen
-              categoryId={route.categoryId}
-              categoryTitle={route.title}
+            <ArticleTabScreen
+              type={ROUTE_TYPE_CATEGORY}
               isCurrent={current}
               showTitle={true}
+              categoryId={route.categoryId}
+              categoryTitle={route.title}
             />
           );
         case ROUTE_TYPE_NEWEST:
-          return <NewestScreen isCurrent={current} />;
+          return <ArticleTabScreen type={ROUTE_TYPE_NEWEST} isCurrent={current} showTitle={true} />;
         case ROUTE_TYPE_POPULAR:
-          return <PopularScreen isCurrent={current} />;
+          return <ArticleTabScreen type={ROUTE_TYPE_POPULAR} isCurrent={current} showTitle={true} />;
         default:
           return <TestScreen text={'Unkown type: ' + JSON.stringify(route)} />;
       }

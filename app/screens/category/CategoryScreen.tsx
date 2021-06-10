@@ -4,8 +4,9 @@ import {StyleSheet} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import CategoryTabScreen from '../main/tabScreen/category/CategoryTabScreen';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import ArticleTabScreen from '../main/tabScreen/ArticleTabScreen';
+import {ROUTE_TYPE_CATEGORY} from '../../api/Types';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Category'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Category'>;
@@ -26,7 +27,13 @@ const CategoryScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.screen} edges={['left', 'right']}>
-      <CategoryTabScreen categoryId={id} categoryTitle={name} />
+      <ArticleTabScreen
+        type={ROUTE_TYPE_CATEGORY}
+        isCurrent={false}
+        showTitle={false}
+        categoryId={id}
+        categoryTitle={name}
+      />
     </SafeAreaView>
   );
 };
