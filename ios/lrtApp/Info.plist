@@ -73,10 +73,9 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We will use your Microphone for media casting.</string>
 	<key>NSUserTrackingUsageDescription</key>
-  	<string>Nuasmeninti duomenys bus naudojami statistikai ir paslaugų kokybei užtikrinti.</string>
+	<string>Nuasmeninti duomenys bus naudojami statistikai ir paslaugų kokybei užtikrinti.</string>
 	<key>Privacy - Local Network Usage Description</key>
 	<string>We will use the local network to discover Cast-enabled devices on your WiFi network.</string>
-	
 	<key>UIAppFonts</key>
 	<array>
 		<string>PlayfairDisplay-Regular.ttf</string>
