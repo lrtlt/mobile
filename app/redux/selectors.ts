@@ -126,7 +126,7 @@ export const selectDrawerData = (state: RootState) => {
   return {
     routes: navigation.routes,
     pages: navigation.pages,
-    projects: projects && projects.length > 0 ? projects[0] : undefined,
+    webPageProjects: projects,
     channels: state.articles.channels.items,
   };
 };

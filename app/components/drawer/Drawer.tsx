@@ -13,13 +13,18 @@ import DrawerBlockNews from './components/DrawerBlockNews';
 import DrawerBlockFooter from './components/DrawerBlockFooter';
 import DrawerBlockTop from './components/DrawerBlockTop';
 import DrawerBlockPages from './components/DrawerBlockPages';
+import {useCallback} from 'react';
 
 type Props = DrawerContentComponentProps<DrawerContentOptions>;
 
 const DrawerComponent: React.FC<Props> = ({navigation}) => {
-  const {colors} = useTheme();
+  const {colors, dim} = useTheme();
   const data = useSelector(selectDrawerData, checkEqual);
   const insets = useSafeAreaInsets();
+
+  const Line = useCallback(() => <Divider style={{marginHorizontal: dim.drawerPadding * 2}} />, [
+    dim.drawerPadding,
+  ]);
 
   return (
     <View style={{...styles.container, backgroundColor: colors.background}}>
@@ -34,18 +39,15 @@ const DrawerComponent: React.FC<Props> = ({navigation}) => {
             paddingLeft: insets.left,
           },
         ]}>
-        <View style={styles.headerContainer}>
-          <DrawerBlockTop navigation={navigation} />
-        </View>
-        <Divider style={styles.line} />
+        <DrawerBlockTop navigation={navigation} />
+        <Line />
         <DrawerBlockChannels key="channels" navigation={navigation} channels={data.channels} />
-        <Divider style={styles.line} />
+        <Line />
         <DrawerBlockNews key="news" navigation={navigation} items={data.routes} />
-        <Divider style={styles.line} />
-        <DrawerBlockProjects key="projects" navigation={navigation} projects={data.projects} />
-        <Divider style={styles.line} />
+        <DrawerBlockProjects key="projects" navigation={navigation} projectBlocks={data.webPageProjects} />
+        <Line />
         <DrawerBlockPages key="pages" navigation={navigation} pages={data.pages} />
-        <Divider style={styles.line} />
+        <Line />
         <DrawerBlockFooter />
       </ScrollView>
     </View>
@@ -53,8 +55,6 @@ const DrawerComponent: React.FC<Props> = ({navigation}) => {
 };
 
 export default DrawerComponent;
-
-const drawerPadding = 10;
 
 const styles = StyleSheet.create({
   container: {
@@ -65,13 +65,5 @@ const styles = StyleSheet.create({
   },
   content: {
     minHeight: '100%',
-  },
-  headerContainer: {
-    paddingTop: drawerPadding,
-    paddingBottom: drawerPadding,
-  },
-  line: {
-    marginStart: drawerPadding * 2,
-    marginEnd: drawerPadding * 2,
   },
 });

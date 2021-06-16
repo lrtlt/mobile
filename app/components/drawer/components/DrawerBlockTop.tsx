@@ -1,6 +1,7 @@
 import {DrawerNavigationHelpers} from '@react-navigation/drawer/lib/typescript/src/types';
 import React from 'react';
 import {useCallback} from 'react';
+import {View} from 'react-native';
 import {useTheme} from '../../../Theme';
 import DrawerItem from '../../drawerItem/DrawerItem';
 import {IconBookmark, IconClock, IconSearch, IconTelevision} from '../../svg';
@@ -18,7 +19,7 @@ const DrawerBlockTop: React.FC<Props> = ({navigation}) => {
   const handleProgramClick = useCallback(() => navigation.navigate('Program'), [navigation]);
 
   return (
-    <>
+    <View style={{paddingVertical: dim.drawerPadding}}>
       <DrawerItem
         key={strings.search}
         text={strings.search}
@@ -43,7 +44,7 @@ const DrawerBlockTop: React.FC<Props> = ({navigation}) => {
         iconComponent={<IconTelevision size={dim.drawerIconSize} color={colors.textSecondary} />}
         onPress={handleProgramClick}
       />
-    </>
+    </View>
   );
 };
 

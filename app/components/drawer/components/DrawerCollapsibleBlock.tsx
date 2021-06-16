@@ -13,7 +13,7 @@ interface Props {
 const DrawerCollapsibleBlock: React.FC<Props> = ({title, children}) => {
   const [collapsed, setCollapsed] = useState(true);
 
-  const {colors} = useTheme();
+  const {colors, dim} = useTheme();
 
   const titlePressHandler = useCallback(() => {
     setCollapsed(!collapsed);
@@ -22,13 +22,21 @@ const DrawerCollapsibleBlock: React.FC<Props> = ({title, children}) => {
   return (
     <View>
       <TouchableDebounce onPress={titlePressHandler} activeOpacity={0.5}>
-        <View style={styles.titleContainer}>
+        <View
+          style={{
+            ...styles.titleContainer,
+            paddingHorizontal: dim.drawerPadding * 2,
+            paddingVertical: dim.drawerPadding * 2,
+          }}>
           <TextComponent style={styles.title}>{title}</TextComponent>
           {collapsed && <IconCarretDown size={20} color={colors.textSecondary} />}
         </View>
       </TouchableDebounce>
       <Collapsible
-        style={styles.container}
+        style={{
+          paddingLeft: dim.drawerPadding,
+          paddingBottom: dim.drawerPadding,
+        }}
         collapsed={collapsed}
         align="bottom"
         duration={200}
@@ -42,14 +50,8 @@ const DrawerCollapsibleBlock: React.FC<Props> = ({title, children}) => {
 export default DrawerCollapsibleBlock;
 
 const styles = StyleSheet.create({
-  container: {
-    paddingLeft: 8,
-    paddingBottom: 8,
-  },
   titleContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
     alignItems: 'center',
   },
   title: {
