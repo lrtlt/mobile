@@ -33,8 +33,8 @@ export const DEEP_LINKING_URL_PREFIX = 'lrt://';
 //Redirect urls
 export const URL_CONTACTS = 'https://apie.lrt.lt/kontaktai/portalas-kontaktai';
 export const URL_ABOUT = 'https://apie.lrt.lt/';
-export const URL_UPLOAD_NEWS = 'https://apie.lrt.lt/bendraukime/rasykite';
-export const URL_FEEDBACK = 'https://apie.lrt.lt/bendraukime/rasykite';
+export const URL_UPLOAD_NEWS = 'https://apie.lrt.lt/kontaktai/rasykite-mums';
+export const URL_FEEDBACK = 'https://apie.lrt.lt/kontaktai/rasykite-mums';
 
 export const DEFAULT_FORECAST_LOCATION = 'vilnius';
 
