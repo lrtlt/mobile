@@ -10,6 +10,7 @@ export interface AppTheme extends Theme {
 
 interface Dimensions {
   appBarIconSize: number;
+  drawerIconSize: number;
 }
 
 //#region Strings
@@ -240,6 +241,7 @@ const colorsDark: ColorScheme = {
 
 const dimensions: Dimensions = {
   appBarIconSize: Platform.OS === 'android' ? 20 : 20,
+  drawerIconSize: 18,
 };
 
 export const themeLight: AppTheme = {

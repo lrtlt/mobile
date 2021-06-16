@@ -12,8 +12,8 @@ interface Props {
 const TouchableDebounce: React.FC<Props> = (props) => {
   return (
     <TouchableOpacity
-      {...props}
       activeOpacity={0.7}
+      {...props}
       onPress={debounce(props.onPress, props.debounceTime, {
         leading: true,
         trailing: false,

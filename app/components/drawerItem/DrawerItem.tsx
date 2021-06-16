@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {RectButton} from 'react-native-gesture-handler';
-import {useTheme} from '../../Theme';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import TextComponent from '../text/Text';
 
 interface Props {
@@ -10,18 +9,17 @@ interface Props {
   onPress: () => void;
 }
 const DrawerItem: React.FC<Props> = (props) => {
-  const {colors} = useTheme();
   const icon = props.iconComponent ? <View style={styles.iconContainer}>{props.iconComponent}</View> : null;
 
   return (
-    <RectButton onPress={props.onPress} rippleColor={colors.ripple} underlayColor={colors.primary}>
+    <TouchableOpacity onPress={props.onPress} activeOpacity={0.5}>
       <View style={styles.container}>
         {icon}
         <TextComponent style={styles.text} type="secondary">
           {props.text}
         </TextComponent>
       </View>
-    </RectButton>
+    </TouchableOpacity>
   );
 };
 
