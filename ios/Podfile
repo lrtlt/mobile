@@ -13,6 +13,9 @@ target 'lrtApp' do
     # Pods for testing
   end
 
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-AppTrackingTransparency', :path => "#{permissions_path}/AppTrackingTransparency"
+  
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
@@ -22,6 +25,9 @@ target 'lrtApp' do
     flipper_post_install(installer)
   end
 end
+
+
+
 
 target 'OneSignalNotificationServiceExtension' do
   pod 'OneSignal', '>= 2.9.3', '< 5.0'

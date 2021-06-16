@@ -9,6 +9,7 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {initialWindowMetrics, SafeAreaProvider} from 'react-native-safe-area-context';
 import {persistor, store} from './app/redux/store';
+import useAppTrackingPermission from './app/util/useAppTrackingPermission';
 
 const ReduxProvider: React.FC = ({children}) => {
   return (
@@ -21,6 +22,7 @@ const ReduxProvider: React.FC = ({children}) => {
 };
 
 const App: React.FC = () => {
+  useAppTrackingPermission();
   useGemiusSetup();
   useOneSignal();
 
