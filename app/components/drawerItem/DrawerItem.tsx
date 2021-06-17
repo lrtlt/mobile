@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import TextComponent from '../text/Text';
 
 interface Props {

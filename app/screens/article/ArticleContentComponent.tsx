@@ -2,15 +2,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {View, Animated, StyleSheet, ListRenderItemInfo, useWindowDimensions} from 'react-native';
 import Header from './header/Header';
 import {getSmallestDim} from '../../util/UI';
-import {
-  ArticlePhoto,
-  TouchableDebounce,
-  ArticleGallery,
-  VideoComponent,
-  AudioComponent,
-  Text,
-  ArticleContentItem,
-} from '../../components';
+import {ArticleGallery, VideoComponent, AudioComponent, Text, ArticleContentItem} from '../../components';
 import {
   compose,
   TYPE_HEADER,
@@ -30,6 +22,7 @@ import {useCollapsibleHeader} from 'react-navigation-collapsible';
 import {useTheme} from '../../Theme';
 import {ArticleContent} from '../../api/Types';
 import AudioContent from './audioContent/AudioContent';
+import ArticleMainPhoto from './mainPhoto/ArticleMainPhoto';
 
 export type ArticleSelectableItem = {
   type: 'photo' | 'article';
@@ -55,81 +48,6 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
     (item: ListRenderItemInfo<ArticleContentItemType>): React.ReactElement | null => {
       const {type, data} = item.item;
 
-      const renderMainPhoto = () => {
-        if (isTextToSpeechPlaying) {
-          //We will render text2Speech component instead
-          return null;
-        }
-
-        return (
-          <TouchableDebounce
-            onPress={() =>
-              itemPressHandler({
-                type: 'photo',
-                item: data.photo,
-              })
-            }>
-            <ArticlePhoto
-              style={styles.photo}
-              photo={data.photo}
-              progressive={true}
-              imageAspectRatio={1.5}
-              expectedWidth={contentWidth}
-            />
-          </TouchableDebounce>
-        );
-      };
-
-      const renderSummary = () => {
-        return (
-          <Text style={styles.summaryText} selectable={true}>
-            {data.text}
-          </Text>
-        );
-      };
-
-      const renderParagraph = () => {
-        return <ArticleContentItem data={data} itemPressHandler={itemPressHandler} />;
-      };
-
-      const renderVideo = () => {
-        return (
-          <View style={styles.playerContainer}>
-            <VideoComponent {...data} style={styles.player} autoPlay={false} />
-          </View>
-        );
-      };
-
-      const renderAudio = () => {
-        return (
-          <View style={styles.playerContainer}>
-            <AudioComponent {...data} style={styles.player} autoStart={false} />
-          </View>
-        );
-      };
-
-      const renderText2Speech = () => {
-        return isTextToSpeechPlaying ? (
-          <View style={styles.playerContainer}>
-            <AudioComponent {...data} style={styles.playerTextToSpeech} autoStart={true} />
-          </View>
-        ) : null;
-      };
-
-      const renderGallery = () => {
-        return (
-          <ArticleGallery
-            data={data.photos}
-            expectedWidth={contentWidth}
-            itemSelectHandler={itemPressHandler}
-          />
-        );
-      };
-
-      const renderAudioContent = () => {
-        return <AudioContent {...data} />;
-      };
-
       switch (type) {
         case TYPE_HEADER: {
           return (
@@ -141,31 +59,67 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
           );
         }
         case TYPE_MAIN_PHOTO: {
-          return renderMainPhoto();
+          if (isTextToSpeechPlaying) {
+            //We will render text2Speech component instead
+            return null;
+          }
+          return (
+            <ArticleMainPhoto
+              data={data.photo}
+              itemPressHandler={itemPressHandler}
+              contentWidth={contentWidth}
+            />
+          );
         }
         case TYPE_SUMMARY: {
-          return renderSummary();
+          return (
+            <Text style={styles.summaryText} selectable={true}>
+              {data.text}
+            </Text>
+          );
         }
         case TYPE_GALLERY: {
-          return renderGallery();
+          return (
+            <ArticleGallery
+              data={data.photos}
+              expectedWidth={contentWidth}
+              itemSelectHandler={itemPressHandler}
+            />
+          );
         }
         case TYPE_PARAGRAPH: {
-          return renderParagraph();
+          return <ArticleContentItem data={data} itemPressHandler={itemPressHandler} />;
         }
         case TYPE_VIDEO: {
-          return renderVideo();
+          return (
+            <View style={styles.playerContainer}>
+              <VideoComponent {...data} style={styles.player} autoPlay={false} />
+            </View>
+          );
         }
         case TYPE_AUDIO: {
-          return renderAudio();
+          return (
+            <View style={styles.playerContainer}>
+              <AudioComponent {...data} style={styles.player} autoStart={false} />
+            </View>
+          );
         }
         case TYPE_AUDIO_CONTENT: {
-          return renderAudioContent();
+          return <AudioContent {...data} />;
         }
         case TYPE_TEXT_TO_SPEECH: {
-          return renderText2Speech();
+          if (!isTextToSpeechPlaying) {
+            return null;
+          } else {
+            return (
+              <View style={styles.playerContainer}>
+                <AudioComponent {...data} style={styles.playerTextToSpeech} autoStart={true} />
+              </View>
+            );
+          }
         }
         default: {
-          return <View />;
+          return null;
         }
       }
     },
@@ -211,9 +165,6 @@ const styles = StyleSheet.create({
     lineHeight: 32,
     fontFamily: 'SourceSansPro-Regular',
     fontSize: 22,
-  },
-  photo: {
-    width: '100%',
   },
   playerContainer: {
     width: '100%',

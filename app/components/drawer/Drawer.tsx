@@ -14,6 +14,8 @@ import DrawerBlockFooter from './components/DrawerBlockFooter';
 import DrawerBlockTop from './components/DrawerBlockTop';
 import DrawerBlockPages from './components/DrawerBlockPages';
 import {useCallback} from 'react';
+import useOnDrawerClose from './useOnDrawerClose';
+import {useRef} from 'react';
 
 type Props = DrawerContentComponentProps<DrawerContentOptions>;
 
@@ -22,13 +24,26 @@ const DrawerComponent: React.FC<Props> = ({navigation}) => {
   const data = useSelector(selectDrawerData, checkEqual);
   const insets = useSafeAreaInsets();
 
+  const scrollRef = useRef<ScrollView>(null);
+
   const Line = useCallback(() => <Divider style={{marginHorizontal: dim.drawerPadding * 2}} />, [
     dim.drawerPadding,
   ]);
 
+  useOnDrawerClose(
+    useCallback(() => {
+      scrollRef.current?.scrollTo({
+        x: 0,
+        y: 0,
+        animated: false,
+      });
+    }, []),
+  );
+
   return (
     <View style={{...styles.container, backgroundColor: colors.background}}>
       <ScrollView
+        ref={scrollRef}
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[

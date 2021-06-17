@@ -6,7 +6,7 @@ import {IMG_SIZE_XS, buildArticleImageUri, getImageSizeForWidth, ImageSize} from
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 import {Icon404} from '../svg';
-import {ArticlePhoto as ArticlePhotoType} from '../../api/Types';
+import {ArticlePhotoType} from '../../api/Types';
 
 interface ImageWrapperProps {
   progressive?: boolean;

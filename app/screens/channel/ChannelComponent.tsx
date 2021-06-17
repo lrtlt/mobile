@@ -60,7 +60,6 @@ const ChannelComponent: React.FC<Props> = ({channelData}) => {
           style={styles.player}
           autoPlay={true}
           backgroundImage={channel_info.player_background_image}
-          isAudioOnly={channel_info.is_radio === 1}
           title={channel_info.title}
           streamUrl={channel_info.get_streams_url}
         />

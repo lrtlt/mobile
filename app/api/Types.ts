@@ -272,7 +272,7 @@ export type NewestArticlesResponse = {
   articles: Article[];
 };
 
-export type ArticlePhoto = {
+export type ArticlePhotoType = {
   title: string;
   path: string;
   w_h: string;
@@ -289,7 +289,7 @@ export type ArticleEmbedType =
 
 export type ArticleEmbedPhotoType = {
   embed_type: 'photo';
-  el: ArticlePhoto;
+  el: ArticlePhotoType;
 };
 
 export type ArticleEmbedArticleType = {
@@ -360,8 +360,8 @@ export type ArticleContentDefault = {
   article_url?: string;
   article_date: string;
   article_summary: string;
-  article_photos: ArticlePhoto[];
-  main_photo: ArticlePhoto;
+  article_photos: ArticlePhotoType[];
+  main_photo: ArticlePhotoType;
   article_authors: {
     name: string;
     slug: string;
@@ -407,7 +407,7 @@ export type ArticleContentMedia = {
     slug: string;
   }[];
   content: string;
-  main_photo: ArticlePhoto;
+  main_photo: ArticlePhotoType;
   'n-18'?: 0 | 1;
   is_video?: 0 | 1;
   is_audio?: 0 | 1;

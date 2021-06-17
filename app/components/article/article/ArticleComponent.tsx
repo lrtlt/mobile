@@ -145,7 +145,6 @@ ArticleComponent.defaultProps = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderRadius: 8,
   },
   image: {
     flex: 1,
@@ -214,12 +213,11 @@ const styles = StyleSheet.create({
 const stylesScroll = {
   ...styles,
   container: {
-    flex: 1,
+    ...styles.container,
     width: 300,
   },
   title: {
-    marginTop: 4,
-    fontFamily: 'PlayfairDisplay-Regular',
+    ...styles.title,
     fontSize: 19,
   },
 };
@@ -227,8 +225,7 @@ const stylesScroll = {
 const stylesMulti = {
   ...styles,
   title: {
-    marginTop: 8,
-    fontFamily: 'PlayfairDisplay-Regular',
+    ...styles.title,
     fontSize: 17,
   },
 };

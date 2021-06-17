@@ -21,7 +21,6 @@ const EmbedBroadcast: React.FC<Props> = ({data}) => {
                 cover={item.el}
                 streamUrl={item.el.get_streams_url}
                 autoPlay={false}
-                isAudioOnly={false}
                 title={item.el.title}
               />
             </View>

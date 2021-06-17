@@ -3,14 +3,14 @@ import {View, useWindowDimensions, ViewStyle} from 'react-native';
 import JWPlayerNative from '../videoComponent/JWPlayerNative';
 import {getImageSizeForWidth, buildArticleImageUri} from '../../util/ImageUtil';
 import Gemius from 'react-native-gemius-plugin';
-import {ArticlePhoto} from '../../api/Types';
+import {ArticlePhotoType} from '../../api/Types';
 
 interface AudioComponentProps {
   style?: ViewStyle;
   streamUri: string;
   mediaId: string;
   title: string;
-  cover?: ArticlePhoto;
+  cover?: ArticlePhotoType;
   autoStart: boolean;
   startTime?: number;
 }

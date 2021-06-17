@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import CoverImage from '../coverImage/CoverImage';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import {buildArticleImageUri, getImageSizeForWidth} from '../../util/ImageUtil';
-import {ArticlePhoto as ArticlePhotoType} from '../../api/Types';
+import {ArticlePhotoType} from '../../api/Types';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 
 const PhotoComponent = (

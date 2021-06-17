@@ -5,6 +5,7 @@ import {useTheme} from '../../../Theme';
 import {IconCarretDown} from '../../svg';
 import TextComponent from '../../text/Text';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
+import useOnDrawerClose from '../useOnDrawerClose';
 
 interface Props {
   title: string;
@@ -14,6 +15,12 @@ const DrawerCollapsibleBlock: React.FC<Props> = ({title, children}) => {
   const [collapsed, setCollapsed] = useState(true);
 
   const {colors, dim} = useTheme();
+
+  useOnDrawerClose(
+    useCallback(() => {
+      setCollapsed(true);
+    }, []),
+  );
 
   const titlePressHandler = useCallback(() => {
     setCollapsed(!collapsed);

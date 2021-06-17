@@ -7,7 +7,7 @@ import {Platform} from 'react-native';
 import {Drawer, SearchFilterDrawer} from '../components';
 import {useSettings} from '../settings/useSettings';
 import {themeDark, themeLight} from '../Theme';
-import {ArticlePhoto, MenuItemPage, SearchFilter} from '../api/Types';
+import {ArticlePhotoType, MenuItemPage, SearchFilter} from '../api/Types';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import SearchContextProvider from '../screens/search/context/SearchContextProvider';
 
@@ -21,8 +21,8 @@ export type MainStackParamList = {
     url: string;
   };
   Gallery: {
-    images: ArticlePhoto[];
-    selectedImage: ArticlePhoto;
+    images: ArticlePhotoType[];
+    selectedImage: ArticlePhotoType;
   };
   Channel: {
     channelId: number;

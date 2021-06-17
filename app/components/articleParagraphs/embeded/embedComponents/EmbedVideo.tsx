@@ -21,7 +21,6 @@ const EmbedVideo: React.FC<Props> = ({data}) => {
                 cover={item.el}
                 streamUrl={(item.el.get_playlist_url || item.el.get_streams_url)!}
                 autoPlay={false}
-                isAudioOnly={false}
                 startTime={item.el.record_offset}
                 title={item.el.title}
               />

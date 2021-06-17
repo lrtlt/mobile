@@ -26,7 +26,7 @@ const DrawerBlockProjects: React.FC<Props> = ({projectBlocks, navigation}) => {
         }
 
         return (
-          <View>
+          <View key={projects.name}>
             <Divider
               style={{
                 marginHorizontal: dim.drawerPadding * 2,

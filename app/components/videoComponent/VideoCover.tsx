@@ -4,7 +4,7 @@ import {getImageSizeForWidth, buildArticleImageUri, buildImageUri, IMG_SIZE_XS} 
 import Image from '../progressiveImage/ProgressiveImage';
 import MediaIndicator from '../mediaIndicator/MediaIndicator';
 import {VIDEO_ASPECT_RATIO, VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
-import {ArticlePhoto} from '../../api/Types';
+import {ArticlePhotoType} from '../../api/Types';
 
 /** Comes from embeded element within the articles paragraphs */
 type AlternativeVideoCoverType = {
@@ -12,7 +12,7 @@ type AlternativeVideoCoverType = {
   img_path_prefix?: string;
 };
 
-export type VideoCoverType = ArticlePhoto | AlternativeVideoCoverType;
+export type VideoCoverType = ArticlePhotoType | AlternativeVideoCoverType;
 
 const VideoCover: React.FC<VideoCoverType> = (props) => {
   const renderImage = useCallback((uri?: string, thumbUri?: string) => {
@@ -48,8 +48,8 @@ const VideoCover: React.FC<VideoCoverType> = (props) => {
   return null;
 };
 
-const isArticlePhoto = (cover?: ArticlePhoto | AlternativeVideoCoverType): cover is ArticlePhoto => {
-  return Boolean((cover as ArticlePhoto)?.path);
+const isArticlePhoto = (cover?: ArticlePhotoType | AlternativeVideoCoverType): cover is ArticlePhotoType => {
+  return Boolean((cover as ArticlePhotoType)?.path);
 };
 
 export default React.memo(VideoCover);
