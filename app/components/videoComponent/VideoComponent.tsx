@@ -32,7 +32,6 @@ const VideoComponent: React.FC<Props> = (props) => {
     if (props.autoPlay) {
       load(props.streamUrl, props.title);
     }
-    load(props.streamUrl, props.title);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
