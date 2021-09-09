@@ -35,7 +35,6 @@
                 <data android:scheme="lrt" />
             </intent-filter>
         </activity>
-        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
 
         <receiver android:name="androidx.media.session.MediaButtonReceiver">
             <intent-filter>
