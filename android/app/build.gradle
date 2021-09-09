@@ -125,8 +125,7 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
     ndkVersion rootProject.ext.ndkVersion
-
-    compileSdkVersion rootProject.ext.compileSdkVersion    
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         applicationId "lt.mediapark.lrt"
@@ -196,6 +195,11 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
+    def work_version = "2.6.0"
+    // Force WorkManager 2.6.0 for transitive dependency
+    implementation("androidx.work:work-runtime-ktx:$work_version") {
+        force = true
+    }
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
