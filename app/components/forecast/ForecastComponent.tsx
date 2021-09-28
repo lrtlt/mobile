@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import {fetchForecast} from '../../api';
 import {Forecast, ForecastLocation} from '../../api/Types';
 import {DEFAULT_FORECAST_LOCATION} from '../../constants';
+import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {selectForecastLocation} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {getIconForWeatherConditions} from '../../util/UI';
@@ -23,6 +24,8 @@ const ForecastComponent: React.FC<Props> = (props) => {
   const storedLocation = useSelector(selectForecastLocation);
   const location = (props.location ? props.location : storedLocation) as ForecastLocation;
 
+  const cancellablePromise = useCancellablePromise();
+
   useEffect(() => {
     if (forecast) {
       if (!location || location.c === forecast.location.code) {
@@ -33,7 +36,7 @@ const ForecastComponent: React.FC<Props> = (props) => {
     const callApi = async () => {
       const cityCode = location?.c ? location.c : DEFAULT_FORECAST_LOCATION;
       try {
-        const response = await fetchForecast(cityCode);
+        const response = await cancellablePromise(fetchForecast(cityCode));
         setForecast(response.current ?? response.default);
       } catch (e) {
         setForecast(undefined);
@@ -43,7 +46,7 @@ const ForecastComponent: React.FC<Props> = (props) => {
     const interval = setInterval(() => callApi(), INTERVAL);
 
     return () => clearInterval(interval);
-  }, [forecast, location]);
+  }, [cancellablePromise, forecast, location]);
 
   const f = forecast?.forecast;
 

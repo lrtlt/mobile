@@ -3,6 +3,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {fetchArticle} from '../../api';
 import {ArticleContent} from '../../api/Types';
+import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {addArticleToHistory} from '../../redux/actions';
 
 type ScreenState = {
@@ -28,13 +29,15 @@ const useArticleScreenState = (articleId: number): [ScreenState, (accept: boolea
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
+  const cancellablePromise = useCancellablePromise();
+
   useEffect(() => {
     setState({
       article: undefined,
       loadingState: STATE_LOADING,
     });
 
-    fetchArticle(articleId)
+    cancellablePromise(fetchArticle(articleId))
       .then((response) => {
         const article = response.article;
         const loadingState = !article
@@ -56,8 +59,7 @@ const useArticleScreenState = (articleId: number): [ScreenState, (accept: boolea
           loadingState: STATE_ERROR,
         });
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [articleId]);
+  }, [articleId, cancellablePromise, dispatch]);
 
   const acceptAdultContent = useCallback(
     (accept: boolean) => {

@@ -5,6 +5,7 @@ import {fetchWeatherLocations} from '../../api';
 import {ForecastLocation} from '../../api/Types';
 import {TouchableDebounce} from '../../components';
 import TextComponent from '../../components/text/Text';
+import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {useTheme} from '../../Theme';
 
 interface Props {
@@ -19,11 +20,13 @@ const WeatherLocations: React.FC<Props> = (props) => {
 
   const {colors, strings} = useTheme();
 
+  const cancellablePromise = useCancellablePromise();
+
   useEffect(() => {
-    fetchWeatherLocations()
+    cancellablePromise(fetchWeatherLocations())
       .then((response) => setLocations(response))
       .catch((error) => console.log(error));
-  }, []);
+  }, [cancellablePromise]);
 
   useEffect(() => {
     if (inputValue && inputValue.length > 2) {

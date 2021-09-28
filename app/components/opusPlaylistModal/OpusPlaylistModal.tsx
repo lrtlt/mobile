@@ -5,6 +5,7 @@ import Modal from 'react-native-modal';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {fetchOpusPlaylist} from '../../api';
 import {OpusPlayListItem} from '../../api/Types';
+import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {useTheme} from '../../Theme';
 import {IconClose} from '../svg';
 import Text from '../text/Text';
@@ -23,11 +24,13 @@ const OpusPlaylistModal: React.FC<OpusPlaylistModalProps> = ({visible, currentSo
   const {colors} = useTheme();
   const insets = useSafeAreaInsets();
 
+  const cancellablePromise = useCancellablePromise();
+
   useEffect(() => {
     if (visible) {
-      fetchOpusPlaylist().then((response) => setItems(response.rds));
+      cancellablePromise(fetchOpusPlaylist()).then((response) => setItems(response.rds));
     }
-  }, [visible]);
+  }, [cancellablePromise, visible]);
 
   return (
     <Modal

@@ -2,6 +2,7 @@ import {useCallback, useState} from 'react';
 import {Article} from '../../../Types';
 import {fetchArticleSearch} from '../../api';
 import {SearchFilter} from '../../api/Types';
+import useCancellablePromise from '../../hooks/useCancellablePromise';
 
 type ReturnType = {
   searchResults: Article[];
@@ -20,12 +21,14 @@ const useSearchApi = (query: string, filter: SearchFilter): ReturnType => {
 
   const [searchResults, setSearchResults] = useState<Article[]>([]);
 
+  const cancellablePromise = useCancellablePromise();
+
   return {
     loadingState,
     searchResults,
     callSearch: useCallback(() => {
       setLoadingState({isFetching: true, isError: false});
-      fetchArticleSearch(query, filter)
+      cancellablePromise(fetchArticleSearch(query, filter))
         .then((response) => {
           setLoadingState({
             isFetching: false,
@@ -39,7 +42,7 @@ const useSearchApi = (query: string, filter: SearchFilter): ReturnType => {
             isError: true,
           });
         });
-    }, [filter, query]),
+    }, [cancellablePromise, filter, query]),
   };
 };
 

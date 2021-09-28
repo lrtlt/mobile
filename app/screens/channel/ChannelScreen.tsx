@@ -20,6 +20,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {ChannelResponse} from '../../api/Types';
 import {ChannelDataType} from '../../components/scrollingChannels/ScrollingChannels';
 import ChannelComponent from './ChannelComponent';
+import useCancellablePromise from '../../hooks/useCancellablePromise';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Channel'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Channel'>;
@@ -47,6 +48,8 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
 
   const {strings} = useTheme();
 
+  const cancellablePromise = useCancellablePromise();
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: strings.channelScreenTitle,
@@ -60,7 +63,7 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
     });
 
     const loadChannel = () => {
-      fetchChannel(selectedChannel)
+      cancellablePromise(fetchChannel(selectedChannel))
         .then((response) =>
           setState({
             channel: response,
@@ -76,7 +79,7 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
     };
 
     loadChannel();
-  }, [selectedChannel]);
+  }, [cancellablePromise, selectedChannel]);
 
   const onChannelPressHandler = useCallback((channel: ChannelDataType) => {
     const {type, payload} = channel;

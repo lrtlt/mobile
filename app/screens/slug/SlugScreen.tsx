@@ -10,6 +10,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Article} from '../../../Types';
+import useCancellablePromise from '../../hooks/useCancellablePromise';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Slug'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Slug'>;
@@ -35,6 +36,8 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
   });
 
   const {name, slugUrl} = route.params;
+
+  const cancellablePromise = useCancellablePromise();
 
   useEffect(() => {
     navigation.setOptions({
@@ -65,7 +68,7 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
 
     const tag = urlSegments[urlSegments.length - 1];
 
-    fetchArticlesByTag(tag, ARTICLES_PER_PAGE_COUNT * 3)
+    cancellablePromise(fetchArticlesByTag(tag, ARTICLES_PER_PAGE_COUNT * 3))
       .then((response) => {
         const formattedArticles = formatArticles(-1, response.articles);
         setState({

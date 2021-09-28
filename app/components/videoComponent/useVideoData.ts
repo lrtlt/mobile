@@ -1,6 +1,7 @@
 import {useCallback, useState} from 'react';
 import {fetchVideoData} from '../../api';
 import {isVideoLiveStream} from '../../api/Types';
+import useCancellablePromise from '../../hooks/useCancellablePromise';
 
 type VideoState = {
   isLoading: boolean;
@@ -22,37 +23,42 @@ const useVideoData = (): ReturnState => {
     isLoading: false,
   });
 
-  const load = useCallback((url: string, title: string) => {
-    setState({isLoading: true});
-    fetchVideoData(url).then((response) => {
-      if (isVideoLiveStream(response)) {
-        const {data} = response.response;
+  const cancellablePromise = useCancellablePromise();
 
-        setState({
-          isLoading: false,
-          data: {
-            isLiveStream: true,
-            streamUri: data.content.trim(),
-            title: title ?? 'untitled-live-stream',
-            mediaId: data.content,
-            offset: undefined,
-          },
-        });
-      } else {
-        const {playlist_item} = response;
-        setState({
-          isLoading: false,
-          data: {
-            isLiveStream: false,
-            streamUri: playlist_item.file.trim(),
-            mediaId: playlist_item.mediaid ? playlist_item.mediaid.toString() : 'no-media-id',
-            title: response.title,
-            offset: response.offset,
-          },
-        });
-      }
-    });
-  }, []);
+  const load = useCallback(
+    (url: string, title: string) => {
+      setState({isLoading: true});
+      cancellablePromise(fetchVideoData(url)).then((response) => {
+        if (isVideoLiveStream(response)) {
+          const {data} = response.response;
+
+          setState({
+            isLoading: false,
+            data: {
+              isLiveStream: true,
+              streamUri: data.content.trim(),
+              title: title ?? 'untitled-live-stream',
+              mediaId: data.content,
+              offset: undefined,
+            },
+          });
+        } else {
+          const {playlist_item} = response;
+          setState({
+            isLoading: false,
+            data: {
+              isLiveStream: false,
+              streamUri: playlist_item.file.trim(),
+              mediaId: playlist_item.mediaid ? playlist_item.mediaid.toString() : 'no-media-id',
+              title: response.title,
+              offset: response.offset,
+            },
+          });
+        }
+      });
+    },
+    [cancellablePromise],
+  );
 
   return {
     ...state,
