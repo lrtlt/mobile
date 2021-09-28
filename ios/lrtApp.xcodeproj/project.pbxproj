@@ -27,6 +27,7 @@
 		6FB5D222254AAF1D00E1295A /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FB5D221254AAF1D00E1295A /* NotificationService.m */; };
 		6FB5D226254AAF1D00E1295A /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6FB5D21E254AAF1D00E1295A /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		9BEA4358EA6A8247F03180FB /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F9D7CE826F3A90100CFC594 /* libPods-OneSignalNotificationServiceExtension.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,6 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0DA441B3E98808C75119AF0C /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
+				9BEA4358EA6A8247F03180FB /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -733,7 +733,7 @@ PODS:
   - react-native-onesignal (4.3.0):
     - OneSignalXCFramework (= 3.6.1)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-pager-view (5.4.4):
+  - react-native-pager-view (5.4.1):
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
@@ -1124,7 +1124,7 @@ SPEC CHECKSUMS:
   react-native-gemius-plugin: 4286c513d65942e7602da9555c95584b24922a5e
   react-native-jw-media-player: c81b53d24424133bbf92bc425414a1cdc85ac6bc
   react-native-onesignal: f829833463ec574cad5e83d1a3e3eed607a3bc3c
-  react-native-pager-view: 5ab4d0b4b44d89f77310cb3eb8129745f274ce55
+  react-native-pager-view: 43f51f45f37ec9715f6c188e4af46ccdf79872e8
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-webview: 1a19adb5578cdf7f005b7961dcc50c1c6b70f41b
   React-perflogger: fd28ee1f2b5b150b00043f0301d96bd417fdc339
