@@ -27,10 +27,17 @@ import {
   LIST_DATA_TYPE_CHANNELS,
   LIST_DATA_TYPE_ARTICLES_FEED,
   LIST_DATA_TYPE_MORE_FOOTER,
+  LIST_DATA_TYPE_BANNER,
 } from '../../constants';
 
 import {formatArticles as formatArticleBlock} from '../../util/articleFormatters';
-import {AudiotekaResponse, HomeChannels, HomeDataResponse} from '../../api/Types';
+import {
+  AudiotekaResponse,
+  HomeArticlesBlock,
+  HomeBannerBlock,
+  HomeChannels,
+  HomeDataResponse,
+} from '../../api/Types';
 import {Article} from '../../../Types';
 import {ArticlesActionType} from '../actions';
 
@@ -92,7 +99,17 @@ type HomeListItemMoreButton = {
   data: Category;
 };
 
-type HomeListItem = HomeListItemArticles | HomeListItemChannels | HomeListItemFeed | HomeListItemMoreButton;
+type HomeListItemBanner = {
+  type: typeof LIST_DATA_TYPE_BANNER;
+  data: HomeBannerBlock;
+};
+
+type HomeListItem =
+  | HomeListItemArticles
+  | HomeListItemChannels
+  | HomeListItemFeed
+  | HomeListItemMoreButton
+  | HomeListItemBanner;
 
 export type ArticlesState = {
   home: HomeState;
@@ -250,6 +267,7 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
       const homeItems = prepareHomeScreenData(articleBlocks);
       insertChannelsItem(homeItems);
       insertMoreFooters(homeItems);
+      insertBannerBlocks(homeItems, parseHomeBanners(action.data));
 
       console.log('HOME ITEMS', homeItems);
 
@@ -430,6 +448,22 @@ const insertChannelsItem = (homeBlocks: HomeBlock[]) => {
   homeBlocks[0].items.splice(1, 0, item);
 };
 
+const insertBannerBlocks = (homeBlocks: HomeBlock[], banners: HomeBannerBlock[]) => {
+  const items: HomeListItemBanner[] = banners.map((b) => {
+    return {type: LIST_DATA_TYPE_BANNER, data: b};
+  });
+
+  if (items.length > 0) {
+    if (items.length === 1) {
+      homeBlocks[0].items.push(...items);
+    } else {
+      homeBlocks[0].items.push(items[0]);
+      const rest = items.splice(1, items.length);
+      homeBlocks[1].items.push(...rest);
+    }
+  }
+};
+
 const insertMoreFooters = (homeBlocks: HomeBlock[]) => {
   homeBlocks.forEach((block) => {
     if (block.category.id === 0 || block.category.is_slug_block) {
@@ -460,7 +494,12 @@ const parseHomeArticles = (apiResponse: HomeDataResponse) => {
     },
   ];
 
-  apiResponse.articles_blocks.forEach((block) => {
+  const isArticleBLock = (block: HomeArticlesBlock | HomeBannerBlock): block is HomeArticlesBlock => {
+    const _block = block as HomeArticlesBlock;
+    return _block.articles_list && _block.articles_list.length > 0;
+  };
+
+  apiResponse.articles_blocks.filter(isArticleBLock).forEach((block) => {
     const articles = block.articles_list;
     if (articles && articles.length > 0) {
       homeCategories.push({
@@ -476,6 +515,16 @@ const parseHomeArticles = (apiResponse: HomeDataResponse) => {
     }
   });
   return homeCategories;
+};
+
+//Filters banner block from home response.
+const parseHomeBanners = (apiResponse: HomeDataResponse) => {
+  const isBannerBLock = (block: HomeArticlesBlock | HomeBannerBlock): block is HomeBannerBlock => {
+    const _block = block as HomeBannerBlock;
+    return Boolean(_block.html_embed);
+  };
+
+  return apiResponse.articles_blocks.filter(isBannerBLock);
 };
 
 export default reducer;

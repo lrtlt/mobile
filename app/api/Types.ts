@@ -97,6 +97,12 @@ export type HomeArticlesBlock = {
   articles_list: Article[];
 };
 
+export type HomeBannerBlock = {
+  template_id?: number;
+  html_embed_title?: string;
+  html_embed?: string;
+};
+
 export type HomeChannels = {
   items: TVChannel[];
   live_items?: LiveChannel[];
@@ -105,7 +111,7 @@ export type HomeChannels = {
 export type HomeDataResponse = {
   articles: Article[];
   tvprog: HomeChannels;
-  articles_blocks: HomeArticlesBlock[];
+  articles_blocks: (HomeArticlesBlock | HomeBannerBlock)[];
 };
 
 export type SearchFilterTypes =

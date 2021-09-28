@@ -19,6 +19,7 @@ import {
   LIST_DATA_TYPE_ARTICLES_FEED,
   LIST_DATA_TYPE_MORE_FOOTER,
   EVENT_LOGO_PRESS,
+  LIST_DATA_TYPE_BANNER,
 } from '../../../../constants';
 import {useDispatch, useSelector} from 'react-redux';
 import Gemius from 'react-native-gemius-plugin';
@@ -30,6 +31,7 @@ import {ROUTE_TYPE_HOME, ROUTE_TYPE_MEDIA} from '../../../../api/Types';
 import {Category} from '../../../../redux/reducers/articles';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../navigation/MainStack';
+import BannerComponent from '../../../../components/banner/Banner';
 
 interface Props {
   isCurrent: boolean;
@@ -156,6 +158,9 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
               onPress={() => onCategoryPressHandler(val.item.data)}
             />
           );
+        }
+        case LIST_DATA_TYPE_BANNER: {
+          return <BannerComponent data={val.item.data} />;
         }
         default: {
           console.warn('Uknown list item type: ' + val.item.type);

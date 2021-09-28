@@ -6,6 +6,7 @@ export const LIST_DATA_TYPE_ARTICLES = 'article';
 export const LIST_DATA_TYPE_ARTICLES_FEED = 'article_feed';
 export const LIST_DATA_TYPE_CHANNELS = 'channels';
 export const LIST_DATA_TYPE_MORE_FOOTER = 'more_footer';
+export const LIST_DATA_TYPE_BANNER = 'banner';
 
 export const EVENT_LOGO_PRESS = 'logo-press';
 export const EVENT_SELECT_CATEGORY_INDEX = 'select-category-index';
