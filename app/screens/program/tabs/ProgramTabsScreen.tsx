@@ -74,6 +74,7 @@ const TabsScreen: React.FC<Props> = ({program}) => {
           title={item.title}
           startTime={item.time_start}
           percent={item.proc}
+          record_article_id={item.record_article_id}
           description={item.description}
         />
         <Divider style={styles.programItemDivider} />

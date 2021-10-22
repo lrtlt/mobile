@@ -192,7 +192,7 @@ const colorsLight: ColorScheme = {
   actionButton: 'primary',
   programItem: 'white',
   toggleButtonSelected: '#DCE3E9',
-  programProgress: '#dce3e9',
+  programProgress: '#dce3e988',
   facebook: '#3b5998',
   darkIcon: '#222',
   lightGreyBackground: '#F9F9F9',

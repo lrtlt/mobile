@@ -1,20 +1,16 @@
 import React from 'react';
-import {TouchableOpacity, ViewStyle} from 'react-native';
+import {TouchableOpacity, TouchableOpacityProps} from 'react-native';
 import {debounce} from 'lodash';
 
-interface Props {
-  onPress: () => void;
-  style?: ViewStyle;
-  activeOpacity?: number;
+interface Props extends TouchableOpacityProps {
   debounceTime?: number;
 }
 
 const TouchableDebounce: React.FC<Props> = (props) => {
   return (
     <TouchableOpacity
-      activeOpacity={0.7}
       {...props}
-      onPress={debounce(props.onPress, props.debounceTime, {
+      onPress={debounce(props.onPress!, props.debounceTime, {
         leading: true,
         trailing: false,
       })}>
@@ -24,7 +20,7 @@ const TouchableDebounce: React.FC<Props> = (props) => {
 };
 
 TouchableDebounce.defaultProps = {
-  activeOpacity: 0.5,
+  activeOpacity: 0.7,
   debounceTime: 500,
 };
 export default TouchableDebounce;

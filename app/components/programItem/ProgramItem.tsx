@@ -1,7 +1,11 @@
-import React from 'react';
+import {useNavigation} from '@react-navigation/core';
+import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useCallback} from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
+import {TouchableDebounce} from '..';
+import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
-import {CameraIcon} from '../svg';
+import {CameraIcon, IconPlay} from '../svg';
 import TextComponent from '../text/Text';
 
 export const PROGRAM_ITEM_HEIGHT = 64;
@@ -10,6 +14,7 @@ interface Props {
   style?: ViewStyle;
   title: string;
   description?: string;
+  record_article_id?: string;
   startTime: string;
   percent: string;
 }
@@ -17,19 +22,44 @@ interface Props {
 const ProgramItem: React.FC<Props> = (props) => {
   const {colors} = useTheme();
 
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Program'>>();
+
   const proc = Math.max(0, Math.min(Number(props.percent), 100));
   const hasEnded = proc === 100;
 
-  const icon = proc < 100 && proc > 0 && (
-    <View style={styles.cameraIconContainer}>
-      <CameraIcon size={20} />
-    </View>
-  );
+  const renderIcon = useCallback(() => {
+    if (proc < 100 && proc > 0) {
+      return (
+        <View style={styles.cameraIconContainer}>
+          <CameraIcon size={16} />
+        </View>
+      );
+    } else if (props.record_article_id) {
+      return (
+        <View style={styles.cameraIconContainer}>
+          <IconPlay size={16} color="#a8d2ff" />
+        </View>
+      );
+    }
+    return null;
+  }, [proc, props.record_article_id]);
+
+  const openArticleHandler = useCallback(() => {
+    try {
+      const articleId = Number(props.record_article_id);
+      navigation.navigate('Article', {articleId});
+    } catch (e) {
+      console.log(e);
+    }
+  }, [navigation, props.record_article_id]);
 
   const titleStyle = hasEnded ? styles.titleText : styles.titleTextUpcoming;
 
   return (
-    <View style={[styles.container, props.style, {backgroundColor: colors.programItem}]}>
+    <TouchableDebounce
+      style={[styles.container, props.style, {backgroundColor: colors.programItem}]}
+      disabled={!props.record_article_id}
+      onPress={openArticleHandler}>
       <View
         style={{...styles.elapsedIndicator, width: proc + '%', backgroundColor: colors.programProgress}}
       />
@@ -37,7 +67,7 @@ const ProgramItem: React.FC<Props> = (props) => {
       <TextComponent style={styles.timeText} type="secondary">
         {props.startTime}
       </TextComponent>
-      {icon}
+      {renderIcon()}
       <View style={styles.textContainer}>
         <TextComponent style={titleStyle} type={proc === 0 ? 'secondary' : 'primary'}>
           {props.title}
@@ -49,7 +79,7 @@ const ProgramItem: React.FC<Props> = (props) => {
           </TextComponent>
         ) : null}
       </View>
-    </View>
+    </TouchableDebounce>
   );
 };
 
