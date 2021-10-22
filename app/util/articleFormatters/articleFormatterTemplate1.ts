@@ -13,7 +13,7 @@ const REQUIRED_LENGTH = 13;
 
 const formatter = <T>(articles: T[]): T[][] => {
   if (articles.length < REQUIRED_LENGTH) {
-    console.error(
+    console.warn(
       'Incorrect article array length: ' + articles.length + '. Minimum required is ' + REQUIRED_LENGTH,
     );
     console.warn('Using default formatter...');
