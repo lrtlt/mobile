@@ -4,6 +4,7 @@ import {
   audiotekaGet,
   categoryGet,
   channelGet,
+  dailyQuestionGet,
   forecastGet,
   homeGet,
   mediatekaGet,
@@ -39,6 +40,8 @@ import {
 export const fetchMenuItemsApi = () => get<MenuResponse>(menuGet());
 
 export const fetchHomeApi = () => get<HomeDataResponse>(homeGet());
+
+export const fetchDailyQuestion = (questionId: number | string) => get<any>(dailyQuestionGet(questionId));
 
 export const fetchMediatekaApi = () => get<HomeDataResponse>(mediatekaGet());
 

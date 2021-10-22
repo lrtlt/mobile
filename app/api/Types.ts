@@ -112,6 +112,8 @@ export type HomeDataResponse = {
   articles: Article[];
   tvprog: HomeChannels;
   articles_blocks: (HomeArticlesBlock | HomeBannerBlock)[];
+  daily_question: number | null;
+  daily_question_response?: DailyQuestionResponse;
 };
 
 export type SearchFilterTypes =
@@ -508,4 +510,19 @@ export type OpusPlayListItem = {
 
 export type OpusPlaylistResponse = {
   rds: OpusPlayListItem[];
+};
+
+export type DailyQuestionChoice = {
+  id: number;
+  image?: string;
+  name: string;
+  percentage: number;
+  votes: number;
+};
+
+export type DailyQuestionResponse = {
+  id: number;
+  title: string;
+  votes: number;
+  choices: DailyQuestionChoice[];
 };

@@ -20,6 +20,7 @@ import {
   FETCH_AUDIOTEKA,
   API_AUDIOTEKA_RESULT,
   API_AUDIOTEKA_ERROR,
+  API_DAILY_QUESTION_RESULT,
 } from '../actions/actionTypes';
 
 import {
@@ -28,11 +29,13 @@ import {
   LIST_DATA_TYPE_ARTICLES_FEED,
   LIST_DATA_TYPE_MORE_FOOTER,
   LIST_DATA_TYPE_BANNER,
+  LIST_DATA_TYPE_DAILY_QUESTION,
 } from '../../constants';
 
 import {formatArticles as formatArticleBlock} from '../../util/articleFormatters';
 import {
   AudiotekaResponse,
+  DailyQuestionResponse,
   HomeArticlesBlock,
   HomeBannerBlock,
   HomeChannels,
@@ -104,17 +107,23 @@ type HomeListItemBanner = {
   data: HomeBannerBlock;
 };
 
+type HomeListItemDailyQuestion = {
+  type: typeof LIST_DATA_TYPE_DAILY_QUESTION;
+};
+
 type HomeListItem =
   | HomeListItemArticles
   | HomeListItemChannels
   | HomeListItemFeed
   | HomeListItemMoreButton
-  | HomeListItemBanner;
+  | HomeListItemBanner
+  | HomeListItemDailyQuestion;
 
 export type ArticlesState = {
   home: HomeState;
   mediateka: HomeState;
   channels: HomeChannels;
+  daily_question?: DailyQuestionResponse;
   audioteka: AudiotekaState;
   categories: CategoryState[];
   newest: PagingState;
@@ -268,6 +277,7 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
       insertChannelsItem(homeItems);
       insertMoreFooters(homeItems);
       insertBannerBlocks(homeItems, parseHomeBanners(action.data));
+      insertDailyQuestionItem(homeItems);
 
       console.log('HOME ITEMS', homeItems);
 
@@ -309,6 +319,12 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
           items: mediatekaItems,
         },
         channels: action.data.tvprog,
+      };
+    }
+    case API_DAILY_QUESTION_RESULT: {
+      return {
+        ...state,
+        daily_question: action.data,
       };
     }
     case API_MEDIATEKA_ERROR: {
@@ -441,6 +457,11 @@ const prepareHomeScreenData = (blocks: {category: Category; items: Article[][]}[
       })),
     };
   });
+};
+
+const insertDailyQuestionItem = (homeBlocks: HomeBlock[]) => {
+  const item: HomeListItemDailyQuestion = {type: LIST_DATA_TYPE_DAILY_QUESTION};
+  homeBlocks[0].items.push(item);
 };
 
 const insertChannelsItem = (homeBlocks: HomeBlock[]) => {
