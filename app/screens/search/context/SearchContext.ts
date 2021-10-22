@@ -16,9 +16,11 @@ export const defaultSearchFilter: SearchFilter = {
   days: '',
 };
 
+const noOp = () => {};
+
 export const SearchContext = React.createContext<SearchContextType>({
   query: '',
-  setQuery: () => {},
+  setQuery: noOp,
   filter: defaultSearchFilter,
-  setFilter: () => {},
+  setFilter: noOp,
 });

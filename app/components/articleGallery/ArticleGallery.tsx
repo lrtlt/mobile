@@ -49,7 +49,7 @@ const PhotoWithOverlayComponent = (
   return (
     <TouchableDebounce onPress={onPressHandler}>
       <View style={styles.imageContainer}>
-        {PhotoComponent(photo, width, undefined)}
+        {PhotoComponent(photo, width)}
 
         <View style={styles.imageCountOverlay}>
           <Text style={styles.imageCountOverlayText}>+{count}</Text>

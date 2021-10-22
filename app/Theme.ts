@@ -1,4 +1,3 @@
-import {Platform} from 'react-native';
 import {Theme, useTheme as useReactNavigationTheme} from '@react-navigation/native';
 
 export interface AppTheme extends Theme {
@@ -241,7 +240,7 @@ const colorsDark: ColorScheme = {
 //#endregion
 
 const dimensions: Dimensions = {
-  appBarIconSize: Platform.OS === 'android' ? 20 : 20,
+  appBarIconSize: 20,
   drawerIconSize: 18,
   drawerPadding: 10,
 };

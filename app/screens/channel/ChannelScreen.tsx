@@ -5,12 +5,7 @@ import {fetchChannel} from '../../api';
 import {ScrollView} from 'react-native-gesture-handler';
 import {getSmallestDim} from '../../util/UI';
 
-import {
-  CHANNEL_TYPE_DEFAULT,
-  CHANNEL_TYPE_LIVE,
-  GEMIUS_VIEW_SCRIPT_ID,
-  VIDEO_ASPECT_RATIO,
-} from '../../constants';
+import {GEMIUS_VIEW_SCRIPT_ID, VIDEO_ASPECT_RATIO} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -82,22 +77,8 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
   }, [cancellablePromise, selectedChannel]);
 
   const onChannelPressHandler = useCallback((channel: ChannelDataType) => {
-    const {type, payload} = channel;
-    switch (type) {
-      case CHANNEL_TYPE_DEFAULT: {
-        const channelId = payload.channel_id;
-        setSelectedChannel(channelId);
-        break;
-      }
-      case CHANNEL_TYPE_LIVE: {
-        const channelId = payload.channel_id;
-        setSelectedChannel(channelId);
-        break;
-      }
-      default: {
-        console.warn('Unkown channel type: ' + channel);
-      }
-    }
+    const {payload} = channel;
+    setSelectedChannel(payload.channel_id);
   }, []);
 
   const {loadingState} = state;

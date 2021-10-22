@@ -25,8 +25,7 @@ interface Props {
 
 const groupEmbedsByType = (data: ArticleEmbedType[]): ArticleEmbedType[][] => {
   const groupedEmbeds: ArticleEmbedType[][] = [];
-  let i;
-  for (i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     let j;
     const group: ArticleEmbedType[] = [];
     const currentType = data[i].embed_type;
