@@ -38,6 +38,7 @@ const ChannelComponent: React.FC<Props> = ({channelData}) => {
         }
 
         const marginTop = i > 0 ? 8 : 0;
+
         return (
           <View key={item.time_start + item.title}>
             <ProgramItem
@@ -45,6 +46,7 @@ const ChannelComponent: React.FC<Props> = ({channelData}) => {
               title={item.title}
               startTime={item.time_start}
               percent={item.proc}
+              description={item.description}
             />
             {opusNowPlayingComponent}
           </View>
