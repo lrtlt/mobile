@@ -17,7 +17,9 @@ interface Props {
 
 const JWPlayerNative: React.FC<Props> = (props) => {
   const {style, streamUri, mediaId, title, backgroundImage, autoStart, startTime} = props;
+
   const playerRef = useRef<JWPlayer>(null);
+  const player = playerRef.current;
 
   useEffect(() => {
     return () => {
@@ -36,43 +38,43 @@ const JWPlayerNative: React.FC<Props> = (props) => {
 
   const sendPlay = useCallback(() => {
     console.log('JWPlayer event: play');
-    playerRef.current?.position().then((pos) => {
+    player?.position().then((pos) => {
       Gemius.sendPlay(mediaId, pos ? pos : 0);
       console.log('play sent');
     });
-  }, [playerRef, mediaId]);
+  }, [player, mediaId]);
 
   const sendPause = useCallback(() => {
     console.log('JWPlayer event: pause');
-    playerRef.current?.position().then((pos) => {
+    player?.position().then((pos) => {
       Gemius.sendPause(mediaId, pos ? pos : 0);
       console.log('pause sent');
     });
-  }, [playerRef, mediaId]);
+  }, [player, mediaId]);
 
   const sendClose = useCallback(() => {
     console.log('JWPlayer event: close');
-    playerRef.current?.position().then((pos) => {
+    player?.position().then((pos) => {
       Gemius.sendClose(mediaId, pos ? pos : 0);
       console.log('close sent');
     });
-  }, [playerRef, mediaId]);
+  }, [player, mediaId]);
 
   const sendBuffer = useCallback(() => {
     console.log('JWPlayer event: buffering');
-    playerRef.current?.position().then((pos) => {
+    player?.position().then((pos) => {
       Gemius.sendBuffer(mediaId, pos ? pos : 0);
       console.log('buffering sent');
     });
-  }, [playerRef, mediaId]);
+  }, [player, mediaId]);
 
   const sendComplete = useCallback(() => {
     console.log('JWPlayer event: complete');
-    playerRef.current?.position().then((pos) => {
+    player?.position().then((pos) => {
       Gemius.sendComplete(mediaId, pos ? pos : 0);
       console.log('complete sent');
     });
-  }, [playerRef, mediaId]);
+  }, [player, mediaId]);
 
   const sendSeek = useCallback(
     (position) => {
@@ -83,9 +85,21 @@ const JWPlayerNative: React.FC<Props> = (props) => {
     [mediaId],
   );
 
+  const onError = useCallback(
+    (playerError: {error: string}) => {
+      console.log('Player error:', playerError);
+      setTimeout(() => {
+        if (player) {
+          console.log('Force updating player...');
+          player.forceUpdate(() => console.log('Update complete'));
+        }
+      }, 400);
+    },
+    [player],
+  );
+
   const playlistItem: PlaylistItem = useMemo(() => {
     return {
-      //playerStyle: 'lrt',
       title: title,
       mediaId: mediaId,
       image: backgroundImage ?? VIDEO_DEFAULT_BACKGROUND_IMAGE,
@@ -107,14 +121,9 @@ const JWPlayerNative: React.FC<Props> = (props) => {
       <JWPlayer
         ref={playerRef}
         style={styles.flex}
-        //playerStyle="lrt"
         playlistItem={playlistItem}
         nativeFullScreen={true}
         nextUpDisplay={false}
-        //landscapeOnFullScreen={true}
-        //exitFullScreenOnPortrait={true}
-        //fullScreenOnLandscape={true}
-        //landscapeOnFullScreen={true}
         onPlay={sendPlay}
         onPause={sendPause}
         onSeeked={useCallback(
@@ -160,6 +169,7 @@ const JWPlayerNative: React.FC<Props> = (props) => {
             StatusBar.setBarStyle('dark-content', true);
           }
         }, [])}
+        onPlayerError={onError}
       />
     </View>
   );
