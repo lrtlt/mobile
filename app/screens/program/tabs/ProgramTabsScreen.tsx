@@ -7,7 +7,8 @@ import {getIconForChannelById} from '../../../util/UI';
 import Divider from '../../../components/divider/Divider';
 import {useTheme} from '../../../Theme';
 import {ProgramItemType, SingleDayProgram} from '../../../api/Types';
-import {Scene} from 'react-native-tab-view/lib/typescript/src/types';
+import {PROGRAM_ITEM_HEIGHT} from '../../../components/programItem/ProgramItem';
+import {Scene} from 'react-native-tab-view/lib/typescript/types';
 
 interface Props {
   program: SingleDayProgram[];
@@ -69,7 +70,12 @@ const TabsScreen: React.FC<Props> = ({program}) => {
     const item = val.item;
     return (
       <View key={`${item.time_start}-${item.title}`}>
-        <ProgramItem title={item.title} startTime={item.time_start} percent={item.proc} />
+        <ProgramItem
+          title={item.title}
+          startTime={item.time_start}
+          percent={item.proc}
+          description={item.description}
+        />
         <Divider style={styles.programItemDivider} />
       </View>
     );
@@ -77,7 +83,10 @@ const TabsScreen: React.FC<Props> = ({program}) => {
 
   const keyExtractor = useCallback((item, i) => String(i) + String(item), []);
 
-  const calculateProgramItemLayout = useCallback((_, index) => ({length: 58, offset: 58 * index, index}), []);
+  const calculateProgramItemLayout = useCallback(
+    (_, index) => ({length: PROGRAM_ITEM_HEIGHT, offset: PROGRAM_ITEM_HEIGHT * index, index}),
+    [],
+  );
 
   const renderScene = useCallback(
     ({route}) => {

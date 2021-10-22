@@ -453,6 +453,7 @@ export type ProgramItemType = {
   time_end: string;
   certification?: string;
   record_article_id?: string;
+  description?: string;
   is_radio?: 0 | 1;
   allow_lt?: 0 | 1;
   block_all?: 0 | 1;

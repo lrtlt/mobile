@@ -16,7 +16,6 @@ const SafeWebView: React.FC<Props> = forwardRef<WebView, Props>((props, ref) => 
         cacheEnabled={false}
         domStorageEnabled={true}
         javaScriptEnabled={true}
-        //TODO: check crashes if there is none - good to go.
         androidHardwareAccelerationDisabled={false}
         androidLayerType="hardware"
         automaticallyAdjustContentInsets={false}

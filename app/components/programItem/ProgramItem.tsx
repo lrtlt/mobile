@@ -4,9 +4,12 @@ import {useTheme} from '../../Theme';
 import {CameraIcon} from '../svg';
 import TextComponent from '../text/Text';
 
+export const PROGRAM_ITEM_HEIGHT = 64;
+
 interface Props {
   style?: ViewStyle;
   title: string;
+  description?: string;
   startTime: string;
   percent: string;
 }
@@ -30,17 +33,22 @@ const ProgramItem: React.FC<Props> = (props) => {
       <View
         style={{...styles.elapsedIndicator, width: proc + '%', backgroundColor: colors.programProgress}}
       />
+
       <TextComponent style={styles.timeText} type="secondary">
         {props.startTime}
       </TextComponent>
       {icon}
-      {proc === 0 ? (
-        <TextComponent style={titleStyle} type="secondary">
+      <View style={styles.textContainer}>
+        <TextComponent style={titleStyle} type={proc === 0 ? 'secondary' : 'primary'}>
           {props.title}
         </TextComponent>
-      ) : (
-        <TextComponent style={titleStyle}>{props.title}</TextComponent>
-      )}
+
+        {props.description ? (
+          <TextComponent style={styles.descriptionText} type="secondary">
+            {props.description}
+          </TextComponent>
+        ) : null}
+      </View>
     </View>
   );
 };
@@ -50,7 +58,7 @@ export default ProgramItem;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: 58,
+    minHeight: PROGRAM_ITEM_HEIGHT,
     width: '100%',
     alignItems: 'center',
   },
@@ -70,17 +78,24 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   titleTextUpcoming: {
-    flex: 1,
-    padding: 6,
     paddingStart: 0,
     fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 15,
   },
   titleText: {
-    flex: 1,
-    padding: 6,
     paddingStart: 0,
     fontFamily: 'SourceSansPro-Regular',
     fontSize: 15,
+  },
+  descriptionText: {
+    paddingStart: 0,
+    marginTop: 2,
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 13,
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 6,
   },
 });

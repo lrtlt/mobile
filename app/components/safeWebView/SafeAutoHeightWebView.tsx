@@ -18,9 +18,7 @@ const SafeAutoHeightWebView: React.FC<Props> = forwardRef<WebView, Props>((props
     if (isUserClickAction) {
       //User clicked on the link which should redirect to other page.
       //Opening the page on the browser...
-      if (Linking.canOpenURL(request.url)) {
-        Linking.openURL(request.url);
-      }
+      Linking.openURL(request.url);
       return false;
     }
 
@@ -35,7 +33,6 @@ const SafeAutoHeightWebView: React.FC<Props> = forwardRef<WebView, Props>((props
         cacheEnabled={false}
         domStorageEnabled={true}
         javaScriptEnabled={true}
-        //TODO: check crashes if there is none - good to go.
         androidHardwareAccelerationDisabled={false}
         androidLayerType="hardware"
         automaticallyAdjustContentInsets={false}
