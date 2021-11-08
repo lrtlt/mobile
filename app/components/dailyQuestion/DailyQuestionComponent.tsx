@@ -5,7 +5,7 @@ import {TouchableDebounce} from '..';
 import {DailyQuestionChoice} from '../../api/Types';
 import {selectDailyQuestion, selectDailyQuestionChoice} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
-import {IconCheck, IconClose} from '../svg';
+import {IconCheck} from '../svg';
 import TextComponent from '../text/Text';
 import {useSetDailyQuestionChoise} from './useSetDailyQuestionChoise';
 
