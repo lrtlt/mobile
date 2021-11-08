@@ -20,6 +20,7 @@ import {
   LIST_DATA_TYPE_MORE_FOOTER,
   EVENT_LOGO_PRESS,
   LIST_DATA_TYPE_BANNER,
+  LIST_DATA_TYPE_DAILY_QUESTION,
 } from '../../../../constants';
 import {useDispatch, useSelector} from 'react-redux';
 import Gemius from 'react-native-gemius-plugin';
@@ -32,6 +33,7 @@ import {Category} from '../../../../redux/reducers/articles';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../navigation/MainStack';
 import BannerComponent from '../../../../components/banner/Banner';
+import DailyQuestionComponent from '../../../../components/dailyQuestion/DailyQuestionComponent';
 
 interface Props {
   isCurrent: boolean;
@@ -161,6 +163,9 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
         }
         case LIST_DATA_TYPE_BANNER: {
           return <BannerComponent data={val.item.data} />;
+        }
+        case LIST_DATA_TYPE_DAILY_QUESTION: {
+          return <DailyQuestionComponent />;
         }
         default: {
           console.warn('Uknown list item type: ' + val.item.type);

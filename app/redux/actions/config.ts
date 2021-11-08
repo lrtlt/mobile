@@ -1,4 +1,4 @@
-import {ForecastLocation} from '../../api/Types';
+import {DailyQuestionChoice, ForecastLocation} from '../../api/Types';
 import {ConfigState} from '../reducers/config';
 import {
   TOGGLE_DARK_MODE,
@@ -6,6 +6,7 @@ import {
   SET_IMAGE_SCALE_FACTOR,
   SET_CONFIG,
   SET_FORECAST_LOCATION,
+  SET_DAILY_QUESTION_CHOICE,
 } from './actionTypes';
 
 export interface ToggleDarkModeAction {
@@ -52,9 +53,29 @@ export const setForecastLocation = (value?: ForecastLocation): SetForecastLocati
   payload: value,
 });
 
+export interface SetDailyQuestionChoice {
+  type: typeof SET_DAILY_QUESTION_CHOICE;
+  payload: {
+    daily_question_id: number;
+    choice: DailyQuestionChoice;
+  };
+}
+
+export const setDailyQuestionChoice = (
+  daily_question_id: number,
+  choice: DailyQuestionChoice,
+): SetDailyQuestionChoice => ({
+  type: SET_DAILY_QUESTION_CHOICE,
+  payload: {
+    daily_question_id,
+    choice,
+  },
+});
+
 export type ConfigActionType =
   | ToggleDarkModeAction
   | SetTextSizeMultiplierAction
   | SetImageMaxScaleFactorAction
   | SetConfigAction
-  | SetForecastLocationAction;
+  | SetForecastLocationAction
+  | SetDailyQuestionChoice;

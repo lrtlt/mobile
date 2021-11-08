@@ -1,6 +1,7 @@
 import {
   AudiotekaResponse,
   CategoryArticlesResponse,
+  DailyQuestionResponse,
   HomeDataResponse,
   NewestArticlesResponse,
   PopularArticlesResponse,
@@ -27,6 +28,7 @@ import {
   API_AUDIOTEKA_RESULT,
   API_CATEGORY_ERROR,
   API_CATEGORY_RESULT,
+  API_DAILY_QUESTION_RESULT,
 } from './actionTypes';
 
 export type FetchHomeAction = {
@@ -38,8 +40,19 @@ export type FetchHomeResultAction = {
   type: typeof API_HOME_RESULT;
   data: HomeDataResponse;
 };
+
 export const fetchHomeResult = (data: HomeDataResponse): FetchHomeResultAction => ({
   type: API_HOME_RESULT,
+  data,
+});
+
+export type FetchDailyQuestionResultAction = {
+  type: typeof API_DAILY_QUESTION_RESULT;
+  data: DailyQuestionResponse;
+};
+
+export const fetchDailyQuestionResult = (data: DailyQuestionResponse): FetchDailyQuestionResultAction => ({
+  type: API_DAILY_QUESTION_RESULT,
   data,
 });
 
@@ -236,4 +249,5 @@ export type ArticlesActionType =
   | FetchPopularArticlesAction
   | FetchPopularArticlesResultAction
   | RefreshPopularArticlesAction
-  | FetchPopularArticlesErrorAction;
+  | FetchPopularArticlesErrorAction
+  | FetchDailyQuestionResultAction;

@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, useWindowDimensions, View} from 'react-native';
 import {HomeBannerBlock} from '../../api/Types';
+import {themeLight} from '../../Theme';
 import SafeAutoHeightWebView from '../safeWebView/SafeAutoHeightWebView';
 
 interface Props {
@@ -20,6 +21,7 @@ const BannerComponent: React.FC<Props> = ({data}) => {
         style={{width}}
         containerStyle={{
           ...styles.container,
+          backgroundColor: themeLight.colors.background,
         }}
         cacheEnabled={true}
         startInLoadingState={true}

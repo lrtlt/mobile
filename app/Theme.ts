@@ -48,9 +48,9 @@ interface Dictionary {
   about_show: string;
   no_search_results: string;
   previous_songs: string;
-  //error messages
   error_no_connection: string;
   error_no_search_query: string;
+  daily_question_vote: string;
 }
 
 export const strings: Dictionary = {
@@ -89,6 +89,7 @@ export const strings: Dictionary = {
   no_search_results: 'Deja, rezultatų pagal šią užklausą rasti nepavyko.',
   error_no_connection: 'Tinklo sutrikimas',
   error_no_search_query: 'Įveskite paieškos tekstą',
+  daily_question_vote: 'BALSUOTI',
 };
 //#endregion
 
@@ -156,6 +157,7 @@ type ColorScheme = {
   darkIcon: '#222';
   ripple: '#99999940';
   lightGreyBackground: '#F9F9F9';
+  dailyQuestionProgress: string;
 };
 
 const colorsLight: ColorScheme = {
@@ -191,7 +193,8 @@ const colorsLight: ColorScheme = {
   actionButton: 'primary',
   programItem: 'white',
   toggleButtonSelected: '#DCE3E9',
-  programProgress: '#dce3e988',
+  programProgress: '#dce3e9AA',
+  dailyQuestionProgress: '#dce3e9',
   facebook: '#3b5998',
   darkIcon: '#222',
   lightGreyBackground: '#F9F9F9',
@@ -236,6 +239,7 @@ const colorsDark: ColorScheme = {
   darkIcon: '#222',
   lightGreyBackground: '#F9F9F9',
   ripple: '#99999940',
+  dailyQuestionProgress: '#36414f',
 };
 //#endregion
 

@@ -1,4 +1,4 @@
-import Axios, {AxiosRequestConfig} from 'axios';
+import Axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import * as AxiosLogger from 'axios-logger';
 
 const LOGGING_ENABLED = true;
@@ -49,4 +49,12 @@ if (__DEV__) {
 export const get = async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
   const response = await LrtClient.get<T>(url, config);
   return response.data;
+};
+
+export const put = async <T>(
+  url: string,
+  data?: any,
+  config?: AxiosRequestConfig,
+): Promise<AxiosResponse<T>> => {
+  return LrtClient.put<T>(url, data, config);
 };
