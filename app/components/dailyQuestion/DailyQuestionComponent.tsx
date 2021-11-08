@@ -1,64 +1,95 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {TouchableDebounce} from '..';
 import {DailyQuestionChoice} from '../../api/Types';
-import {selectDailyQuestion} from '../../redux/selectors';
+import {selectDailyQuestion, selectDailyQuestionChoice} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
+import {IconCheck, IconClose} from '../svg';
 import TextComponent from '../text/Text';
+import {useSetDailyQuestionChoise} from './useSetDailyQuestionChoise';
 
 interface DailyQuestionComponentProps {}
 
 const DailyQuestionComponent: React.FC<DailyQuestionComponentProps> = () => {
-  const [vote, setVote] = useState<DailyQuestionChoice>();
+  const {colors, strings} = useTheme();
 
-  const {colors} = useTheme();
+  const dailyQuestion = useSelector(selectDailyQuestion);
+  const answer = useSelector(selectDailyQuestionChoice);
+  const callVoteAPI = useSetDailyQuestionChoise();
 
   const renderChoise = useCallback(
     (choice: DailyQuestionChoice) => {
       return (
         <View key={choice.id} style={{...styles.choiceContainer, borderColor: colors.buttonBorder}}>
           <TextComponent style={styles.choice}>{choice.name}</TextComponent>
-          <TouchableDebounce style={styles.voteButton} onPress={() => setVote(choice)}>
-            <TextComponent style={styles.voteText}>BALSUOTI</TextComponent>
+          <TouchableDebounce
+            style={styles.voteButton}
+            onPress={() => {
+              if (dailyQuestion) {
+                callVoteAPI(dailyQuestion?.id, choice);
+              }
+            }}>
+            <TextComponent style={styles.voteText}>{strings.daily_question_vote}</TextComponent>
           </TouchableDebounce>
         </View>
       );
     },
-    [colors.buttonBorder],
+    [callVoteAPI, colors.buttonBorder, dailyQuestion, strings.daily_question_vote],
   );
 
   const renderChoiceVoted = useCallback(
     (choice: DailyQuestionChoice) => {
+      const isUserChoice = choice.id === answer?.choice.id ?? -1;
       return (
         <View key={choice.id} style={{...styles.choiceContainer, borderColor: colors.buttonBorder}}>
-          <TextComponent style={styles.choice}>{choice.name}</TextComponent>
-          <TextComponent style={styles.voteText}>
-            {choice.votes}
-            <TextComponent style={styles.voteText}>{choice.percentage}</TextComponent>
+          <View
+            style={{
+              ...styles.progressLine,
+              backgroundColor: colors.dailyQuestionProgress,
+              width: `${choice.percentage}%`,
+            }}
+          />
+          {isUserChoice && (
+            <View style={styles.checkBubble}>
+              <IconCheck color={'black'} size={12} />
+            </View>
+          )}
+          <TextComponent style={styles.choice}>
+            {choice.name}
+            <TextComponent style={styles.voteCountText}>
+              {'  '}
+              {choice.votes}
+              <TextComponent style={{...styles.votePercentageText, color: colors.primaryDark}}>
+                {'  '}
+                {choice.percentage}%
+              </TextComponent>
+            </TextComponent>
           </TextComponent>
         </View>
       );
     },
-    [colors.buttonBorder],
+    [answer?.choice.id, colors.buttonBorder, colors.dailyQuestionProgress, colors.primaryDark],
   );
 
-  const data = useSelector(selectDailyQuestion);
-  if (!data) {
+  if (!dailyQuestion) {
     return null;
   }
+
+  const isUserVoteAccepted = answer && dailyQuestion.id === answer.daily_question_id;
 
   return (
     <View style={{...styles.container, borderColor: colors.buttonBorder}}>
       <View style={styles.topContainer}>
-        <TextComponent style={styles.title}>{data.title}</TextComponent>
-        {vote && (
+        <TextComponent style={styles.title}>{dailyQuestion.title}</TextComponent>
+        {isUserVoteAccepted && (
           <TextComponent style={styles.subtitle}>
-            Iš viso balsavo: <TextComponent style={{color: colors.primaryDark}}>{data.votes}</TextComponent>
+            Iš viso balsavo:{' '}
+            <TextComponent style={{color: colors.primaryDark}}>{dailyQuestion.votes}</TextComponent>
           </TextComponent>
         )}
       </View>
-      {data.choices.map(vote ? renderChoiceVoted : renderChoise)}
+      {dailyQuestion.choices.map(isUserVoteAccepted ? renderChoiceVoted : renderChoise)}
     </View>
   );
 };
@@ -107,5 +138,29 @@ const styles = StyleSheet.create({
   voteText: {
     fontFamily: 'SourceSansPro-Regular',
     fontSize: 13,
+  },
+  voteCountText: {
+    fontFamily: 'SourceSansPro-Regular',
+    fontSize: 15,
+  },
+  votePercentageText: {
+    fontFamily: 'SourceSansPro-SemiBold',
+    fontSize: 15,
+  },
+  checkBubble: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: 'white',
+    marginRight: 8,
+  },
+  progressLine: {
+    position: 'absolute',
+    left: 10,
+    top: 10,
+    bottom: 10,
+    borderRadius: 4,
   },
 });

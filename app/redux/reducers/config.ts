@@ -1,4 +1,4 @@
-import {ForecastLocation} from '../../api/Types';
+import {DailyQuestionChoice, ForecastLocation} from '../../api/Types';
 import {ConfigActionType} from '../actions';
 import {
   TOGGLE_DARK_MODE,
@@ -6,6 +6,7 @@ import {
   SET_IMAGE_SCALE_FACTOR,
   SET_CONFIG,
   SET_FORECAST_LOCATION,
+  SET_DAILY_QUESTION_CHOICE,
 } from '../actions/actionTypes';
 
 export type ConfigState = {
@@ -13,6 +14,10 @@ export type ConfigState = {
   textSizeMultiplier: number;
   imageMaxScaleFactor: number;
   forecastLocation?: ForecastLocation;
+  daily_question_response?: {
+    daily_question_id: number;
+    choice: DailyQuestionChoice;
+  };
 };
 
 const initialState = {
@@ -53,6 +58,9 @@ const reducer = (state: ConfigState = initialState, action: ConfigActionType): C
     }
     case SET_FORECAST_LOCATION: {
       return {...state, forecastLocation: action.payload};
+    }
+    case SET_DAILY_QUESTION_CHOICE: {
+      return {...state, daily_question_response: action.payload};
     }
     default:
       return state;

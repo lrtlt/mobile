@@ -6,8 +6,7 @@ const BASE_URL = 'https://www.lrt.lt/api/json/';
  * Returns array of category items.
  */
 export const menuGet = () => {
-  const method = 'menu';
-  return BASE_URL + method;
+  return `${BASE_URL}menu`;
 };
 
 /**
@@ -115,10 +114,17 @@ export const opusPlaylistGet = () => {
 };
 
 /**
- * Returns previously played songs
+ * Return data for daily question received on home page.
  */
 export const dailyQuestionGet = (questionId: number | string) => {
   return `https://www.lrt.lt/api/v1/daily-question/${questionId}`;
+};
+
+/**
+ * Sets a user vote on daily question.
+ */
+export const putDailyQuestionVote = (questionId: number | string, answerId: number | string) => {
+  return `https://www.lrt.lt/api/v1/daily-question/${questionId}?answer=${answerId}`;
 };
 
 /**

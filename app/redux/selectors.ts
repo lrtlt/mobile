@@ -148,3 +148,7 @@ export const selectForecastLocation = (state: RootState) => {
 export const selectDailyQuestion = (state: RootState) => {
   return state.articles.daily_question;
 };
+
+export const selectDailyQuestionChoice = (state: RootState) => {
+  return state.config.daily_question_response;
+};

@@ -76,7 +76,6 @@ function* fetchArticlesData() {
 
     yield put(fetchHomeResult(data));
 
-    data.daily_question = 103;
     if (data.daily_question) {
       try {
         const dailyQuestionResponse: DailyQuestionResponse = yield call(async () => {
