@@ -8,6 +8,7 @@ import {
   FETCH_HOME,
   SET_LAUNCH_URL,
   CLEAR_LAUNCH_URL,
+  OPEN_CATEGORY_FOR_ID,
 } from '../actions/actionTypes';
 import {EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 import {EventRegister} from 'react-native-event-listeners';
@@ -105,6 +106,19 @@ const reducer = (state = initialState, action: NavigationActionType): Navigation
         EventRegister.emit(EVENT_SELECT_CATEGORY_INDEX, {index});
       } else {
         console.warn('Index not found for route: ' + categoryName);
+      }
+      return state;
+    }
+    case OPEN_CATEGORY_FOR_ID: {
+      const {categoryId} = action;
+      const index = state.routes.findIndex(
+        (route) => route.type === ROUTE_TYPE_CATEGORY && route.id === categoryId,
+      );
+
+      if (index !== -1) {
+        EventRegister.emit(EVENT_SELECT_CATEGORY_INDEX, {index});
+      } else {
+        console.warn('Index not found for categoryId: ' + categoryId);
       }
       return state;
     }

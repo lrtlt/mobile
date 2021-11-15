@@ -36,3 +36,4 @@ export {default as Forecast} from './forecast/ForecastComponent';
 export {default as WeatherEmbed} from './weatherEmbed/WeatherEmbedComponent';
 export {default as SafeWebView} from './safeWebView/SafeWebView';
 export {default as SafeAutoHeightWebView} from './safeWebView/SafeAutoHeightWebView';
+export {default as BannerComponent} from './banner/Banner';

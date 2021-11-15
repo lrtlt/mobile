@@ -4,7 +4,6 @@ import {
   audiotekaGet,
   categoryGet,
   channelGet,
-  dailyQuestionGet,
   forecastGet,
   homeGet,
   mediatekaGet,
@@ -25,6 +24,7 @@ import {
   ForecastLocation,
   ForecastResponse,
   HomeDataResponse,
+  MediatekaDataResponse,
   MenuResponse,
   NewestArticlesResponse,
   OpusPlaylistResponse,
@@ -41,9 +41,7 @@ export const fetchMenuItemsApi = () => get<MenuResponse>(menuGet());
 
 export const fetchHomeApi = () => get<HomeDataResponse>(homeGet());
 
-export const fetchDailyQuestion = (questionId: number | string) => get<any>(dailyQuestionGet(questionId));
-
-export const fetchMediatekaApi = () => get<HomeDataResponse>(mediatekaGet());
+export const fetchMediatekaApi = () => get<MediatekaDataResponse>(mediatekaGet());
 
 export const fetchArticle = (articleId: number | string) =>
   get<ArticleContentResponse>(articleGet(articleId));

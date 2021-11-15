@@ -1,16 +1,16 @@
 import React from 'react';
 import {StyleSheet, useWindowDimensions, View} from 'react-native';
-import {HomeBannerBlock} from '../../api/Types';
+import {HomeBlockEmbed} from '../../api/Types';
 import {themeLight} from '../../Theme';
 import SafeAutoHeightWebView from '../safeWebView/SafeAutoHeightWebView';
 
 interface Props {
-  data: HomeBannerBlock;
+  data: HomeBlockEmbed;
 }
 
 const BannerComponent: React.FC<Props> = ({data}) => {
   const width = useWindowDimensions().width - 8 * 2;
-  if (!data.html_embed) {
+  if (!data.html) {
     return null;
   }
 
@@ -26,7 +26,7 @@ const BannerComponent: React.FC<Props> = ({data}) => {
         cacheEnabled={true}
         startInLoadingState={true}
         viewportContent={`width=${width} user-scalable=no`}
-        source={{html: data.html_embed}}
+        source={{html: data.html}}
         openLinksExternally={true}
       />
     </View>

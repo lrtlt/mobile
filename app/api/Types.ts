@@ -86,35 +86,83 @@ export type LiveChannel = {
   w_h: string;
 };
 
-export type HomeArticlesBlock = {
-  template_id: number;
-  block_title?: string;
-  category_title?: string;
-  slug_title?: string;
-  slug_url?: string;
-  is_slug_block?: 1 | 0;
-  category_id?: number;
-  articles_list: Article[];
-};
-
-export type HomeBannerBlock = {
-  template_id?: number;
-  html_embed_title?: string;
-  html_embed?: string;
-};
-
 export type HomeChannels = {
   items: TVChannel[];
   live_items?: LiveChannel[];
 };
 
-export type HomeDataResponse = {
-  articles: Article[];
-  tvprog: HomeChannels;
-  articles_blocks: (HomeArticlesBlock | HomeBannerBlock)[];
-  daily_question: number | null;
-  daily_question_response?: DailyQuestionResponse;
+export type HomeBlockArticle = {
+  type: 'article';
+  article: Article;
 };
+
+export type HomeBlockTopArticles = {
+  type: 'top_articles';
+  articles: Article[];
+};
+
+export type HomeBlockChannels = {
+  type: 'channels';
+  data: HomeChannels;
+};
+
+export type HomeBlockFeedBlock = {
+  type: 'articles_block';
+  articles_list: Article[];
+  template_id: 999;
+  block_title: string;
+};
+
+export type HomeBlockEmbed = {
+  type: 'embed';
+  name: string;
+  html: string;
+};
+
+export type HomeBlockCategory = {
+  type: 'category';
+  template_id: number;
+  data: {
+    articles_list: Article[];
+    category_url: string;
+    category_id: number;
+    template_id: number;
+    category_title: string;
+  };
+};
+
+export type HomeBlockDailyQuestion = {
+  type: 'daily_question';
+  data: DailyQuestionResponse;
+};
+
+export type HomeBlockSlug = {
+  type: 'slug';
+  template_id: number;
+  data: {
+    is_slug_block: 1;
+    articles_list: Article[];
+    template_id: number;
+    slug_title: string;
+    slug_url: string;
+  };
+};
+
+export type HomeBlockType =
+  | HomeBlockArticle
+  | HomeBlockTopArticles
+  | HomeBlockChannels
+  | HomeBlockEmbed
+  | HomeBlockCategory
+  | HomeBlockSlug
+  | HomeBlockFeedBlock
+  | HomeBlockDailyQuestion;
+
+export type HomeDataResponse = {
+  homepage_data: HomeBlockType[];
+};
+
+export type MediatekaDataResponse = HomeBlockType[];
 
 export type SearchFilterTypes =
   | typeof SEARCH_TYPE_ALL

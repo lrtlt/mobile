@@ -13,7 +13,7 @@ export const menuGet = () => {
  * Home page data.
  */
 export const homeGet = () => {
-  return `${BASE_URL}home`;
+  return `${BASE_URL}home/v2`;
 };
 
 /**
@@ -89,7 +89,7 @@ export const weatherLocationsGet = () => {
  * Returns Mediateka screen's data. Same as for Home page data.
  */
 export const mediatekaGet = () => {
-  return `${BASE_URL}mediateka-home`;
+  return `${BASE_URL}mediateka-home/v2`;
 };
 
 /**
@@ -111,13 +111,6 @@ export const programGet = () => {
  */
 export const opusPlaylistGet = () => {
   return `${BASE_URL}rds?station=opus`;
-};
-
-/**
- * Return data for daily question received on home page.
- */
-export const dailyQuestionGet = (questionId: number | string) => {
-  return `https://www.lrt.lt/api/v1/daily-question/${questionId}`;
 };
 
 /**

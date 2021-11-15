@@ -8,13 +8,12 @@ import {
   fetchNewestApi,
   fetchPopularApi,
   fetchProgramApi,
-  fetchDailyQuestion,
 } from '../api';
 import {
   AudiotekaResponse,
   CategoryArticlesResponse,
-  DailyQuestionResponse,
   HomeDataResponse,
+  MediatekaDataResponse,
   MenuResponse,
   NewestArticlesResponse,
   PopularArticlesResponse,
@@ -26,7 +25,6 @@ import {
   FetchCategoryArticlesAction,
   fetchCategoryError,
   fetchCategoryResult,
-  fetchDailyQuestionResult,
   fetchHomeError,
   fetchHomeResult,
   fetchMediatekaError,
@@ -73,20 +71,7 @@ function* fetchMenuItems() {
 function* fetchArticlesData() {
   try {
     const data: HomeDataResponse = yield call(fetchHomeApi);
-
     yield put(fetchHomeResult(data));
-
-    if (data.daily_question) {
-      try {
-        const dailyQuestionResponse: DailyQuestionResponse = yield call(async () => {
-          return await fetchDailyQuestion(data.daily_question!);
-        });
-
-        yield put(fetchDailyQuestionResult(dailyQuestionResponse));
-      } catch (e) {
-        console.log('Saga error', e);
-      }
-    }
   } catch (e) {
     console.log('Saga error', e);
     yield put(fetchHomeError());
@@ -96,7 +81,7 @@ function* fetchArticlesData() {
 
 function* fetchMediatekaData() {
   try {
-    const data: HomeDataResponse = yield call(fetchMediatekaApi);
+    const data: MediatekaDataResponse = yield call(fetchMediatekaApi);
     yield put(fetchMediatekaResult(data));
   } catch (e) {
     console.log('Saga error', e);

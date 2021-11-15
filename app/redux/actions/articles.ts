@@ -1,8 +1,8 @@
 import {
   AudiotekaResponse,
   CategoryArticlesResponse,
-  DailyQuestionResponse,
   HomeDataResponse,
+  MediatekaDataResponse,
   NewestArticlesResponse,
   PopularArticlesResponse,
 } from '../../api/Types';
@@ -28,7 +28,6 @@ import {
   API_AUDIOTEKA_RESULT,
   API_CATEGORY_ERROR,
   API_CATEGORY_RESULT,
-  API_DAILY_QUESTION_RESULT,
 } from './actionTypes';
 
 export type FetchHomeAction = {
@@ -46,16 +45,6 @@ export const fetchHomeResult = (data: HomeDataResponse): FetchHomeResultAction =
   data,
 });
 
-export type FetchDailyQuestionResultAction = {
-  type: typeof API_DAILY_QUESTION_RESULT;
-  data: DailyQuestionResponse;
-};
-
-export const fetchDailyQuestionResult = (data: DailyQuestionResponse): FetchDailyQuestionResultAction => ({
-  type: API_DAILY_QUESTION_RESULT,
-  data,
-});
-
 export type FetchHomeErrorAction = {
   type: typeof API_HOME_ERROR;
 };
@@ -70,9 +59,9 @@ export const fetchMediateka = (): FetchMediatekaAction => ({type: FETCH_MEDIATEK
 
 export type FetchMediatekaResultAction = {
   type: typeof API_MEDIATEKA_RESULT;
-  data: HomeDataResponse;
+  data: MediatekaDataResponse;
 };
-export const fetchMediatekaResult = (data: HomeDataResponse): FetchMediatekaResultAction => ({
+export const fetchMediatekaResult = (data: MediatekaDataResponse): FetchMediatekaResultAction => ({
   type: API_MEDIATEKA_RESULT,
   data,
 });
@@ -249,5 +238,4 @@ export type ArticlesActionType =
   | FetchPopularArticlesAction
   | FetchPopularArticlesResultAction
   | RefreshPopularArticlesAction
-  | FetchPopularArticlesErrorAction
-  | FetchDailyQuestionResultAction;
+  | FetchPopularArticlesErrorAction;

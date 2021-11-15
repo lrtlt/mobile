@@ -2,19 +2,21 @@ import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {TouchableDebounce} from '..';
-import {DailyQuestionChoice} from '../../api/Types';
-import {selectDailyQuestion, selectDailyQuestionChoice} from '../../redux/selectors';
+import {DailyQuestionChoice, HomeBlockDailyQuestion} from '../../api/Types';
+import {selectDailyQuestionChoice} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {IconCheck} from '../svg';
 import TextComponent from '../text/Text';
 import {useSetDailyQuestionChoise} from './useSetDailyQuestionChoise';
 
-interface DailyQuestionComponentProps {}
+interface DailyQuestionComponentProps {
+  block: HomeBlockDailyQuestion;
+}
 
-const DailyQuestionComponent: React.FC<DailyQuestionComponentProps> = () => {
+const DailyQuestionComponent: React.FC<DailyQuestionComponentProps> = ({block}) => {
+  const {data: dailyQuestion} = block;
   const {colors, strings} = useTheme();
 
-  const dailyQuestion = useSelector(selectDailyQuestion);
   const answer = useSelector(selectDailyQuestionChoice);
   const callVoteAPI = useSetDailyQuestionChoise();
 

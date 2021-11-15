@@ -20,27 +20,10 @@ import {
   FETCH_AUDIOTEKA,
   API_AUDIOTEKA_RESULT,
   API_AUDIOTEKA_ERROR,
-  API_DAILY_QUESTION_RESULT,
 } from '../actions/actionTypes';
 
-import {
-  LIST_DATA_TYPE_ARTICLES,
-  LIST_DATA_TYPE_CHANNELS,
-  LIST_DATA_TYPE_ARTICLES_FEED,
-  LIST_DATA_TYPE_MORE_FOOTER,
-  LIST_DATA_TYPE_BANNER,
-  LIST_DATA_TYPE_DAILY_QUESTION,
-} from '../../constants';
-
 import {formatArticles as formatArticleBlock} from '../../util/articleFormatters';
-import {
-  AudiotekaResponse,
-  DailyQuestionResponse,
-  HomeArticlesBlock,
-  HomeBannerBlock,
-  HomeChannels,
-  HomeDataResponse,
-} from '../../api/Types';
+import {AudiotekaResponse, HomeBlockType, HomeChannels} from '../../api/Types';
 import {Article} from '../../../Types';
 import {ArticlesActionType} from '../actions';
 
@@ -52,7 +35,7 @@ type BaseBlockState = {
 };
 
 type HomeState = {
-  items: HomeBlock[];
+  items: HomeBlockType[];
 } & BaseBlockState;
 
 type AudiotekaState = {
@@ -78,52 +61,10 @@ export type Category = {
   slug_url?: string;
 };
 
-export type HomeBlock = {
-  category: Category;
-  items: HomeListItem[];
-};
-
-type HomeListItemArticles = {
-  type: typeof LIST_DATA_TYPE_ARTICLES;
-  data: Article[];
-};
-
-type HomeListItemChannels = {
-  type: typeof LIST_DATA_TYPE_CHANNELS;
-};
-
-type HomeListItemFeed = {
-  type: typeof LIST_DATA_TYPE_ARTICLES_FEED;
-  data: Article[];
-};
-
-type HomeListItemMoreButton = {
-  type: typeof LIST_DATA_TYPE_MORE_FOOTER;
-  data: Category;
-};
-
-type HomeListItemBanner = {
-  type: typeof LIST_DATA_TYPE_BANNER;
-  data: HomeBannerBlock;
-};
-
-type HomeListItemDailyQuestion = {
-  type: typeof LIST_DATA_TYPE_DAILY_QUESTION;
-};
-
-type HomeListItem =
-  | HomeListItemArticles
-  | HomeListItemChannels
-  | HomeListItemFeed
-  | HomeListItemMoreButton
-  | HomeListItemBanner
-  | HomeListItemDailyQuestion;
-
 export type ArticlesState = {
   home: HomeState;
   mediateka: HomeState;
   channels: HomeChannels;
-  daily_question?: DailyQuestionResponse;
   audioteka: AudiotekaState;
   categories: CategoryState[];
   newest: PagingState;
@@ -272,27 +213,17 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
       };
     }
     case API_HOME_RESULT: {
-      const articleBlocks = parseHomeArticles(action.data);
-      const homeItems = prepareHomeScreenData(articleBlocks);
-      insertChannelsItem(homeItems);
-      insertMoreFooters(homeItems);
-      insertBannerBlocks(homeItems, parseHomeBanners(action.data));
-      insertDailyQuestionItem(homeItems);
-
+      const homeItems = action.data.homepage_data;
       console.log('HOME ITEMS', homeItems);
-
-      const home = {
-        ...state.home,
-        isError: false,
-        isFetching: false,
-        lastFetchTime: Date.now(),
-        items: homeItems,
-      };
 
       return {
         ...state,
-        home,
-        channels: action.data.tvprog,
+        home: {
+          isError: false,
+          isFetching: false,
+          lastFetchTime: Date.now(),
+          items: homeItems,
+        },
       };
     }
     case FETCH_MEDIATEKA: {
@@ -306,10 +237,7 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
       };
     }
     case API_MEDIATEKA_RESULT: {
-      const articleBlocks = parseHomeArticles(action.data);
-      const mediatekaItems = prepareHomeScreenData(articleBlocks);
-      insertChannelsItem(mediatekaItems);
-
+      const mediatekaItems = action.data;
       return {
         ...state,
         mediateka: {
@@ -318,13 +246,6 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
           lastFetchTime: Date.now(),
           items: mediatekaItems,
         },
-        channels: action.data.tvprog,
-      };
-    }
-    case API_DAILY_QUESTION_RESULT: {
-      return {
-        ...state,
-        daily_question: action.data,
       };
     }
     case API_MEDIATEKA_ERROR: {
@@ -444,108 +365,6 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
     default:
       return state;
   }
-};
-
-const prepareHomeScreenData = (blocks: {category: Category; items: Article[][]}[]): HomeBlock[] => {
-  return blocks.map((block) => {
-    const type = block.category.template_id === 999 ? LIST_DATA_TYPE_ARTICLES_FEED : LIST_DATA_TYPE_ARTICLES;
-    return {
-      ...block,
-      items: block.items.map((articlesRow) => ({
-        type: type,
-        data: articlesRow,
-      })),
-    };
-  });
-};
-
-const insertDailyQuestionItem = (homeBlocks: HomeBlock[]) => {
-  const item: HomeListItemDailyQuestion = {type: LIST_DATA_TYPE_DAILY_QUESTION};
-  homeBlocks[0].items.push(item);
-};
-
-const insertChannelsItem = (homeBlocks: HomeBlock[]) => {
-  const item: HomeListItemChannels = {type: LIST_DATA_TYPE_CHANNELS};
-  homeBlocks[0].items.splice(1, 0, item);
-};
-
-const insertBannerBlocks = (homeBlocks: HomeBlock[], banners: HomeBannerBlock[]) => {
-  const items: HomeListItemBanner[] = banners.map((b) => {
-    return {type: LIST_DATA_TYPE_BANNER, data: b};
-  });
-
-  if (items.length > 0) {
-    if (items.length === 1) {
-      homeBlocks[0].items.push(...items);
-    } else {
-      homeBlocks[0].items.push(items[0]);
-      const rest = items.splice(1, items.length);
-      homeBlocks[1].items.push(...rest);
-    }
-  }
-};
-
-const insertMoreFooters = (homeBlocks: HomeBlock[]) => {
-  homeBlocks.forEach((block) => {
-    if (block.category.id === 0 || block.category.is_slug_block) {
-      //Skip tops && slug blocks;
-      return;
-    }
-
-    block.items.push({
-      type: LIST_DATA_TYPE_MORE_FOOTER,
-      data: block.category,
-    });
-  });
-};
-
-//Parses article blocks and top article block into single array.
-const parseHomeArticles = (apiResponse: HomeDataResponse) => {
-  const homeCategories: {
-    category: Category;
-    items: Article[][];
-  }[] = [
-    {
-      category: {
-        id: 0,
-        name: 'Pagrindinis',
-        template_id: 0,
-      },
-      items: formatArticleBlock(0, apiResponse.articles),
-    },
-  ];
-
-  const isArticleBLock = (block: HomeArticlesBlock | HomeBannerBlock): block is HomeArticlesBlock => {
-    const _block = block as HomeArticlesBlock;
-    return _block.articles_list && _block.articles_list.length > 0;
-  };
-
-  apiResponse.articles_blocks.filter(isArticleBLock).forEach((block) => {
-    const articles = block.articles_list;
-    if (articles && articles.length > 0) {
-      homeCategories.push({
-        category: {
-          id: block.category_id,
-          name: (block.category_title || block.slug_title || block.block_title)!,
-          template_id: block.template_id,
-          is_slug_block: block.is_slug_block,
-          slug_url: block.slug_url,
-        },
-        items: formatArticleBlock(block.template_id, articles),
-      });
-    }
-  });
-  return homeCategories;
-};
-
-//Filters banner block from home response.
-const parseHomeBanners = (apiResponse: HomeDataResponse) => {
-  const isBannerBLock = (block: HomeArticlesBlock | HomeBannerBlock): block is HomeBannerBlock => {
-    const _block = block as HomeBannerBlock;
-    return Boolean(_block.html_embed);
-  };
-
-  return apiResponse.articles_blocks.filter(isBannerBLock);
 };
 
 export default reducer;

@@ -1,8 +1,7 @@
 import {HomePageType} from '../../Types';
-import {HomeChannels, ROUTE_TYPE_CATEGORY, ROUTE_TYPE_MEDIA} from '../api/Types';
+import {HomeBlockChannels, HomeChannels, ROUTE_TYPE_CATEGORY, ROUTE_TYPE_MEDIA} from '../api/Types';
 import {formatArticles} from '../util/articleFormatters';
 import {RootState} from './reducers';
-import {HomeBlock} from './reducers/articles';
 import {SavedArticle} from './reducers/articleStorage';
 
 export const selectAppIsReady = (state: RootState) => {
@@ -61,19 +60,10 @@ export const selectCategoryScreenState = (categoryId: number, categoryTitle?: st
 export const selectHomeScreenState = (type: HomePageType) => (state: RootState) => {
   const block = type === ROUTE_TYPE_MEDIA ? state.articles.mediateka : state.articles.home;
 
-  const mapSections = (items: HomeBlock[]) => {
-    return items.map((b) => {
-      return {
-        category: b.category,
-        data: b.items,
-      };
-    });
-  };
-
   return {
     refreshing: block.isFetching && block.items.length > 0,
     lastFetchTime: block.lastFetchTime,
-    sections: mapSections(block.items),
+    items: block.items,
   };
 };
 
@@ -112,7 +102,8 @@ export const selectProgramScreenState = (state: RootState) => {
 };
 
 export const selectHomeChannels = (state: RootState): HomeChannels => {
-  return state.articles.channels;
+  const channelsBlock = state.articles.home.items.find((i) => i.type === 'channels') as HomeBlockChannels;
+  return channelsBlock.data;
 };
 
 export const selectArticleBookmarked = (articleId: string | number) => (state: RootState) => {
@@ -143,10 +134,6 @@ export const selectSettings = (state: RootState) => {
 
 export const selectForecastLocation = (state: RootState) => {
   return state.config.forecastLocation;
-};
-
-export const selectDailyQuestion = (state: RootState) => {
-  return state.articles.daily_question;
 };
 
 export const selectDailyQuestionChoice = (state: RootState) => {
