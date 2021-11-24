@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   scrollContent: {
-    paddingVertical: 16,
+    paddingVertical: 12,
   },
   listItemContainer: {
     width: 290,
