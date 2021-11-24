@@ -48,7 +48,7 @@ const HTMLRenderer: React.FC<Props> = ({html}) => {
   const baseFontStyle: TextStyle = useMemo(
     () => ({
       color: colors.text,
-
+      fontFamily: 'SourceSansPro-Regular',
       lineHeight: fontSize + EXTRA_LINE_SPACING,
       fontSize: fontSize,
     }),
