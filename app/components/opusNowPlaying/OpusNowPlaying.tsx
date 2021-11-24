@@ -43,7 +43,9 @@ const OpusNowComponent: React.FC = () => {
     <>
       <View>
         <View style={{...styles.container, backgroundColor: OPUS_COLOR}}>
-          <TextComponent style={styles.title}>Eteryje</TextComponent>
+          <TextComponent style={styles.title} fontFamily="SourceSansPro-SemiBold">
+            Eteryje
+          </TextComponent>
           <TextComponent style={styles.song}>{currentSong.replace('Eteryje: ', '')}</TextComponent>
           <TouchableOpacity onPress={previousSongsPressHandler}>
             <View style={{...styles.previousSongsButton, backgroundColor: OPUS_COLOR}}>
@@ -76,13 +78,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 15,
   },
   song: {
     flex: 1,
     marginVertical: 8,
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 14,
   },
   previousSongsButton: {
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
   },
   previousSongsButtonText: {
     textAlign: 'center',
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 16,
   },
 });

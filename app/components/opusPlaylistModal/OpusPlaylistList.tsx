@@ -21,7 +21,9 @@ const OpusPaylistList: React.FC<OpusPaylistListProps> = ({items}) => {
     const {item} = itemInfo;
     return (
       <View style={styles.listItem}>
-        <TextComponent style={styles.timeText}>{item.dt}</TextComponent>
+        <TextComponent style={styles.timeText} fontFamily="SourceSansPro-SemiBold">
+          {item.dt}
+        </TextComponent>
         <TextComponent style={styles.songText}>{item.song}</TextComponent>
       </View>
     );
@@ -67,11 +69,9 @@ const styles = StyleSheet.create({
   },
   timeText: {
     color: '#e7792b',
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 15,
   },
   songText: {
-    fontFamily: 'SourceSansPro-Regular',
     marginTop: 4,
     fontSize: 16,
   },

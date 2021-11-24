@@ -12,7 +12,9 @@ const SlugHeader: React.FC<Props> = ({title}) => {
   return (
     <View style={{backgroundColor: colors.slugBackground}}>
       <View style={styles.sectionHeaderContainer}>
-        <TextComponent style={styles.sectionHeaderText}>{title}</TextComponent>
+        <TextComponent style={styles.sectionHeaderText} fontFamily="SourceSansPro-SemiBold">
+          {title}
+        </TextComponent>
         <View style={{...styles.slugContainer, borderColor: colors.border}}>
           <TextComponent style={styles.slugText}>{`# ${title}`}</TextComponent>
         </View>
@@ -26,7 +28,6 @@ export default SlugHeader;
 const styles = StyleSheet.create({
   sectionHeaderText: {
     textTransform: 'uppercase',
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 18,
   },
   sectionHeaderContainer: {
@@ -58,7 +59,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   slugText: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 15,
   },
 });

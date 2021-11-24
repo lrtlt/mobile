@@ -4,16 +4,7 @@ import moment from 'moment';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 
-type WeekDays =
-  | 'Sekmadienis'
-  | 'Pirmadienis'
-  | 'Antradienis'
-  | 'Trečiadienis'
-  | 'Ketvirtadienis'
-  | 'Penktadienis'
-  | 'Šeštadienis';
-
-const weekDays: WeekDays[] = [
+const weekDays = [
   'Sekmadienis',
   'Pirmadienis',
   'Antradienis',
@@ -53,7 +44,6 @@ export default ProgramDay;
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 15,
   },
 });

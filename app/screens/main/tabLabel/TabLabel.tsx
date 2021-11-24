@@ -32,7 +32,7 @@ export default TabLabel;
 const styles = StyleSheet.create({
   label: {
     fontSize: 14,
-    fontFamily: 'SourceSansPro-Regular',
+
     width: '100%',
     textTransform: 'uppercase',
   },

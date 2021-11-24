@@ -32,11 +32,7 @@ const TopFeedBlock: React.FC<TopFeedBlockProps> = ({block}) => {
       articles.map((article, index) => {
         let imgUri;
         if (article.img_path_prefix && article.img_path_postfix) {
-          imgUri = buildImageUri(
-            getImageSizeForWidth(100),
-            article.img_path_prefix,
-            article.img_path_postfix,
-          );
+          imgUri = buildImageUri(getImageSizeForWidth(80), article.img_path_prefix, article.img_path_postfix);
         } else if (article.photo) {
           imgUri = buildArticleImageUri(getImageSizeForWidth(80), article.photo);
         }
@@ -81,7 +77,7 @@ const TopFeedBlock: React.FC<TopFeedBlockProps> = ({block}) => {
           </TouchableDebounce>
         );
       }),
-    [articles, colors.listSeparator],
+    [articlePressHandler, articles, colors.listSeparator],
   );
 
   return (
@@ -103,6 +99,7 @@ const styles = StyleSheet.create({
   container: {
     borderTopWidth: 1,
     borderBottomWidth: 1,
+    marginVertical: 8,
   },
   scrollContent: {
     paddingVertical: 16,
@@ -121,15 +118,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   timeText: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 12,
     marginBottom: 4,
   },
   titleText: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 15,
-    letterSpacing: 0.6,
+    letterSpacing: 0.4,
     flex: 1,
-    marginLeft: 8,
+    marginLeft: 16,
   },
 });

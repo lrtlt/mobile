@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginBottom: 24,
     lineHeight: 32,
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 22,
   },
   playerContainer: {

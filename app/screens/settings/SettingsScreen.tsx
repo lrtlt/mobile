@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   title: {
     width: '100%',
     padding: 2,
-    fontFamily: 'SourceSansPro-Regular',
+
     letterSpacing: 1,
     fontSize: 18,
     height: 40,
@@ -196,15 +196,12 @@ const styles = StyleSheet.create({
     bottom: 32,
   },
   textNormal: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 16,
   },
   textLarge: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 22,
   },
   textExtraLarge: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 30,
   },
 

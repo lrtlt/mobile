@@ -37,9 +37,10 @@ const AudioContent: React.FC<AudioContentProps> = ({about_episode, about_show, i
         <TouchableOpacity onPress={onEpisodePressHandler}>
           <Text
             style={{
-              ...(selectedContent === 'episode' ? styles.textTitleSelected : styles.textTitle),
+              ...styles.textTitle,
               color: selectedContent === 'episode' ? colors.text : colors.textSecondary,
-            }}>
+            }}
+            fontFamily={selectedContent === 'episode' ? 'SourceSansPro-SemiBold' : 'SourceSansPro-Regular'}>
             {strings.about_episode}
           </Text>
         </TouchableOpacity>
@@ -47,9 +48,10 @@ const AudioContent: React.FC<AudioContentProps> = ({about_episode, about_show, i
           <TouchableOpacity style={styles.aboutShowTextContainer} onPress={onShowPressHandler}>
             <Text
               style={{
-                ...(selectedContent === 'show' ? styles.textTitleSelected : styles.textTitle),
+                ...styles.textTitle,
                 color: selectedContent === 'show' ? colors.text : colors.textSecondary,
-              }}>
+              }}
+              fontFamily={selectedContent === 'show' ? 'SourceSansPro-SemiBold' : 'SourceSansPro-Regular'}>
               {strings.about_show}
             </Text>
           </TouchableOpacity>
@@ -82,11 +84,6 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   textTitle: {
-    fontFamily: 'SourceSansPro-Regular',
-    fontSize: 20,
-  },
-  textTitleSelected: {
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 20,
   },
   imageContainer: {

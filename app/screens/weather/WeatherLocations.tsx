@@ -88,16 +88,14 @@ const styles = StyleSheet.create({
   searchInput: {
     paddingVertical: 8,
     width: '100%',
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 18,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   locationTextTitle: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 16,
   },
   locationTextSubtitle: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 13,
   },
   resultContainer: {

@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   countText: {
     paddingStart: 4,
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 13.5,
   },
 });

@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   slugTitle: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 14,
   },
 });

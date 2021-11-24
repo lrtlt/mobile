@@ -66,7 +66,7 @@ const ArticleHeader: React.FC<Props> = ({
         <View style={{...styles.greyDot, backgroundColor: colors.buttonContent}} />
         <Text style={styles.smallText}>{date}</Text>
       </View>
-      <Text style={styles.titleText} selectable={true}>
+      <Text style={styles.titleText} selectable={true} fontFamily="PlayfairDisplay-Regular">
         {title}
       </Text>
       {subtitleComponent}
@@ -74,7 +74,9 @@ const ArticleHeader: React.FC<Props> = ({
 
       <View style={styles.authorShareContainer}>
         <View style={styles.authorContainer}>
-          <Text style={styles.smallTextBold}>{author}</Text>
+          <Text style={styles.smallTextBold} fontFamily="SourceSansPro-SemiBold">
+            {author}
+          </Text>
         </View>
         {text2SpeechComponent}
       </View>
@@ -98,11 +100,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   smallText: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 14,
   },
   smallTextBold: {
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 14,
   },
   authorShareContainer: {
@@ -126,11 +126,9 @@ const styles = StyleSheet.create({
   },
   titleText: {
     marginTop: 24,
-    fontFamily: 'PlayfairDisplay-Regular',
     fontSize: 25,
   },
   subtitle: {
-    fontFamily: 'SourceSansPro-Regular',
     marginTop: 4,
     fontSize: 15,
   },

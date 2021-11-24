@@ -1,10 +1,11 @@
 import React, {useCallback} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import CoverImage from '../coverImage/CoverImage';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import {buildArticleImageUri, getImageSizeForWidth} from '../../util/ImageUtil';
 import {ArticlePhotoType} from '../../api/Types';
 import {checkEqual} from '../../util/LodashEqualityCheck';
+import TextComponent from '../text/Text';
 
 const PhotoComponent = (
   photo: ArticlePhotoType,
@@ -52,7 +53,9 @@ const PhotoWithOverlayComponent = (
         {PhotoComponent(photo, width)}
 
         <View style={styles.imageCountOverlay}>
-          <Text style={styles.imageCountOverlayText}>+{count}</Text>
+          <TextComponent style={styles.imageCountOverlayText} fontFamily="SourceSansPro-SemiBold">
+            +{count}
+          </TextComponent>
         </View>
       </View>
     </TouchableDebounce>
@@ -119,7 +122,6 @@ const styles = StyleSheet.create({
   },
   imageCountOverlayText: {
     color: 'white',
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 40,
   },
   space: {

@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   tabText: {
     textTransform: 'uppercase',
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 14,
   },
 });

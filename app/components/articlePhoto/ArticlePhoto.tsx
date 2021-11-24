@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bottomText: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 13,
     marginTop: 4,
   },

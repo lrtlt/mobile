@@ -17,7 +17,7 @@ const AdultContentWarningComponent: React.FC<Props> = ({onAccept, onDecline}) =>
         <TextComponent style={{...styles.textBadge, borderColor: colors.buttonBorder}}>N-18</TextComponent>
         <TextComponent style={styles.title}>DĖMESIO!</TextComponent>
       </View>
-      <TextComponent style={styles.text}>
+      <TextComponent style={styles.text} fontFamily="PlayfairDisplay-Regular">
         {'Čia pateikiama informacija skirta asmenims nuo'}{' '}
         {<TextComponent type="error">18 metų</TextComponent>}
       </TextComponent>
@@ -28,7 +28,9 @@ const AdultContentWarningComponent: React.FC<Props> = ({onAccept, onDecline}) =>
           underlayColor={colors.primary}
           onPress={onAccept}>
           <View style={styles.buttonPositive}>
-            <TextComponent style={styles.buttonPositiveText}>MAN JAU YRA 18 METŲ</TextComponent>
+            <TextComponent style={styles.buttonPositiveText} fontFamily="SourceSansPro-SemiBold">
+              MAN JAU YRA 18 METŲ
+            </TextComponent>
           </View>
         </RectButton>
         <View style={styles.buttonSpace} />
@@ -38,7 +40,9 @@ const AdultContentWarningComponent: React.FC<Props> = ({onAccept, onDecline}) =>
           underlayColor={colors.primary}
           onPress={onDecline}>
           <View style={styles.buttonNegative}>
-            <TextComponent style={styles.buttonNegativeText}>MAN DAR NĖRA 18 METŲ</TextComponent>
+            <TextComponent style={styles.buttonNegativeText} fontFamily="SourceSansPro-SemiBold">
+              MAN DAR NĖRA 18 METŲ
+            </TextComponent>
           </View>
         </RectButton>
       </View>
@@ -57,19 +61,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 4,
     fontSize: 14,
-    fontFamily: 'SourceSansPro-Regular',
+
     borderRadius: 4,
   },
   title: {
     padding: 4,
     fontSize: 22,
     marginLeft: 4,
-    fontFamily: 'SourceSansPro-Regular',
   },
   text: {
     marginTop: 8,
     fontSize: 20,
-    fontFamily: 'PlayfairDisplay-Regular',
   },
   headerRow: {
     flexDirection: 'row',
@@ -94,12 +96,10 @@ const styles = StyleSheet.create({
   buttonPositiveText: {
     fontSize: 14,
     color: '#FFFFFF',
-    fontFamily: 'SourceSansPro-SemiBold',
   },
   buttonNegativeText: {
     fontSize: 14,
     color: '#45a2ff',
-    fontFamily: 'SourceSansPro-SemiBold',
   },
   buttonNegative: {
     padding: 14,

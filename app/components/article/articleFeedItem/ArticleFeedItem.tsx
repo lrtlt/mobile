@@ -21,8 +21,10 @@ const ArticleFeedItem: React.FC<Props> = (props) => {
   return (
     <TouchableDebounce onPress={onPressHandler} debounceTime={500} activeOpacity={0.4}>
       <View style={{...styles.container, backgroundColor: colors.slugBackground}}>
-        <TextComponent style={styles.title}>{article.title}</TextComponent>
-        <TextComponent style={styles.timeText} type="secondary">
+        <TextComponent style={styles.title} fontFamily="PlayfairDisplay-Regular">
+          {article.title}
+        </TextComponent>
+        <TextComponent style={styles.timeText} type="secondary" fontFamily="SourceSansPro-SemiBold">
           {article.item_time}
         </TextComponent>
       </View>
@@ -40,11 +42,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   title: {
-    fontFamily: 'PlayfairDisplay-Regular',
     fontSize: 17,
   },
   timeText: {
-    fontFamily: 'SourceSansPro-SemiBold',
     marginTop: 4,
     fontSize: 13,
   },

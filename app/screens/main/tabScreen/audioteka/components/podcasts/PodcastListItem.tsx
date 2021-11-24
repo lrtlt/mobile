@@ -39,7 +39,9 @@ const PodcastListItem: React.FC<Props> = ({style, podcast}) => {
           angle={0}
         />
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>{podcast.title}</Text>
+          <Text style={styles.title} fontFamily="PlayfairDisplay-Regular">
+            {podcast.title}
+          </Text>
         </View>
       </View>
     </TouchableDebounce>
@@ -63,7 +65,6 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    fontFamily: 'PlayfairDisplay-Regular',
     fontSize: 20,
     color: 'white',
   },

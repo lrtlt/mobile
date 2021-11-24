@@ -1,6 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet, ViewStyle} from 'react-native';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 import {useTheme} from '../../Theme';
+import TextComponent from '../text/Text';
 
 interface Props {
   style?: ViewStyle;
@@ -10,7 +11,10 @@ const LiveBadge: React.FC<Props> = (props) => {
   const {colors, strings} = useTheme();
   return (
     <View style={[styles.container, {backgroundColor: colors.textError}, props.style]}>
-      <Text style={styles.text}> {strings.liveChannelTitle} </Text>
+      <TextComponent style={styles.text} fontFamily="SourceSansPro-SemiBold">
+        {' '}
+        {strings.liveChannelTitle}{' '}
+      </TextComponent>
     </View>
   );
 };
@@ -26,7 +30,6 @@ const styles = StyleSheet.create({
   text: {
     flexWrap: 'wrap',
     color: 'white',
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 13,
   },
 });

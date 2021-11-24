@@ -43,7 +43,9 @@ const TopArticle: React.FC<TopArticleProps> = ({article}) => {
           <TextComponent
             style={styles.date}>{`${article.category_title}    ${article.item_date}`}</TextComponent>
         </View>
-        <TextComponent style={styles.title}>{article.title}</TextComponent>
+        <TextComponent style={styles.title} fontFamily="PlayfairDisplay-Regular">
+          {article.title}
+        </TextComponent>
       </TopArticleBackground>
     </TouchableDebounce>
   );
@@ -78,7 +80,6 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 16,
-    fontFamily: 'PlayfairDisplay-Regular',
     fontSize: 22,
     color: 'white',
   },
@@ -88,7 +89,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   date: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 14,
     marginLeft: 8,
     color: 'white',

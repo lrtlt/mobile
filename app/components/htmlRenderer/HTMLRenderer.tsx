@@ -28,7 +28,9 @@ const renderP: RendererFunction = (_, children, __, passProps) => {
 const renderBlockquote: RendererFunction = (_, children, __, passProps) => {
   return (
     <View style={styles.quoteContainer} key={passProps.key}>
-      <TextComponent style={styles.quoteSimbol}>”</TextComponent>
+      <TextComponent style={styles.quoteSimbol} fontFamily="SourceSansPro-SemiBold">
+        ”
+      </TextComponent>
       <TextComponent style={styles.quoteText} selectable={true}>
         {children}
       </TextComponent>
@@ -46,7 +48,7 @@ const HTMLRenderer: React.FC<Props> = ({html}) => {
   const baseFontStyle: TextStyle = useMemo(
     () => ({
       color: colors.text,
-      fontFamily: 'SourceSansPro-Regular',
+
       lineHeight: fontSize + EXTRA_LINE_SPACING,
       fontSize: fontSize,
     }),
@@ -97,7 +99,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   quoteSimbol: {
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 80,
     marginTop: -18,
     paddingEnd: 8,

@@ -24,7 +24,10 @@ const EmbedArticles: React.FC<Props> = ({data, itemPressHandler}) => {
         return (
           <View style={styles.embededArticleContainer} key={i}>
             <TouchableDebounce onPress={pressHandler}>
-              <TextComponent style={styles.embededArticleText} type="secondary">
+              <TextComponent
+                style={styles.embededArticleText}
+                type="secondary"
+                fontFamily="PlayfairDisplay-Regular">
                 {item.el.title}
               </TextComponent>
             </TouchableDebounce>
@@ -39,7 +42,9 @@ const EmbedArticles: React.FC<Props> = ({data, itemPressHandler}) => {
     <View style={styles.container}>
       <View style={{...styles.line, backgroundColor: colors.primary}} />
       <View style={styles.container}>
-        <TextComponent style={styles.articleTitle}>{strings.embedArticleHeader}</TextComponent>
+        <TextComponent style={styles.articleTitle} fontFamily="SourceSansPro-SemiBold">
+          {strings.embedArticleHeader}
+        </TextComponent>
         {content}
       </View>
       <View style={{...styles.line, backgroundColor: colors.primary}} />
@@ -64,13 +69,11 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   articleTitle: {
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 18,
     marginTop: 24,
     marginBottom: 8,
   },
   embededArticleText: {
-    fontFamily: 'PlayfairDisplay-Regular',
     fontSize: 18,
   },
 });

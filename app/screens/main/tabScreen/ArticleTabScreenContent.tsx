@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   errorText: {
-    fontFamily: 'SourceSansPro-Regular',
     marginBottom: 20,
     fontSize: 20,
   },

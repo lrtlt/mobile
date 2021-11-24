@@ -84,7 +84,9 @@ const SearchFilterDrawer: React.FC = () => {
   const typeSelection = useMemo(() => {
     return (
       <View>
-        <TextComponent style={styles.titleText}>TIPAS</TextComponent>
+        <TextComponent style={styles.titleText} fontFamily="SourceSansPro-SemiBold">
+          TIPAS
+        </TextComponent>
         <SelectableItem selected={type === 0} text={'Visi'} onPress={() => selectType(SEARCH_TYPE_ALL)} />
         <SelectableItem
           selected={type === 1}
@@ -105,7 +107,9 @@ const SearchFilterDrawer: React.FC = () => {
   const sectionSelection = useMemo(() => {
     return (
       <View>
-        <TextComponent style={styles.titleText}>TEMA</TextComponent>
+        <TextComponent style={styles.titleText} fontFamily="SourceSansPro-SemiBold">
+          TEMA
+        </TextComponent>
         <SelectableItem selected={section === ''} text={'Visos'} onPress={() => selectSection('')} />
         <SelectableItem
           selected={section === 'aktualijos|lietuvoje|zinios|pasaulyje|panorama'}
@@ -149,7 +153,9 @@ const SearchFilterDrawer: React.FC = () => {
   const dateSelection = useMemo(() => {
     return (
       <View>
-        <TextComponent style={styles.titleText}>DATA</TextComponent>
+        <TextComponent style={styles.titleText} fontFamily="SourceSansPro-SemiBold">
+          DATA
+        </TextComponent>
         <SelectableItem selected={days === ''} text={'Visos'} onPress={() => selectDays('')} />
         <SelectableItem selected={days === '1'} text={'Per 24 valandas'} onPress={() => selectDays('1')} />
         <SelectableItem selected={days === '7'} text={'Per savaite'} onPress={() => selectDays('7')} />
@@ -188,7 +194,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   titleText: {
-    fontFamily: 'SourceSansPro-SemiBold',
     padding: 16,
     fontSize: 16,
   },

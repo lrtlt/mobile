@@ -117,7 +117,9 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
           </View>
           <View style={style.dateContainer}>{date}</View>
 
-          <TextComponent style={style.title}>{article.title}</TextComponent>
+          <TextComponent style={style.title} fontFamily="PlayfairDisplay-Regular">
+            {article.title}
+          </TextComponent>
           <ArticleBadges style={style.badges} article={article} />
           {Boolean(article.subtitle) && (
             <TextComponent style={style.subtitle} type="error">
@@ -158,7 +160,6 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 13.5,
     paddingEnd: 6,
-    fontFamily: 'SourceSansPro-Regular',
   },
   categoryTitleContainer: {
     flexDirection: 'row',
@@ -175,11 +176,9 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 4,
-    fontFamily: 'PlayfairDisplay-Regular',
     fontSize: 22,
   },
   subtitle: {
-    fontFamily: 'SourceSansPro-Regular',
     marginTop: 4,
     fontSize: 14,
   },
@@ -193,7 +192,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingVertical: 1,
     paddingHorizontal: 8,
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 13,
     backgroundColor: 'white',
   },

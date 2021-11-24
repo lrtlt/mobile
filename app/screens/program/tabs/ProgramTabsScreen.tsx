@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   },
   tabLable: {
     width: '100%',
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 10,
     textTransform: 'uppercase',
     paddingTop: 6,

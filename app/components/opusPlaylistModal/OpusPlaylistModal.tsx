@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   closeText: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 14,
     marginStart: 8,
   },

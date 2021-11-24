@@ -10,7 +10,9 @@ interface BlockTitleProps {
 const BlockTitle: React.FC<BlockTitleProps> = ({style, text}) => {
   return (
     <View style={{...styles.container, ...style}}>
-      <Text style={styles.text}>{text}</Text>
+      <Text style={styles.text} fontFamily="SourceSansPro-SemiBold">
+        {text}
+      </Text>
     </View>
   );
 };
@@ -27,7 +29,6 @@ const styles = StyleSheet.create({
   },
   text: {
     textTransform: 'uppercase',
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 18,
   },
 });

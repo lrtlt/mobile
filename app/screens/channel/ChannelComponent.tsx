@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 16,
     marginTop: 8,
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 16,
   },
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Text, TextProps, TextStyle} from 'react-native';
 import SelectableText from '../selectableText/SelectableText';
 import {useTheme} from '../../Theme';
@@ -8,19 +8,21 @@ const DEFAULT_FONT_SIZE = 15;
 
 type Type = 'primary' | 'secondary' | 'disabled' | 'error';
 
+type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-SemiBold' | 'PlayfairDisplay-Regular';
+
 interface Props extends TextProps {
-  scalingEnabled?: boolean;
   type?: Type;
+  fontFamily?: FontFamily;
+  scalingEnabled?: boolean;
 }
 
 const TextComponent: React.FC<Props> = (props) => {
   const {colors} = useTheme();
-
   const {textSizeMultiplier} = useSettings();
 
-  const propsStyle = props.style as TextStyle;
+  const style = props.style as TextStyle;
 
-  const getColorForType = () => {
+  const textColor = useMemo(() => {
     switch (props.type) {
       case 'primary':
         return colors.text;
@@ -33,26 +35,34 @@ const TextComponent: React.FC<Props> = (props) => {
       default:
         return colors.text;
     }
+  }, [colors, props.type]);
+
+  const fontSize = useMemo(() => {
+    let size = style?.fontSize ?? DEFAULT_FONT_SIZE;
+    if (props.scalingEnabled) {
+      const multiplier = textSizeMultiplier;
+      size += multiplier ? multiplier : 0;
+    }
+    return size;
+  }, [props.scalingEnabled, style?.fontSize, textSizeMultiplier]);
+
+  const combinedStyle: TextStyle = {
+    ...style,
+    fontSize,
+    fontFamily: style?.fontFamily ?? props?.fontFamily ?? 'SourceSansPro-Regular',
+    color: style?.color ?? textColor,
   };
 
-  let fontSize = propsStyle?.fontSize ?? DEFAULT_FONT_SIZE;
-  if (props.scalingEnabled) {
-    const multiplier = textSizeMultiplier;
-    fontSize += multiplier ? multiplier : 0;
-  }
-
-  const color = propsStyle?.color ? propsStyle.color : getColorForType();
-  const style: TextStyle = {...propsStyle, fontSize, color};
-
   if (props.selectable) {
-    return <SelectableText {...props} style={style} textBreakStrategy="simple" />;
+    return <SelectableText {...props} style={combinedStyle} textBreakStrategy="highQuality" />;
   } else {
-    return <Text {...props} style={style} textBreakStrategy="simple" />;
+    return <Text {...props} style={combinedStyle} textBreakStrategy="highQuality" />;
   }
 };
 
 TextComponent.defaultProps = {
   scalingEnabled: true,
+  type: 'primary',
 };
 
 export default TextComponent;

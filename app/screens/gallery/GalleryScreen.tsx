@@ -73,7 +73,9 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
               {`${selectedIndex + 1} / ${images.length}`}
             </Text>
           </View>
-          <Text style={styles.title}>{image.title}</Text>
+          <Text style={styles.title} fontFamily="PlayfairDisplay-Regular">
+            {image.title}
+          </Text>
         </SafeAreaView>
       </View>
       <View style={styles.absoluteLayout}>
@@ -117,13 +119,11 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
   authorText: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 13,
     marginTop: 4,
   },
   title: {
     marginTop: 4,
-    fontFamily: 'PlayfairDisplay-Regular',
     fontSize: 16,
   },
 });

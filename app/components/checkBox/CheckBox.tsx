@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   label: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 15,
     marginStart: 8,
     textTransform: 'uppercase',

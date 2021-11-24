@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   text: {
     paddingTop: 16,
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 20,
   },
 });

@@ -13,7 +13,9 @@ const DefaultHeader: React.FC<Props> = ({title}) => {
   return (
     <View>
       <View style={styles.sectionHeaderContainer}>
-        <TextComponent style={styles.sectionHeaderText}>{title}</TextComponent>
+        <TextComponent style={styles.sectionHeaderText} fontFamily="SourceSansPro-SemiBold">
+          {title}
+        </TextComponent>
       </View>
       <View style={{...styles.separator, backgroundColor: colors.primaryDark}} />
     </View>
@@ -25,7 +27,6 @@ export default DefaultHeader;
 const styles = StyleSheet.create({
   sectionHeaderText: {
     textTransform: 'uppercase',
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 18,
   },
   sectionHeaderContainer: {

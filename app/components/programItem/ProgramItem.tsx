@@ -53,8 +53,6 @@ const ProgramItem: React.FC<Props> = (props) => {
     }
   }, [navigation, props.record_article_id]);
 
-  const titleStyle = hasEnded ? styles.titleText : styles.titleTextUpcoming;
-
   return (
     <TouchableDebounce
       style={[styles.container, props.style, {backgroundColor: colors.programItem}]}
@@ -69,7 +67,10 @@ const ProgramItem: React.FC<Props> = (props) => {
       </TextComponent>
       {renderIcon()}
       <View style={styles.textContainer}>
-        <TextComponent style={titleStyle} type={proc === 0 ? 'secondary' : 'primary'}>
+        <TextComponent
+          style={styles.titleText}
+          type={proc === 0 ? 'secondary' : 'primary'}
+          fontFamily={hasEnded ? 'SourceSansPro-Regular' : 'SourceSansPro-SemiBold'}>
           {props.title}
         </TextComponent>
 
@@ -104,23 +105,17 @@ const styles = StyleSheet.create({
   timeText: {
     paddingEnd: 8,
     paddingStart: 8,
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 13,
-  },
-  titleTextUpcoming: {
-    paddingStart: 0,
-    fontFamily: 'SourceSansPro-SemiBold',
-    fontSize: 15,
   },
   titleText: {
     paddingStart: 0,
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 15,
   },
   descriptionText: {
     paddingStart: 0,
     marginTop: 2,
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 13,
   },
   textContainer: {

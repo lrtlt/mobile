@@ -70,7 +70,9 @@ const ForecastComponent: React.FC<Props> = (props) => {
         {forecast?.location.name ? forecast?.location.name : '-'}
       </TextComponent>
       <View style={{...styles.sun, borderColor: colors.background, backgroundColor: getSunColor()}} />
-      <TextComponent style={styles.temperatureText}>{temperatureText}</TextComponent>
+      <TextComponent style={styles.temperatureText} fontFamily="SourceSansPro-SemiBold">
+        {temperatureText}
+      </TextComponent>
       {getIconForWeatherConditions(f?.conditionCode, 26, colors.textSecondary)}
       <TextComponent style={styles.humidityText} type="secondary">
         {humidityText}
@@ -95,19 +97,17 @@ const styles = StyleSheet.create({
     height: 16,
   },
   cityText: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 15,
     flex: 1,
   },
   temperatureText: {
     marginLeft: 8,
     marginRight: 24,
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 15,
   },
   humidityText: {
     marginLeft: 8,
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 15,
   },
   sun: {

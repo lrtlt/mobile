@@ -26,7 +26,6 @@ export default DrawerItem;
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 15,
     textTransform: 'uppercase',
   },

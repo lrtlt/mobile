@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 18,
   },
 });

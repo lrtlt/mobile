@@ -24,7 +24,9 @@ const DailyQuestionComponent: React.FC<DailyQuestionComponentProps> = ({block}) 
     (choice: DailyQuestionChoice) => {
       return (
         <View key={choice.id} style={{...styles.choiceContainer, borderColor: colors.buttonBorder}}>
-          <TextComponent style={styles.choice}>{choice.name}</TextComponent>
+          <TextComponent style={styles.choice} fontFamily="SourceSansPro-SemiBold">
+            {choice.name}
+          </TextComponent>
           <TouchableDebounce
             style={styles.voteButton}
             onPress={() => {
@@ -57,12 +59,14 @@ const DailyQuestionComponent: React.FC<DailyQuestionComponentProps> = ({block}) 
               <IconCheck color={'black'} size={12} />
             </View>
           )}
-          <TextComponent style={styles.choice}>
+          <TextComponent style={styles.choice} fontFamily="SourceSansPro-SemiBold">
             {choice.name}
             <TextComponent style={styles.voteCountText}>
               {'  '}
               {choice.votes}
-              <TextComponent style={{...styles.votePercentageText, color: colors.primaryDark}}>
+              <TextComponent
+                style={{...styles.votePercentageText, color: colors.primaryDark}}
+                fontFamily="SourceSansPro-SemiBold">
                 {'  '}
                 {choice.percentage}%
               </TextComponent>
@@ -83,7 +87,9 @@ const DailyQuestionComponent: React.FC<DailyQuestionComponentProps> = ({block}) 
   return (
     <View style={{...styles.container, borderColor: colors.buttonBorder}}>
       <View style={styles.topContainer}>
-        <TextComponent style={styles.title}>{dailyQuestion.title}</TextComponent>
+        <TextComponent style={styles.title} fontFamily="PlayfairDisplay-Regular">
+          {dailyQuestion.title}
+        </TextComponent>
         {isUserVoteAccepted && (
           <TextComponent style={styles.subtitle}>
             Iš viso balsavo:{' '}
@@ -116,18 +122,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontFamily: 'PlayfairDisplay-Regular',
     fontSize: 20,
   },
   subtitle: {
-    fontFamily: 'SourceSansPro-Regular',
     marginTop: 16,
     fontSize: 15,
   },
   choice: {
     flex: 1,
     height: '100%',
-    fontFamily: 'SourceSansPro-SemiBold',
     marginTop: 16,
     fontSize: 15,
   },
@@ -138,15 +141,12 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   voteText: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 13,
   },
   voteCountText: {
-    fontFamily: 'SourceSansPro-Regular',
     fontSize: 15,
   },
   votePercentageText: {
-    fontFamily: 'SourceSansPro-SemiBold',
     fontSize: 15,
   },
   checkBubble: {

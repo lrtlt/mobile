@@ -91,7 +91,7 @@ const Channel: React.FC<Props> = ({data, onPress}) => {
           {channelTitleComponent}
           {liveBadge}
 
-          <TextComponent style={styles.title} numberOfLines={3}>
+          <TextComponent style={styles.title} numberOfLines={3} fontFamily="PlayfairDisplay-Regular">
             {data.title}
           </TextComponent>
         </View>
@@ -147,14 +147,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textTransform: 'uppercase',
     paddingStart: 8,
-    fontFamily: 'SourceSansPro-Regular',
   },
   channelTitleLive: {
     fontSize: 12,
     textTransform: 'uppercase',
     paddingStart: 2,
     paddingVertical: 1,
-    fontFamily: 'SourceSansPro-Regular',
   },
   liveBadge: {
     alignSelf: 'flex-start',
@@ -164,12 +162,11 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: 16,
     marginTop: 4,
-    fontFamily: 'PlayfairDisplay-Regular',
   },
   timeText: {
     opacity: 0.8,
     fontSize: 12,
-    fontFamily: 'SourceSansPro-Regular',
+
     borderRadius: 4,
     padding: 3,
     margin: 8,

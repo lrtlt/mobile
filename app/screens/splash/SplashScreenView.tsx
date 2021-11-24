@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     marginTop: 40,
-    fontFamily: 'SourceSansPro-Regular',
+
     marginBottom: 20,
     fontSize: 18,
   },

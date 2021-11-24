@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     margin: 8,
   },
   title: {
-    fontFamily: 'SourceSansPro-Regular',
     padding: 8,
     fontSize: 16,
   },

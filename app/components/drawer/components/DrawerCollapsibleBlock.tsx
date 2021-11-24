@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 16,
     textTransform: 'uppercase',
     fontWeight: 'bold',

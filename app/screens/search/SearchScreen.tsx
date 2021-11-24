@@ -168,7 +168,9 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
         windowSize={4}
         ListEmptyComponent={
           <View style={styles.noResultsContainer}>
-            <Text style={styles.noResultsText}>{strings.no_search_results}</Text>
+            <Text style={styles.noResultsText} fontFamily="PlayfairDisplay-Regular">
+              {strings.no_search_results}
+            </Text>
           </View>
         }
         numColumns={2}
@@ -229,7 +231,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     padding: 12,
-    fontFamily: 'SourceSansPro-Regular',
+
     fontSize: 17,
     flex: 1,
   },
@@ -245,7 +247,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   errorText: {
-    fontFamily: 'SourceSansPro-Regular',
     marginBottom: 20,
     fontSize: 20,
   },
@@ -255,7 +256,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   noResultsText: {
-    fontFamily: 'PlayfairDisplay-Regular',
     fontSize: 20,
   },
 });

@@ -63,7 +63,9 @@ const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
   return (
     <View style={{...styles.container, backgroundColor: colors.slugBackground}}>
       <View style={styles.topHeader}>
-        <TextComponent style={styles.leftText}>{strings.tvProgramTitle}</TextComponent>
+        <TextComponent style={styles.leftText} fontFamily="SourceSansPro-SemiBold">
+          {strings.tvProgramTitle}
+        </TextComponent>
       </View>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.scrollContent}>
@@ -101,6 +103,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textTransform: 'uppercase',
     margin: 8,
-    fontFamily: 'SourceSansPro-SemiBold',
   },
 });
