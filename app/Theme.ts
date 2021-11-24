@@ -165,7 +165,7 @@ const colorsLight: ColorScheme = {
   primary: '#007aff',
   background: '#FFFFFF',
   card: '#F9F9F9',
-  text: '#121212',
+  text: '#2E2E2F',
   border: '#AAA',
   notification: '#C00',
   //#endregion
@@ -175,7 +175,7 @@ const colorsLight: ColorScheme = {
   primaryDark: '#003d80',
   textError: '#C00',
   onPrimary: '#FFF',
-  textSecondary: '#555',
+  textSecondary: '#666',
   textDisbled: '#55555570',
   slugBackground: '#F5F6F7',
   actionButtonBorder: 'white',

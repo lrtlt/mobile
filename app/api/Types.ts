@@ -106,11 +106,17 @@ export type HomeBlockChannels = {
   data: HomeChannels;
 };
 
+/** @deprecated */
 export type HomeBlockFeedBlock = {
   type: 'articles_block';
   articles_list: Article[];
   template_id: 999;
   block_title: string;
+};
+
+export type HomeBlockTopFeedBlock = {
+  type: 'top_feed';
+  articles: Article[];
 };
 
 export type HomeBlockEmbed = {
@@ -156,6 +162,7 @@ export type HomeBlockType =
   | HomeBlockCategory
   | HomeBlockSlug
   | HomeBlockFeedBlock
+  | HomeBlockTopFeedBlock
   | HomeBlockDailyQuestion;
 
 export type HomeDataResponse = {

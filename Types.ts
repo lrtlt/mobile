@@ -41,4 +41,7 @@ export type Article = {
   has_subtitles?: 1 | 0;
   is_video?: 1 | 0;
   is_audio?: 1 | 0;
+  time_diff?: number | null;
+  time_diff_day: number | null;
+  time_diff_hour: number | null;
 };
