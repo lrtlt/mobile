@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/core';
-import {HeaderBackButton, StackNavigationProp} from '@react-navigation/stack';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
-import {Platform, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Share from 'react-native-share';
 import Snackbar from 'react-native-snackbar';
 import {useDispatch, useSelector} from 'react-redux';
