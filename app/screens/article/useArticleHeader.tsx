@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/core';
 import {HeaderBackButton, StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import Share from 'react-native-share';
 import Snackbar from 'react-native-snackbar';
 import {useDispatch, useSelector} from 'react-redux';
@@ -33,14 +33,6 @@ const useArticleHeader = (article?: ArticleContent) => {
   const isBookmarked = useSelector(selectArticleBookmarked(getArticleId(article)));
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <ActionButton onPress={() => navigation.goBack()}>
-          <HeaderBackButton labelVisible={false} tintColor={colors.headerTint} />
-        </ActionButton>
-      ),
-    });
-
     if (!article) {
       return;
     }
