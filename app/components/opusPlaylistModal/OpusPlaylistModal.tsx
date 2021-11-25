@@ -14,7 +14,6 @@ import OpusPaylistList from './OpusPlaylistList';
 interface OpusPlaylistModalProps {
   visible: boolean;
   currentSong: string;
-
   onCancel: () => void;
 }
 
