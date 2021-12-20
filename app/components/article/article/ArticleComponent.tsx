@@ -95,8 +95,7 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
               borderRadius: article.is_audio ? 8 : 0,
             }}
             onLayout={(event) => {
-              const {width, height} = event.nativeEvent.layout;
-              setDimensions({width: width, height: height});
+              setDimensions(event.nativeEvent.layout);
             }}>
             <CoverImage
               style={style.image}

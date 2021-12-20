@@ -48,7 +48,7 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
   }, [navigation]);
 
   const {images, imageUrls} = state;
-  const {colors, dim} = useTheme();
+  const {colors, dark} = useTheme();
 
   const image = images[selectedIndex];
 
@@ -80,9 +80,14 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
       </View>
       <View style={styles.absoluteLayout}>
         <SafeAreaView edges={['top', 'left']}>
-          <View style={styles.backButtonContainer}>
+          <View
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{
+              ...styles.backButtonContainer,
+              backgroundColor: dark ? '#343434cc' : '#eaeaeacc',
+            }}>
             <BorderlessButton onPress={goBackHandler} hitSlop={{left: 12, right: 12, top: 12, bottom: 12}}>
-              <IconClose color={colors.headerTint} size={dim.appBarIconSize} />
+              <IconClose color={colors.headerTint} size={16} />
             </BorderlessButton>
           </View>
         </SafeAreaView>
@@ -107,8 +112,12 @@ const styles = StyleSheet.create({
   backButtonContainer: {
     margin: 8,
     padding: 16,
-    borderRadius: 40,
-    backgroundColor: '#FFFFFF16',
+    borderRadius: 12,
+    backgroundColor: '#545454cc',
+  },
+  backButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   detailsContainer: {
     padding: 16,

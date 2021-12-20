@@ -348,7 +348,8 @@ export type ArticleEmbedType =
   | ArticleEmbedVideoType
   | ArticleEmbedAudioType
   | ArticleEmbedBroadcastType
-  | ArticleEmbedHTMLType;
+  | ArticleEmbedHTMLType
+  | ArticleEmbedPhotoalbumType;
 
 export type ArticleEmbedPhotoType = {
   embed_type: 'photo';
@@ -413,6 +414,15 @@ export type ArticleEmbedBroadcastType = {
     photo_id?: number;
     url?: string;
     w_h?: number;
+  };
+};
+
+export type ArticleEmbedPhotoalbumType = {
+  embed_type: 'photoalbum';
+  el: {
+    id: number;
+    title: string;
+    album_photos: ArticlePhotoType[];
   };
 };
 

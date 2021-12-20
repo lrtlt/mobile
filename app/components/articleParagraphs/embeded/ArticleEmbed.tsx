@@ -5,6 +5,7 @@ import {
   ArticleEmbedAudioType,
   ArticleEmbedBroadcastType,
   ArticleEmbedHTMLType,
+  ArticleEmbedPhotoalbumType,
   ArticleEmbedPhotoType,
   ArticleEmbedType,
   ArticleEmbedVideoType,
@@ -15,6 +16,7 @@ import EmbedArticles from './embedComponents/EmbedArticles';
 import EmbedAudio from './embedComponents/EmbedAudio';
 import EmbedBroadcast from './embedComponents/EmbedBroadcast';
 import EmbedHTML from './embedComponents/EmbedHTML';
+import EmbedPhotoalbum from './embedComponents/EmbedPhotoalbum';
 import EmbedPhotos from './embedComponents/EmbedPhotos';
 import EmbedVideo from './embedComponents/EmbedVideo';
 
@@ -88,8 +90,16 @@ const ArticleEmbed: React.FC<Props> = ({embedArray, itemPressHandler}) => {
                   <EmbedBroadcast key={`embed-broadcast-${index}`} data={e as ArticleEmbedBroadcastType[]} />
                 );
               }
+              case 'photoalbum': {
+                return (
+                  <EmbedPhotoalbum
+                    key={`embed-photoalbum-${index}`}
+                    data={(e as ArticleEmbedPhotoalbumType[])[0]}
+                  />
+                );
+              }
               default: {
-                console.warn('Unkown embed:' + e);
+                console.warn('Unkown embed:' + JSON.stringify(e));
                 return null;
               }
             }
