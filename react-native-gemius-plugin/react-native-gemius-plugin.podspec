@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/github_account/react-native-gemius-plugin.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m}"
-  s.vendored_frameworks = 'ios/Frameworks/GemiusSDK.framework'
+  s.vendored_frameworks = 'ios/Frameworks/GemiusSDK.xcframework'
   s.frameworks = 'GemiusSDK'
 
   s.dependency "React"

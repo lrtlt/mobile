@@ -36,9 +36,15 @@ android {
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', DEFAULT_MIN_SDK_VERSION)
         targetSdkVersion safeExtGet('targetSdkVersion', DEFAULT_TARGET_SDK_VERSION)
-        versionCode 12
-        versionName "1.2"
+        versionCode 14
+        versionName "1.4"
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     lintOptions {
         abortOnError false
     }
@@ -60,6 +66,13 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+
+    implementation "com.google.android.gms:play-services-base:17.3.0"
+    implementation "com.google.android.gms:play-services-ads:19.1.0"
+    implementation "com.google.android.gms:play-services-appset:16.0.0"
+    implementation "com.google.code.gson:gson:2.8.5"
+    implementation "ch.acra:acra-http:5.7.0"
+
     // ref:
     // https://github.com/facebook/react-native/blob/0.61-stable/template/android/app/build.gradle#L192
     //noinspection GradleDynamicVersion

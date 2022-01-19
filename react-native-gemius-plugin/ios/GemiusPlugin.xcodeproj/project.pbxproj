@@ -7,27 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9CE4D13624D838A900284A02 /* GemiusSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CE4D13524D838A900284A02 /* GemiusSDK.framework */; };
+		6F1120D627989BF400C697C7 /* GemiusSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F1120D527989BF400C697C7 /* GemiusSDK.xcframework */; };
 		B3E7B58A1CC2AC0600A0062D /* GemiusPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* GemiusPlugin.m */; platformFilter = ios; };
 		F3B01E3C236256C300E25B83 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3B01E3B236256C300E25B83 /* AdSupport.framework */; platformFilter = ios; };
 		F3B01E3E236256DF00E25B83 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3B01E3D236256DF00E25B83 /* SystemConfiguration.framework */; platformFilter = ios; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		58B511D91A9E6C8500147676 /* CopyFiles */ = {
+		58B511D91A9E6C8500147676 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libGemiusPlugin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGemiusPlugin.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		9CE4D13524D838A900284A02 /* GemiusSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GemiusSDK.framework; path = Frameworks/GemiusSDK.framework; sourceTree = "<group>"; };
+		6F1120D527989BF400C697C7 /* GemiusSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = GemiusSDK.xcframework; path = Frameworks/GemiusSDK.xcframework; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* GemiusPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemiusPlugin.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* GemiusPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GemiusPlugin.m; sourceTree = "<group>"; };
 		F3B01E3B236256C300E25B83 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/AdSupport.framework; sourceTree = DEVELOPER_DIR; };
@@ -39,8 +40,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F1120D627989BF400C697C7 /* GemiusSDK.xcframework in Frameworks */,
 				F3B01E3E236256DF00E25B83 /* SystemConfiguration.framework in Frameworks */,
-				9CE4D13624D838A900284A02 /* GemiusSDK.framework in Frameworks */,
 				F3B01E3C236256C300E25B83 /* AdSupport.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,7 +70,7 @@
 		F3B01E3A236256C200E25B83 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9CE4D13524D838A900284A02 /* GemiusSDK.framework */,
+				6F1120D527989BF400C697C7 /* GemiusSDK.xcframework */,
 				F3B01E3D236256DF00E25B83 /* SystemConfiguration.framework */,
 				F3B01E3B236256C300E25B83 /* AdSupport.framework */,
 			);
@@ -85,7 +86,7 @@
 			buildPhases = (
 				58B511D71A9E6C8500147676 /* Sources */,
 				58B511D81A9E6C8500147676 /* Frameworks */,
-				58B511D91A9E6C8500147676 /* CopyFiles */,
+				58B511D91A9E6C8500147676 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -183,7 +184,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -226,7 +227,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

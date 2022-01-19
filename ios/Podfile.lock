@@ -745,7 +745,7 @@ PODS:
     - glog
   - react-native-flipper (0.99.0):
     - React-Core
-  - react-native-gemius-plugin (1.5.2):
+  - react-native-gemius-plugin (1.5.7):
     - React
   - react-native-jw-media-player (0.1.57):
     - google-cast-sdk (~> 4.4.5)
@@ -1157,7 +1157,7 @@ SPEC CHECKSUMS:
   React-jsinspector: d9c8eb0b53f0da206fed56612b289fec84991157
   React-logger: e522e76fa3e9ec3e7d7115b49485cc065cf4ae06
   react-native-flipper: 351d392aad3404f0a964054e544be1e0c215969e
-  react-native-gemius-plugin: 4286c513d65942e7602da9555c95584b24922a5e
+  react-native-gemius-plugin: 801f467d993217c06866ae6ccfab398952a72191
   react-native-jw-media-player: c81b53d24424133bbf92bc425414a1cdc85ac6bc
   react-native-onesignal: d8d59d8df1e47231aec95e6392fea53eb0bcbac1
   react-native-pager-view: 43f51f45f37ec9715f6c188e4af46ccdf79872e8
