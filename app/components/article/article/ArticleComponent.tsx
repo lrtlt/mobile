@@ -13,6 +13,7 @@ import TextComponent from '../../text/Text';
 import {Article} from '../../../../Types';
 import ArticleBadges from './ArticleBadges';
 import ListenCount from './ListenCount';
+import Badge from '../../badge/Badge';
 
 const getArticleStyle = (type: ArticleStyleType) => {
   switch (type) {
@@ -70,6 +71,10 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
     </TextComponent>
   );
 
+  const badge = Boolean(article.badge_title) && (
+    <Badge style={style.badge} label={article.badge_title!!} type={article.badge_class} />
+  );
+
   let imgUri;
   if (dimensions.width > 0) {
     if (article.img_path_prefix && article.img_path_postfix) {
@@ -106,6 +111,7 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
             {mediaIndicator}
 
             {mediaDuration}
+            {badge}
             <ListenCount style={style.listenCount} article={article} visible={styleType === 'single'} />
           </View>
           <View style={style.categoryTitleContainer}>
@@ -173,6 +179,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
+
   title: {
     marginTop: 4,
     fontSize: 22,
@@ -184,6 +191,11 @@ const styles = StyleSheet.create({
   mediaIndicator: {
     position: 'absolute',
     alignSelf: 'center',
+  },
+  badge: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
   },
   mediaDurationText: {
     position: 'absolute',

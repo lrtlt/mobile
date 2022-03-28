@@ -44,4 +44,7 @@ export type Article = {
   time_diff?: number | null;
   time_diff_day: number | null;
   time_diff_hour: number | null;
+  badge_id: string | number | null;
+  badge_class: 'badge-danger' | 'badge-primary' | 'badge-secondary' | 'badge-warning' | 'badge-info' | null;
+  badge_title: string | null;
 };
