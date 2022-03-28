@@ -111,7 +111,6 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
             {mediaIndicator}
 
             {mediaDuration}
-            {badge}
             <ListenCount style={style.listenCount} article={article} visible={styleType === 'single'} />
           </View>
           <View style={style.categoryTitleContainer}>
@@ -121,7 +120,7 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
             </TextComponent>
           </View>
           <View style={style.dateContainer}>{date}</View>
-
+          {badge}
           <TextComponent style={style.title} fontFamily="PlayfairDisplay-Regular">
             {article.title}
           </TextComponent>
@@ -193,9 +192,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   badge: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
+    marginTop: 2,
   },
   mediaDurationText: {
     position: 'absolute',

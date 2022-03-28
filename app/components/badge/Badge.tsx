@@ -28,15 +28,15 @@ export default Badge;
 
 const styles = StyleSheet.create({
   container: {
-    margin: 6,
     alignSelf: 'flex-start',
   },
   badgeBase: {
-    fontSize: 13.8,
-    paddingVertical: 4,
-    paddingHorizontal: 6,
+    fontSize: 13,
+    paddingVertical: 1,
+    paddingHorizontal: 4,
     borderRadius: 6,
     overflow: 'hidden',
+    fontWeight: '900',
     textTransform: 'uppercase',
   },
   ['badge-danger']: {
