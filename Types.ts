@@ -10,11 +10,15 @@ export type Article = {
   title: string;
   subtitle?: string;
   category_title: string;
-  channel_logo?: string;
   age_restriction?: string;
   article_type?: ArticleType;
   photo_aspectratio?: string;
+  channel_id?: number;
+  channel_logo?: string;
+  channel_url?: string;
   channel_bg_img?: string;
+  channel_title?: string;
+
   img_path_prefix?: string;
   img_path_postfix?: string;
   category_id?: number;
@@ -23,7 +27,6 @@ export type Article = {
   category_img_path_postfix?: string;
   url: string;
   read_count: number;
-  channel_url?: string;
   media_duration?: string;
   photo_count?: number;
   photo_horizontal?: 1 | 0;
@@ -31,7 +34,6 @@ export type Article = {
   photo?: string;
   photo_title?: string;
   lrt_show_id?: number;
-  channel_title?: string;
   item_time?: string;
   item_date?: string;
   date?: string;

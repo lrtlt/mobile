@@ -14,6 +14,7 @@ import {Article} from '../../../../Types';
 import ArticleBadges from './ArticleBadges';
 import ListenCount from './ListenCount';
 import Badge from '../../badge/Badge';
+import {SvgUri} from 'react-native-svg';
 
 const getArticleStyle = (type: ArticleStyleType) => {
   switch (type) {
@@ -55,15 +56,9 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
     <MediaIndicator style={style.mediaIndicator} size={styleType === 'single' ? 'big' : 'small'} />
   );
 
-  const mediaIcon = article.is_audio ? (
-    <View style={style.mediaIconContainer}>
-      <MicIcon size={18} />
-    </View>
-  ) : article.is_video ? (
-    <View style={style.mediaIconContainer}>
-      <CameraIcon size={18} />
-    </View>
-  ) : undefined;
+  const mediaIcon = Boolean(article.channel_logo) && (
+    <SvgUri style={style.mediaIcon} width={18} height={18} uri={article.channel_logo ?? null} />
+  );
 
   const mediaDuration = Boolean(article.media_duration) && (
     <TextComponent style={{...style.mediaDurationText, color: themeLight.colors.text}}>
@@ -156,10 +151,14 @@ const styles = StyleSheet.create({
     flex: 1,
     overflow: 'hidden',
   },
+
   imageContainer: {
     justifyContent: 'center',
     aspectRatio: 3 / 2,
     overflow: 'hidden',
+  },
+  mediaIcon: {
+    marginEnd: 4,
   },
   categoryTitle: {
     fontSize: 13.5,
