@@ -8,6 +8,7 @@ export const ROUTE_TYPE_POPULAR = 'popular';
 export const ROUTE_TYPE_MEDIA = 'mediateka';
 export const ROUTE_TYPE_AUDIOTEKA = 'audioteka';
 export const ROUTE_TYPE_PAGE = 'page';
+export const ROUTE_TYPE_CHANNELS = 'channels';
 export const ROUTE_TYPE_WEBPAGES = 'webpages';
 
 export const SEARCH_TYPE_ALL = 0;
@@ -50,8 +51,17 @@ export type MenuItemPage = {
   }[];
 };
 
+export type MenuItemChannels = {
+  type: typeof ROUTE_TYPE_CHANNELS;
+  name: string;
+  items: {
+    channel_id: number;
+    channel_title: string;
+  }[];
+};
+
 export type MenuResponse = {
-  main_menu: (MenuItem | MenuItemCategory | MenuItemPage | MenuItemProjects)[];
+  main_menu: (MenuItem | MenuItemCategory | MenuItemPage | MenuItemChannels | MenuItemProjects)[];
 };
 
 /**

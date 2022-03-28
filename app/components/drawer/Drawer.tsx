@@ -55,8 +55,13 @@ const DrawerComponent: React.FC<Props> = ({navigation}) => {
           },
         ]}>
         <DrawerBlockTop navigation={navigation} />
-        <Line />
-        <DrawerBlockChannels key="channels" navigation={navigation} channels={data.channels} />
+        {data.channels && (
+          <>
+            <Line />
+            <DrawerBlockChannels key="channels" navigation={navigation} channels={data.channels} />
+          </>
+        )}
+
         <Line />
         <DrawerBlockNews key="news" navigation={navigation} items={data.routes} />
         <DrawerBlockProjects key="projects" navigation={navigation} projectBlocks={data.webPageProjects} />

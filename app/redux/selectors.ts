@@ -116,9 +116,9 @@ export const selectDrawerData = (state: RootState) => {
   const {projects} = navigation;
   return {
     routes: navigation.routes,
+    channels: navigation.channels,
     pages: navigation.pages,
     webPageProjects: projects,
-    channels: state.articles.channels.items,
   };
 };
 

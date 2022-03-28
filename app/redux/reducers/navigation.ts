@@ -27,10 +27,12 @@ import {
   ROUTE_TYPE_PAGE,
   ROUTE_TYPE_POPULAR,
   ROUTE_TYPE_WEBPAGES,
+  MenuItemChannels,
 } from '../../api/Types';
 
 export type NavigationState = {
   routes: (MenuItem | MenuItemCategory)[];
+  channels?: MenuItemChannels;
   pages: MenuItemPage[];
   projects: MenuItemProjects[];
   isLoading: boolean;
@@ -83,6 +85,7 @@ const reducer = (state = initialState, action: NavigationActionType): Navigation
       return {
         ...state,
         routes: parseRoutes(action.data),
+        channels: parseChannels(action.data),
         pages: parsePages(action.data),
         projects: parseProjects(action.data),
         isLoading: false,
@@ -163,6 +166,10 @@ const parsePages = (apiResponse: MenuResponse): MenuItemPage[] => {
   return apiResponse.main_menu.filter((item): item is MenuItemPage => {
     return item.type === ROUTE_TYPE_PAGE;
   });
+};
+
+const parseChannels = (apiResponse: MenuResponse): MenuItemChannels | undefined => {
+  return apiResponse.main_menu.find((i): i is MenuItemChannels => i.type === 'channels');
 };
 
 const parseProjects = (apiResponse: MenuResponse): MenuItemProjects[] => {

@@ -23,7 +23,7 @@ import {
 } from '../actions/actionTypes';
 
 import {formatArticles as formatArticleBlock} from '../../util/articleFormatters';
-import {AudiotekaResponse, HomeBlockType, HomeChannels} from '../../api/Types';
+import {AudiotekaResponse, HomeBlockType} from '../../api/Types';
 import {Article} from '../../../Types';
 import {ArticlesActionType} from '../actions';
 
@@ -64,7 +64,6 @@ export type Category = {
 export type ArticlesState = {
   home: HomeState;
   mediateka: HomeState;
-  channels: HomeChannels;
   audioteka: AudiotekaState;
   categories: CategoryState[];
   newest: PagingState;
@@ -108,10 +107,6 @@ const initialState: ArticlesState = {
     lastFetchTime: 0,
     articles: [],
     page: 0,
-  },
-  channels: {
-    items: [],
-    live_items: [],
   },
 };
 
