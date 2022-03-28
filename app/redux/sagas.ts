@@ -31,6 +31,7 @@ import {
   fetchMediatekaResult,
   fetchMenuItemsError,
   fetchMenuItemsResult,
+  FetchMenuItemsResultAction,
   FetchNewestArticlesAction,
   fetchNewestError,
   fetchNewestResult,
@@ -42,6 +43,7 @@ import {
   RefreshCategoryArticlesAction,
   RefreshNewestArticlesAction,
   RefreshPopularArticlesAction,
+  updateLogoCache,
 } from './actions';
 import {
   FETCH_HOME,
@@ -55,6 +57,7 @@ import {
   FETCH_MEDIATEKA,
   FETCH_PROGRAM,
   FETCH_AUDIOTEKA,
+  API_MENU_ITEMS_RESULT,
 } from './actions/actionTypes';
 
 function* fetchMenuItems() {
@@ -194,6 +197,26 @@ function* refreshPopularData(action: RefreshPopularArticlesAction) {
   return 0;
 }
 
+function* fetchLogoSvg({data}: FetchMenuItemsResultAction) {
+  try {
+    const logoUrl = data.logo;
+    if (logoUrl) {
+      const svg: string = yield call(() => fetch(logoUrl).then((r) => r.text()));
+      if (svg) {
+        yield put(
+          updateLogoCache({
+            url: logoUrl,
+            svg: svg,
+          }),
+        );
+      }
+    }
+  } catch (e) {
+    console.log('Saga error', e);
+  }
+  return 0;
+}
+
 export default function* rootSaga() {
   yield takeEvery(FETCH_MENU_ITEMS, fetchMenuItems);
   yield takeEvery(FETCH_HOME, fetchArticlesData);
@@ -206,4 +229,5 @@ export default function* rootSaga() {
   yield takeEvery(FETCH_MEDIATEKA, fetchMediatekaData);
   yield takeEvery(FETCH_AUDIOTEKA, fetchAudiotekaData);
   yield takeEvery(FETCH_PROGRAM, fetchProgramData);
+  yield takeEvery(API_MENU_ITEMS_RESULT, fetchLogoSvg);
 }

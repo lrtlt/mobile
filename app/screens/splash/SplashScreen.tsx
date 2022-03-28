@@ -1,11 +1,10 @@
 import React, {useCallback, useEffect} from 'react';
 import {View, ActivityIndicator, Button, StyleSheet, StatusBar} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {Logo} from '../../components/svg';
 import {fetchHome, fetchMenuItems} from '../../redux/actions';
 
 import {selectSplashScreenState} from '../../redux/selectors';
-import {Text} from '../../components';
+import {Logo, Text} from '../../components';
 import {strings, themeDark, themeLight} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
 import {checkEqual} from '../../util/LodashEqualityCheck';

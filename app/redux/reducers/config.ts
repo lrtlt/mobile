@@ -7,6 +7,7 @@ import {
   SET_CONFIG,
   SET_FORECAST_LOCATION,
   SET_DAILY_QUESTION_CHOICE,
+  UPDATE_LOGO_CACHE,
 } from '../actions/actionTypes';
 
 export type ConfigState = {
@@ -14,9 +15,15 @@ export type ConfigState = {
   textSizeMultiplier: number;
   imageMaxScaleFactor: number;
   forecastLocation?: ForecastLocation;
+
   daily_question_response?: {
     daily_question_id: number;
     choice: DailyQuestionChoice;
+  };
+
+  logo?: {
+    url: string;
+    svg: string;
   };
 };
 
@@ -61,6 +68,12 @@ const reducer = (state: ConfigState = initialState, action: ConfigActionType): C
     }
     case SET_DAILY_QUESTION_CHOICE: {
       return {...state, daily_question_response: action.payload};
+    }
+    case UPDATE_LOGO_CACHE: {
+      return {
+        ...state,
+        logo: action.data,
+      };
     }
     default:
       return state;

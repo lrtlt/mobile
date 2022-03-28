@@ -61,6 +61,7 @@ export type MenuItemChannels = {
 };
 
 export type MenuResponse = {
+  logo?: string;
   main_menu: (MenuItem | MenuItemCategory | MenuItemPage | MenuItemChannels | MenuItemProjects)[];
 };
 

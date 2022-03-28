@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Logo} from '../../components/svg';
 
 import {themeDark, themeLight} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
+import {Logo} from '../../components';
 
 const SplashViewComponent: React.FC = () => {
   const {isDarkMode} = useSettings();

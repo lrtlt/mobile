@@ -7,6 +7,7 @@ import {
   SET_CONFIG,
   SET_FORECAST_LOCATION,
   SET_DAILY_QUESTION_CHOICE,
+  UPDATE_LOGO_CACHE,
 } from './actionTypes';
 
 export interface ToggleDarkModeAction {
@@ -72,10 +73,23 @@ export const setDailyQuestionChoice = (
   },
 });
 
+export type UpdateLogoCacheAction = {
+  type: typeof UPDATE_LOGO_CACHE;
+  data: {
+    url: string;
+    svg: string;
+  };
+};
+export const updateLogoCache = (cache: {url: string; svg: string}): UpdateLogoCacheAction => ({
+  type: UPDATE_LOGO_CACHE,
+  data: cache,
+});
+
 export type ConfigActionType =
   | ToggleDarkModeAction
   | SetTextSizeMultiplierAction
   | SetImageMaxScaleFactorAction
   | SetConfigAction
   | SetForecastLocationAction
-  | SetDailyQuestionChoice;
+  | SetDailyQuestionChoice
+  | UpdateLogoCacheAction;

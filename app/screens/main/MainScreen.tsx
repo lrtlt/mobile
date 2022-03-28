@@ -1,8 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
-import {ActionButton} from '../../components';
-import {Logo, IconDrawerMenu, IconSettings} from '../../components/svg';
+import {ActionButton, Logo} from '../../components';
+import {IconDrawerMenu, IconSettings} from '../../components/svg';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
 import {useSelector} from 'react-redux';

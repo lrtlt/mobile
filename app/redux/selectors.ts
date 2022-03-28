@@ -122,6 +122,8 @@ export const selectDrawerData = (state: RootState) => {
   };
 };
 
+export const selectLogo = (state: RootState) => state.config.logo;
+
 export const selectSettings = (state: RootState) => {
   const {config} = state;
 
