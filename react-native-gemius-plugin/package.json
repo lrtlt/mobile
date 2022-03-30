@@ -1,7 +1,7 @@
 {
   "name": "react-native-gemius-plugin",
   "title": "React Native Gemius Plugin",
-  "version": "1.5.7",
+  "version": "1.5.10",
   "description": "Gemius plugin for react-native",
   "main": "index.js",
   "types": "index.d.ts",
@@ -24,7 +24,7 @@
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "devDependencies": {
-    "react": "^16.8.3",
-    "react-native": "^0.62.3"
+    "react": "^17.0.2",
+    "react-native": "^0.66.3"
   }
 }

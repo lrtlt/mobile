@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6F1120D627989BF400C697C7 /* GemiusSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F1120D527989BF400C697C7 /* GemiusSDK.xcframework */; };
+		6F1120D627989BF400C697C7 /* GemiusSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F1120D527989BF400C697C7 /* GemiusSDK.xcframework */; platformFilter = ios; };
 		B3E7B58A1CC2AC0600A0062D /* GemiusPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* GemiusPlugin.m */; platformFilter = ios; };
 		F3B01E3C236256C300E25B83 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3B01E3B236256C300E25B83 /* AdSupport.framework */; platformFilter = ios; };
 		F3B01E3E236256DF00E25B83 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3B01E3D236256DF00E25B83 /* SystemConfiguration.framework */; platformFilter = ios; };
