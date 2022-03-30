@@ -25,6 +25,25 @@ const renderP: RendererFunction = (_, children, __, passProps) => {
   );
 };
 
+const renderListPrefix: RendererFunction = (_, children, __, passProps) => {
+  const fontSize = (passProps.baseFontStyle as TextStyle)?.fontSize ?? 20;
+  const color = (passProps.baseFontStyle as TextStyle)?.textDecorationColor;
+
+  return (
+    <View
+      // eslint-disable-next-line react-native/no-inline-styles
+      style={{
+        marginTop: fontSize / 2,
+        marginRight: 6,
+        width: 6,
+        height: 6,
+        borderRadius: 6,
+        backgroundColor: color,
+      }}
+    />
+  );
+};
+
 const renderBlockquote: RendererFunction = (_, children, __, passProps) => {
   return (
     <View style={styles.quoteContainer} key={passProps.key}>
@@ -51,8 +70,9 @@ const HTMLRenderer: React.FC<Props> = ({html}) => {
       fontFamily: 'SourceSansPro-Regular',
       lineHeight: fontSize + EXTRA_LINE_SPACING,
       fontSize: fontSize,
+      textDecorationColor: colors.primary,
     }),
-    [colors.text, fontSize],
+    [colors.primary, colors.text, fontSize],
   );
 
   return (
@@ -71,12 +91,18 @@ const HTMLRenderer: React.FC<Props> = ({html}) => {
           fontFamily: 'SourceSansPro-LightItalic',
           fontSize: fontSize + 3,
         },
+        a: {
+          color: colors.primary,
+        },
       }}
       onLinkPress={useCallback((_, href) => Linking.openURL(href), [])}
       renderers={{
         table,
         blockquote: renderBlockquote,
         p: renderP,
+      }}
+      listsPrefixesRenderers={{
+        ul: renderListPrefix,
       }}
       renderersProps={{
         table: {
