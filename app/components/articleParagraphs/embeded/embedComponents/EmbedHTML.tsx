@@ -47,7 +47,10 @@ const EmbedHTML: React.FC<Props> = ({data}) => {
                 mediaPlaybackRequiresUserAction={true}
                 startInLoadingState={true}
                 viewportContent={`width=${width}, user-scalable=no`}
-                source={{html: formatted}}
+                source={{
+                  html: formatted,
+                }}
+                openLinksExternally
               />
             );
           },
