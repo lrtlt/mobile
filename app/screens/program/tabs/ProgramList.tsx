@@ -16,7 +16,7 @@ const ProgramList: React.FC<Props> = ({items, scrollToIndex}) => {
 
   useEffect(() => {
     ref.current?.scrollToIndex({
-      animated: true,
+      animated: false,
       index: scrollToIndex,
     });
   }, [scrollToIndex]);
@@ -55,6 +55,7 @@ const ProgramList: React.FC<Props> = ({items, scrollToIndex}) => {
       initialScrollIndex={scrollToIndex}
       contentContainerStyle={styles.scrollContainer}
       windowSize={21}
+      initialNumToRender={50}
       keyExtractor={keyExtractor}
     />
   );

@@ -14,6 +14,7 @@ const Badge: React.FC<Props> = ({style, type, label}) => {
     <View style={[styles.container, style]}>
       <TextComponent
         numberOfLines={2}
+        fontFamily="SourceSansPro-SemiBold"
         style={{
           ...styles.badgeBase,
           ...(styles[type ?? 'default'] ?? styles.default),
@@ -36,7 +37,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     borderRadius: 6,
     overflow: 'hidden',
-    fontWeight: '900',
     textTransform: 'uppercase',
   },
   ['badge-danger']: {

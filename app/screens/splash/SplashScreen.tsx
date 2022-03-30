@@ -47,7 +47,7 @@ const SplashScreen: React.FC = () => {
         backgroundColor={colors.background}
       />
       <View style={{...styles.container, backgroundColor: colors.background}}>
-        <Logo size={100} />
+        <Logo size={120} />
         <ActivityIndicator
           style={styles.loader}
           size="large"

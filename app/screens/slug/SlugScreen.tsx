@@ -68,7 +68,7 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
 
     const tag = urlSegments[urlSegments.length - 1];
 
-    cancellablePromise(fetchArticlesByTag(tag, ARTICLES_PER_PAGE_COUNT * 3))
+    cancellablePromise(fetchArticlesByTag(tag, ARTICLES_PER_PAGE_COUNT * 6))
       .then((response) => {
         const formattedArticles = formatArticles(-1, response.articles);
         setState({

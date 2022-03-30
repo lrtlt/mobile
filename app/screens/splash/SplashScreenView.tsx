@@ -11,7 +11,7 @@ const SplashViewComponent: React.FC = () => {
 
   return (
     <View style={{...styles.container, backgroundColor: colors.background}}>
-      <Logo size={100} />
+      <Logo size={120} />
     </View>
   );
 };
