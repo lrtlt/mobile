@@ -1,14 +1,12 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
-import {ProgramItem, Text} from '../../../components';
+import {Text} from '../../../components';
 import {TabView, TabBar} from 'react-native-tab-view';
 import {getIconForChannelById} from '../../../util/UI';
-import Divider from '../../../components/divider/Divider';
 import {useTheme} from '../../../Theme';
 import {ProgramItemType, SingleDayProgram} from '../../../api/Types';
-import {PROGRAM_ITEM_HEIGHT} from '../../../components/programItem/ProgramItem';
 import {Scene} from 'react-native-tab-view/lib/typescript/types';
+import ProgramList from './ProgramList';
 
 interface Props {
   program: SingleDayProgram[];
@@ -66,29 +64,6 @@ const TabsScreen: React.FC<Props> = ({program}) => {
     [renderTabLable],
   );
 
-  const renderProgramItem = useCallback((val) => {
-    const item = val.item;
-    return (
-      <View key={`${item.time_start}-${item.title}`}>
-        <ProgramItem
-          title={item.title}
-          startTime={item.time_start}
-          percent={item.proc}
-          record_article_id={item.record_article_id}
-          description={item.description}
-        />
-        <Divider style={styles.programItemDivider} />
-      </View>
-    );
-  }, []);
-
-  const keyExtractor = useCallback((item, i) => String(i) + String(item), []);
-
-  const calculateProgramItemLayout = useCallback(
-    (_, index) => ({length: PROGRAM_ITEM_HEIGHT, offset: PROGRAM_ITEM_HEIGHT * index, index}),
-    [],
-  );
-
   const renderScene = useCallback(
     ({route}) => {
       if (Math.abs(currentIndex - routes.indexOf(route)) > 0) {
@@ -104,19 +79,11 @@ const TabsScreen: React.FC<Props> = ({program}) => {
 
       return (
         <View key={`${route.key}`}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={programItems}
-            renderItem={renderProgramItem}
-            getItemLayout={calculateProgramItemLayout}
-            initialScrollIndex={scrollToIndex}
-            contentContainerStyle={styles.scrollContainer}
-            keyExtractor={keyExtractor}
-          />
+          <ProgramList items={programItems} scrollToIndex={scrollToIndex} />
         </View>
       );
     },
-    [calculateProgramItemLayout, currentIndex, keyExtractor, renderProgramItem, routes],
+    [currentIndex, routes],
   );
 
   return (
@@ -156,14 +123,5 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textTransform: 'uppercase',
     paddingTop: 6,
-  },
-  scrollContainer: {
-    minHeight: '100%',
-  },
-  programItemDivider: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
   },
 });
