@@ -23,7 +23,11 @@ import {
   ROUTE_TYPE_POPULAR,
 } from '../../api/Types';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
-import {MainDrawerParamList, MainStackParamList} from '../../navigation/MainStack';
+import {
+  MainDrawerParamList,
+  MainStackParamList,
+  MainWithSettingsDrawerParamList,
+} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import ArticleTabScreen from './tabScreen/ArticleTabScreen';
@@ -34,6 +38,8 @@ type ScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<MainStackParamList, 'Home'>,
   DrawerNavigationProp<MainDrawerParamList, 'Main'>
 >;
+
+type ParentNavigationProps = DrawerNavigationProp<MainWithSettingsDrawerParamList, 'Main'>;
 
 type Props = {
   route: ScreenRouteProp;
@@ -67,7 +73,7 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
         </ActionButton>
       ),
       headerRight: () => (
-        <ActionButton onPress={() => navigation.navigate('Settings')}>
+        <ActionButton onPress={() => navigation.getParent<ParentNavigationProps>().toggleDrawer()}>
           <IconSettings name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),

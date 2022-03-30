@@ -10,6 +10,7 @@ import {themeDark, themeLight} from '../Theme';
 import {ArticlePhotoType, MenuItemPage, SearchFilter} from '../api/Types';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import SearchContextProvider from '../screens/search/context/SearchContextProvider';
+import SettingsScreenView from '../screens/settings/SettingsScreenView';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -71,6 +72,23 @@ const MainDrawerNavigator: React.FC = () => {
   );
 };
 
+export type MainWithSettingsDrawerParamList = {
+  Main: undefined;
+};
+
+const MainWithSettingsDrawer = createDrawerNavigator<MainWithSettingsDrawerParamList>();
+
+const MainSettingsDrawerNavigator: React.FC = () => {
+  return (
+    <MainWithSettingsDrawer.Navigator
+      drawerContent={(_props) => <SettingsScreenView />}
+      drawerPosition="right"
+      drawerType="slide">
+      <MainWithSettingsDrawer.Screen name="Main" component={MainDrawerNavigator} />
+    </MainWithSettingsDrawer.Navigator>
+  );
+};
+
 export type SearchDrawerParamList = {
   SearchScreen: {
     q?: string;
@@ -127,7 +145,7 @@ export default () => {
       }}>
       <Stack.Screen
         name="Home"
-        component={MainDrawerNavigator}
+        component={MainSettingsDrawerNavigator}
         options={{
           headerShown: false,
         }}
