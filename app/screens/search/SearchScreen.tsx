@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {View, Button, TextInput, StyleSheet, Animated, ListRenderItemInfo} from 'react-native';
 import {HeaderBackButton, StackNavigationProp} from '@react-navigation/stack';
 import {ArticleComponent, ActionButton, Text, ScreenLoader} from '../../components';
@@ -6,13 +6,16 @@ import {IconFilter, IconSearch} from '../../components/svg';
 import {useTheme} from '../../Theme';
 import {CollapsibleSubHeaderAnimator, useCollapsibleSubHeader} from 'react-navigation-collapsible';
 import {BorderlessButton} from 'react-native-gesture-handler';
-import {checkEqual} from '../../util/LodashEqualityCheck';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {MainStackParamList, SearchDrawerParamList} from '../../navigation/MainStack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Article} from '../../../Types';
 import useSearch from './context/useSearch';
 import useSearchApi from './useSearchApi';
+import {debounce} from 'lodash';
+import SearchSuggestions from './SearchSuggestions';
+import {defaultSearchFilter} from './context/SearchContext';
+import {SearchCategorySuggestion} from '../../api/Types';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -27,29 +30,30 @@ type Props = {
 };
 
 const SearchScreen: React.FC<Props> = ({navigation, route}) => {
-  const [useNavigationPropFilter, setUseNavigationPropFilter] = useState(
-    Boolean(route?.params?.filter || route?.params?.q),
-  );
-
   const {query, setQuery, filter, setFilter} = useSearch();
-  const {loadingState, searchResults, callSearch} = useSearchApi(query, filter);
+  const {loadingState, searchResults, searchSuggestions, callSearchApi} = useSearchApi();
   const {colors, strings, dim} = useTheme();
 
-  useEffect(() => {
-    if (route?.params?.q) {
-      setQuery(route.params.q);
-    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const callSearchApiWithDebounce = useCallback(debounce(callSearchApi, 1000), []);
 
-    if (route?.params?.filter) {
-      setFilter(route.params.filter);
-    }
+  useEffect(() => {
+    const initialQuery = route?.params?.q ?? '';
+    const initialFilter = route?.params?.filter ?? defaultSearchFilter;
+
+    setQuery(initialQuery);
+    setFilter(initialFilter);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+    callSearchApiWithDebounce(query, filter);
+  }, [callSearchApiWithDebounce, filter, query]);
+
+  useEffect(() => {
     navigation.setOptions({
       headerTitle: '',
-
       headerRight: () => (
         <View style={styles.row}>
           <ActionButton onPress={() => navigation.toggleDrawer()}>
@@ -66,24 +70,20 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
         />
       ),
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (useNavigationPropFilter) {
-      if (!checkEqual(filter, route?.params?.filter) || query !== route?.params?.q) {
-        return;
-      } else {
-        setUseNavigationPropFilter(false);
-      }
-    }
-    callSearch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
+  }, [colors.headerTint, dim.appBarIconSize, navigation]);
 
   const articlePressHandler = useCallback(
     (article: Article) => {
       navigation.navigate('Article', {articleId: article.id});
+    },
+    [navigation],
+  );
+
+  const searchSuggestionPressHandler = useCallback(
+    (suggestion: SearchCategorySuggestion) => {
+      if (suggestion.category_id) {
+        navigation.navigate('Category', {id: suggestion.category_id, name: suggestion.category_title});
+      }
     },
     [navigation],
   );
@@ -103,13 +103,6 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
     [articlePressHandler],
   );
 
-  const handleQueryInput = useCallback(
-    (text) => {
-      setQuery(text);
-    },
-    [setQuery],
-  );
-
   const renderSearchBar = useCallback(() => {
     return (
       <View style={{...styles.searchBar, backgroundColor: colors.card}}>
@@ -119,28 +112,30 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
             multiline={false}
             placeholder={'Paieška'}
             numberOfLines={1}
-            onSubmitEditing={callSearch}
+            autoCorrect={false}
+            onSubmitEditing={() => callSearchApi(query, filter)}
             returnKeyType="search"
             placeholderTextColor={colors.textDisbled}
-            onChangeText={handleQueryInput}
+            onChangeText={setQuery}
             value={query}
           />
-          <BorderlessButton style={styles.searchButton} onPress={callSearch}>
+          <BorderlessButton style={styles.searchButton} onPress={() => callSearchApi(query, filter)}>
             <IconSearch size={dim.appBarIconSize} color={colors.headerTint} />
           </BorderlessButton>
         </View>
       </View>
     );
   }, [
-    colors.background,
     colors.card,
-    colors.headerTint,
+    colors.background,
     colors.text,
     colors.textDisbled,
-    dim.appBarIconSize,
-    handleQueryInput,
+    colors.headerTint,
+    setQuery,
     query,
-    callSearch,
+    dim.appBarIconSize,
+    callSearchApi,
+    filter,
   ]);
 
   const {onScroll, containerPaddingTop, scrollIndicatorInsetTop, translateY} = useCollapsibleSubHeader();
@@ -152,10 +147,14 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
         <Text style={styles.errorText} type="error">
           {strings.error_no_connection}
         </Text>
-        <Button title={strings.tryAgain} color={colors.primary} onPress={callSearch} />
+        <Button
+          title={strings.tryAgain}
+          color={colors.primary}
+          onPress={() => callSearchApi(query, filter)}
+        />
       </View>
     );
-  } else if (loadingState.isFetching) {
+  } else if (loadingState.isFetching || loadingState.idle) {
     content = <ScreenLoader />;
   } else {
     content = (
@@ -166,6 +165,12 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
         showsVerticalScrollIndicator={false}
         data={searchResults}
         windowSize={4}
+        ListHeaderComponent={
+          <SearchSuggestions
+            suggestions={searchSuggestions}
+            onSearchSuggestionClick={searchSuggestionPressHandler}
+          />
+        }
         ListEmptyComponent={
           <View style={styles.noResultsContainer}>
             <Text style={styles.noResultsText} fontFamily="PlayfairDisplay-Regular">

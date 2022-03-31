@@ -564,11 +564,19 @@ export type ChannelResponse = {
   prog: ProgramItemType[];
 };
 
+export type SearchCategorySuggestion = {
+  category_id: number;
+  category_title: string;
+  is_audio: 0 | 1;
+  is_video: 0 | 1;
+};
+
 export type SearchResponse = {
   page: number;
   q: string;
   total_found: string;
   items: Article[];
+  similar_categories: SearchCategorySuggestion[];
 };
 
 export type SlugArticlesResponse = {
