@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View, Dimensions, StyleSheet, Platform} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
 import {ActionButton, Logo} from '../../components';
 import {IconDrawerMenu, IconSettings} from '../../components/svg';
-import {BorderlessButton} from 'react-native-gesture-handler';
+import {BorderlessButton, DrawerLayout} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
 import {useSelector} from 'react-redux';
 import HomeScreen from './tabScreen/home/HomeScreen';
@@ -23,14 +23,11 @@ import {
   ROUTE_TYPE_POPULAR,
 } from '../../api/Types';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
-import {
-  MainDrawerParamList,
-  MainStackParamList,
-  MainWithSettingsDrawerParamList,
-} from '../../navigation/MainStack';
+import {MainDrawerParamList, MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import ArticleTabScreen from './tabScreen/ArticleTabScreen';
+import SettingsScreenView from '../settings/SettingsScreenView';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -38,8 +35,6 @@ type ScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<MainStackParamList, 'Home'>,
   DrawerNavigationProp<MainDrawerParamList, 'Main'>
 >;
-
-type ParentNavigationProps = DrawerNavigationProp<MainWithSettingsDrawerParamList, 'Main'>;
 
 type Props = {
   route: ScreenRouteProp;
@@ -49,6 +44,9 @@ type Props = {
 const MainScreen: React.FC<Props> = ({navigation}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const {colors, dim} = useTheme();
+
+  const drawerRef = useRef<DrawerLayout>(null);
+  const drawerOpenRef = useRef<boolean>(false);
 
   const state = useSelector(selectMainScreenState, (left, right) => {
     return left.routes.length === right.routes.length;
@@ -88,11 +86,15 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
         </ActionButton>
       ),
       headerRight: () => (
-        <ActionButton onPress={() => navigation.getParent<ParentNavigationProps>().toggleDrawer()}>
+        <ActionButton
+          onPress={() =>
+            drawerOpenRef.current ? drawerRef.current?.closeDrawer() : drawerRef.current?.openDrawer()
+          }>
           <IconSettings name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
-      headerTitle: (
+
+      headerTitle: () => (
         <BorderlessButton
           onPress={() => {
             EventRegister.emit(EVENT_LOGO_PRESS, null);
@@ -154,30 +156,49 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
     return <View />;
   }, []);
 
+  const onDrawerCloseHandler = useCallback(() => {
+    drawerOpenRef.current = false;
+  }, []);
+
+  const onDrawerOpenHandler = useCallback(() => {
+    drawerOpenRef.current = true;
+  }, []);
+
   return (
     <>
-      <SafeAreaView style={styles.container} edges={['left', 'right']}>
-        <TabView
-          renderLazyPlaceholder={renderLazyPlaceHolder}
-          tabBarPosition="top"
-          navigationState={{
-            routes: state.routes,
-            index: selectedTabIndex,
-          }}
-          swipeEnabled={true}
-          renderScene={renderScene}
-          renderTabBar={useCallback(
-            (tabBarProps) => (
-              <TabBar {...tabBarProps} />
-            ),
-            [],
-          )}
-          onIndexChange={setSelectedTabIndex}
-          lazy={true}
-          lazyPreloadDistance={0}
-          initialLayout={{height: 0, width: Dimensions.get('screen').width}}
-        />
-      </SafeAreaView>
+      <DrawerLayout
+        ref={drawerRef}
+        drawerType="slide"
+        drawerPosition="right"
+        onDrawerClose={onDrawerCloseHandler}
+        onDrawerOpen={onDrawerOpenHandler}
+        drawerWidth={220}
+        useNativeAnimations={true}
+        statusBarAnimation={'slide'}
+        renderNavigationView={() => <SettingsScreenView />}>
+        <SafeAreaView style={styles.container} edges={['left', 'right']}>
+          <TabView
+            renderLazyPlaceholder={renderLazyPlaceHolder}
+            tabBarPosition="top"
+            navigationState={{
+              routes: state.routes,
+              index: selectedTabIndex,
+            }}
+            swipeEnabled={true}
+            renderScene={renderScene}
+            renderTabBar={useCallback(
+              (tabBarProps) => (
+                <TabBar {...tabBarProps} />
+              ),
+              [],
+            )}
+            onIndexChange={setSelectedTabIndex}
+            lazy={true}
+            lazyPreloadDistance={0}
+            initialLayout={{height: 0, width: Dimensions.get('screen').width}}
+          />
+        </SafeAreaView>
+      </DrawerLayout>
     </>
   );
 };

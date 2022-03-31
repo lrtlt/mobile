@@ -58,27 +58,29 @@ const ProgramItem: React.FC<Props> = (props) => {
       style={[styles.container, props.style, {backgroundColor: colors.programItem}]}
       disabled={!props.record_article_id}
       onPress={openArticleHandler}>
-      <View
-        style={{...styles.elapsedIndicator, width: proc + '%', backgroundColor: colors.programProgress}}
-      />
+      <View style={styles.content}>
+        <View
+          style={{...styles.elapsedIndicator, width: proc + '%', backgroundColor: colors.programProgress}}
+        />
 
-      <TextComponent style={styles.timeText} type="secondary">
-        {props.startTime}
-      </TextComponent>
-      {renderIcon()}
-      <View style={styles.textContainer}>
-        <TextComponent
-          style={styles.titleText}
-          type={proc === 0 ? 'secondary' : 'primary'}
-          fontFamily={hasEnded ? 'SourceSansPro-Regular' : 'SourceSansPro-SemiBold'}>
-          {props.title}
+        <TextComponent style={styles.timeText} type="secondary">
+          {props.startTime}
         </TextComponent>
-
-        {props.description ? (
-          <TextComponent style={styles.descriptionText} type="secondary">
-            {props.description}
+        {renderIcon()}
+        <View style={styles.textContainer}>
+          <TextComponent
+            style={styles.titleText}
+            type={proc === 0 ? 'secondary' : 'primary'}
+            fontFamily={hasEnded ? 'SourceSansPro-Regular' : 'SourceSansPro-SemiBold'}>
+            {props.title}
           </TextComponent>
-        ) : null}
+
+          {props.description ? (
+            <TextComponent style={styles.descriptionText} type="secondary">
+              {props.description}
+            </TextComponent>
+          ) : null}
+        </View>
       </View>
     </TouchableDebounce>
   );
@@ -90,6 +92,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     minHeight: PROGRAM_ITEM_HEIGHT,
+  },
+  content: {
+    flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
   },

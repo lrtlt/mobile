@@ -8,7 +8,7 @@ import {Article} from '../../../../../../../Types';
 import {HomeBlockSlug} from '../../../../../../api/Types';
 import {ArticleRow, SectionHeader} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
-import {colorsDark, colorsLight} from '../../../../../../Theme';
+import {themeDark, themeLight, useTheme} from '../../../../../../Theme';
 import {formatArticles} from '../../../../../../util/articleFormatters';
 import {buildArticleImageUri, IMG_SIZE_L} from '../../../../../../util/ImageUtil';
 
@@ -21,6 +21,7 @@ const SlugArticlesBlock: React.FC<SlugArticlesBlockProps> = ({block}) => {
   const {articles_list, slug_title, slug_url} = data;
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
+  const theme = useTheme();
 
   const formattedArticles = useMemo(() => formatArticles(template_id, articles_list), [
     articles_list,
@@ -44,16 +45,14 @@ const SlugArticlesBlock: React.FC<SlugArticlesBlockProps> = ({block}) => {
   const articleList = useMemo(
     () =>
       formattedArticles.map((row, index) => (
-        <ThemeProvider value={{colors: colorsLight, dark: false}}>
-          <ArticleRow
-            key={index}
-            articleStyle={
-              template_id === 9 ? {...styles.article, backgroundColor: colorsLight.background} : undefined
-            }
-            data={row}
-            onArticlePress={articlePressHandler}
-          />
-        </ThemeProvider>
+        <ArticleRow
+          key={index}
+          articleStyle={
+            template_id === 9 ? {...styles.article, backgroundColor: themeLight.colors.background} : undefined
+          }
+          data={row}
+          onArticlePress={articlePressHandler}
+        />
       )),
     [articlePressHandler, formattedArticles, template_id],
   );
@@ -74,9 +73,9 @@ const SlugArticlesBlock: React.FC<SlugArticlesBlockProps> = ({block}) => {
       <SectionHeader
         category={{name: slug_title, template_id: template_id, is_slug_block: 1, slug_url: slug_url}}
         onPress={onHeaderPressHandler}
-        color={template_id === 9 ? colorsDark.text : undefined}
+        color={template_id === 9 ? themeDark.colors.text : undefined}
       />
-      {articleList}
+      <ThemeProvider value={template_id === 9 ? themeLight : theme}>{articleList}</ThemeProvider>
     </ImageBackground>
   );
 };

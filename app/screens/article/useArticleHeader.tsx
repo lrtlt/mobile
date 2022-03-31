@@ -7,7 +7,7 @@ import Snackbar from 'react-native-snackbar';
 import {useDispatch, useSelector} from 'react-redux';
 import {ArticleContent, isDefaultArticle} from '../../api/Types';
 import {ActionButton} from '../../components';
-import {IconComments, SaveIcon, ShareIcon} from '../../components/svg';
+import {SaveIcon, ShareIcon} from '../../components/svg';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {removeArticle, saveArticle} from '../../redux/actions';
 import {selectArticleBookmarked} from '../../redux/selectors';
@@ -67,13 +67,13 @@ const useArticleHeader = (article?: ArticleContent) => {
       }
     };
 
-    const _handleCommentsPress = () => {
-      if (isDefaultArticle(article)) {
-        navigation.navigate('Comments', {url: `https://lrt.lt${article.article_url}`});
-      } else {
-        navigation.navigate('Comments', {url: `https://lrt.lt${article.url}`});
-      }
-    };
+    // const _handleCommentsPress = () => {
+    //   if (isDefaultArticle(article)) {
+    //     navigation.navigate('Comments', {url: `https://lrt.lt${article.article_url}`});
+    //   } else {
+    //     navigation.navigate('Comments', {url: `https://lrt.lt${article.url}`});
+    //   }
+    // };
 
     navigation.setOptions({
       headerRight: () => (
@@ -81,9 +81,9 @@ const useArticleHeader = (article?: ArticleContent) => {
           <ActionButton onPress={() => _saveArticlePress()}>
             <SaveIcon size={dim.appBarIconSize} color={colors.headerTint} filled={isBookmarked} />
           </ActionButton>
-          <ActionButton onPress={() => _handleCommentsPress()}>
+          {/* <ActionButton onPress={() => _handleCommentsPress()}>
             <IconComments size={dim.appBarIconSize} color={colors.headerTint} />
-          </ActionButton>
+          </ActionButton> */}
           <ActionButton onPress={() => _handleSharePress()}>
             <ShareIcon size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>

@@ -42,7 +42,6 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
   const contentWidth = screenWidth - 12 * 2;
 
   const articleData = useMemo(() => compose(article), [article]);
-  console.log('composition', articleData);
 
   const renderItem = useCallback(
     (item: ListRenderItemInfo<ArticleContentItemType>): React.ReactElement | null => {
@@ -126,12 +125,15 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
     [contentWidth, isTextToSpeechPlaying, itemPressHandler],
   );
 
-  const {onScroll, containerPaddingTop, scrollIndicatorInsetTop} = useCollapsibleHeader({
-    config: {
-      collapsedColor: colors.card,
-      elevation: 2,
+  const {onScroll, containerPaddingTop, scrollIndicatorInsetTop} = useCollapsibleHeader(
+    {
+      config: {
+        collapsedColor: colors.card,
+        elevation: 2,
+      },
     },
-  });
+    0,
+  );
 
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right']}>

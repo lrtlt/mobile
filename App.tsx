@@ -10,6 +10,8 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {initialWindowMetrics, SafeAreaProvider} from 'react-native-safe-area-context';
 import {persistor, store} from './app/redux/store';
 import useAppTrackingPermission from './app/util/useAppTrackingPermission';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {StyleSheet} from 'react-native';
 
 const ReduxProvider: React.FC = ({children}) => {
   return (
@@ -38,7 +40,15 @@ const App: React.FC = () => {
 };
 
 export default () => (
-  <ReduxProvider>
-    <App />
-  </ReduxProvider>
+  <GestureHandlerRootView style={styles.flex}>
+    <ReduxProvider>
+      <App />
+    </ReduxProvider>
+  </GestureHandlerRootView>
 );
+
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+});

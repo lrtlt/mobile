@@ -1,13 +1,13 @@
-import {useIsDrawerOpen} from '@react-navigation/drawer';
+import {useDrawerStatus} from '@react-navigation/drawer';
 import {useEffect} from 'react';
 
 const useOnDrawerClose = (callback: () => void) => {
-  const isOpen = useIsDrawerOpen();
+  const status = useDrawerStatus();
   useEffect(() => {
-    if (!isOpen) {
+    if (status === 'closed') {
       callback();
     }
-  }, [callback, isOpen]);
+  }, [callback, status]);
 };
 
 export default useOnDrawerClose;

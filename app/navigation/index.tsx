@@ -1,7 +1,7 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {StatusBar} from 'react-native';
 import {useSelector} from 'react-redux';
-import {NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
+import {LinkingOptions, NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
 import SplashViewComponent from '../screens/splash/SplashScreenView';
 
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -11,11 +11,11 @@ import {themeDark, themeLight} from '../Theme';
 import {useSettings} from '../settings/useSettings';
 import {DEEP_LINKING_URL_PREFIX, GEMIUS_VIEW_SCRIPT_ID} from '../constants';
 import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
-import MainStack from './MainStack';
+import MainStack, {MainStackParamList} from './MainStack';
 import {SplashScreen} from '../screens';
 import useHandleLaunchUrl from './useHandleLaunchUrl';
 
-const linking = {
+const linking: LinkingOptions<MainStackParamList> = {
   prefixes: [DEEP_LINKING_URL_PREFIX],
   config: {
     initialRouteName: 'Home',
@@ -38,7 +38,7 @@ const NavigatorComponent: React.FC = () => {
   console.log('SETTINGS', settings);
 
   const routeNameRef = useRef<string>();
-  const navRef = useRef<NavigationContainerRef>(null);
+  const navRef = useRef<NavigationContainerRef<MainStackParamList>>(null);
 
   useHandleLaunchUrl(isNavigatorReady);
 

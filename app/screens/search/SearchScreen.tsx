@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect} from 'react';
 import {View, Button, TextInput, StyleSheet, Animated, ListRenderItemInfo} from 'react-native';
-import {HeaderBackButton, StackNavigationProp} from '@react-navigation/stack';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {ArticleComponent, ActionButton, Text, ScreenLoader} from '../../components';
 import {IconFilter, IconSearch} from '../../components/svg';
 import {useTheme} from '../../Theme';
+import {HeaderBackButton} from '@react-navigation/elements';
 import {CollapsibleSubHeaderAnimator, useCollapsibleSubHeader} from 'react-navigation-collapsible';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
@@ -53,7 +54,8 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: '',
+      title: '',
+
       headerRight: () => (
         <View style={styles.row}>
           <ActionButton onPress={() => navigation.toggleDrawer()}>

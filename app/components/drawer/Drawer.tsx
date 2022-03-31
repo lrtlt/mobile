@@ -6,7 +6,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../../Theme';
 import Divider from '../divider/Divider';
 import {checkEqual} from '../../util/LodashEqualityCheck';
-import {DrawerContentComponentProps, DrawerContentOptions} from '@react-navigation/drawer';
+import {DrawerContentComponentProps} from '@react-navigation/drawer';
 import DrawerBlockProjects from './components/DrawerBlockProjects';
 import DrawerBlockChannels from './components/DrawerBlockChannels';
 import DrawerBlockNews from './components/DrawerBlockNews';
@@ -17,7 +17,7 @@ import {useCallback} from 'react';
 import useOnDrawerClose from './useOnDrawerClose';
 import {useRef} from 'react';
 
-type Props = DrawerContentComponentProps<DrawerContentOptions>;
+type Props = DrawerContentComponentProps;
 
 const DrawerComponent: React.FC<Props> = ({navigation}) => {
   const {colors, dim} = useTheme();

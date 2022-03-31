@@ -1,20 +1,27 @@
 import React from 'react';
-import {TouchableOpacity, TouchableOpacityProps} from 'react-native';
 import {debounce} from 'lodash';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacityProps} from 'react-native';
+import {GenericTouchableProps} from 'react-native-gesture-handler/lib/typescript/components/touchables/GenericTouchable';
 
-interface Props extends TouchableOpacityProps {
-  debounceTime?: number;
-}
+type Props = TouchableOpacityProps &
+  GenericTouchableProps & {
+    debounceTime?: number;
+  };
 
-const TouchableDebounce: React.FC<Props> = (props) => {
+const TouchableDebounce: React.FC<Props> = ({debounceTime, onPress, children, ...rest}) => {
   return (
     <TouchableOpacity
-      {...props}
-      onPress={debounce(props.onPress!, props.debounceTime, {
-        leading: true,
-        trailing: false,
-      })}>
-      {props.children}
+      {...rest}
+      onPress={
+        onPress
+          ? debounce(onPress, debounceTime, {
+              leading: true,
+              trailing: false,
+            })
+          : undefined
+      }>
+      {children}
     </TouchableOpacity>
   );
 };
