@@ -1,13 +1,18 @@
 import React, {forwardRef} from 'react';
 import {StyleSheet, View} from 'react-native';
 import WebView, {WebViewProps} from 'react-native-webview';
+import {useTheme} from '../../Theme';
 
-interface Props extends WebViewProps {}
+interface Props extends WebViewProps {
+  allowDarkMode?: boolean;
+}
 
 /**
  * Component extending default WebView applying fixes for android crashes.
  */
 const SafeWebView: React.FC<Props> = forwardRef<WebView, Props>((props, ref) => {
+  const {dark} = useTheme();
+
   return (
     <View style={[props.style as {}, styles.webViewContainer]}>
       <WebView
@@ -16,6 +21,7 @@ const SafeWebView: React.FC<Props> = forwardRef<WebView, Props>((props, ref) => 
         cacheEnabled={false}
         domStorageEnabled={true}
         javaScriptEnabled={true}
+        forceDarkOn={dark && props.allowDarkMode}
         androidHardwareAccelerationDisabled={false}
         androidLayerType="hardware"
         automaticallyAdjustContentInsets={false}

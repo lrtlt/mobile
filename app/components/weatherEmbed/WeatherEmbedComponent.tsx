@@ -24,6 +24,7 @@ const WeatherEmbedComponent: React.FC<Props> = (props) => {
     <SafeAutoHeightWebView
       scrollEnabled={false}
       containerStyle={props.style}
+      allowDarkMode={true}
       viewportContent={`width=${width}, user-scalable=no`}
       startInLoadingState={true}
       renderLoading={useCallback(

@@ -7,6 +7,7 @@ import {useTheme} from '../../Theme';
 
 interface Props extends AutoHeightWebViewProps {
   openLinksExternally?: boolean;
+  allowDarkMode?: boolean;
 }
 
 /**
@@ -40,7 +41,7 @@ const SafeAutoHeightWebView: React.FC<Props> = forwardRef<WebView, Props>((props
         androidLayerType="hardware"
         automaticallyAdjustContentInsets={false}
         bounces={false}
-        forceDarkOn={dark}
+        forceDarkOn={dark && props.allowDarkMode}
         sharedCookiesEnabled={true}
         {...props}
         style={[styles.webView, props.style]}

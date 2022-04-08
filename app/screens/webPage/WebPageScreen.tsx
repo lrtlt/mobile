@@ -1,9 +1,10 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import {SafeWebView} from '../../components';
 import {MainStackParamList} from '../../navigation/MainStack';
+import {useTheme} from '../../Theme';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'WebPage'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'WebPage'>;
@@ -16,6 +17,8 @@ type Props = {
 const WebPageScreen: React.FC<Props> = ({route, navigation}) => {
   const {url, title} = route.params;
 
+  const {colors, dark} = useTheme();
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: title || '',
@@ -24,10 +27,18 @@ const WebPageScreen: React.FC<Props> = ({route, navigation}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor:
+          Platform.select({
+            android: dark ? colors.background : undefined,
+          }) ?? '#F8F8F8',
+      }}>
       <SafeWebView
         style={styles.webView}
         scrollEnabled={true}
+        allowDarkMode={true}
         showsVerticalScrollIndicator={true}
         source={{uri: url}}
       />
@@ -40,7 +51,6 @@ export default WebPageScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
   },
   webView: {
     flex: 1,

@@ -33,6 +33,7 @@ const FacebookComments: React.FC<Props> = (props) => {
     <SafeWebView
       style={styles.webView}
       startInLoadingState={true}
+      allowDarkMode={true}
       renderLoading={useCallback(() => {
         return <ScreenLoader />;
       }, [])}
