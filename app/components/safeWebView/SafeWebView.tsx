@@ -20,6 +20,7 @@ const SafeWebView: React.FC<Props> = forwardRef<WebView, Props>((props, ref) => 
         androidLayerType="hardware"
         automaticallyAdjustContentInsets={false}
         bounces={false}
+        sharedCookiesEnabled={true}
         {...props}
         style={[styles.webView, props.style]}
         containerStyle={styles.webViewContainer}

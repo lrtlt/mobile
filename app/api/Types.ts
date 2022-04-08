@@ -408,6 +408,7 @@ export type ArticleEmbedAudioType = {
 
 export type ArticleEmbedHTMLType = {
   embed_type: 'html';
+  enable_scroll?: boolean;
   el: {
     html?: string;
   };

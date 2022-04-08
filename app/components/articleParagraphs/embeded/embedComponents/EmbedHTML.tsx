@@ -2,6 +2,7 @@ import React, {useCallback} from 'react';
 import {View, useWindowDimensions} from 'react-native';
 import {ArticleEmbedHTMLType} from '../../../../api/Types';
 import SafeAutoHeightWebView from '../../../safeWebView/SafeAutoHeightWebView';
+import SafeWebView from '../../../safeWebView/SafeWebView';
 
 interface Props {
   data: ArticleEmbedHTMLType[];
@@ -42,7 +43,8 @@ const EmbedHTML: React.FC<Props> = ({data}) => {
               <SafeAutoHeightWebView
                 key={i}
                 style={{width}}
-                scrollEnabled={false}
+                scrollEnabled={item?.enable_scroll ? true : false}
+                nestedScrollEnabled={true}
                 allowsFullscreenVideo={true}
                 mediaPlaybackRequiresUserAction={true}
                 startInLoadingState={true}

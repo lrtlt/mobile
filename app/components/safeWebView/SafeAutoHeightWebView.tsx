@@ -3,6 +3,7 @@ import {Linking} from 'react-native';
 import {StyleSheet, View} from 'react-native';
 import WebView, {AutoHeightWebViewProps} from 'react-native-autoheight-webview';
 import {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
+import {useTheme} from '../../Theme';
 
 interface Props extends AutoHeightWebViewProps {
   openLinksExternally?: boolean;
@@ -12,6 +13,8 @@ interface Props extends AutoHeightWebViewProps {
  * Component extending default WebView applying fixes for android crashes.
  */
 const SafeAutoHeightWebView: React.FC<Props> = forwardRef<WebView, Props>((props, ref) => {
+  const {dark} = useTheme();
+
   const handleShouldLoadWithRequest = useCallback((request: ShouldStartLoadRequest) => {
     const isUserClickAction = request.navigationType === 'click';
 
@@ -37,6 +40,8 @@ const SafeAutoHeightWebView: React.FC<Props> = forwardRef<WebView, Props>((props
         androidLayerType="hardware"
         automaticallyAdjustContentInsets={false}
         bounces={false}
+        forceDarkOn={dark}
+        sharedCookiesEnabled={true}
         {...props}
         style={[styles.webView, props.style]}
         containerStyle={[styles.webViewContainer, props.containerStyle]}
