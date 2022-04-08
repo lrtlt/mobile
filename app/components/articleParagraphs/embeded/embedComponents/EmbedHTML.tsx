@@ -2,7 +2,6 @@ import React, {useCallback} from 'react';
 import {View, useWindowDimensions} from 'react-native';
 import {ArticleEmbedHTMLType} from '../../../../api/Types';
 import SafeAutoHeightWebView from '../../../safeWebView/SafeAutoHeightWebView';
-import SafeWebView from '../../../safeWebView/SafeWebView';
 
 interface Props {
   data: ArticleEmbedHTMLType[];
