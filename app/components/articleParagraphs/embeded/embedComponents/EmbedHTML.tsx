@@ -43,7 +43,7 @@ const EmbedHTML: React.FC<Props> = ({data}) => {
                 key={i}
                 style={{width}}
                 scrollEnabled={item?.enable_scroll ? true : false}
-                nestedScrollEnabled={true}
+                nestedScrollEnabled={item?.enable_scroll ? true : false}
                 allowsFullscreenVideo={true}
                 mediaPlaybackRequiresUserAction={true}
                 startInLoadingState={true}
