@@ -34,8 +34,8 @@ const CategoryArticlesBlock: React.FC<CategoryArticlesBlockProps> = ({block}) =>
   );
 
   const onHeaderPressHandler = useCallback(() => {
-    dispatch(openCategoryForId(category_id));
-  }, [category_id, dispatch]);
+    dispatch(openCategoryForId(category_id, category_title));
+  }, [category_id, category_title, dispatch]);
 
   const articleList = useMemo(
     () =>

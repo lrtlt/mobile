@@ -9,7 +9,7 @@ import {useSelector} from 'react-redux';
 import HomeScreen from './tabScreen/home/HomeScreen';
 import TestScreen from '../testScreen/TestScreen';
 import {EventRegister} from 'react-native-event-listeners';
-import {EVENT_LOGO_PRESS, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
+import {EVENT_LOGO_PRESS, EVENT_OPEN_CATEGORY, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 import {selectMainScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -64,6 +64,21 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
       EventRegister.removeEventListener(listener as string);
     };
   }, [state]);
+
+  useEffect(() => {
+    const listener = EventRegister.addEventListener(EVENT_OPEN_CATEGORY, (data) => {
+      if (data?.category) {
+        const {category} = data;
+        navigation.navigate('Category', {
+          id: category.id,
+          name: category.title,
+        });
+      }
+    });
+    return () => {
+      EventRegister.removeEventListener(listener as string);
+    };
+  }, [navigation, state]);
 
   useEffect(() => {
     navigation.setOptions({

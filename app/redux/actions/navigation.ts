@@ -6,7 +6,7 @@ import {
   API_MENU_ITEMS_ERROR,
   SET_LAUNCH_URL,
   CLEAR_LAUNCH_URL,
-  OPEN_CATEGORY_FOR_ID,
+  OPEN_CATEGORY,
 } from './actionTypes';
 import {FetchHomeAction, FetchHomeErrorAction, FetchHomeResultAction} from './articles';
 
@@ -31,14 +31,20 @@ export const fetchMenuItemsError = (): FetchMenuItemsErrorAction => ({
   type: API_MENU_ITEMS_ERROR,
 });
 
-export type OpenCategoryByIdAction = {
-  type: typeof OPEN_CATEGORY_FOR_ID;
-  categoryId: number;
+export type OpenCategoryAction = {
+  type: typeof OPEN_CATEGORY;
+  category: {
+    id: number;
+    title?: string;
+  };
 };
 
-export const openCategoryForId = (categoryId: number): OpenCategoryByIdAction => ({
-  type: OPEN_CATEGORY_FOR_ID,
-  categoryId,
+export const openCategoryForId = (id: number, title: string): OpenCategoryAction => ({
+  type: OPEN_CATEGORY,
+  category: {
+    id,
+    title,
+  },
 });
 
 export type OpenCategoryByNameAction = {
@@ -74,7 +80,7 @@ export type NavigationActionType =
   | FetchMenuItemsResultAction
   | FetchMenuItemsErrorAction
   | OpenCategoryByNameAction
-  | OpenCategoryByIdAction
+  | OpenCategoryAction
   | FetchHomeAction
   | FetchHomeResultAction
   | FetchHomeErrorAction

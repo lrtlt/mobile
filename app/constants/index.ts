@@ -3,6 +3,7 @@ export const ARTICLE_SAVED_MAX_COUNT = 51;
 
 export const EVENT_LOGO_PRESS = 'logo-press';
 export const EVENT_SELECT_CATEGORY_INDEX = 'select-category-index';
+export const EVENT_OPEN_CATEGORY = 'open-category';
 
 export const ARTICLES_PER_PAGE_COUNT = 15;
 
