@@ -156,6 +156,7 @@ export type HomeBlockDailyQuestion = {
 export type HomeBlockSlug = {
   type: 'slug';
   template_id: number;
+  background_image?: string;
   data: {
     is_slug_block: 1;
     articles_list: Article[];

@@ -160,7 +160,7 @@ type ColorScheme = {
   dailyQuestionProgress: string;
 };
 
-const colorsLight: ColorScheme = {
+export const colorsLight: ColorScheme = {
   //#region React-Navigation colors
   primary: '#007aff',
   background: '#FFFFFF',
@@ -201,7 +201,7 @@ const colorsLight: ColorScheme = {
   ripple: '#99999940',
 };
 
-const colorsDark: ColorScheme = {
+export const colorsDark: ColorScheme = {
   //#region React-Navigation colors
   primary: '#AAA',
   background: '#1C242D',

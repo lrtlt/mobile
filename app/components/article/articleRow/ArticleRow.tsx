@@ -1,8 +1,7 @@
 import React, {useMemo} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 import ArticleComponent, {ArticleStyleType} from '../article/ArticleComponent';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useTheme} from '../../../Theme';
 import {Article} from '../../../../Types';
 import {SavedArticle} from '../../../redux/reducers/articleStorage';
 
@@ -20,16 +19,15 @@ const getArticleStyleType = (articleCount: number): ArticleStyleType => {
 };
 
 interface Props {
+  articleStyle?: ViewStyle;
   data: (Article | SavedArticle)[];
-  isSlug?: boolean;
+  backgroundColor?: string;
   onArticlePress: (article: Article) => void;
 }
 
 const ArticleRow: React.FC<Props> = (props) => {
-  const {data, isSlug, onArticlePress} = props;
-  const {colors} = useTheme();
+  const {data, onArticlePress} = props;
 
-  const backgroundColor = isSlug ? colors.slugBackground : undefined;
   const articleStyleType = getArticleStyleType(data.length);
 
   const content = useMemo(
@@ -37,7 +35,7 @@ const ArticleRow: React.FC<Props> = (props) => {
       data.map((a, i) => {
         return (
           <ArticleComponent
-            style={styles.article}
+            style={{...styles.article, ...props.articleStyle}}
             article={a as Article}
             onPress={onArticlePress}
             styleType={articleStyleType}
@@ -45,17 +43,17 @@ const ArticleRow: React.FC<Props> = (props) => {
           />
         );
       }),
-    [articleStyleType, data, onArticlePress],
+    [articleStyleType, data, onArticlePress, props.articleStyle],
   );
 
   if (articleStyleType === 'scroll') {
     return (
-      <ScrollView style={{backgroundColor}} horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={{...styles.container}}>{content}</View>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <View style={styles.container}>{content}</View>
       </ScrollView>
     );
   } else {
-    return <View style={{...styles.container, backgroundColor}}>{content}</View>;
+    return <View style={styles.container}>{content}</View>;
   }
 };
 

@@ -3,6 +3,7 @@ import topFormatter from './articleFormatterTop';
 import template1Formatter from './articleFormatterTemplate1';
 import template2Formatter from './articleFormatterTemplate2';
 import template3Formatter from './articleFormatterTemplate3';
+import template9Formatter from './articleFormatterTemplate9';
 import template999Formatter from './articleFormatterTemplate999';
 
 export const formatArticles = <T>(template_id: number, articles: T[], clipLast = true): T[][] => {
@@ -22,6 +23,9 @@ export const formatArticles = <T>(template_id: number, articles: T[], clipLast =
     }
     case 3: {
       return template3Formatter<T>(articles);
+    }
+    case 9: {
+      return template9Formatter<T>(articles);
     }
     case 999: {
       return template999Formatter<T>(articles);

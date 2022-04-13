@@ -5,19 +5,18 @@ import TextComponent from '../text/Text';
 
 interface Props {
   title: string;
+  color?: string;
 }
-const SlugHeader: React.FC<Props> = ({title}) => {
+const SlugHeader: React.FC<Props> = ({title, color}) => {
   const {colors} = useTheme();
 
   return (
-    <View style={{backgroundColor: colors.slugBackground}}>
-      <View style={styles.sectionHeaderContainer}>
-        <TextComponent style={styles.sectionHeaderText} fontFamily="SourceSansPro-SemiBold">
-          {title}
-        </TextComponent>
-        <View style={{...styles.slugContainer, borderColor: colors.border}}>
-          <TextComponent style={styles.slugText}>{`# ${title}`}</TextComponent>
-        </View>
+    <View style={styles.sectionHeaderContainer}>
+      <TextComponent style={{...styles.sectionHeaderText, color}} fontFamily="SourceSansPro-SemiBold">
+        {title}
+      </TextComponent>
+      <View style={{...styles.slugContainer, borderColor: color ?? colors.border}}>
+        <TextComponent style={{...styles.slugText, color}}>{`# ${title}`}</TextComponent>
       </View>
     </View>
   );

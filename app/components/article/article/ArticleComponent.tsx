@@ -88,7 +88,7 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
   }
 
   return (
-    <View style={[styleProp, style.container]}>
+    <View style={[style.container, styleProp]}>
       <TouchableDebounce debounceTime={500} onPress={onPressHandler}>
         <View>
           <View
@@ -137,6 +137,7 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
 
 export default React.memo(ArticleComponent, (prevProps, nextProps) => {
   return (
+    prevProps.style === nextProps.style &&
     prevProps.styleType === nextProps.styleType &&
     prevProps.article.title === nextProps.article.title &&
     prevProps.article.subtitle === nextProps.article.subtitle
@@ -224,11 +225,11 @@ const stylesScroll = {
   ...styles,
   container: {
     ...styles.container,
-    width: 300,
+    width: 280,
   },
   title: {
     ...styles.title,
-    fontSize: 19,
+    fontSize: 18,
   },
 };
 

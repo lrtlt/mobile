@@ -1,12 +1,16 @@
 import {useNavigation} from '@react-navigation/core';
+import {ThemeProvider} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useMemo} from 'react';
-import {View} from 'react-native';
+import {ImageBackground, StyleSheet} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {Article} from '../../../../../../../Types';
 import {HomeBlockSlug} from '../../../../../../api/Types';
 import {ArticleRow, SectionHeader} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
+import {colorsDark, colorsLight} from '../../../../../../Theme';
 import {formatArticles} from '../../../../../../util/articleFormatters';
+import {buildArticleImageUri, IMG_SIZE_L} from '../../../../../../util/ImageUtil';
 
 interface SlugArticlesBlockProps {
   block: HomeBlockSlug;
@@ -40,20 +44,48 @@ const SlugArticlesBlock: React.FC<SlugArticlesBlockProps> = ({block}) => {
   const articleList = useMemo(
     () =>
       formattedArticles.map((row, index) => (
-        <ArticleRow key={index} data={row} onArticlePress={articlePressHandler} isSlug={true} />
+        <ThemeProvider value={{colors: colorsLight, dark: false}}>
+          <ArticleRow
+            key={index}
+            articleStyle={
+              template_id === 9 ? {...styles.article, backgroundColor: colorsLight.background} : undefined
+            }
+            data={row}
+            onArticlePress={articlePressHandler}
+          />
+        </ThemeProvider>
       )),
-    [articlePressHandler, formattedArticles],
+    [articlePressHandler, formattedArticles, template_id],
   );
 
   return (
-    <View>
+    <ImageBackground
+      source={{
+        uri: buildArticleImageUri(IMG_SIZE_L, block.background_image),
+      }}>
+      {template_id === 9 && (
+        <LinearGradient
+          style={StyleSheet.absoluteFillObject}
+          colors={['#000000EE', '#00000099', '#00000050']}
+          useAngle={true}
+          angle={0}
+        />
+      )}
       <SectionHeader
         category={{name: slug_title, template_id: template_id, is_slug_block: 1, slug_url: slug_url}}
         onPress={onHeaderPressHandler}
+        color={template_id === 9 ? colorsDark.text : undefined}
       />
       {articleList}
-    </View>
+    </ImageBackground>
   );
 };
 
 export default SlugArticlesBlock;
+
+const styles = StyleSheet.create({
+  article: {
+    borderRadius: 4,
+    margin: 12,
+  },
+});

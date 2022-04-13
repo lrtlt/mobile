@@ -6,12 +6,13 @@ import {Category} from '../../redux/reducers/articles';
 
 interface Props {
   category: Category;
+  color?: string;
   onPress?: () => void;
 }
-const SectionHeader: React.FC<Props> = ({category, onPress}) => {
+const SectionHeader: React.FC<Props> = ({category, color, onPress}) => {
   const header =
-    category.is_slug_block && category.is_slug_block === 1 ? (
-      <SlugHeader title={category.name} />
+    category.is_slug_block === 1 ? (
+      <SlugHeader title={category.name} color={color} />
     ) : (
       <DefaultHeader title={category.name} />
     );
