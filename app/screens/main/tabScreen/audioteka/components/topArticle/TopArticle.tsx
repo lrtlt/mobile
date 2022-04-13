@@ -7,8 +7,7 @@ import Image from 'react-native-fast-image';
 import {buildImageUri, IMG_SIZE_S} from '../../../../../../util/ImageUtil';
 import MediaIndicator from '../../../../../../components/mediaIndicator/MediaIndicator';
 import TextComponent from '../../../../../../components/text/Text';
-import {MicIcon} from '../../../../../../components/svg';
-import {TouchableDebounce} from '../../../../../../components';
+import {MediaIcon, TouchableDebounce} from '../../../../../../components';
 import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
@@ -39,7 +38,7 @@ const TopArticle: React.FC<TopArticleProps> = ({article}) => {
         </View>
 
         <View style={styles.dateContainer}>
-          <MicIcon size={18} />
+          <MediaIcon size={18} is_audio={1} channel_id={article.channel_id} />
           <TextComponent
             style={styles.date}>{`${article.category_title}    ${article.item_date}`}</TextComponent>
         </View>

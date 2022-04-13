@@ -38,4 +38,5 @@ export {default as SafeWebView} from './safeWebView/SafeWebView';
 export {default as SafeAutoHeightWebView} from './safeWebView/SafeAutoHeightWebView';
 export {default as SearchSuggestion} from './searchSuggestion/SearchSuggestion';
 export {default as BannerComponent} from './banner/Banner';
+export {default as MediaIcon} from './mediaIcon/MediaIcon';
 export {default as Logo} from './logo/Logo';

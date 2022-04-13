@@ -60,6 +60,32 @@ export const getColorsForChannel = (channel: string) => {
   }
 };
 
+export const getColorsForChannelById = (channel_id?: number) => {
+  switch (channel_id) {
+    case 1: {
+      return channelColors.color_set_lrtHD;
+    }
+    case 2: {
+      return channelColors.color_set_lrtPlius;
+    }
+    case 3: {
+      return channelColors.color_set_lrt_world;
+    }
+    case 4: {
+      return channelColors.color_set_l_radio;
+    }
+    case 5: {
+      return channelColors.color_set_classic;
+    }
+    case 6: {
+      return channelColors.color_set_opus;
+    }
+    default: {
+      return channelColors.color_set_lrtHD;
+    }
+  }
+};
+
 export const getIconForChannel = (channel: string, size = DEFAULT_CHANNEL_ICON_SIZE) => {
   switch (channel.toLowerCase()) {
     case 'ltv1': {

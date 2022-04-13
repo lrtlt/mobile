@@ -5,8 +5,6 @@ import CoverImage from '../../coverImage/CoverImage';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 
-import {CameraIcon, MicIcon} from '../../svg';
-
 import {getImageSizeForWidth, buildImageUri, buildArticleImageUri} from '../../../util/ImageUtil';
 import {themeLight, useTheme} from '../../../Theme';
 import TextComponent from '../../text/Text';
@@ -14,7 +12,7 @@ import {Article} from '../../../../Types';
 import ArticleBadges from './ArticleBadges';
 import ListenCount from './ListenCount';
 import Badge from '../../badge/Badge';
-import {SvgUri} from 'react-native-svg';
+import MediaIcon from '../../mediaIcon/MediaIcon';
 
 const getArticleStyle = (type: ArticleStyleType) => {
   switch (type) {
@@ -56,8 +54,14 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
     <MediaIndicator style={style.mediaIndicator} size={styleType === 'single' ? 'big' : 'small'} />
   );
 
-  const mediaIcon = Boolean(article.channel_logo) && (
-    <SvgUri style={style.mediaIcon} width={18} height={18} uri={article.channel_logo ?? null} />
+  const mediaIcon = (
+    <MediaIcon
+      style={styles.mediaIcon}
+      size={18}
+      is_video={article.is_video}
+      is_audio={article.is_audio}
+      channel_id={article.channel_id}
+    />
   );
 
   const mediaDuration = Boolean(article.media_duration) && (
