@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   modalContentContainer: {
+    minWidth: '50%',
     maxWidth: '80%',
     alignItems: 'center',
     padding: 16,
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   titleText: {
-    fontSize: 20,
+    fontSize: 19,
     width: '100%',
     textAlign: 'center',
   },
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     width: 16,
   },
   button: {
-    flex: 1,
+    minWidth: 100,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',

@@ -15,8 +15,7 @@ const WeatherEmbedComponent: React.FC<Props> = (props) => {
   const {location} = props;
   const locationCode = location ? location?.c ?? DEFAULT_FORECAST_LOCATION : DEFAULT_FORECAST_LOCATION;
 
-  const padding = props.horizontalPadding ? props.horizontalPadding * 2 : 0;
-  const width = useWindowDimensions().width - padding;
+  const width = useWindowDimensions().width - (props.horizontalPadding ? props.horizontalPadding * 2 : 0);
 
   const uri = `https://www.lrt.lt/orai?embed&city=${locationCode}`;
 
@@ -33,7 +32,7 @@ const WeatherEmbedComponent: React.FC<Props> = (props) => {
         ),
         [],
       )}
-      source={{uri: uri}}
+      source={{uri}}
     />
   );
 };

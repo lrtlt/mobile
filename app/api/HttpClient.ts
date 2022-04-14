@@ -2,7 +2,7 @@ import Axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import * as AxiosLogger from 'axios-logger';
 
 const LOGGING_ENABLED = true;
-const LOGGING_DATA = true;
+const LOGGING_DATA = false;
 
 const LrtClient = Axios.create({
   timeout: 1000 * 10,

@@ -16,7 +16,7 @@ const SlugHeader: React.FC<Props> = ({title, color}) => {
         {title}
       </TextComponent>
       <View style={{...styles.slugContainer, borderColor: color ?? colors.border}}>
-        <TextComponent style={{...styles.slugText, color}}>{`# ${title}`}</TextComponent>
+        <TextComponent style={{...styles.slugText, color}} type="secondary">{`# ${title}`}</TextComponent>
       </View>
     </View>
   );
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
   },
 
   slugContainer: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
+    paddingVertical: 3,
+    paddingHorizontal: 6,
     borderRadius: 4,
     marginTop: 16,
     marginBottom: 8,

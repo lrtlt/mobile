@@ -65,14 +65,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   listItem: {
-    padding: 16,
+    padding: 12,
   },
   timeText: {
     color: '#e7792b',
-    fontSize: 15,
+    fontSize: 13,
   },
   songText: {
     marginTop: 4,
-    fontSize: 16,
+    fontSize: 14,
   },
 });

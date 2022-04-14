@@ -4,7 +4,7 @@ import {Forecast, WeatherEmbed} from '../../components';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useTheme} from '../../Theme';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import WeatherLocations from './WeatherLocations';
 import ConfirmModal from './ConfirmModal';
 import {setForecastLocation} from '../../redux/actions/config';
@@ -13,6 +13,8 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {ForecastLocation} from '../../api/Types';
+import useFetchWeatherArticles from './useFetchWeatherArticles';
+import SlugArticlesBlock from '../main/tabScreen/home/blocks/SlugArticlesBlock/SlugArticlesBlock';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Weather'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Weather'>;
@@ -30,6 +32,8 @@ const WeatherScreen: React.FC<Props> = ({navigation}) => {
 
   const {strings} = useTheme();
 
+  const articles = useFetchWeatherArticles();
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: strings.weatherScreenTitle,
@@ -42,13 +46,35 @@ const WeatherScreen: React.FC<Props> = ({navigation}) => {
     setConfirmModalVisible(true);
   }, []);
 
+  const {bottom} = useSafeAreaInsets();
+
   return (
     <SafeAreaView style={styles.screen} edges={['left', 'right']}>
-      <ScrollView style={styles.scrollContainer} nestedScrollEnabled={true}>
-        <View style={styles.container}>
-          <WeatherLocations style={styles.locations} onLocationSelect={(l) => handleSelectLocation(l)} />
-          <Forecast style={styles.forecast} location={selectedLocation} />
-          <WeatherEmbed style={styles.weatherEmbed} horizontalPadding={12} location={selectedLocation} />
+      <ScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={{paddingBottom: bottom}}
+        nestedScrollEnabled={true}>
+        <View>
+          <View style={styles.container}>
+            <WeatherLocations style={styles.locations} onLocationSelect={(l) => handleSelectLocation(l)} />
+            <Forecast style={styles.forecast} location={selectedLocation} />
+            <WeatherEmbed style={styles.weatherEmbed} horizontalPadding={8} location={selectedLocation} />
+          </View>
+          {articles && articles.length > 0 && (
+            <SlugArticlesBlock
+              block={{
+                type: 'slug',
+                template_id: -1,
+                data: {
+                  articles_list: articles,
+                  is_slug_block: 1,
+                  slug_title: 'Orai',
+                  slug_url: 'orai',
+                  template_id: -1,
+                },
+              }}
+            />
+          )}
         </View>
       </ScrollView>
       <ConfirmModal
@@ -75,16 +101,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    padding: 12,
+    padding: 8,
   },
   locations: {
     width: '100%',
-    paddingVertical: 12,
+    paddingVertical: 16,
   },
   forecast: {
-    marginVertical: 12,
+    marginVertical: 16,
   },
   weatherEmbed: {
-    marginTop: 12,
+    flex: 1,
+    marginTop: 16,
+    marginBottom: 16,
   },
 });
