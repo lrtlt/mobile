@@ -17,12 +17,6 @@ import CategoryBlock from './components/category/CategoryBlock';
 import PopularBlock from './components/popular/PopularBlock';
 import NewestBlock from './components/newest/NewestBlock';
 import AudiotekaSearch from './components/search/AudiotekaSearch';
-import {createNativeWrapper} from 'react-native-gesture-handler';
-
-const WrappedRefreshControl = createNativeWrapper(RefreshControl, {
-  disallowInterruption: true,
-  shouldCancelWhenOutside: false,
-});
 
 interface Props {
   isCurrent: boolean;
@@ -31,7 +25,6 @@ interface Props {
 const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
   const dispatch = useDispatch();
   const listRef = useRef<MyFlatList>(null);
-  const refreshRef = useRef(null);
   const {colors, dark} = useTheme();
 
   const state = useSelector(selectAudiotekaScreenState);
@@ -118,8 +111,6 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
       />
       <View style={styles.container}>
         <MyFlatList
-          waitFor={refreshRef}
-          shouldActivateOnStart
           showsVerticalScrollIndicator={false}
           style={styles.container}
           ref={listRef}
@@ -128,11 +119,7 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
           }}
           renderItem={renderItem}
           refreshControl={
-            <WrappedRefreshControl
-              ref={refreshRef}
-              refreshing={refreshing}
-              onRefresh={() => dispatch(fetchAudioteka())}
-            />
+            <RefreshControl refreshing={refreshing} onRefresh={() => dispatch(fetchAudioteka())} />
           }
           data={data}
           removeClippedSubviews={false}

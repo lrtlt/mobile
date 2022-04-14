@@ -116,7 +116,6 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
     content = (
       <MyFlatList
         showsVerticalScrollIndicator={false}
-        shouldActivateOnStart
         data={articles}
         windowSize={4}
         renderItem={(item) => {

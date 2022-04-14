@@ -1,3 +1,3 @@
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList} from 'react-native';
 
 export default FlatList;
