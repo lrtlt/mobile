@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useRef} from 'react';
 import {View, StyleSheet, ListRenderItemInfo, Button, RefreshControl} from 'react-native';
+import {createNativeWrapper} from 'react-native-gesture-handler';
 import {Article} from '../../../../Types';
 import {
   ArticleRow,
@@ -14,6 +15,11 @@ import {
 import {MainStackParamList} from '../../../navigation/MainStack';
 import {PagingState} from '../../../redux/reducers/articles';
 import {useTheme} from '../../../Theme';
+
+const WrappedRefreshControl = createNativeWrapper(RefreshControl, {
+  disallowInterruption: true,
+  shouldCancelWhenOutside: false,
+});
 
 interface Props {
   data: PagingState;
@@ -28,6 +34,7 @@ const TabScreenContent: React.FC<Props> = ({data, showTitle, requestNextPage, re
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const listRef = useRef<MyFlatList>(null);
+  const refreshRef = useRef(null);
 
   useEffect(() => {
     //Scroll to top when it's finished refreshing
@@ -77,6 +84,8 @@ const TabScreenContent: React.FC<Props> = ({data, showTitle, requestNextPage, re
   return (
     <View style={styles.container}>
       <MyFlatList
+        waitFor={refreshRef}
+        shouldActivateOnStart
         ref={listRef}
         showsVerticalScrollIndicator={false}
         style={styles.container}
@@ -87,7 +96,13 @@ const TabScreenContent: React.FC<Props> = ({data, showTitle, requestNextPage, re
         ListFooterComponent={isFetching ? <ListLoader /> : null}
         onEndReached={onListEndReached}
         renderItem={renderItem}
-        refreshControl={<RefreshControl refreshing={Boolean(isRefreshing)} onRefresh={requestRefresh} />}
+        refreshControl={
+          <WrappedRefreshControl
+            ref={refreshRef}
+            refreshing={Boolean(isRefreshing)}
+            onRefresh={requestRefresh}
+          />
+        }
         removeClippedSubviews={false}
         keyExtractor={keyExtractor}
       />

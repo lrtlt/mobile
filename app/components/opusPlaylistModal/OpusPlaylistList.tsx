@@ -38,6 +38,7 @@ const OpusPaylistList: React.FC<OpusPaylistListProps> = ({items}) => {
     <View style={{...styles.container, borderColor: colors.border, backgroundColor: colors.background}}>
       <MyFlatList
         style={styles.flex}
+        shouldActivateOnStart
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         data={items}

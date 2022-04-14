@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {View, RefreshControl, StyleSheet, StatusBar, ListRenderItemInfo} from 'react-native';
+import {View, StyleSheet, StatusBar, ListRenderItemInfo, RefreshControl} from 'react-native';
 import {
   ArticleRow,
   ScrollingChannels,
@@ -26,6 +26,12 @@ import DailyQuestionComponent from '../../../../components/dailyQuestion/DailyQu
 import CategoryArticlesBlock from './blocks/CategoryArticlesBlock/CategoryArticlesBlock';
 import SlugArticlesBlock from './blocks/SlugArticlesBlock/SlugArticlesBlock';
 import TopFeedBlock from './blocks/TopFeedBlock/TopFeedBlock';
+import {createNativeWrapper} from 'react-native-gesture-handler';
+
+const WrappedRefreshControl = createNativeWrapper(RefreshControl, {
+  disallowInterruption: true,
+  shouldCancelWhenOutside: false,
+});
 
 interface Props {
   isCurrent: boolean;
@@ -36,6 +42,8 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const listRef = useRef<MyFlatList>(null);
+  const refreshRef = useRef(null);
+
   const state = useSelector(selectHomeScreenState(type), (l, r) => l.lastFetchTime === r.lastFetchTime);
 
   const {colors, dark} = useTheme();
@@ -165,6 +173,8 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
       />
       <View style={styles.container}>
         <MyFlatList
+          waitFor={refreshRef}
+          shouldActivateOnStart
           showsVerticalScrollIndicator={false}
           style={styles.container}
           ref={listRef}
@@ -172,7 +182,9 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
             lastFetchTime: lastFetchTime,
           }}
           renderItem={renderItem}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={callApi} />}
+          refreshControl={
+            <WrappedRefreshControl ref={refreshRef} refreshing={refreshing} onRefresh={callApi} />
+          }
           ListHeaderComponent={renderForecast()}
           data={items}
           removeClippedSubviews={false}

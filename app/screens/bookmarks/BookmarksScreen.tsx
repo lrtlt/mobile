@@ -42,6 +42,7 @@ const BookmarksScreen: React.FC<Props> = ({navigation}) => {
   return (
     <View style={styles.container}>
       <MyFlatList
+        shouldActivateOnStart
         showsVerticalScrollIndicator={false}
         data={articles}
         windowSize={4}

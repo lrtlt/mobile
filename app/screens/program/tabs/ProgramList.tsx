@@ -46,6 +46,7 @@ const ProgramList: React.FC<Props> = ({items, scrollToIndex}) => {
   return (
     <MyFlatList
       style={styles.root}
+      shouldActivateOnStart
       ref={ref}
       showsVerticalScrollIndicator={false}
       data={items}
