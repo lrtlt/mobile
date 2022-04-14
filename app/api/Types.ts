@@ -492,6 +492,10 @@ export type ArticleContentMedia = {
     name: string;
     slug: string;
   }[];
+  keywords: {
+    name: string;
+    slug: string;
+  }[];
   content: string;
   main_photo: ArticlePhotoType;
   'n-18'?: 0 | 1;

@@ -15,6 +15,7 @@ import {
   TYPE_TEXT_TO_SPEECH,
   ArticleContentItemType,
   TYPE_AUDIO_CONTENT,
+  TYPE_KEYWORDS,
 } from './ArticleCompositor';
 import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -23,6 +24,7 @@ import {useTheme} from '../../Theme';
 import {ArticleContent} from '../../api/Types';
 import AudioContent from './audioContent/AudioContent';
 import ArticleMainPhoto from './mainPhoto/ArticleMainPhoto';
+import ArticleKeywords from './keywords/ArticleKeywords';
 
 export type ArticleSelectableItem = {
   type: 'photo' | 'article';
@@ -116,6 +118,9 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
               </View>
             );
           }
+        }
+        case TYPE_KEYWORDS: {
+          return <ArticleKeywords keywords={data.keywords} />;
         }
         default: {
           return null;

@@ -10,6 +10,7 @@ export const TYPE_HEADER = 'content_header';
 export const TYPE_MAIN_PHOTO = 'content_main_photo';
 export const TYPE_SUMMARY = 'content_summary';
 export const TYPE_GALLERY = 'content_gallery';
+export const TYPE_KEYWORDS = 'content_keywords';
 export const TYPE_PARAGRAPH = 'content_paragraph';
 export const TYPE_VIDEO = 'content_video';
 export const TYPE_AUDIO = 'content_audio';
@@ -22,6 +23,7 @@ export type ArticleContentItemType = {
     | typeof TYPE_MAIN_PHOTO
     | typeof TYPE_SUMMARY
     | typeof TYPE_GALLERY
+    | typeof TYPE_KEYWORDS
     | typeof TYPE_PARAGRAPH
     | typeof TYPE_VIDEO
     | typeof TYPE_AUDIO
@@ -53,6 +55,9 @@ const composeDefault = (article: ArticleContentDefault) => {
   }
   if (article.article_photos) {
     data.push(getGallery(article));
+  }
+  if (article.article_keywords && article.article_keywords.length > 0) {
+    data.push(getKeywords(article));
   }
   return data;
 };
@@ -128,6 +133,15 @@ const getGallery = (article: ArticleContentDefault): ArticleContentItemType => {
   };
 };
 
+const getKeywords = (article: ArticleContentDefault): ArticleContentItemType => {
+  return {
+    type: TYPE_KEYWORDS,
+    data: {
+      keywords: article.article_keywords,
+    },
+  };
+};
+
 const getParagraphs = (article: ArticleContentDefault): ArticleContentItemType[] => {
   return article.paragraphs.map((p) => {
     return {
@@ -151,6 +165,7 @@ const getAudioContent = (article: ArticleContentMedia): ArticleContentItemType =
       about_episode: article.content,
       about_show: article.category_decription,
       image: article.category_img_info,
+      keywords: article.keywords,
     },
   };
 };
