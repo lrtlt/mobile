@@ -1,8 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {ScrollingChannels, ScreenLoader, ScreenError} from '../../components';
+import {ScrollingChannels, ScreenLoader, ScreenError, MyScrollView} from '../../components';
 import {fetchChannel} from '../../api';
-import {ScrollView} from 'react-native-gesture-handler';
 import {getSmallestDim} from '../../util/UI';
 
 import {GEMIUS_VIEW_SCRIPT_ID, VIDEO_ASPECT_RATIO} from '../../constants';
@@ -115,12 +114,12 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.screen} edges={['left', 'right']}>
-      <ScrollView style={styles.scrollContainer}>
+      <MyScrollView style={styles.scrollContainer}>
         <View style={styles.container}>
           {content}
           {tvBar}
         </View>
-      </ScrollView>
+      </MyScrollView>
     </SafeAreaView>
   );
 };

@@ -17,7 +17,7 @@ const ArticleKeywords: React.FC<Props> = ({keywords}) => {
 
   const onKeywordClickHandler = useCallback(
     (name: string, slug: string) => {
-      navigation.navigate('Slug', {name, slugUrl: slug});
+      navigation.push('Slug', {name, slugUrl: slug});
     },
     [navigation],
   );

@@ -1,8 +1,9 @@
 import React, {useCallback} from 'react';
-import {View, StyleSheet, FlatList, ListRenderItemInfo} from 'react-native';
+import {View, StyleSheet, ListRenderItemInfo} from 'react-native';
 import {OpusPlayListItem} from '../../api/Types';
 import {useTheme} from '../../Theme';
 import Divider from '../divider/Divider';
+import MyFlatList from '../MyFlatList/MyFlatList';
 import TextComponent from '../text/Text';
 
 interface OpusPaylistListProps {
@@ -35,7 +36,7 @@ const OpusPaylistList: React.FC<OpusPaylistListProps> = ({items}) => {
 
   return (
     <View style={{...styles.container, borderColor: colors.border, backgroundColor: colors.background}}>
-      <FlatList
+      <MyFlatList
         style={styles.flex}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}

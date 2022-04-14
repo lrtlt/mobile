@@ -40,3 +40,6 @@ export {default as SearchSuggestion} from './searchSuggestion/SearchSuggestion';
 export {default as BannerComponent} from './banner/Banner';
 export {default as MediaIcon} from './mediaIcon/MediaIcon';
 export {default as Logo} from './logo/Logo';
+
+export {default as MyFlatList} from './MyFlatList/MyFlatList';
+export {default as MyScrollView} from './MyScrollView/MyScrollView';

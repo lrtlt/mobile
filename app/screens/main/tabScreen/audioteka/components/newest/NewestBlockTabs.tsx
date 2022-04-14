@@ -1,7 +1,7 @@
 import React, {useMemo, useState} from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {AudiotekaNewest, AudiotekaNewestCategory} from '../../../../../../api/Types';
-import {Text, TouchableDebounce} from '../../../../../../components';
+import {MyScrollView, Text, TouchableDebounce} from '../../../../../../components';
 import {themeLight} from '../../../../../../Theme';
 
 interface Props {
@@ -29,13 +29,13 @@ const NewestBlockTabs: React.FC<Props> = ({data, onCategorySelected}) => {
   );
 
   return (
-    <ScrollView
+    <MyScrollView
       style={styles.scrollView}
       contentContainerStyle={styles.scrollViewContent}
       horizontal={true}
       showsHorizontalScrollIndicator={false}>
       <View style={styles.container}>{tabs}</View>
-    </ScrollView>
+    </MyScrollView>
   );
 };
 

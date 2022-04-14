@@ -1,7 +1,8 @@
 import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ChannelResponse} from '../../api/Types';
 import {OpusNowPlaying, ProgramItem, Text, VideoComponent} from '../../components';
 import {VIDEO_ASPECT_RATIO} from '../../constants';

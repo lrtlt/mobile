@@ -13,7 +13,7 @@ public class MainActivity extends ReactActivity {
 
   @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
     }
 
   /**
@@ -23,16 +23,6 @@ public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
     return "lrtApp";
-  }
-
-  @Override
-  protected ReactActivityDelegate createReactActivityDelegate() {
-      return new ReactActivityDelegate(this, getMainComponentName()) {
-          @Override
-          protected ReactRootView createRootView() {
-              return new RNGestureHandlerEnabledRootView(MainActivity.this);
-          }
-      };
   }
 
   // Workaround appcompat-1.1.0 bug https://issuetracker.google.com/issues/141132133

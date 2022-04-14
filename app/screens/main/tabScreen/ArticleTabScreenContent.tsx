@@ -1,9 +1,16 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useRef} from 'react';
-import {View, StyleSheet, FlatList, ListRenderItemInfo, Button, RefreshControl} from 'react-native';
+import {View, StyleSheet, ListRenderItemInfo, Button, RefreshControl} from 'react-native';
 import {Article} from '../../../../Types';
-import {ArticleRow, DefaultSectionHeader, ListLoader, ScreenLoader, Text} from '../../../components';
+import {
+  ArticleRow,
+  DefaultSectionHeader,
+  ListLoader,
+  MyFlatList,
+  ScreenLoader,
+  Text,
+} from '../../../components';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import {PagingState} from '../../../redux/reducers/articles';
 import {useTheme} from '../../../Theme';
@@ -20,7 +27,7 @@ const TabScreenContent: React.FC<Props> = ({data, showTitle, requestNextPage, re
   const {colors, strings} = useTheme();
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<MyFlatList>(null);
 
   useEffect(() => {
     //Scroll to top when it's finished refreshing
@@ -69,7 +76,7 @@ const TabScreenContent: React.FC<Props> = ({data, showTitle, requestNextPage, re
   //Handle article data
   return (
     <View style={styles.container}>
-      <FlatList
+      <MyFlatList
         ref={listRef}
         showsVerticalScrollIndicator={false}
         style={styles.container}

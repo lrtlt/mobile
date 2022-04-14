@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {View, RefreshControl, StyleSheet, StatusBar, FlatList, ListRenderItemInfo} from 'react-native';
+import {View, RefreshControl, StyleSheet, StatusBar, ListRenderItemInfo} from 'react-native';
 import {
   ArticleRow,
   ScrollingChannels,
@@ -7,6 +7,7 @@ import {
   Forecast,
   TouchableDebounce,
   BannerComponent,
+  MyFlatList,
 } from '../../../../components';
 import {fetchHome, fetchMediateka} from '../../../../redux/actions/index';
 import {ARTICLE_EXPIRE_DURATION, GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS} from '../../../../constants';
@@ -34,7 +35,7 @@ interface Props {
 const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<MyFlatList>(null);
   const state = useSelector(selectHomeScreenState(type), (l, r) => l.lastFetchTime === r.lastFetchTime);
 
   const {colors, dark} = useTheme();
@@ -163,7 +164,7 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
         backgroundColor={colors.statusBar}
       />
       <View style={styles.container}>
-        <FlatList
+        <MyFlatList
           showsVerticalScrollIndicator={false}
           style={styles.container}
           ref={listRef}

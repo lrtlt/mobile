@@ -1,10 +1,10 @@
 import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useMemo} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Article} from '../../../../../../../Types';
 import {HomeBlockTopFeedBlock} from '../../../../../../api/Types';
-import {CoverImage, Text, TouchableDebounce} from '../../../../../../components';
+import {CoverImage, MyScrollView, Text, TouchableDebounce} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import {useTheme} from '../../../../../../Theme';
 import {buildArticleImageUri, buildImageUri, getImageSizeForWidth} from '../../../../../../util/ImageUtil';
@@ -82,13 +82,13 @@ const TopFeedBlock: React.FC<TopFeedBlockProps> = ({block}) => {
 
   return (
     <View style={{...styles.container, borderColor: colors.listSeparator}}>
-      <ScrollView
+      <MyScrollView
         contentContainerStyle={styles.scrollContent}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}>
         {articleList}
-      </ScrollView>
+      </MyScrollView>
     </View>
   );
 };

@@ -1,8 +1,7 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {FlatList} from 'react-native';
 import {StyleSheet, View} from 'react-native';
 import {ProgramItemType} from '../../../api/Types';
-import {ProgramItem} from '../../../components';
+import {MyFlatList, ProgramItem} from '../../../components';
 import Divider from '../../../components/divider/Divider';
 import {PROGRAM_ITEM_HEIGHT} from '../../../components/programItem/ProgramItem';
 
@@ -12,7 +11,7 @@ interface Props {
 }
 
 const ProgramList: React.FC<Props> = ({items, scrollToIndex}) => {
-  const ref = useRef<FlatList>(null);
+  const ref = useRef<MyFlatList>(null);
 
   useEffect(() => {
     ref.current?.scrollToIndex({
@@ -45,7 +44,7 @@ const ProgramList: React.FC<Props> = ({items, scrollToIndex}) => {
   const keyExtractor = useCallback((item, i) => String(i) + String(item), []);
 
   return (
-    <FlatList
+    <MyFlatList
       style={styles.root}
       ref={ref}
       showsVerticalScrollIndicator={false}

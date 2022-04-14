@@ -140,6 +140,9 @@ android {
         versionName "2.26.0"
         multiDexEnabled true
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
     splits {
         abi {
             reset()
@@ -193,6 +196,10 @@ android {
             }
 
         }
+    }
+
+    packagingOptions {
+        exclude "META-INF/annotation-experimental_release.kotlin_module"
     }
 }
 

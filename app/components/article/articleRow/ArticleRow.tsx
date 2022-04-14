@@ -1,9 +1,9 @@
 import React, {useMemo} from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
 import ArticleComponent, {ArticleStyleType} from '../article/ArticleComponent';
-import {ScrollView} from 'react-native-gesture-handler';
 import {Article} from '../../../../Types';
 import {SavedArticle} from '../../../redux/reducers/articleStorage';
+import MyScrollView from '../../MyScrollView/MyScrollView';
 
 //TODO calculate for bigger screens.
 const articleFitCount = 2;
@@ -48,9 +48,9 @@ const ArticleRow: React.FC<Props> = (props) => {
 
   if (articleStyleType === 'scroll') {
     return (
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <MyScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.container}>{content}</View>
-      </ScrollView>
+      </MyScrollView>
     );
   } else {
     return <View style={styles.container}>{content}</View>;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {debounce} from 'lodash';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {TouchableOpacityProps} from 'react-native';
@@ -9,18 +9,20 @@ type Props = TouchableOpacityProps &
     debounceTime?: number;
   };
 
+const noOp = () => {};
+
 const TouchableDebounce: React.FC<Props> = ({debounceTime, onPress, children, ...rest}) => {
+  const debouncedOnPress = useMemo(
+    () =>
+      debounce(onPress ?? noOp, debounceTime, {
+        leading: true,
+        trailing: false,
+      }),
+    [debounceTime, onPress],
+  );
+
   return (
-    <TouchableOpacity
-      {...rest}
-      onPress={
-        onPress
-          ? debounce(onPress, debounceTime, {
-              leading: true,
-              trailing: false,
-            })
-          : undefined
-      }>
+    <TouchableOpacity {...rest} onPress={debouncedOnPress}>
       {children}
     </TouchableOpacity>
   );

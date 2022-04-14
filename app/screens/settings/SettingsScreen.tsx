@@ -3,17 +3,12 @@ import {useSelector} from 'react-redux';
 import {selectSettings} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {checkEqual} from '../../util/LodashEqualityCheck';
-import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import SettingsScreenView from './SettingsScreenView';
 
-type ScreenRouteProp = RouteProp<MainStackParamList, 'Slug'>;
-type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Slug'>;
-
 type Props = {
-  route: ScreenRouteProp;
-  navigation: ScreenNavigationProp;
+  navigation: StackNavigationProp<MainStackParamList>;
 };
 
 /**

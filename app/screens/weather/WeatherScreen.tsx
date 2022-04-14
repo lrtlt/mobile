@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
-import {Forecast, WeatherEmbed} from '../../components';
+import {View, StyleSheet} from 'react-native';
+import {Forecast, MyScrollView, WeatherEmbed} from '../../components';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useTheme} from '../../Theme';
@@ -50,7 +50,7 @@ const WeatherScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.screen} edges={['left', 'right']}>
-      <ScrollView
+      <MyScrollView
         style={styles.scrollContainer}
         contentContainerStyle={{paddingBottom: bottom}}
         nestedScrollEnabled={true}>
@@ -76,7 +76,7 @@ const WeatherScreen: React.FC<Props> = ({navigation}) => {
             />
           )}
         </View>
-      </ScrollView>
+      </MyScrollView>
       <ConfirmModal
         visible={confirmModalVisible}
         onCancel={() => setConfirmModalVisible(false)}
@@ -113,6 +113,6 @@ const styles = StyleSheet.create({
   weatherEmbed: {
     flex: 1,
     marginTop: 16,
-    marginBottom: 16,
+    marginBottom: 80,
   },
 });

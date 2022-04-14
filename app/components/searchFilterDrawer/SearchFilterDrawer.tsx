@@ -1,7 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
 import SelectableItem from './selectableItem/SelectableItem';
-import {ScrollView} from 'react-native-gesture-handler';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 import Divider from '../divider/Divider';
@@ -16,6 +15,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CheckBox from '../checkBox/CheckBox';
 import useSearch from '../../screens/search/context/useSearch';
+import MyScrollView from '../MyScrollView/MyScrollView';
 
 const SearchFilterDrawer: React.FC = () => {
   const {colors} = useTheme();
@@ -166,7 +166,7 @@ const SearchFilterDrawer: React.FC = () => {
 
   return (
     <View style={{...styles.root, backgroundColor: colors.background}}>
-      <ScrollView>
+      <MyScrollView>
         <SafeAreaView edges={['top', 'bottom']}>
           {checkBoxes}
           {typeSelection}
@@ -175,7 +175,7 @@ const SearchFilterDrawer: React.FC = () => {
           <Divider style={styles.divider} />
           {dateSelection}
         </SafeAreaView>
-      </ScrollView>
+      </MyScrollView>
     </View>
   );
 };

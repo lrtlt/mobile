@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import {useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {AudiotekaPodcasts} from '../../../../../../api/Types';
+import {MyScrollView} from '../../../../../../components';
 import BlockTitle from '../BlockTitle';
 import PodcastListItem from './PodcastListItem';
 
@@ -24,12 +24,12 @@ const PodcastsBlock: React.FC<Props> = (props) => {
   return (
     <View style={styles.container}>
       <BlockTitle style={styles.title} text={title} />
-      <ScrollView
+      <MyScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContentContainer}>
         <View style={styles.scrollContent}>{podcastComponents}</View>
-      </ScrollView>
+      </MyScrollView>
     </View>
   );
 };

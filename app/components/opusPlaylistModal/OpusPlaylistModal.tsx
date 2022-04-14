@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     borderRadius: 4,
     borderWidth: 1,
-    paddingVertical: 2,
+    paddingVertical: 4,
     paddingHorizontal: 8,
   },
   closeButtonContainer: {

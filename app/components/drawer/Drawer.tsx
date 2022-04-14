@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {selectDrawerData} from '../../redux/selectors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -16,6 +16,7 @@ import DrawerBlockPages from './components/DrawerBlockPages';
 import {useCallback} from 'react';
 import useOnDrawerClose from './useOnDrawerClose';
 import {useRef} from 'react';
+import MyScrollView from '../MyScrollView/MyScrollView';
 
 type Props = DrawerContentComponentProps;
 
@@ -24,7 +25,7 @@ const DrawerComponent: React.FC<Props> = ({navigation}) => {
   const data = useSelector(selectDrawerData, checkEqual);
   const insets = useSafeAreaInsets();
 
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<MyScrollView>(null);
 
   const Line = useCallback(() => <Divider style={{marginHorizontal: dim.drawerPadding * 2}} />, [
     dim.drawerPadding,
@@ -42,7 +43,7 @@ const DrawerComponent: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={{...styles.container, backgroundColor: colors.background}}>
-      <ScrollView
+      <MyScrollView
         ref={scrollRef}
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
@@ -69,7 +70,7 @@ const DrawerComponent: React.FC<Props> = ({navigation}) => {
         <DrawerBlockPages key="pages" navigation={navigation} pages={data.pages} />
         <Line />
         <DrawerBlockFooter />
-      </ScrollView>
+      </MyScrollView>
     </View>
   );
 };

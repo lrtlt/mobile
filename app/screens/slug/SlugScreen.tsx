@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {View, Button, ActivityIndicator, StyleSheet} from 'react-native';
-import {ArticleRow, Text} from '../../components';
+import {ArticleRow, MyFlatList, Text} from '../../components';
 import {fetchArticlesByTag} from '../../api';
 import {formatArticles} from '../../util/articleFormatters';
 import {ARTICLES_PER_PAGE_COUNT} from '../../constants';
-import {FlatList} from 'react-native-gesture-handler';
 import {useTheme} from '../../Theme';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {RouteProp} from '@react-navigation/native';
@@ -115,7 +114,7 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
     content = renderLoading();
   } else {
     content = (
-      <FlatList
+      <MyFlatList
         showsVerticalScrollIndicator={false}
         data={articles}
         windowSize={4}

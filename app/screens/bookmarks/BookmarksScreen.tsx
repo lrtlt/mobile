@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
-import {FlatList, ListRenderItemInfo, StyleSheet, View} from 'react-native';
-import {ArticleRow} from '../../components';
+import {ListRenderItemInfo, StyleSheet, View} from 'react-native';
+import {ArticleRow, MyFlatList} from '../../components';
 import {useSelector} from 'react-redux';
 import {selectBookmarksScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
@@ -41,7 +41,7 @@ const BookmarksScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <MyFlatList
         showsVerticalScrollIndicator={false}
         data={articles}
         windowSize={4}

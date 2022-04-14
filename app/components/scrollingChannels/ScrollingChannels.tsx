@@ -1,6 +1,5 @@
 import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import Channel from './channel/Channel';
 import {CHANNEL_TYPE_DEFAULT, CHANNEL_TYPE_LIVE} from '../../constants';
 import {useTheme} from '../../Theme';
@@ -9,6 +8,7 @@ import {useSelector} from 'react-redux';
 import {selectHomeChannels} from '../../redux/selectors';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 import {isLiveChannel, LiveChannel, TVChannel} from '../../api/Types';
+import MyScrollView from '../MyScrollView/MyScrollView';
 
 type LiveChannelData = {
   type: typeof CHANNEL_TYPE_LIVE;
@@ -67,12 +67,12 @@ const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
           {strings.tvProgramTitle}
         </TextComponent>
       </View>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <MyScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.scrollContent}>
           {liveItemsContent}
           {itemsContent}
         </View>
-      </ScrollView>
+      </MyScrollView>
     </View>
   );
 };

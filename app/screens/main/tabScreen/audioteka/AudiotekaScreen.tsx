@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {View, RefreshControl, StyleSheet, StatusBar, FlatList, ListRenderItemInfo} from 'react-native';
-import {ScreenLoader} from '../../../../components';
+import {View, RefreshControl, StyleSheet, StatusBar, ListRenderItemInfo} from 'react-native';
+import {MyFlatList, ScreenLoader} from '../../../../components';
 import {fetchAudioteka} from '../../../../redux/actions/index';
 import {GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,7 +24,7 @@ interface Props {
 
 const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
   const dispatch = useDispatch();
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<MyFlatList>(null);
   const {colors, dark} = useTheme();
 
   const state = useSelector(selectAudiotekaScreenState);
@@ -110,7 +110,7 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
         backgroundColor={colors.statusBar}
       />
       <View style={styles.container}>
-        <FlatList
+        <MyFlatList
           showsVerticalScrollIndicator={false}
           style={styles.container}
           ref={listRef}
