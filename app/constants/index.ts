@@ -40,3 +40,6 @@ export const VIDEO_DEFAULT_BACKGROUND_IMAGE = 'https://www.lrt.lt/images/video-n
 export const ARTICLE_TYPE_TEXT = 1;
 export const ARTICLE_TYPE_VIDEO = 6;
 export const ARTICLE_TYPE_AUDIO = 7;
+
+export const JW_PLAYER_LICENSE_ANDROID = 'CjkDZtaKTNRb7EzgcqfHM9z2k2HfGT4NhZMdVw==';
+export const JW_PLAYER_LICENSE_IOS = 'nontkUJG5FnS1spqDYgMHwdeuBj+saOJ++kmwg==';

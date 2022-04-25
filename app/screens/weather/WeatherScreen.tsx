@@ -113,6 +113,6 @@ const styles = StyleSheet.create({
   weatherEmbed: {
     flex: 1,
     marginTop: 16,
-    marginBottom: 80,
+    marginBottom: 100,
   },
 });

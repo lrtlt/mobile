@@ -1,9 +1,13 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {StatusBar, Platform, StyleSheet, ViewStyle} from 'react-native';
 import {View} from 'react-native';
-import JWPlayer, {PlaylistItem} from 'react-native-jw-media-player';
+import JWPlayer, {Config, PlaylistItem} from 'react-native-jw-media-player';
 import Gemius from 'react-native-gemius-plugin';
-import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
+import {
+  JW_PLAYER_LICENSE_ANDROID,
+  JW_PLAYER_LICENSE_IOS,
+  VIDEO_DEFAULT_BACKGROUND_IMAGE,
+} from '../../constants';
 
 interface Props {
   style?: ViewStyle;
@@ -13,23 +17,22 @@ interface Props {
   backgroundImage?: string;
   autoStart: boolean;
   startTime?: number;
-  onError?: () => void;
 }
 
-const MAX_ERROR_COUNT = 5;
-const ERROR_DELAY = 400;
-
-const JWPlayerNative: React.FC<Props> = (props) => {
-  const {style, streamUri, mediaId, title, backgroundImage, autoStart, startTime} = props;
-
-  const errorCountRef = useRef<number>(0);
+const JWPlayerNative: React.FC<Props> = ({
+  style,
+  streamUri,
+  mediaId,
+  title,
+  backgroundImage,
+  autoStart = true,
+  startTime,
+}) => {
   const playerRef = useRef<JWPlayer>(null);
-  const player = playerRef.current;
 
   useEffect(() => {
     return () => {
       //Cleanup
-
       /* This fixes the bug on android where user presses back button
        * while video is in fullscreen and status bar does not show up */
       if (Platform.OS === 'android') {
@@ -43,44 +46,43 @@ const JWPlayerNative: React.FC<Props> = (props) => {
 
   const sendPlay = useCallback(() => {
     console.log('JWPlayer event: play');
-    errorCountRef.current = 0;
-    player?.position().then((pos) => {
+    playerRef.current?.position().then((pos) => {
       Gemius.sendPlay(mediaId, pos ? pos : 0);
       console.log('play sent');
     });
-  }, [player, mediaId]);
+  }, [mediaId]);
 
   const sendPause = useCallback(() => {
     console.log('JWPlayer event: pause');
-    player?.position().then((pos) => {
+    playerRef.current?.position().then((pos) => {
       Gemius.sendPause(mediaId, pos ? pos : 0);
       console.log('pause sent');
     });
-  }, [player, mediaId]);
+  }, [mediaId]);
 
   const sendClose = useCallback(() => {
     console.log('JWPlayer event: close');
-    player?.position().then((pos) => {
+    playerRef.current?.position().then((pos) => {
       Gemius.sendClose(mediaId, pos ? pos : 0);
       console.log('close sent');
     });
-  }, [player, mediaId]);
+  }, [mediaId]);
 
   const sendBuffer = useCallback(() => {
     console.log('JWPlayer event: buffering');
-    player?.position().then((pos) => {
+    playerRef.current?.position().then((pos) => {
       Gemius.sendBuffer(mediaId, pos ? pos : 0);
       console.log('buffering sent');
     });
-  }, [player, mediaId]);
+  }, [mediaId]);
 
   const sendComplete = useCallback(() => {
     console.log('JWPlayer event: complete');
-    player?.position().then((pos) => {
+    playerRef.current?.position().then((pos) => {
       Gemius.sendComplete(mediaId, pos ? pos : 0);
       console.log('complete sent');
     });
-  }, [player, mediaId]);
+  }, [mediaId]);
 
   const sendSeek = useCallback(
     (position) => {
@@ -91,47 +93,77 @@ const JWPlayerNative: React.FC<Props> = (props) => {
     [mediaId],
   );
 
-  const onError = useCallback(
-    (playerError: {error: string}) => {
-      console.log('Player error:', playerError);
-      setTimeout(() => {
-        if (props.onError) {
-          props.onError();
-        }
-        if (errorCountRef.current < MAX_ERROR_COUNT) {
-          errorCountRef.current = errorCountRef.current + 1;
-        }
-      }, errorCountRef.current * ERROR_DELAY);
-    },
-    [props],
-  );
+  const onError = useCallback((playerError: {error: string}) => {
+    console.warn('Player error:', playerError);
+    setTimeout(() => {
+      if (playerRef.current) {
+        console.log('Force updating player...');
+        playerRef.current?.forceUpdate(() => console.log('Update complete'));
+      }
+    }, 400);
+  }, []);
 
-  const playlistItem: PlaylistItem = useMemo(() => {
-    return {
-      title: title,
-      mediaId: mediaId,
-      image: backgroundImage ?? VIDEO_DEFAULT_BACKGROUND_IMAGE,
-      desc: undefined,
-      time: 0,
+  const config: Config = useMemo(() => {
+    const _playlistItem: PlaylistItem = {
+      title: title || '',
+      mediaId: mediaId || '-1',
+      image: backgroundImage || VIDEO_DEFAULT_BACKGROUND_IMAGE,
       file: streamUri,
       autostart: autoStart,
-      controls: true,
-      repeat: false,
-      displayDescription: false,
-      startTime: startTime ? startTime : undefined,
-      displayTitle: false,
-      backgroundAudioEnabled: true,
+      startTime: startTime || 0,
     };
-  }, [title, mediaId, backgroundImage, streamUri, autoStart, startTime]);
+
+    const _cfg: Config = {
+      license:
+        Platform.select({
+          ios: JW_PLAYER_LICENSE_IOS,
+          android: JW_PLAYER_LICENSE_ANDROID,
+        }) ?? '',
+      controls: true,
+      viewOnly: false,
+      repeat: false,
+      playlist: [_playlistItem],
+      interfaceBehavior: 'normal',
+      autostart: autoStart,
+      backgroundAudioEnabled: true,
+      enableLockScreenControls: true,
+
+      //Fullscreen logic
+      landscapeOnFullScreen: false,
+      fullScreenOnLandscape: false,
+      exitFullScreenOnPortrait: false,
+      portraitOnExitFullScreen: false,
+
+      //Styling
+      // styling: {
+      //   displayTitle: true,
+      //   displayDescription: false,
+      //   menuStyle: {
+      //     backgroundColor: '000000',
+      //     fontColor: 'FFFFFF',
+      //   },
+      //   colors: {
+      //     backgroundColor: '000000',
+      //     buttons: 'FFFFFF',
+      //     fontColor: 'FFFFFF',
+      //     timeslider: {
+      //       progress: 'FFFFFF',
+      //       rail: 'AAAAAA',
+      //       thumb: 'FFFFFF',
+      //     },
+      //   },
+      // },
+    };
+    return _cfg;
+  }, [autoStart, backgroundImage, mediaId, startTime, streamUri, title]);
 
   return (
     <View style={[styles.htmlContainer, style]}>
       <JWPlayer
         ref={playerRef}
         style={styles.flex}
-        playlistItem={playlistItem}
-        nativeFullScreen={true}
-        nextUpDisplay={false}
+        config={config}
+        controls={true}
         onPlay={sendPlay}
         onPause={sendPause}
         onSeeked={useCallback(
@@ -184,10 +216,6 @@ const JWPlayerNative: React.FC<Props> = (props) => {
 };
 
 export default JWPlayerNative;
-
-JWPlayerNative.defaultProps = {
-  autoStart: true,
-};
 
 const styles = StyleSheet.create({
   flex: {

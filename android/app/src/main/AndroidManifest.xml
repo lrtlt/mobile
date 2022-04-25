@@ -13,10 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
 
-        <meta-data
-            android:name="JW_LICENSE_KEY"
-            android:value="CjkDZtaKTNRb7EzgcqfHM9z2k2HfGT4NhZMdVw==" />
-
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
