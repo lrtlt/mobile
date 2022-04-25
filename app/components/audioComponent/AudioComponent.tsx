@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
-import {View, useWindowDimensions, ViewStyle} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import JWPlayerNative from '../videoComponent/JWPlayerNative';
-import {getImageSizeForWidth, buildArticleImageUri} from '../../util/ImageUtil';
+import {buildArticleImageUri, IMG_SIZE_L} from '../../util/ImageUtil';
 import Gemius from 'react-native-gemius-plugin';
 import {ArticlePhotoType} from '../../api/Types';
 
@@ -28,8 +28,6 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
     Gemius.setProgramData(mediaId, title, 0, false);
   }, [mediaId, title]);
 
-  const windowWidth = useWindowDimensions().width;
-
   return (
     <View style={style}>
       <JWPlayerNative
@@ -38,9 +36,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
         title={title}
         autoStart={autoStart}
         startTime={startTime}
-        backgroundImage={
-          cover ? buildArticleImageUri(getImageSizeForWidth(windowWidth), cover.path) : undefined
-        }
+        backgroundImage={cover ? buildArticleImageUri(IMG_SIZE_L, cover.path) : undefined}
         {...restProps}
       />
     </View>

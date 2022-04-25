@@ -135,7 +135,7 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
           return <DailyQuestionComponent block={block} />;
         }
         default: {
-          console.warn('Uknown list item type: ' + val.item.type);
+          console.warn('Unknown list item type: ' + val.item.type);
           return <View />;
         }
       }
