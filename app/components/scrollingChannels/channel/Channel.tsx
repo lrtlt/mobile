@@ -9,9 +9,10 @@ import {buildArticleImageUri, IMG_SIZE_L} from '../../../util/ImageUtil';
 
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import TextComponent from '../../text/Text';
-import {useTheme} from '../../../Theme';
+import {themeLight, useTheme} from '../../../Theme';
 import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 import {isLiveChannel, LiveChannel, TVChannel} from '../../../api/Types';
+import {ThemeProvider} from '@react-navigation/native';
 
 interface Props {
   data: TVChannel | LiveChannel;
@@ -22,7 +23,7 @@ const Channel: React.FC<Props> = ({data, onPress}) => {
   const {colors} = useTheme();
 
   const colorsSet = getColorsForChannel(data.channel);
-  const channelIcon = getIconForChannel(data.channel, 32);
+  const channelIcon = getIconForChannel(data.channel, {width: 56, height: 40});
   const coverUrl = isLiveChannel(data) ? buildArticleImageUri(IMG_SIZE_L, data.photo) : data.cover_url;
 
   const programTimeComponent = isLiveChannel(data) ? (
@@ -79,7 +80,9 @@ const Channel: React.FC<Props> = ({data, onPress}) => {
           <View style={styles.coverContainer}>
             <CoverImage style={styles.cover} source={{uri: coverUrl}} />
             <View style={styles.coverContentContainer}>
-              <View style={styles.channelImageContainer}>{channelIcon}</View>
+              <View style={styles.channelImageContainer}>
+                <ThemeProvider value={themeLight}>{channelIcon}</ThemeProvider>
+              </View>
               <View style={styles.mediaIndicatorContainer}>
                 <MediaIndicator size="small" />
               </View>

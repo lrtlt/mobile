@@ -8,7 +8,7 @@ import {OpusNowPlaying, ProgramItem, Text, VideoComponent} from '../../component
 import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
-import {getIconForChannel, getSmallestDim} from '../../util/UI';
+import {getSmallestDim} from '../../util/UI';
 
 /** Count of visible program items below player */
 const PROGRAM_ITEMS_VISIBLE = 2;
@@ -68,7 +68,6 @@ const ChannelComponent: React.FC<Props> = ({channelData}) => {
         />
       </View>
       <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>
-        <View style={styles.channelIconHolder}>{getIconForChannel(channel_info.channel, 40)}</View>
         {programComponent}
         <TouchableOpacity onPress={onProgramPressHandler}>
           <Text style={{...styles.fullProgramText, backgroundColor: colors.background}}>
@@ -102,7 +101,8 @@ const styles = StyleSheet.create({
     maxHeight: getSmallestDim() - 62,
   },
   channelIconHolder: {
-    marginVertical: 8,
+    marginTop: 12,
+    marginBottom: 16,
   },
   fullProgramText: {
     width: '100%',
@@ -110,7 +110,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 16,
     marginTop: 8,
-
     fontSize: 16,
   },
 });

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Dimensions} from 'react-native';
+import {Logo} from '../components';
 
 import {
   ChannelLRadioIcon,
@@ -24,7 +25,10 @@ import {
 
 import {channelColors} from '../Theme';
 
-const DEFAULT_CHANNEL_ICON_SIZE = 25;
+export type IconSize = {
+  width?: number;
+  height?: number;
+};
 
 export const ORIENTATION_PORTRAIT = 'portrait';
 export const ORIENTATION_LANDSCAPE = 'landscape';
@@ -86,33 +90,33 @@ export const getColorsForChannelById = (channel_id?: number) => {
   }
 };
 
-export const getIconForChannel = (channel: string, size = DEFAULT_CHANNEL_ICON_SIZE) => {
+export const getIconForChannel = (channel: string, size?: IconSize) => {
   switch (channel.toLowerCase()) {
     case 'ltv1': {
-      return <ChannelLRTHDIcon size={size} />;
+      return <ChannelLRTHDIcon {...size} />;
     }
     case 'ltv2': {
-      return <ChannelLRTPliusIcon size={size} />;
+      return <ChannelLRTPliusIcon {...size} />;
     }
     case 'world': {
-      return <ChannelLRTWorldIcon size={size} />;
+      return <ChannelLRTWorldIcon {...size} />;
     }
     case 'lr': {
-      return <ChannelLRadioIcon size={size} />;
+      return <ChannelLRadioIcon {...size} />;
     }
     case 'klasika': {
-      return <ChannelClassicIcon size={size} />;
+      return <ChannelClassicIcon {...size} />;
     }
     case 'opus': {
-      return <ChannelOpusIcon size={size} />;
+      return <ChannelOpusIcon {...size} />;
     }
     default: {
-      return <LogoLight width={size} height={size} />;
+      return <LogoLight {...size} />;
     }
   }
 };
 
-export const getIconForChannelById = (channelId: number, size = DEFAULT_CHANNEL_ICON_SIZE) => {
+export const getIconForChannelById = (channelId: number, size?: IconSize) => {
   switch (channelId) {
     case 1:
       return getIconForChannel('LTV1', size);
@@ -127,7 +131,7 @@ export const getIconForChannelById = (channelId: number, size = DEFAULT_CHANNEL_
     case 6:
       return getIconForChannel('Opus', size);
     default:
-      return <LogoLight width={size} height={size} />;
+      return <Logo {...size} useOnlyInternal />;
   }
 };
 

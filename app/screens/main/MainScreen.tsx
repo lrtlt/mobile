@@ -100,7 +100,7 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
             EventRegister.emit(EVENT_LOGO_PRESS, null);
           }}>
           <View style={styles.logoContainer}>
-            <Logo size={dim.appBarIconSize + 10} />
+            <Logo height={dim.appBarIconSize + 6} />
           </View>
         </BorderlessButton>
       ),

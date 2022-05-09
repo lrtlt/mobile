@@ -1,6 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
-import {Text} from '../../../components';
 import {TabView, TabBar} from 'react-native-tab-view';
 import {getIconForChannelById} from '../../../util/UI';
 import {useTheme} from '../../../Theme';
@@ -38,10 +37,7 @@ const TabsScreen: React.FC<Props> = ({program}) => {
     const {channelId, title} = route;
     return (
       <View key={`${channelId}-${title}`} style={styles.centerContainer}>
-        {getIconForChannelById(channelId)}
-        <Text style={styles.tabLable} scalingEnabled={false} type="secondary">
-          {title}
-        </Text>
+        {getIconForChannelById(channelId, {width: 64})}
       </View>
     );
   }, []);

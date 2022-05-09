@@ -7,18 +7,24 @@ import {SvgCss} from 'react-native-svg';
 import {LogoDark, LogoLight} from '../svg';
 
 interface Props {
-  size: number;
+  width?: number;
+  height?: number;
+  useOnlyInternal?: boolean;
 }
 
-const LogoComponent: React.FC<Props> = ({size = 48}) => {
+const LogoComponent: React.FC<Props> = ({width = 60, height = 32, useOnlyInternal = false}) => {
   const {isDarkMode} = useSettings();
 
   const logo = useSelector(selectLogo);
-  if (logo?.svg) {
-    return <SvgCss xml={logo?.svg} width={size} height={size} />;
+  if (logo?.svg && !useOnlyInternal) {
+    return <SvgCss xml={logo?.svg} width={width} height={height} />;
   }
 
-  return isDarkMode ? <LogoDark width={size} height={size} /> : <LogoLight width={size} height={size} />;
+  return isDarkMode ? (
+    <LogoDark width={width} height={height} />
+  ) : (
+    <LogoLight width={width} height={height} />
+  );
 };
 
 export default React.memo(LogoComponent);

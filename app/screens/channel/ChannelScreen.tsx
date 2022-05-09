@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {ScrollingChannels, ScreenLoader, ScreenError, MyScrollView} from '../../components';
 import {fetchChannel} from '../../api';
-import {getSmallestDim} from '../../util/UI';
+import {getIconForChannelById, getSmallestDim} from '../../util/UI';
 
 import {GEMIUS_VIEW_SCRIPT_ID, VIDEO_ASPECT_RATIO} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
@@ -46,9 +46,14 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: strings.channelScreenTitle,
+      headerTitleAlign: 'center',
+      headerTitle: () => {
+        return (
+          <View style={styles.logoContainer}>{getIconForChannelById(selectedChannel, {height: 26})}</View>
+        );
+      },
     });
-  }, [navigation, strings.channelScreenTitle]);
+  }, [navigation, selectedChannel, strings.channelScreenTitle]);
 
   useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
@@ -142,5 +147,12 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: VIDEO_ASPECT_RATIO,
     maxHeight: getSmallestDim() - 62,
+  },
+  logoContainer: {
+    paddingStart: 12,
+    paddingEnd: 12,
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

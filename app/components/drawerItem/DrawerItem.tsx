@@ -5,7 +5,7 @@ import TextComponent from '../text/Text';
 
 interface Props {
   iconComponent?: React.ReactNode;
-  text: string;
+  text?: string;
   onPress: () => void;
 }
 const DrawerItem: React.FC<Props> = (props) => {
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'flex-start',
     padding: 10,
     marginStart: 10,
   },
