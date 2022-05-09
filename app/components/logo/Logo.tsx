@@ -10,7 +10,7 @@ interface Props {
   size: number;
 }
 
-const LogoComponent: React.FC<Props> = ({size}) => {
+const LogoComponent: React.FC<Props> = ({size = 48}) => {
   const {isDarkMode} = useSettings();
 
   const logo = useSelector(selectLogo);
@@ -18,7 +18,7 @@ const LogoComponent: React.FC<Props> = ({size}) => {
     return <SvgCss xml={logo?.svg} width={size} height={size} />;
   }
 
-  return isDarkMode ? <LogoDark size={size} /> : <LogoLight size={size} />;
+  return isDarkMode ? <LogoDark width={size} height={size} /> : <LogoLight width={size} height={size} />;
 };
 
 export default React.memo(LogoComponent);

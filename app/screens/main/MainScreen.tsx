@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, Dimensions, StyleSheet, Platform} from 'react-native';
+import {View, Dimensions, StyleSheet} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
 import {ActionButton, Logo} from '../../components';
 import {IconDrawerMenu, IconSettings} from '../../components/svg';
@@ -100,13 +100,7 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
             EventRegister.emit(EVENT_LOGO_PRESS, null);
           }}>
           <View style={styles.logoContainer}>
-            <Logo
-              size={
-                Platform.select({
-                  ios: dim.appBarIconSize + 4,
-                }) ?? dim.appBarIconSize + 6
-              }
-            />
+            <Logo size={dim.appBarIconSize + 10} />
           </View>
         </BorderlessButton>
       ),

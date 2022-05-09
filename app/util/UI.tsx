@@ -8,7 +8,6 @@ import {
   ChannelLRTHDIcon,
   ChannelLRTWorldIcon,
   ChannelOpusIcon,
-  LogoLight,
   IconWeatherCloud,
   IconWeatherCloudy,
   IconWeatherDayCloudy,
@@ -20,6 +19,7 @@ import {
   IconWeatherSnow,
   IconWeatherSnowWind,
   IconWeatherSprinkle,
+  LogoLight,
 } from '../components/svg';
 
 import {channelColors} from '../Theme';
@@ -107,7 +107,7 @@ export const getIconForChannel = (channel: string, size = DEFAULT_CHANNEL_ICON_S
       return <ChannelOpusIcon size={size} />;
     }
     default: {
-      return <LogoLight size={size} />;
+      return <LogoLight width={size} height={size} />;
     }
   }
 };
@@ -127,7 +127,7 @@ export const getIconForChannelById = (channelId: number, size = DEFAULT_CHANNEL_
     case 6:
       return getIconForChannel('Opus', size);
     default:
-      return <LogoLight size={size} />;
+      return <LogoLight width={size} height={size} />;
   }
 };
 

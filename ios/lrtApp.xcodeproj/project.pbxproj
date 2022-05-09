@@ -23,11 +23,11 @@
 		5DE5469DBE4D4DF687A0D573 /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A436044A3C041F281F7BF8B /* SourceSansPro-SemiBold.ttf */; };
 		6E77BFFD1A0446E7AF06C197 /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A3C40A1A26044BDA6A6599C /* SourceSansPro-Regular.ttf */; };
 		6F35ABBC254AC514009EE240 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */; };
-		6F60A1922549D330005E14EA /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F60A1912549D330005E14EA /* logo.png */; };
 		6FB5D222254AAF1D00E1295A /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FB5D221254AAF1D00E1295A /* NotificationService.m */; };
 		6FB5D226254AAF1D00E1295A /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6FB5D21E254AAF1D00E1295A /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		9BEA4358EA6A8247F03180FB /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F9D7CE826F3A90100CFC594 /* libPods-OneSignalNotificationServiceExtension.a */; };
+		9C0CA4ED28291CF100E1601F /* logo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C0CA4EC28291CF100E1601F /* logo2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,7 +89,6 @@
 		62350164273C4F2A885BD709 /* SourceSansPro-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-LightItalic.ttf"; path = "../assets/font/SourceSansPro-LightItalic.ttf"; sourceTree = "<group>"; };
 		6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6F60A1252549BE0B005E14EA /* lrtApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = lrtApp.entitlements; path = lrtApp/lrtApp.entitlements; sourceTree = "<group>"; };
-		6F60A1912549D330005E14EA /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = lrtApp/logo.png; sourceTree = "<group>"; };
 		6F9D7CE826F3A90100CFC594 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FB5D21E254AAF1D00E1295A /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FB5D220254AAF1D00E1295A /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
@@ -101,6 +100,7 @@
 		8F73005EC221D36C68379F41 /* Pods-lrtApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp.debug.xcconfig"; path = "Target Support Files/Pods-lrtApp/Pods-lrtApp.debug.xcconfig"; sourceTree = "<group>"; };
 		945979D07578987EF3B629E6 /* Pods-lrtApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp.release.xcconfig"; path = "Target Support Files/Pods-lrtApp/Pods-lrtApp.release.xcconfig"; sourceTree = "<group>"; };
 		9B771B1D8B41E7248FE0D24C /* libPods-lrtApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lrtApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C0CA4EC28291CF100E1601F /* logo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo2.png; path = lrtApp/logo2.png; sourceTree = "<group>"; };
 		9FDEE75E69F5A37153D09DE9 /* libPods-lrtApp-lrtAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lrtApp-lrtAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C73D9392908EBD3453D6CEA5 /* Pods-lrtApp-lrtAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp-lrtAppTests.debug.xcconfig"; path = "Target Support Files/Pods-lrtApp-lrtAppTests/Pods-lrtApp-lrtAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -170,10 +170,10 @@
 		13B07FAE1A68108700A75B9A /* lrtApp */ = {
 			isa = PBXGroup;
 			children = (
+				9C0CA4EC28291CF100E1601F /* logo2.png */,
 				6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */,
 				6F60A1252549BE0B005E14EA /* lrtApp.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				6F60A1912549D330005E14EA /* logo.png */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -443,7 +443,7 @@
 				6F35ABBC254AC514009EE240 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				30DF8C0F1DC54C25996EA68C /* PlayfairDisplay-Regular.ttf in Resources */,
-				6F60A1922549D330005E14EA /* logo.png in Resources */,
+				9C0CA4ED28291CF100E1601F /* logo2.png in Resources */,
 				20564F7D1ABD4A148FCB3E78 /* SourceSansPro-LightItalic.ttf in Resources */,
 				6E77BFFD1A0446E7AF06C197 /* SourceSansPro-Regular.ttf in Resources */,
 				5DE5469DBE4D4DF687A0D573 /* SourceSansPro-SemiBold.ttf in Resources */,
