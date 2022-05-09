@@ -22,8 +22,12 @@ const OpusNowComponent: React.FC = () => {
       .doc('opus')
       .onSnapshot((documentSnapshot) => {
         if (documentSnapshot) {
-          const {info} = documentSnapshot.data();
-          setCurrentSong(info);
+          try {
+            const {info} = documentSnapshot.data();
+            setCurrentSong(info);
+          } catch (e) {
+            console.log(e);
+          }
         } else {
           console.warn('documentSnapshot is null from firestore');
         }
