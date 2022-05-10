@@ -7,7 +7,7 @@ import {buildArticleImageUri, IMG_SIZE_L} from '../../../util/ImageUtil';
 
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import TextComponent from '../../text/Text';
-import {themeLight, useTheme} from '../../../Theme';
+import {channelColors, themeLight, useTheme} from '../../../Theme';
 import {isLiveChannel, LiveChannel, TVChannel} from '../../../api/Types';
 import {ThemeProvider} from '@react-navigation/native';
 import {IconPlay} from '../../svg';
@@ -20,7 +20,7 @@ interface Props {
 const Channel: React.FC<Props> = ({data, onPress}) => {
   const {colors, dark} = useTheme();
 
-  const colorsSet = getColorsForChannel(data.channel);
+  const colorsSet = getColorsForChannel(data.channel, channelColors.color_set_lrtLT);
   const coverUrl = isLiveChannel(data) ? buildArticleImageUri(IMG_SIZE_L, data.photo) : data.cover_url;
 
   const bottomBarContainer = (

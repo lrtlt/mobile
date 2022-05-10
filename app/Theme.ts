@@ -94,13 +94,14 @@ export const strings: Dictionary = {
 //#endregion
 
 //#region ChannelColors
-type ChannelColor = {
+export type ChannelColor = {
   primary: string;
   secondary: string;
 };
 
 type ChannelColorScheme = {
   color_set_default: ChannelColor;
+  color_set_lrtLT: ChannelColor;
   color_set_lrtHD: ChannelColor;
   color_set_lrtPlius: ChannelColor;
   color_set_lrt_world: ChannelColor;
@@ -116,7 +117,8 @@ export const channelColors: ChannelColorScheme = {
   color_set_l_radio: {primary: '#EA8D7A', secondary: '#D92053'},
   color_set_classic: {primary: '#C47FAA', secondary: '#441D56'},
   color_set_opus: {primary: '#F2B12E', secondary: '#E7792B'},
-  color_set_default: {primary: '#545a94', secondary: '#2f357d'},
+  color_set_lrtLT: {primary: '#545a94', secondary: '#2f357d'},
+  color_set_default: {primary: '#BADAFB', secondary: '#93BDE7'},
 };
 //#endregion
 

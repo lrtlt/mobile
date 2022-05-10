@@ -23,7 +23,7 @@ import {
   LogoLight,
 } from '../components/svg';
 
-import {channelColors} from '../Theme';
+import {ChannelColor, channelColors} from '../Theme';
 
 export type IconSize = {
   width?: number;
@@ -38,7 +38,7 @@ export const getSmallestDim = () => {
   return Math.min(dim.width, dim.height);
 };
 
-export const getColorsForChannel = (channel: string) => {
+export const getColorsForChannel = (channel: string, fallback?: ChannelColor) => {
   switch (channel) {
     case 'LTV1': {
       return channelColors.color_set_lrtHD;
@@ -59,12 +59,12 @@ export const getColorsForChannel = (channel: string) => {
       return channelColors.color_set_opus;
     }
     default: {
-      return channelColors.color_set_default;
+      return fallback || channelColors.color_set_default;
     }
   }
 };
 
-export const getColorsForChannelById = (channel_id?: number) => {
+export const getColorsForChannelById = (channel_id?: number, fallback?: ChannelColor) => {
   switch (channel_id) {
     case 1: {
       return channelColors.color_set_lrtHD;
@@ -85,7 +85,7 @@ export const getColorsForChannelById = (channel_id?: number) => {
       return channelColors.color_set_opus;
     }
     default: {
-      return channelColors.color_set_default;
+      return fallback || channelColors.color_set_default;
     }
   }
 };
