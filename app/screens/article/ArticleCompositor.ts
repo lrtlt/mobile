@@ -76,6 +76,9 @@ const composeMedia = (article: ArticleContentMedia) => {
       data.push(getContentForMedia(article));
     }
   }
+  if (article.keywords && article.keywords.length > 0) {
+    data.push(getKeywords(article));
+  }
 
   return data;
 };
@@ -133,13 +136,22 @@ const getGallery = (article: ArticleContentDefault): ArticleContentItemType => {
   };
 };
 
-const getKeywords = (article: ArticleContentDefault): ArticleContentItemType => {
-  return {
-    type: TYPE_KEYWORDS,
-    data: {
-      keywords: article.article_keywords,
-    },
-  };
+const getKeywords = (article: ArticleContentDefault | ArticleContentMedia): ArticleContentItemType => {
+  if (isMediaArticle(article)) {
+    return {
+      type: TYPE_KEYWORDS,
+      data: {
+        keywords: article.keywords,
+      },
+    };
+  } else {
+    return {
+      type: TYPE_KEYWORDS,
+      data: {
+        keywords: article.article_keywords,
+      },
+    };
+  }
 };
 
 const getParagraphs = (article: ArticleContentDefault): ArticleContentItemType[] => {
@@ -165,7 +177,6 @@ const getAudioContent = (article: ArticleContentMedia): ArticleContentItemType =
       about_episode: article.content,
       about_show: article.category_decription,
       image: article.category_img_info,
-      keywords: article.keywords,
     },
   };
 };
