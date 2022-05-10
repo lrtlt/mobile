@@ -9,6 +9,10 @@ import {selectHomeChannels} from '../../redux/selectors';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 import {isLiveChannel, LiveChannel, TVChannel} from '../../api/Types';
 import MyScrollView from '../MyScrollView/MyScrollView';
+import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
+import {useNavigation} from '@react-navigation/native';
+import {MainStackParamList} from '../../navigation/MainStack';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 type LiveChannelData = {
   type: typeof CHANNEL_TYPE_LIVE;
@@ -27,6 +31,8 @@ interface Props {
 }
 
 const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
+
   const {colors, strings} = useTheme();
   const channels = useSelector(selectHomeChannels, checkEqual);
 
@@ -41,12 +47,15 @@ const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
     [onChannelPress],
   );
 
+  const onProgramPressHandler = useCallback(() => {
+    navigation.navigate('Program');
+  }, [navigation]);
+
   if (!channels || channels.items.length === 0) {
     return <View />;
   }
 
   const {items, live_items} = channels;
-  //live_items = mockLiveChannel;
 
   const liveItemsContent =
     live_items &&
@@ -66,6 +75,11 @@ const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
         <TextComponent style={styles.leftText} fontFamily="SourceSansPro-SemiBold">
           {strings.tvProgramTitle}
         </TextComponent>
+        <TouchableDebounce onPress={onProgramPressHandler}>
+          <TextComponent style={{...styles.rightText, color: colors.primary}}>
+            {strings.tvProgram}
+          </TextComponent>
+        </TouchableDebounce>
       </View>
       <MyScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.scrollContent}>
@@ -102,6 +116,13 @@ const styles = StyleSheet.create({
   leftText: {
     fontSize: 18,
     textTransform: 'uppercase',
+    margin: 8,
+    padding: 8,
+  },
+  rightText: {
+    fontSize: 15,
+    textTransform: 'capitalize',
+    padding: 8,
     margin: 8,
   },
 });

@@ -90,6 +90,9 @@ export type LiveChannel = {
   channel: string;
   title: string;
   get_streams_url: string;
+  proc: string;
+  time_start: string;
+  time_end: string;
   href: string;
   stream_embed: string;
   photo: string;

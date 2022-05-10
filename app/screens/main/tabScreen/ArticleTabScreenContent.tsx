@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useRef} from 'react';
 import {View, StyleSheet, ListRenderItemInfo, Button, RefreshControl} from 'react-native';
+import {EventRegister} from 'react-native-event-listeners';
 import {Article} from '../../../../Types';
 import {
   ArticleRow,
@@ -10,7 +11,10 @@ import {
   MyFlatList,
   ScreenLoader,
   Text,
+  TouchableDebounce,
 } from '../../../components';
+import {IconArrowLeft} from '../../../components/svg';
+import {EVENT_SELECT_CATEGORY_INDEX} from '../../../constants';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import {PagingState} from '../../../redux/reducers/articles';
 import {useTheme} from '../../../Theme';
@@ -56,6 +60,22 @@ const TabScreenContent: React.FC<Props> = ({data, showTitle, requestNextPage, re
     }
   }, [isFetching, requestNextPage]);
 
+  const renderTitle = useCallback(() => {
+    return (
+      <View>
+        <TouchableDebounce
+          style={styles.backContainer}
+          onPress={() => {
+            EventRegister.emit(EVENT_SELECT_CATEGORY_INDEX, {index: 0});
+          }}>
+          <IconArrowLeft color={colors.primary} size={16} />
+          <Text style={{color: colors.primary, ...styles.backText}}>Atgal į pagrindinį</Text>
+        </TouchableDebounce>
+        <DefaultSectionHeader title={title} />
+      </View>
+    );
+  }, [colors.primary, title]);
+
   //Handle error state
   if (isError === true) {
     return (
@@ -81,7 +101,7 @@ const TabScreenContent: React.FC<Props> = ({data, showTitle, requestNextPage, re
         showsVerticalScrollIndicator={false}
         style={styles.container}
         data={articles}
-        ListHeaderComponent={showTitle ? <DefaultSectionHeader title={title} /> : null}
+        ListHeaderComponent={showTitle ? renderTitle() : null}
         windowSize={4}
         onEndReachedThreshold={0.3}
         ListFooterComponent={isFetching ? <ListLoader /> : null}
@@ -109,5 +129,14 @@ const styles = StyleSheet.create({
   errorText: {
     marginBottom: 20,
     fontSize: 20,
+  },
+  backContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 12,
+    marginTop: 24,
+  },
+  backText: {
+    marginLeft: 6,
   },
 });

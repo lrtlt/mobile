@@ -33,6 +33,7 @@ export {default as Icon404} from './ic_404';
 export {default as IconPlay} from './ic_play';
 export {default as IconPhotoCamera} from './ic_photo_camera';
 export {default as IconScreenError} from './ic_screen_error';
+export {default as IconArrowLeft} from './ic_arrow_left';
 export {default as IconCalendar} from './ic_calendar';
 export {default as IconFilter} from './ic_filter';
 export {default as IconHome} from './ic_home';

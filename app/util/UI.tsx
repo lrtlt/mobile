@@ -59,7 +59,7 @@ export const getColorsForChannel = (channel: string) => {
       return channelColors.color_set_opus;
     }
     default: {
-      return channelColors.color_set_lrtHD;
+      return channelColors.color_set_default;
     }
   }
 };
@@ -85,7 +85,7 @@ export const getColorsForChannelById = (channel_id?: number) => {
       return channelColors.color_set_opus;
     }
     default: {
-      return channelColors.color_set_lrtHD;
+      return channelColors.color_set_default;
     }
   }
 };

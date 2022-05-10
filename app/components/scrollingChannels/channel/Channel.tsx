@@ -2,17 +2,15 @@ import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
 import CoverImage from '../../coverImage/CoverImage';
 import LiveBadge from '../../liveBadge/LiveBadge';
-import IC_CAMERA from '../../svg/ic_camera';
-import IC_MICROPHONE from '../../svg/ic_microphone';
 import {getIconForChannel, getColorsForChannel} from '../../../util/UI';
 import {buildArticleImageUri, IMG_SIZE_L} from '../../../util/ImageUtil';
 
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import TextComponent from '../../text/Text';
 import {themeLight, useTheme} from '../../../Theme';
-import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 import {isLiveChannel, LiveChannel, TVChannel} from '../../../api/Types';
 import {ThemeProvider} from '@react-navigation/native';
+import {IconPlay} from '../../svg';
 
 interface Props {
   data: TVChannel | LiveChannel;
@@ -20,48 +18,24 @@ interface Props {
 }
 
 const Channel: React.FC<Props> = ({data, onPress}) => {
-  const {colors} = useTheme();
+  const {colors, dark} = useTheme();
 
   const colorsSet = getColorsForChannel(data.channel);
-  const channelIcon = getIconForChannel(data.channel, {width: 56, height: 40});
   const coverUrl = isLiveChannel(data) ? buildArticleImageUri(IMG_SIZE_L, data.photo) : data.cover_url;
 
-  const programTimeComponent = isLiveChannel(data) ? (
-    <View style={styles.liveFooTimeView} />
-  ) : (
-    <TextComponent style={{...styles.timeText, backgroundColor: colors.greyBackground}}>
-      {data.time_start + ' - ' + data.time_end}
-    </TextComponent>
-  );
-
-  const channelTitleComponent = isLiveChannel(data) ? (
-    <View style={styles.channelTitleContainer}>
-      <TextComponent style={styles.channelTitleLive}>LRT.LT</TextComponent>
-    </View>
-  ) : (
-    <View style={styles.channelTitleContainer}>
-      {data.is_radio ? <IC_MICROPHONE size={20} /> : <IC_CAMERA size={20} />}
-      <TextComponent style={styles.channelTitle} numberOfLines={2}>
-        {data.channel_title}
-      </TextComponent>
-    </View>
-  );
-
-  const bottomBarContainer = isLiveChannel(data) ? (
-    <View />
-  ) : (
+  const bottomBarContainer = (
     <View style={styles.bottomBarContainer}>
       <View
         style={{
           ...styles.bottomBar,
-          backgroundColor: colorsSet.primary,
+          backgroundColor: dark ? colors.primary : colorsSet.secondary,
         }}
       />
       <View
         style={{
           ...styles.bottomBarOverlay,
           width: Math.max(0, Math.min(Number(data.proc), 100)) + '%',
-          backgroundColor: colorsSet.secondary,
+          backgroundColor: dark ? colors.primary : colorsSet.secondary,
         }}
       />
     </View>
@@ -81,22 +55,28 @@ const Channel: React.FC<Props> = ({data, onPress}) => {
             <CoverImage style={styles.cover} source={{uri: coverUrl}} />
             <View style={styles.coverContentContainer}>
               <View style={styles.channelImageContainer}>
-                <ThemeProvider value={themeLight}>{channelIcon}</ThemeProvider>
+                <ThemeProvider value={themeLight}>
+                  {getIconForChannel(data.channel, {height: 28})}
+                </ThemeProvider>
+                <View style={styles.playIconContainer}>
+                  <IconPlay size={14} color={colorsSet.secondary} />
+                </View>
               </View>
-              <View style={styles.mediaIndicatorContainer}>
-                <MediaIndicator size="small" />
-              </View>
-              {programTimeComponent}
-              {bottomBarContainer}
             </View>
           </View>
 
-          {channelTitleComponent}
-          {liveBadge}
+          <View style={styles.bottomContainer}>
+            <TextComponent style={{...styles.timeText, color: dark ? colors.text : colorsSet.secondary}}>
+              {data.time_start + ' - ' + data.time_end}
+            </TextComponent>
 
-          <TextComponent style={styles.title} numberOfLines={3} fontFamily="PlayfairDisplay-Regular">
-            {data.title}
-          </TextComponent>
+            {bottomBarContainer}
+            {liveBadge}
+
+            <TextComponent style={styles.title} numberOfLines={3} fontFamily="PlayfairDisplay-Regular">
+              {data.title}
+            </TextComponent>
+          </View>
         </View>
       </TouchableDebounce>
     </View>
@@ -108,10 +88,7 @@ export default Channel;
 const styles = StyleSheet.create({
   container: {
     margin: 2,
-    borderRadius: 4,
     width: 180,
-    alignSelf: 'center',
-    flexWrap: 'wrap',
   },
   coverContainer: {
     flex: 1,
@@ -122,6 +99,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
     flexWrap: 'wrap',
     flexDirection: 'column',
   },
@@ -130,16 +109,25 @@ const styles = StyleSheet.create({
     aspectRatio: 0.66,
   },
   channelImageContainer: {
+    transform: [
+      {
+        scale: 0.9,
+      },
+      {
+        translateX: -6,
+      },
+    ],
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: 'white',
-    padding: 8,
-    borderBottomEndRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 12,
+    margin: 4,
+    borderRadius: 4,
     alignSelf: 'flex-start',
   },
-  mediaIndicatorContainer: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+  playIconContainer: {
+    marginHorizontal: 6,
   },
   channelTitleContainer: {
     flexDirection: 'row',
@@ -159,38 +147,32 @@ const styles = StyleSheet.create({
   },
   liveBadge: {
     alignSelf: 'flex-start',
-    marginTop: 4,
+    marginTop: 8,
   },
   title: {
     width: '100%',
     fontSize: 16,
-    marginTop: 4,
+    marginTop: 8,
   },
   timeText: {
-    opacity: 0.8,
-    fontSize: 12,
-
-    borderRadius: 4,
-    padding: 3,
-    margin: 8,
-    alignSelf: 'flex-end',
+    fontSize: 12.5,
+    marginVertical: 6,
   },
-  liveFooTimeView: {
-    height: 44,
+  bottomContainer: {
+    margin: 4,
   },
   bottomBarContainer: {
     width: '100%',
     height: 8,
-    borderBottomStartRadius: 4,
-    borderBottomEndRadius: 4,
+    justifyContent: 'center',
   },
   bottomBar: {
     width: '100%',
-    height: 8,
+    height: 1,
     position: 'absolute',
   },
   bottomBarOverlay: {
-    height: 8,
+    height: 4,
     position: 'absolute',
   },
 });

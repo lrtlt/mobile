@@ -12,8 +12,7 @@ const LiveBadge: React.FC<Props> = (props) => {
   return (
     <View style={[styles.container, {backgroundColor: colors.textError}, props.style]}>
       <TextComponent style={styles.text} fontFamily="SourceSansPro-SemiBold">
-        {' '}
-        {strings.liveChannelTitle}{' '}
+        {strings.liveChannelTitle}
       </TextComponent>
     </View>
   );
@@ -23,7 +22,8 @@ export default LiveBadge;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 3,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
     borderRadius: 4,
     flexDirection: 'row',
   },
