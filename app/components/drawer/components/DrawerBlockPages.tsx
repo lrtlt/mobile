@@ -21,7 +21,7 @@ const DrawerBlockPages: React.FC<Props> = ({navigation, pages}) => {
         <DrawerItem
           key={page.name}
           // text={page.name}
-          iconComponent={<IconLituanica width={124} />}
+          iconComponent={<IconLituanica width={120} />}
           onPress={() => navigation.navigate('Page', {page})}
         />
       ))}

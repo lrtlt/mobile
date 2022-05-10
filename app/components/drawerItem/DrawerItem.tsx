@@ -33,11 +33,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
     padding: 10,
     marginStart: 10,
   },
   iconContainer: {
-    paddingRight: 10,
+    paddingRight: 8,
   },
 });

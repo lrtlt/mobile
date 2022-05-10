@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux';
 import {selectLogo} from '../../redux/selectors';
 import {SvgCss} from 'react-native-svg';
 import {LogoDark, LogoLight} from '../svg';
+import {themeDark} from '../../Theme';
 
 interface Props {
   width?: number;
@@ -16,8 +17,13 @@ const LogoComponent: React.FC<Props> = ({width = 60, height = 32, useOnlyInterna
   const {isDarkMode} = useSettings();
 
   const logo = useSelector(selectLogo);
+
   if (logo?.svg && !useOnlyInternal) {
-    return <SvgCss xml={logo?.svg} width={width} height={height} />;
+    //Replace svg fill colors for dark mode to "headerTint" color
+    const formattedSvg = isDarkMode
+      ? logo?.svg?.replace(/fill="#(?:[0-9a-fA-F]{3}){1,2}"/g, `fill="${themeDark.colors.headerTint}"`)
+      : logo?.svg;
+    return <SvgCss xml={formattedSvg} width={width} height={height} />;
   }
 
   return isDarkMode ? (
