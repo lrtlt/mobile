@@ -136,8 +136,8 @@ android {
         applicationId "lt.mediapark.lrt"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 202700
-        versionName "2.27.0"
+        versionCode 202701
+        versionName "2.27.1"
         multiDexEnabled true
     }
     dexOptions {
