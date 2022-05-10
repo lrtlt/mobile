@@ -13,11 +13,16 @@ interface Props {
   backgroundImage?: string;
   autoStart: boolean;
   startTime?: number;
+  onError?: () => void;
 }
+
+const MAX_ERROR_COUNT = 5;
+const ERROR_DELAY = 400;
 
 const JWPlayerNative: React.FC<Props> = (props) => {
   const {style, streamUri, mediaId, title, backgroundImage, autoStart, startTime} = props;
 
+  const errorCountRef = useRef<number>(0);
   const playerRef = useRef<JWPlayer>(null);
   const player = playerRef.current;
 
@@ -38,6 +43,7 @@ const JWPlayerNative: React.FC<Props> = (props) => {
 
   const sendPlay = useCallback(() => {
     console.log('JWPlayer event: play');
+    errorCountRef.current = 0;
     player?.position().then((pos) => {
       Gemius.sendPlay(mediaId, pos ? pos : 0);
       console.log('play sent');
@@ -89,13 +95,15 @@ const JWPlayerNative: React.FC<Props> = (props) => {
     (playerError: {error: string}) => {
       console.log('Player error:', playerError);
       setTimeout(() => {
-        if (player) {
-          console.log('Force updating player...');
-          player.forceUpdate(() => console.log('Update complete'));
+        if (props.onError) {
+          props.onError();
         }
-      }, 400);
+        if (errorCountRef.current < MAX_ERROR_COUNT) {
+          errorCountRef.current = errorCountRef.current + 1;
+        }
+      }, errorCountRef.current * ERROR_DELAY);
     },
-    [player],
+    [props],
   );
 
   const playlistItem: PlaylistItem = useMemo(() => {

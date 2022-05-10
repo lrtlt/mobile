@@ -37,13 +37,17 @@ const VideoComponent: React.FC<Props> = (props) => {
 
   const onPlayPress = useCallback(() => {
     load(props.streamUrl, props.title);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [load]);
+  }, [load, props.streamUrl, props.title]);
+
+  const onPlayerError = useCallback(() => {
+    load(props.streamUrl, props.title);
+  }, [load, props.streamUrl, props.title]);
 
   const content = useMemo(() => {
     if (data) {
       return (
         <JWPlayerNative
+          key={data.streamUri}
           style={props.style}
           mediaId={data.mediaId}
           streamUri={data.streamUri}
@@ -51,6 +55,7 @@ const VideoComponent: React.FC<Props> = (props) => {
           autoStart={true}
           backgroundImage={props.backgroundImage}
           startTime={props.startTime || data.offset}
+          onError={onPlayerError}
         />
       );
     } else if (isLoading) {
@@ -71,6 +76,7 @@ const VideoComponent: React.FC<Props> = (props) => {
     data,
     isLoading,
     onPlayPress,
+    onPlayerError,
     props.backgroundImage,
     props.cover,
     props.startTime,
