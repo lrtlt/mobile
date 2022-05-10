@@ -37,7 +37,7 @@ const TabsScreen: React.FC<Props> = ({program}) => {
     const {channelId, title} = route;
     return (
       <View key={`${channelId}-${title}`} style={styles.centerContainer}>
-        {getIconForChannelById(channelId, {width: 64})}
+        {getIconForChannelById(channelId, {height: 24, width: 120})}
       </View>
     );
   }, []);
