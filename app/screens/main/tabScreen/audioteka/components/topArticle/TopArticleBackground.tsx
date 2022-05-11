@@ -20,7 +20,7 @@ const TopArticleBackground: React.FC<TopArticleBackgroundProps> = (props) => {
         source={{
           uri: BASE_IMG_URL + article.channel_bg_img,
         }}
-        blurRadius={12}
+        blurRadius={3}
         resizeMode="cover"
       />
       <LinearGradient

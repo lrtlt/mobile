@@ -25,7 +25,7 @@ const ListenCount: React.FC<ListenCountProps> = ({style, visible, article}) => {
           },
           style,
         ]}>
-        <IconAudioReadCount size={18} color={colors.darkIcon} />
+        <IconAudioReadCount size={16} color={colors.darkIcon} />
         <TextComponent style={{...styles.countText, color: colors.darkIcon}}>
           {article.read_count}
         </TextComponent>
@@ -54,6 +54,6 @@ const styles = StyleSheet.create({
   countText: {
     paddingStart: 4,
 
-    fontSize: 15,
+    fontSize: 14,
   },
 });

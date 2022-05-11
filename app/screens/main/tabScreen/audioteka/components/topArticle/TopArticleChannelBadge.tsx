@@ -10,7 +10,7 @@ interface TopArticleChannelBadgeProps {
 const TopArticleChannelBadge: React.FC<TopArticleChannelBadgeProps> = (props) => {
   return (
     <View style={{...styles.container, ...props.style}}>
-      <SvgUri width={32} height={32} uri={props.logoUri ?? null} />
+      <SvgUri height={24} uri={props.logoUri ?? null} />
     </View>
   );
 };
@@ -19,9 +19,9 @@ export default TopArticleChannelBadge;
 
 const styles = StyleSheet.create({
   container: {
-    width: 56,
-    height: 56,
-    borderRadius: 56 / 2,
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+    borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
