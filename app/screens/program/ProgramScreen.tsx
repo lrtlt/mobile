@@ -1,18 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Easing} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {ScreenLoader, ProgramDay, ActionButton} from '../../components';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {fetchProgram} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
-import Collapsible from 'react-native-collapsible';
 import ProgramTabs from './tabs/ProgramTabsScreen';
 import {selectProgramScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
-import Divider from '../../components/divider/Divider';
 import {IconCalendar} from '../../components/svg';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import ProgramDateModal from './ProgramDateModal';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Slug'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Slug'>;
@@ -56,14 +54,7 @@ const ProgramScreen: React.FC<Props> = ({navigation}) => {
         </ActionButton>
       ),
       headerTitle: () => {
-        return selectedDate ? (
-          <ProgramDay
-            textStyle={{...styles.headerText, color: colors.headerTint}}
-            dateString={selectedDate}
-          />
-        ) : (
-          <View />
-        );
+        return selectedDate ? <ProgramDay dateString={selectedDate} /> : <View />;
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,24 +75,16 @@ const ProgramScreen: React.FC<Props> = ({navigation}) => {
       const selectedDayProgram = program![selectedDay];
       content = (
         <View style={styles.root}>
-          <Collapsible collapsed={!headerExpanded} align="bottom" duration={250} easing={Easing.ease}>
-            <View>
-              {program?.days.map((day: string) => (
-                <TouchableOpacity
-                  key={day}
-                  onPress={() => {
-                    setSelectedDate(day);
-                    setHeaderExpanded(false);
-                  }}>
-                  <View>
-                    <ProgramDay style={styles.dayListItem} dateString={day} />
-                    <Divider />
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </Collapsible>
           <ProgramTabs program={selectedDayProgram} />
+          <ProgramDateModal
+            days={program?.days!}
+            onCancel={() => setHeaderExpanded(false)}
+            visible={headerExpanded}
+            onDateSelected={(index) => {
+              setSelectedDate(program?.days[index]);
+              setHeaderExpanded(false);
+            }}
+          />
         </View>
       );
       break;
@@ -120,9 +103,5 @@ const styles = StyleSheet.create({
   dayListItem: {
     padding: 16,
     justifyContent: 'center',
-  },
-  headerText: {
-    fontFamily: 'SourceSansPro-SemiBold',
-    fontSize: 16,
   },
 });

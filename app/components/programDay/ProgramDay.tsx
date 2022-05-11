@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TextStyle, ViewStyle} from 'react-native';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 import moment from 'moment';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
@@ -17,24 +17,23 @@ const weekDays = [
 interface Props {
   style?: ViewStyle;
   dateString: string;
-  textStyle?: TextStyle;
 }
 
 const ProgramDay: React.FC<Props> = (props) => {
   const {strings} = useTheme();
 
   const date = moment(props.dateString, 'YYYY-MM-DD');
-  const dateString = props.dateString.slice(-5);
 
   const dayOfWeek = date.day();
   const dayName = dayOfWeek === moment().day() ? strings.today : weekDays[dayOfWeek];
 
-  const textStyle = props.textStyle ? props.textStyle : styles.text;
-
   return (
     <View {...props}>
-      <TextComponent style={textStyle}>
-        {dateString} - {dayName}
+      <TextComponent style={styles.text}>
+        {props.dateString} -{' '}
+        <TextComponent style={styles.text} fontFamily="SourceSansPro-SemiBold">
+          {dayName}
+        </TextComponent>
       </TextComponent>
     </View>
   );
@@ -44,6 +43,6 @@ export default ProgramDay;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 15,
+    fontSize: 16,
   },
 });
