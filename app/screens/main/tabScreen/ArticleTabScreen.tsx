@@ -14,11 +14,19 @@ interface Props {
   isCurrent: boolean;
   type: typeof ROUTE_TYPE_CATEGORY | typeof ROUTE_TYPE_NEWEST | typeof ROUTE_TYPE_POPULAR;
   showTitle: boolean;
+  showBackToHome?: boolean;
   categoryId?: number;
   categoryTitle?: string;
 }
 
-const ArticleTabScreen: React.FC<Props> = ({isCurrent, type, showTitle, categoryId, categoryTitle}) => {
+const ArticleTabScreen: React.FC<Props> = ({
+  isCurrent,
+  type,
+  showTitle,
+  showBackToHome,
+  categoryId,
+  categoryTitle,
+}) => {
   const provider: ArticleScreenAdapter = useMemo(() => {
     switch (type) {
       case 'newest': {
@@ -63,6 +71,7 @@ const ArticleTabScreen: React.FC<Props> = ({isCurrent, type, showTitle, category
       requestNextPage={loadNextPage}
       requestRefresh={refresh}
       showTitle={showTitle}
+      showBackToHome={showBackToHome}
     />
   );
 };

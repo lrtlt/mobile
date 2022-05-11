@@ -130,15 +130,16 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
             <ArticleTabScreen
               type={ROUTE_TYPE_CATEGORY}
               isCurrent={current}
-              showTitle={true}
+              showTitle
+              showBackToHome
               categoryId={route.categoryId}
               categoryTitle={route.title}
             />
           );
         case ROUTE_TYPE_NEWEST:
-          return <ArticleTabScreen type={ROUTE_TYPE_NEWEST} isCurrent={current} showTitle={true} />;
+          return <ArticleTabScreen type={ROUTE_TYPE_NEWEST} isCurrent={current} showTitle showBackToHome />;
         case ROUTE_TYPE_POPULAR:
-          return <ArticleTabScreen type={ROUTE_TYPE_POPULAR} isCurrent={current} showTitle={true} />;
+          return <ArticleTabScreen type={ROUTE_TYPE_POPULAR} isCurrent={current} showTitle showBackToHome />;
         default:
           return <TestScreen text={'Unkown type: ' + JSON.stringify(route)} />;
       }

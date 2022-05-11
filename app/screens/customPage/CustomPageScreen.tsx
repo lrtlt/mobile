@@ -56,7 +56,7 @@ const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
             return (
               <ArticleTabScreen
                 type={ROUTE_TYPE_CATEGORY}
-                showTitle={true}
+                showTitle
                 isCurrent={false}
                 categoryId={sceneRounte.categoryId}
                 categoryTitle={sceneRounte.title}

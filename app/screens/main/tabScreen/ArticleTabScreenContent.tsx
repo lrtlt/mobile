@@ -22,11 +22,18 @@ import {useTheme} from '../../../Theme';
 interface Props {
   data: PagingState;
   showTitle: boolean;
+  showBackToHome?: boolean;
   requestNextPage: () => void;
   requestRefresh: () => void;
 }
 
-const TabScreenContent: React.FC<Props> = ({data, showTitle, requestNextPage, requestRefresh}) => {
+const TabScreenContent: React.FC<Props> = ({
+  data,
+  showTitle,
+  showBackToHome,
+  requestNextPage,
+  requestRefresh,
+}) => {
   const {isError, articles, isFetching, isRefreshing, title} = data;
   const {colors, strings} = useTheme();
 
@@ -63,18 +70,20 @@ const TabScreenContent: React.FC<Props> = ({data, showTitle, requestNextPage, re
   const renderTitle = useCallback(() => {
     return (
       <View>
-        <TouchableDebounce
-          style={styles.backContainer}
-          onPress={() => {
-            EventRegister.emit(EVENT_SELECT_CATEGORY_INDEX, {index: 0});
-          }}>
-          <IconArrowLeft color={colors.primary} size={16} />
-          <Text style={{color: colors.primary, ...styles.backText}}>Atgal į pagrindinį</Text>
-        </TouchableDebounce>
+        {showBackToHome && (
+          <TouchableDebounce
+            style={styles.backContainer}
+            onPress={() => {
+              EventRegister.emit(EVENT_SELECT_CATEGORY_INDEX, {index: 0});
+            }}>
+            <IconArrowLeft color={colors.primary} size={16} />
+            <Text style={{color: colors.primary, ...styles.backText}}>Atgal į pagrindinį</Text>
+          </TouchableDebounce>
+        )}
         <DefaultSectionHeader title={title} />
       </View>
     );
-  }, [colors.primary, title]);
+  }, [colors.primary, showBackToHome, title]);
 
   //Handle error state
   if (isError === true) {
