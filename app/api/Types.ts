@@ -415,6 +415,7 @@ export type ArticleEmbedHTMLType = {
   enable_scroll?: boolean;
   el: {
     html?: string;
+    src?: string;
   };
 };
 

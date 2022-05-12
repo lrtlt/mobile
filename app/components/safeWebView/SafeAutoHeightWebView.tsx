@@ -34,7 +34,6 @@ const SafeAutoHeightWebView: React.FC<Props> = forwardRef<WebView, Props>((props
       <WebView
         ref={ref}
         originWhitelist={['*']}
-        cacheEnabled={false}
         domStorageEnabled={true}
         javaScriptEnabled={true}
         androidHardwareAccelerationDisabled={false}
