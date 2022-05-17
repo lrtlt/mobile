@@ -25,7 +25,7 @@ const TopArticle: React.FC<TopArticleProps> = ({article}) => {
   }, [article.id, navigation]);
 
   return (
-    <TouchableDebounce debounceTime={500} onPress={onPressHandler}>
+    <TouchableDebounce debounceTime={500} onPress={onPressHandler} activeOpacity={0.8}>
       <TopArticleBackground style={styles.container} article={article}>
         <View style={styles.imageContainer}>
           <Image

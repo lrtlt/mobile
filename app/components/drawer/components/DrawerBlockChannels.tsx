@@ -26,6 +26,7 @@ const DrawerBlockChannels: React.FC<Props> = ({channels, navigation}) => {
       {items.map((channel) => {
         return (
           <View
+            key={channel.channel_id}
             style={{
               transform: [{scale: 0.9}, {translateX: -12}],
             }}>

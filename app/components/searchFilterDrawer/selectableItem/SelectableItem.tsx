@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {RectButton} from 'react-native-gesture-handler';
+import {View, StyleSheet, TouchableHighlight} from 'react-native';
 import {useTheme} from '../../../Theme';
 import TextComponent from '../../text/Text';
 
@@ -14,14 +13,16 @@ const SelectableItem: React.FC<Props> = (props) => {
   const {colors} = useTheme();
 
   return (
-    <View style={props.selected === true ? {backgroundColor: colors.slugBackground} : {}}>
-      <RectButton onPress={props.onPress} rippleColor={colors.ripple} underlayColor={colors.primary}>
+    <View style={{backgroundColor: props.selected ? colors.slugBackground : undefined}}>
+      <TouchableHighlight onPress={props.onPress} underlayColor={colors.greyBackground}>
         <View style={styles.container}>
-          <TextComponent style={styles.text} type="secondary">
+          <TextComponent
+            style={{...styles.text, color: props.selected ? colors.primary : undefined}}
+            type="secondary">
             {props.text}
           </TextComponent>
         </View>
-      </RectButton>
+      </TouchableHighlight>
     </View>
   );
 };

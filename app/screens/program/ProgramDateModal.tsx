@@ -1,9 +1,8 @@
 import * as React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 
 import Modal from 'react-native-modal';
 import {ProgramDay} from '../../components';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import Divider from '../../components/divider/Divider';
 import {useTheme} from '../../Theme';
 

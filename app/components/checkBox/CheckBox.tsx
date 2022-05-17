@@ -39,7 +39,7 @@ const CheckBox: React.FC<Props> = ({style, value, onValueChange, label}) => {
           styles.clickArea,
           {
             borderColor: colors.buttonBorder,
-            backgroundColor: value || pressedIn ? colors.primaryDark : undefined,
+            backgroundColor: value || pressedIn ? colors.primary : undefined,
           },
         ]}>
         {value && <IconCheck size={14} color={colors.onPrimary} />}
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   clickArea: {
     height: '100%',
-    borderRadius: 8,
+    borderRadius: 4,
     borderWidth: 1,
     overflow: 'hidden',
     aspectRatio: 1,

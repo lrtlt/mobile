@@ -1,12 +1,11 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {IconNote} from '../svg';
 import firestore from '@react-native-firebase/firestore';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 import Text from '../text/Text';
 import OpusPlaylistModal from '../opusPlaylistModal/OpusPlaylistModal';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const OPUS_COLOR = 'rgba(242,177,46,.3)';
 

@@ -89,7 +89,7 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
 
   return (
     <View style={[style.container, styleProp]}>
-      <TouchableDebounce debounceTime={500} onPress={onPressHandler}>
+      <TouchableDebounce debounceTime={500} onPress={onPressHandler} activeOpacity={0.8}>
         <View>
           <View
             // eslint-disable-next-line react-native/no-inline-styles

@@ -1,8 +1,8 @@
 import React from 'react';
 import DefaultHeader from './DefaultHeader';
 import SlugHeader from './SlugHeader';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Category} from '../../redux/reducers/articles';
+import {TouchableOpacity} from 'react-native';
 
 interface Props {
   category: Category;

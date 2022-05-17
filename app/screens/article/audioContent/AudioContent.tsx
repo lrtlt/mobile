@@ -1,6 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import Image from 'react-native-fast-image';
 import {useTheme} from '../../../Theme';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
