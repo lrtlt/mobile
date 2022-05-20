@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-community/async-storage';
-import {createStore, applyMiddleware} from 'redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {legacy_createStore as createStore, applyMiddleware} from 'redux';
 import {persistStore, persistReducer} from 'redux-persist';
 import createSagaMiddleware from 'redux-saga';
 import {composeWithDevTools} from 'redux-devtools-extension';
