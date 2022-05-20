@@ -26,6 +26,7 @@ import DailyQuestionComponent from '../../../../components/dailyQuestion/DailyQu
 import CategoryArticlesBlock from './blocks/CategoryArticlesBlock/CategoryArticlesBlock';
 import SlugArticlesBlock from './blocks/SlugArticlesBlock/SlugArticlesBlock';
 import TopFeedBlock from './blocks/TopFeedBlock/TopFeedBlock';
+import TopUrlBlock from './blocks/TopUrlsBlock/TopUrlBlock';
 
 interface Props {
   isCurrent: boolean;
@@ -108,6 +109,9 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
               }
             />
           );
+        }
+        case 'top_url_list': {
+          return <TopUrlBlock block={block} />;
         }
         case 'top_feed': {
           return <TopFeedBlock block={block} />;

@@ -129,6 +129,8 @@ export type HomeBlockFeedBlock = {
 };
 
 export type HomeBlockTopFeedBlock = {
+  //TODO: remove this template after audioteka api update
+  template: 'top_feed';
   type: 'top_feed';
   articles: Article[];
 };
@@ -178,7 +180,8 @@ export type HomeBlockType =
   | HomeBlockSlug
   | HomeBlockFeedBlock
   | HomeBlockTopFeedBlock
-  | HomeBlockDailyQuestion;
+  | HomeBlockDailyQuestion
+  | AudiotekaTopUrlList;
 
 export type HomeDataResponse = {
   homepage_data: HomeBlockType[];
@@ -230,15 +233,46 @@ export type VideoDataDefault = {
   };
 };
 
+export type URLTypeCategory = {
+  url_type: 'category';
+  title: string;
+  category_href: string;
+  category_id: number;
+};
+
+export type URLTypeTag = {
+  url_type: 'tag';
+  title: string;
+  tag_slug: string;
+};
+
+export type URLTypeExternalURL = {
+  url_type: 'webpage';
+  title: string;
+  url: string;
+};
+
 export type AudiotekaResponse = AudiotekaTemplate[];
 
 export type AudiotekaTemplate =
+  | AudiotekaTopUrlList
   | AudiotekaTopArticle
   | AudiotekaNewest
   | AudiotekaPopular
   | AudiotekaPodcasts
   | AudiotekaCategory
+  | HomeBlockTopFeedBlock
   | AudiotekaSlug;
+
+export type AudiotekaTopUrlList = {
+  template: 'url_list';
+  type: 'top_url_list';
+  url_list: {
+    id: number;
+    title: string;
+    items: (URLTypeCategory | URLTypeTag | URLTypeExternalURL)[];
+  };
+};
 
 export type AudiotekaTopArticle = {
   template: 'top';

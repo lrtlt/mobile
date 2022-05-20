@@ -17,6 +17,8 @@ import CategoryBlock from './components/category/CategoryBlock';
 import PopularBlock from './components/popular/PopularBlock';
 import NewestBlock from './components/newest/NewestBlock';
 import AudiotekaSearch from './components/search/AudiotekaSearch';
+import TopFeedBlock from '../home/blocks/TopFeedBlock/TopFeedBlock';
+import TopUrlBlock from '../home/blocks/TopUrlsBlock/TopUrlBlock';
 
 interface Props {
   isCurrent: boolean;
@@ -65,6 +67,12 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
     const {item} = listItem;
 
     switch (item.template) {
+      case 'url_list': {
+        return <TopUrlBlock block={item} />;
+      }
+      case 'top_feed': {
+        return <TopFeedBlock block={item} />;
+      }
       case 'top': {
         return <TopArticle article={item.article} />;
       }
@@ -92,7 +100,12 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
         }
       }
       default: {
-        console.warn('Uknown list item: ' + item);
+        //TODO: remove this after audioteka api update. This is temp workaround
+        if ((item as any).type === 'top_feed') {
+          return <TopFeedBlock block={item} />;
+        }
+
+        console.warn('Uknown list item: ' + JSON.stringify(item, null, 4));
         return <View />;
       }
     }
