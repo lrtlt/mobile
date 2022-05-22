@@ -18,7 +18,7 @@ const ArticleContentItem: React.FC<Props> = ({data, itemPressHandler}) => {
 
   return (
     <>
-      {p && <ArticleParagraph htmlText={p} />}
+      {Boolean(p) && <ArticleParagraph htmlText={p} />}
       {embed && <ArticleEmbed embedArray={embed} itemPressHandler={itemPressHandler} />}
     </>
   );

@@ -57,10 +57,8 @@ const TopUrlBlock: React.FC<Props> = ({block}) => {
     () =>
       items.map((item) => {
         return (
-          <TouchableDebounce onPress={() => onPressHandler(item)}>
-            <Text key={item.title} style={{...styles.itemName, color: colors.primaryDark}}>
-              #{item.title}
-            </Text>
+          <TouchableDebounce key={item.title} onPress={() => onPressHandler(item)}>
+            <Text style={{...styles.itemName, color: colors.primaryDark}}>#{item.title}</Text>
           </TouchableDebounce>
         );
       }),
