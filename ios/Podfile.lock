@@ -1126,14 +1126,14 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBApp (14.8.0):
+  - RNFBApp (14.9.4):
     - Firebase/CoreOnly (= 8.15.0)
     - React-Core
-  - RNFBCrashlytics (14.8.0):
+  - RNFBCrashlytics (14.9.4):
     - Firebase/Crashlytics (= 8.15.0)
     - React-Core
     - RNFBApp
-  - RNFBFirestore (14.8.0):
+  - RNFBFirestore (14.9.4):
     - Firebase/Firestore (= 8.15.0)
     - React-Core
     - RNFBApp
@@ -1171,7 +1171,7 @@ PODS:
   - RNScreens (3.13.1):
     - React-Core
     - React-RCTImage
-  - RNShare (7.3.9):
+  - RNShare (7.4.1):
     - React-Core
   - RNSnackbar (2.4.0):
     - React-Core
@@ -1442,7 +1442,7 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: d8d346844eca5d9120c17d441a2f38596e8ed2b9
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 5337263514dd6f09803962437687240c5dc39aa4
+  glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
   google-cast-sdk: 2feec01ef5ee467f70a14acde9f01f188aeea76f
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
@@ -1462,7 +1462,7 @@ SPEC CHECKSUMS:
   Permission-AppTrackingTransparency: 507f031f783885aad86f5754bd23edba587b2125
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   Protobuf: 66e2f3b26a35e4cc379831f4ced538274ee4b923
-  RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
+  RCT-Folly: 803a9cfd78114b2ec0f140cfa6fa2a6bafb2d685
   RCTRequired: 0aa6c1c27e1d65920df35ceea5341a5fe76bdb79
   RCTTypeSafety: d76a59d00632891e11ed7522dba3fd1a995e573a
   React: ab8c09da2e7704f4b3ebad4baa6cfdfcc852dcb5
@@ -1496,14 +1496,14 @@ SPEC CHECKSUMS:
   ReactCommon: 07d0c460b9ba9af3eaf1b8f5abe7daaad28c9c4e
   RNCAsyncStorage: 81187912cc9a5c2591ddb161e03e587688afb764
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
-  RNFBApp: dd24402ca1f28a66e45ef51aee8b6fedee51922f
-  RNFBCrashlytics: 9fb244c35e832dca3f81485f618b7ad283f23819
-  RNFBFirestore: 31b633a6cf7e59156f727a81a6cfae9b2f8764b4
+  RNFBApp: bef4ec5a6d31a3da9bf285379d0c4857c6b7313e
+  RNFBCrashlytics: 69208255267018416e181e78a7112fc41fc671db
+  RNFBFirestore: 841f319bfba0fbf3bd48fae80145301941219dd6
   RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
   RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
   RNReanimated: 46cdb89ca59ab7181334f4ed05a70e82ddb36751
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
-  RNShare: 807d6f8231b8ebcf6dd839294b877342eb93d4e5
+  RNShare: 2074af48908436c310847c6c47ebb6129db1dc89
   RNSnackbar: be3333a21a453ccc272f41a8add5a71f7d44dfcd
   RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
