@@ -158,7 +158,7 @@ type ColorScheme = {
   toggleButtonSelected: string;
   programProgress: string;
   facebook: string;
-  darkIcon: '#222';
+  darkIcon: '#222222';
   ripple: '#99999940';
   lightGreyBackground: '#F9F9F9';
   dailyQuestionProgress: string;
@@ -170,7 +170,7 @@ const colorsLight: ColorScheme = {
   background: '#FFFFFF',
   card: '#F9F9F9',
   text: '#2E2E2F',
-  border: '#AAA',
+  border: '#AAAAAA',
   notification: '#C00',
   //#endregion
 
@@ -178,15 +178,15 @@ const colorsLight: ColorScheme = {
   primaryLight: '#a8d2ff',
   primaryDark: '#003d80',
   textError: '#C00',
-  onPrimary: '#FFF',
-  textSecondary: '#666',
+  onPrimary: '#FFFFFF',
+  textSecondary: '#666666',
   textDisbled: '#55555570',
   slugBackground: '#F5F6F7',
-  actionButtonBorder: 'white',
+  actionButtonBorder: '#FFFFFF',
   photoOverlay: '#FFFFFFC0',
-  tabBarBackground: '#FFF',
+  tabBarBackground: '#FFFFFF',
   tabLableSelected: 'primaryDark',
-  headerTint: '#444',
+  headerTint: '#444444',
   greyBackground: '#F4F6F8',
   playerBackground: '#888',
   articleHighlight: '#F4F6F820',
@@ -200,14 +200,14 @@ const colorsLight: ColorScheme = {
   programProgress: '#dce3e9AA',
   dailyQuestionProgress: '#dce3e9',
   facebook: '#3b5998',
-  darkIcon: '#222',
+  darkIcon: '#222222',
   lightGreyBackground: '#F9F9F9',
   ripple: '#99999940',
 };
 
 const colorsDark: ColorScheme = {
   //#region React-Navigation colors
-  primary: '#AAA',
+  primary: '#AAAAAA',
   background: '#1C242D',
   card: '#242D36',
   text: '#F9F9F9',
@@ -216,10 +216,10 @@ const colorsDark: ColorScheme = {
   //#endregion
 
   statusBar: '#242D36',
-  primaryLight: '#333',
-  primaryDark: '#CCC',
+  primaryLight: '#333333',
+  primaryDark: '#CCCCCC',
   textError: '#E00',
-  onPrimary: '#FFF',
+  onPrimary: '#FFFFFF',
   textSecondary: '#B0B0B0',
   textDisbled: '#A0A0A070',
   slugBackground: '#222b36',
@@ -228,19 +228,19 @@ const colorsDark: ColorScheme = {
   tabBarBackground: '#242D36',
   tabLableSelected: 'primaryDark',
   headerTint: '#DADADA',
-  actionButton: '#333',
+  actionButton: '#333333',
   greyBackground: '#2B3640',
   articleHighlight: '#2B364060',
   listSeparator: '#FFFFFF40',
   buttonBorder: '#55555590',
-  buttonContent: '#777',
-  playerBackground: '#444',
-  androidTouchFeedback: '#AAA',
+  buttonContent: '#777777',
+  playerBackground: '#444444',
+  androidTouchFeedback: '#AAAAAA',
   programItem: '#1C242D',
   programProgress: '#36414f',
   toggleButtonSelected: '#465363',
-  facebook: '#BBB',
-  darkIcon: '#222',
+  facebook: '#BBBBBB',
+  darkIcon: '#222222',
   lightGreyBackground: '#F9F9F9',
   ripple: '#99999940',
   dailyQuestionProgress: '#36414f',

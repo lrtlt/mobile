@@ -54,9 +54,9 @@ const TextComponent: React.FC<Props> = (props) => {
   };
 
   if (props.selectable) {
-    return <SelectableText {...props} style={combinedStyle} textBreakStrategy="highQuality" />;
+    return <SelectableText {...props} style={combinedStyle} />;
   } else {
-    return <Text {...props} style={combinedStyle} textBreakStrategy="highQuality" />;
+    return <Text {...props} style={combinedStyle} />;
   }
 };
 
