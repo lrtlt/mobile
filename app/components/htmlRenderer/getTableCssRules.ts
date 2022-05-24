@@ -16,7 +16,7 @@ export default (theme: AppTheme): string => {
     ...defaultTableStylesSpecs,
     ...{
       fitContainerWidth: true,
-      fontFamily: 'sans-serif', // TODO: Fix fonts on iOS
+      fontFamily: 'sans-serif',
       thEvenBackground: 'transparent',
       thOddBackground: 'transparent',
       trEvenBackground: 'transparent',

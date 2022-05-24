@@ -37,10 +37,10 @@ const TopUrlBlock: React.FC<Props> = ({block}) => {
           break;
         }
         case 'webpage': {
-          if (await Linking.canOpenURL(item.url)) {
+          try {
             Linking.openURL(item.url);
-          } else {
-            console.warn('Cannot open url for "webpage" item:', JSON.stringify(item, null, 4));
+          } catch (e) {
+            console.warn(e);
           }
           break;
         }
