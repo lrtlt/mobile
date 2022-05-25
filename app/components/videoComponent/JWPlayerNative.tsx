@@ -17,6 +17,7 @@ interface Props {
   backgroundImage?: string;
   autoStart: boolean;
   startTime?: number;
+  onError: () => void;
 }
 
 const JWPlayerNative: React.FC<Props> = ({
@@ -27,6 +28,7 @@ const JWPlayerNative: React.FC<Props> = ({
   backgroundImage,
   autoStart = true,
   startTime,
+  onError,
 }) => {
   const playerRef = useRef<JWPlayer>(null);
 
@@ -93,15 +95,16 @@ const JWPlayerNative: React.FC<Props> = ({
     [mediaId],
   );
 
-  const onError = useCallback((playerError: {error: string}) => {
-    console.warn('Player error:', playerError);
-    setTimeout(() => {
-      if (playerRef.current) {
-        console.log('Force updating player...');
-        playerRef.current?.forceUpdate(() => console.log('Update complete'));
+  const handleError = useCallback(
+    (_playerError: {error: unknown}) => {
+      console.log('Player error!');
+
+      if (onError) {
+        onError();
       }
-    }, 400);
-  }, []);
+    },
+    [onError],
+  );
 
   const config: Config = useMemo(() => {
     const _playlistItem: PlaylistItem = {
@@ -209,7 +212,8 @@ const JWPlayerNative: React.FC<Props> = ({
             StatusBar.setBarStyle('dark-content', true);
           }
         }, [])}
-        onPlayerError={onError}
+        onPlayerError={handleError}
+        onSetupPlayerError={handleError}
       />
     </View>
   );
