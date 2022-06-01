@@ -100,6 +100,10 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
         }
       }
       default: {
+        //TODO: remove this after audioteka api update. This is temp workaround
+        if ((item as any).type === 'top_feed') {
+          return <TopFeedBlock block={item} />;
+        }
         console.warn('Unknown list item: ', JSON.stringify(item, null, 4));
         return <View />;
       }

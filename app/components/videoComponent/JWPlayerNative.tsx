@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {StatusBar, Platform, StyleSheet, ViewStyle} from 'react-native';
+import {StatusBar, Platform, StyleSheet, ViewStyle, BackHandler} from 'react-native';
 import {View} from 'react-native';
 import JWPlayer, {Config, PlaylistItem} from 'react-native-jw-media-player';
 import Gemius from 'react-native-gemius-plugin';
@@ -17,7 +17,7 @@ interface Props {
   backgroundImage?: string;
   autoStart: boolean;
   startTime?: number;
-  onError: () => void;
+  onError?: () => void;
 }
 
 const JWPlayerNative: React.FC<Props> = ({
@@ -33,11 +33,17 @@ const JWPlayerNative: React.FC<Props> = ({
   const playerRef = useRef<JWPlayer>(null);
 
   useEffect(() => {
+    const backHandlerSubscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      playerRef.current?.setFullscreen(false);
+      return false;
+    });
+
     return () => {
       //Cleanup
       /* This fixes the bug on android where user presses back button
        * while video is in fullscreen and status bar does not show up */
       if (Platform.OS === 'android') {
+        backHandlerSubscription.remove();
         StatusBar.setHidden(false, 'slide');
         StatusBar.setBarStyle('dark-content', true);
       }
@@ -124,7 +130,7 @@ const JWPlayerNative: React.FC<Props> = ({
         }) ?? '',
       controls: true,
       //viewOnly: false,
-      repeat: false,
+      //pipEnabled: false,
       playlist: [_playlistItem],
       interfaceBehavior: 'normal',
       autostart: autoStart,
@@ -137,25 +143,17 @@ const JWPlayerNative: React.FC<Props> = ({
       exitFullScreenOnPortrait: false,
       portraitOnExitFullScreen: false,
 
+      //hideUIGroup: 'casting_menu',
+
       //Styling
-      // styling: {
-      //   displayTitle: true,
-      //   displayDescription: false,
-      //   menuStyle: {
-      //     backgroundColor: '000000',
-      //     fontColor: 'FFFFFF',
-      //   },
-      //   colors: {
-      //     backgroundColor: '000000',
-      //     buttons: 'FFFFFF',
-      //     fontColor: 'FFFFFF',
-      //     timeslider: {
-      //       progress: 'FFFFFF',
-      //       rail: 'AAAAAA',
-      //       thumb: 'FFFFFF',
-      //     },
-      //   },
-      // },
+      styling: {
+        displayTitle: true,
+        displayDescription: true,
+        menuStyle: {
+          backgroundColor: '000000',
+          fontColor: 'FFFFFF',
+        },
+      },
     };
     return _cfg;
   }, [autoStart, backgroundImage, mediaId, startTime, streamUri, title]);
@@ -190,10 +188,10 @@ const JWPlayerNative: React.FC<Props> = ({
             //Also works on android but onSeeked event is more reliable
             console.log('onSeekEvent', e?.nativeEvent);
             if (Platform.OS === 'ios') {
-              if (e.nativeEvent.offset !== undefined) {
-                sendSeek(e.nativeEvent.offset);
+              if (e.nativeEvent.to !== undefined) {
+                sendSeek(e.nativeEvent.to);
               } else {
-                console.warn('onSeek event has no offset param');
+                console.warn('onSeek event has no "to" param');
               }
             }
           },
