@@ -123,7 +123,7 @@ const JWPlayerNative: React.FC<Props> = ({
           android: JW_PLAYER_LICENSE_ANDROID,
         }) ?? '',
       controls: true,
-      viewOnly: false,
+      //viewOnly: false,
       repeat: false,
       playlist: [_playlistItem],
       interfaceBehavior: 'normal',
