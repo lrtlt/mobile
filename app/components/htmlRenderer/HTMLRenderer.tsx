@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import HTML, {
   CustomBlockRenderer,
   CustomTagRendererRecord,
@@ -8,6 +8,7 @@ import HTML, {
   MixedStyleDeclaration,
   RenderersProps,
   TChildrenRenderer,
+  TNode,
   TNodeChildrenRenderer,
 } from 'react-native-render-html';
 import {View, StyleSheet, Linking, useWindowDimensions} from 'react-native';
@@ -19,6 +20,7 @@ import {useTheme} from '../../Theme';
 import getTableCssRules from './getTableCssRules';
 import SafeWebView from '../safeWebView/SafeWebView';
 import useTextStyle from '../text/useTextStyle';
+import {useTextSelector} from '../../screens/article/textSelector/useTextSelector';
 
 const DEFAULT_FONT_SIZE = 19.5;
 const EXTRA_LINE_SPACING = 7;
@@ -28,9 +30,30 @@ interface Props {
   html: string;
 }
 
+const getText = (node: TNode): string => {
+  if (node.type === 'text' && node.data) {
+    return node.data;
+  }
+
+  return node.children.map(getText).join(' ');
+};
+
 const MyTextualRenderer: CustomTextualRenderer = (props) => {
   const nodeProps = getNativePropsForTNode(props);
-  return React.createElement(TextComponent, {...nodeProps, selectable: true});
+  const {selectText, unselectText} = useTextSelector();
+
+  const onSelectedHandler = useCallback(
+    (selected: boolean) => {
+      if (selected) {
+        selectText(getText(props.tnode));
+      } else {
+        unselectText(getText(props.tnode));
+      }
+    },
+    [props.tnode, selectText, unselectText],
+  );
+
+  return <TextComponent {...nodeProps} selectable={true} onSelected={onSelectedHandler} />;
 };
 
 const BlockquoteRenderer: CustomBlockRenderer = (props) => {

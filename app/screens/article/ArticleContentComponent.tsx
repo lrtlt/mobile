@@ -25,6 +25,7 @@ import {ArticleContent} from '../../api/Types';
 import AudioContent from './audioContent/AudioContent';
 import ArticleMainPhoto from './mainPhoto/ArticleMainPhoto';
 import ArticleKeywords from './keywords/ArticleKeywords';
+import TextSelectorProvider from './textSelector/TextSelectorProvider';
 
 export type ArticleSelectableItem = {
   type: 'photo' | 'article';
@@ -142,19 +143,21 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
 
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right']}>
-      <Animated.FlatList
-        onScroll={onScroll}
-        contentContainerStyle={{paddingTop: containerPaddingTop}}
-        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
-        data={articleData}
-        windowSize={6}
-        showsVerticalScrollIndicator={false}
-        renderItem={renderItem}
-        removeClippedSubviews={false}
-        keyExtractor={useCallback((item, index) => {
-          return String(index) + String(item.type);
-        }, [])}
-      />
+      <TextSelectorProvider>
+        <Animated.FlatList
+          onScroll={onScroll}
+          contentContainerStyle={{paddingTop: containerPaddingTop}}
+          scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+          data={articleData}
+          windowSize={6}
+          showsVerticalScrollIndicator={false}
+          renderItem={renderItem}
+          removeClippedSubviews={false}
+          keyExtractor={useCallback((item, index) => {
+            return String(index) + String(item.type);
+          }, [])}
+        />
+      </TextSelectorProvider>
     </SafeAreaView>
   );
 };
