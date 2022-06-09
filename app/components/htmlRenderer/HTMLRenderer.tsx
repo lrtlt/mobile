@@ -47,7 +47,7 @@ const BlockquoteRenderer: CustomBlockRenderer = (props) => {
           tnode={tnode}
           renderChild={(p) => {
             return (
-              <View style={styles.quoteText}>
+              <View key={p.key} style={styles.quoteText}>
                 <TChildrenRenderer tchildren={[p.childTnode]} />
               </View>
             );
@@ -95,6 +95,9 @@ const HTMLRenderer: React.FC<Props> = ({html}) => {
         'SourceSansPro-LightItalic',
       ]}
       tagsStyles={{
+        p: {
+          marginVertical: 4,
+        },
         strong: {
           fontFamily: 'SourceSansPro-SemiBold',
           fontWeight: '900',

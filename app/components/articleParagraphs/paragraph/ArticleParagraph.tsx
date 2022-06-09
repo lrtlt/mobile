@@ -19,6 +19,5 @@ export default ArticleParagraph;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 4,
   },
 });

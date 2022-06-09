@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {TextStyle} from 'react-native';
+import {Falsy, StyleSheet, TextStyle} from 'react-native';
 import {useSettings} from '../../settings/useSettings';
 import {useTheme} from '../../Theme';
 import {TextComponentProps} from './Text';
@@ -10,7 +10,9 @@ const useTextStyle = (props: TextComponentProps): TextStyle => {
   const {colors} = useTheme();
   const {textSizeMultiplier} = useSettings();
 
-  const style = props.style as TextStyle;
+  const style: TextStyle | Falsy = Array.isArray(props.style)
+    ? StyleSheet.flatten(props.style)
+    : (props.style as TextStyle);
 
   const textColor = useMemo(() => {
     switch (props.type) {

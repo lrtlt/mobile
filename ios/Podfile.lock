@@ -1132,7 +1132,7 @@ PODS:
     - RNFBApp
   - RNGestureHandler (2.4.2):
     - React-Core
-  - RNJWPlayer (0.2.19):
+  - RNJWPlayer (0.2.20):
     - google-cast-sdk (~> 4.7.0)
     - JWPlayerKit (~> 4.5.3)
     - React
@@ -1494,7 +1494,7 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: 69208255267018416e181e78a7112fc41fc671db
   RNFBFirestore: 841f319bfba0fbf3bd48fae80145301941219dd6
   RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
-  RNJWPlayer: 33103a3db55e909cb6324c5ee01b2aab127d5e2d
+  RNJWPlayer: 804079e7609d9913cd4e5fa7c77e29ab71ef8476
   RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
   RNReanimated: 46cdb89ca59ab7181334f4ed05a70e82ddb36751
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
