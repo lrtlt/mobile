@@ -19,7 +19,6 @@ export default ArticleParagraph;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 16,
-    paddingBottom: 16,
+    marginTop: 4,
   },
 });

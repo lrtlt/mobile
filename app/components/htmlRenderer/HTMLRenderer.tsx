@@ -1,110 +1,153 @@
-import React, {useCallback, useMemo} from 'react';
-import HTML, {RendererFunction} from 'react-native-render-html';
-import {View, StyleSheet, Linking, TextStyle} from 'react-native';
+import React from 'react';
+import HTML, {
+  CustomBlockRenderer,
+  defaultHTMLElementModels,
+  defaultSystemFonts,
+  getNativePropsForTNode,
+  HTMLContentModel,
+  TChildrenRenderer,
+  TNodeChildrenRenderer,
+} from 'react-native-render-html';
+import {View, StyleSheet, Linking, useWindowDimensions} from 'react-native';
 
-import table, {IGNORED_TAGS} from '@native-html/table-plugin';
+import TableRenderer, {tableModel} from '@native-html/table-plugin';
 
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
-import {useSettings} from '../../settings/useSettings';
 import getTableCssRules from './getTableCssRules';
 import SafeWebView from '../safeWebView/SafeWebView';
+import useTextStyle from '../text/useTextStyle';
 
-/** Todo remove maybe? It introduces bugs (text not fitting) */
+const DEFAULT_FONT_SIZE = 19.5;
 const EXTRA_LINE_SPACING = 7;
+const LI_TAG_VERTICAL_MARGIN = 8;
 
 interface Props {
   html: string;
 }
 
-const renderP: RendererFunction = (_, children, __, passProps) => {
-  return (
-    <TextComponent key={passProps.key} selectable={true}>
-      {children}
-    </TextComponent>
-  );
+const ParagraphRenderer: CustomBlockRenderer = (props) => {
+  const nodeProps = getNativePropsForTNode(props);
+  return React.createElement(TextComponent, nodeProps);
 };
 
-const renderListPrefix: RendererFunction = (_, children, __, passProps) => {
-  const fontSize = (passProps.baseFontStyle as TextStyle)?.fontSize ?? 20;
-  const color = (passProps.baseFontStyle as TextStyle)?.textDecorationColor;
+const BlockquoteRenderer: CustomBlockRenderer = (props) => {
+  const {colors} = useTheme();
+
+  const {TDefaultRenderer, tnode} = props;
 
   return (
-    <View
-      // eslint-disable-next-line react-native/no-inline-styles
-      style={{
-        marginTop: fontSize / 2,
-        marginRight: 6,
-        width: 6,
-        height: 6,
-        borderRadius: 6,
-        backgroundColor: color,
-      }}
-    />
-  );
-};
-
-const renderBlockquote: RendererFunction = (_, children, __, passProps) => {
-  return (
-    <View style={styles.quoteContainer} key={passProps.key}>
-      <TextComponent style={styles.quoteSimbol} fontFamily="SourceSansPro-SemiBold">
+    <TDefaultRenderer {...props}>
+      <TextComponent
+        style={{...styles.quoteSimbol, color: colors.primary}}
+        fontFamily="SourceSansPro-Regular">
         ”
       </TextComponent>
-      <TextComponent style={styles.quoteText} selectable={true}>
-        {children}
-      </TextComponent>
-    </View>
+
+      <View style={styles.flex}>
+        <TNodeChildrenRenderer
+          tnode={tnode}
+          renderChild={(p) => {
+            return (
+              <View style={styles.quoteText}>
+                <TChildrenRenderer tchildren={[p.childTnode]} />
+              </View>
+            );
+          }}
+        />
+      </View>
+    </TDefaultRenderer>
   );
 };
 
 const HTMLRenderer: React.FC<Props> = ({html}) => {
+  const {width} = useWindowDimensions();
+
   const theme = useTheme();
   const {colors} = theme;
-  const {textSizeMultiplier} = useSettings();
 
-  const fontSize = useMemo(() => 20 + textSizeMultiplier, [textSizeMultiplier]);
-
-  const baseFontStyle: TextStyle = useMemo(
-    () => ({
-      color: colors.text,
-      fontFamily: 'SourceSansPro-Regular',
-      lineHeight: fontSize + EXTRA_LINE_SPACING,
-      fontSize: fontSize,
+  const textStyle = useTextStyle({
+    type: 'primary',
+    scalingEnabled: true,
+    fontFamily: 'SourceSansPro-Regular',
+    style: {
+      fontSize: DEFAULT_FONT_SIZE,
+      lineHeight: DEFAULT_FONT_SIZE + EXTRA_LINE_SPACING,
       textDecorationColor: colors.primary,
-    }),
-    [colors.primary, colors.text, fontSize],
-  );
+      marginVertical: 8,
+    },
+  });
 
   return (
     <HTML
       source={{
         html,
       }}
-      baseFontStyle={baseFontStyle}
+      contentWidth={width - 12}
+      defaultTextProps={{
+        selectable: false,
+        allowFontScaling: true,
+      }}
+      baseStyle={textStyle as any}
       WebView={SafeWebView}
-      ignoredTags={IGNORED_TAGS}
+      systemFonts={[
+        ...defaultSystemFonts,
+        'SourceSansPro-SemiBold',
+        'SourceSansPro-Regular',
+        'SourceSansPro-LightItalic',
+      ]}
       tagsStyles={{
         strong: {
           fontFamily: 'SourceSansPro-SemiBold',
+          fontWeight: '900',
         },
         blockquote: {
+          margin: 12,
+          flexDirection: 'row',
           fontFamily: 'SourceSansPro-LightItalic',
-          fontSize: fontSize + 3,
+          fontSize: DEFAULT_FONT_SIZE + 3,
         },
         a: {
           color: colors.primary,
         },
+        li: {
+          paddingVertical: LI_TAG_VERTICAL_MARGIN,
+        },
       }}
-      onLinkPress={useCallback((_, href) => Linking.openURL(href), [])}
+      customHTMLElementModels={{
+        table: tableModel,
+        blockquote: defaultHTMLElementModels.blockquote.extend({
+          contentModel: HTMLContentModel.block,
+          isOpaque: false,
+        }),
+      }}
       renderers={{
-        table,
-        blockquote: renderBlockquote,
-        p: renderP,
-      }}
-      listsPrefixesRenderers={{
-        ul: renderListPrefix,
+        table: TableRenderer,
+        blockquote: BlockquoteRenderer,
+        p: ParagraphRenderer,
       }}
       renderersProps={{
+        a: {
+          onPress: (_, href) => Linking.openURL(href),
+        },
+        ul: {
+          markerBoxStyle: {
+            paddingTop: LI_TAG_VERTICAL_MARGIN,
+          },
+          markerTextStyle: {
+            color: colors.primary,
+            padding: 4,
+          },
+        },
+        ol: {
+          markerBoxStyle: {
+            paddingTop: LI_TAG_VERTICAL_MARGIN,
+          },
+          markerTextStyle: {
+            color: colors.primary,
+            padding: 4,
+          },
+        },
         table: {
           cssRules: getTableCssRules(theme),
           startInLoadingState: true,
@@ -117,16 +160,15 @@ const HTMLRenderer: React.FC<Props> = ({html}) => {
 export default HTMLRenderer;
 
 const styles = StyleSheet.create({
-  quoteText: {
+  flex: {
     flex: 1,
-  },
-  quoteContainer: {
-    flex: 1,
-    flexDirection: 'row',
   },
   quoteSimbol: {
-    fontSize: 80,
-    marginTop: -18,
-    paddingEnd: 8,
+    fontSize: 70,
+    marginTop: -8,
+    marginRight: 12,
+  },
+  quoteText: {
+    margin: 8,
   },
 });

@@ -1,5 +1,5 @@
 import {cssRulesFromSpecs, defaultTableStylesSpecs, TableStyleSpecs} from '@native-html/table-plugin';
-import {Platform, StyleSheet} from 'react-native';
+import {Platform} from 'react-native';
 import {AppTheme} from '../../Theme';
 
 function getFontAssetURL(fontFileName: string) {
@@ -15,16 +15,27 @@ export default (theme: AppTheme): string => {
   const tableStyleSpecs: TableStyleSpecs = {
     ...defaultTableStylesSpecs,
     ...{
+      fontSizePx: 13,
       fitContainerWidth: true,
-      fontFamily: 'sans-serif',
+      fitContainerHeight: true,
+      cellPaddingEm: 0.5,
+      fontFamily: '"SourceSansPro-Regular"',
       thEvenBackground: 'transparent',
       thOddBackground: 'transparent',
       trEvenBackground: 'transparent',
-      trOddBackground: theme.colors.lightGreyBackground,
-      linkColor: theme.colors.text,
-      rowsBorderWidthPx: StyleSheet.hairlineWidth,
-      fitContainerHeight: true,
-      tdBorderColor: theme.colors.listSeparator,
+      trOddBackground: 'transparent',
+      linkColor: theme.colors.primary,
+      rowsBorderWidthPx: 1,
+
+      thEvenColor: theme.colors.textSecondary,
+      thOddColor: theme.colors.textSecondary,
+      trEvenColor: theme.colors.text,
+      trOddColor: theme.colors.text,
+
+      tdBorderColor: theme.colors.border,
+      thBorderColor: theme.colors.listSeparator,
+      outerBorderColor: theme.colors.border,
+      outerBorderWidthPx: 1,
     },
   };
 
@@ -33,12 +44,13 @@ export default (theme: AppTheme): string => {
     `
         @font-face {
           font-family: 'SourceSansPro-Regular';
-          font-style: normal;
           font-weight: 400;
-          src: ${sourceSansProRegular}, format('opentype');
+          src: ${sourceSansProRegular}, format('ttf');
         }
         th {
           text-align: left;
+          font-weight: bold;
+          line-height: 200%;
         }
         td {
           vertical-align: top;
