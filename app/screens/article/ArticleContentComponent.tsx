@@ -167,11 +167,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   summaryText: {
-    marginTop: 24,
-    marginBottom: 24,
-    lineHeight: 32,
-
-    fontSize: 22,
+    marginTop: 16,
+    marginBottom: 16,
+    lineHeight: 34,
+    fontSize: 23,
   },
   playerContainer: {
     width: '100%',

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, TextProps} from 'react-native';
+import SelectableText from '../selectableText/SelectableText';
 
 import useTextStyle from './useTextStyle';
 
@@ -15,6 +16,10 @@ export interface TextComponentProps extends TextProps {
 
 const TextComponent: React.FC<TextComponentProps> = (props) => {
   const style = useTextStyle(props);
+
+  if (props.selectable) {
+    return <SelectableText {...props} style={style} />;
+  }
   return <Text {...props} style={style} />;
 };
 

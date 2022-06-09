@@ -1,10 +1,8 @@
 import React from 'react';
 import HTML, {
   CustomBlockRenderer,
-  defaultHTMLElementModels,
   defaultSystemFonts,
   getNativePropsForTNode,
-  HTMLContentModel,
   TChildrenRenderer,
   TNodeChildrenRenderer,
 } from 'react-native-render-html';
@@ -28,7 +26,7 @@ interface Props {
 
 const ParagraphRenderer: CustomBlockRenderer = (props) => {
   const nodeProps = getNativePropsForTNode(props);
-  return React.createElement(TextComponent, nodeProps);
+  return React.createElement(TextComponent, {...nodeProps, selectable: true});
 };
 
 const BlockquoteRenderer: CustomBlockRenderer = (props) => {
@@ -116,10 +114,6 @@ const HTMLRenderer: React.FC<Props> = ({html}) => {
       }}
       customHTMLElementModels={{
         table: tableModel,
-        blockquote: defaultHTMLElementModels.blockquote.extend({
-          contentModel: HTMLContentModel.block,
-          isOpaque: false,
-        }),
       }}
       renderers={{
         table: TableRenderer,
@@ -165,7 +159,6 @@ const styles = StyleSheet.create({
   },
   quoteSimbol: {
     fontSize: 70,
-    marginTop: -8,
     marginRight: 12,
   },
   quoteText: {
