@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {StatusBar, Platform, StyleSheet, ViewStyle, BackHandler} from 'react-native';
+import {StatusBar, Platform, StyleSheet, ViewStyle} from 'react-native';
 import {View} from 'react-native';
 import JWPlayer, {Config, PlaylistItem} from 'react-native-jw-media-player';
 import Gemius from 'react-native-gemius-plugin';
@@ -33,17 +33,11 @@ const JWPlayerNative: React.FC<Props> = ({
   const playerRef = useRef<JWPlayer>(null);
 
   useEffect(() => {
-    const backHandlerSubscription = BackHandler.addEventListener('hardwareBackPress', () => {
-      playerRef.current?.setFullscreen(false);
-      return false;
-    });
-
     return () => {
       //Cleanup
       /* This fixes the bug on android where user presses back button
        * while video is in fullscreen and status bar does not show up */
       if (Platform.OS === 'android') {
-        backHandlerSubscription.remove();
         StatusBar.setHidden(false, 'slide');
         StatusBar.setBarStyle('dark-content', true);
       }

@@ -37,7 +37,7 @@
     "react-native-gallery-swiper": "^1.26.4",
     "react-native-gemius-plugin": "./react-native-gemius-plugin",
     "react-native-gesture-handler": "^2.4.2",
-    "react-native-jw-media-player": "^0.2.19",
+    "react-native-jw-media-player": "^0.2.20",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-modal": "^13.0.1",
     "react-native-onesignal": "^4.3.9",
