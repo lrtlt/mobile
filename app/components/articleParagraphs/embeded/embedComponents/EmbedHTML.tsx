@@ -59,6 +59,7 @@ const EmbedHTML: React.FC<Props> = ({data}) => {
                 nestedScrollEnabled={false}
                 allowsFullscreenVideo={true}
                 mediaPlaybackRequiresUserAction={true}
+                androidHardwareAccelerationDisabled={item.long_content === true ? true : false}
                 startInLoadingState={true}
                 viewportContent={`width=${width}, user-scalable=no`}
                 source={source}
