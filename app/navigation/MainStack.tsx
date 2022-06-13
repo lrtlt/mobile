@@ -133,13 +133,21 @@ export default () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="Article" component={Screens.ArticleScreen} />
+      <Stack.Screen
+        name="Article"
+        component={Screens.ArticleScreen}
+        options={{
+          detachPreviousScreen: false,
+        }}
+      />
       <Stack.Screen name="Comments" component={Screens.CommentsScreen} />
       <Stack.Screen
         name="Gallery"
         component={Screens.GalleryScreen}
         options={{
           headerShown: false,
+          //TODO: disable animation after this fix: https://github.com/react-navigation/react-navigation/issues/10611
+          //animationEnabled: false,
         }}
       />
       <Stack.Screen name="Channel" component={Screens.ChannelScreen} />

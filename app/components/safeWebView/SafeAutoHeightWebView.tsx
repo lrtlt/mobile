@@ -1,8 +1,11 @@
-import React, {forwardRef, useCallback} from 'react';
-import {Linking} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import React, {forwardRef, useCallback, useRef} from 'react';
+import {LayoutChangeEvent, Linking} from 'react-native';
 import {StyleSheet, View} from 'react-native';
 import WebView, {AutoHeightWebViewProps} from 'react-native-autoheight-webview';
 import {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
+import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
 
 interface Props extends AutoHeightWebViewProps {
@@ -15,6 +18,7 @@ interface Props extends AutoHeightWebViewProps {
  */
 const SafeAutoHeightWebView: React.FC<Props> = forwardRef<WebView, Props>((props, ref) => {
   const {dark} = useTheme();
+  const animationDisabled = useRef(false);
 
   const handleShouldLoadWithRequest = useCallback((request: ShouldStartLoadRequest) => {
     const isUserClickAction = request.navigationType === 'click';
@@ -29,15 +33,30 @@ const SafeAutoHeightWebView: React.FC<Props> = forwardRef<WebView, Props>((props
     return true;
   }, []);
 
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
+
+  const onLayout = useCallback(
+    (e: LayoutChangeEvent) => {
+      const {height} = e.nativeEvent.layout;
+      if (height > 1000 && !animationDisabled.current) {
+        console.log('Disabling animation because of webView height:', height);
+        navigation.setOptions({
+          animationEnabled: false,
+        });
+        animationDisabled.current = true;
+      }
+    },
+    [navigation],
+  );
+
   return (
     <View style={[props.style as {}, styles.webViewContainer]}>
       <WebView
         ref={ref}
+        onLayout={onLayout}
         originWhitelist={['*']}
         domStorageEnabled={true}
         javaScriptEnabled={true}
-        androidHardwareAccelerationDisabled={false}
-        androidLayerType="hardware"
         automaticallyAdjustContentInsets={false}
         bounces={false}
         forceDarkOn={dark && props.allowDarkMode}
@@ -61,9 +80,11 @@ const styles = StyleSheet.create({
      */
     minHeight: 100,
     opacity: 0.99,
+    overflow: 'hidden',
   },
   webViewContainer: {
     minHeight: 100,
+    opacity: 0.99,
     overflow: 'hidden',
   },
 });
