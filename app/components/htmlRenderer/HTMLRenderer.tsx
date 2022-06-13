@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import HTML, {
   CustomBlockRenderer,
+  CustomTagRendererRecord,
+  CustomTextualRenderer,
   defaultSystemFonts,
   getNativePropsForTNode,
+  MixedStyleDeclaration,
+  RenderersProps,
   TChildrenRenderer,
   TNodeChildrenRenderer,
 } from 'react-native-render-html';
@@ -24,7 +28,7 @@ interface Props {
   html: string;
 }
 
-const ParagraphRenderer: CustomBlockRenderer = (props) => {
+const MyTextualRenderer: CustomTextualRenderer = (props) => {
   const nodeProps = getNativePropsForTNode(props);
   return React.createElement(TextComponent, {...nodeProps, selectable: true});
 };
@@ -58,11 +62,93 @@ const BlockquoteRenderer: CustomBlockRenderer = (props) => {
   );
 };
 
-const HTMLRenderer: React.FC<Props> = ({html}) => {
-  const {width} = useWindowDimensions();
+const renderers: CustomTagRendererRecord = {
+  table: TableRenderer,
+  blockquote: BlockquoteRenderer,
+  p: MyTextualRenderer,
+  li: MyTextualRenderer,
+  h5: MyTextualRenderer,
+  h4: MyTextualRenderer,
+  h3: MyTextualRenderer,
+  h2: MyTextualRenderer,
+  h1: MyTextualRenderer,
+};
 
+const fonts: string[] = [
+  ...defaultSystemFonts,
+  'SourceSansPro-SemiBold',
+  'SourceSansPro-Regular',
+  'SourceSansPro-LightItalic',
+];
+
+const useRendererProps = (): Partial<RenderersProps> => {
   const theme = useTheme();
   const {colors} = theme;
+
+  return useMemo(
+    () => ({
+      a: {
+        onPress: (_, href) => Linking.openURL(href),
+      },
+      ul: {
+        markerBoxStyle: {
+          paddingTop: LI_TAG_VERTICAL_MARGIN,
+        },
+        markerTextStyle: {
+          color: colors.primary,
+          padding: 4,
+        },
+      },
+      ol: {
+        markerBoxStyle: {
+          paddingTop: LI_TAG_VERTICAL_MARGIN,
+        },
+        markerTextStyle: {
+          color: colors.primary,
+          padding: 4,
+        },
+      },
+      table: {
+        cssRules: getTableCssRules(theme),
+        startInLoadingState: true,
+      },
+    }),
+    [colors.primary, theme],
+  );
+};
+
+const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
+  const {colors} = useTheme();
+
+  return useMemo(
+    () => ({
+      p: {
+        marginVertical: 4,
+      },
+      strong: {
+        fontFamily: 'SourceSansPro-SemiBold',
+        fontWeight: '900',
+      },
+      blockquote: {
+        margin: 12,
+        flexDirection: 'row',
+        fontFamily: 'SourceSansPro-LightItalic',
+        fontSize: DEFAULT_FONT_SIZE + 3,
+      },
+      a: {
+        color: colors.primary,
+      },
+      li: {
+        paddingVertical: LI_TAG_VERTICAL_MARGIN,
+      },
+    }),
+    [colors.primary],
+  );
+};
+
+const HTMLRenderer: React.FC<Props> = ({html}) => {
+  const {width} = useWindowDimensions();
+  const {colors} = useTheme();
 
   const textStyle = useTextStyle({
     type: 'primary',
@@ -82,73 +168,17 @@ const HTMLRenderer: React.FC<Props> = ({html}) => {
         html,
       }}
       contentWidth={width - 12}
+      baseStyle={textStyle as MixedStyleDeclaration}
       defaultTextProps={{
-        selectable: false,
         allowFontScaling: true,
       }}
-      baseStyle={textStyle as any}
       WebView={SafeWebView}
-      systemFonts={[
-        ...defaultSystemFonts,
-        'SourceSansPro-SemiBold',
-        'SourceSansPro-Regular',
-        'SourceSansPro-LightItalic',
-      ]}
-      tagsStyles={{
-        p: {
-          marginVertical: 4,
-        },
-        strong: {
-          fontFamily: 'SourceSansPro-SemiBold',
-          fontWeight: '900',
-        },
-        blockquote: {
-          margin: 12,
-          flexDirection: 'row',
-          fontFamily: 'SourceSansPro-LightItalic',
-          fontSize: DEFAULT_FONT_SIZE + 3,
-        },
-        a: {
-          color: colors.primary,
-        },
-        li: {
-          paddingVertical: LI_TAG_VERTICAL_MARGIN,
-        },
-      }}
+      systemFonts={fonts}
+      tagsStyles={useTagStyles()}
+      renderers={renderers}
+      renderersProps={useRendererProps()}
       customHTMLElementModels={{
         table: tableModel,
-      }}
-      renderers={{
-        table: TableRenderer,
-        blockquote: BlockquoteRenderer,
-        p: ParagraphRenderer,
-      }}
-      renderersProps={{
-        a: {
-          onPress: (_, href) => Linking.openURL(href),
-        },
-        ul: {
-          markerBoxStyle: {
-            paddingTop: LI_TAG_VERTICAL_MARGIN,
-          },
-          markerTextStyle: {
-            color: colors.primary,
-            padding: 4,
-          },
-        },
-        ol: {
-          markerBoxStyle: {
-            paddingTop: LI_TAG_VERTICAL_MARGIN,
-          },
-          markerTextStyle: {
-            color: colors.primary,
-            padding: 4,
-          },
-        },
-        table: {
-          cssRules: getTableCssRules(theme),
-          startInLoadingState: true,
-        },
       }}
     />
   );
