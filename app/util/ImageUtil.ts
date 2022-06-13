@@ -31,7 +31,7 @@ export const getImageSizeForWidth = (width: number) => {
     sizes.find((s) => {
       const maxAvailableOffset = s.width - s.width * (1.0 - MAX_AVAILABLE_SCALE_FACTOR);
       return s.width + maxAvailableOffset >= width;
-    }) || IMG_SIZE_XL
+    }) || IMG_SIZE_L
   );
 };
 

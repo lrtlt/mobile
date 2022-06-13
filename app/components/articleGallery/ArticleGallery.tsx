@@ -6,32 +6,50 @@ import {buildArticleImageUri, getImageSizeForWidth} from '../../util/ImageUtil';
 import {ArticlePhotoType} from '../../api/Types';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 import TextComponent from '../text/Text';
+import {useTheme} from '../../Theme';
+
+const DEFAULT_ASPECT_RATIO = 1.5;
+
+const getAspectRatio = (w_h: string | number) => {
+  if (w_h) {
+    const ratio = Number(w_h);
+    if (ratio > 1) {
+      return DEFAULT_ASPECT_RATIO;
+    } else {
+      return ratio;
+    }
+  }
+  return DEFAULT_ASPECT_RATIO;
+};
 
 const PhotoComponent = (
   photo: ArticlePhotoType,
   width: number,
   pressHandler?: (selectedPhoto: any) => void,
 ) => {
-  let img;
-  if (photo) {
-    const imgSize = getImageSizeForWidth(width);
-    const aspectRatio = 3 / 2;
-    img = (
-      <CoverImage
-        style={{...styles.image, aspectRatio}}
-        source={{uri: buildArticleImageUri(imgSize, photo.path)}}
-      />
-    );
-  }
-
-  const onPressHandler = useCallback(() => {
-    pressHandler && pressHandler({type: 'photo', item: photo});
-  }, [photo, pressHandler]);
-
+  const {colors} = useTheme();
   return (
-    <View style={styles.imageContainer}>
-      <TouchableDebounce onPress={onPressHandler}>
-        <View>{img}</View>
+    <View
+      style={{
+        ...styles.imageContainer,
+        backgroundColor: colors.photoBackground,
+        width,
+      }}>
+      <TouchableDebounce
+        style={styles.flex}
+        onPress={useCallback(() => {
+          pressHandler && pressHandler({type: 'photo', item: photo});
+        }, [photo, pressHandler])}>
+        {photo && (
+          <CoverImage
+            style={{
+              ...styles.image,
+              width,
+              aspectRatio: getAspectRatio(photo.w_h),
+            }}
+            source={{uri: buildArticleImageUri(getImageSizeForWidth(width), photo.path)}}
+          />
+        )}
       </TouchableDebounce>
     </View>
   );
@@ -68,15 +86,9 @@ interface Props {
   itemSelectHandler: (photo: {type: 'photo'; item: ArticlePhotoType}) => void;
 }
 const ArticleGallery: React.FC<Props> = ({data, expectedWidth, itemSelectHandler}) => {
-  if (data.length === 0) {
-    return <View />;
+  if (!data?.length) {
+    return null;
   }
-
-  const lastPhoto = data[6]
-    ? PhotoWithOverlayComponent(data[5], expectedWidth, itemSelectHandler, data.length - 6)
-    : data[5]
-    ? PhotoComponent(data[5], expectedWidth, itemSelectHandler)
-    : null;
 
   return (
     <View style={styles.container}>
@@ -92,7 +104,11 @@ const ArticleGallery: React.FC<Props> = ({data, expectedWidth, itemSelectHandler
         {PhotoComponent(data[4], expectedWidth / 2, itemSelectHandler)}
       </View>
       <View style={styles.space} />
-      {lastPhoto}
+      {data[6]
+        ? PhotoWithOverlayComponent(data[5], expectedWidth, itemSelectHandler, data.length - 6)
+        : data[5]
+        ? PhotoComponent(data[5], expectedWidth, itemSelectHandler)
+        : null}
     </View>
   );
 };
@@ -100,6 +116,9 @@ const ArticleGallery: React.FC<Props> = ({data, expectedWidth, itemSelectHandler
 export default React.memo(ArticleGallery, checkEqual);
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   container: {
     width: '100%',
     paddingTop: 24,
@@ -108,6 +127,8 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
     overflow: 'hidden',
+    aspectRatio: DEFAULT_ASPECT_RATIO,
+    backgroundColor: '#bbbbbb80',
   },
   imageCountOverlay: {
     flex: 1,
@@ -135,5 +156,6 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
+    alignSelf: 'center',
   },
 });
