@@ -30,7 +30,6 @@
     "react": "17.0.2",
     "react-native": "0.67.4",
     "react-native-autoheight-webview": "^1.6.1",
-    "react-native-collapsible": "^1.6.0",
     "react-native-event-listeners": "^1.0.7",
     "react-native-fast-image": "^8.5.11",
     "react-native-flipper": "^0.125.0",

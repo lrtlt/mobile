@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
-import {View, Easing, StyleSheet} from 'react-native';
-import Collapsible from 'react-native-collapsible';
+import {View, StyleSheet} from 'react-native';
 import {useTheme} from '../../../Theme';
+import Collapsible from '../../collapsible/Collapsible';
 import {IconCarretDown} from '../../svg';
 import TextComponent from '../../text/Text';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
@@ -39,15 +39,7 @@ const DrawerCollapsibleBlock: React.FC<Props> = ({title, children}) => {
           {collapsed && <IconCarretDown size={20} color={colors.textSecondary} />}
         </View>
       </TouchableDebounce>
-      <Collapsible
-        style={{
-          paddingLeft: dim.drawerPadding,
-          paddingBottom: dim.drawerPadding,
-        }}
-        collapsed={collapsed}
-        align="bottom"
-        duration={200}
-        easing={Easing.exp}>
+      <Collapsible collapsed={collapsed} duration={200}>
         {children}
       </Collapsible>
     </View>
