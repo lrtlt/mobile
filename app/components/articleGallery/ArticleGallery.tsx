@@ -92,18 +92,19 @@ const ArticleGallery: React.FC<Props> = ({data, expectedWidth, itemSelectHandler
 
   return (
     <View style={styles.container}>
-      {PhotoComponent(data[0], expectedWidth, itemSelectHandler)}
+      {data.length > 0 && PhotoComponent(data[0], expectedWidth, itemSelectHandler)}
       <View style={styles.row}>
-        {PhotoComponent(data[1], expectedWidth / 2, itemSelectHandler)}
+        {data.length > 1 && PhotoComponent(data[1], expectedWidth / 2, itemSelectHandler)}
         <View style={styles.space} />
-        {PhotoComponent(data[2], expectedWidth / 2, itemSelectHandler)}
+        {data.length > 2 && PhotoComponent(data[2], expectedWidth / 2, itemSelectHandler)}
       </View>
       <View style={styles.row}>
-        {PhotoComponent(data[3], expectedWidth / 2, itemSelectHandler)}
+        {data.length > 3 && PhotoComponent(data[3], expectedWidth / 2, itemSelectHandler)}
         <View style={styles.space} />
-        {PhotoComponent(data[4], expectedWidth / 2, itemSelectHandler)}
+        {data.length > 4 && PhotoComponent(data[4], expectedWidth / 2, itemSelectHandler)}
       </View>
       <View style={styles.space} />
+
       {data[6]
         ? PhotoWithOverlayComponent(data[5], expectedWidth, itemSelectHandler, data.length - 6)
         : data[5]
@@ -125,7 +126,6 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   imageContainer: {
-    flex: 1,
     overflow: 'hidden',
     aspectRatio: DEFAULT_ASPECT_RATIO,
     backgroundColor: '#bbbbbb80',

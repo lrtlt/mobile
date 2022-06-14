@@ -49,7 +49,7 @@ const VideoComponent: React.FC<Props> = (props) => {
     setTimeout(() => {
       if (errorCountRef.current < MAX_ERROR_COUNT) {
         errorCountRef.current = errorCountRef.current + 1;
-        console.log('Error count:', errorCountRef.current);
+        console.log('Video error count:', errorCountRef.current);
         load(props.streamUrl, props.title);
       } else {
         console.log('Max error count reached!');

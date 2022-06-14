@@ -184,7 +184,7 @@ const HTMLRenderer: React.FC<Props> = ({html}) => {
   );
 };
 
-export default HTMLRenderer;
+export default React.memo(HTMLRenderer, (prevProps, nextProps) => prevProps.html === nextProps.html);
 
 const styles = StyleSheet.create({
   flex: {
