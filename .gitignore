@@ -46,7 +46,7 @@ buck-out/
 *.keystore
 !debug.keystore
 
-*.lock
+Podfile.lock
 
 # fastlane
 #
