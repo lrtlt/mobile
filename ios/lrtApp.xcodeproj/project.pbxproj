@@ -8,23 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* lrtAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* lrtAppTests.m */; };
-		0DA441B3E98808C75119AF0C /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5053279E741BF922B7BEB6A1 /* libPods-OneSignalNotificationServiceExtension.a */; };
-		0FCAEF375383C345DBED54B6 /* libPods-lrtApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B771B1D8B41E7248FE0D24C /* libPods-lrtApp.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		18DD7B8C8053E4FD2958C289 /* libPods-lrtApp-lrtAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FDEE75E69F5A37153D09DE9 /* libPods-lrtApp-lrtAppTests.a */; };
 		20564F7D1ABD4A148FCB3E78 /* SourceSansPro-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 62350164273C4F2A885BD709 /* SourceSansPro-LightItalic.ttf */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* lrtAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* lrtAppTests.m */; };
 		30DF8C0F1DC54C25996EA68C /* PlayfairDisplay-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B1BAAF427CA44828E0B7B95 /* PlayfairDisplay-Regular.ttf */; };
 		5DE5469DBE4D4DF687A0D573 /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A436044A3C041F281F7BF8B /* SourceSansPro-SemiBold.ttf */; };
+		6C1A63A2E352D9677B90DDC7 /* libPods-lrtApp-lrtAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC06F2A43AAE077EE87CB068 /* libPods-lrtApp-lrtAppTests.a */; };
 		6E77BFFD1A0446E7AF06C197 /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A3C40A1A26044BDA6A6599C /* SourceSansPro-Regular.ttf */; };
 		6F35ABBC254AC514009EE240 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */; };
 		6FB5D222254AAF1D00E1295A /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FB5D221254AAF1D00E1295A /* NotificationService.m */; };
 		6FB5D226254AAF1D00E1295A /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6FB5D21E254AAF1D00E1295A /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		9BEA4358EA6A8247F03180FB /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F9D7CE826F3A90100CFC594 /* libPods-OneSignalNotificationServiceExtension.a */; };
+		8CDF52A27CECB0928998A071 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 384BAC472D5BE5D2C76C20F4 /* libPods-OneSignalNotificationServiceExtension.a */; };
+		949DF10D33CC30D6C647CCAC /* libPods-lrtApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B2AF738A7E1EEAC5667DD2F /* libPods-lrtApp.a */; };
 		9C0CA4ED28291CF100E1601F /* logo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C0CA4EC28291CF100E1601F /* logo2.png */; };
 		9C9A05BF285B418B00A39CD1 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C9A05BE285B418B00A39CD1 /* AppDelegate.mm */; };
 /* End PBXBuildFile section */
@@ -81,27 +80,26 @@
 		2D02E47B1E0B4A5D006451C7 /* lrtApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "lrtApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* lrtApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "lrtApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		36E9F7F766A64F38A2976B7B /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
+		384BAC472D5BE5D2C76C20F4 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A436044A3C041F281F7BF8B /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-SemiBold.ttf"; path = "../assets/font/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
 		4B1BAAF427CA44828E0B7B95 /* PlayfairDisplay-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "PlayfairDisplay-Regular.ttf"; path = "../assets/font/PlayfairDisplay-Regular.ttf"; sourceTree = "<group>"; };
-		5053279E741BF922B7BEB6A1 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		62350164273C4F2A885BD709 /* SourceSansPro-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-LightItalic.ttf"; path = "../assets/font/SourceSansPro-LightItalic.ttf"; sourceTree = "<group>"; };
 		6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6F60A1252549BE0B005E14EA /* lrtApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = lrtApp.entitlements; path = lrtApp/lrtApp.entitlements; sourceTree = "<group>"; };
-		6F9D7CE826F3A90100CFC594 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FB5D21E254AAF1D00E1295A /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FB5D220254AAF1D00E1295A /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		6FB5D221254AAF1D00E1295A /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		6FB5D223254AAF1D00E1295A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6FB5D28F254ABDA800E1295A /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		7748B3BCCF159404022C96A3 /* Pods-lrtApp-lrtAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp-lrtAppTests.release.xcconfig"; path = "Target Support Files/Pods-lrtApp-lrtAppTests/Pods-lrtApp-lrtAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		7B2AF738A7E1EEAC5667DD2F /* libPods-lrtApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lrtApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = lrtApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F73005EC221D36C68379F41 /* Pods-lrtApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp.debug.xcconfig"; path = "Target Support Files/Pods-lrtApp/Pods-lrtApp.debug.xcconfig"; sourceTree = "<group>"; };
 		945979D07578987EF3B629E6 /* Pods-lrtApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp.release.xcconfig"; path = "Target Support Files/Pods-lrtApp/Pods-lrtApp.release.xcconfig"; sourceTree = "<group>"; };
-		9B771B1D8B41E7248FE0D24C /* libPods-lrtApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lrtApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C0CA4EC28291CF100E1601F /* logo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo2.png; path = lrtApp/logo2.png; sourceTree = "<group>"; };
 		9C9A05BE285B418B00A39CD1 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = lrtApp/AppDelegate.mm; sourceTree = "<group>"; };
-		9FDEE75E69F5A37153D09DE9 /* libPods-lrtApp-lrtAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lrtApp-lrtAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C73D9392908EBD3453D6CEA5 /* Pods-lrtApp-lrtAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp-lrtAppTests.debug.xcconfig"; path = "Target Support Files/Pods-lrtApp-lrtAppTests/Pods-lrtApp-lrtAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		CC06F2A43AAE077EE87CB068 /* libPods-lrtApp-lrtAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lrtApp-lrtAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -111,7 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18DD7B8C8053E4FD2958C289 /* libPods-lrtApp-lrtAppTests.a in Frameworks */,
+				6C1A63A2E352D9677B90DDC7 /* libPods-lrtApp-lrtAppTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,7 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0FCAEF375383C345DBED54B6 /* libPods-lrtApp.a in Frameworks */,
+				949DF10D33CC30D6C647CCAC /* libPods-lrtApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,8 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0DA441B3E98808C75119AF0C /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
-				9BEA4358EA6A8247F03180FB /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
+				8CDF52A27CECB0928998A071 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,12 +195,11 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6F9D7CE826F3A90100CFC594 /* libPods-OneSignalNotificationServiceExtension.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				9B771B1D8B41E7248FE0D24C /* libPods-lrtApp.a */,
-				9FDEE75E69F5A37153D09DE9 /* libPods-lrtApp-lrtAppTests.a */,
-				5053279E741BF922B7BEB6A1 /* libPods-OneSignalNotificationServiceExtension.a */,
+				384BAC472D5BE5D2C76C20F4 /* libPods-OneSignalNotificationServiceExtension.a */,
+				7B2AF738A7E1EEAC5667DD2F /* libPods-lrtApp.a */,
+				CC06F2A43AAE077EE87CB068 /* libPods-lrtApp-lrtAppTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1120,7 +1116,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "i386 arm64";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;

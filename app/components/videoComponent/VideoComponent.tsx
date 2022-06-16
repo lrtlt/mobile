@@ -8,6 +8,7 @@ import useVideoData from './useVideoData';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
+import Player from './Player';
 
 interface Props {
   style?: ViewStyle;
@@ -99,7 +100,8 @@ const VideoComponent: React.FC<Props> = (props) => {
 
   return (
     <View style={props.style}>
-      <JWPlayerNative
+      <Player uri={data.streamUri} />
+      {/* <JWPlayerNative p
         key={data.streamUri}
         style={props.style}
         mediaId={data.mediaId}
@@ -109,7 +111,7 @@ const VideoComponent: React.FC<Props> = (props) => {
         backgroundImage={props.backgroundImage}
         startTime={props.startTime || data.offset}
         onError={onPlayerError}
-      />
+      /> */}
     </View>
   );
 };
