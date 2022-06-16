@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Platform, View, ViewStyle} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, ViewStyle} from 'react-native';
 import JWPlayerNative from '../videoComponent/JWPlayerNative';
 import {buildArticleImageUri, IMG_SIZE_L} from '../../util/ImageUtil';
 import Gemius from 'react-native-gemius-plugin';
