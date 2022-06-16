@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import {useRef} from 'react';
 import {LayoutAnimation, Platform, UIManager} from 'react-native';
 
 interface Props {
@@ -7,15 +8,24 @@ interface Props {
 }
 
 const Collapsible: React.FC<Props> = ({children, collapsed, duration}) => {
+  const isCollapsed = useRef(collapsed);
+
   useEffect(() => {
     if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }, []);
 
-  LayoutAnimation.configureNext(
-    LayoutAnimation.create(duration, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity),
-  );
+  if (isCollapsed.current !== collapsed) {
+    LayoutAnimation.configureNext(
+      LayoutAnimation.create(
+        duration,
+        LayoutAnimation.Types.easeInEaseOut,
+        LayoutAnimation.Properties.opacity,
+      ),
+    );
+    isCollapsed.current = collapsed;
+  }
 
   return collapsed ? null : <>{children}</>;
 };
