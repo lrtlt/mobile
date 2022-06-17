@@ -11,7 +11,7 @@ const LiveBadge: React.FC<Props> = (props) => {
   const {colors, strings} = useTheme();
   return (
     <View style={[styles.container, {backgroundColor: colors.textError}, props.style]}>
-      <TextComponent style={styles.text} fontFamily="SourceSansPro-SemiBold">
+      <TextComponent style={styles.text} fontFamily="SourceSansPro-SemiBold" allowFontScaling={false}>
         {strings.liveChannelTitle}
       </TextComponent>
     </View>
@@ -30,6 +30,8 @@ const styles = StyleSheet.create({
   text: {
     flexWrap: 'wrap',
     color: 'white',
-    fontSize: 13,
+    letterSpacing: 0.2,
+    fontSize: 12.5,
+    textTransform: 'uppercase',
   },
 });

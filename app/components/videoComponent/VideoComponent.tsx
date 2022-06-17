@@ -1,7 +1,6 @@
 import React, {useEffect, useCallback, useRef} from 'react';
 import {View, ActivityIndicator, StyleSheet, ViewStyle} from 'react-native';
 import VideoCover, {VideoCoverType} from './VideoCover';
-import JWPlayerNative from './JWPlayerNative';
 import Gemius from 'react-native-gemius-plugin';
 import {useTheme} from '../../Theme';
 import useVideoData from './useVideoData';
@@ -100,18 +99,16 @@ const VideoComponent: React.FC<Props> = (props) => {
 
   return (
     <View style={props.style}>
-      <Player uri={data.streamUri} />
-      {/* <JWPlayerNative p
+      <Player
         key={data.streamUri}
         style={props.style}
-        mediaId={data.mediaId}
-        streamUri={data.streamUri}
+        uri={data.streamUri}
         title={data.title}
-        autoStart={true}
-        backgroundImage={props.backgroundImage}
         startTime={props.startTime || data.offset}
+        poster={props.backgroundImage}
+        autostart={true}
         onError={onPlayerError}
-      /> */}
+      />
     </View>
   );
 };

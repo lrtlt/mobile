@@ -1,9 +1,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, ViewStyle} from 'react-native';
-import JWPlayerNative from '../videoComponent/JWPlayerNative';
 import {buildArticleImageUri, IMG_SIZE_L} from '../../util/ImageUtil';
 import Gemius from 'react-native-gemius-plugin';
 import {ArticlePhotoType} from '../../api/Types';
+import Player from '../videoComponent/Player';
 
 interface AudioComponentProps {
   style?: ViewStyle;
@@ -25,7 +25,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
   cover,
   autoStart,
   startTime,
-  ...restProps
+  streamUri,
 }) => {
   const [errorCount, setErrorCount] = useState(0);
 
@@ -46,16 +46,15 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
 
   return (
     <View style={style}>
-      <JWPlayerNative
-        key={`${restProps.streamUri}-${errorCount}`}
+      <Player
+        key={`${streamUri}-${errorCount}`}
         style={style}
-        mediaId={mediaId}
         title={title}
-        autoStart={autoStart}
+        uri={streamUri}
+        autostart={autoStart}
         startTime={startTime}
-        backgroundImage={cover ? buildArticleImageUri(IMG_SIZE_L, cover.path) : undefined}
+        poster={cover ? buildArticleImageUri(IMG_SIZE_L, cover.path) : undefined}
         onError={onPlayerError}
-        {...restProps}
       />
     </View>
   );
