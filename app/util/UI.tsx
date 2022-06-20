@@ -30,9 +30,6 @@ export type IconSize = {
   height?: number;
 };
 
-export const ORIENTATION_PORTRAIT = 'portrait';
-export const ORIENTATION_LANDSCAPE = 'landscape';
-
 export const getSmallestDim = () => {
   const dim = Dimensions.get('screen');
   return Math.min(dim.width, dim.height);

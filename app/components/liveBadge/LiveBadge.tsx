@@ -10,9 +10,9 @@ interface Props {
 const LiveBadge: React.FC<Props> = (props) => {
   const {colors, strings} = useTheme();
   return (
-    <View style={[styles.container, {backgroundColor: colors.textError}, props.style]}>
+    <View style={[styles.container, {backgroundColor: colors?.textError ?? '#C00'}, props.style]}>
       <TextComponent style={styles.text} fontFamily="SourceSansPro-SemiBold" allowFontScaling={false}>
-        {strings.liveChannelTitle}
+        {strings?.liveChannelTitle ?? 'Tiesiogiai'}
       </TextComponent>
     </View>
   );

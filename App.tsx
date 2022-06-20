@@ -12,6 +12,7 @@ import {persistor, store} from './app/redux/store';
 import useAppTrackingPermission from './app/util/useAppTrackingPermission';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {StyleSheet} from 'react-native';
+import VideoProvider from './app/components/videoComponent/context/VideoProvider';
 
 const ReduxProvider: React.FC = ({children}) => {
   return (
@@ -32,7 +33,9 @@ const App: React.FC = () => {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <SettingsProvider>
         <AppBackground>
-          <Navigation />
+          <VideoProvider>
+            <Navigation />
+          </VideoProvider>
         </AppBackground>
       </SettingsProvider>
     </SafeAreaProvider>

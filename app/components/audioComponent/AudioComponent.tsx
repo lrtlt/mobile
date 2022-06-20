@@ -3,7 +3,7 @@ import {View, ViewStyle} from 'react-native';
 import {buildArticleImageUri, IMG_SIZE_L} from '../../util/ImageUtil';
 import Gemius from 'react-native-gemius-plugin';
 import {ArticlePhotoType} from '../../api/Types';
-import Player from '../videoComponent/Player';
+import MediaPlayerWithControls from '../videoComponent/MediaPlayerWithControls';
 
 interface AudioComponentProps {
   style?: ViewStyle;
@@ -46,7 +46,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
 
   return (
     <View style={style}>
-      <Player
+      <MediaPlayerWithControls
         key={`${streamUri}-${errorCount}`}
         style={style}
         title={title}

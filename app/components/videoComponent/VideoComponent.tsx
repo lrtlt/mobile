@@ -7,7 +7,7 @@ import useVideoData from './useVideoData';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
-import Player from './Player';
+import MediaPlayerWithControls from './MediaPlayerWithControls';
 
 interface Props {
   style?: ViewStyle;
@@ -45,17 +45,21 @@ const VideoComponent: React.FC<Props> = (props) => {
     load(props.streamUrl, props.title);
   }, [load, props.streamUrl, props.title]);
 
-  const onPlayerError = useCallback(() => {
-    setTimeout(() => {
-      if (errorCountRef.current < MAX_ERROR_COUNT) {
-        errorCountRef.current = errorCountRef.current + 1;
-        console.log('Video error count:', errorCountRef.current);
-        load(props.streamUrl, props.title);
-      } else {
-        console.log('Max error count reached!');
-      }
-    }, errorCountRef.current * ERROR_DELAY);
-  }, [load, props.streamUrl, props.title]);
+  const onPlayerError = useCallback(
+    (e: any) => {
+      console.log('Error:', e);
+      setTimeout(() => {
+        if (errorCountRef.current < MAX_ERROR_COUNT) {
+          errorCountRef.current = errorCountRef.current + 1;
+          console.log('Video error count:', errorCountRef.current);
+          load(props.streamUrl, props.title);
+        } else {
+          console.log('Max error count reached!');
+        }
+      }, errorCountRef.current * ERROR_DELAY);
+    },
+    [load, props.streamUrl, props.title],
+  );
 
   if (errorCountRef.current >= MAX_ERROR_COUNT) {
     return (
@@ -99,7 +103,7 @@ const VideoComponent: React.FC<Props> = (props) => {
 
   return (
     <View style={props.style}>
-      <Player
+      <MediaPlayerWithControls
         key={data.streamUri}
         style={props.style}
         uri={data.streamUri}
