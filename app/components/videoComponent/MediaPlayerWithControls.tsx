@@ -11,14 +11,9 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import Gemius from 'react-native-gemius-plugin';
 import {MediaType} from './context/VideoContext';
+import {PlayerMode} from './PlayerMode';
 
 const SCRUBBER_TOLERANCE = 0;
-
-// eslint-disable-next-line no-shadow
-export enum PlayerMode {
-  DEFAULT,
-  FULLSCREEN,
-}
 
 interface Props {
   style?: ViewStyle;
@@ -342,12 +337,12 @@ const MediaPlayerWithControls: React.FC<Props> = ({
               enabled={true}
               currentTime={getCurrentTime()}
               mediaDuration={duration}
-              isFullScreen={isFullScreen ?? false}
               isMuted={isMuted ?? false}
               isPaused={isPaused}
               loading={!isLoaded}
               isBuffering={isBuffering}
               enableFullScreen={enableFullScreen}
+              enableMute={true}
               title={title}
               onPlayPausePress={handlePlayPauseToggle}
               onMutePress={handleMuteToggle}
