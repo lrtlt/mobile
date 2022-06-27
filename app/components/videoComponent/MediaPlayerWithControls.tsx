@@ -5,6 +5,7 @@ import Video, {LoadError, OnLoadData, OnProgressData, OnSeekData} from 'react-na
 import {checkEqual} from '../../util/LodashEqualityCheck';
 import {useVideo} from './context/useVideo';
 import MediaControls from './MediaControls';
+import {useFocusEffect} from '@react-navigation/native';
 
 const SCRUBBER_TOLERANCE = 0;
 
@@ -37,6 +38,16 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
   const videoRef = useRef<Video>(null);
 
+  const handleOnBlurEffect = useCallback(() => {
+    return () => setIsPaused(true);
+  }, []);
+
+  try {
+    useFocusEffect(handleOnBlurEffect);
+  } catch (_error) {
+    //Error: Couldn't find a navigation object. Is your component inside NavigationContainer?
+  }
+
   const {
     setCurrentTime,
     getCurrentTime,
@@ -56,7 +67,9 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   );
 
   useEffect(() => {
-    registerFullScreenListener(mode, {
+    const key = `${mode}-${Math.random() * Math.pow(10, 8)}`;
+
+    registerFullScreenListener(key, {
       onFullScreenEnter: () => {
         if (mode === 'playerDefault') {
           setIsPaused(true);
@@ -69,7 +82,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
         }
       },
     });
-    return () => unregisterFullScreenListener(mode);
+    return () => unregisterFullScreenListener(key);
   }, [duration, getCurrentTime, mode, registerFullScreenListener, seek, unregisterFullScreenListener]);
 
   const _onLoad = useCallback(
