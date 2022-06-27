@@ -3,7 +3,6 @@ import {debounce} from 'lodash';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
 import Video, {LoadError, OnBufferData, OnLoadData, OnProgressData, OnSeekData} from 'react-native-video';
-import {checkEqual} from '../../util/LodashEqualityCheck';
 import {useVideo} from './context/useVideo';
 import MediaControls from './MediaControls';
 import {useFocusEffect} from '@react-navigation/native';
@@ -110,7 +109,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
       },
       onFullScreenExit: () => {
         if (mode === 'playerDefault') {
-          seek(duration <= 1 ? -1 : getCurrentTime());
+          seek(duration > 1 ? getCurrentTime() : Number.MAX_SAFE_INTEGER);
           setIsPaused(false);
         }
       },
@@ -122,7 +121,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
     (data: OnLoadData) => {
       setIsLoaded(true);
       setDuration(data.duration);
-      setCurrentTime(data.currentTime);
+      setCurrentTime(Math.min(data.currentTime, data.duration));
 
       setVideoBaseData({
         poster,
@@ -163,10 +162,10 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
   const _onSeek = useCallback(
     (data: OnSeekData) => {
-      setCurrentTime(data.seekTime);
+      setCurrentTime(Math.min(data.seekTime, duration));
       setBufferingDebounce(false);
     },
-    [setBufferingDebounce, setCurrentTime],
+    [setBufferingDebounce, setCurrentTime, duration],
   );
 
   const _onBuffer = useCallback(
@@ -175,6 +174,11 @@ const MediaPlayerWithControls: React.FC<Props> = ({
     },
     [setBufferingDebounce],
   );
+
+  const _onAudioBecomingNoisy = useCallback(() => {
+    setIsPaused(true);
+    trackPause(uri, getCurrentTime());
+  }, []);
 
   const _onEnd = useCallback(() => {
     trackComplete(uri, getCurrentTime());
@@ -225,8 +229,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
         poster={poster ?? VIDEO_DEFAULT_BACKGROUND_IMAGE}
         audioOnly={false}
         fullscreen={false}
-        fullscreenAutorotate={true}
-        fullscreenOrientation="all"
+        fullscreenAutorotate={false}
         posterResizeMode="cover"
         controls={false}
         rate={1.0}
@@ -239,9 +242,10 @@ const MediaPlayerWithControls: React.FC<Props> = ({
         onSeek={_onSeek}
         onEnd={_onEnd}
         onBuffer={_onBuffer}
+        onAudioBecomingNoisy={_onAudioBecomingNoisy}
         progressUpdateInterval={300}
         ignoreSilentSwitch={'ignore'}
-        automaticallyWaitsToMinimizeStalling={false}
+        automaticallyWaitsToMinimizeStalling={true}
         source={{
           uri: uri,
         }}
@@ -267,9 +271,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   );
 };
 
-export default React.memo(MediaPlayerWithControls, (prev, next) => {
-  return checkEqual(prev, next);
-});
+export default MediaPlayerWithControls;
 
 const styles = StyleSheet.create({
   container: {
