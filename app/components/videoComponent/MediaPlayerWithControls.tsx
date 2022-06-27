@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {debounce} from 'lodash';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
@@ -7,6 +8,7 @@ import {useVideo} from './context/useVideo';
 import MediaControls from './MediaControls';
 import {useFocusEffect} from '@react-navigation/native';
 import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
+import useMediaTracking from './useMediaTracking';
 
 const SCRUBBER_TOLERANCE = 0;
 
@@ -42,7 +44,9 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   const videoRef = useRef<Video>(null);
 
   const handleOnBlurEffect = useCallback(() => {
-    return () => setIsPaused(true);
+    return () => {
+      setIsPaused(true);
+    };
   }, []);
 
   try {
@@ -61,6 +65,16 @@ const MediaPlayerWithControls: React.FC<Props> = ({
     unregisterFullScreenListener,
   } = useVideo();
 
+  const {trackPlay, trackPause, trackBuffer, trackClose, trackComplete, trackSeek} = useMediaTracking();
+
+  useEffect(() => {
+    return () => {
+      if (mode === 'playerDefault') {
+        trackClose(uri, getCurrentTime());
+      }
+    };
+  }, []);
+
   const seek = useMemo(
     () =>
       debounce((time) => {
@@ -72,6 +86,14 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   const setBufferingDebounce = useMemo(
     () =>
       debounce((buffering: boolean) => {
+        if (buffering) {
+          trackBuffer(uri, getCurrentTime());
+        } else {
+          if (getCurrentTime() > 1) {
+            trackPlay(uri, getCurrentTime());
+          }
+        }
+
         setIsBuffering(buffering);
       }, 100),
     [],
@@ -111,6 +133,12 @@ const MediaPlayerWithControls: React.FC<Props> = ({
       if (startTime) {
         videoRef.current?.seek(startTime, SCRUBBER_TOLERANCE);
       }
+
+      if (isPaused) {
+        trackPause(uri, getCurrentTime());
+      } else {
+        trackPlay(uri, getCurrentTime());
+      }
     },
     [poster, setCurrentTime, setVideoBaseData, startTime, title, uri],
   );
@@ -149,14 +177,22 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   );
 
   const _onEnd = useCallback(() => {
+    trackComplete(uri, getCurrentTime());
     setTimeout(() => {
       setIsPaused(true);
+      trackPause(uri, getCurrentTime());
       seek(0);
+      trackSeek(uri, 0);
     }, 1000);
-  }, [seek]);
+  }, [getCurrentTime, seek, trackComplete]);
 
   const handlePlayPauseToggle = useCallback(() => {
     setIsPaused(!isPaused);
+    if (isPaused) {
+      trackPlay(uri, getCurrentTime());
+    } else {
+      trackPause(uri, getCurrentTime());
+    }
   }, [isPaused]);
 
   const handleMuteToggle = useCallback(() => {
@@ -170,6 +206,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
   const handleOnSeekRequest = useCallback(
     (time) => {
+      trackSeek(uri, getCurrentTime());
       seek(time);
       setCurrentTime(time);
       setCurrentTimeInternal(time);
