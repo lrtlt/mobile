@@ -40,6 +40,7 @@ interface Props {
   currentTime: number;
   title?: string;
   loading?: boolean;
+  isBuffering?: boolean;
 
   isPaused: boolean;
   onPlayPausePress: () => void;
@@ -58,6 +59,7 @@ const MediaControls: React.FC<Props> = ({
   mediaDuration,
   title,
   loading = false,
+  isBuffering,
   isPaused,
   onPlayPausePress,
   isMuted,
@@ -161,15 +163,18 @@ const MediaControls: React.FC<Props> = ({
         style={styles.playPauseIcon}
         onPress={handlePlayPauseToggle}
         hitSlop={HIT_SLOP}
+        disabled={isBuffering}
         activeOpacity={0.6}>
-        {isPaused ? (
+        {isBuffering ? (
+          <ActivityIndicator />
+        ) : isPaused ? (
           <IconPlayerPlay size={ICON_SIZE} color={ICON_COLOR} />
         ) : (
           <IconPlayerPause size={ICON_SIZE} color={ICON_COLOR} />
         )}
       </TouchableOpacity>
     ),
-    [handlePlayPauseToggle, isPaused],
+    [handlePlayPauseToggle, isBuffering, isPaused],
   );
 
   const VolumeControl = useCallback(

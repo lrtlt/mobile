@@ -47,7 +47,6 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
   return (
     <View style={style}>
       <MediaPlayerWithControls
-        key={`${streamUri}-${errorCount}`}
         style={style}
         title={title}
         uri={streamUri}

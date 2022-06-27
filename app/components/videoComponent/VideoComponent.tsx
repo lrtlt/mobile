@@ -104,7 +104,6 @@ const VideoComponent: React.FC<Props> = (props) => {
   return (
     <View style={props.style}>
       <MediaPlayerWithControls
-        key={data.streamUri}
         style={props.style}
         uri={data.streamUri}
         title={data.title}

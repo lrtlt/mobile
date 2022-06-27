@@ -1,11 +1,12 @@
 import {debounce} from 'lodash';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
-import Video, {LoadError, OnLoadData, OnProgressData, OnSeekData} from 'react-native-video';
+import Video, {LoadError, OnBufferData, OnLoadData, OnProgressData, OnSeekData} from 'react-native-video';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 import {useVideo} from './context/useVideo';
 import MediaControls from './MediaControls';
 import {useFocusEffect} from '@react-navigation/native';
+import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 
 const SCRUBBER_TOLERANCE = 0;
 
@@ -30,10 +31,12 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   startTime,
   onError: _onError,
 }) => {
-  const [loaded, setLoaded] = useState(false);
   const [duration, setDuration] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isPaused, setIsPaused] = useState(!autostart);
   const [isMuted, setIsMuted] = useState(false);
+  const [isBuffering, setIsBuffering] = useState(false);
+
   const [, setCurrentTimeInternal] = useState(0);
 
   const videoRef = useRef<Video>(null);
@@ -66,6 +69,14 @@ const MediaPlayerWithControls: React.FC<Props> = ({
     [],
   );
 
+  const setBufferingDebounce = useMemo(
+    () =>
+      debounce((buffering: boolean) => {
+        setIsBuffering(buffering);
+      }, 100),
+    [],
+  );
+
   useEffect(() => {
     const key = `${mode}-${Math.random() * Math.pow(10, 8)}`;
 
@@ -77,7 +88,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
       },
       onFullScreenExit: () => {
         if (mode === 'playerDefault') {
-          seek(duration <= 1 ? 1 : getCurrentTime());
+          seek(duration <= 1 ? -1 : getCurrentTime());
           setIsPaused(false);
         }
       },
@@ -87,7 +98,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
   const _onLoad = useCallback(
     (data: OnLoadData) => {
-      setLoaded(true);
+      setIsLoaded(true);
       setDuration(data.duration);
       setCurrentTime(data.currentTime);
 
@@ -105,7 +116,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   );
 
   const _onLoadStart = useCallback(() => {
-    setLoaded(false);
+    setIsLoaded(false);
   }, []);
 
   const _onProgress = useCallback(
@@ -115,15 +126,26 @@ const MediaPlayerWithControls: React.FC<Props> = ({
       }
       setCurrentTimeInternal(data.currentTime);
       setCurrentTime(data.currentTime);
+      if (isBuffering) {
+        setBufferingDebounce(false);
+      }
     },
-    [duration, setCurrentTime],
+    [duration, isBuffering, setBufferingDebounce, setCurrentTime],
   );
 
   const _onSeek = useCallback(
     (data: OnSeekData) => {
       setCurrentTime(data.seekTime);
+      setBufferingDebounce(false);
     },
-    [setCurrentTime],
+    [setBufferingDebounce, setCurrentTime],
+  );
+
+  const _onBuffer = useCallback(
+    (data: OnBufferData) => {
+      setBufferingDebounce(data?.isBuffering ?? false);
+    },
+    [setBufferingDebounce],
   );
 
   const _onEnd = useCallback(() => {
@@ -163,7 +185,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
         resizeMode="contain"
         paused={isPaused}
         muted={isMuted}
-        poster={poster}
+        poster={poster ?? VIDEO_DEFAULT_BACKGROUND_IMAGE}
         audioOnly={false}
         fullscreen={false}
         fullscreenAutorotate={true}
@@ -179,6 +201,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
         onLoad={_onLoad}
         onSeek={_onSeek}
         onEnd={_onEnd}
+        onBuffer={_onBuffer}
         progressUpdateInterval={300}
         ignoreSilentSwitch={'ignore'}
         automaticallyWaitsToMinimizeStalling={false}
@@ -186,7 +209,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
           uri: uri,
         }}
       />
-      {loaded === true ? (
+      {isLoaded === true ? (
         <MediaControls
           enabled={true}
           currentTime={getCurrentTime()}
@@ -194,6 +217,8 @@ const MediaPlayerWithControls: React.FC<Props> = ({
           isFullScreen={isFullScreen ?? false}
           isMuted={isMuted}
           isPaused={isPaused}
+          loading={!isLoaded}
+          isBuffering={isBuffering}
           title={title}
           onPlayPausePress={handlePlayPauseToggle}
           onMutePress={handleMuteToggle}
