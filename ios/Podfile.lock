@@ -720,11 +720,6 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
-  - google-cast-sdk (4.7.0):
-    - google-cast-sdk/Core (= 4.7.0)
-    - Protobuf (~> 3.13)
-  - google-cast-sdk/Core (4.7.0):
-    - Protobuf (~> 3.13)
   - GoogleDataTransport (9.1.2):
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
@@ -787,7 +782,6 @@ PODS:
     - Libuv-gRPC (= 0.0.10)
   - gRPC-Core/Interface (1.44.0)
   - hermes-engine (0.11.0)
-  - JWPlayerKit (4.5.3)
   - leveldb-library (1.22.1)
   - libevent (2.1.12)
   - Libuv-gRPC (0.0.10):
@@ -825,7 +819,6 @@ PODS:
   - Permission-AppTrackingTransparency (3.3.1):
     - RNPermissions
   - PromisesObjC (2.1.0)
-  - Protobuf (3.20.1)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -1156,10 +1149,6 @@ PODS:
     - RNFBApp
   - RNGestureHandler (2.4.2):
     - React-Core
-  - RNJWPlayer (0.2.20):
-    - google-cast-sdk (~> 4.7.0)
-    - JWPlayerKit (~> 4.5.3)
-    - React
   - RNPermissions (3.3.1):
     - React-Core
   - RNReanimated (2.8.0):
@@ -1283,7 +1272,6 @@ DEPENDENCIES:
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
-  - RNJWPlayer (from `../node_modules/react-native-jw-media-player/ios`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -1313,13 +1301,11 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - fmt
-    - google-cast-sdk
     - GoogleDataTransport
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
     - hermes-engine
-    - JWPlayerKit
     - leveldb-library
     - libevent
     - Libuv-gRPC
@@ -1329,7 +1315,6 @@ SPEC REPOS:
     - OneSignalXCFramework
     - OpenSSL-Universal
     - PromisesObjC
-    - Protobuf
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
@@ -1428,8 +1413,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/firestore"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
-  RNJWPlayer:
-    :path: "../node_modules/react-native-jw-media-player/ios"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNReanimated:
@@ -1471,13 +1454,11 @@ SPEC CHECKSUMS:
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
-  google-cast-sdk: 6731e9a206ce43e0f4433d15598ad8a19f0371d5
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
   hermes-engine: 84e3af1ea01dd7351ac5d8689cbbea1f9903ffc3
-  JWPlayerKit: 5e7fc477a267b4aa25ca30a3b41ddca5a9f53c17
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
@@ -1488,7 +1469,6 @@ SPEC CHECKSUMS:
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   Permission-AppTrackingTransparency: 507f031f783885aad86f5754bd23edba587b2125
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
-  Protobuf: b60ec2f51ad74765f44d0c09d2e0579d7de21745
   RCT-Folly: 803a9cfd78114b2ec0f140cfa6fa2a6bafb2d685
   RCTRequired: 3e917ea5377751094f38145fdece525aa90545a0
   RCTTypeSafety: c43c072a4bd60feb49a9570b0517892b4305c45e
@@ -1528,7 +1508,6 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: 9fb244c35e832dca3f81485f618b7ad283f23819
   RNFBFirestore: 31b633a6cf7e59156f727a81a6cfae9b2f8764b4
   RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
-  RNJWPlayer: 804079e7609d9913cd4e5fa7c77e29ab71ef8476
   RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
   RNReanimated: 64573e25e078ae6bec03b891586d50b9ec284393
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19

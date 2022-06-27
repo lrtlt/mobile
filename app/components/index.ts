@@ -27,7 +27,6 @@ export {default as DefaultSectionHeader} from './sectionHeader/DefaultHeader';
 export {default as SectionHeader} from './sectionHeader/SectionHeader';
 export {default as SettingsToggleButton} from './settingsToggleButton/SettingsToggleButton';
 export {default as TouchableDebounce} from './touchableDebounce/TouchableDebounce';
-export {default as JWPlayer} from './videoComponent/JWPlayerNative';
 export {default as VideoComponent} from './videoComponent/VideoComponent';
 export {default as ActionButton} from './actionButton/ActionButton';
 export {default as SearchFilterDrawer} from './searchFilterDrawer/SearchFilterDrawer';
