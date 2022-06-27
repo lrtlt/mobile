@@ -19,7 +19,7 @@ import TextComponent from '../text/Text';
 const CONTROLS_TIMEOUT_MS = 4000;
 const ICON_COLOR = '#FFFFFFDD';
 
-const ICON_SIZE = 20;
+const ICON_SIZE = 22;
 
 /**
  * Hit slop size for controls
@@ -226,7 +226,11 @@ const MediaControls: React.FC<Props> = ({
 
   const SeekBar = useCallback(({position}: {position: number}) => {
     return (
-      <View style={styles.seekBar_container} collapsable={false} {...seekPanResponder.current?.panHandlers}>
+      <View
+        style={styles.seekBar_container}
+        collapsable={false}
+        {...seekPanResponder.current?.panHandlers}
+        hitSlop={HIT_SLOP}>
         <View
           style={styles.seekBar_track}
           onLayout={(event) => (seekerWidth.current = event.nativeEvent.layout.width)}
@@ -273,19 +277,25 @@ const MediaControls: React.FC<Props> = ({
       <Title />
       <PlayPauseControl />
       <View style={styles.bottomControlsContainer}>
-        <VolumeControl />
-        <View style={styles.progressContainer}>
-          {mediaDuration > 0 ? (
-            <>
-              <TimerControl time={formatTimeElapsed(currentTime ?? 0, mediaDuration)} />
-              <SeekBar position={seekerPosition} />
-              <TimerControl time={formatTimeRemaining(currentTime ?? 0, mediaDuration)} />
-            </>
-          ) : (
-            <LiveBadge />
-          )}
+        {!isLiveStream && (
+          <View>
+            <SeekBar position={seekerPosition} />
+          </View>
+        )}
+        <View style={styles.bottomControlsRow}>
+          <VolumeControl />
+          <View style={styles.progressContainer}>
+            {!isLiveStream ? (
+              <>
+                <TimerControl time={formatTimeElapsed(currentTime ?? 0, mediaDuration)} />
+                <TimerControl time={formatTimeTotal(mediaDuration ?? 0)} />
+              </>
+            ) : (
+              <LiveBadge />
+            )}
+          </View>
+          <FullScreenControl />
         </View>
-        <FullScreenControl />
       </View>
     </Animated.View>
   ) : (
@@ -312,14 +322,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   bottomControlsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     left: 0,
     right: 0,
     bottom: 0,
     position: 'absolute',
     padding: 4,
+  },
+  bottomControlsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   volumeIcon: {
     width: ICON_SIZE + 8,
@@ -355,22 +367,20 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   seekBar_container: {
-    height: 22,
-    flexGrow: 1,
-    justifyContent: 'center',
-    marginHorizontal: 8,
-    top: 1,
+    flex: 1,
+    marginHorizontal: 4,
+    marginVertical: 6,
   },
   seekBar_track: {
     borderRadius: 2,
-    height: 3,
+    height: 5,
     overflow: 'hidden',
     backgroundColor: '#999999AA',
     width: '100%',
   },
   seekBar_fill: {
     backgroundColor: '#FFFFFFFF',
-    height: 3,
+    height: 5,
   },
 });
 
@@ -382,10 +392,10 @@ const formatTimeElapsed = (time: number, duration: number) => {
   return result;
 };
 
-const formatTimeRemaining = (time: number, duration: number) => {
-  time = Math.floor(Math.abs(Math.min(Math.max(time, 0), duration) - duration));
+const formatTimeTotal = (duration: number) => {
+  const time = Math.max(duration, 0);
   const minutes = Math.floor(time / 60);
   const seconds = Math.floor(time % 60);
-  const result = `-${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  const result = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   return result;
 };
