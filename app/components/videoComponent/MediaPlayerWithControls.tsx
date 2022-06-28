@@ -1,13 +1,14 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {debounce} from 'lodash';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
 import Video, {LoadError, OnBufferData, OnLoadData, OnProgressData, OnSeekData} from 'react-native-video';
 import {useVideo} from './context/useVideo';
 import MediaControls from './MediaControls';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 import useMediaTracking from './useMediaTracking';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MainStackParamList} from '../../navigation/MainStack';
 
 const SCRUBBER_TOLERANCE = 0;
 
@@ -37,22 +38,40 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   const [isPaused, setIsPaused] = useState(!autostart);
   const [isMuted, setIsMuted] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
+  const [isActive, setActive] = useState(true);
 
   const [, setCurrentTimeInternal] = useState(0);
 
   const videoRef = useRef<Video>(null);
 
+  /***************************************************************/
+  /** HANDLE IOS react-navigation back behaviour *****************/
+  /***************************************************************/
+
   const handleOnBlurEffect = useCallback(() => {
+    setActive(true);
     return () => {
+      setActive(false);
       setIsPaused(true);
     };
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(handleOnBlurEffect, []);
+
+  try {
+    const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
+    navigation.addListener('beforeRemove', () => {
+      setActive(false);
+      setIsPaused(true);
+    });
+  } catch (_) {}
+
   try {
     useFocusEffect(handleOnBlurEffect);
-  } catch (_error) {
-    //Error: Couldn't find a navigation object. Is your component inside NavigationContainer?
-  }
+  } catch (_) {}
+  /***************************************************************/
+  /***************************************************************/
 
   const {
     setCurrentTime,
@@ -72,6 +91,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
         trackClose(uri, getCurrentTime());
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const seek = useMemo(
@@ -95,7 +115,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
         setIsBuffering(buffering);
       }, 100),
-    [],
+    [getCurrentTime, trackBuffer, trackPlay, uri],
   );
 
   useEffect(() => {
@@ -139,7 +159,18 @@ const MediaPlayerWithControls: React.FC<Props> = ({
         trackPlay(uri, getCurrentTime());
       }
     },
-    [poster, setCurrentTime, setVideoBaseData, startTime, title, uri],
+    [
+      getCurrentTime,
+      isPaused,
+      poster,
+      setCurrentTime,
+      setVideoBaseData,
+      startTime,
+      title,
+      trackPause,
+      trackPlay,
+      uri,
+    ],
   );
 
   const _onLoadStart = useCallback(() => {
@@ -178,7 +209,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   const _onAudioBecomingNoisy = useCallback(() => {
     setIsPaused(true);
     trackPause(uri, getCurrentTime());
-  }, []);
+  }, [getCurrentTime, trackPause, uri]);
 
   const _onEnd = useCallback(() => {
     trackComplete(uri, getCurrentTime());
@@ -188,7 +219,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
       seek(0);
       trackSeek(uri, 0);
     }, 1000);
-  }, [getCurrentTime, seek, trackComplete]);
+  }, [getCurrentTime, seek, trackComplete, trackPause, trackSeek, uri]);
 
   const handlePlayPauseToggle = useCallback(() => {
     setIsPaused(!isPaused);
@@ -197,7 +228,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
     } else {
       trackPause(uri, getCurrentTime());
     }
-  }, [isPaused]);
+  }, [getCurrentTime, isPaused, trackPause, trackPlay, uri]);
 
   const handleMuteToggle = useCallback(() => {
     setIsMuted(!isMuted);
@@ -215,58 +246,62 @@ const MediaPlayerWithControls: React.FC<Props> = ({
       setCurrentTime(time);
       setCurrentTimeInternal(time);
     },
-    [seek, setCurrentTime],
+    [getCurrentTime, seek, setCurrentTime, trackSeek, uri],
   );
 
   return (
     <View style={[styles.container, style]}>
-      <Video
-        ref={videoRef}
-        style={styles.video}
-        resizeMode="contain"
-        paused={isPaused}
-        muted={isMuted}
-        poster={poster ?? VIDEO_DEFAULT_BACKGROUND_IMAGE}
-        audioOnly={false}
-        fullscreen={false}
-        fullscreenAutorotate={false}
-        posterResizeMode="cover"
-        controls={false}
-        rate={1.0}
-        playInBackground={true}
-        playWhenInactive={true}
-        onLoadStart={_onLoadStart}
-        onProgress={_onProgress}
-        onError={_onError}
-        onLoad={_onLoad}
-        onSeek={_onSeek}
-        onEnd={_onEnd}
-        onBuffer={_onBuffer}
-        onAudioBecomingNoisy={_onAudioBecomingNoisy}
-        progressUpdateInterval={300}
-        ignoreSilentSwitch={'ignore'}
-        automaticallyWaitsToMinimizeStalling={true}
-        source={{
-          uri: uri,
-        }}
-      />
-      {isLoaded === true ? (
-        <MediaControls
-          enabled={true}
-          currentTime={getCurrentTime()}
-          mediaDuration={duration}
-          isFullScreen={isFullScreen ?? false}
-          isMuted={isMuted}
-          isPaused={isPaused}
-          loading={!isLoaded}
-          isBuffering={isBuffering}
-          title={title}
-          onPlayPausePress={handlePlayPauseToggle}
-          onMutePress={handleMuteToggle}
-          onFullScreenPress={handleFullscreenClick}
-          onSeekRequest={handleOnSeekRequest}
-        />
-      ) : null}
+      {isActive && (
+        <>
+          <Video
+            ref={videoRef}
+            style={styles.video}
+            resizeMode="contain"
+            paused={isPaused}
+            muted={isMuted}
+            poster={poster ?? VIDEO_DEFAULT_BACKGROUND_IMAGE}
+            audioOnly={false}
+            fullscreen={false}
+            fullscreenAutorotate={false}
+            posterResizeMode="cover"
+            controls={false}
+            rate={1.0}
+            playInBackground={true}
+            playWhenInactive={true}
+            onLoadStart={_onLoadStart}
+            onProgress={_onProgress}
+            onError={_onError}
+            onLoad={_onLoad}
+            onSeek={_onSeek}
+            onEnd={_onEnd}
+            onBuffer={_onBuffer}
+            onAudioBecomingNoisy={_onAudioBecomingNoisy}
+            progressUpdateInterval={300}
+            ignoreSilentSwitch={'ignore'}
+            automaticallyWaitsToMinimizeStalling={true}
+            source={{
+              uri: uri,
+            }}
+          />
+          {isLoaded === true ? (
+            <MediaControls
+              enabled={true}
+              currentTime={getCurrentTime()}
+              mediaDuration={duration}
+              isFullScreen={isFullScreen ?? false}
+              isMuted={isMuted}
+              isPaused={isPaused}
+              loading={!isLoaded}
+              isBuffering={isBuffering}
+              title={title}
+              onPlayPausePress={handlePlayPauseToggle}
+              onMutePress={handleMuteToggle}
+              onFullScreenPress={handleFullscreenClick}
+              onSeekRequest={handleOnSeekRequest}
+            />
+          ) : null}
+        </>
+      )}
     </View>
   );
 };
