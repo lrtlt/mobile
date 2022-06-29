@@ -131,9 +131,8 @@ const MediaPlayerWithControls: React.FC<Props> = ({
             trackPlay(uri, getCurrentTime());
           }
         }
-
         setIsBuffering(buffering);
-      }, 100),
+      }, 200),
     [getCurrentTime, trackBuffer, trackPlay, uri],
   );
 
@@ -150,6 +149,11 @@ const MediaPlayerWithControls: React.FC<Props> = ({
         if (mode === PlayerMode.DEFAULT) {
           seek(duration > 1 ? getCurrentTime() : Number.MAX_SAFE_INTEGER);
           setIsPaused(isPausedByUser ?? false);
+        }
+
+        if (mode === PlayerMode.FULLSCREEN) {
+          setIsPaused(true);
+          setActive(false);
         }
       },
     });

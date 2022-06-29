@@ -3,6 +3,7 @@ import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
 import useOrientation from '../../../util/useOrientation';
 import MediaPlayerWithControls, {PlayerMode} from '../MediaPlayerWithControls';
 import {VideoBaseData, VideoContext} from './VideoContext';
+import Animated, {FadeOut, SlideInDown} from 'react-native-reanimated';
 
 export type FullScreenListener = {
   onFullScreenEnter: () => void;
@@ -63,7 +64,7 @@ const VideoProvider: React.FC = (props) => {
       return null;
     }
     return (
-      <View style={styles.root}>
+      <Animated.View style={styles.root} entering={SlideInDown.duration(300)} exiting={FadeOut.duration(250)}>
         <StatusBar hidden={isFullScreen} />
         <View
           style={orientation === 'portrait' ? styles.videoContainerPortrait : styles.videoContainerLandscape}>
@@ -76,7 +77,7 @@ const VideoProvider: React.FC = (props) => {
             startTime={currentTimeRef.current}
           />
         </View>
-      </View>
+      </Animated.View>
     );
   }, [isFullScreen, isPausedByUser, orientation, videoBaseData]);
 
@@ -105,10 +106,6 @@ const VideoProvider: React.FC = (props) => {
 export default VideoProvider;
 
 const styles = StyleSheet.create({
-  flex: {
-    flex: 1,
-  },
-
   root: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'black',

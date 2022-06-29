@@ -186,18 +186,15 @@ const MediaControls: React.FC<Props> = ({
         style={styles.playPauseIcon}
         onPress={handlePlayPauseToggle}
         hitSlop={HIT_SLOP}
-        disabled={isBuffering}
         activeOpacity={0.6}>
-        {isBuffering ? (
-          <ActivityIndicator />
-        ) : isPaused ? (
+        {isPaused ? (
           <IconPlayerPlay size={ICON_SIZE} color={ICON_COLOR} />
         ) : (
           <IconPlayerPause size={ICON_SIZE} color={ICON_COLOR} />
         )}
       </TouchableOpacity>
     ),
-    [handlePlayPauseToggle, isBuffering, isPaused],
+    [handlePlayPauseToggle, isPaused],
   );
 
   const CenterControls = useCallback(
@@ -325,6 +322,7 @@ const MediaControls: React.FC<Props> = ({
       <View style={styles.bottomControlsContainer}>
         {!isLiveStream && (
           <View>
+            {isBuffering && <ActivityIndicator style={styles.activityIndicator} size="small" color="white" />}
             <SeekBar position={seekerPosition} />
           </View>
         )}
@@ -440,6 +438,10 @@ const styles = StyleSheet.create({
   seekBar_fill: {
     backgroundColor: '#DD0000',
     height: 5,
+  },
+  activityIndicator: {
+    alignSelf: 'flex-end',
+    margin: 4,
   },
 });
 
