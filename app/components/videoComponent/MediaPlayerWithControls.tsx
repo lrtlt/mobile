@@ -126,6 +126,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
         if (buffering) {
           trackBuffer(uri, getCurrentTime());
         } else {
+          //Dont track initial buffer
           if (getCurrentTime() > 1) {
             trackPlay(uri, getCurrentTime());
           }
@@ -177,7 +178,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
       setIsPausedByUser(isPaused);
 
-      if (startTime) {
+      if (startTime && data.duration > 1) {
         videoRef.current?.seek(startTime, SCRUBBER_TOLERANCE);
       }
 
