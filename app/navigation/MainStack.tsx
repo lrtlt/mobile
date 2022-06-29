@@ -133,13 +133,7 @@ export default () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen
-        name="Article"
-        component={Screens.ArticleScreen}
-        options={{
-          detachPreviousScreen: false,
-        }}
-      />
+      <Stack.Screen name="Article" component={Screens.ArticleScreen} />
       <Stack.Screen name="Comments" component={Screens.CommentsScreen} />
       <Stack.Screen
         name="Gallery"
