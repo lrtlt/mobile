@@ -26,6 +26,7 @@ interface Props {
   autostart?: boolean;
   startTime?: number;
   poster?: string;
+  enableFullScreen?: boolean;
   onError?: (error: LoadError) => void;
 }
 
@@ -38,6 +39,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   poster,
   startTime,
   onError: _onError,
+  enableFullScreen = true,
 }) => {
   const [duration, setDuration] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -113,7 +115,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
     () =>
       debounce((time) => {
         setIsSeeking(true);
-        videoRef.current?.seek(time, SCRUBBER_TOLERANCE);
+        videoRef.current?.seek(Math.max(time, 0), SCRUBBER_TOLERANCE);
       }, 100),
     [],
   );
@@ -173,13 +175,13 @@ const MediaPlayerWithControls: React.FC<Props> = ({
         uri,
       });
 
+      setIsPausedByUser(isPaused);
+
       if (startTime) {
         videoRef.current?.seek(startTime, SCRUBBER_TOLERANCE);
       }
 
-      if (isPaused) {
-        trackPause(uri, getCurrentTime());
-      } else {
+      if (!isPaused) {
         trackPlay(uri, getCurrentTime());
       }
     },
@@ -188,10 +190,10 @@ const MediaPlayerWithControls: React.FC<Props> = ({
       isPaused,
       poster,
       setCurrentTime,
+      setIsPausedByUser,
       setVideoBaseData,
       startTime,
       title,
-      trackPause,
       trackPlay,
       uri,
     ],
@@ -206,8 +208,9 @@ const MediaPlayerWithControls: React.FC<Props> = ({
       if (duration <= 0 && isSeeking) {
         return;
       }
-      setCurrentTimeInternal(data.currentTime);
       setCurrentTime(data.currentTime);
+      setCurrentTimeInternal(data.currentTime);
+
       if (isBuffering) {
         setBufferingDebounce(false);
       }
@@ -332,6 +335,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
               isPaused={isPaused}
               loading={!isLoaded}
               isBuffering={isBuffering}
+              enableFullScreen={enableFullScreen}
               title={title}
               onPlayPausePress={handlePlayPauseToggle}
               onMutePress={handleMuteToggle}

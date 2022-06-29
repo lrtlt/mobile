@@ -50,6 +50,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
         style={style}
         title={title}
         uri={streamUri}
+        enableFullScreen={false}
         autostart={autoStart}
         startTime={startTime}
         poster={cover ? buildArticleImageUri(IMG_SIZE_L, cover.path) : undefined}

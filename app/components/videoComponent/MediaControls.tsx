@@ -43,7 +43,7 @@ const HIT_SLOP: Insets = {
 
 interface Props {
   enabled: boolean;
-
+  enableFullScreen: boolean;
   mediaDuration: number;
   currentTime: number;
   title?: string;
@@ -64,6 +64,7 @@ interface Props {
 }
 const MediaControls: React.FC<Props> = ({
   enabled,
+  enableFullScreen,
   currentTime,
   mediaDuration,
   title,
@@ -339,7 +340,7 @@ const MediaControls: React.FC<Props> = ({
               <LiveBadge />
             )}
           </View>
-          <FullScreenControl />
+          {enableFullScreen && <FullScreenControl />}
         </View>
       </View>
     </Animated.View>
