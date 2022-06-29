@@ -16,6 +16,9 @@ export type VideoContextType = VideoBaseData & {
   isMuted?: boolean;
   setIsMuted: (muted: boolean) => void;
 
+  isPausedByUser?: boolean;
+  setIsPausedByUser: (paused: boolean) => void;
+
   setVideoBaseData: (data: VideoBaseData) => void;
   setIsFullScreen: (fullScreen: boolean) => void;
 
@@ -24,7 +27,7 @@ export type VideoContextType = VideoBaseData & {
 };
 
 const noOp = (): any => {
-  console.log('VideoContext: NO OP CALLED!');
+  console.warn('VideoContext: NO OP CALLED!');
 };
 
 export const VideoContext = React.createContext<VideoContextType>({
@@ -32,6 +35,7 @@ export const VideoContext = React.createContext<VideoContextType>({
   getCurrentTime: noOp,
   setVideoBaseData: noOp,
   setIsMuted: noOp,
+  setIsPausedByUser: noOp,
   setIsFullScreen: noOp,
   registerFullScreenListener: noOp,
   unregisterFullScreenListener: noOp,

@@ -59,7 +59,7 @@ const ChannelComponent: React.FC<Props> = ({channelData}) => {
     <View>
       <View style={styles.playerContainer}>
         <VideoComponent
-          key={channel_info.stream_embed}
+          key={channel_info.channel_id}
           style={styles.player}
           autoPlay={true}
           backgroundImage={channel_info.player_background_image}

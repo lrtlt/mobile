@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
 import useOrientation from '../../../util/useOrientation';
-import MediaPlayerWithControls from '../MediaPlayerWithControls';
+import MediaPlayerWithControls, {PlayerMode} from '../MediaPlayerWithControls';
 import {VideoBaseData, VideoContext} from './VideoContext';
 
 export type FullScreenListener = {
@@ -13,6 +13,7 @@ const VideoProvider: React.FC = (props) => {
   const [videoBaseData, setVideoBaseData] = useState<VideoBaseData>({});
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [isPausedByUser, setIsPausedByUser] = useState<boolean>(true);
 
   const orientation = useOrientation();
 
@@ -67,26 +68,28 @@ const VideoProvider: React.FC = (props) => {
         <View
           style={orientation === 'portrait' ? styles.videoContainerPortrait : styles.videoContainerLandscape}>
           <MediaPlayerWithControls
-            mode="playerFullscreen"
+            mode={PlayerMode.FULLSCREEN}
             uri={uri}
             poster={poster}
             title={title}
-            autostart={true}
+            autostart={!isPausedByUser}
             startTime={currentTimeRef.current}
           />
         </View>
       </View>
     );
-  }, [isFullScreen, orientation, videoBaseData]);
+  }, [isFullScreen, isPausedByUser, orientation, videoBaseData]);
 
   return (
     <VideoContext.Provider
       value={{
         ...videoBaseData,
         isFullScreen,
+        isPausedByUser,
         isMuted,
         setVideoBaseData,
         setIsMuted,
+        setIsPausedByUser,
         getCurrentTime: handleGetCurrentTime,
         setCurrentTime: handleSetCurrentTime,
         setIsFullScreen: handleSetFullScreen,

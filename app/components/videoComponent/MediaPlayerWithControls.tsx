@@ -12,10 +12,16 @@ import {MainStackParamList} from '../../navigation/MainStack';
 
 const SCRUBBER_TOLERANCE = 0;
 
+// eslint-disable-next-line no-shadow
+export enum PlayerMode {
+  DEFAULT,
+  FULLSCREEN,
+}
+
 interface Props {
   style?: ViewStyle;
   uri: string;
-  mode?: 'playerDefault' | 'playerFullscreen';
+  mode?: PlayerMode;
   title?: string;
   autostart?: boolean;
   startTime?: number;
@@ -26,7 +32,7 @@ interface Props {
 const MediaPlayerWithControls: React.FC<Props> = ({
   style,
   uri,
-  mode = 'playerDefault',
+  mode = PlayerMode.DEFAULT,
   autostart = true,
   title,
   poster,
@@ -43,6 +49,26 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   const [, setCurrentTimeInternal] = useState(0);
 
   const videoRef = useRef<Video>(null);
+
+  const {
+    setCurrentTime,
+    getCurrentTime,
+
+    isPausedByUser,
+    setIsPausedByUser,
+
+    isFullScreen,
+    setIsFullScreen,
+
+    isMuted,
+    setIsMuted,
+
+    setVideoBaseData,
+    registerFullScreenListener,
+    unregisterFullScreenListener,
+  } = useVideo();
+
+  const {trackPlay, trackPause, trackBuffer, trackClose, trackComplete, trackSeek} = useMediaTracking();
 
   /***************************************************************/
   /** HANDLE IOS react-navigation back behaviour *****************/
@@ -74,26 +100,9 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   /***************************************************************/
   /***************************************************************/
 
-  const {
-    setCurrentTime,
-    getCurrentTime,
-
-    isFullScreen,
-    setIsFullScreen,
-
-    isMuted,
-    setIsMuted,
-
-    setVideoBaseData,
-    registerFullScreenListener,
-    unregisterFullScreenListener,
-  } = useVideo();
-
-  const {trackPlay, trackPause, trackBuffer, trackClose, trackComplete, trackSeek} = useMediaTracking();
-
   useEffect(() => {
     return () => {
-      if (mode === 'playerDefault') {
+      if (mode === PlayerMode.DEFAULT) {
         trackClose(uri, getCurrentTime());
       }
     };
@@ -130,19 +139,27 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
     registerFullScreenListener(key, {
       onFullScreenEnter: () => {
-        if (mode === 'playerDefault') {
+        if (mode === PlayerMode.DEFAULT) {
           setIsPaused(true);
         }
       },
       onFullScreenExit: () => {
-        if (mode === 'playerDefault') {
+        if (mode === PlayerMode.DEFAULT) {
           seek(duration > 1 ? getCurrentTime() : Number.MAX_SAFE_INTEGER);
-          setIsPaused(false);
+          setIsPaused(isPausedByUser ?? false);
         }
       },
     });
     return () => unregisterFullScreenListener(key);
-  }, [duration, getCurrentTime, mode, registerFullScreenListener, seek, unregisterFullScreenListener]);
+  }, [
+    duration,
+    getCurrentTime,
+    isPausedByUser,
+    mode,
+    registerFullScreenListener,
+    seek,
+    unregisterFullScreenListener,
+  ]);
 
   const _onLoad = useCallback(
     (data: OnLoadData) => {
@@ -216,27 +233,30 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
   const _onAudioBecomingNoisy = useCallback(() => {
     setIsPaused(true);
+    setIsPausedByUser(true);
     trackPause(uri, getCurrentTime());
-  }, [getCurrentTime, trackPause, uri]);
+  }, [getCurrentTime, setIsPausedByUser, trackPause, uri]);
 
   const _onEnd = useCallback(() => {
     trackComplete(uri, getCurrentTime());
     setTimeout(() => {
       setIsPaused(true);
+      setIsPausedByUser(true);
       trackPause(uri, getCurrentTime());
       seek(0);
       trackSeek(uri, 0);
     }, 1000);
-  }, [getCurrentTime, seek, trackComplete, trackPause, trackSeek, uri]);
+  }, [getCurrentTime, seek, setIsPausedByUser, trackComplete, trackPause, trackSeek, uri]);
 
   const handlePlayPauseToggle = useCallback(() => {
     setIsPaused(!isPaused);
+    setIsPausedByUser(!isPaused);
     if (isPaused) {
       trackPlay(uri, getCurrentTime());
     } else {
       trackPause(uri, getCurrentTime());
     }
-  }, [getCurrentTime, isPaused, trackPause, trackPlay, uri]);
+  }, [getCurrentTime, isPaused, setIsPausedByUser, trackPause, trackPlay, uri]);
 
   const handleMuteToggle = useCallback(() => {
     setIsMuted(!isMuted);
