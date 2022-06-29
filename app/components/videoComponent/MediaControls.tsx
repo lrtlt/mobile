@@ -315,7 +315,7 @@ const MediaControls: React.FC<Props> = ({
       exiting={FadeOut.duration(400)}>
       <LinearGradient
         style={StyleSheet.absoluteFillObject}
-        colors={['#000000', '#22222299', '#22222299', '#22222244']}
+        colors={['#000000', '#222222CC', '#22222299', '#22222266']}
         useAngle={true}
         angle={0}
       />
@@ -434,11 +434,11 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     height: 5,
     overflow: 'hidden',
-    backgroundColor: '#999999AA',
+    backgroundColor: '#FFFFFFAA',
     width: '100%',
   },
   seekBar_fill: {
-    backgroundColor: '#FFFFFFFF',
+    backgroundColor: '#DD0000',
     height: 5,
   },
 });
