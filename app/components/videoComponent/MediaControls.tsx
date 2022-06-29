@@ -13,7 +13,15 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import LiveBadge from '../liveBadge/LiveBadge';
-import {IconFullscreen, IconPlayerMute, IconPlayerPause, IconPlayerPlay, IconPlayerVolume} from '../svg';
+import {
+  IconFullscreen,
+  IconPlayerForward,
+  IconPlayerMute,
+  IconPlayerPause,
+  IconPlayerPlay,
+  IconPlayerRewind,
+  IconPlayerVolume,
+} from '../svg';
 import TextComponent from '../text/Text';
 
 const CONTROLS_TIMEOUT_MS = 4000;
@@ -52,6 +60,7 @@ interface Props {
   onFullScreenPress: () => void;
 
   onSeekRequest: (time: number) => void;
+  onSeekByRequest: (time: number) => void;
 }
 const MediaControls: React.FC<Props> = ({
   enabled,
@@ -68,6 +77,7 @@ const MediaControls: React.FC<Props> = ({
   onFullScreenPress,
 
   onSeekRequest,
+  onSeekByRequest,
 }) => {
   const [visible, setVisible] = useState(enabled);
   const [scrubbing, setScrubbing] = useState(false);
@@ -75,6 +85,8 @@ const MediaControls: React.FC<Props> = ({
 
   const seekPanResponder = useRef<PanResponderInstance>();
   const seekerWidth = useRef(0);
+
+  const isLiveStream = mediaDuration <= 1;
 
   const resetControlsTimeout = useMemo(
     () =>
@@ -138,6 +150,16 @@ const MediaControls: React.FC<Props> = ({
     resetControlsTimeout();
   }, [onPlayPausePress, resetControlsTimeout]);
 
+  const handleSeekBack = useCallback(() => {
+    onSeekByRequest(-10);
+    resetControlsTimeout();
+  }, [onSeekByRequest, resetControlsTimeout]);
+
+  const handleSeekForward = useCallback(() => {
+    onSeekByRequest(10);
+    resetControlsTimeout();
+  }, [onSeekByRequest, resetControlsTimeout]);
+
   const handleMuteToggle = useCallback(() => {
     onMutePress();
     resetControlsTimeout();
@@ -175,6 +197,25 @@ const MediaControls: React.FC<Props> = ({
       </TouchableOpacity>
     ),
     [handlePlayPauseToggle, isBuffering, isPaused],
+  );
+
+  const CenterControls = useCallback(
+    () => (
+      <View style={styles.conterControlsRow}>
+        {!isLiveStream && (
+          <TouchableOpacity onPress={handleSeekBack} hitSlop={HIT_SLOP} activeOpacity={0.6}>
+            <IconPlayerRewind style={styles.rewindIcon} size={ICON_SIZE + 12} color={ICON_COLOR} />
+          </TouchableOpacity>
+        )}
+        <PlayPauseControl />
+        {!isLiveStream && (
+          <TouchableOpacity onPress={handleSeekForward} hitSlop={HIT_SLOP} activeOpacity={0.6}>
+            <IconPlayerForward style={styles.forwardIcon} size={ICON_SIZE + 12} color={ICON_COLOR} />
+          </TouchableOpacity>
+        )}
+      </View>
+    ),
+    [PlayPauseControl, handleSeekBack, handleSeekForward, isLiveStream],
   );
 
   const VolumeControl = useCallback(
@@ -262,7 +303,6 @@ const MediaControls: React.FC<Props> = ({
     );
   }
 
-  const isLiveStream = mediaDuration <= 1;
   const isOnStart = !isLiveStream && currentTime <= 1;
   const isEnding = !isLiveStream && mediaDuration - currentTime <= 1;
   const shouldBeVisible = enabled && (isOnStart || isEnding || visible);
@@ -280,7 +320,7 @@ const MediaControls: React.FC<Props> = ({
       />
       <Pressable style={{...StyleSheet.absoluteFillObject}} onPress={handleHideControls} />
       <Title />
-      <PlayPauseControl />
+      <CenterControls />
       <View style={styles.bottomControlsContainer}>
         {!isLiveStream && (
           <View>
@@ -323,6 +363,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
     borderRadius: 99,
+    width: 44,
+    height: 44,
     backgroundColor: '#00000088',
     alignSelf: 'center',
   },
@@ -345,6 +387,17 @@ const styles = StyleSheet.create({
   fullScreenIcon: {
     width: ICON_SIZE + 8,
     height: ICON_SIZE + 8,
+  },
+  conterControlsRow: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  rewindIcon: {
+    marginRight: 32,
+  },
+  forwardIcon: {
+    marginLeft: 32,
   },
   progressContainer: {
     flexDirection: 'row',

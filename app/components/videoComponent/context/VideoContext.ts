@@ -13,6 +13,9 @@ export type VideoContextType = VideoBaseData & {
 
   isFullScreen?: boolean;
 
+  isMuted?: boolean;
+  setIsMuted: (muted: boolean) => void;
+
   setVideoBaseData: (data: VideoBaseData) => void;
   setIsFullScreen: (fullScreen: boolean) => void;
 
@@ -28,6 +31,7 @@ export const VideoContext = React.createContext<VideoContextType>({
   setCurrentTime: noOp,
   getCurrentTime: noOp,
   setVideoBaseData: noOp,
+  setIsMuted: noOp,
   setIsFullScreen: noOp,
   registerFullScreenListener: noOp,
   unregisterFullScreenListener: noOp,

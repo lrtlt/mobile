@@ -12,6 +12,7 @@ export type FullScreenListener = {
 const VideoProvider: React.FC = (props) => {
   const [videoBaseData, setVideoBaseData] = useState<VideoBaseData>({});
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
 
   const orientation = useOrientation();
 
@@ -83,7 +84,9 @@ const VideoProvider: React.FC = (props) => {
       value={{
         ...videoBaseData,
         isFullScreen,
+        isMuted,
         setVideoBaseData,
+        setIsMuted,
         getCurrentTime: handleGetCurrentTime,
         setCurrentTime: handleSetCurrentTime,
         setIsFullScreen: handleSetFullScreen,

@@ -36,8 +36,8 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   const [duration, setDuration] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isPaused, setIsPaused] = useState(!autostart);
-  const [isMuted, setIsMuted] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
+  const [isSeeking, setIsSeeking] = useState(false);
   const [isActive, setActive] = useState(true);
 
   const [, setCurrentTimeInternal] = useState(0);
@@ -56,15 +56,16 @@ const MediaPlayerWithControls: React.FC<Props> = ({
     };
   }, []);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(handleOnBlurEffect, []);
-
   try {
     const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-    navigation.addListener('beforeRemove', () => {
-      setActive(false);
-      setIsPaused(true);
-    });
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      const subscription = navigation.addListener('beforeRemove', () => {
+        setActive(false);
+        setIsPaused(true);
+      });
+      return subscription;
+    }, [navigation]);
   } catch (_) {}
 
   try {
@@ -76,8 +77,13 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   const {
     setCurrentTime,
     getCurrentTime,
+
     isFullScreen,
     setIsFullScreen,
+
+    isMuted,
+    setIsMuted,
+
     setVideoBaseData,
     registerFullScreenListener,
     unregisterFullScreenListener,
@@ -97,6 +103,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   const seek = useMemo(
     () =>
       debounce((time) => {
+        setIsSeeking(true);
         videoRef.current?.seek(time, SCRUBBER_TOLERANCE);
       }, 100),
     [],
@@ -179,7 +186,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
   const _onProgress = useCallback(
     (data: OnProgressData) => {
-      if (duration <= 0) {
+      if (duration <= 0 && isSeeking) {
         return;
       }
       setCurrentTimeInternal(data.currentTime);
@@ -188,13 +195,14 @@ const MediaPlayerWithControls: React.FC<Props> = ({
         setBufferingDebounce(false);
       }
     },
-    [duration, isBuffering, setBufferingDebounce, setCurrentTime],
+    [duration, isBuffering, isSeeking, setBufferingDebounce, setCurrentTime],
   );
 
   const _onSeek = useCallback(
     (data: OnSeekData) => {
       setCurrentTime(Math.min(data.seekTime, duration));
       setBufferingDebounce(false);
+      setIsSeeking(false);
     },
     [setBufferingDebounce, setCurrentTime, duration],
   );
@@ -232,7 +240,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
   const handleMuteToggle = useCallback(() => {
     setIsMuted(!isMuted);
-  }, [isMuted]);
+  }, [isMuted, setIsMuted]);
 
   const handleFullscreenClick = useCallback(() => {
     // videoRef?.current?.presentFullscreenPlayer();
@@ -241,10 +249,21 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
   const handleOnSeekRequest = useCallback(
     (time) => {
-      trackSeek(uri, getCurrentTime());
+      trackSeek(uri, time);
       seek(time);
       setCurrentTime(time);
       setCurrentTimeInternal(time);
+    },
+    [seek, setCurrentTime, trackSeek, uri],
+  );
+
+  const handleOnSeekByRequest = useCallback(
+    (seekByTime) => {
+      const newTime = getCurrentTime() + seekByTime;
+      trackSeek(uri, newTime);
+      seek(newTime);
+      setCurrentTime(newTime);
+      setCurrentTimeInternal(newTime);
     },
     [getCurrentTime, seek, setCurrentTime, trackSeek, uri],
   );
@@ -276,7 +295,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
             onEnd={_onEnd}
             onBuffer={_onBuffer}
             onAudioBecomingNoisy={_onAudioBecomingNoisy}
-            progressUpdateInterval={300}
+            progressUpdateInterval={200}
             ignoreSilentSwitch={'ignore'}
             automaticallyWaitsToMinimizeStalling={true}
             source={{
@@ -289,7 +308,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
               currentTime={getCurrentTime()}
               mediaDuration={duration}
               isFullScreen={isFullScreen ?? false}
-              isMuted={isMuted}
+              isMuted={isMuted ?? false}
               isPaused={isPaused}
               loading={!isLoaded}
               isBuffering={isBuffering}
@@ -298,6 +317,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
               onMutePress={handleMuteToggle}
               onFullScreenPress={handleFullscreenClick}
               onSeekRequest={handleOnSeekRequest}
+              onSeekByRequest={handleOnSeekByRequest}
             />
           ) : null}
         </>
