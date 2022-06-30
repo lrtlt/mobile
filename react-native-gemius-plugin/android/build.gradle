@@ -63,13 +63,13 @@ repositories {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    //implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 
-    implementation "com.google.android.gms:play-services-base:17.3.0"
-    implementation "com.google.android.gms:play-services-ads:19.1.0"
-    implementation "com.google.android.gms:play-services-appset:16.0.0"
-    implementation "com.google.code.gson:gson:2.8.5"
-    implementation "ch.acra:acra-http:5.7.0"
+    // implementation "com.google.android.gms:play-services-base:17.3.0"
+    // implementation "com.google.android.gms:play-services-ads:19.1.0"
+    // implementation "com.google.android.gms:play-services-appset:16.0.0"
+    // implementation "com.google.code.gson:gson:2.8.5"
+    // implementation "ch.acra:acra-http:5.7.0"
 
     // ref:
     // https://github.com/facebook/react-native/blob/0.61-stable/template/android/app/build.gradle#L192
