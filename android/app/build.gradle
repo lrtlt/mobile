@@ -279,26 +279,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-
-    implementation ("androidx.appcompat:appcompat:1.3.1") {
-        version {
-            strictly '1.3.1'
-        }
-    }
-    
-
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation 'androidx.multidex:multidex:2.0.1'
-
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
-
-    def work_version = "2.6.0"
-    // Force WorkManager 2.6.0 for transitive dependency
-    implementation("androidx.work:work-runtime-ktx:$work_version") {
-        force = true
-    }
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
