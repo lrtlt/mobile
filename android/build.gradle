@@ -25,6 +25,7 @@ buildscript {
         maven {
              url 'https://plugins.gradle.org/m2/' 
         }
+
     }
     dependencies {
         classpath('com.android.tools.build:gradle:7.0.4')
@@ -52,6 +53,13 @@ allprojects {
             content {
                 excludeGroup "com.facebook.react"
             }
+        }
+        maven {
+            credentials {
+                username project.properties["mavenGemiusUser"] as String
+                password project.properties["mavenGemiusPassword"] as String
+            }
+            url 'https://mobilesdk.gemius.com/releases/'
         }
         jcenter()
         google()
