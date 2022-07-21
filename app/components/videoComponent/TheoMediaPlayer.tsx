@@ -43,7 +43,8 @@ const config: PlayerConfiguration = {
   },
 };
 
-const makeSource = (uri: string): SourceDescription => ({
+const makeSource = (uri: string, poster?: string): SourceDescription => ({
+  poster,
   sources: [
     {
       src: uri,
@@ -169,7 +170,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
     // player.addEventListener(PlayerEventType.SEEKED, console.log);
     // player.addEventListener(PlayerEventType.ENDED, console.log);
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
-    player.source = makeSource(streamUri);
+    player.source = makeSource(streamUri, poster);
     player.backgroundAudioConfiguration = {enabled: true};
     player.autoplay = autoStart;
     player.muted = false;
@@ -181,7 +182,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
     <View style={styles.container}>
       <>
         <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady} />
-        <ImageBackground source={{uri: poster}} style={styles.video} resizeMode="cover" />
+        {/* <ImageBackground source={{uri: poster}} style={styles.video} resizeMode="cover" /> */}
         {!isLoading && player ? (
           <MediaControls
             enabled={true}

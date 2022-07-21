@@ -8,6 +8,7 @@ import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
 import TheoMediaPlayer from './TheoMediaPlayer';
+import {MediaType} from './context/VideoContext';
 
 interface Props {
   style?: ViewStyle;
@@ -100,12 +101,12 @@ const VideoComponent: React.FC<Props> = (props) => {
       <TheoMediaPlayer
         key={data.streamUri}
         style={props.style}
-        //mediaId={data.mediaId}
         streamUri={data.streamUri}
         title={data.title}
         startTime={props.startTime || data.offset}
         autoStart={true}
-        backgroundImage={props.backgroundImage}
+        poster={props.backgroundImage}
+        mediaType={MediaType.VIDEO}
         onError={onPlayerError}
       />
     </View>
