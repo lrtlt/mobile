@@ -20,7 +20,7 @@ const ERROR_DELAY = 300;
 
 const AudioComponent: React.FC<AudioComponentProps> = ({
   style,
-  mediaId,
+  mediaId: _,
   title,
   cover,
   autoStart,
@@ -30,8 +30,8 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
   const [errorCount, setErrorCount] = useState(0);
 
   useEffect(() => {
-    Gemius.setProgramData(mediaId, title, 0, false);
-  }, [mediaId, title]);
+    Gemius.setProgramData(streamUri, title, 0, false);
+  }, [streamUri, title]);
 
   const onPlayerError = useCallback(() => {
     setTimeout(() => {

@@ -30,7 +30,7 @@ const VideoComponent: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (data) {
-      Gemius.setProgramData(data.mediaId, data.title, 0, true);
+      Gemius.setProgramData(data.streamUri, data.title, 0, true);
     }
   }, [data]);
 
