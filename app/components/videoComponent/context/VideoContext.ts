@@ -1,10 +1,17 @@
 import React from 'react';
 import {FullScreenListener} from './VideoProvider';
 
+// eslint-disable-next-line no-shadow
+export enum MediaType {
+  AUDIO,
+  VIDEO,
+}
+
 export type VideoBaseData = {
   uri?: string;
   title?: string;
   poster?: string;
+  mediaType: MediaType;
 };
 
 export type VideoContextType = VideoBaseData & {
@@ -31,6 +38,7 @@ const noOp = (): any => {
 };
 
 export const VideoContext = React.createContext<VideoContextType>({
+  mediaType: MediaType.VIDEO,
   setCurrentTime: noOp,
   getCurrentTime: noOp,
   setVideoBaseData: noOp,

@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
 import useOrientation from '../../../util/useOrientation';
 import MediaPlayerWithControls, {PlayerMode} from '../MediaPlayerWithControls';
-import {VideoBaseData, VideoContext} from './VideoContext';
+import {MediaType, VideoBaseData, VideoContext} from './VideoContext';
 import Animated, {FadeOut, SlideInDown} from 'react-native-reanimated';
 
 export type FullScreenListener = {
@@ -11,7 +11,7 @@ export type FullScreenListener = {
 };
 
 const VideoProvider: React.FC = (props) => {
-  const [videoBaseData, setVideoBaseData] = useState<VideoBaseData>({});
+  const [videoBaseData, setVideoBaseData] = useState<VideoBaseData>({mediaType: MediaType.VIDEO});
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [isPausedByUser, setIsPausedByUser] = useState<boolean>(true);
@@ -58,7 +58,7 @@ const VideoProvider: React.FC = (props) => {
   }, [handleSetFullScreen, isFullScreen]);
 
   const renderFullScreenPlayer = useCallback(() => {
-    const {uri, poster, title} = videoBaseData;
+    const {uri, mediaType, poster, title} = videoBaseData;
     if (!uri) {
       console.log('Cannot render full screen player URI is empty!');
       return null;
@@ -71,6 +71,7 @@ const VideoProvider: React.FC = (props) => {
           <MediaPlayerWithControls
             mode={PlayerMode.FULLSCREEN}
             uri={uri}
+            mediaType={mediaType}
             poster={poster}
             title={title}
             autostart={!isPausedByUser}

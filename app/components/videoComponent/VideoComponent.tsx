@@ -1,13 +1,13 @@
 import React, {useEffect, useCallback, useRef} from 'react';
 import {View, ActivityIndicator, StyleSheet, ViewStyle} from 'react-native';
 import VideoCover, {VideoCoverType} from './VideoCover';
-import Gemius from 'react-native-gemius-plugin';
 import {useTheme} from '../../Theme';
 import useVideoData from './useVideoData';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
 import MediaPlayerWithControls from './MediaPlayerWithControls';
+import {MediaType} from './context/VideoContext';
 
 interface Props {
   style?: ViewStyle;
@@ -27,12 +27,6 @@ const VideoComponent: React.FC<Props> = (props) => {
   const {isLoading, data, load} = useVideoData();
 
   const errorCountRef = useRef(0);
-
-  useEffect(() => {
-    if (data) {
-      Gemius.setProgramData(data.streamUri, data.title, 0, true);
-    }
-  }, [data]);
 
   useEffect(() => {
     if (props.autoPlay) {
@@ -106,6 +100,7 @@ const VideoComponent: React.FC<Props> = (props) => {
       <MediaPlayerWithControls
         style={props.style}
         uri={data.streamUri}
+        mediaType={MediaType.VIDEO}
         title={data.title}
         startTime={props.startTime || data.offset}
         poster={props.backgroundImage}

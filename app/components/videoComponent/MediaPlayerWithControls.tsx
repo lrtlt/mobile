@@ -9,6 +9,8 @@ import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 import useMediaTracking from './useMediaTracking';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
+import Gemius from 'react-native-gemius-plugin';
+import {MediaType} from './context/VideoContext';
 
 const SCRUBBER_TOLERANCE = 0;
 
@@ -22,6 +24,7 @@ interface Props {
   style?: ViewStyle;
   uri: string;
   mode?: PlayerMode;
+  mediaType: MediaType;
   title?: string;
   autostart?: boolean;
   startTime?: number;
@@ -34,6 +37,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
   style,
   uri,
   mode = PlayerMode.DEFAULT,
+  mediaType,
   autostart = true,
   title,
   poster,
@@ -170,11 +174,14 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
   const _onLoad = useCallback(
     (data: OnLoadData) => {
+      Gemius.setProgramData(uri, title ?? '', duration, mediaType === MediaType.VIDEO);
+
       setIsLoaded(true);
       setDuration(data.duration);
       setCurrentTime(Math.min(data.currentTime, data.duration));
 
       setVideoBaseData({
+        mediaType,
         poster,
         title,
         uri,
@@ -191,8 +198,10 @@ const MediaPlayerWithControls: React.FC<Props> = ({
       }
     },
     [
+      duration,
       getCurrentTime,
       isPaused,
+      mediaType,
       poster,
       setCurrentTime,
       setIsPausedByUser,

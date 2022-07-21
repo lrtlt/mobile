@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, ViewStyle} from 'react-native';
 import {buildArticleImageUri, IMG_SIZE_L} from '../../util/ImageUtil';
-import Gemius from 'react-native-gemius-plugin';
 import {ArticlePhotoType} from '../../api/Types';
 import MediaPlayerWithControls from '../videoComponent/MediaPlayerWithControls';
+import {MediaType} from '../videoComponent/context/VideoContext';
 
 interface AudioComponentProps {
   style?: ViewStyle;
@@ -29,10 +29,6 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
 }) => {
   const [errorCount, setErrorCount] = useState(0);
 
-  useEffect(() => {
-    Gemius.setProgramData(streamUri, title, 0, false);
-  }, [streamUri, title]);
-
   const onPlayerError = useCallback(() => {
     setTimeout(() => {
       if (errorCount < MAX_ERROR_COUNT) {
@@ -48,6 +44,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
     <View style={style}>
       <MediaPlayerWithControls
         style={style}
+        mediaType={MediaType.AUDIO}
         title={title}
         uri={streamUri}
         enableFullScreen={false}
