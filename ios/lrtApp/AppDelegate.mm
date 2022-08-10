@@ -33,9 +33,7 @@
 {
   RCTAppSetupPrepareApp(application);
   
-  if ([FIRApp defaultApp] == nil) {
-      [FIRApp configure];
-  }
+  [FIRApp configure];
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
 

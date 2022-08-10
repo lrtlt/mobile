@@ -5,6 +5,7 @@ import {LinkingOptions, NavigationContainer, NavigationContainerRef} from '@reac
 import SplashViewComponent from '../screens/splash/SplashScreenView';
 
 import crashlytics from '@react-native-firebase/crashlytics';
+import analytics from '@react-native-firebase/analytics';
 
 import {selectAppIsReady} from '../redux/selectors';
 import {themeDark, themeLight} from '../Theme';
@@ -60,6 +61,10 @@ const NavigatorComponent: React.FC = () => {
       console.log('Current route:', currentRoute);
       crashlytics().log(`Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
       Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, params);
+      analytics().logScreenView({
+        screen_name: currentScreen,
+        screen_class: currentRouteName,
+      });
     }
     routeNameRef.current = currentRouteName;
   }, []);
