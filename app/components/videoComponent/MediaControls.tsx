@@ -312,7 +312,7 @@ const MediaControls: React.FC<Props> = ({
       exiting={FadeOut.duration(400)}>
       <LinearGradient
         style={StyleSheet.absoluteFillObject}
-        colors={['#000000', '#222222CC', '#22222299', '#22222266']}
+        colors={['#000000AA', '#00000088', '#00000066', '#22222233']}
         useAngle={true}
         angle={0}
       />
