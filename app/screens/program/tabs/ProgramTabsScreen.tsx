@@ -68,14 +68,16 @@ const TabsScreen: React.FC<Props> = ({program}) => {
 
       const programItems = (route as Route).program;
 
-      const scrollToIndex = programItems?.findIndex((i) => {
+      const currentProgramIndex = programItems?.findIndex((i) => {
         const proc = Math.max(0, Math.min(Number(i.proc), 100));
         return proc < 100;
       });
 
+      const scrollToIndex = Math.max(currentProgramIndex, 0);
+
       return (
         <View key={`${route.key}`}>
-          <ProgramList items={programItems || []} scrollToIndex={scrollToIndex || 0} />
+          <ProgramList items={programItems || []} scrollToIndex={scrollToIndex} />
         </View>
       );
     },
