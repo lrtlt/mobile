@@ -34,7 +34,7 @@ const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const {colors, strings} = useTheme();
-  const channels = useSelector(selectHomeChannels, checkEqual);
+  const channelsData = useSelector(selectHomeChannels, checkEqual);
 
   const onChannelPressHandler = useCallback(
     (channel: TVChannel | LiveChannel) => {
@@ -51,22 +51,28 @@ const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
     navigation.navigate('Program');
   }, [navigation]);
 
-  if (!channels || channels.items.length === 0) {
+  if (!channelsData || channelsData.channels.length === 0) {
     return <View />;
   }
 
-  const {items, live_items} = channels;
+  const {channels, liveChannels, tempLiveChannels} = channelsData;
 
-  const liveItemsContent =
-    live_items &&
-    live_items.map((liveItem) => {
+  const channelsContent =
+    channels &&
+    channels.map((item, i) => {
+      return <Channel data={item} key={`${i}-${item.proc}`} onPress={onChannelPressHandler} />;
+    });
+
+  const liveChannelsContent =
+    liveChannels &&
+    liveChannels.map((liveItem) => {
       return <Channel data={liveItem} key={liveItem.title} onPress={onChannelPressHandler} />;
     });
 
-  const itemsContent =
-    items &&
-    items.map((item, i) => {
-      return <Channel data={item} key={`${i}-${item.proc}`} onPress={onChannelPressHandler} />;
+  const tempLiveChannelsContent =
+    tempLiveChannels &&
+    tempLiveChannels.map((liveItem) => {
+      return <Channel data={liveItem} key={liveItem.title} onPress={onChannelPressHandler} />;
     });
 
   return (
@@ -83,8 +89,9 @@ const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
       </View>
       <MyScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.scrollContent}>
-          {liveItemsContent}
-          {itemsContent}
+          {liveChannelsContent}
+          {channelsContent}
+          {tempLiveChannelsContent}
         </View>
       </MyScrollView>
     </View>

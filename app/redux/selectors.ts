@@ -1,5 +1,5 @@
 import {HomePageType} from '../../Types';
-import {HomeBlockChannels, HomeChannels, ROUTE_TYPE_CATEGORY, ROUTE_TYPE_MEDIA} from '../api/Types';
+import {HomeBlockChannels, ROUTE_TYPE_CATEGORY, ROUTE_TYPE_MEDIA} from '../api/Types';
 import {formatArticles} from '../util/articleFormatters';
 import {RootState} from './reducers';
 import {SavedArticle} from './reducers/articleStorage';
@@ -101,9 +101,14 @@ export const selectProgramScreenState = (state: RootState) => {
   };
 };
 
-export const selectHomeChannels = (state: RootState): HomeChannels => {
+export const selectHomeChannels = (state: RootState) => {
   const channelsBlock = state.articles.home.items.find((i) => i.type === 'channels') as HomeBlockChannels;
-  return channelsBlock.data;
+
+  return {
+    channels: channelsBlock.data.items,
+    liveChannels: channelsBlock.data.live_items?.filter((c) => !c.web_permanent),
+    tempLiveChannels: channelsBlock.data.live_items?.filter((c) => Boolean(c.web_permanent)),
+  };
 };
 
 export const selectArticleBookmarked = (articleId: string | number) => (state: RootState) => {

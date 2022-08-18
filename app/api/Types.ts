@@ -98,6 +98,7 @@ export type LiveChannel = {
   photo: string;
   photo_id: number;
   w_h: string;
+  web_permanent?: 1 | null;
 };
 
 export type HomeChannels = {
