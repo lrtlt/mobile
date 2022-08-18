@@ -32,9 +32,9 @@ const VideoProvider: React.FC = (props) => {
   const handleSetFullScreen = useCallback((fullScreen: boolean) => {
     Object.keys(fullScreenListeners.current).forEach((key) => {
       if (fullScreen) {
-        fullScreenListeners.current[key].onFullScreenEnter();
+        fullScreenListeners.current[key]?.onFullScreenEnter();
       } else {
-        fullScreenListeners.current[key].onFullScreenExit();
+        fullScreenListeners.current[key]?.onFullScreenExit();
       }
     });
     setIsFullScreen(fullScreen);
