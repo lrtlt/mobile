@@ -5,6 +5,8 @@ import {useTheme} from '../../../Theme';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
 import {Text} from '../../../components';
 import ArticleParagraph from '../../../components/articleParagraphs/paragraph/ArticleParagraph';
+import {ArticleContentMedia} from '../../../api/Types';
+import ArticleKeywords from '../keywords/ArticleKeywords';
 
 interface AudioContentProps {
   about_episode: string;
@@ -13,11 +15,12 @@ interface AudioContentProps {
     path: string;
     w_h: string;
   };
+  keywords: ArticleContentMedia['keywords'];
 }
 
 type ContentType = 'episode' | 'show';
 
-const AudioContent: React.FC<AudioContentProps> = ({about_episode, about_show, image}) => {
+const AudioContent: React.FC<AudioContentProps> = ({about_episode, about_show, image, keywords}) => {
   const [selectedContent, setSelectedContent] = useState<ContentType>('episode');
   const {colors, strings} = useTheme();
   const onEpisodePressHandler = useCallback(() => {
@@ -67,6 +70,7 @@ const AudioContent: React.FC<AudioContentProps> = ({about_episode, about_show, i
         </View>
       )}
       <ArticleParagraph htmlText={selectedContent === 'episode' ? about_episode : about_show} />
+      {selectedContent === 'episode' && <ArticleKeywords keywords={keywords} />}
     </View>
   );
 };

@@ -76,7 +76,7 @@ const composeMedia = (article: ArticleContentMedia) => {
       data.push(getContentForMedia(article));
     }
   }
-  if (article.keywords && article.keywords.length > 0) {
+  if (article.keywords && article.keywords.length > 0 && article.is_audio !== 1) {
     data.push(getKeywords(article));
   }
 
@@ -177,6 +177,7 @@ const getAudioContent = (article: ArticleContentMedia): ArticleContentItemType =
       about_episode: article.content,
       about_show: article.category_decription,
       image: article.category_img_info,
+      keywords: article.keywords,
     },
   };
 };
