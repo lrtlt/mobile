@@ -174,8 +174,7 @@ const MediaPlayerWithControls: React.FC<Props> = ({
 
   const _onLoad = useCallback(
     (data: OnLoadData) => {
-      Gemius.setProgramData(uri, title ?? '', duration, mediaType === MediaType.VIDEO);
-
+      Gemius.setProgramData(uri, title ?? '', data.duration, mediaType === MediaType.VIDEO);
       setIsLoaded(true);
       setDuration(data.duration);
       setCurrentTime(Math.min(data.currentTime, data.duration));
@@ -198,7 +197,6 @@ const MediaPlayerWithControls: React.FC<Props> = ({
       }
     },
     [
-      duration,
       getCurrentTime,
       isPaused,
       mediaType,
