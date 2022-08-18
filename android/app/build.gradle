@@ -150,8 +150,8 @@ android {
         applicationId "lt.mediapark.lrt"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 203108
-        versionName "2.31.8"
+        versionCode 203109
+        versionName "2.31.9"
         multiDexEnabled true
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
