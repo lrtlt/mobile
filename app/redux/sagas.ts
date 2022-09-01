@@ -1,4 +1,6 @@
 import {takeEvery, call, put} from 'redux-saga/effects';
+import crashlytics from '@react-native-firebase/crashlytics';
+
 import {
   fetchHomeApi,
   fetchAudiotekaApi,
@@ -60,12 +62,25 @@ import {
   API_MENU_ITEMS_RESULT,
 } from './actions/actionTypes';
 
+function report(error: any, message: string) {
+  crashlytics().log(JSON.stringify(error, null, 4));
+  crashlytics().recordError(
+    {
+      name: 'APIError: menu',
+      message: error.message ?? message,
+      stack: error.stack ?? JSON.stringify(error, null, 4),
+    },
+    'APIError',
+  );
+}
+
 function* fetchMenuItems() {
   try {
     const data: MenuResponse = yield call(fetchMenuItemsApi);
     yield put(fetchMenuItemsResult(data));
-  } catch (e) {
+  } catch (e: any) {
     console.log('Saga error', e);
+    report(e, 'Error getting menu items from API');
     yield put(fetchMenuItemsError());
   }
   return 0;
@@ -77,6 +92,7 @@ function* fetchArticlesData() {
     yield put(fetchHomeResult(data));
   } catch (e) {
     console.log('Saga error', e);
+    report(e, 'Error getting home data from API');
     yield put(fetchHomeError());
   }
   return 0;
@@ -88,6 +104,7 @@ function* fetchMediatekaData() {
     yield put(fetchMediatekaResult(data));
   } catch (e) {
     console.log('Saga error', e);
+    report(e, 'Error getting mediateka data from API');
     yield put(fetchMediatekaError());
   }
   return 0;
@@ -99,6 +116,7 @@ function* fetchAudiotekaData() {
     yield put(fetchAudiotekaResult(data));
   } catch (e) {
     console.log('Saga error', e);
+    report(e, 'Error getting audioteka data from API');
     yield put(fetchAudiotekaError());
   }
   return 0;
