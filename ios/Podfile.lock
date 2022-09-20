@@ -874,6 +874,8 @@ PODS:
   - Permission-AppTrackingTransparency (3.3.1):
     - RNPermissions
   - PromisesObjC (2.1.0)
+  - PromisesSwift (2.1.0):
+    - PromisesObjC (= 2.1.0)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -1107,16 +1109,17 @@ PODS:
     - React (< 1.0.0, >= 0.13.0)
   - react-native-pager-view (5.4.1):
     - React-Core
-  - react-native-safe-area-context (4.3.1):
+  - react-native-safe-area-context (4.3.3):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
-    - React
-    - ReactCommon/turbomodule/core
-  - react-native-video (5.2.0):
     - React-Core
-    - react-native-video/Video (= 5.2.0)
-  - react-native-video/Video (5.2.0):
+    - ReactCommon/turbomodule/core
+  - react-native-video (6.0.0-alpha.3):
+    - React-Core
+    - react-native-video/Video (= 6.0.0-alpha.3)
+  - react-native-video/Video (6.0.0-alpha.3):
+    - PromisesSwift
     - React-Core
   - react-native-webview (11.23.0):
     - React-Core
@@ -1185,7 +1188,7 @@ PODS:
     - React-jsi (= 0.68.3)
     - React-logger (= 0.68.3)
     - React-perflogger (= 0.68.3)
-  - RNCAsyncStorage (1.17.6):
+  - RNCAsyncStorage (1.17.5):
     - React-Core
   - RNFastImage (8.5.11):
     - React-Core
@@ -1237,10 +1240,10 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.15.0):
+  - RNScreens (3.17.0):
     - React-Core
     - React-RCTImage
-  - RNShare (7.3.9):
+  - RNShare (7.4.1):
     - React-Core
   - RNSnackbar (2.4.0):
     - React-Core
@@ -1376,6 +1379,7 @@ SPEC REPOS:
     - OneSignalXCFramework
     - OpenSSL-Universal
     - PromisesObjC
+    - PromisesSwift
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
@@ -1517,7 +1521,7 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
+  glog: 476ee3e89abb49e07f822b48323c51c57124b572
   GoogleAppMeasurement: 4c19f031220c72464d460c9daa1fb5d1acce958e
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
@@ -1533,7 +1537,8 @@ SPEC CHECKSUMS:
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   Permission-AppTrackingTransparency: 507f031f783885aad86f5754bd23edba587b2125
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
-  RCT-Folly: 803a9cfd78114b2ec0f140cfa6fa2a6bafb2d685
+  PromisesSwift: b39b85b2e2e2146b97f357500395117a6e5415a8
+  RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
   RCTRequired: b8caca023d386d43740dfb94c2cf68f695fa5e77
   RCTTypeSafety: ec44ea1d6ad1e5cd6447b22159ff40c2ebbd23b1
   React: 9f8c8afb9a9d61b7a1b01a1c6fb7f0d4f902988f
@@ -1551,8 +1556,8 @@ SPEC CHECKSUMS:
   react-native-gemius-plugin: 635e73cef85a23426a786b00f41bbecfefab07e1
   react-native-onesignal: e1f82b98767a9014d2c46f395b083330cfa29cea
   react-native-pager-view: 43f51f45f37ec9715f6c188e4af46ccdf79872e8
-  react-native-safe-area-context: 6c12e3859b6f27b25de4fee8201cfb858432d8de
-  react-native-video: a4c2635d0802f983594b7057e1bce8f442f0ad28
+  react-native-safe-area-context: b456e1c40ec86f5593d58b275bd0e9603169daca
+  react-native-video: 3b4fa3b67e6d8efcfba6c27231a7a493c28d4f1f
   react-native-webview: e771bc375f789ebfa02a26939a57dbc6fa897336
   React-perflogger: fa15d1d29ff7557ee25ea48f7f59e65896fb3215
   React-RCTActionSheet: e83515333352a3cc19c146e3c7a63a8a9269da8f
@@ -1566,7 +1571,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: f41f116aad644973f24653effb3db3de64fa0314
   React-runtimeexecutor: 8cdd80915ed6dabf2221a689f1f7ddb50ea5e9f3
   ReactCommon: 5b1b43a7d81a1ac4eec85f7c4db3283a14a3b13d
-  RNCAsyncStorage: 466b9df1a14bccda91da86e0b7d9a345d78e1673
+  RNCAsyncStorage: 81187912cc9a5c2591ddb161e03e587688afb764
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
   RNFBAnalytics: e332a2d0b4c28884dbeacbe21fe68688abdf34b9
   RNFBApp: 9646e09d041ea159b84584865212e4cf33acd179
@@ -1575,8 +1580,8 @@ SPEC CHECKSUMS:
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
   RNReanimated: 64573e25e078ae6bec03b891586d50b9ec284393
-  RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
-  RNShare: 807d6f8231b8ebcf6dd839294b877342eb93d4e5
+  RNScreens: 0df01424e9e0ed7827200d6ed1087ddd06c493f9
+  RNShare: 2074af48908436c310847c6c47ebb6129db1dc89
   RNSnackbar: be3333a21a453ccc272f41a8add5a71f7d44dfcd
   RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d

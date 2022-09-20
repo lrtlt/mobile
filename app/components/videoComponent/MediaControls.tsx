@@ -44,11 +44,11 @@ const HIT_SLOP: Insets = {
 interface Props {
   enabled: boolean;
   enableFullScreen: boolean;
+  isLoading?: boolean;
+  isBuffering?: boolean;
   mediaDuration: number;
   currentTime: number;
   title?: string;
-  loading?: boolean;
-  isBuffering?: boolean;
 
   isPaused: boolean;
   onPlayPausePress: () => void;
@@ -62,13 +62,14 @@ interface Props {
   onSeekRequest: (time: number) => void;
   onSeekByRequest: (time: number) => void;
 }
+
 const MediaControls: React.FC<Props> = ({
   enabled,
   enableFullScreen,
   currentTime,
   mediaDuration,
   title,
-  loading = false,
+  isLoading = false,
   isBuffering,
   isPaused,
   onPlayPausePress,
@@ -293,7 +294,7 @@ const MediaControls: React.FC<Props> = ({
     );
   }, []);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <View style={[styles.flex, styles.center]}>
         <ActivityIndicator size="large" animating={true} color="#FFF" />

@@ -6,8 +6,7 @@ import useVideoData from './useVideoData';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
-import MediaPlayerWithControls from './MediaPlayerWithControls';
-import {MediaType} from './context/VideoContext';
+import MediaPlayerWithControls, {MediaType} from './MediaPlayerWithControls';
 
 interface Props {
   style?: ViewStyle;

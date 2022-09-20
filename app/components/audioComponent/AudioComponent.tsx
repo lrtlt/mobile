@@ -2,8 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {View, ViewStyle} from 'react-native';
 import {buildArticleImageUri, IMG_SIZE_L} from '../../util/ImageUtil';
 import {ArticlePhotoType} from '../../api/Types';
-import MediaPlayerWithControls from '../videoComponent/MediaPlayerWithControls';
-import {MediaType} from '../videoComponent/context/VideoContext';
+import MediaPlayerWithControls, {MediaType} from '../videoComponent/MediaPlayerWithControls';
 
 interface AudioComponentProps {
   style?: ViewStyle;

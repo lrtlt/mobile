@@ -11,13 +11,13 @@ type ReturnType = {
   trackSeek: (mediaId: string, time: number) => void;
 };
 
-const EVENT_DEBOUNCE_DURATION = 100;
+const EVENT_DEBOUNCE_DURATION = 500;
 
 const useMediaTracking = (): ReturnType => {
   const sendPlay = useMemo(
     () =>
       debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: play');
+        console.log(`MediaPlayer event: play ${time}`);
         Gemius.sendPlay(mediaId, time ? time : 0);
       }, EVENT_DEBOUNCE_DURATION),
     [],
@@ -26,7 +26,7 @@ const useMediaTracking = (): ReturnType => {
   const sendPause = useMemo(
     () =>
       debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: pause');
+        console.log(`MediaPlayer event: pause ${time}`);
         Gemius.sendPause(mediaId, time ? time : 0);
       }, EVENT_DEBOUNCE_DURATION),
     [],
@@ -35,7 +35,7 @@ const useMediaTracking = (): ReturnType => {
   const sendClose = useMemo(
     () =>
       debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: close');
+        console.log(`MediaPlayer event: close ${time}`);
         Gemius.sendClose(mediaId, time ? time : 0);
       }, EVENT_DEBOUNCE_DURATION),
     [],
@@ -43,17 +43,24 @@ const useMediaTracking = (): ReturnType => {
 
   const sendBuffer = useMemo(
     () =>
-      debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: buffering');
-        Gemius.sendBuffer(mediaId, time ? time : 0);
-      }, EVENT_DEBOUNCE_DURATION),
+      debounce(
+        (mediaId: string, time: number) => {
+          console.log(`MediaPlayer event: buffering ${time}`);
+          Gemius.sendBuffer(mediaId, time ? time : 0);
+        },
+        EVENT_DEBOUNCE_DURATION,
+        {
+          leading: true,
+          trailing: false,
+        },
+      ),
     [],
   );
 
   const sendComplete = useMemo(
     () =>
       debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: complete');
+        console.log(`MediaPlayer event: complete ${time}`);
         Gemius.sendComplete(mediaId, time ? time : 0);
       }, EVENT_DEBOUNCE_DURATION),
     [],
@@ -61,10 +68,17 @@ const useMediaTracking = (): ReturnType => {
 
   const sendSeek = useMemo(
     () =>
-      debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: seek ' + time);
-        Gemius.sendSeek(mediaId, time);
-      }, EVENT_DEBOUNCE_DURATION),
+      debounce(
+        (mediaId: string, time: number) => {
+          console.log(`MediaPlayer event: seek ${time}`);
+          Gemius.sendSeek(mediaId, time);
+        },
+        EVENT_DEBOUNCE_DURATION,
+        {
+          leading: true,
+          trailing: false,
+        },
+      ),
     [],
   );
 
