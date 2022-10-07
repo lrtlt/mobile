@@ -21,7 +21,7 @@ interface Props {
 }
 
 const MAX_ERROR_COUNT = 3;
-const ERROR_DELAY = 300;
+const ERROR_DELAY = 1000;
 
 const VideoComponent: React.FC<Props> = (props) => {
   const {colors, strings} = useTheme();
