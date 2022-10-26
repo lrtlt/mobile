@@ -481,6 +481,7 @@ export type ArticleEmbedPhotoalbumType = {
 export type ArticleContentDefault = {
   article_id: number;
   article_title: string;
+  article_title_formated?: string | null;
   article_subtitle?: string;
   article_url?: string;
   article_date: string;
@@ -512,6 +513,7 @@ export type ArticleContentDefault = {
 export type ArticleContentMedia = {
   id: number;
   title: string;
+  title_formated?: string | null;
   subtitle?: string;
   date: string;
   category_id: number;

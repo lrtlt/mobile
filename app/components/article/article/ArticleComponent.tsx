@@ -13,6 +13,7 @@ import ArticleBadges from './ArticleBadges';
 import ListenCount from './ListenCount';
 import Badge from '../../badge/Badge';
 import MediaIcon from '../../mediaIcon/MediaIcon';
+import ArticleTitle from '../../articleTitle/ArticleTitle';
 
 const getArticleStyle = (type: ArticleStyleType) => {
   switch (type) {
@@ -120,9 +121,7 @@ const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType
           </View>
           <View style={style.dateContainer}>{date}</View>
           {badge}
-          <TextComponent style={style.title} fontFamily="PlayfairDisplay-Regular">
-            {article.title}
-          </TextComponent>
+          <ArticleTitle style={style.title}>{article.title}</ArticleTitle>
           <ArticleBadges style={style.badges} article={article} />
           {Boolean(article.subtitle) && (
             <TextComponent style={style.subtitle} type="error">

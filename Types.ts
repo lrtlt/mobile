@@ -8,6 +8,7 @@ export type ArticleType = typeof ARTICLE_TYPE_TEXT | typeof ARTICLE_TYPE_AUDIO |
 export type Article = {
   id: number;
   title: string;
+  title_formated?: string | null;
   subtitle?: string;
   category_title: string;
   age_restriction?: string;
