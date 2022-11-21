@@ -1107,16 +1107,16 @@ PODS:
     - React (< 1.0.0, >= 0.13.0)
   - react-native-pager-view (5.4.1):
     - React-Core
-  - react-native-safe-area-context (4.3.1):
+  - react-native-safe-area-context (4.4.1):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
-    - React
-    - ReactCommon/turbomodule/core
-  - react-native-video (5.2.0):
     - React-Core
-    - react-native-video/Video (= 5.2.0)
-  - react-native-video/Video (5.2.0):
+    - ReactCommon/turbomodule/core
+  - react-native-video (5.2.1):
+    - React-Core
+    - react-native-video/Video (= 5.2.1)
+  - react-native-video/Video (5.2.1):
     - React-Core
   - react-native-webview (11.23.0):
     - React-Core
@@ -1191,22 +1191,22 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBAnalytics (14.11.1):
+  - RNFBAnalytics (14.12.0):
     - Firebase/Analytics (= 8.15.0)
     - React-Core
     - RNFBApp
-  - RNFBApp (14.11.1):
+  - RNFBApp (14.12.0):
     - Firebase/CoreOnly (= 8.15.0)
     - React-Core
-  - RNFBCrashlytics (14.11.1):
+  - RNFBCrashlytics (14.12.0):
     - Firebase/Crashlytics (= 8.15.0)
     - React-Core
     - RNFBApp
-  - RNFBFirestore (14.11.1):
+  - RNFBFirestore (14.12.0):
     - Firebase/Firestore (= 8.15.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.5.0):
+  - RNGestureHandler (2.8.0):
     - React-Core
   - RNPermissions (3.3.1):
     - React-Core
@@ -1237,7 +1237,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.15.0):
+  - RNScreens (3.18.2):
     - React-Core
     - React-RCTImage
   - RNShare (7.3.9):
@@ -1517,7 +1517,7 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
+  glog: 476ee3e89abb49e07f822b48323c51c57124b572
   GoogleAppMeasurement: 4c19f031220c72464d460c9daa1fb5d1acce958e
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
@@ -1533,7 +1533,7 @@ SPEC CHECKSUMS:
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   Permission-AppTrackingTransparency: 507f031f783885aad86f5754bd23edba587b2125
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
-  RCT-Folly: 803a9cfd78114b2ec0f140cfa6fa2a6bafb2d685
+  RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
   RCTRequired: b8caca023d386d43740dfb94c2cf68f695fa5e77
   RCTTypeSafety: ec44ea1d6ad1e5cd6447b22159ff40c2ebbd23b1
   React: 9f8c8afb9a9d61b7a1b01a1c6fb7f0d4f902988f
@@ -1551,8 +1551,8 @@ SPEC CHECKSUMS:
   react-native-gemius-plugin: 635e73cef85a23426a786b00f41bbecfefab07e1
   react-native-onesignal: e1f82b98767a9014d2c46f395b083330cfa29cea
   react-native-pager-view: 43f51f45f37ec9715f6c188e4af46ccdf79872e8
-  react-native-safe-area-context: 6c12e3859b6f27b25de4fee8201cfb858432d8de
-  react-native-video: a4c2635d0802f983594b7057e1bce8f442f0ad28
+  react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
+  react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
   react-native-webview: e771bc375f789ebfa02a26939a57dbc6fa897336
   React-perflogger: fa15d1d29ff7557ee25ea48f7f59e65896fb3215
   React-RCTActionSheet: e83515333352a3cc19c146e3c7a63a8a9269da8f
@@ -1568,14 +1568,14 @@ SPEC CHECKSUMS:
   ReactCommon: 5b1b43a7d81a1ac4eec85f7c4db3283a14a3b13d
   RNCAsyncStorage: 466b9df1a14bccda91da86e0b7d9a345d78e1673
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
-  RNFBAnalytics: e332a2d0b4c28884dbeacbe21fe68688abdf34b9
-  RNFBApp: 9646e09d041ea159b84584865212e4cf33acd179
-  RNFBCrashlytics: f2b5e456c4969bdec60482e83d973d873ff17f1d
-  RNFBFirestore: 70f47946084f6ce68c827c4a770613e0adb46da3
-  RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
+  RNFBAnalytics: ea1421b49a0bf5e5bb7274df4a330713d0e85d2e
+  RNFBApp: e4439717c23252458da2b41b81b4b475c86f90c4
+  RNFBCrashlytics: 94e1f78e2a9aa9e02edbfb0d3f1f0921ce00094b
+  RNFBFirestore: 24c46940b96579c50bd39a72566f6d48c6165f2f
+  RNGestureHandler: 62232ba8f562f7dea5ba1b3383494eb5bf97a4d3
   RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
   RNReanimated: 64573e25e078ae6bec03b891586d50b9ec284393
-  RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
+  RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNShare: 807d6f8231b8ebcf6dd839294b877342eb93d4e5
   RNSnackbar: be3333a21a453ccc272f41a8add5a71f7d44dfcd
   RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
