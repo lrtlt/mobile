@@ -27,6 +27,7 @@ import CategoryArticlesBlock from './blocks/CategoryArticlesBlock/CategoryArticl
 import SlugArticlesBlock from './blocks/SlugArticlesBlock/SlugArticlesBlock';
 import TopFeedBlock from './blocks/TopFeedBlock/TopFeedBlock';
 import TopUrlBlock from './blocks/TopUrlsBlock/TopUrlBlock';
+import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 
 interface Props {
   isCurrent: boolean;
@@ -67,15 +68,25 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
     };
   });
 
-  useEffect(() => {
-    if (isCurrent) {
-      if (!refreshing && Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
-        console.log(`${type} data expired!`);
-        callApi();
-      }
+  const refresh = useCallback(() => {
+    if (!refreshing && Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
+      console.log(`${type} data expired!`);
+      callApi();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isCurrent, refreshing, state.lastFetchTime]);
+  }, [refreshing, state.lastFetchTime]);
+
+  useEffect(() => {
+    if (isCurrent) {
+      refresh();
+    }
+  }, [isCurrent, refresh]);
+
+  useAppStateCallback(
+    useCallback(() => {
+      refresh();
+    }, [refresh]),
+  );
 
   const callApi = useCallback(() => {
     if (type === ROUTE_TYPE_MEDIA) {
