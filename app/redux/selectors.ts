@@ -98,6 +98,7 @@ export const selectProgramScreenState = (state: RootState) => {
   return {
     loadingState,
     program: prog.program,
+    lastFetchTime: prog.lastFetchTime,
   };
 };
 

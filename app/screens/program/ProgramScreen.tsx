@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ScreenLoader, ProgramDay, ActionButton} from '../../components';
 import {fetchProgram} from '../../redux/actions';
@@ -11,6 +11,8 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import ProgramDateModal from './ProgramDateModal';
+import useAppStateCallback from '../../hooks/useAppStateCallback';
+import {ARTICLE_EXPIRE_DURATION} from '../../constants';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Slug'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Slug'>;
@@ -25,7 +27,8 @@ const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
 const ProgramScreen: React.FC<Props> = ({navigation}) => {
-  const [headerExpanded, setHeaderExpanded] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
   const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined);
 
   const {colors, dim} = useTheme();
@@ -34,22 +37,31 @@ const ProgramScreen: React.FC<Props> = ({navigation}) => {
   const state = useSelector(selectProgramScreenState);
   const loadingState = state.loadingState;
   const program = state.program?.all_programs;
+  const lastFetchTime = state.lastFetchTime;
 
   useEffect(() => {
-    if (program) {
+    if (program && !selectedDate) {
       setSelectedDate(program.days[0]);
     }
-  }, [program]);
+  }, [program, selectedDate]);
 
   useEffect(() => {
     dispatch(fetchProgram());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useAppStateCallback(
+    useCallback(() => {
+      if (Date.now() - lastFetchTime > ARTICLE_EXPIRE_DURATION) {
+        dispatch(fetchProgram());
+      }
+    }, [dispatch, lastFetchTime]),
+  );
+
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <ActionButton onPress={() => setHeaderExpanded(!headerExpanded)}>
+        <ActionButton onPress={() => setModalVisible(!modalVisible)}>
           <IconCalendar size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
@@ -58,19 +70,11 @@ const ProgramScreen: React.FC<Props> = ({navigation}) => {
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [headerExpanded, selectedDate]);
+  }, [modalVisible, selectedDate]);
 
   let content;
-  switch (loadingState) {
-    case STATE_LOADING: {
-      content = <ScreenLoader />;
-      break;
-    }
-    case STATE_ERROR: {
-      content = <View style={styles.root} />;
-      break;
-    }
-    case STATE_READY: {
+  switch (true) {
+    case loadingState === STATE_READY || state.lastFetchTime > 0: {
       const selectedDay = selectedDate || program?.days[0];
       const selectedDayProgram = program![selectedDay];
       content = (
@@ -78,15 +82,23 @@ const ProgramScreen: React.FC<Props> = ({navigation}) => {
           <ProgramTabs program={selectedDayProgram} />
           <ProgramDateModal
             days={program?.days!}
-            onCancel={() => setHeaderExpanded(false)}
-            visible={headerExpanded}
+            onCancel={() => setModalVisible(false)}
+            visible={modalVisible}
             onDateSelected={(index) => {
               setSelectedDate(program?.days[index]);
-              setHeaderExpanded(false);
+              setModalVisible(false);
             }}
           />
         </View>
       );
+      break;
+    }
+    case loadingState === STATE_LOADING: {
+      content = <ScreenLoader />;
+      break;
+    }
+    case loadingState === STATE_ERROR: {
+      content = <View style={styles.root} />;
       break;
     }
   }

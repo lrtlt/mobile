@@ -6,12 +6,14 @@ export type ProgramState = {
   isFetching: boolean;
   isError: boolean;
   program?: ProgramResponse;
+  lastFetchTime: number;
 };
 
 const initialState: ProgramState = {
   isFetching: false,
   isError: false,
   program: undefined,
+  lastFetchTime: 0,
 };
 
 const reducer = (state = initialState, action: ProgramActionType): ProgramState => {
@@ -35,6 +37,7 @@ const reducer = (state = initialState, action: ProgramActionType): ProgramState 
         isFetching: false,
         isError: false,
         program: action.data,
+        lastFetchTime: Date.now(),
       };
     }
     default:
