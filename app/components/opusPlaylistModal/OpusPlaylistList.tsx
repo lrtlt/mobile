@@ -61,9 +61,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginTop: 16,
-    borderWidth: 1,
-    borderRadius: 8,
+    marginTop: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 4,
+    overflow: 'hidden',
   },
   listItem: {
     padding: 12,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   songText: {
-    marginTop: 4,
+    marginTop: 2,
     fontSize: 14,
   },
 });

@@ -69,11 +69,19 @@ const ChannelComponent: React.FC<Props> = ({channelData}) => {
       </View>
       <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>
         {programComponent}
-        <TouchableOpacity onPress={onProgramPressHandler}>
-          <Text style={{...styles.fullProgramText, backgroundColor: colors.background}}>
-            {strings.tvProgramButtonText}
-          </Text>
-        </TouchableOpacity>
+        {
+          <TouchableOpacity onPress={onProgramPressHandler}>
+            <Text
+              // eslint-disable-next-line react-native/no-inline-styles
+              style={{
+                ...styles.fullProgramText,
+                marginTop: programComponent !== undefined ? 8 : 0,
+                backgroundColor: colors.background,
+              }}>
+              {strings.tvProgramButtonText}
+            </Text>
+          </TouchableOpacity>
+        }
       </View>
     </View>
   );
@@ -109,7 +117,6 @@ const styles = StyleSheet.create({
     minWidth: '100%',
     textAlign: 'center',
     padding: 16,
-    marginTop: 8,
     fontSize: 16,
   },
 });

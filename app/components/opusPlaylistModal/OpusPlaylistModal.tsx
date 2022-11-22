@@ -34,7 +34,7 @@ const OpusPlaylistModal: React.FC<OpusPlaylistModalProps> = ({visible, currentSo
     <Modal
       style={{
         ...styles.modal,
-        backgroundColor: colors.slugBackground,
+        // backgroundColor: colors.slugBackground,
         marginTop: insets.top + 16,
         marginLeft: insets.left + 16,
         marginRight: insets.right + 16,
@@ -69,15 +69,15 @@ const styles = StyleSheet.create({
   },
   modal: {
     flex: 1,
-    borderRadius: 8,
-    padding: 12,
+    paddingTop: 12,
   },
   closeButton: {
     alignSelf: 'flex-end',
-    borderRadius: 4,
+    borderRadius: 99,
     borderWidth: 1,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: 'white',
   },
   closeButtonContainer: {
     flexDirection: 'row',

@@ -7,7 +7,7 @@ import {useTheme} from '../../Theme';
 import Text from '../text/Text';
 import OpusPlaylistModal from '../opusPlaylistModal/OpusPlaylistModal';
 
-const OPUS_COLOR = 'rgba(242,177,46,.3)';
+const OPUS_COLOR = 'rgba(240,81,35,.3)';
 
 const OpusNowComponent: React.FC = () => {
   const [currentSong, setCurrentSong] = useState('');
@@ -72,12 +72,11 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     padding: 8,
-    paddingVertical: 16,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
   },
   iconContainer: {
-    width: 32,
+    width: 36,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -87,7 +86,6 @@ const styles = StyleSheet.create({
   song: {
     flex: 1,
     marginVertical: 8,
-
     fontSize: 14,
   },
   previousSongsButton: {
@@ -97,8 +95,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     padding: 12,
-    borderRadius: 8,
-    marginTop: 8,
+    borderRadius: 4,
+    marginTop: 4,
   },
   previousSongsButtonText: {
     textAlign: 'center',
