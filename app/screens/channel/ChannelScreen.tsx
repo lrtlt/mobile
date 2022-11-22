@@ -4,7 +4,7 @@ import {ScrollingChannels, ScreenLoader, ScreenError, MyScrollView} from '../../
 import {fetchChannel} from '../../api';
 import {getIconForChannelById, getSmallestDim} from '../../util/UI';
 
-import {GEMIUS_VIEW_SCRIPT_ID, VIDEO_ASPECT_RATIO} from '../../constants';
+import {ARTICLE_EXPIRE_DURATION, GEMIUS_VIEW_SCRIPT_ID, VIDEO_ASPECT_RATIO} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -15,6 +15,7 @@ import {ChannelResponse} from '../../api/Types';
 import {ChannelDataType} from '../../components/scrollingChannels/ScrollingChannels';
 import ChannelComponent from './ChannelComponent';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
+import useAppStateCallback from '../../hooks/useAppStateCallback';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Channel'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Channel'>;
@@ -26,6 +27,7 @@ type Props = {
 
 type ScreenState = {
   channel?: ChannelResponse;
+  lastFetchTime: number;
   loadingState: typeof STATE_LOADING | typeof STATE_ERROR | typeof STATE_READY;
 };
 
@@ -36,6 +38,7 @@ const STATE_READY = 'ready';
 const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
   const [state, setState] = useState<ScreenState>({
     channel: undefined,
+    lastFetchTime: 0,
     loadingState: STATE_LOADING,
   });
   const [selectedChannel, setSelectedChannel] = useState(route.params.channelId);
@@ -55,29 +58,40 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
     });
   }, [navigation, selectedChannel, strings.channelScreenTitle]);
 
+  const loadChannel = () => {
+    cancellablePromise(fetchChannel(selectedChannel))
+      .then((response) =>
+        setState({
+          channel: response,
+          lastFetchTime: Date.now(),
+          loadingState: response.channel_info ? STATE_READY : STATE_ERROR,
+        }),
+      )
+      .catch(() =>
+        setState({
+          channel: undefined,
+          lastFetchTime: 0,
+          loadingState: STATE_ERROR,
+        }),
+      );
+  };
+
+  useAppStateCallback(
+    useCallback(() => {
+      if (Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
+        loadChannel();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [state.lastFetchTime]),
+  );
+
   useEffect(() => {
     Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
       screen: 'channel',
       channelId: selectedChannel.toString(),
     });
-
-    const loadChannel = () => {
-      cancellablePromise(fetchChannel(selectedChannel))
-        .then((response) =>
-          setState({
-            channel: response,
-            loadingState: response.channel_info ? STATE_READY : STATE_ERROR,
-          }),
-        )
-        .catch(() =>
-          setState({
-            channel: undefined,
-            loadingState: STATE_ERROR,
-          }),
-        );
-    };
-
     loadChannel();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cancellablePromise, selectedChannel]);
 
   const onChannelPressHandler = useCallback((channel: ChannelDataType) => {
@@ -141,7 +155,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    padding: 12,
   },
   player: {
     width: '100%',
