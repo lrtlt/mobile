@@ -19,6 +19,7 @@ import NewestBlock from './components/newest/NewestBlock';
 import AudiotekaSearch from './components/search/AudiotekaSearch';
 import TopFeedBlock from '../home/blocks/TopFeedBlock/TopFeedBlock';
 import TopUrlBlock from '../home/blocks/TopUrlsBlock/TopUrlBlock';
+import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 
 interface Props {
   isCurrent: boolean;
@@ -53,15 +54,25 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
     };
   });
 
-  useEffect(() => {
-    if (isCurrent) {
-      if (!refreshing && Date.now() - lastFetchTime > ARTICLE_EXPIRE_DURATION) {
-        console.log('Audioteka data expired!');
-        dispatch(fetchAudioteka());
-      }
+  const refresh = useCallback(() => {
+    if (!refreshing && Date.now() - lastFetchTime > ARTICLE_EXPIRE_DURATION) {
+      console.log('Audioteka data expired!');
+      dispatch(fetchAudioteka());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isCurrent, refreshing, lastFetchTime]);
+  }, [refreshing, state.lastFetchTime]);
+
+  useEffect(() => {
+    if (isCurrent) {
+      refresh();
+    }
+  }, [isCurrent, refresh]);
+
+  useAppStateCallback(
+    useCallback(() => {
+      refresh();
+    }, [refresh]),
+  );
 
   const renderItem = useCallback((listItem: ListRenderItemInfo<AudiotekaTemplate>) => {
     const {item} = listItem;
