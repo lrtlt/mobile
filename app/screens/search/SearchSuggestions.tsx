@@ -15,8 +15,13 @@ const SearchSuggestions: React.FC<Props> = ({suggestions, onSearchSuggestionClic
 
   return (
     <View style={styles.container}>
-      {suggestions.map((s) => (
-        <SearchSuggestion style={styles.suggestion} suggestion={s} onPress={onSearchSuggestionClick} />
+      {suggestions.map((s, i) => (
+        <SearchSuggestion
+          key={`${i}-${s.category_id}`}
+          style={styles.suggestion}
+          suggestion={s}
+          onPress={onSearchSuggestionClick}
+        />
       ))}
     </View>
   );
@@ -30,7 +35,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     margin: 4,
-    marginTop: 12,
+    marginTop: 8,
   },
   suggestion: {
     overflow: 'hidden',

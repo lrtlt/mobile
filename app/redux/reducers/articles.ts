@@ -289,7 +289,7 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
     case API_CATEGORY_RESULT: {
       const {data} = action;
       const {category_id, category_title} = data.category_info;
-      const articles = formatArticleBlock(-1, action.data.articles);
+      const articles = formatArticleBlock(-1, data.articles, false);
 
       const savedCategory = state.categories.find((c) => c.id === category_id);
 
