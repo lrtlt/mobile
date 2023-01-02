@@ -24,7 +24,7 @@ import {
 } from '../svg';
 import TextComponent from '../text/Text';
 
-const CONTROLS_TIMEOUT_MS = 4000;
+const CONTROLS_TIMEOUT_MS = 3000;
 const ICON_COLOR = '#FFFFFFDD';
 
 const ICON_SIZE = 22;
