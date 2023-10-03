@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import GallerySwiper from 'react-native-gallery-swiper';
+import Gallery from 'react-native-awesome-gallery';
 import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import {Text} from '../../components';
@@ -10,7 +10,6 @@ import {IconClose} from '../../components/svg';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import formatImages from './formatImages';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Gallery'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Gallery'>;
@@ -31,13 +30,10 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
       initialIndex = Math.max(0, initialIndex);
     }
 
-    const formattedImages = formatImages(images, initialIndex);
     return {
       initialIndex,
-      images: formattedImages,
-      imageUrls: formattedImages.map((img) => ({
-        uri: buildArticleImageUri(IMG_SIZE_XXL, img.path),
-      })),
+      images: images,
+      imageUrls: images.map((img) => buildArticleImageUri(IMG_SIZE_XXL, img.path)),
     };
   });
 
@@ -54,14 +50,15 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <GallerySwiper
+      <Gallery
         style={{backgroundColor: colors.background}}
-        images={imageUrls}
-        sensitiveScroll={false}
-        initialNumToRender={2}
-        //initialPage={state.initialIndex}
-        pageMargin={4}
-        onPageSelected={setSelectedIndex}
+        data={imageUrls}
+        keyExtractor={(item, i) => item ?? i.toString()}
+        numToRender={3}
+        initialIndex={state.initialIndex}
+        onIndexChange={setSelectedIndex}
+        loop={true}
+        emptySpaceWidth={8}
       />
       <View style={{...styles.detailsContainer, backgroundColor: colors.background}}>
         <SafeAreaView edges={['bottom']}>

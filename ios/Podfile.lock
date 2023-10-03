@@ -603,7 +603,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
-  - BVLinearGradient (2.8.0):
+  - BVLinearGradient (2.8.3):
     - React-Core
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.72.5)
@@ -844,7 +844,7 @@ PODS:
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - Permission-AppTrackingTransparency (3.8.4):
+  - Permission-AppTrackingTransparency (3.9.2):
     - RNPermissions
   - PromisesObjC (2.3.1)
   - RCT-Folly (2021.07.22.00):
@@ -1154,7 +1154,7 @@ PODS:
     - React-Core
   - react-native-render-html (6.3.4):
     - React-Core
-  - react-native-safe-area-context (4.7.1):
+  - react-native-safe-area-context (4.7.2):
     - React-Core
   - react-native-video (5.2.1):
     - React-Core
@@ -1273,7 +1273,7 @@ PODS:
     - React-jsi (= 0.72.5)
     - React-logger (= 0.72.5)
     - React-perflogger (= 0.72.5)
-  - RNCAsyncStorage (1.19.1):
+  - RNCAsyncStorage (1.19.3):
     - React-Core
   - RNFastImage (8.6.3):
     - React-Core
@@ -1294,9 +1294,9 @@ PODS:
     - Firebase/Firestore (= 8.15.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.12.0):
+  - RNGestureHandler (2.13.1):
     - React-Core
-  - RNPermissions (3.8.4):
+  - RNPermissions (3.9.2):
     - React-Core
   - RNReanimated (3.5.4):
     - DoubleConversion
@@ -1327,14 +1327,14 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.17.0):
+  - RNScreens (3.25.0):
     - React-Core
     - React-RCTImage
   - RNShare (8.2.2):
     - React-Core
   - RNSnackbar (2.6.2):
     - React-Core
-  - RNSVG (13.10.0):
+  - RNSVG (13.14.0):
     - React-Core
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
@@ -1565,7 +1565,7 @@ SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  BVLinearGradient: 612a04ff38e8480291f3379ee5b5a2c571f03fe0
+  BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 71803c074f6325f10b5ec891c443b6bbabef0ca7
   FBReactNativeSpec: 448e08a759d29a96e15725ae532445bf4343567c
@@ -1590,7 +1590,7 @@ SPEC CHECKSUMS:
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OneSignalXCFramework: d47a350b15e106a5dc310e3f97867e28dad6589e
-  Permission-AppTrackingTransparency: 644f9b7ee1355b34c1b552f87c2fc9f440e03236
+  Permission-AppTrackingTransparency: f6d1b9f94b367863e8ae2e671caad73bbfba32ef
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: df81ab637d35fac9e6eb94611cfd20f0feb05455
@@ -1610,7 +1610,7 @@ SPEC CHECKSUMS:
   react-native-onesignal: 2f88c5f8d353ab553f699e760c7995a511aec5f4
   react-native-pager-view: 43f51f45f37ec9715f6c188e4af46ccdf79872e8
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
-  react-native-safe-area-context: 9697629f7b2cda43cf52169bb7e0767d330648c2
+  react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
   react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
   React-NativeModulesApple: 797bc6078d566eef3fb3f74127e6e1d2e945a15f
@@ -1630,19 +1630,19 @@ SPEC CHECKSUMS:
   React-runtimescheduler: cc32add98c45c5df18436a6a52a7e1f6edec102c
   React-utils: 7a9918a1ffdd39aba67835d42386f592ea3f8e76
   ReactCommon: 91ece8350ebb3dd2be9cef662abd78b6948233c0
-  RNCAsyncStorage: f47fe18526970a69c34b548883e1aeceb115e3e1
+  RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBAnalytics: ea1421b49a0bf5e5bb7274df4a330713d0e85d2e
   RNFBApp: e4439717c23252458da2b41b81b4b475c86f90c4
   RNFBCrashlytics: 94e1f78e2a9aa9e02edbfb0d3f1f0921ce00094b
   RNFBFirestore: 24c46940b96579c50bd39a72566f6d48c6165f2f
-  RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
-  RNPermissions: f1b49dd05fa9b83993cd05a9ee115247944d8f1a
+  RNGestureHandler: 38aa38413896620338948fbb5c90579a7b1c3fde
+  RNPermissions: 868c4e459921873df0c756f37450457a88bf037c
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
-  RNScreens: 0df01424e9e0ed7827200d6ed1087ddd06c493f9
+  RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
   RNShare: d82e10f6b7677f4b0048c23709bd04098d5aee6c
   RNSnackbar: 3727b42bf6c4314a53c18185b5203e915a4ab020
-  RNSVG: 80584470ff1ffc7994923ea135a3e5ad825546b9
+  RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
