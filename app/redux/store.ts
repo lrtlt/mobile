@@ -19,11 +19,6 @@ let composeEnhancers = composeWithDevTools({});
 
 const middlewaresToApply = [saggaMiddleWare];
 
-if (__DEV__ && !process.env.JEST_WORKER_ID) {
-  const createFlipperDebugger = require('redux-flipper').default;
-  middlewaresToApply.push(createFlipperDebugger());
-}
-
 // Middleware: Redux Persist Persisted Reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
