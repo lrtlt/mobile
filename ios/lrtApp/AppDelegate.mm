@@ -1,44 +1,17 @@
 #import <Firebase.h>
 #import "AppDelegate.h"
 
-
 #import <React/RCTBundleURLProvider.h>
-
 #import <React/RCTLinkingManager.h>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  RCTAppSetupPrepareApp(application);
-  
   [FIRApp configure];
-
-  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-
-
-  _contextContainer = std::make_shared<facebook::react::ContextContainer const>();
-  _reactNativeConfig = std::make_shared<facebook::react::EmptyReactNativeConfig const>();
-  _contextContainer->insert("ReactNativeConfig", _reactNativeConfig);
-  _bridgeAdapter = [[RCTSurfacePresenterBridgeAdapter alloc] initWithBridge:bridge contextContainer:_contextContainer];
-  bridge.surfacePresenter = _bridgeAdapter.surfacePresenter;
-
-
-  UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"lrtApp", nil);
+  self.moduleName = @"lrtApp";
+  // You can add your custom initial props in the dictionary below.
+  // They will be passed down to the ViewController used by React Native.
+  self.initialProps = @{};
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
@@ -58,23 +31,4 @@
 {
   return [RCTLinkingManager application:application openURL:url options:options];
 }
-
-#if RCT_NEW_ARCH_ENABLED
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif
-
 @end
