@@ -163,13 +163,14 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
     <>
       <DrawerLayout
         ref={drawerRef}
-        drawerType="slide"
+        drawerType="front"
         drawerPosition="right"
+        drawerBackgroundColor={colors.background}
         onDrawerClose={onDrawerCloseHandler}
         onDrawerOpen={onDrawerOpenHandler}
         drawerWidth={220}
         useNativeAnimations={true}
-        statusBarAnimation={'slide'}
+        statusBarAnimation={'fade'}
         renderNavigationView={() => <SettingsScreenView />}>
         <SafeAreaView style={styles.container} edges={['left', 'right']}>
           <TabView

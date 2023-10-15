@@ -9,6 +9,8 @@ end
 
 node_require('react-native/scripts/react_native_pods.rb')
 node_require('react-native-permissions/scripts/setup.rb')
+
+$RNFirebaseAsStaticFramework = true
   
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
@@ -54,6 +56,7 @@ end
 
 target 'lrtApp' do
   config = use_native_modules!
+  use_frameworks! :linkage => :static
 
   # Flags change depending on the env values.
   flags = get_default_flags()
@@ -89,5 +92,7 @@ target 'lrtApp' do
 end
 
 target 'OneSignalNotificationServiceExtension' do
+  use_frameworks! :linkage => :static
+  
   pod 'OneSignalXCFramework', '>= 5.0.0', '< 6.0'
 end
