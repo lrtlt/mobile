@@ -52,6 +52,7 @@
     "react-native-webview": "13.6.2",
     "react-navigation-collapsible": "6.2.0",
     "react-redux": "^8.1.3",
+    "react-native-gemius-plugin": "./react-native-gemius-plugin",
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",

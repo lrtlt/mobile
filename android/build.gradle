@@ -58,9 +58,8 @@ allprojects {
             }
             url 'https://mobilesdk.gemius.com/releases/'
         }
-        jcenter()
         google()
-        maven { url 'https://www.jitpack.io' }
+        mavenCentral()
 
 
         def REACT_NATIVE_VERSION = new File(['node', '--print',"JSON.parse(require('fs').readFileSync(require.resolve('react-native/package.json'), 'utf-8')).version"].execute(null, rootDir).text.trim())
