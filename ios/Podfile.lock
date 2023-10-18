@@ -1342,7 +1342,7 @@ PODS:
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.13.2):
+  - RNGestureHandler (2.12.1):
     - React-Core
   - RNPermissions (3.9.2):
     - React-Core
@@ -1688,7 +1688,7 @@ SPEC CHECKSUMS:
   RNFBApp: 082df9f8ffba99f23f7aee3ecb64df703e7e1adb
   RNFBCrashlytics: 9d5b36a7e280178c5d61695936cb812005bf17ad
   RNFBFirestore: a9837bc0c4d0911ade436787e995fa20a12a77b0
-  RNGestureHandler: bb86e378287f7713baf3ca205423eb8109790022
+  RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
   RNPermissions: 8022532c15e61af6dc4e1c96087333d2d1056c6d
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
   RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa

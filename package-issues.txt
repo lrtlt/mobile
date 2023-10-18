@@ -1,0 +1,4 @@
+"react-native-gesture-handler": "2.12.1", 
+https://github.com/software-mansion/react-native-gesture-handler/issues/2603
+
+
