@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
-import {Linking, Platform} from 'react-native';
-import OneSignal from 'react-native-onesignal';
+import {Linking} from 'react-native';
+import {OneSignal} from 'react-native-onesignal';
 import {useDispatch} from 'react-redux';
 import {ONE_SIGNAL_APP_ID} from '../constants';
 import {setLaunchUrl} from '../redux/actions';
@@ -9,26 +9,26 @@ const useOneSignal = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    OneSignal.setAppId(ONE_SIGNAL_APP_ID);
-    OneSignal.getDeviceState()
-      .then((deviceState) => console.log('OneSignal device state: ', deviceState))
-      .catch((e) => console.log('OneSignal device error: ', e));
+    OneSignal.initialize(ONE_SIGNAL_APP_ID);
 
-    if (Platform.OS === 'ios') {
-      OneSignal.promptForPushNotificationsWithUserResponse((response) => {
-        console.log('OneSignal prompt response:', response);
-      });
-    }
-
-    OneSignal.setNotificationOpenedHandler((openedEvent) => {
-      console.log('OneSignal: notification opened:', openedEvent);
-      const data = openedEvent.notification.additionalData as any;
-      if (data && data.url && Linking.canOpenURL(data.url)) {
-        console.log('OneSignal: opening url:', data.url);
-        dispatch(setLaunchUrl(data.url));
+    OneSignal.Notifications.canRequestPermission().then((canRequest) => {
+      if (canRequest) {
+        OneSignal.Notifications.requestPermission(true);
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    OneSignal.Notifications.addEventListener('click', async (e) => {
+      console.log('OneSignal: notification click event:', e);
+      const data = e.notification.additionalData as any;
+      if (data && data.url) {
+        Linking.canOpenURL(data.url).then((supported) => {
+          console.log('Url:', data.url, 'Supported:', supported);
+          if (supported) {
+            dispatch(setLaunchUrl(data.url));
+          }
+        });
+      }
+    });
   }, []);
 };
 

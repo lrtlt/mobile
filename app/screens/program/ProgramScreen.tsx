@@ -14,8 +14,8 @@ import ProgramDateModal from './ProgramDateModal';
 import useAppStateCallback from '../../hooks/useAppStateCallback';
 import {ARTICLE_EXPIRE_DURATION} from '../../constants';
 
-type ScreenRouteProp = RouteProp<MainStackParamList, 'Slug'>;
-type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Slug'>;
+type ScreenRouteProp = RouteProp<MainStackParamList, 'Program'>;
+type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Program'>;
 
 type Props = {
   route: ScreenRouteProp;

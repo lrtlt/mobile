@@ -16,7 +16,10 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => "9.0" }
   s.source       = { :git => "https://github.com/github_account/react-native-gemius-plugin.git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m}"
+  # Try uncommenting if something wrong
+  # s.static_framework = true
+  
+  s.source_files = "ios/*.{h,m}"
   s.vendored_frameworks = 'ios/Frameworks/GemiusSDK.xcframework'
   s.frameworks = 'GemiusSDK'
 
