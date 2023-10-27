@@ -148,20 +148,22 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
 
   //TODO: using default SafeAreaView because react-native-safe-area-context stutters
   return (
-    <SafeAreaView style={styles.container}>
-      <Animated.FlatList
-        onScroll={onScroll}
-        contentContainerStyle={{paddingTop: containerPaddingTop}}
-        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
-        data={articleData}
-        windowSize={6}
-        showsVerticalScrollIndicator={false}
-        renderItem={renderItem}
-        removeClippedSubviews={false}
-        keyExtractor={useCallback((item, index) => {
-          return String(index) + String(item.type);
-        }, [])}
-      />
+    <SafeAreaView style={styles.flex}>
+      <View style={styles.container}>
+        <Animated.FlatList
+          onScroll={onScroll}
+          contentContainerStyle={{paddingTop: containerPaddingTop}}
+          scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+          data={articleData}
+          windowSize={6}
+          showsVerticalScrollIndicator={false}
+          renderItem={renderItem}
+          removeClippedSubviews={false}
+          keyExtractor={useCallback((item, index) => {
+            return String(index) + String(item.type);
+          }, [])}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -169,6 +171,9 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
 export default ArticleContentComponent;
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     paddingHorizontal: 12,
