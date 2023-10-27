@@ -44,7 +44,7 @@ const DailyQuestionComponent: React.FC<DailyQuestionComponentProps> = ({block}) 
 
   const renderChoiceVoted = useCallback(
     (choice: DailyQuestionChoice) => {
-      const isUserChoice = choice.id === answer?.choice.id ?? -1;
+      const isUserChoice = choice.id === (answer?.choice.id ?? -1);
       return (
         <View key={choice.id} style={{...styles.choiceContainer, borderColor: colors.buttonBorder}}>
           <View

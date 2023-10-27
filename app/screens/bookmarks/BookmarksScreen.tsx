@@ -1,13 +1,14 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {ListRenderItemInfo, StyleSheet, View} from 'react-native';
 import {ArticleRow, MyFlatList} from '../../components';
 import {useSelector} from 'react-redux';
-import {selectBookmarksScreenState} from '../../redux/selectors';
+import {selectBookmarkedArticles} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {RouteProp} from '@react-navigation/native';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SavedArticle} from '../../redux/reducers/articleStorage';
+import {formatArticles} from '../../util/articleFormatters';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Bookmarks'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Bookmarks'>;
@@ -18,8 +19,9 @@ type Props = {
 };
 
 const BookmarksScreen: React.FC<Props> = ({navigation}) => {
-  const state = useSelector(selectBookmarksScreenState);
-  const {articles} = state;
+  const bookmarkedArticles = useSelector(selectBookmarkedArticles);
+
+  const articles = useMemo(() => formatArticles(-1, bookmarkedArticles, false), [bookmarkedArticles]);
 
   const {strings} = useTheme();
 

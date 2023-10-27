@@ -91,11 +91,7 @@ const ArticleScreen: React.FC<Props> = ({navigation, route}) => {
       );
     }
     case 'ready': {
-      return (
-        <SafeAreaView style={styles.screen} edges={['bottom']}>
-          <ArticleContentComponent article={article!} itemPressHandler={articleItemPressHandler} />
-        </SafeAreaView>
-      );
+      return <ArticleContentComponent article={article!} itemPressHandler={articleItemPressHandler} />;
     }
     default: {
       return (

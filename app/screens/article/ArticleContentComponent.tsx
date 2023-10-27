@@ -141,7 +141,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
   );
 
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right']}>
+    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
       <Animated.FlatList
         onScroll={onScroll}
         contentContainerStyle={{paddingTop: containerPaddingTop}}

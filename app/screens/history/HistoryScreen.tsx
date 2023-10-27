@@ -1,13 +1,14 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {ListRenderItemInfo, StyleSheet, View} from 'react-native';
 import {ArticleRow, MyFlatList} from '../../components';
 import {useSelector} from 'react-redux';
-import {selectHistoryScreenState} from '../../redux/selectors';
+import {selectHistoryArticles} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {SavedArticle} from '../../redux/reducers/articleStorage';
+import {formatArticles} from '../../util/articleFormatters';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'History'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'History'>;
@@ -19,8 +20,9 @@ type Props = {
 
 const HistoryScreen: React.FC<Props> = ({navigation}) => {
   const {strings} = useTheme();
-  const state = useSelector(selectHistoryScreenState);
-  const {articles} = state;
+
+  const historyArticles = useSelector(selectHistoryArticles);
+  const articles = useMemo(() => formatArticles(-1, historyArticles, false), [historyArticles]);
 
   useEffect(() => {
     navigation.setOptions({
