@@ -1,5 +1,12 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {View, Animated, StyleSheet, ListRenderItemInfo, useWindowDimensions} from 'react-native';
+import {
+  View,
+  Animated,
+  StyleSheet,
+  ListRenderItemInfo,
+  useWindowDimensions,
+  SafeAreaView,
+} from 'react-native';
 import Header from './header/Header';
 import {getSmallestDim} from '../../util/UI';
 import {ArticleGallery, VideoComponent, AudioComponent, Text, ArticleContentItem} from '../../components';
@@ -18,7 +25,6 @@ import {
   TYPE_KEYWORDS,
 } from './ArticleCompositor';
 import {VIDEO_ASPECT_RATIO} from '../../constants';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {useCollapsibleHeader} from 'react-navigation-collapsible';
 import {useTheme} from '../../Theme';
 import {ArticleContent} from '../../api/Types';
@@ -140,8 +146,9 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
     0,
   );
 
+  //TODO: using default SafeAreaView because react-native-safe-area-context stutters
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
+    <SafeAreaView style={styles.container}>
       <Animated.FlatList
         onScroll={onScroll}
         contentContainerStyle={{paddingTop: containerPaddingTop}}

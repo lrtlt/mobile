@@ -3,7 +3,6 @@ import {StyleSheet, View} from 'react-native';
 import ArticleContentComponent, {ArticleSelectableItem} from './ArticleContentComponent';
 import {ScreenLoader, ScreenError, AdultContentWarning} from '../../components';
 import {useTheme} from '../../Theme';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {isDefaultArticle} from '../../api/Types';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';

@@ -1193,7 +1193,7 @@ PODS:
     - glog
   - react-native-gemius-plugin (1.6.3):
     - React
-  - react-native-onesignal (5.0.1):
+  - react-native-onesignal (5.0.2):
     - OneSignalXCFramework (= 5.0.2)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-pager-view (5.4.1):
@@ -1344,7 +1344,7 @@ PODS:
     - RNFBApp
   - RNGestureHandler (2.12.1):
     - React-Core
-  - RNPermissions (3.9.2):
+  - RNPermissions (3.10.1):
     - React-Core
   - RNReanimated (3.5.4):
     - DoubleConversion
@@ -1659,7 +1659,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 194e32c6aab382d88713ad3dd0025c5f5c4ee072
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
   react-native-gemius-plugin: bd761200bd7ec73b4c3f175c7a30f2a0cdd5fc59
-  react-native-onesignal: 2f88c5f8d353ab553f699e760c7995a511aec5f4
+  react-native-onesignal: 1040aa56f0b49d32a2c314979b4bf00718968f0c
   react-native-pager-view: 43f51f45f37ec9715f6c188e4af46ccdf79872e8
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
@@ -1689,7 +1689,7 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: 9d5b36a7e280178c5d61695936cb812005bf17ad
   RNFBFirestore: a9837bc0c4d0911ade436787e995fa20a12a77b0
   RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
-  RNPermissions: 8022532c15e61af6dc4e1c96087333d2d1056c6d
+  RNPermissions: 60d60ce58c13537514288f285910c8b1cd12908d
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
   RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
   RNShare: 32e97adc8d8c97d4a26bcdd3c45516882184f8b6
@@ -1700,6 +1700,6 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
 
-PODFILE CHECKSUM: 35224b071b682c96f0e0e8f5a7ef46073e4ae7d4
+PODFILE CHECKSUM: 3eea1eaf9fdf0b955bc9140b0bf8047b48354174
 
 COCOAPODS: 1.12.1

@@ -13,6 +13,7 @@ import useAppTrackingPermission from './app/util/useAppTrackingPermission';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {StyleSheet} from 'react-native';
 import VideoProvider from './app/components/videoComponent/context/VideoProvider';
+import useNotificationsPermission from './app/util/useNotificationsPermission';
 
 const ReduxProvider: React.FC = ({children}) => {
   return (
@@ -25,6 +26,7 @@ const ReduxProvider: React.FC = ({children}) => {
 };
 
 const App: React.FC = () => {
+  useNotificationsPermission();
   useAppTrackingPermission();
   useGemiusSetup();
   useOneSignal();

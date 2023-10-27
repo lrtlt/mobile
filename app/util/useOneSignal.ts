@@ -11,12 +11,6 @@ const useOneSignal = () => {
   useEffect(() => {
     OneSignal.initialize(ONE_SIGNAL_APP_ID);
 
-    OneSignal.Notifications.canRequestPermission().then((canRequest) => {
-      if (canRequest) {
-        OneSignal.Notifications.requestPermission(true);
-      }
-    });
-
     OneSignal.Notifications.addEventListener('click', async (e) => {
       console.log('OneSignal: notification click event:', e);
       const data = e.notification.additionalData as any;
