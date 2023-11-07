@@ -156,9 +156,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
   const onPlayerReady = (player: THEOplayer) => {
     setPlayer(player);
     //player.addEventListener(PlayerEventType.SOURCE_CHANGE, console.log);
-    player.addEventListener(PlayerEventType.LOADED_DATA, (event) => {
-      console.log(event);
-    });
+    //player.addEventListener(PlayerEventType.LOADED_DATA, console.log);
     player.addEventListener(PlayerEventType.ERROR, onErrorHandler);
     player.addEventListener(PlayerEventType.LOADED_METADATA, onLoadedMetaDataHandler);
     //player.addEventListener(PlayerEventType.WAITING, console.log);
@@ -182,7 +180,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
     <View style={styles.container}>
       <>
         <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady} />
-        {/* <ImageBackground source={{uri: poster}} style={styles.video} resizeMode="cover" /> */}
+        <ImageBackground source={{uri: poster}} style={styles.video} resizeMode="cover" />
         {!isLoading && player ? (
           <MediaControls
             enabled={true}
