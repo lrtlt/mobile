@@ -15,6 +15,8 @@ import MediaControls from './MediaControls';
 import {useVideo} from './context/useVideo';
 import {PlayerMode} from './PlayerMode';
 import {MediaType} from './context/VideoContext';
+import useMediaTracking from './useMediaTracking';
+import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 
 interface Props {
   style?: ViewStyle;
@@ -43,8 +45,11 @@ const config: PlayerConfiguration = {
   },
 };
 
-const makeSource = (uri: string, poster?: string): SourceDescription => ({
-  poster,
+const makeSource = (uri: string, title?: string, poster?: string): SourceDescription => ({
+  poster: poster,
+  metadata: {
+    title: title,
+  },
   sources: [
     {
       src: uri,
@@ -58,7 +63,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
   mode = PlayerMode.DEFAULT,
   mediaType,
   title,
-  poster,
+  poster = VIDEO_DEFAULT_BACKGROUND_IMAGE,
   autoStart,
   startTime,
   onError,
@@ -67,6 +72,8 @@ const TheoMediaPlayer: React.FC<Props> = ({
   const [duration, setDuration] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [, setCurrentTimeInternal] = useState(0);
+
+  const {trackPlay, trackPause, trackBuffer, trackClose, trackComplete, trackSeek} = useMediaTracking();
 
   const {
     setCurrentTime,
@@ -82,6 +89,27 @@ const TheoMediaPlayer: React.FC<Props> = ({
     registerFullScreenListener,
     unregisterFullScreenListener,
   } = useVideo();
+
+  useEffect(() => {
+    return () => {
+      if (mode === PlayerMode.DEFAULT) {
+        trackClose(streamUri, getCurrentTime());
+      }
+    };
+  }, [streamUri]);
+
+  useEffect(() => {
+    if (player?.seeking === true) {
+      trackBuffer(streamUri, player.currentTime / 1000);
+    }
+    if (player?.seeking === false) {
+      if (player?.paused) {
+        trackPause(streamUri, player.currentTime / 1000);
+      } else {
+        trackPlay(streamUri, player.currentTime / 1000);
+      }
+    }
+  }, [player?.seeking]);
 
   useEffect(() => {
     const key = `${mode}-${Math.random() * Math.pow(10, 8)}`;
@@ -106,7 +134,6 @@ const TheoMediaPlayer: React.FC<Props> = ({
     });
     return () => unregisterFullScreenListener(key);
   }, [
-    duration,
     getCurrentTime,
     isPausedByUser,
     player,
@@ -127,12 +154,17 @@ const TheoMediaPlayer: React.FC<Props> = ({
     setIsLoading(false);
   }, []);
 
-  const onPauseHandler = useCallback((e: Event<PlayerEventType.PAUSE>) => {
-    setIsPausedByUser(true);
+  const onPauseHandler = useCallback((_: Event<PlayerEventType.PAUSE>) => {
+    trackPause(streamUri, getCurrentTime() / 1000);
   }, []);
 
-  const onPlayHandler = useCallback((e: Event<PlayerEventType.PLAY>) => {
+  const onPlayHandler = useCallback((_: Event<PlayerEventType.PLAY>) => {
     setIsPausedByUser(false);
+    trackPlay(streamUri, getCurrentTime() / 1000);
+  }, []);
+
+  const onEndedHandler = useCallback((_: Event<PlayerEventType.ENDED>) => {
+    trackComplete(streamUri, getCurrentTime() / 1000);
   }, []);
 
   const onTimeUpdateHandler = useCallback(
@@ -156,7 +188,9 @@ const TheoMediaPlayer: React.FC<Props> = ({
   const onPlayerReady = (player: THEOplayer) => {
     setPlayer(player);
     //player.addEventListener(PlayerEventType.SOURCE_CHANGE, console.log);
-    //player.addEventListener(PlayerEventType.LOADED_DATA, console.log);
+    // player.addEventListener(PlayerEventType.PROGRESS, console.log);
+    // player.addEventListener(PlayerEventType.LOAD_START, console.log);
+    // player.addEventListener(PlayerEventType.WAITING, console.log);
     player.addEventListener(PlayerEventType.ERROR, onErrorHandler);
     player.addEventListener(PlayerEventType.LOADED_METADATA, onLoadedMetaDataHandler);
     //player.addEventListener(PlayerEventType.WAITING, console.log);
@@ -166,21 +200,62 @@ const TheoMediaPlayer: React.FC<Props> = ({
     player.addEventListener(PlayerEventType.PAUSE, onPauseHandler);
     // player.addEventListener(PlayerEventType.SEEKING, console.log);
     // player.addEventListener(PlayerEventType.SEEKED, console.log);
+    player.addEventListener(PlayerEventType.ENDED, onEndedHandler);
     // player.addEventListener(PlayerEventType.ENDED, console.log);
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
-    player.source = makeSource(streamUri, poster);
+    player.source = makeSource(streamUri, title, poster);
     player.backgroundAudioConfiguration = {enabled: true};
     player.autoplay = autoStart;
     player.muted = false;
     player.currentTime = startTime ?? 0;
+    //player.selectedVideoTrack = player.videoTracks[0];
     //player.pipConfiguration = {startsAutomatically: true};
   };
+
+  const _playPauseControl = useCallback(() => {
+    if (player) {
+      if (player.paused) {
+        setIsPausedByUser(false);
+        player.play();
+      } else {
+        setIsPausedByUser(true);
+        player.pause();
+      }
+    }
+  }, [player, setIsPausedByUser]);
+
+  const _fullScreenControl = useCallback(() => {
+    setIsFullScreen(!isFullScreen), [isFullScreen];
+  }, []);
+
+  const _seekControl = useCallback(
+    (time) => {
+      if (player) {
+        trackSeek(streamUri, time);
+        player.currentTime = time * 1000;
+      }
+    },
+    [player],
+  );
+
+  const _seekByControl = useCallback(
+    (time) => {
+      if (player) {
+        const newTime = player.currentTime + time * 1000;
+        trackSeek(streamUri, newTime / 1000);
+        player.currentTime = newTime;
+      }
+    },
+    [player],
+  );
 
   return (
     <View style={styles.container}>
       <>
         <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady} />
-        <ImageBackground source={{uri: poster}} style={styles.video} resizeMode="cover" />
+        {mediaType == MediaType.AUDIO ? (
+          <ImageBackground source={{uri: poster}} style={styles.video} resizeMode="contain" />
+        ) : null}
         {!isLoading && player ? (
           <MediaControls
             enabled={true}
@@ -193,15 +268,11 @@ const TheoMediaPlayer: React.FC<Props> = ({
             enableFullScreen={true}
             enableMute={false}
             title={title}
-            onPlayPausePress={() => (player.paused ? player.play() : player.pause())}
-            onMutePress={() => {
-              player.volume < 1 ? (player.volume = 1.0) : (player.volume = 0.0);
-            }}
-            onFullScreenPress={() => {
-              setIsFullScreen(!isFullScreen);
-            }}
-            onSeekRequest={(time) => (player.currentTime = time * 1000)}
-            onSeekByRequest={(time) => (player.currentTime += time * 1000)}
+            onPlayPausePress={_playPauseControl}
+            onMutePress={() => {}}
+            onFullScreenPress={_fullScreenControl}
+            onSeekRequest={_seekControl}
+            onSeekByRequest={_seekByControl}
           />
         ) : null}
       </>
