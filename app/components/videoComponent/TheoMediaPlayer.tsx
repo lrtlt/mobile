@@ -225,9 +225,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
     }
   }, [player, setIsPausedByUser]);
 
-  const _fullScreenControl = useCallback(() => {
-    setIsFullScreen(!isFullScreen), [isFullScreen];
-  }, []);
+  const _fullScreenControl = useCallback(() => setIsFullScreen(!isFullScreen), [isFullScreen]);
 
   const _seekControl = useCallback(
     (time) => {
