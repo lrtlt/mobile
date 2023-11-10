@@ -136,7 +136,7 @@
 //   );
 
 //   useEffect(() => {
-//     const key = `${mode}-${Math.random() * Math.pow(10, 8)}`;
+//     const key = uniqueId(`${mode}-`);
 
 //     registerFullScreenListener(key, {
 //       onFullScreenEnter: () => {

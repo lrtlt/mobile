@@ -17,6 +17,7 @@ import {PlayerMode} from './PlayerMode';
 import {MediaType} from './context/VideoContext';
 import useMediaTracking from './useMediaTracking';
 import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
+import {uniqueId} from 'lodash';
 
 interface Props {
   style?: ViewStyle;
@@ -112,7 +113,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
   }, [player?.seeking]);
 
   useEffect(() => {
-    const key = `${mode}-${Math.random() * Math.pow(10, 8)}`;
+    const key = uniqueId(`${mode}-`);
 
     registerFullScreenListener(key, {
       onFullScreenEnter: () => {
