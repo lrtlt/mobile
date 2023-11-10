@@ -11,7 +11,7 @@ type ReturnType = {
   trackSeek: (mediaId: string, time: number) => void;
 };
 
-const EVENT_DEBOUNCE_DURATION = 100;
+const EVENT_DEBOUNCE_DURATION = 200;
 
 const useMediaTracking = (): ReturnType => {
   const sendPlay = useMemo(

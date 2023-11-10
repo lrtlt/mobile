@@ -1,12 +1,13 @@
 import React, {useEffect, useCallback, useRef} from 'react';
 import {View, ActivityIndicator, StyleSheet, ViewStyle} from 'react-native';
 import VideoCover, {VideoCoverType} from './VideoCover';
+import Gemius from 'react-native-gemius-plugin';
 import {useTheme} from '../../Theme';
 import useVideoData from './useVideoData';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
-import MediaPlayerWithControls from './MediaPlayerWithControls';
+import TheoMediaPlayer from './TheoMediaPlayer';
 import {MediaType} from './context/VideoContext';
 
 interface Props {
@@ -20,7 +21,7 @@ interface Props {
 }
 
 const MAX_ERROR_COUNT = 3;
-const ERROR_DELAY = 300;
+const ERROR_DELAY = 1000;
 
 const VideoComponent: React.FC<Props> = (props) => {
   const {colors, strings} = useTheme();
@@ -97,14 +98,15 @@ const VideoComponent: React.FC<Props> = (props) => {
 
   return (
     <View style={props.style}>
-      <MediaPlayerWithControls
+      <TheoMediaPlayer
+        key={data.streamUri}
         style={props.style}
-        uri={data.streamUri}
-        mediaType={MediaType.VIDEO}
+        streamUri={data.streamUri}
         title={data.title}
         startTime={props.startTime || data.offset}
+        autoStart={true}
         poster={props.backgroundImage}
-        autostart={true}
+        mediaType={MediaType.VIDEO}
         onError={onPlayerError}
       />
     </View>

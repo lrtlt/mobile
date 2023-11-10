@@ -8,7 +8,7 @@ import {MainStackParamList} from '../../../navigation/MainStack';
 import {useTheme} from '../../../Theme';
 
 interface Props {
-  keywords: ArticleContentDefault['article_keywords'];
+  keywords?: ArticleContentDefault['article_keywords'];
 }
 
 const ArticleKeywords: React.FC<Props> = ({keywords}) => {
@@ -24,7 +24,7 @@ const ArticleKeywords: React.FC<Props> = ({keywords}) => {
 
   return (
     <View style={styles.root}>
-      {keywords.map((k) => {
+      {keywords?.map((k) => {
         return (
           <TouchableDebounce
             key={k.slug}

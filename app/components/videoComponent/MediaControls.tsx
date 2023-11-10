@@ -44,6 +44,7 @@ const HIT_SLOP: Insets = {
 interface Props {
   enabled: boolean;
   enableFullScreen: boolean;
+  enableMute: boolean;
   mediaDuration: number;
   currentTime: number;
   title?: string;
@@ -56,7 +57,6 @@ interface Props {
   isMuted: boolean;
   onMutePress: () => void;
 
-  isFullScreen: boolean;
   onFullScreenPress: () => void;
 
   onSeekRequest: (time: number) => void;
@@ -65,6 +65,7 @@ interface Props {
 const MediaControls: React.FC<Props> = ({
   enabled,
   enableFullScreen,
+  enableMute,
   currentTime,
   mediaDuration,
   title,
@@ -74,7 +75,7 @@ const MediaControls: React.FC<Props> = ({
   onPlayPausePress,
   isMuted,
   onMutePress,
-  isFullScreen: _notUsed,
+
   onFullScreenPress,
 
   onSeekRequest,
@@ -180,7 +181,7 @@ const MediaControls: React.FC<Props> = ({
     setVisible(false);
   }, []);
 
-  const PlayPauseControl = useCallback(
+  const PlayPauseControl = useMemo(
     () => (
       <TouchableOpacity
         style={styles.playPauseIcon}
@@ -197,7 +198,7 @@ const MediaControls: React.FC<Props> = ({
     [handlePlayPauseToggle, isPaused],
   );
 
-  const CenterControls = useCallback(
+  const CenterControls = useMemo(
     () => (
       <View style={styles.conterControlsRow}>
         {!isLiveStream && (
@@ -205,7 +206,7 @@ const MediaControls: React.FC<Props> = ({
             <IconPlayerRewind style={styles.rewindIcon} size={ICON_SIZE + 12} color={ICON_COLOR} />
           </TouchableOpacity>
         )}
-        <PlayPauseControl />
+        {PlayPauseControl}
         {!isLiveStream && (
           <TouchableOpacity onPress={handleSeekForward} hitSlop={HIT_SLOP} activeOpacity={0.6}>
             <IconPlayerForward style={styles.forwardIcon} size={ICON_SIZE + 12} color={ICON_COLOR} />
@@ -233,7 +234,7 @@ const MediaControls: React.FC<Props> = ({
     [handleMuteToggle, isMuted],
   );
 
-  const FullScreenControl = useCallback(
+  const FullScreenControl = useMemo(
     () => (
       <TouchableOpacity
         style={[styles.fullScreenIcon, styles.center]}
@@ -318,7 +319,7 @@ const MediaControls: React.FC<Props> = ({
       />
       <Pressable style={{...StyleSheet.absoluteFillObject}} onPress={handleHideControls} />
       <Title />
-      <CenterControls />
+      {CenterControls}
       <View style={styles.bottomControlsContainer}>
         {!isLiveStream && (
           <View>
@@ -327,7 +328,7 @@ const MediaControls: React.FC<Props> = ({
           </View>
         )}
         <View style={styles.bottomControlsRow}>
-          <VolumeControl />
+          {enableMute && <VolumeControl />}
           <View style={styles.progressContainer}>
             {!isLiveStream ? (
               <>
@@ -338,7 +339,7 @@ const MediaControls: React.FC<Props> = ({
               <LiveBadge />
             )}
           </View>
-          {enableFullScreen && <FullScreenControl />}
+          {enableFullScreen ? FullScreenControl : null}
         </View>
       </View>
     </Animated.View>
@@ -378,6 +379,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    minHeight: ICON_SIZE + 8,
   },
   volumeIcon: {
     width: ICON_SIZE + 8,

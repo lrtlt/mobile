@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
 import useOrientation from '../../../util/useOrientation';
-import MediaPlayerWithControls, {PlayerMode} from '../MediaPlayerWithControls';
 import {MediaType, VideoBaseData, VideoContext} from './VideoContext';
 import Animated, {FadeOut, SlideInDown} from 'react-native-reanimated';
+import {PlayerMode} from '../PlayerMode';
+import TheoMediaPlayer from '../TheoMediaPlayer';
 
 export type FullScreenListener = {
   onFullScreenEnter: () => void;
@@ -68,13 +69,13 @@ const VideoProvider: React.FC = (props) => {
         <StatusBar hidden={isFullScreen} />
         <View
           style={orientation === 'portrait' ? styles.videoContainerPortrait : styles.videoContainerLandscape}>
-          <MediaPlayerWithControls
+          <TheoMediaPlayer
+            streamUri={uri}
             mode={PlayerMode.FULLSCREEN}
-            uri={uri}
             mediaType={mediaType}
             poster={poster}
             title={title}
-            autostart={!isPausedByUser}
+            autoStart={!isPausedByUser}
             startTime={currentTimeRef.current}
           />
         </View>
