@@ -75,7 +75,7 @@ const VideoProvider: React.FC = (props) => {
             mediaType={mediaType}
             poster={poster}
             title={title}
-            autoStart={true || !isPausedByUser} //TODO: needs update
+            autoStart={!isPausedByUser}
             startTime={currentTimeRef.current}
           />
         </View>

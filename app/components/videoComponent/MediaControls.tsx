@@ -379,6 +379,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    minHeight: ICON_SIZE + 8,
   },
   volumeIcon: {
     width: ICON_SIZE + 8,

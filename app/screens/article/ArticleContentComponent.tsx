@@ -107,7 +107,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
         case TYPE_AUDIO: {
           return (
             <View style={styles.playerContainer}>
-              <AudioComponent {...data} style={styles.player} autoStart={false} />
+              <AudioComponent {...data} style={styles.player} autoStart={true} />
             </View>
           );
         }
