@@ -1,8 +1,11 @@
 package lt.mediapark.lrt;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -55,5 +58,24 @@ public class MainActivity extends ReactActivity {
             return;
         }
         super.applyOverrideConfiguration(overrideConfiguration);
+    }
+
+    //Theo-player PIP setup
+    @Override
+    protected void onUserLeaveHint() {
+        this.sendBroadcast(new Intent("onUserLeaveHint"));
+        super.onUserLeaveHint();
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, @NonNull Configuration newConfig) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig);
+            Intent intent = new Intent("onPictureInPictureModeChanged");
+            intent.putExtra("isInPictureInPictureMode", isInPictureInPictureMode);
+            this.sendBroadcast(intent);
+        }
+
+
     }
 }

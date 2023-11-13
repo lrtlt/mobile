@@ -10,6 +10,9 @@ import {
   LoadedMetadataEvent,
   Event,
   TimeUpdateEvent,
+  AspectRatio,
+  PresentationMode,
+  ABRStrategyType,
 } from 'react-native-theoplayer';
 import MediaControls from './MediaControls';
 import {useVideo} from './context/useVideo';
@@ -204,12 +207,30 @@ const TheoMediaPlayer: React.FC<Props> = ({
     player.addEventListener(PlayerEventType.ENDED, onEndedHandler);
     // player.addEventListener(PlayerEventType.ENDED, console.log);
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
+    //player.addEventListener(PlayerEventType.MEDIA_TRACK_LIST, (e) => console.log(JSON.stringify(e, null, 4)));
     player.source = makeSource(streamUri, title, poster);
     player.backgroundAudioConfiguration = {enabled: true};
     player.autoplay = autoStart;
     player.preload = 'auto';
     player.muted = false;
+
+    player.pipConfiguration = {
+      //TODO: enable on android after the fix on TheoPlayer side
+      startsAutomatically: Platform.OS === 'ios',
+    };
+
+    //player.selectedAudioTrack = 113;
     player.currentTime = startTime ?? 0;
+    player.aspectRatio = AspectRatio.FIT;
+
+    if (player.abr) {
+      player.abr!.strategy = ABRStrategyType.performance;
+      player.abr.targetBuffer = 15;
+    }
+    // console.log('audioTracks:', player.audioTracks);
+    // console.log('videoTracks:', player.videoTracks);
+    // console.log('targetVideoQuality:', player.targetVideoQuality);
+    //player.playbackRate = 1.5;
     //player.selectedVideoTrack = player.videoTracks[0];
     //player.pipConfiguration = {startsAutomatically: true};
   };
