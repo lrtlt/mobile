@@ -105,7 +105,7 @@ const VideoComponent: React.FC<Props> = (props) => {
         autoStart={true}
         isLiveStream={data.isLiveStream}
         startTime={data.isLiveStream ? undefined : props.startTime || data.offset}
-        poster={props.backgroundImage}
+        poster={props.backgroundImage ?? data.poster}
         mediaType={MediaType.VIDEO}
         onError={onPlayerError}
       />

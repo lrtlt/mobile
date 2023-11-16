@@ -2,6 +2,7 @@ import {useCallback, useState} from 'react';
 import {fetchVideoData} from '../../api';
 import {isVideoLiveStream} from '../../api/Types';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
+import {BASE_IMG_URL} from '../../util/ImageUtil';
 
 type VideoState = {
   isLoading: boolean;
@@ -11,6 +12,7 @@ type VideoState = {
     mediaId: string;
     title: string;
     offset?: number;
+    poster?: string;
   };
 };
 
@@ -52,6 +54,7 @@ const useVideoData = (): ReturnState => {
               mediaId: playlist_item.mediaid ? playlist_item.mediaid.toString() : 'no-media-id',
               title: response.title,
               offset: response.offset,
+              poster: playlist_item.image ? BASE_IMG_URL + playlist_item.image : undefined,
             },
           });
         }
