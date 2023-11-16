@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {ImageBackground, Platform, StyleSheet, View, ViewStyle} from 'react-native';
 import {
   PlayerConfiguration,
@@ -11,7 +11,6 @@ import {
   Event,
   TimeUpdateEvent,
   AspectRatio,
-  PresentationMode,
   ABRStrategyType,
 } from 'react-native-theoplayer';
 import MediaControls from './MediaControls';
@@ -27,6 +26,7 @@ interface Props {
   mode?: PlayerMode;
   mediaType: MediaType;
   streamUri: string;
+  isLiveStream: boolean;
   title?: string;
   poster?: string;
   autoStart: boolean;
@@ -69,6 +69,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
   title,
   poster = VIDEO_DEFAULT_BACKGROUND_IMAGE,
   autoStart,
+  isLiveStream,
   startTime,
   onError,
 }) => {
@@ -140,6 +141,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
   }, [
     getCurrentTime,
     isPausedByUser,
+    isLiveStream,
     player,
     mode,
     registerFullScreenListener,
@@ -147,13 +149,13 @@ const TheoMediaPlayer: React.FC<Props> = ({
   ]);
 
   const onLoadedMetaDataHandler = useCallback((e: LoadedMetadataEvent) => {
-    //console.log('Metadata:', e);
     setDuration(e.duration === Infinity ? 0 : e.duration);
     setVideoBaseData({
       mediaType: mediaType,
       poster: poster,
       title: title,
       uri: streamUri,
+      isLiveStream: isLiveStream,
     });
     setIsLoading(false);
   }, []);
@@ -171,13 +173,10 @@ const TheoMediaPlayer: React.FC<Props> = ({
     trackComplete(streamUri, getCurrentTime() / 1000);
   }, []);
 
-  const onTimeUpdateHandler = useCallback(
-    (e: TimeUpdateEvent) => {
-      setCurrentTime(e.currentTime);
-      setCurrentTimeInternal(e.currentTime);
-    },
-    [player],
-  );
+  const onTimeUpdateHandler = useCallback((e: TimeUpdateEvent) => {
+    setCurrentTime(e.currentTime);
+    setCurrentTimeInternal(e.currentTime);
+  }, []);
 
   const onErrorHandler = useCallback(
     (e: ErrorEvent) => {
@@ -213,14 +212,15 @@ const TheoMediaPlayer: React.FC<Props> = ({
     player.autoplay = autoStart;
     player.preload = 'auto';
     player.muted = false;
-
     player.pipConfiguration = {
       //TODO: enable on android after the fix on TheoPlayer side
       startsAutomatically: Platform.OS === 'ios',
     };
-
     //player.selectedAudioTrack = 113;
-    player.currentTime = startTime ?? 0;
+
+    if (!isLiveStream) {
+      player.currentTime = startTime ? startTime * 1000 : 0;
+    }
     player.aspectRatio = AspectRatio.FIT;
 
     if (player.abr) {

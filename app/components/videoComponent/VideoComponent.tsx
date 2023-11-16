@@ -1,7 +1,6 @@
 import React, {useEffect, useCallback, useRef} from 'react';
 import {View, ActivityIndicator, StyleSheet, ViewStyle} from 'react-native';
 import VideoCover, {VideoCoverType} from './VideoCover';
-import Gemius from 'react-native-gemius-plugin';
 import {useTheme} from '../../Theme';
 import useVideoData from './useVideoData';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
@@ -103,8 +102,9 @@ const VideoComponent: React.FC<Props> = (props) => {
         style={props.style}
         streamUri={data.streamUri}
         title={data.title}
-        startTime={props.startTime || data.offset}
         autoStart={true}
+        isLiveStream={data.isLiveStream}
+        startTime={data.isLiveStream ? undefined : props.startTime || data.offset}
         poster={props.backgroundImage}
         mediaType={MediaType.VIDEO}
         onError={onPlayerError}

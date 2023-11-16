@@ -12,6 +12,7 @@ export type VideoBaseData = {
   title?: string;
   poster?: string;
   mediaType: MediaType;
+  isLiveStream?: boolean;
 };
 
 export type VideoContextType = VideoBaseData & {

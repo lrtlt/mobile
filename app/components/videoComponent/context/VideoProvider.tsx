@@ -59,7 +59,7 @@ const VideoProvider: React.FC = (props) => {
   }, [handleSetFullScreen, isFullScreen]);
 
   const renderFullScreenPlayer = useCallback(() => {
-    const {uri, mediaType, poster, title} = videoBaseData;
+    const {uri, mediaType, poster, title, isLiveStream} = videoBaseData;
     if (!uri) {
       console.log('Cannot render full screen player URI is empty!');
       return null;
@@ -76,7 +76,8 @@ const VideoProvider: React.FC = (props) => {
             poster={poster}
             title={title}
             autoStart={!isPausedByUser}
-            startTime={currentTimeRef.current}
+            isLiveStream={Boolean(isLiveStream)}
+            startTime={isLiveStream ? undefined : currentTimeRef.current / 1000}
           />
         </View>
       </Animated.View>
