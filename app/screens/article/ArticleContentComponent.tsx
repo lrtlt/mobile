@@ -107,7 +107,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
         case TYPE_AUDIO: {
           return (
             <View style={styles.playerContainer}>
-              <AudioComponent {...data} style={styles.player} autoStart={true} />
+              <AudioComponent {...data} style={styles.player} autoStart={true} isLiveStream={false} />
             </View>
           );
         }
@@ -120,7 +120,12 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
           } else {
             return (
               <View style={styles.playerContainer}>
-                <AudioComponent {...data} style={styles.playerTextToSpeech} autoStart={true} />
+                <AudioComponent
+                  {...data}
+                  style={styles.playerTextToSpeech}
+                  autoStart={true}
+                  isLiveStream={false}
+                />
               </View>
             );
           }
@@ -196,7 +201,7 @@ const styles = StyleSheet.create({
   },
   playerTextToSpeech: {
     width: '100%',
-    aspectRatio: 1.5,
+    aspectRatio: VIDEO_ASPECT_RATIO,
     maxHeight: getSmallestDim() - 62,
   },
 });

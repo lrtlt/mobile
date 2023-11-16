@@ -10,6 +10,7 @@ interface AudioComponentProps {
   streamUri: string;
   mediaId: string;
   title: string;
+  isLiveStream: boolean;
   cover?: ArticlePhotoType;
   autoStart: boolean;
   startTime?: number;
@@ -24,6 +25,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
   title,
   cover,
   autoStart,
+  isLiveStream,
   startTime,
   streamUri,
 }) => {
@@ -47,6 +49,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
         style={style}
         streamUri={streamUri}
         title={title}
+        isLiveStream={isLiveStream}
         mediaType={MediaType.AUDIO}
         autoStart={autoStart}
         poster={cover ? buildArticleImageUri(IMG_SIZE_L, cover.path) : undefined}

@@ -20,6 +20,7 @@ import {MediaType} from './context/VideoContext';
 import useMediaTracking from './useMediaTracking';
 import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 import {uniqueId} from 'lodash';
+import Gemius from 'react-native-gemius-plugin';
 
 interface Props {
   style?: ViewStyle;
@@ -149,7 +150,10 @@ const TheoMediaPlayer: React.FC<Props> = ({
   ]);
 
   const onLoadedMetaDataHandler = useCallback((e: LoadedMetadataEvent) => {
-    setDuration(e.duration === Infinity ? 0 : e.duration);
+    const duration = e.duration === Infinity ? 0 : e.duration;
+    Gemius.setProgramData(streamUri, title ?? '', duration, mediaType === MediaType.VIDEO);
+    setDuration(duration);
+
     setVideoBaseData({
       mediaType: mediaType,
       poster: poster,
