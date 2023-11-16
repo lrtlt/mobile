@@ -13,6 +13,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import ProgramDateModal from './ProgramDateModal';
 import useAppStateCallback from '../../hooks/useAppStateCallback';
 import {ARTICLE_EXPIRE_DURATION} from '../../constants';
+import {delay} from 'lodash';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Program'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Program'>;
@@ -28,6 +29,7 @@ const STATE_READY = 'ready';
 
 const ProgramScreen: React.FC<Props> = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [isLoadingSelection, setIsLoadingSelection] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined);
 
@@ -77,20 +79,31 @@ const ProgramScreen: React.FC<Props> = ({navigation}) => {
     case loadingState === STATE_READY || state.lastFetchTime > 0: {
       const selectedDay = selectedDate || program?.days[0];
       const selectedDayProgram = program![selectedDay];
-      content = (
-        <View style={styles.root}>
-          <ProgramTabs program={selectedDayProgram} />
-          <ProgramDateModal
-            days={program?.days!}
-            onCancel={() => setModalVisible(false)}
-            visible={modalVisible}
-            onDateSelected={(index) => {
-              setSelectedDate(program?.days[index]);
-              setModalVisible(false);
-            }}
-          />
-        </View>
-      );
+
+      //This is a workaround for tab-view crash when count of tabs changes
+      if (isLoadingSelection) {
+        console.log('isLoadingSelection');
+        content = <ScreenLoader />;
+        delay(() => {
+          setIsLoadingSelection(false);
+        }, 250);
+      } else {
+        content = (
+          <View style={styles.root}>
+            <ProgramTabs program={selectedDayProgram} />
+            <ProgramDateModal
+              days={program?.days!}
+              onCancel={() => setModalVisible(false)}
+              visible={modalVisible}
+              onDateSelected={(index) => {
+                setIsLoadingSelection(true);
+                setSelectedDate(program?.days[index]);
+                setModalVisible(false);
+              }}
+            />
+          </View>
+        );
+      }
       break;
     }
     case loadingState === STATE_LOADING: {

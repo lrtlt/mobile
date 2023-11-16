@@ -4,7 +4,7 @@ import {TabView, TabBar} from 'react-native-tab-view';
 import {getIconForChannelById} from '../../../util/UI';
 import {useTheme} from '../../../Theme';
 import {ProgramItemType, SingleDayProgram} from '../../../api/Types';
-import {Scene} from 'react-native-tab-view/lib/typescript/types';
+import {Scene} from 'react-native-tab-view/src/types';
 import ProgramList from './ProgramList';
 
 interface Props {
@@ -25,7 +25,7 @@ const TabsScreen: React.FC<Props> = ({program}) => {
   const routes: Route[] = useMemo(() => {
     return program.map((channel, i) => {
       return {
-        key: String(channel.channel_id || `unkown-channel-${i}`),
+        key: String(channel.channel_id || `unknown-channel-${i}`),
         channelId: channel.channel_id ?? -1,
         title: channel.title,
         program: channel.prog,
@@ -33,7 +33,7 @@ const TabsScreen: React.FC<Props> = ({program}) => {
     });
   }, [program]);
 
-  const renderTabLable = useCallback(({route}: Scene<Route>) => {
+  const renderTabLabel = useCallback(({route}: Scene<Route>) => {
     const {channelId, title} = route;
     return (
       <View key={`${channelId}-${title}`} style={styles.centerContainer}>
@@ -49,7 +49,7 @@ const TabsScreen: React.FC<Props> = ({program}) => {
           {...tabBarProps}
           scrollEnabled={true}
           pressColor={colors.androidTouchFeedback}
-          renderLabel={renderTabLable}
+          renderLabel={renderTabLabel}
           indicatorStyle={{backgroundColor: colors.primary}}
           style={{backgroundColor: colors.background}}
           tabStyle={styles.tab}
@@ -57,7 +57,7 @@ const TabsScreen: React.FC<Props> = ({program}) => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [renderTabLable],
+    [renderTabLabel],
   );
 
   const renderScene = useCallback(
@@ -88,7 +88,7 @@ const TabsScreen: React.FC<Props> = ({program}) => {
     <View style={styles.root}>
       <TabView
         navigationState={{
-          index: currentIndex,
+          index: currentIndex < 0 ? 0 : currentIndex,
           routes: routes,
         }}
         swipeEnabled={true}
@@ -114,12 +114,5 @@ const styles = StyleSheet.create({
   },
   tab: {
     width: 140,
-  },
-  tabLable: {
-    width: '100%',
-
-    fontSize: 10,
-    textTransform: 'uppercase',
-    paddingTop: 6,
   },
 });
