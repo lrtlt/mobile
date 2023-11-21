@@ -126,3 +126,7 @@ export const putDailyQuestionVote = (questionId: number | string, answerId: numb
 export const forecastGet = (cityCode: string) => {
   return `https://www.lrt.lt/servisai/orai/?code=${cityCode}`;
 };
+
+export const liveFeedGet = (id: string | number, count: number, order: 'desc' | 'asc') => {
+  return `${BASE_URL}get-feed-items/${id}?count=${count}&order=${order}`;
+};

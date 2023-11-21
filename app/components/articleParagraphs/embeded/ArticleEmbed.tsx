@@ -7,6 +7,7 @@ import {
   ArticleEmbedHTMLType,
   ArticleEmbedPhotoalbumType,
   ArticleEmbedPhotoType,
+  ArticleEmbedTimelineType,
   ArticleEmbedType,
   ArticleEmbedVideoType,
 } from '../../../api/Types';
@@ -19,6 +20,7 @@ import EmbedHTML from './embedComponents/EmbedHTML';
 import EmbedPhotoalbum from './embedComponents/EmbedPhotoalbum';
 import EmbedPhotos from './embedComponents/EmbedPhotos';
 import EmbedVideo from './embedComponents/EmbedVideo';
+import EmbedTimeline from './embedComponents/EmbedTimeline';
 
 interface Props {
   embedArray: ArticleEmbedType[];
@@ -89,6 +91,9 @@ const ArticleEmbed: React.FC<Props> = ({embedArray, itemPressHandler}) => {
                 return (
                   <EmbedBroadcast key={`embed-broadcast-${index}`} data={e as ArticleEmbedBroadcastType[]} />
                 );
+              }
+              case 'timeline': {
+                return <EmbedTimeline data={e as ArticleEmbedTimelineType[]} />;
               }
               case 'photoalbum': {
                 return (

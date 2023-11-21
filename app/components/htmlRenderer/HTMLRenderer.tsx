@@ -20,12 +20,13 @@ import getTableCssRules from './getTableCssRules';
 import SafeWebView from '../safeWebView/SafeWebView';
 import useTextStyle from '../text/useTextStyle';
 
-const DEFAULT_FONT_SIZE = 19.5;
-const EXTRA_LINE_SPACING = 7;
+const DEFAULT_FONT_SIZE = 18.5;
+const EXTRA_LINE_SPACING = 10;
 const LI_TAG_VERTICAL_MARGIN = 8;
 
 interface Props {
   html: string;
+  textSize?: number;
 }
 
 const MyTextualRenderer: CustomTextualRenderer = (props) => {
@@ -146,7 +147,7 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
   );
 };
 
-const HTMLRenderer: React.FC<Props> = ({html}) => {
+const HTMLRenderer: React.FC<Props> = ({html, textSize}) => {
   const {width} = useWindowDimensions();
   const {colors} = useTheme();
 
@@ -155,8 +156,8 @@ const HTMLRenderer: React.FC<Props> = ({html}) => {
     scalingEnabled: true,
     fontFamily: 'SourceSansPro-Regular',
     style: {
-      fontSize: DEFAULT_FONT_SIZE,
-      lineHeight: DEFAULT_FONT_SIZE + EXTRA_LINE_SPACING,
+      fontSize: textSize ?? DEFAULT_FONT_SIZE,
+      lineHeight: (textSize ?? DEFAULT_FONT_SIZE) + EXTRA_LINE_SPACING,
       textDecorationColor: colors.primary,
       marginVertical: 8,
     },

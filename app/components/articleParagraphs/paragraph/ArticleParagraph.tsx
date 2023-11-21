@@ -4,12 +4,13 @@ import HTMLRenderer from '../../htmlRenderer/HTMLRenderer';
 
 interface Props {
   htmlText?: string;
+  textSize?: number;
 }
 
-const ArticleParagraph: React.FC<Props> = ({htmlText = ''}) => {
+const ArticleParagraph: React.FC<Props> = ({htmlText = '', textSize}) => {
   return (
     <View style={styles.container}>
-      <HTMLRenderer html={htmlText} />
+      <HTMLRenderer html={htmlText} textSize={textSize} />
     </View>
   );
 };
