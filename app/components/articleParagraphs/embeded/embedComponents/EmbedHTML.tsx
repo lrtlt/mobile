@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, useWindowDimensions} from 'react-native';
 import {WebViewSource} from 'react-native-webview/lib/WebViewTypes';
 import {ArticleEmbedHTMLType} from '../../../../api/Types';
@@ -9,12 +9,24 @@ interface Props {
 }
 
 const EmbedHTML: React.FC<Props> = ({data}) => {
-  const width = useWindowDimensions().width - 12 * 2;
+  const [dimensions, setDimensions] = useState({width: 0, height: 0});
+
+  const {width} = dimensions;
   return (
-    <View>
-      {data.map(
-        useCallback(
-          (item, i) => {
+    <View
+      onLayout={(event) => {
+        setDimensions(event.nativeEvent.layout);
+      }}>
+      {width === 0
+        ? null
+        : data.map((item, i) => {
+            if (item.el.is_timeline) {
+              /**
+               * Disable html timeline for now because we have native Timeline embed instead.
+               */
+              return null;
+            }
+
             const {html, src} = item.el;
 
             let source: WebViewSource | undefined;
@@ -40,7 +52,7 @@ const EmbedHTML: React.FC<Props> = ({data}) => {
                   'width="' + width + '"',
                 );
 
-              console.log(formattedHTML);
+              //console.log(formattedHTML);
               source = {
                 html: formattedHTML,
               };
@@ -66,10 +78,7 @@ const EmbedHTML: React.FC<Props> = ({data}) => {
                 openLinksExternally
               />
             );
-          },
-          [width],
-        ),
-      )}
+          })}
     </View>
   );
 };

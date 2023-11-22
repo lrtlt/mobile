@@ -6,6 +6,7 @@ import {
   channelGet,
   forecastGet,
   homeGet,
+  liveFeedGet,
   mediatekaGet,
   menuGet,
   newestArticlesGet,
@@ -24,6 +25,7 @@ import {
   ForecastLocation,
   ForecastResponse,
   HomeDataResponse,
+  LiveFeedResponse,
   MediatekaDataResponse,
   MenuResponse,
   NewestArticlesResponse,
@@ -74,3 +76,6 @@ export const fetchWeatherLocations = () => get<ForecastLocation[]>(weatherLocati
 export const fetchForecast = (cityCode: string) => get<ForecastResponse>(forecastGet(cityCode));
 
 export const fetchOpusPlaylist = () => get<OpusPlaylistResponse>(opusPlaylistGet());
+
+export const fetchLiveFeed = (id: string | number, count: number, order: 'asc' | 'desc') =>
+  get<LiveFeedResponse>(liveFeedGet(id, count, order));

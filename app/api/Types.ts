@@ -1,4 +1,4 @@
-import {Article} from '../../Types';
+import {Article as FeedArticle} from '../../Types';
 
 //Route types from menu api
 export const ROUTE_TYPE_HOME = 'home';
@@ -108,12 +108,12 @@ export type HomeChannels = {
 
 export type HomeBlockArticle = {
   type: 'article';
-  article: Article;
+  article: FeedArticle;
 };
 
 export type HomeBlockTopArticles = {
   type: 'top_articles';
-  articles: Article[];
+  articles: FeedArticle[];
 };
 
 export type HomeBlockChannels = {
@@ -124,7 +124,7 @@ export type HomeBlockChannels = {
 /** @deprecated */
 export type HomeBlockFeedBlock = {
   type: 'articles_block';
-  articles_list: Article[];
+  articles_list: FeedArticle[];
   template_id: 999;
   block_title: string;
 };
@@ -133,7 +133,7 @@ export type HomeBlockTopFeedBlock = {
   //TODO: remove this template after audioteka api update
   template: 'top_feed';
   type: 'top_feed';
-  articles: Article[];
+  articles: FeedArticle[];
 };
 
 export type HomeBlockEmbed = {
@@ -146,7 +146,7 @@ export type HomeBlockCategory = {
   type: 'category';
   template_id: number;
   data: {
-    articles_list: Article[];
+    articles_list: FeedArticle[];
     category_url: string;
     category_id: number;
     template_id: number;
@@ -165,7 +165,7 @@ export type HomeBlockSlug = {
   background_image?: string;
   data: {
     is_slug_block: 1;
-    articles_list: Article[];
+    articles_list: FeedArticle[];
     template_id: number;
     slug_title: string;
     slug_url: string;
@@ -277,7 +277,7 @@ export type AudiotekaTopUrlList = {
 
 export type AudiotekaTopArticle = {
   template: 'top';
-  article: Article;
+  article: FeedArticle;
   backgroundImage?: string;
   icon?: string;
 };
@@ -289,7 +289,7 @@ export type AudiotekaNewestCategory = {
   'color-active': string;
   'background-color-active': string;
   'background-color': string;
-  articles: Article[];
+  articles: FeedArticle[];
 };
 
 export type AudiotekaNewest = {
@@ -301,7 +301,7 @@ export type AudiotekaNewest = {
 export type AudiotekaPopular = {
   template: 'popular';
   title: string;
-  articles: Article[];
+  articles: FeedArticle[];
 };
 
 export type Podcast = {
@@ -324,13 +324,13 @@ export type AudiotekaCategory = {
   category_url: string;
   category_id: number;
   template_id: number;
-  articles_list: Article[];
+  articles_list: FeedArticle[];
 };
 
 export type AudiotekaSlug = {
   template: 'slug';
   is_slug_block: 1;
-  articles_list: Article[];
+  articles_list: FeedArticle[];
   slug_title: string;
   slug_url: string;
 };
@@ -370,19 +370,19 @@ export type CategoryArticlesResponse = {
     category_title: string;
     term: string;
   };
-  articles: Article[];
+  articles: FeedArticle[];
 };
 
 export type PopularArticlesResponse = {
   page: number;
   refresh: boolean;
-  articles: Article[];
+  articles: FeedArticle[];
 };
 
 export type NewestArticlesResponse = {
   page: number;
   refresh: boolean;
-  articles: Article[];
+  articles: FeedArticle[];
 };
 
 export type ArticlePhotoType = {
@@ -399,7 +399,8 @@ export type ArticleEmbedType =
   | ArticleEmbedAudioType
   | ArticleEmbedBroadcastType
   | ArticleEmbedHTMLType
-  | ArticleEmbedPhotoalbumType;
+  | ArticleEmbedPhotoalbumType
+  | ArticleEmbedTimelineType;
 
 export type ArticleEmbedPhotoType = {
   embed_type: 'photo';
@@ -451,6 +452,7 @@ export type ArticleEmbedHTMLType = {
   el: {
     html?: string;
     src?: string;
+    is_timeline?: number;
   };
 };
 
@@ -476,6 +478,11 @@ export type ArticleEmbedPhotoalbumType = {
     title: string;
     album_photos: ArticlePhotoType[];
   };
+};
+
+export type ArticleEmbedTimelineType = {
+  embed_type: 'timeline';
+  src: string;
 };
 
 export type ArticleContentDefault = {
@@ -620,12 +627,12 @@ export type SearchResponse = {
   page: number;
   q: string;
   total_found: string;
-  items: Article[];
+  items: FeedArticle[];
   similar_categories: SearchCategorySuggestion[];
 };
 
 export type SlugArticlesResponse = {
-  articles: Article[];
+  articles: FeedArticle[];
   slug: {
     title: string;
     slug: string;
@@ -655,3 +662,40 @@ export type DailyQuestionResponse = {
   votes: number;
   choices: DailyQuestionChoice[];
 };
+
+export interface LiveFeedResponse {
+  'feed-items-left': number;
+  'feed-items': LiveFeedItem[];
+}
+export interface LiveFeedItem {
+  date_full: string;
+  img_path_prefix?: string;
+  article_id?: any;
+  feed_item_type: string;
+  feed_item_id: number;
+  feed_item_content: string;
+  time_diff_minutes: number;
+  photo_id?: any;
+  is_yesterday_date?: any;
+  photo_info?: string;
+  is_today_date?: any;
+  badge_id?: any;
+  photo_aspectratio?: any;
+  badge_text?: any;
+  feed_item_title?: string;
+  img_path_postfix: string;
+  embed?: string;
+  articles?: LiveFeedArticle[];
+}
+export interface LiveFeedArticle {
+  reactions: string;
+  url: string;
+  id: number;
+  subtitle: string;
+  badge_text?: string;
+
+  category_url: string;
+  category_title: string;
+  item_date: string;
+  title: string;
+}
