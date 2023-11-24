@@ -130,6 +130,9 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.onesignal:OneSignal:[5.0.0, 5.99.99]'
 
+    implementation "com.google.android.gms:play-services-cast-framework:${safeExtGet('castFrameworkVersion', '+')}"
+
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.squareup.okhttp3', module:'okhttp'
@@ -141,6 +144,10 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+}
+
+def safeExtGet(prop, fallback) {
+  rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

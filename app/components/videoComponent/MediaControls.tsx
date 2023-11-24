@@ -23,6 +23,7 @@ import {
   IconPlayerVolume,
 } from '../svg';
 import TextComponent from '../text/Text';
+import {CastButton} from 'react-native-google-cast';
 
 const CONTROLS_TIMEOUT_MS = 3000;
 const ICON_COLOR = '#FFFFFFDD';
@@ -97,6 +98,12 @@ const MediaControls: React.FC<Props> = ({
       }, CONTROLS_TIMEOUT_MS),
     [],
   );
+
+  useEffect(() => {
+    if (enabled) {
+      resetControlsTimeout();
+    }
+  }, []);
 
   useEffect(() => {
     //Cleanup debounce on unmount
@@ -241,11 +248,13 @@ const MediaControls: React.FC<Props> = ({
         onPress={handleFullscreenClick}
         hitSlop={HIT_SLOP}
         activeOpacity={0.6}>
-        <IconFullscreen size={ICON_SIZE - 8} color={ICON_COLOR} />
+        <IconFullscreen size={ICON_SIZE - 6} color={ICON_COLOR} />
       </TouchableOpacity>
     ),
     [handleFullscreenClick],
   );
+
+  const ChromeCastControl = <CastButton style={[styles.fullScreenIcon, styles.center]} tintColor="white" />;
 
   const Title = useCallback(
     () => (
@@ -313,11 +322,11 @@ const MediaControls: React.FC<Props> = ({
       exiting={FadeOut.duration(400)}>
       <LinearGradient
         style={StyleSheet.absoluteFillObject}
-        colors={['#000000AA', '#00000088', '#00000066', '#22222233']}
+        colors={['#000000FF', '#00000088', '#00000066', '#22222233']}
         useAngle={true}
         angle={0}
       />
-      <Pressable style={{...StyleSheet.absoluteFillObject}} onPress={handleHideControls} />
+      <Pressable style={{...StyleSheet.absoluteFillObject, bottom: ICON_SIZE}} onPress={handleHideControls} />
       <Title />
       {CenterControls}
       <View style={styles.bottomControlsContainer}>
@@ -339,6 +348,7 @@ const MediaControls: React.FC<Props> = ({
               <LiveBadge />
             )}
           </View>
+          {ChromeCastControl}
           {enableFullScreen ? FullScreenControl : null}
         </View>
       </View>
@@ -379,6 +389,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    gap: 8,
     minHeight: ICON_SIZE + 8,
   },
   volumeIcon: {

@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import com.google.android.gms.cast.framework.CastContext;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 
 public class MainActivity extends ReactActivity {
@@ -17,6 +19,14 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
+
+        try {
+            // lazy load Google Cast context
+            CastContext.getSharedInstance(this);
+        } catch (Exception e) {
+            Log.e("MainActivity", "onCreate: ", e);
+            // cast framework not supported
+        }
     }
 
     /**

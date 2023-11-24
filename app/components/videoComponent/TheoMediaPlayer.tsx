@@ -21,6 +21,7 @@ import useMediaTracking from './useMediaTracking';
 import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 import {uniqueId} from 'lodash';
 import Gemius from 'react-native-gemius-plugin';
+import CastContext, {CastState} from 'react-native-google-cast';
 
 interface Props {
   style?: ViewStyle;
@@ -103,6 +104,19 @@ const TheoMediaPlayer: React.FC<Props> = ({
       }
     };
   }, [streamUri]);
+
+  useEffect(() => {
+    if (player === undefined) {
+      return;
+    }
+
+    const subscription = CastContext.onCastStateChanged((castState) => {
+      if (castState === CastState.CONNECTED) {
+        player?.cast.chromecast?.start();
+      }
+    });
+    return () => subscription.remove();
+  }, [player]);
 
   useEffect(() => {
     if (player?.seeking === true) {
@@ -200,6 +214,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
     // player.addEventListener(PlayerEventType.WAITING, console.log);
     player.addEventListener(PlayerEventType.ERROR, onErrorHandler);
     player.addEventListener(PlayerEventType.LOADED_METADATA, onLoadedMetaDataHandler);
+    player.addEventListener(PlayerEventType.CAST_EVENT, console.log);
     //player.addEventListener(PlayerEventType.WAITING, console.log);
     //player.addEventListener(PlayerEventType.READYSTATE_CHANGE, console.log);
     // player.addEventListener(PlayerEventType.PLAYING, console.log);

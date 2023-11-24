@@ -12,9 +12,9 @@ const EmbedTimeline: React.FC<Props> = ({data}) => {
     <>
       {data.map(
         useCallback(
-          (item) => {
+          (item, i) => {
             const lastSegment = item.src.split('/').pop();
-            return lastSegment ? <ArticleLiveFeed key={lastSegment} id={lastSegment} /> : null;
+            return lastSegment ? <ArticleLiveFeed key={`${i}-${lastSegment}`} id={lastSegment} /> : null;
           },
           [data],
         ),

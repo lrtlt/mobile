@@ -721,6 +721,7 @@ PODS:
     - PromisesSwift (~> 2.1)
   - fmt (6.2.1)
   - glog (0.3.5)
+  - google-cast-sdk-dynamic-xcframework-no-bluetooth (4.7.1)
   - GoogleAppMeasurement (10.15.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.15.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -1193,6 +1194,16 @@ PODS:
     - glog
   - react-native-gemius-plugin (1.6.3):
     - React
+  - react-native-google-cast (4.6.2):
+    - React
+    - react-native-google-cast/NoBluetoothArm (= 4.6.2)
+  - react-native-google-cast/NoBluetoothArm (4.6.2):
+    - google-cast-sdk-dynamic-xcframework-no-bluetooth
+    - React
+    - react-native-google-cast/RNGoogleCast
+  - react-native-google-cast/RNGoogleCast (4.6.2):
+    - PromisesObjC
+    - React
   - react-native-onesignal (5.0.2):
     - OneSignalXCFramework (= 5.0.2)
     - React (< 1.0.0, >= 0.13.0)
@@ -1419,6 +1430,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-gemius-plugin (from `../node_modules/react-native-gemius-plugin`)
+  - react-native-google-cast (from `../node_modules/react-native-google-cast`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-render-html (from `../node_modules/react-native-render-html`)
@@ -1471,6 +1483,7 @@ SPEC REPOS:
     - FirebaseInstallations
     - FirebaseSessions
     - fmt
+    - google-cast-sdk-dynamic-xcframework-no-bluetooth
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
@@ -1536,6 +1549,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-gemius-plugin:
     :path: "../node_modules/react-native-gemius-plugin"
+  react-native-google-cast:
+    :path: "../node_modules/react-native-google-cast"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
   react-native-pager-view:
@@ -1630,6 +1645,7 @@ SPEC CHECKSUMS:
   FirebaseSessions: 49f39e5c10e3f9fdd38d01b748329bae2a2fa8ed
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  google-cast-sdk-dynamic-xcframework-no-bluetooth: 1fa9e267df3fd6f8a1c6e3345142ca5286297968
   GoogleAppMeasurement: 722db6550d1e6d552b08398b69a975ac61039338
   GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
@@ -1659,6 +1675,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 194e32c6aab382d88713ad3dd0025c5f5c4ee072
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
   react-native-gemius-plugin: bd761200bd7ec73b4c3f175c7a30f2a0cdd5fc59
+  react-native-google-cast: 18b9b2fc518caabfa65d309409e160b3fc6d1733
   react-native-onesignal: 1040aa56f0b49d32a2c314979b4bf00718968f0c
   react-native-pager-view: 43f51f45f37ec9715f6c188e4af46ccdf79872e8
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
