@@ -235,17 +235,17 @@ const TheoMediaPlayer: React.FC<Props> = ({
       //TODO: enable on android after the fix on TheoPlayer side
       startsAutomatically: Platform.OS === 'ios',
     };
-    //player.selectedAudioTrack = 113;
 
     if (!isLiveStream) {
       player.currentTime = startTime ? startTime * 1000 : 0;
     }
     player.aspectRatio = AspectRatio.FIT;
 
-    if (player.abr) {
-      player.abr!.strategy = ABRStrategyType.performance;
-      player.abr.targetBuffer = 15;
-    }
+    // if (player.abr) {
+    //   player.abr!.strategy = ABRStrategyType.performance;
+    //   player.abr.targetBuffer = 15;
+    // }
+
     // console.log('audioTracks:', player.audioTracks);
     // console.log('videoTracks:', player.videoTracks);
     // console.log('targetVideoQuality:', player.targetVideoQuality);
