@@ -21,6 +21,7 @@ buildscript {
         maven {
              url 'https://plugins.gradle.org/m2/' 
         }
+        maven { url 'https://developer.huawei.com/repo/' }
 
     }
     dependencies {
@@ -58,6 +59,7 @@ allprojects {
             }
             url 'https://mobilesdk.gemius.com/releases/'
         }
+        maven { url 'https://developer.huawei.com/repo/' }
         google()
         mavenCentral()
 

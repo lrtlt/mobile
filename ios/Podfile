@@ -61,6 +61,8 @@ target 'lrtApp' do
   # Flags change depending on the env values.
   flags = get_default_flags()
 
+  pod 'react-native-google-cast', :git => 'https://github.com/Danesz/react-native-google-cast.git', branch: 'feature/guestmode_apple_silicon'
+
   use_react_native!(
     :path => config[:reactNativePath],
     # Hermes is now enabled by default. Disable by setting this flag to false.

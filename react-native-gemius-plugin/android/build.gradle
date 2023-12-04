@@ -12,6 +12,7 @@ buildscript {
         repositories {
             google()
             mavenCentral()
+            maven { url 'https://developer.huawei.com/repo/' }
         }
         dependencies {
             classpath 'com.android.tools.build:gradle:3.4.2'
@@ -65,6 +66,8 @@ repositories {
         }
         url 'https://mobilesdk.gemius.com/releases/'
     }
+    maven { url 'https://developer.huawei.com/repo/' }
+
     google()
     mavenCentral()
 }
@@ -72,7 +75,8 @@ repositories {
 dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'
-    implementation "com.gemius:mobile-sdk:2.0.5"
+    implementation "com.gemius:mobile-sdk:2.0.8"
+    implementation "com.huawei.hms:ads-identifier:3.4.58.301"
     implementation "com.google.code.gson:gson:2.8.5"
     implementation "com.google.android.gms:play-services-base:18.2.0"
     implementation "com.google.android.gms:play-services-ads:22.4.0"

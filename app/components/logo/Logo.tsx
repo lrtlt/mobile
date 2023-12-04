@@ -3,7 +3,7 @@ import React from 'react';
 import {useSettings} from '../../settings/useSettings';
 import {useSelector} from 'react-redux';
 import {selectLogo} from '../../redux/selectors';
-import {SvgCss} from 'react-native-svg';
+import {SvgCss} from 'react-native-svg/css';
 import {LogoDark, LogoLight} from '../svg';
 import {themeDark} from '../../Theme';
 

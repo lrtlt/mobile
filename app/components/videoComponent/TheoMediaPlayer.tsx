@@ -180,6 +180,9 @@ const TheoMediaPlayer: React.FC<Props> = ({
   }, []);
 
   const onPlayHandler = useCallback((_: Event<PlayerEventType.PLAY>) => {
+    console.log(player?.duration);
+
+    //Gemius.setProgramData(streamUri, title ?? '', duration, mediaType === MediaType.VIDEO);
     setIsPausedByUser(false);
     trackPlay(streamUri, getCurrentTime() / 1000);
   }, []);
@@ -204,6 +207,8 @@ const TheoMediaPlayer: React.FC<Props> = ({
   );
 
   const onPlayerReady = (player: THEOplayer) => {
+    Gemius.setProgramData(streamUri, title ?? '', 0, mediaType === MediaType.VIDEO);
+
     setPlayer(player);
     //player.addEventListener(PlayerEventType.SOURCE_CHANGE, console.log);
     // player.addEventListener(PlayerEventType.PROGRESS, console.log);
