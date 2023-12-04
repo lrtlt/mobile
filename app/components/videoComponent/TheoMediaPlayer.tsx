@@ -21,7 +21,8 @@ import useMediaTracking from './useMediaTracking';
 import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 import {uniqueId} from 'lodash';
 import Gemius from 'react-native-gemius-plugin';
-import CastContext, {CastState} from 'react-native-google-cast';
+import useChromecast from './useChromecast';
+import {MediaPlayerState} from 'react-native-google-cast';
 
 interface Props {
   style?: ViewStyle;
@@ -105,18 +106,14 @@ const TheoMediaPlayer: React.FC<Props> = ({
     };
   }, [streamUri]);
 
-  useEffect(() => {
-    if (player === undefined) {
-      return;
-    }
-
-    const subscription = CastContext.onCastStateChanged((castState) => {
-      if (castState === CastState.CONNECTED) {
-        player?.cast.chromecast?.start();
-      }
-    });
-    return () => subscription.remove();
-  }, [player]);
+  const {client, mediaStatus} = useChromecast({
+    player: player,
+    mediaType: mediaType,
+    streamUri: streamUri,
+    title: title,
+    poster: poster,
+    isLiveStream: isLiveStream,
+  });
 
   useEffect(() => {
     if (player?.seeking === true) {
@@ -241,10 +238,9 @@ const TheoMediaPlayer: React.FC<Props> = ({
     }
     player.aspectRatio = AspectRatio.FIT;
 
-    // if (player.abr) {
-    //   player.abr!.strategy = ABRStrategyType.performance;
-    //   player.abr.targetBuffer = 15;
-    // }
+    if (player.abr) {
+      player.abr!.strategy = ABRStrategyType.bandwidth;
+    }
 
     // console.log('audioTracks:', player.audioTracks);
     // console.log('videoTracks:', player.videoTracks);
@@ -254,17 +250,24 @@ const TheoMediaPlayer: React.FC<Props> = ({
     //player.pipConfiguration = {startsAutomatically: true};
   };
 
-  const _playPauseControl = useCallback(() => {
-    if (player) {
-      if (player.paused) {
-        setIsPausedByUser(false);
-        player.play();
+  const _playPauseControl = useCallback(async () => {
+    if (client) {
+      if (mediaStatus?.playerState === MediaPlayerState.PLAYING) {
+        client?.pause();
+        player?.pause();
       } else {
-        setIsPausedByUser(true);
+        client?.play();
+      }
+    } else if (player) {
+      if (player.paused) {
+        player.play();
+        setIsPausedByUser(false);
+      } else {
         player.pause();
+        setIsPausedByUser(true);
       }
     }
-  }, [player, setIsPausedByUser]);
+  }, [player, client, mediaStatus, setIsPausedByUser]);
 
   const _fullScreenControl = useCallback(() => setIsFullScreen(!isFullScreen), [isFullScreen]);
 
@@ -273,9 +276,10 @@ const TheoMediaPlayer: React.FC<Props> = ({
       if (player) {
         trackSeek(streamUri, time);
         player.currentTime = time * 1000;
+        client?.seek({position: time});
       }
     },
-    [player],
+    [player, client],
   );
 
   const _seekByControl = useCallback(
@@ -284,9 +288,10 @@ const TheoMediaPlayer: React.FC<Props> = ({
         const newTime = player.currentTime + time * 1000;
         trackSeek(streamUri, newTime / 1000);
         player.currentTime = newTime;
+        client?.seek({position: time, relative: true});
       }
     },
-    [player],
+    [player, client],
   );
 
   return (
@@ -302,7 +307,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
             currentTime={getCurrentTime() / 1000}
             mediaDuration={duration / 1000}
             isMuted={player.muted ?? false}
-            isPaused={player.paused}
+            isPaused={mediaStatus ? mediaStatus?.playerState === MediaPlayerState.PAUSED : player.paused}
             loading={isLoading}
             isBuffering={player.seeking && !player.paused}
             enableFullScreen={mediaType == MediaType.VIDEO}
