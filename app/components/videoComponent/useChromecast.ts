@@ -67,6 +67,9 @@ const useChromecast = ({player, mediaType, isLiveStream, poster, streamUri, titl
             },
           });
         });
+      } else {
+        setClient(undefined);
+        setMediaStatus(null);
       }
     });
     return () => subscription.remove();
