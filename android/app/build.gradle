@@ -86,8 +86,8 @@ android {
         applicationId "lt.mediapark.lrt"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 203407
-        versionName "2.34.7"
+        versionCode 203408
+        versionName "2.34.8"
         multiDexEnabled true
     }
     signingConfigs {
@@ -117,11 +117,12 @@ android {
         }
     }
 
-    //TODO: check if still needed
-    packagingOptions {
-        exclude "META-INF/annotation-experimental_release.kotlin_module"
-        exclude "META-INF/kotlin-stdlib.kotlin_module"
-    }
+//Uncomment if problems with kotlin versions
+//    packagingOptions {
+//        exclude "META-INF/annotation-experimental_release.kotlin_module"
+//        exclude "META-INF/kotlin-stdlib.kotlin_module"
+//    }
+
 }
 
 dependencies {
@@ -131,7 +132,6 @@ dependencies {
     implementation 'com.onesignal:OneSignal:[5.0.0, 5.99.99]'
 
     implementation "com.google.android.gms:play-services-cast-framework:${safeExtGet('castFrameworkVersion', '+')}"
-
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
@@ -144,6 +144,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    
+    //Uncomment if problems with building signed apk / bundle
+    //coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
 
 def safeExtGet(prop, fallback) {
