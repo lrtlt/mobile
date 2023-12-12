@@ -1,5 +1,5 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {StatusBar} from 'react-native';
+import {Platform, StatusBar} from 'react-native';
 import {useSelector} from 'react-redux';
 import {LinkingOptions, NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
 import SplashViewComponent from '../screens/splash/SplashScreenView';
@@ -15,6 +15,7 @@ import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
 import MainStack, {MainStackParamList} from './MainStack';
 import {SplashScreen} from '../screens';
 import useHandleLaunchUrl from './useHandleLaunchUrl';
+import {ChartbeatTracker} from '../util/useChartbeatSetup';
 
 const linking: LinkingOptions<MainStackParamList> = {
   prefixes: [DEEP_LINKING_URL_PREFIX],
@@ -61,6 +62,14 @@ const NavigatorComponent: React.FC = () => {
       console.log('Current route:', currentRoute);
       crashlytics().log(`Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
       Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, params);
+
+      //TODO: test out
+      ChartbeatTracker.trackView({
+        viewId: currentScreen,
+        title: `${currentScreen} - title`,
+      });
+      ChartbeatTracker._appState == '';
+
       analytics().logScreenView({
         screen_name: currentScreen,
         screen_class: currentRouteName,

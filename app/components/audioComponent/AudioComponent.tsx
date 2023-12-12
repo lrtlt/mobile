@@ -8,7 +8,6 @@ import {MediaType} from '../videoComponent/context/VideoContext';
 interface AudioComponentProps {
   style?: ViewStyle;
   streamUri: string;
-  mediaId: string;
   title: string;
   isLiveStream: boolean;
   cover?: ArticlePhotoType;
@@ -21,7 +20,6 @@ const ERROR_DELAY = 300;
 
 const AudioComponent: React.FC<AudioComponentProps> = ({
   style,
-  mediaId: _,
   title,
   cover,
   autoStart,
@@ -58,10 +56,6 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
       />
     </View>
   );
-};
-
-AudioComponent.defaultProps = {
-  mediaId: '-1',
 };
 
 export default AudioComponent;
