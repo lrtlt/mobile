@@ -17,6 +17,7 @@ import {debounce} from 'lodash';
 import SearchSuggestions from './SearchSuggestions';
 import {defaultSearchFilter} from './context/SearchContext';
 import {SearchCategorySuggestion} from '../../api/Types';
+import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -51,6 +52,11 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
   useEffect(() => {
     callSearchApiWithDebounce(query, filter);
   }, [callSearchApiWithDebounce, filter, query]);
+
+  useNavigationAnalytics({
+    type: 'Search',
+    title: 'Paieška',
+  });
 
   useEffect(() => {
     navigation.setOptions({

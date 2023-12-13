@@ -7,6 +7,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import ArticleTabScreen from '../main/tabScreen/ArticleTabScreen';
 import {ROUTE_TYPE_CATEGORY} from '../../api/Types';
+import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Page'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Page'>;
@@ -25,6 +26,11 @@ const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
     key: c.name,
     title: c.name,
   }));
+
+  useNavigationAnalytics({
+    type: `Page -  ${page.type}`,
+    title: page.name,
+  });
 
   useEffect(() => {
     navigation.setOptions({

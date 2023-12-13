@@ -10,6 +10,7 @@ import {IconClose} from '../../components/svg';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
+import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Gallery'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Gallery'>;
@@ -38,6 +39,11 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
   });
 
   const [selectedIndex, setSelectedIndex] = useState(state.initialIndex);
+
+  useNavigationAnalytics({
+    type: 'Gallery',
+    title: 'Galerija',
+  });
 
   const goBackHandler = useCallback(() => {
     navigation.goBack();

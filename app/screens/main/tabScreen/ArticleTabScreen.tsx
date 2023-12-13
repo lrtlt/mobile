@@ -9,6 +9,7 @@ import TabScreenContent from './ArticleTabScreenContent';
 import {ArticleScreenAdapter} from './Types';
 import useCategoryArticlesProvider from './useCategoryArticlesProvider';
 import {EventRegister} from 'react-native-event-listeners';
+import useArticleTabScreenAnalytics from './useArticleTabScreenAnalytics';
 
 interface Props {
   isCurrent: boolean;
@@ -42,6 +43,8 @@ const ArticleTabScreen: React.FC<Props> = ({
   }, [type]);
 
   const {state, loadNextPage, refresh} = provider(categoryId, categoryTitle);
+
+  useArticleTabScreenAnalytics({type, categoryTitle});
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {

@@ -34,7 +34,7 @@ const Channel: React.FC<Props> = ({data, onPress}) => {
       <View
         style={{
           ...styles.bottomBarOverlay,
-          width: Math.max(0, Math.min(Number(data.proc), 100)) + '%',
+          width: `${Math.max(0, Math.min(Number(data.proc), 100))}%`,
           backgroundColor: dark ? colors.primary : colorsSet.secondary,
         }}
       />

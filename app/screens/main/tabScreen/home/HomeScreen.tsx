@@ -28,6 +28,7 @@ import SlugArticlesBlock from './blocks/SlugArticlesBlock/SlugArticlesBlock';
 import TopFeedBlock from './blocks/TopFeedBlock/TopFeedBlock';
 import TopUrlBlock from './blocks/TopUrlsBlock/TopUrlBlock';
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
+import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
 
 interface Props {
   isCurrent: boolean;
@@ -51,6 +52,11 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useNavigationAnalytics({
+    type: type === ROUTE_TYPE_MEDIA ? 'Mediateka' : 'Home',
+    title: type === ROUTE_TYPE_MEDIA ? 'Mediateka' : 'Pagrindinis',
+  });
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {

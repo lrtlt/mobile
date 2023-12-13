@@ -16,6 +16,7 @@ import {ChannelDataType} from '../../components/scrollingChannels/ScrollingChann
 import ChannelComponent from './ChannelComponent';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
 import useAppStateCallback from '../../hooks/useAppStateCallback';
+import useChannelAnalytics from './useChannelAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Channel'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Channel'>;
@@ -57,6 +58,8 @@ const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
       },
     });
   }, [navigation, selectedChannel, strings.channelScreenTitle]);
+
+  useChannelAnalytics({channel_response: state.channel});
 
   const loadChannel = () => {
     cancellablePromise(fetchChannel(selectedChannel))

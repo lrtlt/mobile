@@ -15,6 +15,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {ForecastLocation} from '../../api/Types';
 import useFetchWeatherArticles from './useFetchWeatherArticles';
 import SlugArticlesBlock from '../main/tabScreen/home/blocks/SlugArticlesBlock/SlugArticlesBlock';
+import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Weather'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Weather'>;
@@ -40,6 +41,11 @@ const WeatherScreen: React.FC<Props> = ({navigation}) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useNavigationAnalytics({
+    type: `Weather - ${selectedLocation?.n}`,
+    title: `Orų prognozė - ${selectedLocation?.n}`,
+  });
 
   const handleSelectLocation = useCallback((location: ForecastLocation) => {
     setSelectedLocation(location);

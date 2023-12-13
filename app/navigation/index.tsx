@@ -15,7 +15,6 @@ import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
 import MainStack, {MainStackParamList} from './MainStack';
 import {SplashScreen} from '../screens';
 import useHandleLaunchUrl from './useHandleLaunchUrl';
-import {ChartbeatTracker} from '../util/useChartbeatSetup';
 
 const linking: LinkingOptions<MainStackParamList> = {
   prefixes: [DEEP_LINKING_URL_PREFIX],
@@ -59,16 +58,10 @@ const NavigatorComponent: React.FC = () => {
         screen: currentScreen,
         params: currentRoute?.params && JSON.stringify(currentRoute.params),
       };
+
       console.log('Current route:', currentRoute);
       crashlytics().log(`Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
       Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, params);
-
-      //TODO: test out
-      ChartbeatTracker.trackView({
-        viewId: currentScreen,
-        title: `${currentScreen} - title`,
-      });
-      ChartbeatTracker._appState == '';
 
       analytics().logScreenView({
         screen_name: currentScreen,

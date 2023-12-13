@@ -20,6 +20,7 @@ import AudiotekaSearch from './components/search/AudiotekaSearch';
 import TopFeedBlock from '../home/blocks/TopFeedBlock/TopFeedBlock';
 import TopUrlBlock from '../home/blocks/TopUrlsBlock/TopUrlBlock';
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
+import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
 
 interface Props {
   isCurrent: boolean;
@@ -38,6 +39,11 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
       page: 'audioteka',
     });
   }, []);
+
+  useNavigationAnalytics({
+    type: 'Audioteka',
+    title: 'Audioteka',
+  });
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {

@@ -9,6 +9,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import useArticleScreenState from './useArticleScreenState';
 import useArticleHeader from './useArticleHeader';
+import useArticleAnalytics from './useArticleAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Article'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Article'>;
@@ -35,6 +36,8 @@ const ArticleScreen: React.FC<Props> = ({navigation, route}) => {
   const adultContentDeclineHandler = useCallback(() => {
     acceptAdultContent(false);
   }, [acceptAdultContent]);
+
+  useArticleAnalytics({article});
 
   const articleItemPressHandler = useCallback(
     (item: ArticleSelectableItem) => {

@@ -60,7 +60,7 @@ const ProgramItem: React.FC<Props> = (props) => {
       onPress={openArticleHandler}>
       <View style={styles.content}>
         <View
-          style={{...styles.elapsedIndicator, width: proc + '%', backgroundColor: colors.programProgress}}
+          style={{...styles.elapsedIndicator, width: `${proc}%`, backgroundColor: colors.programProgress}}
         />
 
         <TextComponent style={styles.timeText} type="secondary">
