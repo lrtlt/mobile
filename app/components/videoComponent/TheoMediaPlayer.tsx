@@ -208,9 +208,8 @@ const TheoMediaPlayer: React.FC<Props> = ({
 
   const onPlayerReady = (player: THEOplayer) => {
     Gemius.setProgramData(streamUri, title ?? '', 0, mediaType === MediaType.VIDEO);
-
     setPlayer(player);
-    //player.addEventListener(PlayerEventType.SOURCE_CHANGE, console.log);
+    // player.addEventListener(PlayerEventType.SOURCE_CHANGE, console.log);
     // player.addEventListener(PlayerEventType.PROGRESS, console.log);
     // player.addEventListener(PlayerEventType.LOAD_START, console.log);
     // player.addEventListener(PlayerEventType.WAITING, console.log);
@@ -228,7 +227,6 @@ const TheoMediaPlayer: React.FC<Props> = ({
     // player.addEventListener(PlayerEventType.ENDED, console.log);
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
     //player.addEventListener(PlayerEventType.MEDIA_TRACK_LIST, (e) => console.log(JSON.stringify(e, null, 4)));
-    player.source = makeSource(streamUri, title, poster);
     player.backgroundAudioConfiguration = {enabled: true};
     player.autoplay = autoStart;
     player.preload = 'auto';
@@ -246,13 +244,13 @@ const TheoMediaPlayer: React.FC<Props> = ({
     if (player.abr) {
       player.abr!.strategy = ABRStrategyType.bandwidth;
     }
-
     // console.log('audioTracks:', player.audioTracks);
     // console.log('videoTracks:', player.videoTracks);
     // console.log('targetVideoQuality:', player.targetVideoQuality);
     //player.playbackRate = 1.5;
     //player.selectedVideoTrack = player.videoTracks[0];
     //player.pipConfiguration = {startsAutomatically: true};
+    player.source = makeSource(streamUri, title, poster);
   };
 
   const _playPauseControl = useCallback(async () => {

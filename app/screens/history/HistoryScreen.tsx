@@ -9,6 +9,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {SavedArticle} from '../../redux/reducers/articleStorage';
 import {formatArticles} from '../../util/articleFormatters';
+import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'History'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'History'>;
@@ -31,6 +32,11 @@ const HistoryScreen: React.FC<Props> = ({navigation}) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useNavigationAnalytics({
+    type: 'History',
+    title: 'Istorija / Peržiūrėti straipsniai',
+  });
 
   const renderItem = (val: ListRenderItemInfo<SavedArticle[]>) => {
     return (

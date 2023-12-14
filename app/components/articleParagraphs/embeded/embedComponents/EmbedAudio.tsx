@@ -21,7 +21,6 @@ const EmbedAudio: React.FC<Props> = ({data}) => {
                 style={styles.player}
                 streamUri={stream_url}
                 isLiveStream={false}
-                mediaId={id ? id.toString() : '-1'}
                 title={title}
                 autoStart={false}
                 startTime={record_offset}

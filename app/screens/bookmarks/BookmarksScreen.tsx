@@ -9,6 +9,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SavedArticle} from '../../redux/reducers/articleStorage';
 import {formatArticles} from '../../util/articleFormatters';
+import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Bookmarks'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Bookmarks'>;
@@ -40,6 +41,11 @@ const BookmarksScreen: React.FC<Props> = ({navigation}) => {
       />
     );
   };
+
+  useNavigationAnalytics({
+    type: 'Bookmarks',
+    title: 'Išsaugoti straipsniai',
+  });
 
   return (
     <View style={styles.container}>

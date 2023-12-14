@@ -14,6 +14,7 @@ import ProgramDateModal from './ProgramDateModal';
 import useAppStateCallback from '../../hooks/useAppStateCallback';
 import {ARTICLE_EXPIRE_DURATION} from '../../constants';
 import {delay} from 'lodash';
+import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Program'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Program'>;
@@ -51,6 +52,11 @@ const ProgramScreen: React.FC<Props> = ({navigation}) => {
     dispatch(fetchProgram());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useNavigationAnalytics({
+    type: 'TVProgram',
+    title: 'TV Programa',
+  });
 
   useAppStateCallback(
     useCallback(() => {

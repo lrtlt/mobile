@@ -5,6 +5,7 @@ import {Platform, StyleSheet, View} from 'react-native';
 import {SafeWebView} from '../../components';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
+import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'WebPage'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'WebPage'>;
@@ -25,6 +26,11 @@ const WebPageScreen: React.FC<Props> = ({route, navigation}) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useNavigationAnalytics({
+    type: `WebPage -  ${title}`,
+    title: url,
+  });
 
   return (
     <View

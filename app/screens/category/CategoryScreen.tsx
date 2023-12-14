@@ -7,6 +7,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ArticleTabScreen from '../main/tabScreen/ArticleTabScreen';
 import {ROUTE_TYPE_CATEGORY} from '../../api/Types';
+import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Category'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Category'>;
@@ -24,6 +25,11 @@ const CategoryScreen: React.FC<Props> = ({navigation, route}) => {
       headerTitle: name,
     });
   }, [name, navigation]);
+
+  useNavigationAnalytics({
+    type: `Category`,
+    title: `Straipsnių kategorija - ${name}`,
+  });
 
   return (
     <SafeAreaView style={styles.screen} edges={['left', 'right']}>

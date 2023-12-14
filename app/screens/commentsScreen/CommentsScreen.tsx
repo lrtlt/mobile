@@ -4,6 +4,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {FacebookComments} from '../../components';
 import {MainStackParamList} from '../../navigation/MainStack';
+import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Comments'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Comments'>;
@@ -14,6 +15,11 @@ type Props = {
 };
 
 const CommentsScreen: React.FC<Props> = ({route}) => {
+  useNavigationAnalytics({
+    type: 'Comments',
+    title: 'Komentarai',
+  });
+
   return (
     <View style={styles.container}>
       <FacebookComments url={route.params.url} />

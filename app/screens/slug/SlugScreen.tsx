@@ -10,6 +10,7 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Article} from '../../../Types';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
+import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Slug'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Slug'>;
@@ -46,6 +47,11 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
     startLoading();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useNavigationAnalytics({
+    type: 'Slug',
+    title: slugUrl,
+  });
 
   const startLoading = () => {
     setState({
