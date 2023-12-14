@@ -1,8 +1,9 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ProgramItemType} from '../../../api/Types';
-import {MyFlatList, ProgramItem} from '../../../components';
+import {ProgramItem} from '../../../components';
 import Divider from '../../../components/divider/Divider';
+import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {PROGRAM_ITEM_HEIGHT} from '../../../components/programItem/ProgramItem';
 
 interface Props {
@@ -11,11 +12,11 @@ interface Props {
 }
 
 const ProgramList: React.FC<Props> = ({items, scrollToIndex}) => {
-  const ref = useRef<MyFlatList>(null);
+  const ref = useRef<FlashList<any>>(null);
 
   useEffect(() => {
     ref.current?.scrollToIndex({
-      animated: false,
+      animated: true,
       index: scrollToIndex,
     });
   }, [scrollToIndex]);
@@ -44,19 +45,22 @@ const ProgramList: React.FC<Props> = ({items, scrollToIndex}) => {
   const keyExtractor = useCallback((item, i) => String(i) + String(item), []);
 
   return (
-    <MyFlatList
-      style={styles.root}
-      ref={ref}
-      showsVerticalScrollIndicator={false}
-      data={items}
-      renderItem={renderProgramItem}
-      getItemLayout={calculateProgramItemLayout}
-      initialScrollIndex={scrollToIndex}
-      contentContainerStyle={styles.scrollContainer}
-      windowSize={21}
-      initialNumToRender={50}
-      keyExtractor={keyExtractor}
-    />
+    <View style={styles.root}>
+      <FlashList
+        //style={styles.root}
+        ref={ref}
+        showsVerticalScrollIndicator={false}
+        data={items}
+        renderItem={renderProgramItem}
+        // getItemLayout={calculateProgramItemLayout}
+        initialScrollIndex={scrollToIndex}
+        // contentContainerStyle={styles.scrollContainer}
+        // windowSize={21}
+        // initialNumToRender={50}
+        estimatedItemSize={PROGRAM_ITEM_HEIGHT}
+        keyExtractor={keyExtractor}
+      />
+    </View>
   );
 };
 

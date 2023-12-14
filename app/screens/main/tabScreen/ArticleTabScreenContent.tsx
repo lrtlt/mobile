@@ -1,14 +1,14 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useRef} from 'react';
-import {View, StyleSheet, ListRenderItemInfo, Button, RefreshControl} from 'react-native';
+import {View, StyleSheet, Button, RefreshControl} from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
+import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {Article} from '../../../../Types';
 import {
   ArticleRow,
   DefaultSectionHeader,
   ListLoader,
-  MyFlatList,
   ScreenLoader,
   Text,
   TouchableDebounce,
@@ -38,7 +38,7 @@ const TabScreenContent: React.FC<Props> = ({
   const {colors, strings} = useTheme();
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const listRef = useRef<MyFlatList>(null);
+  const listRef = useRef<FlashList<any>>(null);
 
   useEffect(() => {
     //Scroll to top when it's finished refreshing
@@ -105,13 +105,14 @@ const TabScreenContent: React.FC<Props> = ({
   //Handle article data
   return (
     <View style={styles.container}>
-      <MyFlatList
+      <FlashList
         ref={listRef}
         showsVerticalScrollIndicator={false}
-        style={styles.container}
+        //style={styles.container}
         data={articles}
         ListHeaderComponent={showTitle ? renderTitle() : null}
-        windowSize={4}
+        //windowSize={4}
+        estimatedItemSize={320}
         onEndReachedThreshold={0.3}
         ListFooterComponent={isFetching ? <ListLoader /> : null}
         onEndReached={onListEndReached}

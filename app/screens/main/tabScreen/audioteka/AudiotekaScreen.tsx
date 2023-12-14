@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {View, RefreshControl, StyleSheet, StatusBar, ListRenderItemInfo} from 'react-native';
-import {MyFlatList, ScreenLoader} from '../../../../components';
+import {View, RefreshControl, StyleSheet, StatusBar} from 'react-native';
+import {ScreenLoader} from '../../../../components';
 import {fetchAudioteka} from '../../../../redux/actions/index';
 import {GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
 import {useDispatch, useSelector} from 'react-redux';
@@ -8,6 +8,7 @@ import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {useTheme} from '../../../../Theme';
 import {selectAudiotekaScreenState} from '../../../../redux/selectors';
+import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {AudiotekaTemplate} from '../../../../api/Types';
 import TopArticle from './components/topArticle/TopArticle';
 import PodcastsBlock from './components/podcasts/PodcastsBlock';
@@ -28,7 +29,7 @@ interface Props {
 
 const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
   const dispatch = useDispatch();
-  const listRef = useRef<MyFlatList>(null);
+  const listRef = useRef<FlashList<any>>(null);
   const {colors, dark} = useTheme();
 
   const state = useSelector(selectAudiotekaScreenState);
@@ -139,9 +140,9 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
         backgroundColor={colors.statusBar}
       />
       <View style={styles.container}>
-        <MyFlatList
+        <FlashList
           showsVerticalScrollIndicator={false}
-          style={styles.container}
+          //style={styles.container}
           ref={listRef}
           extraData={{
             lastFetchTime: lastFetchTime,
@@ -152,11 +153,13 @@ const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
           }
           data={data}
           removeClippedSubviews={false}
-          windowSize={4}
-          updateCellsBatchingPeriod={20}
-          maxToRenderPerBatch={2}
+          estimatedFirstItemOffset={500}
+          estimatedItemSize={400}
+          // windowSize={4}
+          // updateCellsBatchingPeriod={20}
+          // maxToRenderPerBatch={2}
+          // initialNumToRender={6}
           ListFooterComponent={<SafeAreaView edges={['bottom']} />}
-          initialNumToRender={6}
           keyExtractor={(item, index) => String(index) + String(item)}
         />
       </View>
