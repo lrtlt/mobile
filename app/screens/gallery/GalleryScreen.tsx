@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import Gallery from 'react-native-awesome-gallery';
 import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
@@ -40,10 +40,15 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
 
   const [selectedIndex, setSelectedIndex] = useState(state.initialIndex);
 
-  useNavigationAnalytics({
-    type: 'Gallery',
-    title: 'Galerija',
-  });
+  useNavigationAnalytics(
+    useMemo(
+      () => ({
+        type: 'Gallery',
+        title: 'Galleria',
+      }),
+      [],
+    ),
+  );
 
   const goBackHandler = useCallback(() => {
     navigation.goBack();

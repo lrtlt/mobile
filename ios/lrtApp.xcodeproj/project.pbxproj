@@ -261,6 +261,7 @@
 			buildPhases = (
 				DAD3B05D139160AD60F7B3C8 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
+				6FB5D14D254AAB9700E1295A /* Embed App Extensions */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
@@ -269,7 +270,6 @@
 				A6BB913A80477845BBF7DA29 /* [CP] Embed Pods Frameworks */,
 				7BC6C230E218D9E165B46652 /* [CP-User] [RNFB] Core Configuration */,
 				14F0787B20AA646B333FA49C /* [CP-User] [RNFB] Crashlytics Configuration */,
-				6FB5D14D254AAB9700E1295A /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -1053,7 +1053,8 @@
 				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -1125,7 +1126,8 @@
 				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;

@@ -17,13 +17,13 @@ const useNavigationAnalytics = (params?: TrackingParams) => {
 
   const pushToAnalytics = useMemo(
     () =>
-      debounce((params: TrackingParams) => {
-        console.log(`ANALYTICS - tracking page: ${params.type}`);
+      debounce((p: TrackingParams) => {
+        //console.log(`ANALYTICS - Lrt.lt app - ${p.title}`);
         ChartbeatTracker.trackView({
-          viewId: `Lrt.lt app - ${params.type}`,
-          title: `Lrt.lt app - ${params.title}`,
-          authors: params.authors,
-          sections: params.sections,
+          viewId: `Lrt.lt app - ${p.type}`,
+          title: `Lrt.lt app - ${p.title}`,
+          authors: p.authors,
+          sections: p.sections,
         });
       }, EVENT_DEBOUNCE_DURATION),
     [],
