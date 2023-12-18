@@ -162,7 +162,6 @@ const TheoMediaPlayer: React.FC<Props> = ({
 
   const onLoadedMetaDataHandler = useCallback((e: LoadedMetadataEvent) => {
     const duration = e.duration === Infinity ? 0 : e.duration;
-    Gemius.setProgramData(streamUri, title ?? '', duration, mediaType === MediaType.VIDEO);
     setDuration(duration);
 
     setVideoBaseData({
@@ -175,14 +174,16 @@ const TheoMediaPlayer: React.FC<Props> = ({
     setIsLoading(false);
   }, []);
 
+  const onLoadedDataHandler = useCallback((e: Event<PlayerEventType.LOADED_DATA>) => {
+    Gemius.setProgramData(streamUri, title ?? '', duration, mediaType === MediaType.VIDEO);
+    setIsLoading(false);
+  }, []);
+
   const onPauseHandler = useCallback((_: Event<PlayerEventType.PAUSE>) => {
     trackPause(streamUri, getCurrentTime() / 1000);
   }, []);
 
   const onPlayHandler = useCallback((_: Event<PlayerEventType.PLAY>) => {
-    console.log(player?.duration);
-
-    //Gemius.setProgramData(streamUri, title ?? '', duration, mediaType === MediaType.VIDEO);
     setIsPausedByUser(false);
     trackPlay(streamUri, getCurrentTime() / 1000);
   }, []);
@@ -215,14 +216,15 @@ const TheoMediaPlayer: React.FC<Props> = ({
     // player.addEventListener(PlayerEventType.WAITING, console.log);
     player.addEventListener(PlayerEventType.ERROR, onErrorHandler);
     player.addEventListener(PlayerEventType.LOADED_METADATA, onLoadedMetaDataHandler);
-    player.addEventListener(PlayerEventType.CAST_EVENT, console.log);
+    player.addEventListener(PlayerEventType.LOADED_DATA, onLoadedDataHandler);
+    //player.addEventListener(PlayerEventType.CAST_EVENT, console.log);
     //player.addEventListener(PlayerEventType.WAITING, console.log);
     //player.addEventListener(PlayerEventType.READYSTATE_CHANGE, console.log);
     // player.addEventListener(PlayerEventType.PLAYING, console.log);
     player.addEventListener(PlayerEventType.PLAY, onPlayHandler);
     player.addEventListener(PlayerEventType.PAUSE, onPauseHandler);
     // player.addEventListener(PlayerEventType.SEEKING, console.log);
-    // player.addEventListener(PlayerEventType.SEEKED, console.log);
+
     player.addEventListener(PlayerEventType.ENDED, onEndedHandler);
     // player.addEventListener(PlayerEventType.ENDED, console.log);
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
@@ -236,9 +238,6 @@ const TheoMediaPlayer: React.FC<Props> = ({
       startsAutomatically: Platform.OS === 'ios',
     };
 
-    if (!isLiveStream) {
-      player.currentTime = startTime ? startTime * 1000 : 0;
-    }
     player.aspectRatio = AspectRatio.FIT;
 
     if (player.abr) {
@@ -251,6 +250,10 @@ const TheoMediaPlayer: React.FC<Props> = ({
     //player.selectedVideoTrack = player.videoTracks[0];
     //player.pipConfiguration = {startsAutomatically: true};
     player.source = makeSource(streamUri, title, poster);
+    if (!isLiveStream) {
+      console.log('startTime:', startTime);
+      player.currentTime = startTime ? startTime * 1000 : 0;
+    }
   };
 
   const _playPauseControl = useCallback(async () => {
@@ -299,31 +302,34 @@ const TheoMediaPlayer: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
-      <>
-        <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady} />
-        {mediaType == MediaType.AUDIO ? (
-          <ImageBackground source={{uri: poster}} style={styles.video} resizeMode="contain" />
-        ) : null}
-        {!isLoading && player ? (
-          <MediaControls
-            enabled={true}
-            currentTime={getCurrentTime() / 1000}
-            mediaDuration={duration / 1000}
-            isMuted={player.muted ?? false}
-            isPaused={mediaStatus ? mediaStatus?.playerState === MediaPlayerState.PAUSED : player.paused}
-            loading={isLoading}
-            isBuffering={player.seeking && !player.paused}
-            enableFullScreen={mediaType == MediaType.VIDEO}
-            enableMute={false}
-            title={title}
-            onPlayPausePress={_playPauseControl}
-            onMutePress={() => {}}
-            onFullScreenPress={_fullScreenControl}
-            onSeekRequest={_seekControl}
-            onSeekByRequest={_seekByControl}
-          />
-        ) : null}
-      </>
+      <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady}>
+        <>
+          {mediaType == MediaType.AUDIO ? (
+            <ImageBackground source={{uri: poster}} style={styles.video} resizeMode="center" />
+          ) : null}
+          {!isLoading && player && player.seekable.length ? (
+            <MediaControls
+              enabled={true}
+              currentTime={getCurrentTime() / 1000}
+              mediaDuration={duration / 1000}
+              isMuted={player.muted ?? false}
+              isPaused={mediaStatus ? mediaStatus?.playerState === MediaPlayerState.PAUSED : player.paused}
+              loading={isLoading}
+              isBuffering={player.seeking && !player.paused}
+              enableFullScreen={mediaType == MediaType.VIDEO}
+              enableMute={false}
+              seekerStart={player.seekable[0].start / 1000}
+              seekerEnd={player.seekable[0].end / 1000}
+              title={title}
+              onPlayPausePress={_playPauseControl}
+              onMutePress={() => {}}
+              onFullScreenPress={_fullScreenControl}
+              onSeekRequest={_seekControl}
+              onSeekByRequest={_seekByControl}
+            />
+          ) : null}
+        </>
+      </THEOplayerView>
     </View>
   );
 };

@@ -62,7 +62,7 @@ export const strings: Dictionary = {
   tvProgramButtonText: 'VISA PROGRAMA',
   history: 'ISTORIJA',
   bookmarks: 'IŠSAUGOTI',
-  liveChannelTitle: 'Tiesiogiai',
+  liveChannelTitle: 'Gyvai',
   channelScreenTitle: 'LRT GYVAI',
   weatherScreenTitle: 'ORAI',
   locationSearch: 'Įveskite miestą',

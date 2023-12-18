@@ -1222,6 +1222,9 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.7.4):
     - React-Core
+  - react-native-slider (4.5.0):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
   - react-native-theoplayer (3.2.0):
     - React-Core
     - THEOplayer-Integration-GoogleCast (~> 6.0)
@@ -1450,6 +1453,7 @@ DEPENDENCIES:
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-theoplayer (from `../node_modules/react-native-theoplayer`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1580,6 +1584,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-render-html"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-slider:
+    :path: "../node_modules/@react-native-community/slider"
   react-native-theoplayer:
     :path: "../node_modules/react-native-theoplayer"
   react-native-webview:
@@ -1711,6 +1717,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: cf96a223846458cc7e932017636b5c6d8cc2c549
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
+  react-native-slider: 4d4f9b0a0de2f5ebe70b72cd760fdb6df0e267e2
   react-native-theoplayer: 5735fa3b2b328d02a2dded81c619e94fe1413c56
   react-native-webview: 88293a0f23eca8465c0433c023ec632930e644d0
   React-NativeModulesApple: 1802a680a4cd891d2ab97780771bcb2ff11fdc0b

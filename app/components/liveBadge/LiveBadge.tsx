@@ -8,11 +8,11 @@ interface Props {
 }
 
 const LiveBadge: React.FC<Props> = (props) => {
-  const {colors, strings} = useTheme();
+  const {strings} = useTheme();
   return (
-    <View style={[styles.container, {backgroundColor: colors?.textError ?? '#C00'}, props.style]}>
-      <TextComponent style={styles.text} fontFamily="SourceSansPro-SemiBold" allowFontScaling={false}>
-        {strings?.liveChannelTitle ?? 'Tiesiogiai'}
+    <View style={[styles.container, {backgroundColor: 'black' ?? '#C00'}, props.style]}>
+      <TextComponent style={styles.text} fontFamily="SourceSansPro-Regular" allowFontScaling={false}>
+        {strings?.liveChannelTitle ?? 'Gyvai'}
       </TextComponent>
     </View>
   );
@@ -22,15 +22,17 @@ export default LiveBadge;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 4,
+    paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
     flexDirection: 'row',
+    borderColor: 'red',
+    borderWidth: 1,
   },
   text: {
     flexWrap: 'wrap',
     color: 'white',
-    letterSpacing: 0.2,
+    letterSpacing: 1.5,
     fontSize: 12.5,
     textTransform: 'uppercase',
   },

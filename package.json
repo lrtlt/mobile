@@ -16,6 +16,7 @@
   "dependencies": {
     "@native-html/table-plugin": "^5.3.1",
     "@react-native-async-storage/async-storage": "^1.21.0",
+    "@react-native-community/slider": "^4.5.0",
     "@react-native-firebase/analytics": "^18.7.1",
     "@react-native-firebase/app": "^18.7.1",
     "@react-native-firebase/crashlytics": "^18.7.1",
@@ -25,6 +26,7 @@
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/stack": "^6.3.20",
     "@shopify/flash-list": "^1.6.3",
+    "@theoplayer/react-native-ui": "^0.3.0",
     "axios": "0.27.2",
     "axios-logger": "2.6.1",
     "chartbeat-react-native-sdk": "^0.0.20",

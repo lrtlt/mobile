@@ -24,6 +24,7 @@ import {
 } from '../svg';
 import TextComponent from '../text/Text';
 import {CastButton} from 'react-native-google-cast';
+import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 
 const CONTROLS_TIMEOUT_MS = 3000;
 const ICON_COLOR = '#FFFFFFDD';
@@ -50,6 +51,8 @@ interface Props {
   currentTime: number;
   title?: string;
   loading?: boolean;
+  seekerStart: number;
+  seekerEnd: number;
   isBuffering?: boolean;
 
   isPaused: boolean;
@@ -68,6 +71,8 @@ const MediaControls: React.FC<Props> = ({
   enableFullScreen,
   enableMute,
   currentTime,
+  seekerStart,
+  seekerEnd,
   mediaDuration,
   title,
   loading = false,
@@ -89,7 +94,8 @@ const MediaControls: React.FC<Props> = ({
   const seekPanResponder = useRef<PanResponderInstance>();
   const seekerWidth = useRef(0);
 
-  const isLiveStream = mediaDuration <= 1;
+  const isLiveStream = isNaN(mediaDuration) || !isFinite(mediaDuration) || mediaDuration <= 0;
+  const showSeeker = !isLiveStream || seekerEnd - seekerStart > 60;
 
   const resetControlsTimeout = useMemo(
     () =>
@@ -120,9 +126,10 @@ const MediaControls: React.FC<Props> = ({
 
   useEffect(() => {
     if (!scrubbing) {
-      setPosition(seekerWidth.current * (currentTime / mediaDuration));
+      const normalizedPosition = (currentTime - seekerStart) / (seekerEnd - seekerStart);
+      setPosition(normalizedPosition * seekerWidth.current);
     }
-  }, [currentTime, mediaDuration, scrubbing, setPosition]);
+  }, [currentTime, seekerStart, seekerEnd, scrubbing, setPosition]);
 
   seekPanResponder.current = useMemo(() => {
     return PanResponder.create({
@@ -143,7 +150,10 @@ const MediaControls: React.FC<Props> = ({
 
       onPanResponderRelease: (event, _gestureState) => {
         const newPosition = setPosition(event.nativeEvent.locationX);
-        const newTime = mediaDuration * (newPosition / seekerWidth.current);
+        const normalizedPosition = Math.max(0, Math.min(seekerWidth.current, newPosition));
+        const percentage = normalizedPosition / seekerWidth.current;
+        const newTime = (seekerEnd - seekerStart) * percentage;
+
         onSeekRequest(newTime);
         resetControlsTimeout();
 
@@ -152,7 +162,7 @@ const MediaControls: React.FC<Props> = ({
         }, 400);
       },
     });
-  }, [mediaDuration, onSeekRequest, resetControlsTimeout, setPosition]);
+  }, [seekerStart, seekerEnd, onSeekRequest, resetControlsTimeout, setPosition]);
 
   const handlePlayPauseToggle = useCallback(() => {
     onPlayPausePress();
@@ -178,6 +188,11 @@ const MediaControls: React.FC<Props> = ({
     onFullScreenPress();
     resetControlsTimeout();
   }, [onFullScreenPress, resetControlsTimeout]);
+
+  const handleLiveBadgeClick = useCallback(() => {
+    onSeekRequest(seekerEnd);
+    resetControlsTimeout();
+  }, [onSeekRequest, resetControlsTimeout, seekerEnd]);
 
   const handleShowControls = useCallback(() => {
     setVisible(true);
@@ -208,13 +223,13 @@ const MediaControls: React.FC<Props> = ({
   const CenterControls = useMemo(
     () => (
       <View style={styles.conterControlsRow}>
-        {!isLiveStream && (
+        {showSeeker && (
           <TouchableOpacity onPress={handleSeekBack} hitSlop={HIT_SLOP} activeOpacity={0.6}>
             <IconPlayerRewind style={styles.rewindIcon} size={ICON_SIZE + 12} color={ICON_COLOR} />
           </TouchableOpacity>
         )}
         {PlayPauseControl}
-        {!isLiveStream && (
+        {showSeeker && (
           <TouchableOpacity onPress={handleSeekForward} hitSlop={HIT_SLOP} activeOpacity={0.6}>
             <IconPlayerForward style={styles.forwardIcon} size={ICON_SIZE + 12} color={ICON_COLOR} />
           </TouchableOpacity>
@@ -280,11 +295,7 @@ const MediaControls: React.FC<Props> = ({
 
   const SeekBar = useCallback(({position}: {position: number}) => {
     return (
-      <View
-        style={styles.seekBar_container}
-        collapsable={false}
-        {...seekPanResponder.current?.panHandlers}
-        hitSlop={HIT_SLOP}>
+      <View style={styles.seekBar_container} {...seekPanResponder.current?.panHandlers} hitSlop={HIT_SLOP}>
         <View
           style={styles.seekBar_track}
           onLayout={(event) => (seekerWidth.current = event.nativeEvent.layout.width)}
@@ -312,7 +323,7 @@ const MediaControls: React.FC<Props> = ({
   }
 
   const isOnStart = !isLiveStream && currentTime <= 1;
-  const isEnding = !isLiveStream && mediaDuration - currentTime <= 1;
+  const isEnding = !isLiveStream && seekerEnd - currentTime <= 1;
   const shouldBeVisible = enabled && (isOnStart || isEnding || visible);
 
   return shouldBeVisible ? (
@@ -330,7 +341,7 @@ const MediaControls: React.FC<Props> = ({
       <Title />
       {CenterControls}
       <View style={styles.bottomControlsContainer}>
-        {!isLiveStream && (
+        {showSeeker && (
           <View>
             {isBuffering && <ActivityIndicator style={styles.activityIndicator} size="small" color="white" />}
             <SeekBar position={seekerPosition} />
@@ -341,11 +352,18 @@ const MediaControls: React.FC<Props> = ({
           <View style={styles.progressContainer}>
             {!isLiveStream ? (
               <>
-                <TimerControl time={formatTimeElapsed(currentTime ?? 0, mediaDuration)} />
-                <TimerControl time={formatTimeTotal(mediaDuration ?? 0)} />
+                <TimerControl time={formatTimeElapsed(currentTime ?? 0, seekerEnd)} />
+                {showSeeker ? <TimerControl time={formatTimeTotal(seekerEnd ?? 0)} /> : null}
               </>
             ) : (
-              <LiveBadge />
+              <>
+                <TouchableDebounce onPress={handleLiveBadgeClick}>
+                  <LiveBadge />
+                </TouchableDebounce>
+                <TimerControl
+                  time={formatLiveStreamTime(currentTime ?? seekerStart, seekerStart, seekerEnd)}
+                />
+              </>
             )}
           </View>
           {ChromeCastControl}
@@ -458,11 +476,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const formatTimeElapsed = (time: number, duration: number) => {
-  time = Math.floor(Math.min(Math.max(time, 0), duration));
+const formatTimeElapsed = (currentTime: number, duration: number) => {
+  const time = Math.floor(Math.min(Math.max(currentTime, 0), duration));
   const minutes = Math.floor(time / 60);
   const seconds = Math.floor(time % 60);
   const result = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  return result;
+};
+
+const formatLiveStreamTime = (time: number, minTime: number, maxTime: number) => {
+  const currentTime = Math.max(0, maxTime - time);
+  const minutes = Math.floor(currentTime / 60);
+  const seconds = Math.floor(currentTime % 60);
+  const result = `-${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   return result;
 };
 
