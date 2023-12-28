@@ -34,7 +34,7 @@
     "moment": "^2.29.4",
     "proxy-memoize": "^2.0.4",
     "react": "18.2.0",
-    "react-native": "0.72.8",
+    "react-native": "0.72.6",
     "react-native-autoheight-webview": "^1.6.5",
     "react-native-awesome-gallery": "^0.3.8",
     "react-native-event-listeners": "^1.0.7",
