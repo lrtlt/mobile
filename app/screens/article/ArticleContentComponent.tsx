@@ -100,7 +100,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
         case TYPE_VIDEO: {
           return (
             <View style={styles.playerContainer}>
-              <VideoComponent {...data} style={styles.player} autoPlay={false} />
+              <VideoComponent {...data} style={styles.player} autoPlay={true} />
             </View>
           );
         }
