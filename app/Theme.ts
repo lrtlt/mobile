@@ -51,6 +51,7 @@ interface Dictionary {
   error_no_connection: string;
   error_no_search_query: string;
   daily_question_vote: string;
+  close: string;
 }
 
 export const strings: Dictionary = {
@@ -90,6 +91,7 @@ export const strings: Dictionary = {
   error_no_connection: 'Tinklo sutrikimas',
   error_no_search_query: 'Įveskite paieškos tekstą',
   daily_question_vote: 'BALSUOTI',
+  close: 'Uždaryti',
 };
 //#endregion
 

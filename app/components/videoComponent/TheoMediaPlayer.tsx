@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {ImageBackground, Platform, StyleSheet, View, ViewStyle} from 'react-native';
+import {ActivityIndicator, ImageBackground, Platform, StyleSheet, View, ViewStyle} from 'react-native';
 import {
   PlayerConfiguration,
   SourceDescription,
@@ -12,6 +12,7 @@ import {
   TimeUpdateEvent,
   AspectRatio,
   ABRStrategyType,
+  ReadyStateChangeEvent,
 } from 'react-native-theoplayer';
 import MediaControls from './MediaControls';
 import {useVideo} from './context/useVideo';
@@ -23,6 +24,8 @@ import {uniqueId} from 'lodash';
 import Gemius from 'react-native-gemius-plugin';
 import useChromecast from './useChromecast';
 import {MediaPlayerState} from 'react-native-google-cast';
+import {useTheme} from '../../Theme';
+import usePlayerLanguage from './usePlayerLanguage';
 
 interface Props {
   style?: ViewStyle;
@@ -82,6 +85,8 @@ const TheoMediaPlayer: React.FC<Props> = ({
   const [, setCurrentTimeInternal] = useState(0);
 
   const {trackPlay, trackPause, trackBuffer, trackClose, trackComplete, trackSeek} = useMediaTracking();
+
+  const {colors} = useTheme();
 
   const {
     setCurrentTime,
@@ -171,12 +176,10 @@ const TheoMediaPlayer: React.FC<Props> = ({
       uri: streamUri,
       isLiveStream: isLiveStream,
     });
-    setIsLoading(false);
   }, []);
 
   const onLoadedDataHandler = useCallback((e: Event<PlayerEventType.LOADED_DATA>) => {
     Gemius.setProgramData(streamUri, title ?? '', duration, mediaType === MediaType.VIDEO);
-    setIsLoading(false);
   }, []);
 
   const onPauseHandler = useCallback((_: Event<PlayerEventType.PAUSE>) => {
@@ -195,6 +198,12 @@ const TheoMediaPlayer: React.FC<Props> = ({
   const onTimeUpdateHandler = useCallback((e: TimeUpdateEvent) => {
     setCurrentTime(e.currentTime);
     setCurrentTimeInternal(e.currentTime);
+  }, []);
+
+  const onReadyStateChangeHandler = useCallback((e: ReadyStateChangeEvent) => {
+    //https://docs.theoplayer.com/api-reference/ios/Enums/ReadyState.html#/c:@M@THEOplayerSDK@E@THEOplayerReadyState@THEOplayerReadyStateHAVE_ENOUGH_DATA
+    const isReady = e.readyState > 2;
+    setIsLoading(!isReady);
   }, []);
 
   const onErrorHandler = useCallback(
@@ -228,7 +237,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
     player.addEventListener(PlayerEventType.ENDED, onEndedHandler);
     // player.addEventListener(PlayerEventType.ENDED, console.log);
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
-    //player.addEventListener(PlayerEventType.MEDIA_TRACK_LIST, (e) => console.log(JSON.stringify(e, null, 4)));
+    player.addEventListener(PlayerEventType.READYSTATE_CHANGE, onReadyStateChangeHandler);
     player.backgroundAudioConfiguration = {enabled: true};
     player.autoplay = autoStart;
     player.preload = 'auto';
@@ -243,12 +252,14 @@ const TheoMediaPlayer: React.FC<Props> = ({
     if (player.abr) {
       player.abr!.strategy = ABRStrategyType.bandwidth;
     }
+
     // console.log('audioTracks:', player.audioTracks);
     // console.log('videoTracks:', player.videoTracks);
     // console.log('targetVideoQuality:', player.targetVideoQuality);
     //player.playbackRate = 1.5;
     //player.selectedVideoTrack = player.videoTracks[0];
     //player.pipConfiguration = {startsAutomatically: true};
+
     player.source = makeSource(streamUri, title, poster);
     if (!isLiveStream) {
       console.log('startTime:', startTime);
@@ -300,6 +311,8 @@ const TheoMediaPlayer: React.FC<Props> = ({
     [player, client],
   );
 
+  const {LanguageButton, LanguageMenu} = usePlayerLanguage({player: player});
+
   return (
     <View style={styles.container}>
       <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady}>
@@ -307,7 +320,12 @@ const TheoMediaPlayer: React.FC<Props> = ({
           {mediaType == MediaType.AUDIO ? (
             <ImageBackground source={{uri: poster}} style={styles.video} resizeMode="center" />
           ) : null}
-          {!isLoading && player && player.seekable.length ? (
+          {isLoading && (
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <ActivityIndicator size="large" animating={isLoading} color={colors.primary} />
+            </View>
+          )}
+          {!isLoading && player ? (
             <MediaControls
               enabled={true}
               currentTime={getCurrentTime() / 1000}
@@ -326,10 +344,12 @@ const TheoMediaPlayer: React.FC<Props> = ({
               onFullScreenPress={_fullScreenControl}
               onSeekRequest={_seekControl}
               onSeekByRequest={_seekByControl}
+              extraControls={LanguageButton}
             />
           ) : null}
         </>
       </THEOplayerView>
+      {LanguageMenu}
     </View>
   );
 };

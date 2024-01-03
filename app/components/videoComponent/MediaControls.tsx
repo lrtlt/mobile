@@ -27,16 +27,15 @@ import {CastButton} from 'react-native-google-cast';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 
 const CONTROLS_TIMEOUT_MS = 3000;
-const ICON_COLOR = '#FFFFFFDD';
-
-const ICON_SIZE = 22;
+export const ICON_COLOR = '#FFFFFFDD';
+export const ICON_SIZE = 22;
 
 /**
  * Hit slop size for controls
  */
 const HIT_SLOP_SIZE = 4;
 
-const HIT_SLOP: Insets = {
+export const HIT_SLOP: Insets = {
   top: HIT_SLOP_SIZE,
   bottom: HIT_SLOP_SIZE,
   left: HIT_SLOP_SIZE,
@@ -54,6 +53,8 @@ interface Props {
   seekerStart: number;
   seekerEnd: number;
   isBuffering?: boolean;
+
+  extraControls?: JSX.Element;
 
   isPaused: boolean;
   onPlayPausePress: () => void;
@@ -86,6 +87,7 @@ const MediaControls: React.FC<Props> = ({
 
   onSeekRequest,
   onSeekByRequest,
+  extraControls,
 }) => {
   const [visible, setVisible] = useState(enabled);
   const [scrubbing, setScrubbing] = useState(false);
@@ -366,6 +368,7 @@ const MediaControls: React.FC<Props> = ({
               </>
             )}
           </View>
+          {extraControls}
           {ChromeCastControl}
           {enableFullScreen ? FullScreenControl : null}
         </View>

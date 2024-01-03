@@ -59,3 +59,4 @@ export {default as IconVolume} from './ic_volume';
 export {default as IconAudioReadCount} from './ic_audio_read_count';
 export {default as IconCheck} from './ic_check';
 export {default as IconCarretDown} from './ic_carret_down';
+export {default as IconLanguage} from './ic_language';
