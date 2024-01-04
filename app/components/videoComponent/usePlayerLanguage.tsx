@@ -4,7 +4,6 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {MediaTrack, PlayerEventType, THEOplayer} from 'react-native-theoplayer';
 import {IconLanguage} from '../svg';
 import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from './MediaControls';
-import {useTheme} from '../../Theme';
 
 type Options = {
   player?: THEOplayer;
@@ -14,8 +13,6 @@ const usePlayerLanguage = ({player}: Options) => {
   const [audioTracks, setAudioTracks] = useState<MediaTrack[]>([]);
   const [showMenu, setShowMenu] = useState(false);
 
-  const {colors, strings} = useTheme();
-
   useEffect(() => {
     if (!!player) {
       player.addEventListener(PlayerEventType.MEDIA_TRACK_LIST, (_) => {
@@ -24,15 +21,17 @@ const usePlayerLanguage = ({player}: Options) => {
     }
   }, [player]);
 
-  const selectAudioTrack = useCallback((track: MediaTrack) => {
-    if (!!player) {
-      player.selectedAudioTrack = track.uid;
-    }
-    setShowMenu(false);
-  }, []);
+  const selectAudioTrack = useCallback(
+    (track: MediaTrack) => {
+      if (!!player) {
+        player.selectedAudioTrack = track.uid;
+      }
+      setShowMenu(false);
+    },
+    [player],
+  );
 
   const handleLanguageButtonPress = useCallback(() => {
-    console.log('handleLanguageButtonPress');
     setShowMenu(true);
   }, []);
 
@@ -40,24 +39,29 @@ const usePlayerLanguage = ({player}: Options) => {
     setShowMenu(false);
   }, []);
 
-  const renderAudioTrackItem = useCallback(({item}: {item: MediaTrack}) => {
-    return (
-      <TouchableOpacity
-        style={{...styles.center, backgroundColor: colors.primaryLight, padding: 12, margin: 4}}
-        activeOpacity={0.9}
-        onPress={() => selectAudioTrack(item)}>
-        <Text>{item.language}</Text>
-      </TouchableOpacity>
-    );
-  }, []);
+  const renderAudioTrackItem = useCallback(
+    ({item}: {item: MediaTrack}) => {
+      return (
+        <TouchableOpacity
+          key={item.uid}
+          style={{...styles.center, backgroundColor: '#a8d2ff', padding: 12, margin: 4}}
+          activeOpacity={0.9}
+          onPress={() => selectAudioTrack(item)}>
+          <Text>{item.language}</Text>
+        </TouchableOpacity>
+      );
+    },
+    [selectAudioTrack],
+  );
 
   const renderBackButton = useCallback(() => {
     return (
       <TouchableOpacity
-        style={{...styles.center, backgroundColor: colors.greyBackground, padding: 12, margin: 4}}
+        key={'close'}
+        style={{...styles.center, backgroundColor: '#F4F6F8', padding: 12, margin: 4}}
         activeOpacity={0.9}
         onPress={() => handleModalClose()}>
-        <Text>{strings.close}</Text>
+        <Text>Uždaryti</Text>
       </TouchableOpacity>
     );
   }, []);
@@ -65,7 +69,7 @@ const usePlayerLanguage = ({player}: Options) => {
   return {
     LanguageButton: <LanguageButton audioTracks={audioTracks} onPress={handleLanguageButtonPress} />,
     LanguageMenu: showMenu ? (
-      <View key={'close'} style={{...styles.menuContainer, backgroundColor: colors.darkIcon}}>
+      <View key={'close'} style={{...styles.menuContainer, backgroundColor: '#222222'}}>
         {audioTracks.map((track) => renderAudioTrackItem({item: track}))}
         {renderBackButton()}
       </View>
