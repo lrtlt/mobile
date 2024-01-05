@@ -10,6 +10,7 @@ import {themeDark, themeLight} from '../Theme';
 import {ArticlePhotoType, MenuItemPage, SearchFilter} from '../api/Types';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import SearchContextProvider from '../screens/search/context/SearchContextProvider';
+import ChannelContextProvider from '../screens/channel/context/ChannelContextProvider';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -144,7 +145,13 @@ export default () => {
           //animationEnabled: false,
         }}
       />
-      <Stack.Screen name="Channel" component={Screens.ChannelScreen} />
+      <Stack.Screen name="Channel">
+        {(props) => (
+          <ChannelContextProvider>
+            <Screens.ChannelScreen {...props} />
+          </ChannelContextProvider>
+        )}
+      </Stack.Screen>
       <Stack.Screen name="Search" component={SearchDrawerNavigator} options={{headerShown: false}} />
       <Stack.Screen name="Bookmarks" component={Screens.BookmarksScreen} />
       <Stack.Screen name="History" component={Screens.HistoryScreen} />

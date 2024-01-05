@@ -40,3 +40,8 @@ export const VIDEO_DEFAULT_BACKGROUND_IMAGE = 'https://www.lrt.lt/images/video-n
 export const ARTICLE_TYPE_TEXT = 1;
 export const ARTICLE_TYPE_VIDEO = 6;
 export const ARTICLE_TYPE_AUDIO = 7;
+
+//Audio only stream covers
+export const LRT_RADIJAS = 'https://www.lrt.lt/media/logo/LR.jpg?v=2024152153';
+export const LRT_KLASIKA = 'https://www.lrt.lt/media/logo/Klasika.jpg?v=2024152156';
+export const LRT_OPUS = 'https://www.lrt.lt/media/logo/Opus.jpg?v=2024152157';
