@@ -2,7 +2,7 @@ import React, {useEffect, useCallback, useRef} from 'react';
 import {View, ActivityIndicator, StyleSheet, ViewStyle} from 'react-native';
 import VideoCover, {VideoCoverType} from './VideoCover';
 import {useTheme} from '../../Theme';
-import useVideoData from './useVideoData';
+import useVideoData, {StreamData} from './useVideoData';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
@@ -17,6 +17,7 @@ interface Props {
   title: string;
   autoPlay: boolean;
   startTime?: number;
+  streamData?: StreamData;
 }
 
 const MAX_ERROR_COUNT = 3;
@@ -24,12 +25,12 @@ const ERROR_DELAY = 1000;
 
 const VideoComponent: React.FC<Props> = (props) => {
   const {colors, strings} = useTheme();
-  const {isLoading, data, load} = useVideoData();
+  const {isLoading, data, load} = useVideoData(props.streamData);
 
   const errorCountRef = useRef(0);
 
   useEffect(() => {
-    if (props.autoPlay) {
+    if (props.autoPlay && !data) {
       load(props.streamUrl, props.title);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,14 +100,13 @@ const VideoComponent: React.FC<Props> = (props) => {
     <View style={props.style}>
       <TheoMediaPlayer
         key={data.streamUri}
-        style={props.style}
         streamUri={data.streamUri}
         title={data.title}
         autoStart={true}
         isLiveStream={data.isLiveStream}
         startTime={data.isLiveStream ? undefined : props.startTime || data.offset}
         poster={props.backgroundImage ?? data.poster}
-        mediaType={MediaType.VIDEO}
+        mediaType={data.streamUri.includes('audio') ? MediaType.AUDIO : MediaType.VIDEO}
         onError={onPlayerError}
       />
     </View>

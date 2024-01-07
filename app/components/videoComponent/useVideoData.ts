@@ -1,29 +1,41 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {fetchVideoData} from '../../api';
 import {isVideoLiveStream} from '../../api/Types';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {BASE_IMG_URL} from '../../util/ImageUtil';
 
+export type StreamData = {
+  isLiveStream: boolean;
+  streamUri: string;
+  mediaId: string;
+  title: string;
+  offset?: number;
+  poster?: string;
+};
+
 type VideoState = {
   isLoading: boolean;
-  data?: {
-    isLiveStream: boolean;
-    streamUri: string;
-    mediaId: string;
-    title: string;
-    offset?: number;
-    poster?: string;
-  };
+  data?: StreamData;
 };
 
 type ReturnState = VideoState & {
   load: (url: string, title: string) => void;
 };
 
-const useVideoData = (): ReturnState => {
+const useVideoData = (cache?: StreamData): ReturnState => {
   const [state, setState] = useState<VideoState>({
+    data: cache,
     isLoading: false,
   });
+
+  useEffect(() => {
+    if (cache) {
+      setState({
+        isLoading: false,
+        data: cache,
+      });
+    }
+  }, [cache]);
 
   const cancellablePromise = useCancellablePromise();
 

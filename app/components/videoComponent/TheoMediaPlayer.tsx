@@ -28,7 +28,6 @@ import {useTheme} from '../../Theme';
 import usePlayerLanguage from './usePlayerLanguage';
 
 interface Props {
-  style?: ViewStyle;
   mode?: PlayerMode;
   mediaType: MediaType;
   streamUri: string;
@@ -68,7 +67,6 @@ const makeSource = (uri: string, title?: string, poster?: string): SourceDescrip
 });
 
 const TheoMediaPlayer: React.FC<Props> = ({
-  style,
   streamUri,
   mode = PlayerMode.DEFAULT,
   mediaType,
@@ -206,6 +204,13 @@ const TheoMediaPlayer: React.FC<Props> = ({
     setIsLoading(!isReady);
   }, []);
 
+  //TODO: remove after theo player fix for audio only streams
+  useEffect(() => {
+    if (!isLoading && autoStart) {
+      player?.play();
+    }
+  }, [isLoading, autoStart]);
+
   const onErrorHandler = useCallback(
     (e: ErrorEvent) => {
       console.log('Player error:', e);
@@ -239,7 +244,10 @@ const TheoMediaPlayer: React.FC<Props> = ({
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
     player.addEventListener(PlayerEventType.READYSTATE_CHANGE, onReadyStateChangeHandler);
     player.backgroundAudioConfiguration = {enabled: true};
-    player.autoplay = autoStart;
+
+    //TODO: enabled after theo player fix for audio only streams
+    //player.autoplay = autoStart;
+
     player.preload = 'auto';
     player.muted = false;
     player.pipConfiguration = {

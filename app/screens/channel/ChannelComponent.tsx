@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ChannelResponse} from '../../api/Types';
@@ -9,15 +9,25 @@ import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
 import {getSmallestDim} from '../../util/UI';
+import {StreamData} from '../../components/videoComponent/useVideoData';
+import TextComponent from '../../components/text/Text';
+
+import CheckBox from '../../components/checkBox/CheckBox';
+import ToggleButton from '../../components/settingsToggleButton/SettingsToggleButton';
+import {CameraIcon, IconNote} from '../../components/svg';
 
 /** Count of visible program items below player */
 const PROGRAM_ITEMS_VISIBLE = 2;
 
 interface Props {
   channelData: ChannelResponse;
+  streamData: StreamData;
+  audioStreamData?: StreamData;
 }
 
-const ChannelComponent: React.FC<Props> = ({channelData}) => {
+const ChannelComponent: React.FC<Props> = ({channelData, streamData, audioStreamData}) => {
+  const [selectedStream, setSelectedStream] = useState(streamData);
+
   const {channel_info, prog} = channelData;
   const {colors, strings} = useTheme();
 
@@ -26,6 +36,41 @@ const ChannelComponent: React.FC<Props> = ({channelData}) => {
   const onProgramPressHandler = useCallback(() => {
     navigation.navigate('Program');
   }, [navigation]);
+
+  useEffect(() => {
+    setSelectedStream(streamData);
+  }, [channel_info]);
+
+  const streamSelectionComponent = audioStreamData ? (
+    <View style={styles.streamSelectionContainer}>
+      <TouchableOpacity onPress={() => setSelectedStream(streamData)}>
+        <View
+          style={{
+            ...styles.streamSelectionButton,
+            backgroundColor: selectedStream === streamData ? colors.primaryLight : undefined,
+          }}>
+          <CameraIcon
+            size={16}
+            colorBase={selectedStream === streamData ? colors.primary : colors.textSecondary}
+            colorAccent={selectedStream === streamData ? colors.primary : colors.textDisbled}
+          />
+          <TextComponent style={styles.streamSelectionText}>Su vaizdu</TextComponent>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          ...styles.streamSelectionButton,
+          backgroundColor: selectedStream === audioStreamData ? colors.primaryLight : undefined,
+        }}
+        onPress={() => setSelectedStream(audioStreamData)}>
+        <IconNote
+          size={16}
+          color={selectedStream === audioStreamData ? colors.primary : colors.textSecondary}
+        />
+        <TextComponent style={styles.streamSelectionText}>Tik garsas</TextComponent>
+      </TouchableOpacity>
+    </View>
+  ) : undefined;
 
   const programComponent = prog
     ? prog.map((item, i) => {
@@ -62,12 +107,14 @@ const ChannelComponent: React.FC<Props> = ({channelData}) => {
           key={channel_info.channel_id}
           style={styles.player}
           autoPlay={true}
-          backgroundImage={channel_info.player_background_image}
+          backgroundImage={selectedStream.poster}
           title={channel_info.title}
-          streamUrl={channel_info.get_streams_url}
+          streamUrl={selectedStream.streamUri}
+          streamData={selectedStream}
         />
       </View>
       <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>
+        {streamSelectionComponent}
         {programComponent}
         {
           <TouchableOpacity onPress={onProgramPressHandler}>
@@ -117,6 +164,24 @@ const styles = StyleSheet.create({
     minWidth: '100%',
     textAlign: 'center',
     padding: 16,
+    fontSize: 16,
+  },
+  streamSelectionContainer: {
+    // minWidth: '100%',
+    marginBottom: 8,
+    flexDirection: 'row',
+    gap: 12,
+  },
+  streamSelectionButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+    borderWidth: StyleSheet.hairlineWidth * 2,
+    borderRadius: 6,
+  },
+  streamSelectionText: {
     fontSize: 16,
   },
 });
