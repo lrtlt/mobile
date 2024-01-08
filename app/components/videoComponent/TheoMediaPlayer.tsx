@@ -257,9 +257,10 @@ const TheoMediaPlayer: React.FC<Props> = ({
 
     player.aspectRatio = AspectRatio.FIT;
 
-    if (player.abr) {
-      player.abr!.strategy = ABRStrategyType.bandwidth;
-    }
+    //TODO: test if this is needed
+    // if (player.abr) {
+    //   player.abr!.strategy = ABRStrategyType.bandwidth;
+    // }
 
     // console.log('audioTracks:', player.audioTracks);
     // console.log('videoTracks:', player.videoTracks);

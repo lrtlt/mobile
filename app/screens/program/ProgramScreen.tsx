@@ -88,7 +88,6 @@ const ProgramScreen: React.FC<Props> = ({navigation}) => {
 
       //This is a workaround for tab-view crash when count of tabs changes
       if (isLoadingSelection) {
-        console.log('isLoadingSelection');
         content = <ScreenLoader />;
         delay(() => {
           setIsLoadingSelection(false);
