@@ -1185,6 +1185,8 @@ PODS:
   - React-jsinspector (0.72.6)
   - React-logger (0.72.6):
     - glog
+  - react-native-carplay (2.4.0-beta.2):
+    - React
   - react-native-gemius-plugin (1.7.0):
     - React
   - react-native-google-cast (4.6.2):
@@ -1418,6 +1420,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-carplay (from `../node_modules/react-native-carplay`)
   - react-native-gemius-plugin (from `../node_modules/react-native-gemius-plugin`)
   - react-native-google-cast (from `https://github.com/Danesz/react-native-google-cast.git`, branch `feature/guestmode_apple_silicon`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -1543,6 +1546,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-carplay:
+    :path: "../node_modules/react-native-carplay"
   react-native-gemius-plugin:
     :path: "../node_modules/react-native-gemius-plugin"
   react-native-google-cast:
@@ -1685,6 +1690,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 3bf18ff7cb03cd8dfdce08fbbc0d15058c1d71ae
   React-jsinspector: 194e32c6aab382d88713ad3dd0025c5f5c4ee072
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
+  react-native-carplay: 6ea89d662dad1fcc0a29302c5a37868acb6a7dad
   react-native-gemius-plugin: 003b164539125055787a816a7b65976b19bf4a27
   react-native-google-cast: d7bdfd1a0eeba84afde03b9722351ec29543e74c
   react-native-pager-view: cf96a223846458cc7e932017636b5c6d8cc2c549

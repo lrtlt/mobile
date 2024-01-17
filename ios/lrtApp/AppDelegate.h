@@ -3,6 +3,7 @@
 
 @interface AppDelegate : RCTAppDelegate
 
+@property (nonatomic, strong) UIView *rootView;
 
 
 @end

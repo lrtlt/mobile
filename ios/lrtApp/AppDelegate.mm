@@ -1,9 +1,15 @@
 #import <Firebase.h>
 #import <GoogleCast/GoogleCast.h>
 #import "AppDelegate.h"
+#import "CarSceneDelegate.h"
+#import "PhoneSceneDelegate.h"
+
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
+#import <React/RCTBridge.h>
+#import <React/RCTRootView.h>
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -20,8 +26,25 @@
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
 
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+  BOOL app = [super application:application didFinishLaunchingWithOptions:launchOptions];
+  self.rootView = [[RCTRootView alloc] initWithBridge:self.bridge moduleName:self.moduleName initialProperties:self.initialProps];
+  
+//self.rootView = [self createRootViewWithBridge:self.bridge moduleName:self.moduleName initProps:self.initialProps];
+  return app;
 }
+
+- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
+    if (connectingSceneSession.role == UIWindowSceneSessionRoleExternalDisplay) {
+        UISceneConfiguration *scene = [UISceneConfiguration configurationWithName:@"CarPlay" sessionRole:connectingSceneSession.role];
+        scene.delegateClass = [CarSceneDelegate class];
+        return scene;
+    } else {
+        UISceneConfiguration *scene = [UISceneConfiguration configurationWithName:@"Phone" sessionRole:connectingSceneSession.role];
+        scene.delegateClass = [PhoneSceneDelegate class];
+        return scene;
+    }
+}
+
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {

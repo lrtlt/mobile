@@ -88,7 +88,7 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
       <NavigationContainer
         ref={navRef}
         theme={theme}
-        linking={linking}
+        // linking={linking}
         fallback={<SplashViewComponent />}
         onReady={onNavigationReady}
         onStateChange={onNavigationStateChange}>
