@@ -3,7 +3,6 @@ import Navigation from './app/navigation';
 
 import SettingsProvider from './app/settings/SettingsProvider';
 import AppBackground from './app/components/appBackground/AppBackground';
-import useOneSignal from './app/util/useOneSignal';
 import useGemiusSetup from './app/util/useGemiusSetup';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -14,6 +13,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {StyleSheet} from 'react-native';
 import VideoProvider from './app/components/videoComponent/context/VideoProvider';
 import useNotificationsPermission from './app/util/useNotificationsPermission';
+import useFirebaseMessaging from './app/util/useFirebaseMessaging';
 
 const ReduxProvider: React.FC = ({children}) => {
   return (
@@ -29,7 +29,6 @@ const App: React.FC = () => {
   useNotificationsPermission();
   useAppTrackingPermission();
   useGemiusSetup();
-  useOneSignal();
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>

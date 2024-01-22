@@ -15,6 +15,7 @@ import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
 import MainStack, {MainStackParamList} from './MainStack';
 import {SplashScreen} from '../screens';
 import useHandleLaunchUrl from './useHandleLaunchUrl';
+import useFirebaseMessaging from '../util/useFirebaseMessaging';
 
 const linking: LinkingOptions<MainStackParamList> = {
   prefixes: [DEEP_LINKING_URL_PREFIX],
@@ -41,6 +42,7 @@ const NavigatorComponent: React.FC = () => {
   const routeNameRef = useRef<string>();
   const navRef = useRef<NavigationContainerRef<MainStackParamList>>(null);
 
+  useFirebaseMessaging(isNavigatorReady);
   useHandleLaunchUrl(isNavigatorReady);
 
   const onNavigationReady = useCallback(() => {

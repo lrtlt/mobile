@@ -19,9 +19,6 @@ export const GEMIUS_VIEW_SCRIPT_ID = 'ByM1j_rseQxqJpUz1t03Y6ScXtdux_Nex_L85JMn39
 export const GEMIUS_PLAYER_SCRIPT_ID = 'zP2V7SulUZxVv54GDWn9fOTlXhxpw7ulIJCOTYgrQKL.a7';
 export const GEMIUS_HIT_COLLECTOR_HOST = 'https://galt.hit.gemius.pl';
 
-//OneSignal.com
-export const ONE_SIGNAL_APP_ID = '1fcd7381-5e0f-4efb-9bad-8f3339daf73a';
-
 //DeepLinks
 export const DEEP_LINKING_URL_PREFIX = 'lrt://';
 
