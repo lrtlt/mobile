@@ -7,14 +7,14 @@ import {Platform} from 'react-native';
 const CarPlayProvider: React.FC<PropsWithChildren<{}>> = (props) => {
   const {isConnected} = useCarPlayController();
 
-  useEffect(() => {
-    //TODO: remove this temporary fix later. Think of a better way to handle this.
-    if (!isConnected && Platform.OS === 'android') {
-      setTimeout(() => {
-        CarPlay.bridge.reload();
-      }, 3000);
-    }
-  }, [isConnected]);
+  // //TODO: remove this temporary fix later. Think of a better way to handle this.
+  // useEffect(() => {
+  //   if (!isConnected && Platform.OS === 'android') {
+  //     setTimeout(() => {
+  //       CarPlay.bridge.reload();
+  //     }, 3000);
+  //   }
+  // }, [isConnected]);
 
   return (
     <CarPlayContext.Provider

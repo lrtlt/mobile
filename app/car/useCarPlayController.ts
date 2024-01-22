@@ -41,7 +41,7 @@ const useCarPlayController = (): ReturnType => {
 
   useEffect(() => {
     if (isConnected) {
-      CarPlay.bridge.reload();
+      // CarPlay.bridge.reload();
       console.log('useCarPlayController: settings root template');
       CarPlay.setRootTemplate(createCarListTemplate());
     } else {

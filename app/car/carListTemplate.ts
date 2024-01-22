@@ -48,9 +48,9 @@ const createCarListTemplate = () => {
         isPlaying: false,
       },
     ],
-    onItemSelect: async ({index}) => {
-      console.log('onItemSelect', index);
-    },
+    // onItemSelect: async ({index}) => {
+    //   console.log('onItemSelect', index);
+    // },
   });
 };
 

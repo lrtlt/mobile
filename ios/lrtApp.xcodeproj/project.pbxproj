@@ -8,10 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		20564F7D1ABD4A148FCB3E78 /* SourceSansPro-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 62350164273C4F2A885BD709 /* SourceSansPro-LightItalic.ttf */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		30DF8C0F1DC54C25996EA68C /* PlayfairDisplay-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B1BAAF427CA44828E0B7B95 /* PlayfairDisplay-Regular.ttf */; };
 		5B990E2D44F0C0A9F687C7B3 /* Pods_FCMImageNotification.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC9213B230A625445486065B /* Pods_FCMImageNotification.framework */; };
 		5DE5469DBE4D4DF687A0D573 /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A436044A3C041F281F7BF8B /* SourceSansPro-SemiBold.ttf */; };
@@ -19,12 +17,13 @@
 		6E77BFFD1A0446E7AF06C197 /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A3C40A1A26044BDA6A6599C /* SourceSansPro-Regular.ttf */; };
 		6F35ABBC254AC514009EE240 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		9C0AAF9D2B58425B006DBD7B /* CarSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AAF9A2B58425B006DBD7B /* CarSceneDelegate.m */; };
-		9C0AAF9E2B58425B006DBD7B /* PhoneSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AAF9C2B58425B006DBD7B /* PhoneSceneDelegate.m */; };
 		9C0CA4ED28291CF100E1601F /* logo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C0CA4EC28291CF100E1601F /* logo2.png */; };
 		9C6632FA2B839B1100E82A8E /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6632F92B839B1100E82A8E /* NotificationService.m */; };
 		9C6632FE2B839B1100E82A8E /* FCMImageNotification.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9C6632F62B839B1100E82A8E /* FCMImageNotification.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		9C9A05BF285B418B00A39CD1 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C9A05BE285B418B00A39CD1 /* AppDelegate.mm */; };
+		9C78266B2B5887FD00B7183B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C78266A2B5887FD00B7183B /* AppDelegate.swift */; };
+		9C78266E2B588AD800B7183B /* PhoneScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C78266C2B588AD800B7183B /* PhoneScene.swift */; };
+		9C78266F2B588AD800B7183B /* CarScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C78266D2B588AD800B7183B /* CarScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,7 +67,6 @@
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* lrtAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = lrtAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* lrtApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lrtApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = lrtApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = lrtApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = lrtApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = lrtApp/main.m; sourceTree = "<group>"; };
@@ -84,16 +82,15 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = lrtApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F73005EC221D36C68379F41 /* Pods-lrtApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp.debug.xcconfig"; path = "Target Support Files/Pods-lrtApp/Pods-lrtApp.debug.xcconfig"; sourceTree = "<group>"; };
 		945979D07578987EF3B629E6 /* Pods-lrtApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp.release.xcconfig"; path = "Target Support Files/Pods-lrtApp/Pods-lrtApp.release.xcconfig"; sourceTree = "<group>"; };
-		9C0AAF992B58425B006DBD7B /* PhoneSceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhoneSceneDelegate.h; path = lrtApp/PhoneSceneDelegate.h; sourceTree = "<group>"; };
-		9C0AAF9A2B58425B006DBD7B /* CarSceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CarSceneDelegate.m; path = lrtApp/CarSceneDelegate.m; sourceTree = "<group>"; };
-		9C0AAF9B2B58425B006DBD7B /* CarSceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CarSceneDelegate.h; path = lrtApp/CarSceneDelegate.h; sourceTree = "<group>"; };
-		9C0AAF9C2B58425B006DBD7B /* PhoneSceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhoneSceneDelegate.m; path = lrtApp/PhoneSceneDelegate.m; sourceTree = "<group>"; };
 		9C0CA4EC28291CF100E1601F /* logo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo2.png; path = lrtApp/logo2.png; sourceTree = "<group>"; };
 		9C6632F62B839B1100E82A8E /* FCMImageNotification.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FCMImageNotification.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C6632F82B839B1100E82A8E /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		9C6632F92B839B1100E82A8E /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		9C6632FB2B839B1100E82A8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9C9A05BE285B418B00A39CD1 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = lrtApp/AppDelegate.mm; sourceTree = "<group>"; };
+		9C7826692B5887FD00B7183B /* lrtApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "lrtApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		9C78266A2B5887FD00B7183B /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = lrtApp/AppDelegate.swift; sourceTree = "<group>"; };
+		9C78266C2B588AD800B7183B /* PhoneScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhoneScene.swift; path = lrtApp/PhoneScene.swift; sourceTree = "<group>"; };
+		9C78266D2B588AD800B7183B /* CarScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CarScene.swift; path = lrtApp/CarScene.swift; sourceTree = "<group>"; };
 		9CB19FE32B0EAC2B00F49E23 /* lrtAppRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = lrtAppRelease.entitlements; path = lrtApp/lrtAppRelease.entitlements; sourceTree = "<group>"; };
 		AC9213B230A625445486065B /* Pods_FCMImageNotification.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FCMImageNotification.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B444A0B5A3869DA4136C766C /* Pods_lrtApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lrtApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,20 +143,17 @@
 		13B07FAE1A68108700A75B9A /* lrtApp */ = {
 			isa = PBXGroup;
 			children = (
-				9C0AAF9B2B58425B006DBD7B /* CarSceneDelegate.h */,
-				9C0AAF9A2B58425B006DBD7B /* CarSceneDelegate.m */,
-				9C0AAF992B58425B006DBD7B /* PhoneSceneDelegate.h */,
-				9C0AAF9C2B58425B006DBD7B /* PhoneSceneDelegate.m */,
+				9C78266D2B588AD800B7183B /* CarScene.swift */,
+				9C78266C2B588AD800B7183B /* PhoneScene.swift */,
+				9C78266A2B5887FD00B7183B /* AppDelegate.swift */,
 				9CB19FE32B0EAC2B00F49E23 /* lrtAppRelease.entitlements */,
-				9C9A05BE285B418B00A39CD1 /* AppDelegate.mm */,
 				9C0CA4EC28291CF100E1601F /* logo2.png */,
 				6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */,
 				6F60A1252549BE0B005E14EA /* lrtApp.entitlements */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
-				13B07FB71A68108700A75B9A /* main.m */,
+				9C7826692B5887FD00B7183B /* lrtApp-Bridging-Header.h */,
 			);
 			name = lrtApp;
 			sourceTree = "<group>";
@@ -359,7 +353,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = TGMUP98888;
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1510;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -645,10 +639,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C9A05BF285B418B00A39CD1 /* AppDelegate.mm in Sources */,
-				9C0AAF9D2B58425B006DBD7B /* CarSceneDelegate.m in Sources */,
-				9C0AAF9E2B58425B006DBD7B /* PhoneSceneDelegate.m in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				9C78266B2B5887FD00B7183B /* AppDelegate.swift in Sources */,
+				9C78266F2B588AD800B7183B /* CarScene.swift in Sources */,
+				9C78266E2B588AD800B7183B /* PhoneScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -656,7 +649,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,6 +691,7 @@
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -721,6 +714,7 @@
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = lrtAppTests/Info.plist;
@@ -758,9 +752,12 @@
 					"-ObjC",
 					"-lc++",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS";
 				PRODUCT_BUNDLE_IDENTIFIER = lt.lrtlt.lrtltapp;
 				PRODUCT_NAME = lrtApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "lrtApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -790,6 +787,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = lt.lrtlt.lrtltapp;
 				PRODUCT_NAME = lrtApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "lrtApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
