@@ -20,7 +20,7 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
+const GalleryScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigation}) => {
   const [state] = useState(() => {
     const selectedImage = route.params.selectedImage ?? null;
     const images = route.params.images ?? [];

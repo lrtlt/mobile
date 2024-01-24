@@ -13,7 +13,12 @@ interface Props {
   useFastImage?: boolean;
 }
 
-const ProgressiveImage: React.FC<Props> = ({style, thumbnailSource, source, useFastImage}) => {
+const ProgressiveImage: React.FC<React.PropsWithChildren<Props>> = ({
+  style,
+  thumbnailSource,
+  source,
+  useFastImage,
+}) => {
   const [thumbnailAnimated] = useState(new Animated.Value(0));
   const [imageAnimated] = useState(new Animated.Value(0));
 

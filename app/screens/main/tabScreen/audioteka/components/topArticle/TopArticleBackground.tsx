@@ -5,12 +5,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import {Article} from '../../../../../../../Types';
 import {BASE_IMG_URL} from '../../../../../../util/ImageUtil';
 
-interface TopArticleBackgroundProps {
+interface Props {
   style: ViewStyle;
   article: Article;
 }
 
-const TopArticleBackground: React.FC<TopArticleBackgroundProps> = (props) => {
+const TopArticleBackground: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {article, style, children} = props;
 
   return (

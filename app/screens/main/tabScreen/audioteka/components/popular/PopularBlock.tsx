@@ -12,7 +12,7 @@ interface Props {
   data: AudiotekaPopular;
 }
 
-const PopularBlock: React.FC<Props> = ({data}) => {
+const PopularBlock: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   return (
     <View style={styles.container}>

@@ -10,7 +10,7 @@ interface Props {
   text: string;
 }
 
-const ScreenError: React.FC<Props> = (props) => {
+const ScreenError: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
   return (
     <View style={[styles.container, props.style]}>

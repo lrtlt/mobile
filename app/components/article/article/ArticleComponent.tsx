@@ -35,7 +35,13 @@ interface Props {
   onPress: (article: Article) => void;
 }
 
-const ArticleComponent: React.FC<Props> = ({style: styleProp, article, styleType, dateEnabled, onPress}) => {
+const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
+  style: styleProp,
+  article,
+  styleType,
+  dateEnabled,
+  onPress,
+}) => {
   const [dimensions, setDimensions] = useState({width: 0, height: 0});
   const {colors} = useTheme();
   const style = getArticleStyle(styleType);

@@ -7,7 +7,7 @@ interface Props {
   duration: number;
 }
 
-const Collapsible: React.FC<Props> = ({children, collapsed, duration}) => {
+const Collapsible: React.FC<React.PropsWithChildren<Props>> = ({children, collapsed, duration}) => {
   const isCollapsed = useRef(collapsed);
 
   useEffect(() => {

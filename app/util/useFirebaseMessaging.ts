@@ -72,7 +72,6 @@ const useFirebaseMessaging = (isNavigationReady: boolean) => {
   //Setup firebase messaging && notification channels
   useEffect(() => {
     const init = async () => {
-      await messaging().registerDeviceForRemoteMessages();
       const token = await messaging().getToken();
       const apnsToken = await messaging().getAPNSToken();
       console.log('FCM-token', token);

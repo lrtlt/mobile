@@ -27,15 +27,6 @@ export const setTextSizeMultiplier = (value: number): SetTextSizeMultiplierActio
   multiplier: value,
 });
 
-export interface SetImageMaxScaleFactorAction {
-  type: typeof SET_IMAGE_SCALE_FACTOR;
-  scaleFactor: number;
-}
-export const setImageMaxScaleFactor = (value: number): SetImageMaxScaleFactorAction => ({
-  type: SET_IMAGE_SCALE_FACTOR,
-  scaleFactor: value,
-});
-
 export interface SetConfigAction {
   type: typeof SET_CONFIG;
   payload: ConfigState;
@@ -88,7 +79,6 @@ export const updateLogoCache = (cache: {url: string; svg: string}): UpdateLogoCa
 export type ConfigActionType =
   | ToggleDarkModeAction
   | SetTextSizeMultiplierAction
-  | SetImageMaxScaleFactorAction
   | SetConfigAction
   | SetForecastLocationAction
   | SetDailyQuestionChoice

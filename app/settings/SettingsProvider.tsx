@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {selectSettings} from '../redux/selectors';
 import {checkEqual} from '../util/LodashEqualityCheck';
 
-const SettingsProvider: React.FC = (props) => {
+const SettingsProvider: React.FC<React.PropsWithChildren<{}>> = (props): JSX.Element => {
   const config = useSelector(selectSettings, checkEqual);
   return <SettingsContext.Provider value={config}>{props.children}</SettingsContext.Provider>;
 };

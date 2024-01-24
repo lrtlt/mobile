@@ -8,7 +8,7 @@ interface Props {
   data: HomeBlockEmbed;
 }
 
-const BannerComponent: React.FC<Props> = ({data}) => {
+const BannerComponent: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
   const width = useWindowDimensions().width - 8 * 2;
   if (!data.html) {
     return null;

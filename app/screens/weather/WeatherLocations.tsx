@@ -13,7 +13,7 @@ interface Props {
   onLocationSelect: (location: ForecastLocation) => void;
 }
 
-const WeatherLocations: React.FC<Props> = (props) => {
+const WeatherLocations: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const [inputValue, setInputValue] = useState('');
   const [locations, setLocations] = useState<ForecastLocation[]>([]);
   const [searchResults, setSearchResults] = useState<ForecastLocation[]>([]);

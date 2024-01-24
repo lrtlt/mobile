@@ -11,7 +11,7 @@ interface Props {
   keywords?: ArticleContentDefault['article_keywords'];
 }
 
-const ArticleKeywords: React.FC<Props> = ({keywords}) => {
+const ArticleKeywords: React.FC<React.PropsWithChildren<Props>> = ({keywords}) => {
   const {colors} = useTheme();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Article'>>();
 

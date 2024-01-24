@@ -8,7 +8,7 @@ interface Props {
   data: ArticleEmbedHTMLType[];
 }
 
-const EmbedHTML: React.FC<Props> = ({data}) => {
+const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
   const [dimensions, setDimensions] = useState({width: 0, height: 0});
 
   const {width} = dimensions;

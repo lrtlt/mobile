@@ -10,7 +10,7 @@ interface Props {
   itemPressHandler: (item: ArticleSelectableItem) => void;
 }
 
-const EmbedPhotos: React.FC<Props> = ({data, itemPressHandler}) => {
+const EmbedPhotos: React.FC<React.PropsWithChildren<Props>> = ({data, itemPressHandler}) => {
   const screenWidth = useWindowDimensions().width;
   return (
     <View>

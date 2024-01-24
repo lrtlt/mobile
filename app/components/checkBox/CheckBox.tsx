@@ -11,7 +11,7 @@ interface Props {
   onValueChange: (checked: boolean) => void;
 }
 
-const CheckBox: React.FC<Props> = ({style, value, onValueChange, label}) => {
+const CheckBox: React.FC<React.PropsWithChildren<Props>> = ({style, value, onValueChange, label}) => {
   const [pressedIn, setPressedIn] = useState(false);
 
   const {colors} = useTheme();

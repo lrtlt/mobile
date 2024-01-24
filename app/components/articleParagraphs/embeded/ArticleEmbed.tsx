@@ -47,7 +47,7 @@ const groupEmbedsByType = (data: ArticleEmbedType[]): ArticleEmbedType[][] => {
   return groupedEmbeds;
 };
 
-const ArticleEmbed: React.FC<Props> = ({embedArray, itemPressHandler}) => {
+const ArticleEmbed: React.FC<React.PropsWithChildren<Props>> = ({embedArray, itemPressHandler}) => {
   const embedsGroupedByType = useMemo(() => groupEmbedsByType(embedArray), [embedArray]);
   return (
     <View style={styles.container}>

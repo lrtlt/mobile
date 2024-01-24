@@ -9,7 +9,7 @@ interface Props {
   data: ArticleEmbedBroadcastType[];
 }
 
-const EmbedBroadcast: React.FC<Props> = ({data}) => {
+const EmbedBroadcast: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
   return (
     <View>
       {data.map(

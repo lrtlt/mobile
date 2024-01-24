@@ -25,7 +25,7 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const WeatherScreen: React.FC<Props> = ({navigation}) => {
+const WeatherScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const [selectedLocation, setSelectedLocation] = useState(useSelector(selectForecastLocation));
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
 

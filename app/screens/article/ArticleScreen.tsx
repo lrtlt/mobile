@@ -19,7 +19,7 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const ArticleScreen: React.FC<Props> = ({navigation, route}) => {
+const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const {articleId} = route.params;
   console.log('articleId', articleId);
 

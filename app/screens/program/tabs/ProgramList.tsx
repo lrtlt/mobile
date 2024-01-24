@@ -11,7 +11,7 @@ interface Props {
   scrollToIndex: number;
 }
 
-const ProgramList: React.FC<Props> = ({items, scrollToIndex}) => {
+const ProgramList: React.FC<React.PropsWithChildren<Props>> = ({items, scrollToIndex}) => {
   const ref = useRef<FlashList<any>>(null);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const ProgramList: React.FC<Props> = ({items, scrollToIndex}) => {
     });
   }, [scrollToIndex]);
 
-  const renderProgramItem = useCallback((val) => {
+  const renderProgramItem = useCallback((val: ListRenderItemInfo<ProgramItemType>) => {
     const item = val.item;
     return (
       <View key={`${item.time_start}-${item.title}`}>
@@ -37,26 +37,16 @@ const ProgramList: React.FC<Props> = ({items, scrollToIndex}) => {
     );
   }, []);
 
-  const calculateProgramItemLayout = useCallback(
-    (_, index) => ({length: PROGRAM_ITEM_HEIGHT, offset: PROGRAM_ITEM_HEIGHT * index, index}),
-    [],
-  );
-
-  const keyExtractor = useCallback((item, i) => String(i) + String(item), []);
+  const keyExtractor = useCallback((item: any, i: number) => String(i) + String(item), []);
 
   return (
     <View style={styles.root}>
       <FlashList
-        //style={styles.root}
         ref={ref}
         showsVerticalScrollIndicator={false}
         data={items}
         renderItem={renderProgramItem}
-        // getItemLayout={calculateProgramItemLayout}
         initialScrollIndex={scrollToIndex}
-        // contentContainerStyle={styles.scrollContainer}
-        // windowSize={21}
-        // initialNumToRender={50}
         estimatedItemSize={PROGRAM_ITEM_HEIGHT}
         keyExtractor={keyExtractor}
       />

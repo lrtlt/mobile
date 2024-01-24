@@ -9,7 +9,7 @@ import OpusPlaylistModal from '../opusPlaylistModal/OpusPlaylistModal';
 
 const OPUS_COLOR = 'rgba(240,81,35,.3)';
 
-const OpusNowComponent: React.FC = () => {
+const OpusNowComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const [currentSong, setCurrentSong] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 

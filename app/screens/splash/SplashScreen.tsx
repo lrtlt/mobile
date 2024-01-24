@@ -9,7 +9,7 @@ import {strings, themeDark, themeLight} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 
-const SplashScreen: React.FC = () => {
+const SplashScreen: React.FC<React.PropsWithChildren<{}>> = () => {
   const {isDarkMode} = useSettings();
   const {colors} = isDarkMode ? themeDark : themeLight;
 

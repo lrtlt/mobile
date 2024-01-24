@@ -16,7 +16,7 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const CategoryScreen: React.FC<Props> = ({navigation, route}) => {
+const CategoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const {id, name, url} = route.params;
 
   useEffect(() => {

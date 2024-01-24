@@ -57,7 +57,7 @@ export type MainDrawerParamList = {
 };
 const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
 
-const MainDrawerNavigator: React.FC = () => {
+const MainDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
   return (
     <MainDrawer.Navigator drawerContent={(props) => <Drawer {...props} />}>
       <MainDrawer.Screen
@@ -81,7 +81,7 @@ export type SearchDrawerParamList = {
 
 const SearchDrawer = createDrawerNavigator<SearchDrawerParamList>();
 
-const SearchDrawerNavigator: React.FC = () => {
+const SearchDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
   return (
     <SearchContextProvider>
       <SearchDrawer.Navigator

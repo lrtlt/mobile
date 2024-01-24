@@ -7,7 +7,7 @@ interface Props {
   text?: string;
   onPress: () => void;
 }
-const DrawerItem: React.FC<Props> = (props) => {
+const DrawerItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const icon = props.iconComponent ? <View style={styles.iconContainer}>{props.iconComponent}</View> : null;
 
   return (

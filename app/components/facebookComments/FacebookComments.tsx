@@ -27,7 +27,7 @@ interface Props {
   url: string;
 }
 
-const FacebookComments: React.FC<Props> = (props) => {
+const FacebookComments: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const html = buildFrame(props.url);
   return (
     <SafeWebView

@@ -5,7 +5,7 @@ import {useTheme} from '../../Theme';
 interface Props extends TextProps {}
 
 //This introduces a bug where paragraphs end get cut off sometimes.
-const SelectableText: React.FC<Props> = (props) => {
+const SelectableText: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
   return (
     <TextInput

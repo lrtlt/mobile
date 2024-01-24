@@ -13,7 +13,7 @@ interface Props {
   channels?: MenuItemChannels;
 }
 
-const DrawerBlockChannels: React.FC<Props> = ({channels, navigation}) => {
+const DrawerBlockChannels: React.FC<React.PropsWithChildren<Props>> = ({channels, navigation}) => {
   if (!channels || channels.items.length <= 0) {
     console.log('invalid channels data');
     return null;

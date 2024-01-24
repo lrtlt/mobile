@@ -27,7 +27,7 @@ interface Props {
   requestRefresh: () => void;
 }
 
-const TabScreenContent: React.FC<Props> = ({
+const TabScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
   data,
   showTitle,
   showBackToHome,
@@ -59,7 +59,7 @@ const TabScreenContent: React.FC<Props> = ({
     [openArticleHandler],
   );
 
-  const keyExtractor = useCallback((item, index) => String(index) + String(item), []);
+  const keyExtractor = useCallback((item: any, index: number) => String(index) + String(item), []);
 
   const onListEndReached = useCallback(() => {
     if (isFetching === false) {

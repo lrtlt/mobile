@@ -10,7 +10,7 @@ interface Props {
   onPress: (article: Article) => void;
 }
 
-const ArticleFeedItem: React.FC<Props> = (props) => {
+const ArticleFeedItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
   const {article, onPress} = props;
 

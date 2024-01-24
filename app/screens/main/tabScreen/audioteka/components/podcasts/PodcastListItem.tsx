@@ -13,7 +13,7 @@ interface Props {
   podcast: Podcast;
 }
 
-const PodcastListItem: React.FC<Props> = ({style, podcast}) => {
+const PodcastListItem: React.FC<React.PropsWithChildren<Props>> = ({style, podcast}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const onPressHandler = useCallback(() => {

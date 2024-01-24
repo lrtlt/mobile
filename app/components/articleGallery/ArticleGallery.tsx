@@ -85,7 +85,11 @@ interface Props {
   expectedWidth: number;
   itemSelectHandler: (photo: {type: 'photo'; item: ArticlePhotoType}) => void;
 }
-const ArticleGallery: React.FC<Props> = ({data, expectedWidth, itemSelectHandler}) => {
+const ArticleGallery: React.FC<React.PropsWithChildren<Props>> = ({
+  data,
+  expectedWidth,
+  itemSelectHandler,
+}) => {
   if (!data?.length) {
     return null;
   }

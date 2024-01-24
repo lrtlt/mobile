@@ -11,7 +11,7 @@ interface Props {
   itemPressHandler: (item: ArticleSelectableItem) => void;
 }
 
-const EmbedArticles: React.FC<Props> = ({data, itemPressHandler}) => {
+const EmbedArticles: React.FC<React.PropsWithChildren<Props>> = ({data, itemPressHandler}) => {
   const {colors, strings} = useTheme();
 
   const content = data.map(

@@ -19,7 +19,7 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const HistoryScreen: React.FC<Props> = ({navigation}) => {
+const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const {strings} = useTheme();
 
   const historyArticles = useSelector(selectHistoryArticles);

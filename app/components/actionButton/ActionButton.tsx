@@ -6,7 +6,7 @@ interface Props {
   onPress: () => void;
 }
 
-const ActionButton: React.FC<Props> = (props) => {
+const ActionButton: React.FC<React.PropsWithChildren<Props>> = (props) => {
   return (
     <BorderlessButton style={styles.root} onPress={props.onPress}>
       <View style={styles.clickArea}>{props.children}</View>

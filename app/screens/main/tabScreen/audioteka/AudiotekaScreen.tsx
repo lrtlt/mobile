@@ -27,7 +27,7 @@ interface Props {
   isCurrent: boolean;
 }
 
-const AudiotekaScreen: React.FC<Props> = ({isCurrent}) => {
+const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
   const dispatch = useDispatch();
   const listRef = useRef<FlashList<any>>(null);
   const {colors, dark} = useTheme();

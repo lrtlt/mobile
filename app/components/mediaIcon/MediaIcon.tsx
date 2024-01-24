@@ -11,7 +11,13 @@ interface Props {
   channel_id?: number;
 }
 
-const MediaIcon: React.FC<Props> = ({style, size, is_video, is_audio, channel_id}) => {
+const MediaIcon: React.FC<React.PropsWithChildren<Props>> = ({
+  style,
+  size,
+  is_video,
+  is_audio,
+  channel_id,
+}) => {
   const Icon = is_audio === 1 ? MicIcon : is_video === 1 ? CameraIcon : null;
   if (Icon) {
     const colors = getColorsForChannelById(channel_id);

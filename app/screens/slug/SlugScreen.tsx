@@ -26,7 +26,7 @@ type ScreenState = {
   articles: Article[][];
 };
 
-const SlugScreen: React.FC<Props> = ({navigation, route}) => {
+const SlugScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const {colors, strings} = useTheme();
 
   const [state, setState] = useState<ScreenState>({

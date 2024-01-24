@@ -16,59 +16,61 @@ interface Props extends AutoHeightWebViewProps {
 /**
  * Component extending default WebView applying fixes for android crashes.
  */
-const SafeAutoHeightWebView: React.FC<Props> = forwardRef<WebView, Props>((props, ref) => {
-  const {dark} = useTheme();
-  const animationDisabled = useRef(false);
+const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardRef<WebView, Props>(
+  (props, ref) => {
+    const {dark} = useTheme();
+    const animationDisabled = useRef(false);
 
-  const handleShouldLoadWithRequest = useCallback((request: ShouldStartLoadRequest) => {
-    const isUserClickAction = request.navigationType === 'click';
+    const handleShouldLoadWithRequest = useCallback((request: ShouldStartLoadRequest) => {
+      const isUserClickAction = request.navigationType === 'click';
 
-    if (isUserClickAction) {
-      //User clicked on the link which should redirect to other page.
-      //Opening the page on the browser...
-      Linking.openURL(request.url);
-      return false;
-    }
-
-    return true;
-  }, []);
-
-  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-
-  const onLayout = useCallback(
-    (e: LayoutChangeEvent) => {
-      const {height} = e.nativeEvent.layout;
-      if (height > 1000 && !animationDisabled.current) {
-        console.log('Disabling animation because of webView height:', height);
-        navigation.setOptions({
-          animationEnabled: false,
-        });
-        animationDisabled.current = true;
+      if (isUserClickAction) {
+        //User clicked on the link which should redirect to other page.
+        //Opening the page on the browser...
+        Linking.openURL(request.url);
+        return false;
       }
-    },
-    [navigation],
-  );
 
-  return (
-    <View style={[props.style as {}, styles.webViewContainer]}>
-      <WebView
-        ref={ref}
-        onLayout={onLayout}
-        originWhitelist={['*']}
-        domStorageEnabled={true}
-        javaScriptEnabled={true}
-        automaticallyAdjustContentInsets={false}
-        bounces={false}
-        forceDarkOn={dark && props.allowDarkMode}
-        sharedCookiesEnabled={true}
-        {...props}
-        style={[styles.webView, props.style]}
-        containerStyle={[styles.webViewContainer, props.containerStyle]}
-        onShouldStartLoadWithRequest={props.openLinksExternally ? handleShouldLoadWithRequest : undefined}
-      />
-    </View>
-  );
-});
+      return true;
+    }, []);
+
+    const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
+
+    const onLayout = useCallback(
+      (e: LayoutChangeEvent) => {
+        const {height} = e.nativeEvent.layout;
+        if (height > 1000 && !animationDisabled.current) {
+          console.log('Disabling animation because of webView height:', height);
+          navigation.setOptions({
+            animationEnabled: false,
+          });
+          animationDisabled.current = true;
+        }
+      },
+      [navigation],
+    );
+
+    return (
+      <View style={[props.style as {}, styles.webViewContainer]}>
+        <WebView
+          ref={ref}
+          onLayout={onLayout}
+          originWhitelist={['*']}
+          domStorageEnabled={true}
+          javaScriptEnabled={true}
+          automaticallyAdjustContentInsets={false}
+          bounces={false}
+          forceDarkOn={dark && props.allowDarkMode}
+          sharedCookiesEnabled={true}
+          {...props}
+          style={[styles.webView, props.style]}
+          containerStyle={[styles.webViewContainer, props.containerStyle]}
+          onShouldStartLoadWithRequest={props.openLinksExternally ? handleShouldLoadWithRequest : undefined}
+        />
+      </View>
+    );
+  },
+);
 
 export default SafeAutoHeightWebView;
 

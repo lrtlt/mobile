@@ -6,7 +6,7 @@ interface Props extends TextProps {}
 
 const COLOR_ALPHA = '50';
 
-const SelectableText: React.FC<Props> = (props) => {
+const SelectableText: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
   return (
     <Text {...props} selectable={true} selectionColor={`${colors.primary}${COLOR_ALPHA}`}>

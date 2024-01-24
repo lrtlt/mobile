@@ -20,7 +20,7 @@ import MyScrollView from '../MyScrollView/MyScrollView';
 
 type Props = DrawerContentComponentProps;
 
-const DrawerComponent: React.FC<Props> = ({navigation}) => {
+const DrawerComponent: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const {colors, dim} = useTheme();
   const data = useSelector(selectDrawerData, checkEqual);
   const insets = useSafeAreaInsets();

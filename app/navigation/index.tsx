@@ -1,5 +1,5 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {Platform, StatusBar} from 'react-native';
+import {StatusBar} from 'react-native';
 import {useSelector} from 'react-redux';
 import {LinkingOptions, NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
 import SplashViewComponent from '../screens/splash/SplashScreenView';
@@ -32,7 +32,7 @@ const linking: LinkingOptions<MainStackParamList> = {
   },
 };
 
-const NavigatorComponent: React.FC = () => {
+const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const [isNavigatorReady, setNavigatorReady] = useState(false);
   const isAppReady = useSelector(selectAppIsReady);
 

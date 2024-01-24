@@ -8,7 +8,7 @@ interface Props {
   selected: boolean;
   onPress: () => void;
 }
-const ToggleButton: React.FC<Props> = ({style, selected, onPress, ...props}) => {
+const ToggleButton: React.FC<React.PropsWithChildren<Props>> = ({style, selected, onPress, ...props}) => {
   const {colors} = useTheme();
 
   const backgroundColor = selected ? colors.toggleButtonSelected : colors.background;

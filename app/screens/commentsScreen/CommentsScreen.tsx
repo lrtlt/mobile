@@ -14,7 +14,7 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const CommentsScreen: React.FC<Props> = ({route}) => {
+const CommentsScreen: React.FC<React.PropsWithChildren<Props>> = ({route}) => {
   useNavigationAnalytics({
     viewId: 'Lrt app - Komentarai',
     title: 'Lrt app - Komentarai',

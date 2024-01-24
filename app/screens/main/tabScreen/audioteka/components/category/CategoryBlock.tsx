@@ -18,7 +18,7 @@ interface Props {
   data: AudiotekaCategory | AudiotekaSlug;
 }
 
-const CategoryBlock: React.FC<Props> = ({data}) => {
+const CategoryBlock: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const title = data.template === 'slug' ? data.slug_title : data.category_title;
 

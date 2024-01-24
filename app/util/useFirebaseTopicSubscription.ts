@@ -7,21 +7,25 @@ const useFirebaseTopicSubscription = () => {
   useEffect(() => {
     fetch('https://www.lrt.lt/static/data/push_categories.json', {
       method: 'GET',
-    }).then(async (response) => {
-      const data = (await response.json()) as FirebaseTopicsResponse;
+    })
+      .then(async (response) => {
+        const data = (await response.json()) as FirebaseTopicsResponse;
 
-      data
-        .filter((topic) => topic.hidden === 1)
-        .forEach((hiddenTopics) => {
-          messaging().subscribeToTopic(hiddenTopics.slug);
-        });
+        data
+          .filter((topic) => topic.hidden === 1)
+          .forEach((hiddenTopics) => {
+            messaging().subscribeToTopic(hiddenTopics.slug);
+          });
 
-      if (__DEV__) {
-        messaging().subscribeToTopic('test');
-      }
+        if (__DEV__) {
+          messaging().subscribeToTopic('test');
+        }
 
-      setTopics(data);
-    });
+        setTopics(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   return topics;

@@ -1,9 +1,9 @@
 import React, {useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Route, Scene} from 'react-native-tab-view/lib/typescript/types';
 import {Text} from '../../../components';
 import {IconHome} from '../../../components/svg';
 import {useTheme} from '../../../Theme';
+import {Route, Scene} from 'react-native-tab-view/src/types';
 
 export type TabLabelProps = Scene<Route> & {focused: boolean};
 

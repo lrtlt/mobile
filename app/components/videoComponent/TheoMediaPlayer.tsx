@@ -75,7 +75,7 @@ const makeSource = (uri: string, title?: string, poster?: string): SourceDescrip
   ],
 });
 
-const TheoMediaPlayer: React.FC<Props> = ({
+const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   streamUri,
   mode = PlayerMode.DEFAULT,
   mediaType,
@@ -326,7 +326,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
   }, [player]);
 
   const _seekControl = useCallback(
-    (time) => {
+    (time: number) => {
       if (player) {
         trackSeek(streamUri, time);
         player.currentTime = time * 1000;
@@ -337,7 +337,7 @@ const TheoMediaPlayer: React.FC<Props> = ({
   );
 
   const _seekByControl = useCallback(
-    (time) => {
+    (time: number) => {
       if (player) {
         const newTime = player.currentTime + time * 1000;
         trackSeek(streamUri, newTime / 1000);

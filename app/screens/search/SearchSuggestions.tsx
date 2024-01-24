@@ -8,7 +8,10 @@ interface Props {
   onSearchSuggestionClick: (suggestion: SearchCategorySuggestion) => void;
 }
 
-const SearchSuggestions: React.FC<Props> = ({suggestions, onSearchSuggestionClick}) => {
+const SearchSuggestions: React.FC<React.PropsWithChildren<Props>> = ({
+  suggestions,
+  onSearchSuggestionClick,
+}) => {
   if (!suggestions) {
     return null;
   }

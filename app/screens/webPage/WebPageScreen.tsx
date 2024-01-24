@@ -15,7 +15,7 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const WebPageScreen: React.FC<Props> = ({route, navigation}) => {
+const WebPageScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigation}) => {
   const {url, title} = route.params;
 
   const {colors, dark} = useTheme();

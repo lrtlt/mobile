@@ -42,7 +42,7 @@ interface Props {
   itemPressHandler: (item: ArticleSelectableItem) => void;
 }
 
-const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) => {
+const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({article, itemPressHandler}) => {
   const [isTextToSpeechPlaying, setTextToSpeechPlaying] = useState(false);
   const {colors} = useTheme();
 
@@ -164,7 +164,7 @@ const ArticleContentComponent: React.FC<Props> = ({article, itemPressHandler}) =
           showsVerticalScrollIndicator={false}
           renderItem={renderItem}
           removeClippedSubviews={false}
-          keyExtractor={useCallback((item, index) => {
+          keyExtractor={useCallback((item: ArticleContentItemType, index: number) => {
             return String(index) + String(item.type);
           }, [])}
         />

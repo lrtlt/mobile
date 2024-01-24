@@ -12,7 +12,7 @@ interface Props {
   onPress: (suggestion: SearchCategorySuggestion) => void;
 }
 
-const SearchSuggestion: React.FC<Props> = ({style, suggestion, onPress}) => {
+const SearchSuggestion: React.FC<React.PropsWithChildren<Props>> = ({style, suggestion, onPress}) => {
   const {colors} = useTheme();
 
   const renderIcon = useCallback(() => {

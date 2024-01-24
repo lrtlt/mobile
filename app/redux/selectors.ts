@@ -129,7 +129,6 @@ export const selectSettings = memoize((state: RootState) => {
 
   return {
     isDarkMode: config.isDarkMode,
-    imageMaxScaleFactor: config.imageMaxScaleFactor,
     textSizeMultiplier: config.textSizeMultiplier,
   };
 });

@@ -13,9 +13,8 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {StyleSheet} from 'react-native';
 import VideoProvider from './app/components/videoComponent/context/VideoProvider';
 import useNotificationsPermission from './app/util/useNotificationsPermission';
-import useFirebaseMessaging from './app/util/useFirebaseMessaging';
 
-const ReduxProvider: React.FC = ({children}) => {
+const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

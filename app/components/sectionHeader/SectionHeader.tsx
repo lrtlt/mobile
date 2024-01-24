@@ -9,7 +9,7 @@ interface Props {
   color?: string;
   onPress?: () => void;
 }
-const SectionHeader: React.FC<Props> = ({category, color, onPress}) => {
+const SectionHeader: React.FC<React.PropsWithChildren<Props>> = ({category, color, onPress}) => {
   const header =
     category.is_slug_block === 1 ? (
       <SlugHeader title={category.name} color={color} />

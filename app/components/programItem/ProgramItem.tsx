@@ -19,7 +19,7 @@ interface Props {
   percent: string;
 }
 
-const ProgramItem: React.FC<Props> = (props) => {
+const ProgramItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Program'>>();

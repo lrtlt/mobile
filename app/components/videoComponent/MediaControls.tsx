@@ -67,7 +67,7 @@ interface Props {
   onSeekRequest: (time: number) => void;
   onSeekByRequest: (time: number) => void;
 }
-const MediaControls: React.FC<Props> = ({
+const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   enabled,
   enableFullScreen,
   enableMute,

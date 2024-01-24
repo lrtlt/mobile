@@ -17,7 +17,7 @@ interface Props {
 
 const INTERVAL = 1000 * 8;
 
-const ForecastComponent: React.FC<Props> = (props) => {
+const ForecastComponent: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const [forecast, setForecast] = useState<Forecast | undefined>();
   const {colors} = useTheme();
 

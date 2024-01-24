@@ -41,7 +41,7 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const MainScreen: React.FC<Props> = ({navigation}) => {
+const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const {colors, dim} = useTheme();
 
@@ -184,12 +184,7 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
             }}
             swipeEnabled={true}
             renderScene={renderScene}
-            renderTabBar={useCallback(
-              (tabBarProps) => (
-                <TabBar {...tabBarProps} />
-              ),
-              [],
-            )}
+            renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
             onIndexChange={setSelectedTabIndex}
             lazy={true}
             lazyPreloadDistance={0}

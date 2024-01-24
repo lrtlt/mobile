@@ -17,7 +17,7 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
+const CustomPageScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const [currentRouteIndex, setCurrentRouteIndex] = useState(0);
   const {page} = route.params;
 
@@ -70,12 +70,7 @@ const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
             );
           }
         }}
-        renderTabBar={useCallback(
-          (tabBarProps) => (
-            <TabBar {...tabBarProps} />
-          ),
-          [],
-        )}
+        renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
         onIndexChange={setCurrentRouteIndex}
         lazy={true}
         lazyPreloadDistance={0}

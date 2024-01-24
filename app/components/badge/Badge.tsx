@@ -9,7 +9,7 @@ interface Props {
   label: string;
 }
 
-const Badge: React.FC<Props> = ({style, type, label}) => {
+const Badge: React.FC<React.PropsWithChildren<Props>> = ({style, type, label}) => {
   return (
     <View style={[styles.container, style]}>
       <TextComponent

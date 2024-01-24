@@ -9,7 +9,7 @@ interface Props {
   data: ArticleEmbedVideoType[];
 }
 
-const EmbedVideo: React.FC<Props> = ({data}) => {
+const EmbedVideo: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
   return (
     <View>
       {data.map(

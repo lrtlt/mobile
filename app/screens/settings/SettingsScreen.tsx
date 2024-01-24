@@ -15,7 +15,7 @@ type Props = {
  *
  * @deprecated
  */
-const SettingsScreen: React.FC<Props> = ({navigation}) => {
+const SettingsScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const {strings} = useTheme();
   const config = useSelector(selectSettings, checkEqual);
 

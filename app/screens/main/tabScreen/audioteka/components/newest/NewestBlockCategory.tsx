@@ -12,7 +12,7 @@ interface Props {
   data: AudiotekaNewestCategory;
 }
 
-const NewestBlockCategory: React.FC<Props> = ({data}) => {
+const NewestBlockCategory: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const onArticlePressHandler = useCallback(

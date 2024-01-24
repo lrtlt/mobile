@@ -79,7 +79,13 @@ interface Props {
   progressive?: boolean;
 }
 
-const ArticlePhoto: React.FC<Props> = ({photo, style, expectedWidth, imageAspectRatio, ...props}) => {
+const ArticlePhoto: React.FC<React.PropsWithChildren<Props>> = ({
+  photo,
+  style,
+  expectedWidth,
+  imageAspectRatio,
+  ...props
+}) => {
   const {colors} = useTheme();
 
   if (!photo) {
