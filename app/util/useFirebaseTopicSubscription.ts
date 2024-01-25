@@ -1,8 +1,48 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const TOPICS_STORAGE_KEY = 'initialTopicSubscription';
 
 const useFirebaseTopicSubscription = () => {
   const [topics, setTopics] = useState<FirebaseTopicsResponse>([]);
+  const [subscriptions, setSubscriptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (__DEV__) {
+      messaging().subscribeToTopic('test');
+    }
+  }, []);
+
+  const subscribeToTopic = useCallback(
+    async (topicSlug: string) => {
+      if (subscriptions.indexOf(topicSlug) === -1) {
+        const list = [...subscriptions, topicSlug];
+        setSubscriptions(list);
+        messaging()
+          .subscribeToTopic(topicSlug)
+          .then(() => AsyncStorage.setItem(TOPICS_STORAGE_KEY, JSON.stringify(list)))
+          .then(() => console.log('Subscribed to topic: ' + topicSlug))
+          //revert if failed
+          .catch(() => setSubscriptions(subscriptions));
+      }
+    },
+    [subscriptions],
+  );
+
+  const unsubscribeFromTopic = useCallback(
+    async (topicSlug: string) => {
+      const list = subscriptions.filter((item) => item !== topicSlug);
+      setSubscriptions(list);
+      messaging()
+        .unsubscribeFromTopic(topicSlug)
+        .then(() => AsyncStorage.setItem(TOPICS_STORAGE_KEY, JSON.stringify(list)))
+        .then(() => console.log('Unsubscribed from topic: ' + topicSlug))
+        //revert if failed
+        .catch(() => setSubscriptions(subscriptions));
+    },
+    [subscriptions],
+  );
 
   useEffect(() => {
     fetch('https://www.lrt.lt/static/data/push_categories.json', {
@@ -10,17 +50,28 @@ const useFirebaseTopicSubscription = () => {
     })
       .then(async (response) => {
         const data = (await response.json()) as FirebaseTopicsResponse;
+        const topicsJson = await AsyncStorage.getItem(TOPICS_STORAGE_KEY);
 
-        data
-          .filter((topic) => topic.hidden === 1)
-          .forEach((hiddenTopics) => {
-            messaging().subscribeToTopic(hiddenTopics.slug);
-          });
+        let isFirstRun = true;
+        let activeSubscriptions: string[] = [];
 
-        if (__DEV__) {
-          messaging().subscribeToTopic('test');
+        if (topicsJson) {
+          isFirstRun = false;
+          activeSubscriptions = JSON.parse(topicsJson);
         }
 
+        data.forEach((topic) => {
+          const shouldSubscribe = isFirstRun || topic.hidden === 1;
+          if (shouldSubscribe) {
+            messaging().subscribeToTopic(topic.slug);
+            if (activeSubscriptions.indexOf(topic.slug) === -1) {
+              activeSubscriptions.push(topic.slug);
+            }
+          }
+        });
+
+        await AsyncStorage.setItem(TOPICS_STORAGE_KEY, JSON.stringify(activeSubscriptions));
+        setSubscriptions(activeSubscriptions);
         setTopics(data);
       })
       .catch((error) => {
@@ -28,7 +79,12 @@ const useFirebaseTopicSubscription = () => {
       });
   }, []);
 
-  return topics;
+  return {
+    topics,
+    subscriptions,
+    subscribeToTopic,
+    unsubscribeFromTopic,
+  };
 };
 
 export default useFirebaseTopicSubscription;

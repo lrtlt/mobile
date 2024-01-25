@@ -14,6 +14,7 @@ import ChannelContextProvider from '../screens/channel/context/ChannelContextPro
 
 export type MainStackParamList = {
   Home: undefined;
+  Settings: undefined;
   Article: {
     articleId: number;
   };
@@ -135,6 +136,7 @@ export default () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen name="Settings" component={Screens.SettingsScreen} />
       <Stack.Screen name="Article" component={Screens.ArticleScreen} />
       <Stack.Screen name="Comments" component={Screens.CommentsScreen} />
       <Stack.Screen

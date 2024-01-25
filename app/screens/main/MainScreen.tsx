@@ -27,7 +27,6 @@ import {MainDrawerParamList, MainStackParamList} from '../../navigation/MainStac
 import {StackNavigationProp} from '@react-navigation/stack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import ArticleTabScreen from './tabScreen/ArticleTabScreen';
-import SettingsScreenView from '../settings/SettingsScreenView';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -44,9 +43,6 @@ type Props = {
 const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const {colors, dim} = useTheme();
-
-  const drawerRef = useRef<DrawerLayout>(null);
-  const drawerOpenRef = useRef<boolean>(false);
 
   const state = useSelector(selectMainScreenState, (left, right) => {
     return left.routes.length === right.routes.length;
@@ -87,10 +83,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
         </ActionButton>
       ),
       headerRight: () => (
-        <ActionButton
-          onPress={() =>
-            drawerOpenRef.current ? drawerRef.current?.closeDrawer() : drawerRef.current?.openDrawer()
-          }>
+        <ActionButton onPress={() => navigation.navigate('Settings')}>
           <IconSettings name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
@@ -153,46 +146,24 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
     return <View />;
   }, []);
 
-  const onDrawerCloseHandler = useCallback(() => {
-    drawerOpenRef.current = false;
-  }, []);
-
-  const onDrawerOpenHandler = useCallback(() => {
-    drawerOpenRef.current = true;
-  }, []);
-
   return (
-    <>
-      <DrawerLayout
-        ref={drawerRef}
-        drawerType="front"
-        drawerPosition="right"
-        drawerBackgroundColor={colors.background}
-        onDrawerClose={onDrawerCloseHandler}
-        onDrawerOpen={onDrawerOpenHandler}
-        drawerWidth={220}
-        useNativeAnimations={true}
-        statusBarAnimation={'fade'}
-        renderNavigationView={() => <SettingsScreenView />}>
-        <SafeAreaView style={styles.container} edges={['left', 'right']}>
-          <TabView
-            renderLazyPlaceholder={renderLazyPlaceHolder}
-            tabBarPosition="top"
-            navigationState={{
-              routes: state.routes,
-              index: selectedTabIndex,
-            }}
-            swipeEnabled={true}
-            renderScene={renderScene}
-            renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
-            onIndexChange={setSelectedTabIndex}
-            lazy={true}
-            lazyPreloadDistance={0}
-            initialLayout={{height: 0, width: Dimensions.get('screen').width}}
-          />
-        </SafeAreaView>
-      </DrawerLayout>
-    </>
+    <SafeAreaView style={styles.container} edges={['left', 'right']}>
+      <TabView
+        renderLazyPlaceholder={renderLazyPlaceHolder}
+        tabBarPosition="top"
+        navigationState={{
+          routes: state.routes,
+          index: selectedTabIndex,
+        }}
+        swipeEnabled={true}
+        renderScene={renderScene}
+        renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
+        onIndexChange={setSelectedTabIndex}
+        lazy={true}
+        lazyPreloadDistance={0}
+        initialLayout={{height: 0, width: Dimensions.get('screen').width}}
+      />
+    </SafeAreaView>
   );
 };
 
