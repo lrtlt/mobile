@@ -44,6 +44,9 @@ yarn-error.log
 yarn.lock
 package-lock.json
 
+# helpers
+/fcm-service
+
 Podfile.lock
 
 # fastlane
