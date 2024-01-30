@@ -20,7 +20,6 @@
 		9C0CA4ED28291CF100E1601F /* logo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C0CA4EC28291CF100E1601F /* logo2.png */; };
 		9C6632FA2B839B1100E82A8E /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6632F92B839B1100E82A8E /* NotificationService.m */; };
 		9C6632FE2B839B1100E82A8E /* FCMImageNotification.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9C6632F62B839B1100E82A8E /* FCMImageNotification.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		9C9A05BF285B418B00A39CD1 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C9A05BE285B418B00A39CD1 /* AppDelegate.mm */; };
 		9C78266B2B5887FD00B7183B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C78266A2B5887FD00B7183B /* AppDelegate.swift */; };
 		9C78266E2B588AD800B7183B /* PhoneScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C78266C2B588AD800B7183B /* PhoneScene.swift */; };
 		9C78266F2B588AD800B7183B /* CarScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C78266D2B588AD800B7183B /* CarScene.swift */; };
@@ -69,7 +68,6 @@
 		13B07F961A680F5B00A75B9A /* lrtApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lrtApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = lrtApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = lrtApp/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = lrtApp/main.m; sourceTree = "<group>"; };
 		1A3C40A1A26044BDA6A6599C /* SourceSansPro-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Regular.ttf"; path = "../assets/font/SourceSansPro-Regular.ttf"; sourceTree = "<group>"; };
 		25D8625B36DB99BEE54E7E4C /* Pods-FCMImageNotification.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FCMImageNotification.debug.xcconfig"; path = "Target Support Files/Pods-FCMImageNotification/Pods-FCMImageNotification.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* lrtApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "lrtApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };

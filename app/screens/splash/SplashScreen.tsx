@@ -1,44 +1,15 @@
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import {View, ActivityIndicator, Button, StyleSheet, StatusBar} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import {fetchHome, fetchMenuItems} from '../../redux/actions';
-
-import {selectSplashScreenState} from '../../redux/selectors';
 import {Logo, Text} from '../../components';
 import {strings, themeDark, themeLight} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
-import {checkEqual} from '../../util/LodashEqualityCheck';
+import useSplashScreenState from './useSplashScreenState';
 
 const SplashScreen: React.FC<React.PropsWithChildren<{}>> = () => {
   const {isDarkMode} = useSettings();
   const {colors} = isDarkMode ? themeDark : themeLight;
 
-  const state = useSelector(selectSplashScreenState, checkEqual);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (state.isReady !== true) {
-      load();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.hasMenuData]);
-
-  const load = useCallback(
-    (ignoreError = false) => {
-      if (state.isError && ignoreError === false) {
-        return;
-      }
-
-      if (state.isLoading !== true) {
-        if (state.hasMenuData) {
-          dispatch(fetchHome());
-        } else {
-          dispatch(fetchMenuItems());
-        }
-      }
-    },
-    [dispatch, state.hasMenuData, state.isError, state.isLoading],
-  );
+  const state = useSplashScreenState();
 
   return (
     <>
@@ -59,7 +30,7 @@ const SplashScreen: React.FC<React.PropsWithChildren<{}>> = () => {
             <Text style={styles.errorText} type="error">
               {strings.error_no_connection}
             </Text>
-            <Button title={strings.tryAgain} color={colors.primary} onPress={() => load(true)} />
+            <Button title={strings.tryAgain} color={colors.primary} onPress={() => state.load(true)} />
           </View>
         )}
       </View>

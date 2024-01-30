@@ -1,7 +1,10 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
-import {CarPlay, OnConnectCallback, OnDisconnectCallback, ListTemplate} from 'react-native-carplay';
-import {CarPlayContextType} from './CarPlayContext';
-import createCarListTemplate from './carListTemplate';
+import {useCallback, useEffect, useState} from 'react';
+import {CarPlay, ListTemplate} from 'react-native-carplay';
+import {CarPlayContextType, PlayListItem} from './CarPlayContext';
+import createCarListTemplate from './carPlayListTemplate';
+import createCarPlayNowPlayingTemplate from './carPlayNowPlayingTemplate';
+import createCarPlayGridTemplate from './carPlayGridTemplate';
+import createCarPlayLiveTemplate from './carPlayLiveTemplate';
 
 type ReturnType = CarPlayContextType;
 
@@ -40,10 +43,10 @@ const useCarPlayController = (): ReturnType => {
   // }, [onConnectHandler]);
 
   useEffect(() => {
-    if (isConnected) {
+    if (CarPlay.connected) {
       // CarPlay.bridge.reload();
       console.log('useCarPlayController: settings root template');
-      CarPlay.setRootTemplate(createCarListTemplate());
+      // CarPlay.setRootTemplate(createCarListTemplate());
     } else {
       console.log('useCarPlayController: not connected');
     }
@@ -54,12 +57,12 @@ const useCarPlayController = (): ReturnType => {
       console.log('useCarPlayController: Android Auto connected');
 
       if (CarPlay.connected) {
-        console.log('useCarPlayController: Android Auto connected for real');
+        console.log('useCarPlayController: auto connected for real');
         setConnected(true);
       }
     });
     CarPlay.emitter.addListener('backButtonPressed', () => {
-      console.log('useCarPlayController: Android Auto back button pressed');
+      console.log('useCarPlayController: auto back button pressed');
       CarPlay.popTemplate();
     });
 
@@ -74,6 +77,15 @@ const useCarPlayController = (): ReturnType => {
     };
   }, []);
 
+  const setPlaylist = useCallback((playlist: PlayListItem[]) => {
+    if (CarPlay.connected) {
+      console.log('setPlaylist', playlist);
+      CarPlay.setRootTemplate(createCarPlayLiveTemplate(playlist));
+    } else {
+      console.log('setPlaylist', 'not connected');
+    }
+  }, []);
+
   // useEffect(() => {
   //   CarPlay.registerOnDisconnect(onDisconnectHandler);
   //   return () => CarPlay.unregisterOnDisconnect(onDisconnectHandler);
@@ -81,6 +93,7 @@ const useCarPlayController = (): ReturnType => {
 
   return {
     isConnected: isConnected,
+    setPlaylist,
   };
 };
 

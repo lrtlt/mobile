@@ -1,11 +1,10 @@
 import React, {PropsWithChildren, useEffect} from 'react';
 import {CarPlayContext} from './CarPlayContext';
 import useCarPlayController from './useCarPlayController';
-import {CarPlay} from 'react-native-carplay';
-import {Platform} from 'react-native';
+import CarScreen from './screen/CarScreen';
 
 const CarPlayProvider: React.FC<PropsWithChildren<{}>> = (props) => {
-  const {isConnected} = useCarPlayController();
+  const {isConnected, setPlaylist} = useCarPlayController();
 
   // //TODO: remove this temporary fix later. Think of a better way to handle this.
   // useEffect(() => {
@@ -20,8 +19,9 @@ const CarPlayProvider: React.FC<PropsWithChildren<{}>> = (props) => {
     <CarPlayContext.Provider
       value={{
         isConnected,
+        setPlaylist,
       }}>
-      {props.children}
+      {isConnected ? <CarScreen /> : props.children}
     </CarPlayContext.Provider>
   );
 };
