@@ -62,14 +62,19 @@ export const fetchProgramApi = () => get<ProgramResponse>(programGet());
 
 export const fetchAudiotekaApi = () => get<AudiotekaResponse>(audiotekaGet());
 
-export const fetchNewestApi = (page: number, count: number) =>
-  get<NewestArticlesResponse>(newestArticlesGet(count, page));
+export const fetchNewestApi = (page: number, count: number, date_max?: string, not_id?: string) =>
+  get<NewestArticlesResponse>(newestArticlesGet(count, page, date_max, not_id));
 
-export const fetchPopularApi = (page: number, count: number) =>
-  get<PopularArticlesResponse>(popularArticlesGet(count, page));
+export const fetchPopularApi = (page: number, count: number, date_max?: string, not_id?: string) =>
+  get<PopularArticlesResponse>(popularArticlesGet(count, page, date_max, not_id));
 
-export const fetchCategoryApi = (categoryId: number, count: number, page: number) =>
-  get<CategoryArticlesResponse>(categoryGet(categoryId, count, page));
+export const fetchCategoryApi = (
+  categoryId: number,
+  count: number,
+  page: number,
+  date_max?: string,
+  not_id?: string,
+) => get<CategoryArticlesResponse>(categoryGet(categoryId, count, page, date_max, not_id));
 
 export const fetchWeatherLocations = () => get<ForecastLocation[]>(weatherLocationsGet());
 

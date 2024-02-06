@@ -96,15 +96,19 @@ export type FetchCategoryArticlesAction = {
     categoryId: number;
     count: number;
     page: number;
+    date_max?: string;
+    not_id?: string;
   };
 };
 export const fetchCategory = (
   categoryId: number,
   count: number,
   page: number,
+  date_max?: string,
+  not_id?: string,
 ): FetchCategoryArticlesAction => ({
   type: FETCH_CATEGORY,
-  payload: {categoryId, count, page},
+  payload: {categoryId, count, page, date_max, not_id},
 });
 
 export type RefreshCategoryArticlesAction = {
@@ -142,11 +146,18 @@ export type FetchNewestArticlesAction = {
   payload: {
     page: number;
     count: number;
+    date_max?: string;
+    not_id?: string;
   };
 };
-export const fetchNewest = (page: number, count: number): FetchNewestArticlesAction => ({
+export const fetchNewest = (
+  page: number,
+  count: number,
+  date_max?: string,
+  not_id?: string,
+): FetchNewestArticlesAction => ({
   type: FETCH_NEWEST,
-  payload: {page, count},
+  payload: {page, count, date_max, not_id},
 });
 
 export type RefreshNewestArticlesAction = {
@@ -182,11 +193,18 @@ export type FetchPopularArticlesAction = {
   payload: {
     page: number;
     count: number;
+    date_max?: string;
+    not_id?: string;
   };
 };
-export const fetchPopular = (page: number, count: number): FetchPopularArticlesAction => ({
+export const fetchPopular = (
+  page: number,
+  count: number,
+  date_max?: string,
+  not_id?: string,
+): FetchPopularArticlesAction => ({
   type: FETCH_POPULAR,
-  payload: {page, count},
+  payload: {page, count, date_max, not_id},
 });
 
 export type RefreshPopularArticlesAction = {

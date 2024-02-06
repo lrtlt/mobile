@@ -47,7 +47,7 @@ if (__DEV__) {
 }
 
 export const get = async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
-  const response = await LrtClient.get<T>(url, config);
+  const response = await LrtClient.get<T>(encodeURI(url), config);
   return response.data;
 };
 

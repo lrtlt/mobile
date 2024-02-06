@@ -26,8 +26,24 @@ export const articleGet = (articleId: number | string) => {
 /**
  * Returns article array for a category by it's id.
  */
-export const categoryGet = (id: number | string, count: number, page: number) => {
-  return `${BASE_URL}category?id=${id}&count=${count}&page=${page}`;
+export const categoryGet = (
+  id: number | string,
+  count: number,
+  page: number,
+  date_max?: string,
+  not_id?: string,
+) => {
+  let url = `${BASE_URL}category?id=${id}&count=${count}`;
+  if (page && !date_max && !not_id) {
+    url += `&page=${page}`;
+  }
+  if (date_max) {
+    url += `&date_max=${date_max}`;
+  }
+  if (not_id) {
+    url += `&not_id=${not_id}`;
+  }
+  return url;
 };
 
 export const categoryTopsGet = (id: number | string, count: number) => {
@@ -60,15 +76,35 @@ export const searchArticles = (query: string, filter: SearchFilter) => {
 /**
  * Return array of currently newest articles
  */
-export const newestArticlesGet = (count: number, page: number) => {
-  return `${BASE_URL}articles/top?count=${count}&page=${page}`;
+export const newestArticlesGet = (count: number, page: number, date_max?: string, not_id?: string) => {
+  let url = `${BASE_URL}articles/top?count=${count}`;
+  if (page && !date_max && !not_id) {
+    url += `&page=${page}`;
+  }
+  if (date_max) {
+    url += `&date_max=${date_max}`;
+  }
+  if (not_id) {
+    url += `&not_id=${not_id}`;
+  }
+  return url;
 };
 
 /**
  * Return array of currently most popular articles in last 24 hours
  */
-export const popularArticlesGet = (count: number, page: number) => {
-  return `${BASE_URL}articles/pop24?count=${count}&page=${page}`;
+export const popularArticlesGet = (count: number, page: number, date_max?: string, not_id?: string) => {
+  let url = `${BASE_URL}articles/pop24?count=${count}`;
+  if (page && !date_max && !not_id) {
+    url += `&page=${page}`;
+  }
+  if (date_max) {
+    url += `&date_max=${date_max}`;
+  }
+  if (not_id) {
+    url += `&not_id=${not_id}`;
+  }
+  return url;
 };
 
 /**

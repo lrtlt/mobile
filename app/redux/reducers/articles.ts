@@ -45,6 +45,7 @@ type AudiotekaState = {
 export type PagingState = {
   title: string;
   articles: Article[][];
+  lastArticle?: Article;
   page: number;
 } & BaseBlockState;
 
@@ -303,6 +304,7 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
         page: data.page,
         nextPage: data.next_page,
         articles: articlesList,
+        lastArticle: data.articles?.length ? data.articles[data.articles.length - 1] : undefined,
         lastFetchTime: Date.now(),
         id: savedCategory?.id ?? category_id,
         title: savedCategory?.title ?? category_title,
@@ -328,6 +330,7 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
           title: 'Naujausi',
           isFetching: false,
           isError: false,
+          lastArticle: action.data?.articles[action.data.articles.length - 1],
           isRefreshing: false,
           articles,
           page,
@@ -349,6 +352,7 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
           title: 'Populiariausi',
           isFetching: false,
           isError: false,
+          lastArticle: action.data?.articles[action.data.articles.length - 1],
           isRefreshing: false,
           articles,
           page,

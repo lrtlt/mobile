@@ -12,8 +12,19 @@ const useNewestArticlesProvider: ArticleScreenAdapter = () => {
   const dispatch = useDispatch();
 
   const loadNextPage = useCallback(() => {
-    dispatch(fetchNewest(page + 1, ARTICLES_PER_PAGE_COUNT));
-  }, [dispatch, page]);
+    if (state.lastArticle) {
+      dispatch(
+        fetchNewest(
+          page + 1,
+          ARTICLES_PER_PAGE_COUNT,
+          state.lastArticle.item_date,
+          String(state.lastArticle.id),
+        ),
+      );
+    } else {
+      dispatch(fetchNewest(page + 1, ARTICLES_PER_PAGE_COUNT));
+    }
+  }, [dispatch, page, state.lastArticle]);
 
   const refresh = useCallback(() => {
     dispatch(refreshNewest(ARTICLES_PER_PAGE_COUNT));

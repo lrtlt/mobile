@@ -134,10 +134,10 @@ function* fetchProgramData() {
 }
 
 function* fetchCategoryData(action: FetchCategoryArticlesAction) {
-  const {categoryId, count, page} = action.payload;
+  const {categoryId, count, page, date_max, not_id} = action.payload;
   try {
     const data: CategoryArticlesResponse = yield call(
-      async () => await fetchCategoryApi(categoryId, count, page),
+      async () => await fetchCategoryApi(categoryId, count, page, date_max, not_id),
     );
     data.refresh = false;
     yield put(fetchCategoryResult(data));
@@ -165,8 +165,8 @@ function* refreshCategoryData(action: RefreshCategoryArticlesAction) {
 
 function* fetchNewestData(action: FetchNewestArticlesAction) {
   try {
-    const {page, count} = action.payload;
-    const data: NewestArticlesResponse = yield call(() => fetchNewestApi(page, count));
+    const {page, count, date_max, not_id} = action.payload;
+    const data: NewestArticlesResponse = yield call(() => fetchNewestApi(page, count, date_max, not_id));
     data.refresh = false;
     yield put(fetchNewestResult(data));
   } catch (e) {
@@ -191,8 +191,8 @@ function* refreshNewestData(action: RefreshNewestArticlesAction) {
 
 function* fetchPopularData(action: FetchPopularArticlesAction) {
   try {
-    const {page, count} = action.payload;
-    const data: PopularArticlesResponse = yield call(() => fetchPopularApi(page, count));
+    const {page, count, date_max, not_id} = action.payload;
+    const data: PopularArticlesResponse = yield call(() => fetchPopularApi(page, count, date_max, not_id));
     data.refresh = false;
     yield put(fetchPopularResult(data));
   } catch (e) {

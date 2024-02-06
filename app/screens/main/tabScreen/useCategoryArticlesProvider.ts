@@ -14,11 +14,23 @@ const useCategoryArticlesProvider: ArticleScreenAdapter = (categoryId?: number, 
 
   const loadNextPage = useCallback(() => {
     if (nextPage !== null && categoryId) {
-      dispatch(fetchCategory(categoryId, ARTICLES_PER_PAGE_COUNT, nextPage));
+      if (state.lastArticle) {
+        dispatch(
+          fetchCategory(
+            categoryId,
+            ARTICLES_PER_PAGE_COUNT,
+            nextPage,
+            state.lastArticle.item_date,
+            String(state.lastArticle.id),
+          ),
+        );
+      } else {
+        dispatch(fetchCategory(categoryId, ARTICLES_PER_PAGE_COUNT, nextPage));
+      }
     } else {
       console.warn('Category ID cannot be empty');
     }
-  }, [categoryId, dispatch, nextPage]);
+  }, [categoryId, dispatch, nextPage, state.lastArticle]);
 
   const refresh = useCallback(() => {
     if (categoryId) {
