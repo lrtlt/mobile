@@ -12,8 +12,19 @@ const usePopularArticlesProvider: ArticleScreenAdapter = () => {
   const dispatch = useDispatch();
 
   const loadNextPage = useCallback(() => {
-    dispatch(fetchPopular(page + 1, ARTICLES_PER_PAGE_COUNT));
-  }, [dispatch, page]);
+    if (state.lastArticle) {
+      dispatch(
+        fetchPopular(
+          page + 1,
+          ARTICLES_PER_PAGE_COUNT,
+          state.lastArticle.item_date,
+          String(state.lastArticle.id),
+        ),
+      );
+    } else {
+      dispatch(fetchPopular(page + 1, ARTICLES_PER_PAGE_COUNT));
+    }
+  }, [dispatch, page, state.lastArticle]);
 
   const refresh = useCallback(() => {
     dispatch(refreshPopular(ARTICLES_PER_PAGE_COUNT));

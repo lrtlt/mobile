@@ -1,9 +1,9 @@
 import {HomePageType} from '../../Types';
 import {HomeBlockChannels, ROUTE_TYPE_CATEGORY, ROUTE_TYPE_MEDIA} from '../api/Types';
-import {formatArticles} from '../util/articleFormatters';
 import {RootState} from './reducers';
 import {SavedArticle} from './reducers/articleStorage';
 import {memoize} from 'proxy-memoize';
+import {CategoryState} from './reducers/articles';
 
 export const selectAppIsReady = (state: RootState) => {
   return state.navigation.isReady && state.navigation.routes.length !== 0;
@@ -38,19 +38,22 @@ export const selectPopularArticlesScreenState = (state: RootState) => state.arti
 
 export const selectCategoryScreenState = (categoryId: number, categoryTitle?: string) =>
   memoize((state: RootState) => {
-    return (
-      state.articles.categories.find((category) => category.id === categoryId) ?? {
-        id: categoryId,
-        title: categoryTitle,
-        articles: [],
-        isFetching: false,
-        isRefreshing: false,
-        isError: false,
-        lastFetchTime: 0,
-        page: 0,
-        nextPage: 1,
-      }
-    );
+    const categoryState: CategoryState = state.articles.categories.find(
+      (category) => category.id === categoryId,
+    ) ?? {
+      id: categoryId,
+      title: categoryTitle ?? '-',
+      articles: [],
+      isFetching: false,
+      lastArticle: undefined,
+      isRefreshing: false,
+      isError: false,
+      lastFetchTime: 0,
+      page: 0,
+      nextPage: 1,
+    };
+
+    return categoryState;
   });
 
 export const selectHomeScreenState = (type: HomePageType) =>

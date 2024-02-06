@@ -51,8 +51,7 @@ const ArticleTabScreen: React.FC<Props> = ({
       page: type,
       categoryId: categoryId?.toString(),
     });
-    refresh();
-  }, [categoryId, refresh, type]);
+  }, [categoryId, type]);
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {
