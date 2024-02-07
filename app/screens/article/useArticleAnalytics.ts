@@ -1,5 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
-import {useEffect} from 'react';
 import useNavigationAnalytics, {TrackingParams} from '../../util/useNavigationAnalytics';
 import {ArticleContent, isDefaultArticle} from '../../api/Types';
 
@@ -19,14 +17,14 @@ const articleToTrackingParams = (article?: ArticleContent): TrackingParams | und
 
   if (isDefaultArticle(article)) {
     return {
-      type: `Article`,
+      viewId: `https://www.lrt.lt${article.article_url}`,
       title: `${article.article_title} - LRT`,
       authors: article.article_authors?.map((author) => author.name) ?? undefined,
       sections: !!article.category_title ? [article.category_title] : undefined,
     };
   } else {
     return {
-      type: `Article`,
+      viewId: `https://www.lrt.lt${article.url}`,
       title: `${article.title} - LRT`,
       authors: article.authors?.map((author) => author.name) ?? undefined,
       sections: !!article.category_title ? [article.category_title] : undefined,

@@ -49,8 +49,9 @@ const SlugScreen: React.FC<Props> = ({navigation, route}) => {
   }, []);
 
   useNavigationAnalytics({
-    type: 'Slug',
-    title: slugUrl,
+    viewId: `https://www.lrt.lt/${slugUrl}`,
+    title: name,
+    sections: ['slug'],
   });
 
   const startLoading = () => {

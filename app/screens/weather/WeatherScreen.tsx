@@ -43,8 +43,10 @@ const WeatherScreen: React.FC<Props> = ({navigation}) => {
   }, []);
 
   useNavigationAnalytics({
-    type: `Weather - ${selectedLocation?.n}`,
-    title: `Orų prognozė - ${selectedLocation?.n}`,
+    viewId: `https://www.lrt.lt/orai/${selectedLocation?.c ?? 'vilnius'}`,
+    title: `Orai | ${selectedLocation?.n ?? 'Vilnius'} | ${
+      selectedLocation?.ad ?? 'Vilniaus miesto sav.'
+    } - LRT`,
   });
 
   const handleSelectLocation = useCallback((location: ForecastLocation) => {

@@ -18,6 +18,7 @@ interface Props {
   showBackToHome?: boolean;
   categoryId?: number;
   categoryTitle?: string;
+  categoryUrl?: string;
 }
 
 const TWO_MINUTES = 1000 * 60 * 2;
@@ -29,6 +30,7 @@ const ArticleTabScreen: React.FC<Props> = ({
   showBackToHome,
   categoryId,
   categoryTitle,
+  categoryUrl,
 }) => {
   const provider: ArticleScreenAdapter = useMemo(() => {
     switch (type) {
@@ -46,7 +48,7 @@ const ArticleTabScreen: React.FC<Props> = ({
 
   const {state, loadNextPage, refresh} = provider(categoryId, categoryTitle);
 
-  useArticleTabScreenAnalytics({type, categoryTitle});
+  useArticleTabScreenAnalytics({type, categoryTitle, categoryUrl});
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {

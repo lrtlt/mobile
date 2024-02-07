@@ -46,6 +46,7 @@ export type MainStackParamList = {
   Category: {
     id: number;
     name: string;
+    url: string;
   };
 };
 

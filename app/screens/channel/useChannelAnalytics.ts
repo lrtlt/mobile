@@ -1,7 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import {useEffect} from 'react';
 import useNavigationAnalytics, {TrackingParams} from '../../util/useNavigationAnalytics';
-import {ArticleContent, ChannelResponse, isDefaultArticle} from '../../api/Types';
+import {ChannelResponse} from '../../api/Types';
 
 type Params = {
   channel_response?: ChannelResponse;
@@ -16,10 +14,15 @@ const channelToTrackingParams = (channel_response?: ChannelResponse): TrackingPa
   if (!channel_response) {
     return undefined;
   }
+  const channelTitle = channel_response.channel_info.title;
   return {
-    type: `Channel`,
-    title: `${channel_response.channel_info.title} - LRT Gyvai - LRT`,
+    viewId: channel_response.channel_info.get_streams_url,
+    title: `${channelTitle} - LRT Gyvai - LRT`,
+    sections: ['Gyvai', toTitleCase(channelTitle)],
   };
 };
+
+const toTitleCase = (s: string) =>
+  s.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase());
 
 export default useChannelAnalytics;

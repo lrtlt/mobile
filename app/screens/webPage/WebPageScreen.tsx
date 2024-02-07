@@ -28,8 +28,8 @@ const WebPageScreen: React.FC<Props> = ({route, navigation}) => {
   }, []);
 
   useNavigationAnalytics({
-    type: `WebPage -  ${title}`,
-    title: url,
+    viewId: url,
+    title: `${title} - LRT`,
   });
 
   return (

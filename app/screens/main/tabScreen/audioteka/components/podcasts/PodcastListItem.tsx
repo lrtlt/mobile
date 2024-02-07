@@ -20,6 +20,7 @@ const PodcastListItem: React.FC<Props> = ({style, podcast}) => {
     navigation.navigate('Category', {
       id: podcast.category_id,
       name: podcast.title,
+      url: podcast.category_url,
     });
   }, [navigation, podcast.category_id, podcast.title]);
 

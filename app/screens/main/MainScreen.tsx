@@ -70,6 +70,7 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
         navigation.navigate('Category', {
           id: category.id,
           name: category.title,
+          url: category.url,
         });
       }
     });
@@ -134,6 +135,7 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
               showBackToHome
               categoryId={route.categoryId}
               categoryTitle={route.title}
+              categoryUrl={route.categoryUrl}
             />
           );
         case ROUTE_TYPE_NEWEST:

@@ -24,7 +24,7 @@ export const selectMainScreenState = memoize((state: RootState) => {
   return {
     routes: navigation.routes.map((r) => {
       if (r.type === ROUTE_TYPE_CATEGORY) {
-        return {type: r.type, key: r.name, title: r.name, categoryId: r.id};
+        return {type: r.type, key: r.name, title: r.name, categoryId: r.id, categoryUrl: r.url};
       } else {
         return {type: r.type, key: r.name, title: r.name};
       }

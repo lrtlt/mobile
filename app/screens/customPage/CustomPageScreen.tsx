@@ -28,8 +28,8 @@ const CustomPageScreen: React.FC<Props> = ({navigation, route}) => {
   }));
 
   useNavigationAnalytics({
-    type: `Page -  ${page.type}`,
-    title: page.name,
+    viewId: `Lrt app - Page -  ${page.type}`,
+    title: `Lrt app - Page - ${page.name}`,
   });
 
   useEffect(() => {

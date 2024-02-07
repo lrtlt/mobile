@@ -54,8 +54,9 @@ const ProgramScreen: React.FC<Props> = ({navigation}) => {
   }, []);
 
   useNavigationAnalytics({
-    type: 'TVProgram',
-    title: 'TV Programa',
+    viewId: 'https://www.lrt.lt/programa',
+    title: 'TV / Radijo programa savaitei - LRT',
+    sections: ['Bendra'],
   });
 
   useAppStateCallback(

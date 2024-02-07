@@ -43,8 +43,9 @@ const BookmarksScreen: React.FC<Props> = ({navigation}) => {
   };
 
   useNavigationAnalytics({
-    type: 'Bookmarks',
-    title: 'Išsaugoti straipsniai',
+    viewId: 'Lrt app - Bookmarks',
+    title: 'Lrt app - Išsaugoti straipsniai',
+    sections: ['Bendra'],
   });
 
   return (

@@ -43,8 +43,8 @@ const GalleryScreen: React.FC<Props> = ({route, navigation}) => {
   useNavigationAnalytics(
     useMemo(
       () => ({
-        type: 'Gallery',
-        title: 'Galleria',
+        viewId: 'Lrt app - Gallery',
+        title: 'Lrt app - Nuotraukų galerija',
       }),
       [],
     ),

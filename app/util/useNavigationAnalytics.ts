@@ -6,7 +6,7 @@ import {debounce} from 'lodash';
 const EVENT_DEBOUNCE_DURATION = 200;
 
 export type TrackingParams = {
-  type: string;
+  viewId: string;
   title?: string;
   authors?: string[];
   sections?: string[];
@@ -18,10 +18,10 @@ const useNavigationAnalytics = (params?: TrackingParams) => {
   const pushToAnalytics = useMemo(
     () =>
       debounce((p: TrackingParams) => {
-        //console.log(`ANALYTICS - Lrt.lt app - ${p.title}`);
+        // console.log('#Analytics', p);
         ChartbeatTracker.trackView({
-          viewId: `Lrt.lt app - ${p.type}`,
-          title: `Lrt.lt app - ${p.title}`,
+          viewId: p.viewId,
+          title: p.title,
           authors: p.authors,
           sections: p.sections,
         });

@@ -54,8 +54,12 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
   }, []);
 
   useNavigationAnalytics({
-    type: type === ROUTE_TYPE_MEDIA ? 'Mediateka' : 'Home',
-    title: type === ROUTE_TYPE_MEDIA ? 'Mediateka' : 'Pagrindinis',
+    viewId: type === ROUTE_TYPE_MEDIA ? 'https://www.lrt.lt/mediateka' : 'https://www.lrt.lt/',
+    title:
+      type === ROUTE_TYPE_MEDIA
+        ? 'Mediateka - LRT'
+        : 'Lietuvos nacionalinis radijas ir televizija. Naujienos, įrašai ir transliacijos. - LRT',
+    sections: type == ROUTE_TYPE_MEDIA ? ['mediateka_home'] : ['/lrt'],
   });
 
   useEffect(() => {

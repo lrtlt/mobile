@@ -34,6 +34,7 @@ const CategoryBlock: React.FC<Props> = ({data}) => {
       navigation.navigate('Category', {
         id: data.category_id,
         name: data.category_title,
+        url: data.category_url,
       });
     } else {
       navigation.navigate('Slug', {

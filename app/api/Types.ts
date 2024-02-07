@@ -31,6 +31,7 @@ export type MenuItemCategory = {
   type: typeof ROUTE_TYPE_CATEGORY;
   name: string;
   id: number;
+  url: string;
 };
 
 export type MenuItemProjects = {

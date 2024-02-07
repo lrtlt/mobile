@@ -16,8 +16,8 @@ type Props = {
 
 const CommentsScreen: React.FC<Props> = ({route}) => {
   useNavigationAnalytics({
-    type: 'Comments',
-    title: 'Komentarai',
+    viewId: 'Lrt app - Komentarai',
+    title: 'Lrt app - Komentarai',
   });
 
   return (

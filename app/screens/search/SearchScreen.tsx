@@ -54,8 +54,9 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
   }, [callSearchApiWithDebounce, filter, query]);
 
   useNavigationAnalytics({
-    type: 'Search',
-    title: 'Paieška',
+    viewId: 'https://www.lrt.lt/paieska',
+    title: 'Paieška - LRT',
+    sections: ['Bendra'],
   });
 
   useEffect(() => {
@@ -90,7 +91,11 @@ const SearchScreen: React.FC<Props> = ({navigation, route}) => {
   const searchSuggestionPressHandler = useCallback(
     (suggestion: SearchCategorySuggestion) => {
       if (suggestion.category_id) {
-        navigation.navigate('Category', {id: suggestion.category_id, name: suggestion.category_title});
+        navigation.navigate('Category', {
+          id: suggestion.category_id,
+          name: suggestion.category_title,
+          url: 'missing category url on suggestion',
+        });
       }
     },
     [navigation],
