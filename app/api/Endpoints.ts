@@ -93,18 +93,8 @@ export const newestArticlesGet = (count: number, page: number, date_max?: string
 /**
  * Return array of currently most popular articles in last 24 hours
  */
-export const popularArticlesGet = (count: number, page: number, date_max?: string, not_id?: string) => {
-  let url = `${BASE_URL}articles/pop24?count=${count}`;
-  if (page && !date_max && !not_id) {
-    url += `&page=${page}`;
-  }
-  if (date_max) {
-    url += `&date_max=${date_max}`;
-  }
-  if (not_id) {
-    url += `&not_id=${not_id}`;
-  }
-  return url;
+export const popularArticlesGet = (count: number, page: number) => {
+  return `${BASE_URL}articles/pop24?count=${count}&page=${page}`;
 };
 
 /**

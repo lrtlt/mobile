@@ -191,8 +191,8 @@ function* refreshNewestData(action: RefreshNewestArticlesAction) {
 
 function* fetchPopularData(action: FetchPopularArticlesAction) {
   try {
-    const {page, count, date_max, not_id} = action.payload;
-    const data: PopularArticlesResponse = yield call(() => fetchPopularApi(page, count, date_max, not_id));
+    const {page, count} = action.payload;
+    const data: PopularArticlesResponse = yield call(() => fetchPopularApi(page, count));
     data.refresh = false;
     yield put(fetchPopularResult(data));
   } catch (e) {

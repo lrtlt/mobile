@@ -65,8 +65,8 @@ export const fetchAudiotekaApi = () => get<AudiotekaResponse>(audiotekaGet());
 export const fetchNewestApi = (page: number, count: number, date_max?: string, not_id?: string) =>
   get<NewestArticlesResponse>(newestArticlesGet(count, page, date_max, not_id));
 
-export const fetchPopularApi = (page: number, count: number, date_max?: string, not_id?: string) =>
-  get<PopularArticlesResponse>(popularArticlesGet(count, page, date_max, not_id));
+export const fetchPopularApi = (page: number, count: number) =>
+  get<PopularArticlesResponse>(popularArticlesGet(count, page));
 
 export const fetchCategoryApi = (
   categoryId: number,

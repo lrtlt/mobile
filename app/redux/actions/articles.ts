@@ -193,18 +193,11 @@ export type FetchPopularArticlesAction = {
   payload: {
     page: number;
     count: number;
-    date_max?: string;
-    not_id?: string;
   };
 };
-export const fetchPopular = (
-  page: number,
-  count: number,
-  date_max?: string,
-  not_id?: string,
-): FetchPopularArticlesAction => ({
+export const fetchPopular = (page: number, count: number): FetchPopularArticlesAction => ({
   type: FETCH_POPULAR,
-  payload: {page, count, date_max, not_id},
+  payload: {page, count},
 });
 
 export type RefreshPopularArticlesAction = {

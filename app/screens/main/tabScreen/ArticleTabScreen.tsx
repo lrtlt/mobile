@@ -20,6 +20,8 @@ interface Props {
   categoryTitle?: string;
 }
 
+const TWO_MINUTES = 1000 * 60 * 2;
+
 const ArticleTabScreen: React.FC<Props> = ({
   isCurrent,
   type,
@@ -51,6 +53,10 @@ const ArticleTabScreen: React.FC<Props> = ({
       page: type,
       categoryId: categoryId?.toString(),
     });
+
+    if (Date.now() - state.lastFetchTime > TWO_MINUTES) {
+      refresh();
+    }
   }, [categoryId, type]);
 
   useEffect(() => {
