@@ -1225,10 +1225,11 @@ PODS:
   - react-native-slider (4.5.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - react-native-theoplayer (3.6.0):
+  - react-native-theoplayer (3.7.1):
     - React-Core
-    - THEOplayer-Integration-GoogleCast (~> 6.0)
-    - THEOplayerSDK-core (~> 6.0)
+    - THEOplayer-Integration-GoogleCast/Base (~> 6.9)
+    - THEOplayer-Integration-GoogleCast/Dependencies (~> 6.9)
+    - THEOplayerSDK-core (~> 6.9)
   - react-native-webview (13.6.3):
     - React-Core
   - React-NativeModulesApple (0.72.6):
@@ -1391,9 +1392,10 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.6.1)
-  - THEOplayer-Integration-GoogleCast (6.8.1):
+  - THEOplayer-Integration-GoogleCast/Base (6.9.0)
+  - THEOplayer-Integration-GoogleCast/Dependencies (6.9.0):
     - google-cast-sdk-dynamic-xcframework (~> 4.7.1)
-  - THEOplayerSDK-core (6.8.1)
+  - THEOplayerSDK-core (6.9.0)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -1693,7 +1695,7 @@ SPEC CHECKSUMS:
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   react-native-slider: 4d4f9b0a0de2f5ebe70b72cd760fdb6df0e267e2
-  react-native-theoplayer: 4a395399170eb2bf84532a7c369b1b1ec1a259ce
+  react-native-theoplayer: 972e07247531cfa29b089205912772fb29d17fce
   react-native-webview: 88293a0f23eca8465c0433c023ec632930e644d0
   React-NativeModulesApple: 1802a680a4cd891d2ab97780771bcb2ff11fdc0b
   React-perflogger: e3596db7e753f51766bceadc061936ef1472edc3
@@ -1729,8 +1731,8 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  THEOplayer-Integration-GoogleCast: 2160a8c8a0f4a738180f99f8b239a5c3a50893b6
-  THEOplayerSDK-core: e27b7b22cffdabdbb3bbc29f0338842e2c94d4bb
+  THEOplayer-Integration-GoogleCast: e17210b2b67eb3ed20a6b2766e5ddd1be6c3be30
+  THEOplayerSDK-core: df300b41fbedb365e3d83eb4e2356acd07921d1b
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
 
 PODFILE CHECKSUM: f24006cb0107066d8c7b618389991275fdd84b11

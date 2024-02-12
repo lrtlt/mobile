@@ -1,5 +1,13 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator, ImageBackground, Platform, StyleSheet, View, ViewStyle} from 'react-native';
+import {
+  ActivityIndicator,
+  BackHandler,
+  ImageBackground,
+  Platform,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {
   PlayerConfiguration,
   SourceDescription,
@@ -13,6 +21,7 @@ import {
   AspectRatio,
   ABRStrategyType,
   ReadyStateChangeEvent,
+  PresentationMode,
 } from 'react-native-theoplayer';
 import MediaControls from './MediaControls';
 import {useVideo} from './context/useVideo';
@@ -108,6 +117,17 @@ const TheoMediaPlayer: React.FC<Props> = ({
       }
     };
   }, [streamUri]);
+
+  useEffect(() => {
+    const handler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (player && player.presentationMode === PresentationMode.fullscreen) {
+        player.presentationMode = PresentationMode.inline;
+        return true;
+      }
+      return false;
+    });
+    return () => handler.remove();
+  }, [player]);
 
   const {client, mediaStatus} = useChromecast({
     player: player,
@@ -295,7 +315,15 @@ const TheoMediaPlayer: React.FC<Props> = ({
     }
   }, [player, client, mediaStatus, setIsPausedByUser]);
 
-  const _fullScreenControl = useCallback(() => setIsFullScreen(!isFullScreen), [isFullScreen]);
+  const _fullScreenControl = useCallback(() => {
+    if (player) {
+      if (player.presentationMode === PresentationMode.fullscreen) {
+        player.presentationMode = PresentationMode.inline;
+      } else {
+        player.presentationMode = PresentationMode.fullscreen;
+      }
+    }
+  }, [player]);
 
   const _seekControl = useCallback(
     (time) => {
@@ -335,29 +363,32 @@ const TheoMediaPlayer: React.FC<Props> = ({
             </View>
           )}
           {!isLoading && player ? (
-            <MediaControls
-              enabled={true}
-              currentTime={getCurrentTime() / 1000}
-              mediaDuration={duration / 1000}
-              isMuted={player.muted ?? false}
-              isPaused={mediaStatus ? mediaStatus?.playerState === MediaPlayerState.PAUSED : player.paused}
-              loading={isLoading}
-              isBuffering={player.seeking && !player.paused}
-              enableFullScreen={mediaType == MediaType.VIDEO}
-              enableMute={false}
-              seekerStart={player.seekable[0].start / 1000}
-              seekerEnd={player.seekable[0].end / 1000}
-              title={title}
-              onPlayPausePress={_playPauseControl}
-              onMutePress={() => {}}
-              onFullScreenPress={_fullScreenControl}
-              onSeekRequest={_seekControl}
-              onSeekByRequest={_seekByControl}
-              extraControls={LanguageButton}
-            />
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <MediaControls
+                enabled={true}
+                currentTime={getCurrentTime() / 1000}
+                mediaDuration={duration / 1000}
+                isMuted={player.muted ?? false}
+                isPaused={mediaStatus ? mediaStatus?.playerState === MediaPlayerState.PAUSED : player.paused}
+                loading={isLoading}
+                isBuffering={player.seeking && !player.paused}
+                enableFullScreen={mediaType == MediaType.VIDEO}
+                enableMute={false}
+                seekerStart={player.seekable[0].start / 1000}
+                seekerEnd={player.seekable[0].end / 1000}
+                title={title}
+                onPlayPausePress={_playPauseControl}
+                onMutePress={() => {}}
+                onFullScreenPress={_fullScreenControl}
+                onSeekRequest={_seekControl}
+                onSeekByRequest={_seekByControl}
+                extraControls={LanguageButton}
+              />
+            </View>
           ) : null}
         </>
       </THEOplayerView>
+
       {LanguageMenu}
     </View>
   );
