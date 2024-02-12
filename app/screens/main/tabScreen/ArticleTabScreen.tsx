@@ -56,7 +56,7 @@ const ArticleTabScreen: React.FC<Props> = ({
       categoryId: categoryId?.toString(),
     });
 
-    if (Date.now() - state.lastFetchTime > TWO_MINUTES) {
+    if (!!state.lastFetchTime && Date.now() - state.lastFetchTime > TWO_MINUTES) {
       refresh();
     }
   }, [categoryId, type]);
