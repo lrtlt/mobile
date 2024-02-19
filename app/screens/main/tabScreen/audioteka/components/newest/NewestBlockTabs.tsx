@@ -9,7 +9,7 @@ interface Props {
   onCategorySelected: (category: AudiotekaNewestCategory) => void;
 }
 
-const NewestBlockTabs: React.FC<Props> = ({data, onCategorySelected}) => {
+const NewestBlockTabs: React.FC<React.PropsWithChildren<Props>> = ({data, onCategorySelected}) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const tabs = useMemo(

@@ -11,7 +11,7 @@ interface Props {
   title: string;
 }
 
-const DrawerCollapsibleBlock: React.FC<Props> = ({title, children}) => {
+const DrawerCollapsibleBlock: React.FC<React.PropsWithChildren<Props>> = ({title, children}) => {
   const [collapsed, setCollapsed] = useState(true);
 
   const {colors, dim} = useTheme();

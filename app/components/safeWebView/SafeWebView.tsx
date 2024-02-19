@@ -10,7 +10,7 @@ interface Props extends WebViewProps {
 /**
  * Component extending default WebView applying fixes for android crashes.
  */
-const SafeWebView: React.FC<Props> = forwardRef<WebView, Props>((props, ref) => {
+const SafeWebView: React.FC<React.PropsWithChildren<Props>> = forwardRef<WebView, Props>((props, ref) => {
   const {dark} = useTheme();
 
   return (
@@ -22,7 +22,6 @@ const SafeWebView: React.FC<Props> = forwardRef<WebView, Props>((props, ref) => 
         domStorageEnabled={true}
         javaScriptEnabled={true}
         forceDarkOn={dark && props.allowDarkMode}
-        androidHardwareAccelerationDisabled={false}
         androidLayerType="hardware"
         automaticallyAdjustContentInsets={false}
         bounces={false}

@@ -30,7 +30,7 @@ interface Props {
   onChannelPress: (channel: ChannelDataType) => void;
 }
 
-const ScrollingChannels: React.FC<Props> = ({onChannelPress}) => {
+const ScrollingChannels: React.FC<React.PropsWithChildren<Props>> = ({onChannelPress}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const {colors, strings} = useTheme();

@@ -13,7 +13,7 @@ interface Props {
   itemPressHandler: (item: ArticleSelectableItem) => void;
 }
 
-const ArticleContentItem: React.FC<Props> = ({data, itemPressHandler}) => {
+const ArticleContentItem: React.FC<React.PropsWithChildren<Props>> = ({data, itemPressHandler}) => {
   const {p, embed} = data;
 
   return (

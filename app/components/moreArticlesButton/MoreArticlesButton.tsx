@@ -10,7 +10,11 @@ interface Props {
   onPress: () => void;
 }
 
-const MoreArticlesButton: React.FC<Props> = ({backgroundColor, customText, onPress}) => {
+const MoreArticlesButton: React.FC<React.PropsWithChildren<Props>> = ({
+  backgroundColor,
+  customText,
+  onPress,
+}) => {
   const {colors, strings} = useTheme();
 
   const extraPadding = backgroundColor ? 8 : 0;

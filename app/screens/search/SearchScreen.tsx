@@ -31,7 +31,7 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const SearchScreen: React.FC<Props> = ({navigation, route}) => {
+const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const {query, setQuery, filter, setFilter} = useSearch();
   const {loadingState, searchResults, searchSuggestions, callSearchApi} = useSearchApi();
   const {colors, strings, dim} = useTheme();

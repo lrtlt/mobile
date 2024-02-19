@@ -14,7 +14,7 @@ interface Props {
   items?: (MenuItem | MenuItemCategory)[];
 }
 
-const DrawerBlockNews: React.FC<Props> = ({items, navigation}) => {
+const DrawerBlockNews: React.FC<React.PropsWithChildren<Props>> = ({items, navigation}) => {
   const {strings} = useTheme();
 
   const dispatch = useDispatch();

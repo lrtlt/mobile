@@ -25,7 +25,11 @@ interface Props {
   audioStreamData?: StreamData;
 }
 
-const ChannelComponent: React.FC<Props> = ({channelData, streamData, audioStreamData}) => {
+const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
+  channelData,
+  streamData,
+  audioStreamData,
+}) => {
   const [selectedStream, setSelectedStream] = useState(streamData);
 
   const {channel_info, prog} = channelData;

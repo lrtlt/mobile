@@ -1,8 +1,8 @@
 //
 //  NotificationService.h
-//  OneSignalNotificationServiceExtension
+//  FCMImageNotification
 //
-//  Created by Kestas Venslauskas on 2020-10-29.
+//  Created by Kestas Venslauskas on 19/02/2024.
 //
 
 #import <UserNotifications/UserNotifications.h>

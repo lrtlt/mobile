@@ -26,7 +26,7 @@ type Props = {
 
 export const PROGRAM_RELOAD_TIME = 1000 * 60 * 2; //2 minutes
 
-const ChannelScreen: React.FC<Props> = ({navigation, route}) => {
+const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const [selectedChannel, setSelectedChannel] = useState(route.params.channelId);
 
   const {

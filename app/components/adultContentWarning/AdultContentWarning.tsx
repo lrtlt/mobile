@@ -8,7 +8,7 @@ interface Props {
   onAccept: () => void;
   onDecline: () => void;
 }
-const AdultContentWarningComponent: React.FC<Props> = ({onAccept, onDecline}) => {
+const AdultContentWarningComponent: React.FC<React.PropsWithChildren<Props>> = ({onAccept, onDecline}) => {
   const {colors} = useTheme();
 
   return (

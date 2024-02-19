@@ -7,7 +7,7 @@ interface Props {
   title: string;
   color?: string;
 }
-const SlugHeader: React.FC<Props> = ({title, color}) => {
+const SlugHeader: React.FC<React.PropsWithChildren<Props>> = ({title, color}) => {
   const {colors} = useTheme();
 
   return (

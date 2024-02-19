@@ -44,7 +44,6 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
     <View style={style}>
       <TheoMediaPlayer
         key={`${streamUri}-${errorCount}`}
-        style={style}
         streamUri={streamUri}
         title={title}
         isLiveStream={isLiveStream}

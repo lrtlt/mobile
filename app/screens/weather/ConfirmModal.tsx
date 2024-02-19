@@ -12,7 +12,7 @@ interface Props {
   onCancel: () => void;
 }
 
-const ConfirmModal: React.FC<Props> = (props) => {
+const ConfirmModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
 
   return (

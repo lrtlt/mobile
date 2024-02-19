@@ -84,7 +84,7 @@ type Props = {
   onPress: () => void;
 };
 
-const LanguageButton: React.FC<Props> = ({audioTracks, onPress}: Props) => {
+const LanguageButton: React.FC<React.PropsWithChildren<Props>> = ({audioTracks, onPress}: Props) => {
   if (audioTracks.length < 2) {
     return null;
   } else {

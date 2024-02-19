@@ -10,7 +10,12 @@ type Props = TouchableOpacityProps &
 
 const noOp = () => {};
 
-const TouchableDebounce: React.FC<Props> = ({debounceTime, onPress, children, ...rest}) => {
+const TouchableDebounce: React.FC<React.PropsWithChildren<Props>> = ({
+  debounceTime,
+  onPress,
+  children,
+  ...rest
+}) => {
   const debouncedOnPress = useMemo(
     () =>
       debounce(onPress ?? noOp, debounceTime, {

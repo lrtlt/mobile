@@ -147,7 +147,7 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
   );
 };
 
-const HTMLRenderer: React.FC<Props> = ({html, textSize}) => {
+const HTMLRenderer: React.FC<React.PropsWithChildren<Props>> = ({html, textSize}) => {
   const {width} = useWindowDimensions();
   const {colors} = useTheme();
 

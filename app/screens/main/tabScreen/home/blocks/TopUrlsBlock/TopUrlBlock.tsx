@@ -14,7 +14,7 @@ type Props = {
   block: AudiotekaTopUrlList;
 };
 
-const TopUrlBlock: React.FC<Props> = ({block}) => {
+const TopUrlBlock: React.FC<React.PropsWithChildren<Props>> = ({block}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const dispatch = useDispatch();
 

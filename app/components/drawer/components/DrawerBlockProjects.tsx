@@ -14,7 +14,7 @@ interface Props {
   projectBlocks?: MenuItemProjects[];
 }
 
-const DrawerBlockProjects: React.FC<Props> = ({projectBlocks, navigation}) => {
+const DrawerBlockProjects: React.FC<React.PropsWithChildren<Props>> = ({projectBlocks, navigation}) => {
   const {dim} = useTheme();
 
   return (

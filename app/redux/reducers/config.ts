@@ -13,7 +13,6 @@ import {
 export type ConfigState = {
   isDarkMode: boolean;
   textSizeMultiplier: number;
-  imageMaxScaleFactor: number;
   forecastLocation?: ForecastLocation;
 
   daily_question_response?: {
@@ -30,7 +29,6 @@ export type ConfigState = {
 const initialState = {
   isDarkMode: false,
   textSizeMultiplier: 0,
-  imageMaxScaleFactor: -0.1,
   forecastLocation: undefined,
 };
 
@@ -54,12 +52,6 @@ const reducer = (state: ConfigState = initialState, action: ConfigActionType): C
       return newState;
     }
 
-    case SET_IMAGE_SCALE_FACTOR: {
-      return {
-        ...state,
-        imageMaxScaleFactor: action.scaleFactor,
-      };
-    }
     case SET_CONFIG: {
       return {...state, ...action.payload};
     }

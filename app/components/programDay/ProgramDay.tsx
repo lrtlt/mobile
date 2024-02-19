@@ -19,7 +19,7 @@ interface Props {
   dateString: string;
 }
 
-const ProgramDay: React.FC<Props> = (props) => {
+const ProgramDay: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {strings} = useTheme();
 
   const date = moment(props.dateString, 'YYYY-MM-DD');

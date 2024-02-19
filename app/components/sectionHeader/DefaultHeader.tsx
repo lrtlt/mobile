@@ -7,7 +7,7 @@ interface Props {
   title?: string;
 }
 
-const DefaultHeader: React.FC<Props> = ({title}) => {
+const DefaultHeader: React.FC<React.PropsWithChildren<Props>> = ({title}) => {
   const {colors} = useTheme();
 
   return (

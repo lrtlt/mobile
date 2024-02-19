@@ -25,13 +25,11 @@ const sizes = [IMG_SIZE_XXS, IMG_SIZE_XS, IMG_SIZE_S, IMG_SIZE_M, IMG_SIZE_L, IM
 
 //Finds the image size for given width by finding smallest width offset.
 export const getImageSizeForWidth = (width: number) => {
-  const MAX_AVAILABLE_SCALE_FACTOR = store.getState().config.imageMaxScaleFactor;
-
   return (
     sizes.find((s) => {
-      const maxAvailableOffset = s.width - s.width * (1.0 - MAX_AVAILABLE_SCALE_FACTOR);
-      return s.width + maxAvailableOffset >= width;
-    }) || IMG_SIZE_L
+      const offset = 100;
+      return s.width + offset >= width;
+    }) || IMG_SIZE_M
   );
 };
 

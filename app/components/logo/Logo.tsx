@@ -13,7 +13,11 @@ interface Props {
   useOnlyInternal?: boolean;
 }
 
-const LogoComponent: React.FC<Props> = ({width = 60, height = 32, useOnlyInternal = false}) => {
+const LogoComponent: React.FC<React.PropsWithChildren<Props>> = ({
+  width = 60,
+  height = 32,
+  useOnlyInternal = false,
+}) => {
   const {isDarkMode} = useSettings();
 
   const logo = useSelector(selectLogo);

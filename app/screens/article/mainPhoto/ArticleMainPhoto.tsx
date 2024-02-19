@@ -10,7 +10,11 @@ interface Props {
   itemPressHandler: (item: ArticleSelectableItem) => void;
 }
 
-const ArticleMainPhoto: React.FC<Props> = ({contentWidth, data, itemPressHandler}) => {
+const ArticleMainPhoto: React.FC<React.PropsWithChildren<Props>> = ({
+  contentWidth,
+  data,
+  itemPressHandler,
+}) => {
   return (
     <TouchableDebounce
       onPress={() =>

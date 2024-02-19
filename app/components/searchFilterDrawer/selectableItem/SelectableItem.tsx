@@ -9,7 +9,7 @@ interface Props {
   onPress: () => void;
 }
 
-const SelectableItem: React.FC<Props> = (props) => {
+const SelectableItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
 
   return (

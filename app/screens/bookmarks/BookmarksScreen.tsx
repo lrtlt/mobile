@@ -19,7 +19,7 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const BookmarksScreen: React.FC<Props> = ({navigation}) => {
+const BookmarksScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const bookmarkedArticles = useSelector(selectBookmarkedArticles);
 
   const articles = useMemo(() => formatArticles(-1, bookmarkedArticles, false), [bookmarkedArticles]);

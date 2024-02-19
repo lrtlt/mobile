@@ -6,7 +6,7 @@ export interface Props {
   text: string;
 }
 
-const TestScreen: React.FC<Props> = (props) => {
+const TestScreen: React.FC<React.PropsWithChildren<Props>> = (props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text} type="secondary">

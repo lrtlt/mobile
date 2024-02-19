@@ -19,7 +19,7 @@ interface Props {
   onPlayStateChange: (play: boolean) => void;
 }
 
-const ArticleHeader: React.FC<Props> = ({
+const ArticleHeader: React.FC<React.PropsWithChildren<Props>> = ({
   author,
   category,
   title,

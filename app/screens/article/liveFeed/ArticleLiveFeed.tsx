@@ -19,7 +19,7 @@ interface Props {
 
 const ITEM_COUNT_INCREMENT = 5;
 
-const ArticleLiveFeed: React.FC<Props> = ({id}) => {
+const ArticleLiveFeed: React.FC<React.PropsWithChildren<Props>> = ({id}) => {
   const [countDown, setCountDown] = useState(60);
   const [itemCount, setItemCount] = useState(ITEM_COUNT_INCREMENT);
   const {state, reload} = useLiveFeedState(id);

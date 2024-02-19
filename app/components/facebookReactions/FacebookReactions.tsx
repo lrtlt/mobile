@@ -10,7 +10,7 @@ interface Props {
   count?: number | string;
 }
 
-const FacebookReactions: React.FC<Props> = ({style, count}) => {
+const FacebookReactions: React.FC<React.PropsWithChildren<Props>> = ({style, count}) => {
   const {colors} = useTheme();
   const {textSizeMultiplier} = useSettings();
 

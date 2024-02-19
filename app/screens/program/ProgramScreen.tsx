@@ -28,7 +28,7 @@ const STATE_LOADING = 'loading';
 const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
-const ProgramScreen: React.FC<Props> = ({navigation}) => {
+const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoadingSelection, setIsLoadingSelection] = useState(false);
 

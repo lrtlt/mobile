@@ -8,7 +8,7 @@ import {IconError, IconInfo, IconPhone, IconUpload} from '../../svg';
 
 interface Props {}
 
-const DrawerBlockFooter: React.FC<Props> = () => {
+const DrawerBlockFooter: React.FC<React.PropsWithChildren<Props>> = () => {
   const {colors, strings, dim} = useTheme();
 
   const handleUploadNewsClick = useCallback(() => Linking.openURL(URL_UPLOAD_NEWS), []);

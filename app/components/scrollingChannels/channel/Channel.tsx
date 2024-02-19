@@ -17,7 +17,7 @@ interface Props {
   onPress: (channel: TVChannel | LiveChannel) => void;
 }
 
-const Channel: React.FC<Props> = ({data, onPress}) => {
+const Channel: React.FC<React.PropsWithChildren<Props>> = ({data, onPress}) => {
   const {colors, dark} = useTheme();
 
   const colorsSet = getColorsForChannel(data.channel, channelColors.color_set_lrtLT);

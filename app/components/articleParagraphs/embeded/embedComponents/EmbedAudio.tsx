@@ -9,7 +9,7 @@ interface Props {
   data: ArticleEmbedAudioType[];
 }
 
-const EmbedAudio: React.FC<Props> = ({data}) => {
+const EmbedAudio: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
   return (
     <View>
       {data.map(

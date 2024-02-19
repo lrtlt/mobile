@@ -7,7 +7,7 @@ interface Props {
   textSize?: number;
 }
 
-const ArticleParagraph: React.FC<Props> = ({htmlText = '', textSize}) => {
+const ArticleParagraph: React.FC<React.PropsWithChildren<Props>> = ({htmlText = '', textSize}) => {
   return (
     <View style={styles.container}>
       <HTMLRenderer html={htmlText} textSize={textSize} />

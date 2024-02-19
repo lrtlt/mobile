@@ -23,7 +23,7 @@ interface Props {
 
 const TWO_MINUTES = 1000 * 60 * 2;
 
-const ArticleTabScreen: React.FC<Props> = ({
+const ArticleTabScreen: React.FC<React.PropsWithChildren<Props>> = ({
   isCurrent,
   type,
   showTitle,

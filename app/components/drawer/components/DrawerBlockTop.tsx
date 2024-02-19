@@ -10,7 +10,7 @@ interface Props {
   navigation: DrawerNavigationHelpers;
 }
 
-const DrawerBlockTop: React.FC<Props> = ({navigation}) => {
+const DrawerBlockTop: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const {colors, strings, dim} = useTheme();
 
   const handleSearchClick = useCallback(() => navigation.navigate('Search'), [navigation]);

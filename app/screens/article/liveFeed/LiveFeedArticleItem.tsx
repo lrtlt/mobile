@@ -7,7 +7,7 @@ interface Props {
   article: LiveFeedArticle;
 }
 
-const LiveFeedArticleItem: React.FC<Props> = ({article}) => {
+const LiveFeedArticleItem: React.FC<React.PropsWithChildren<Props>> = ({article}) => {
   const theme = useTheme();
   return (
     <View key={article.id} style={{...styles.container, backgroundColor: theme.colors.lightGreyBackground}}>

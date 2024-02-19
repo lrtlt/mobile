@@ -7,7 +7,7 @@ interface Props {
   style?: ViewStyle;
   size: 'small' | 'big';
 }
-const MediaIndicator: React.FC<Props> = ({style, size}) => {
+const MediaIndicator: React.FC<React.PropsWithChildren<Props>> = ({style, size}) => {
   const {colors} = useTheme();
   return (
     <View

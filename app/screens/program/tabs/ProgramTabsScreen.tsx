@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
-import {TabView, TabBar} from 'react-native-tab-view';
+import {TabView, TabBar, TabViewProps} from 'react-native-tab-view';
 import {getIconForChannelById} from '../../../util/UI';
 import {useTheme} from '../../../Theme';
 import {ProgramItemType, SingleDayProgram} from '../../../api/Types';
@@ -18,7 +18,7 @@ type Route = {
   program: ProgramItemType[];
 };
 
-const TabsScreen: React.FC<Props> = ({program}) => {
+const TabsScreen: React.FC<React.PropsWithChildren<Props>> = ({program}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const {colors} = useTheme();
 
@@ -43,7 +43,7 @@ const TabsScreen: React.FC<Props> = ({program}) => {
   }, []);
 
   const renderTabBar = useCallback(
-    (tabBarProps) => {
+    (tabBarProps: any) => {
       return (
         <TabBar
           {...tabBarProps}
@@ -60,13 +60,13 @@ const TabsScreen: React.FC<Props> = ({program}) => {
     [renderTabLabel],
   );
 
-  const renderScene = useCallback(
+  const renderScene: TabViewProps<Route>['renderScene'] = useCallback(
     ({route}) => {
       if (Math.abs(currentIndex - routes.indexOf(route)) > 0) {
         return <View key={`${route.key}-foo`} />;
       }
 
-      const programItems = (route as Route).program;
+      const programItems = route.program;
 
       const currentProgramIndex = programItems?.findIndex((i) => {
         const proc = Math.max(0, Math.min(Number(i.proc), 100));

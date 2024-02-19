@@ -129,7 +129,6 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'com.onesignal:OneSignal:[5.0.0, 5.99.99]'
 
     implementation "com.google.android.gms:play-services-cast-framework:${safeExtGet('castFrameworkVersion', '+')}"
 

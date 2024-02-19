@@ -11,7 +11,7 @@ export type FullScreenListener = {
   onFullScreenExit: () => void;
 };
 
-const VideoProvider: React.FC = (props) => {
+const VideoProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
   const [videoBaseData, setVideoBaseData] = useState<VideoBaseData>({mediaType: MediaType.VIDEO});
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);

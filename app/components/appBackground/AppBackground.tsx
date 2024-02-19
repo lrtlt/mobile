@@ -7,7 +7,7 @@ interface Props {
   style?: ViewStyle;
 }
 
-const AppBackground: React.FC<Props> = (props) => {
+const AppBackground: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const settings = useSettings();
   const theme = settings.isDarkMode ? themeDark : themeLight;
 

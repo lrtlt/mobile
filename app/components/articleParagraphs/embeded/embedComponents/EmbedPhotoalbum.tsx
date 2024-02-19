@@ -14,7 +14,7 @@ interface Props {
   data: ArticleEmbedPhotoalbumType;
 }
 
-const EmbedPhotoalbum: React.FC<Props> = ({data}) => {
+const EmbedPhotoalbum: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
   const [dimensions, setDimensions] = useState({width: 0, height: 0});
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Article'>>();

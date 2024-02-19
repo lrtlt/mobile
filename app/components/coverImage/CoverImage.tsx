@@ -8,7 +8,7 @@ interface Props {
   source: Source;
 }
 
-const CoverImage: React.FC<Props> = ({style, source}) => {
+const CoverImage: React.FC<React.PropsWithChildren<Props>> = ({style, source}) => {
   return (
     <View style={style}>
       {source.uri && <FastImage style={styles.img} source={source} resizeMode={FastImage.resizeMode.cover} />}

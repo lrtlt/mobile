@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {SearchFilter} from '../../../api/Types';
 import {defaultSearchFilter, SearchContext} from './SearchContext';
 
-const SearchContextProvider: React.FC = (props) => {
+const SearchContextProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<SearchFilter>(defaultSearchFilter);
 

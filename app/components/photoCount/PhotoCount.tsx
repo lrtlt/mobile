@@ -10,7 +10,7 @@ interface Props {
   count?: number | string;
 }
 
-const PhotoCount: React.FC<Props> = ({style, count}) => {
+const PhotoCount: React.FC<React.PropsWithChildren<Props>> = ({style, count}) => {
   const {colors} = useTheme();
   const {textSizeMultiplier} = useSettings();
 

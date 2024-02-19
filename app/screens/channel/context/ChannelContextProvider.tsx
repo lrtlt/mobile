@@ -20,7 +20,7 @@ const getPosterByChannelId = (channelId: string) => {
   }
 };
 
-const ChannelProvider: React.FC = ({children}) => {
+const ChannelProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
   const [state, setState] = useState<Omit<ChannelContextType, 'loadChannel' | 'reloadProgram'>>({
     channelData: undefined,
     lastFetchTime: 0,

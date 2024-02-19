@@ -5,7 +5,7 @@ import {themeDark, themeLight} from '../../Theme';
 import {useSettings} from '../../settings/useSettings';
 import {Logo} from '../../components';
 
-const SplashViewComponent: React.FC = () => {
+const SplashViewComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const {isDarkMode} = useSettings();
   const colors = isDarkMode ? themeDark.colors : themeLight.colors;
 

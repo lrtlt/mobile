@@ -7,7 +7,7 @@ interface Props {
   style?: ViewStyle;
 }
 
-const LiveBadge: React.FC<Props> = (props) => {
+const LiveBadge: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {strings} = useTheme();
   return (
     <View style={[styles.container, {backgroundColor: 'black' ?? '#C00'}, props.style]}>

@@ -17,7 +17,7 @@ import CheckBox from '../checkBox/CheckBox';
 import useSearch from '../../screens/search/context/useSearch';
 import MyScrollView from '../MyScrollView/MyScrollView';
 
-const SearchFilterDrawer: React.FC = () => {
+const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
   const {colors} = useTheme();
 
   const {filter, setFilter} = useSearch();

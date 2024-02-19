@@ -6,7 +6,7 @@ interface Props {
   style?: ViewStyle;
 }
 
-const ScreenLoader: React.FC<Props> = (props) => {
+const ScreenLoader: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
   return (
     <View style={[styles.container, props.style]}>

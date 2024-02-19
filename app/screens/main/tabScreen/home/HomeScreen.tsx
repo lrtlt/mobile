@@ -35,7 +35,7 @@ interface Props {
   type: typeof ROUTE_TYPE_HOME | typeof ROUTE_TYPE_MEDIA;
 }
 
-const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
+const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const listRef = useRef<FlashList<any>>(null);
@@ -176,7 +176,7 @@ const HomeScreen: React.FC<Props> = ({isCurrent, type}) => {
     }
   }, [onForecastPressHandler, type]);
 
-  const keyExtractor = useCallback((item: HomeBlockType, index) => `${index}-${item.type}`, []);
+  const keyExtractor = useCallback((item: HomeBlockType, index: number) => `${index}-${item.type}`, []);
 
   if (items.length === 0) {
     return <ScreenLoader />;

@@ -9,7 +9,7 @@ interface Props {
   pages?: MenuItemPage[];
 }
 
-const DrawerBlockPages: React.FC<Props> = ({navigation, pages}) => {
+const DrawerBlockPages: React.FC<React.PropsWithChildren<Props>> = ({navigation, pages}) => {
   if (!pages || pages.length <= 0) {
     console.log('invalid pages data');
     return null;

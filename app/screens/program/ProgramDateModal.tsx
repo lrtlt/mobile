@@ -13,7 +13,7 @@ interface Props {
   onCancel: () => void;
 }
 
-const ProgramDateModal: React.FC<Props> = (props) => {
+const ProgramDateModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
 
   return (

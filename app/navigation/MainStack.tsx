@@ -14,6 +14,7 @@ import ChannelContextProvider from '../screens/channel/context/ChannelContextPro
 
 export type MainStackParamList = {
   Home: undefined;
+  Settings: undefined;
   Article: {
     articleId: number;
   };
@@ -57,7 +58,7 @@ export type MainDrawerParamList = {
 };
 const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
 
-const MainDrawerNavigator: React.FC = () => {
+const MainDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
   return (
     <MainDrawer.Navigator drawerContent={(props) => <Drawer {...props} />}>
       <MainDrawer.Screen
@@ -81,7 +82,7 @@ export type SearchDrawerParamList = {
 
 const SearchDrawer = createDrawerNavigator<SearchDrawerParamList>();
 
-const SearchDrawerNavigator: React.FC = () => {
+const SearchDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
   return (
     <SearchContextProvider>
       <SearchDrawer.Navigator
@@ -135,6 +136,7 @@ export default () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen name="Settings" component={Screens.SettingsScreen} />
       <Stack.Screen name="Article" component={Screens.ArticleScreen} />
       <Stack.Screen name="Comments" component={Screens.CommentsScreen} />
       <Stack.Screen

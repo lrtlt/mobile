@@ -7,7 +7,7 @@ interface Props {
   data: ArticleEmbedTimelineType[];
 }
 
-const EmbedTimeline: React.FC<Props> = ({data}) => {
+const EmbedTimeline: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
   return (
     <>
       {data.map(

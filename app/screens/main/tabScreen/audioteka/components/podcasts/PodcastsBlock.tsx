@@ -10,7 +10,7 @@ interface Props {
   data: AudiotekaPodcasts;
 }
 
-const PodcastsBlock: React.FC<Props> = (props) => {
+const PodcastsBlock: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {title, podcasts} = props.data;
 
   const podcastComponents = useMemo(

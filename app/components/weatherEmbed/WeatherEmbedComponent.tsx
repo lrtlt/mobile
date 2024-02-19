@@ -11,7 +11,7 @@ interface Props {
   horizontalPadding?: number;
 }
 
-const WeatherEmbedComponent: React.FC<Props> = (props) => {
+const WeatherEmbedComponent: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {location} = props;
   const locationCode = location ? location?.c ?? DEFAULT_FORECAST_LOCATION : DEFAULT_FORECAST_LOCATION;
 

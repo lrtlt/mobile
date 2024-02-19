@@ -6,7 +6,7 @@ interface Props {
   style?: ViewStyle;
 }
 
-const Divider: React.FC<Props> = (props) => {
+const Divider: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
   return <View style={{...styles.line, backgroundColor: colors.listSeparator, ...props.style}} />;
 };

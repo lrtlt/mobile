@@ -25,7 +25,7 @@ interface Props {
   onArticlePress: (article: Article) => void;
 }
 
-const ArticleRow: React.FC<Props> = (props) => {
+const ArticleRow: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {data, onArticlePress} = props;
 
   const articleStyleType = getArticleStyleType(data.length);

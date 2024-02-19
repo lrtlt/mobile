@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useRef} from 'react';
+import React, {useEffect, useCallback, useRef, PropsWithChildren} from 'react';
 import {View, ActivityIndicator, StyleSheet, ViewStyle} from 'react-native';
 import VideoCover, {VideoCoverType} from './VideoCover';
 import {useTheme} from '../../Theme';
@@ -23,7 +23,7 @@ interface Props {
 const MAX_ERROR_COUNT = 3;
 const ERROR_DELAY = 1000;
 
-const VideoComponent: React.FC<Props> = (props) => {
+const VideoComponent: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors, strings} = useTheme();
   const {isLoading, data, load} = useVideoData(props.streamData);
 

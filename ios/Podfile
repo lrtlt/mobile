@@ -88,8 +88,9 @@ target 'lrtApp' do
   end
 end
 
-target 'OneSignalNotificationServiceExtension' do
+target 'FCMImageNotification' do
   use_frameworks! :linkage => :static
-  
-  pod 'OneSignalXCFramework', '>= 5.0.0', '< 6.0'
+  #This was added manually
+  #Change version if needed, just copy from Podfile.lock
+  pod 'Firebase/Messaging', '~> 10.20.0'
 end
