@@ -86,8 +86,8 @@ android {
         applicationId "lt.mediapark.lrt"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 203700
-        versionName "2.37.0"
+        versionCode 203800
+        versionName "2.38.0"
         multiDexEnabled true
     }
     signingConfigs {
