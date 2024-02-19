@@ -9,6 +9,9 @@ import notifee, {
   EventType,
   Event,
   AndroidCategory,
+  AndroidBadgeIconType,
+  AndroidStyle,
+  AndroidBigPictureStyle,
 } from '@notifee/react-native';
 
 const INITIAL_URL_STORAGE_KEY = 'initialUrl';
@@ -97,12 +100,32 @@ const useFirebaseMessaging = (isNavigationReady: boolean) => {
 
     const unsubscribeOnMessage = messaging().onMessage(async (remoteMessage) => {
       if (remoteMessage.notification) {
+        const iosFCMOptions = remoteMessage.data?.fcm_options as any;
+
         notifee.displayNotification({
           id: remoteMessage.messageId,
           title: remoteMessage.notification.title,
           body: remoteMessage.notification.body,
           data: remoteMessage.data,
+          ios: {
+            attachments: !!iosFCMOptions?.image
+              ? [
+                  {
+                    url: iosFCMOptions?.image as string,
+                  },
+                ]
+              : [],
+          },
           android: {
+            style: !!remoteMessage.notification.android?.imageUrl
+              ? {
+                  type: AndroidStyle.BIGPICTURE,
+                  picture: remoteMessage.notification.android?.imageUrl!,
+                }
+              : {
+                  type: AndroidStyle.BIGTEXT,
+                  text: remoteMessage.notification.body ?? '',
+                },
             channelId: FOREGROUND_NOTIFICATION_CHANNEL_ID,
             color: remoteMessage.notification.android?.color,
             smallIcon: remoteMessage.notification.android?.smallIcon,
