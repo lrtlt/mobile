@@ -9,9 +9,7 @@ import notifee, {
   EventType,
   Event,
   AndroidCategory,
-  AndroidBadgeIconType,
   AndroidStyle,
-  AndroidBigPictureStyle,
 } from '@notifee/react-native';
 
 const INITIAL_URL_STORAGE_KEY = 'initialUrl';
@@ -54,11 +52,8 @@ const _handleInitialNotification = async () => {
 };
 
 const _onNotificationEvent = async ({type, detail}: Event) => {
-  switch (type) {
-    case EventType.PRESS:
-      detail.notification;
-      _handleNotificationOpen(detail.notification?.data as NotificationData, false);
-      break;
+  if (type === EventType.PRESS) {
+    _handleNotificationOpen(detail.notification?.data as NotificationData, false);
   }
 };
 
@@ -100,7 +95,7 @@ const useFirebaseMessaging = (isNavigationReady: boolean) => {
 
     const unsubscribeOnMessage = messaging().onMessage(async (remoteMessage) => {
       if (remoteMessage.notification) {
-        const iosFCMOptions = remoteMessage.data?.fcm_options as any;
+        const iosFCMOptions: any = remoteMessage.data?.fcm_options;
 
         notifee.displayNotification({
           id: remoteMessage.messageId,
@@ -108,7 +103,7 @@ const useFirebaseMessaging = (isNavigationReady: boolean) => {
           body: remoteMessage.notification.body,
           data: remoteMessage.data,
           ios: {
-            attachments: !!iosFCMOptions?.image
+            attachments: iosFCMOptions?.image
               ? [
                   {
                     url: iosFCMOptions?.image as string,
@@ -117,7 +112,7 @@ const useFirebaseMessaging = (isNavigationReady: boolean) => {
               : [],
           },
           android: {
-            style: !!remoteMessage.notification.android?.imageUrl
+            style: remoteMessage.notification.android?.imageUrl
               ? {
                   type: AndroidStyle.BIGPICTURE,
                   picture: remoteMessage.notification.android?.imageUrl!,

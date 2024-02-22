@@ -23,7 +23,7 @@ interface Props {
 const MAX_ERROR_COUNT = 3;
 const ERROR_DELAY = 1000;
 
-const VideoComponent: React.FC<React.PropsWithChildren<Props>> = (props) => {
+const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
   const {colors, strings} = useTheme();
   const {isLoading, data, load} = useVideoData(props.streamData);
 

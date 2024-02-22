@@ -1,13 +1,5 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  ActivityIndicator,
-  BackHandler,
-  ImageBackground,
-  Platform,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {ActivityIndicator, BackHandler, ImageBackground, Platform, StyleSheet, View} from 'react-native';
 import {
   PlayerConfiguration,
   SourceDescription,
@@ -19,7 +11,6 @@ import {
   Event,
   TimeUpdateEvent,
   AspectRatio,
-  ABRStrategyType,
   ReadyStateChangeEvent,
   PresentationMode,
 } from 'react-native-theoplayer';
@@ -101,9 +92,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
     isPausedByUser,
     setIsPausedByUser,
-
-    isFullScreen,
-    setIsFullScreen,
 
     setVideoBaseData,
     registerFullScreenListener,
