@@ -384,6 +384,7 @@ export default MediaControls;
 const styles = StyleSheet.create({
   flex: {
     width: '100%',
+    maxHeight: '100%',
     aspectRatio: 16 / 9,
   },
   center: {
