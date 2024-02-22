@@ -1212,7 +1212,8 @@ PODS:
     - THEOplayer-Integration-GoogleCast/Base (~> 6.9)
     - THEOplayer-Integration-GoogleCast/Dependencies (~> 6.9)
     - THEOplayerSDK-core (~> 6.9)
-  - react-native-webview (13.6.3):
+  - react-native-webview (13.8.1):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - React-NativeModulesApple (0.72.6):
     - hermes-engine
@@ -1324,37 +1325,37 @@ PODS:
     - React-jsi (= 0.72.6)
     - React-logger (= 0.72.6)
     - React-perflogger (= 0.72.6)
-  - RNCAsyncStorage (1.21.0):
+  - RNCAsyncStorage (1.22.1):
     - React-Core
   - RNFastImage (8.6.3):
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBAnalytics (18.8.0):
+  - RNFBAnalytics (18.9.0):
     - Firebase/Analytics (= 10.20.0)
     - React-Core
     - RNFBApp
-  - RNFBApp (18.8.0):
+  - RNFBApp (18.9.0):
     - Firebase/CoreOnly (= 10.20.0)
     - React-Core
-  - RNFBCrashlytics (18.8.0):
+  - RNFBCrashlytics (18.9.0):
     - Firebase/Crashlytics (= 10.20.0)
     - FirebaseCoreExtension (= 10.20.0)
     - React-Core
     - RNFBApp
-  - RNFBFirestore (18.8.0):
+  - RNFBFirestore (18.9.0):
     - Firebase/Firestore (= 10.20.0)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - React-Core
     - RNFBApp
-  - RNFBMessaging (18.8.0):
+  - RNFBMessaging (18.9.0):
     - Firebase/Messaging (= 10.20.0)
     - FirebaseCoreExtension (= 10.20.0)
     - React-Core
     - RNFBApp
   - RNFlashList (1.6.3):
     - React-Core
-  - RNGestureHandler (2.14.0):
+  - RNGestureHandler (2.15.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNNotifee (7.8.2):
@@ -1384,10 +1385,10 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.6.1)
-  - THEOplayer-Integration-GoogleCast/Base (6.10.0)
-  - THEOplayer-Integration-GoogleCast/Dependencies (6.10.0):
+  - THEOplayer-Integration-GoogleCast/Base (6.10.1)
+  - THEOplayer-Integration-GoogleCast/Dependencies (6.10.1):
     - google-cast-sdk-dynamic-xcframework (~> 4.7.1)
-  - THEOplayerSDK-core (6.10.0)
+  - THEOplayerSDK-core (6.10.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -1691,7 +1692,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   react-native-slider: 4d4f9b0a0de2f5ebe70b72cd760fdb6df0e267e2
   react-native-theoplayer: 972e07247531cfa29b089205912772fb29d17fce
-  react-native-webview: 88293a0f23eca8465c0433c023ec632930e644d0
+  react-native-webview: a2272b7db020753dfc9bac620dc5eadfcf1415d6
   React-NativeModulesApple: 1802a680a4cd891d2ab97780771bcb2ff11fdc0b
   React-perflogger: e3596db7e753f51766bceadc061936ef1472edc3
   React-RCTActionSheet: 17ab132c748b4471012abbcdcf5befe860660485
@@ -1709,15 +1710,15 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 76eb364c37e6c20845cfe0cb049f883021bdfccf
   React-utils: 1dc03e6e55f56388b6fdde3768a66c885bacb627
   ReactCommon: cfe086d2e2ec9f2907c66666c856082608fba822
-  RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
+  RNCAsyncStorage: 7deab901e27d1f989a83e8be6ce91b673772c848
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
-  RNFBAnalytics: 991772a4cd8c90de9a5eec33ef24dbba6e028c5b
-  RNFBApp: a4f5b074984cf612e4c97d68b42be690c59e2638
-  RNFBCrashlytics: a88c315ab5b6cb2b8a3f56390cd63b2dfd5ec05a
-  RNFBFirestore: 2ed2073fc9c4d8951f267d1cbadc3b384e948141
-  RNFBMessaging: 1e7415390ae579c5949505a0709686a2de8a47e5
+  RNFBAnalytics: ec290267aac57446c10b491293373ac86357f575
+  RNFBApp: 9b25191f7a5e72c185b7e43fffb0d906869c4659
+  RNFBCrashlytics: 28f83084ae8a4b9e6ad128e3a644c28bb5e16007
+  RNFBFirestore: be3b76650231721bad4e9b28bf3a09a3ce62f8bb
+  RNFBMessaging: 99621af036e0aa85506390f77d79c9e6353aacca
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
-  RNGestureHandler: a5039da2ac028b073ae801289476060b34d559b1
+  RNGestureHandler: 6a0bca5c5b2fb62211e9a75d5f4ed877817c4412
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
   RNPermissions: 60d60ce58c13537514288f285910c8b1cd12908d
   RNReanimated: 8a6a83984cb4d61ebf1065b6137150b6b31ce609
@@ -1728,10 +1729,10 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  THEOplayer-Integration-GoogleCast: 71b0204a3402cbcaba35de34463c2858a497d8ea
-  THEOplayerSDK-core: 2568325514d164d56203ad2b1809f3e1a1c21373
+  THEOplayer-Integration-GoogleCast: 1fb68547a2dfbf6707f5e017ef8cfde45fff524b
+  THEOplayerSDK-core: 543fe68107ae62f169daf6b0c236243f283b5461
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
 
-PODFILE CHECKSUM: f4c16f63394314129e81051688f7f8e7f13ad75a
+PODFILE CHECKSUM: 05f6426a9eab3e5fe8997fd152e7d4036066fddc
 
 COCOAPODS: 1.15.2
