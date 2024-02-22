@@ -20,7 +20,6 @@ import {PlayerMode} from './PlayerMode';
 import {MediaType} from './context/VideoContext';
 import useMediaTracking from './useMediaTracking';
 import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
-import {uniqueId} from 'lodash';
 import Gemius from 'react-native-gemius-plugin';
 import useChromecast from './useChromecast';
 import {MediaPlayerState} from 'react-native-google-cast';
@@ -86,17 +85,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const {colors} = useTheme();
 
-  const {
-    setCurrentTime,
-    getCurrentTime,
-
-    isPausedByUser,
-    setIsPausedByUser,
-
-    setVideoBaseData,
-    registerFullScreenListener,
-    unregisterFullScreenListener,
-  } = useVideo();
+  const {setCurrentTime, getCurrentTime, setVideoBaseData} = useVideo();
 
   useEffect(() => {
     return () => {
@@ -139,38 +128,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     }
   }, [player?.seeking]);
 
-  useEffect(() => {
-    const key = uniqueId(`${mode}-`);
-
-    registerFullScreenListener(key, {
-      onFullScreenEnter: () => {
-        if (mode === PlayerMode.DEFAULT) {
-          player?.pause();
-        }
-      },
-      onFullScreenExit: () => {
-        if (player) {
-          if (mode === PlayerMode.DEFAULT) {
-            player.currentTime = getCurrentTime();
-            isPausedByUser ? player?.pause() : player?.play();
-          }
-          if (mode === PlayerMode.FULLSCREEN) {
-            player.pause();
-          }
-        }
-      },
-    });
-    return () => unregisterFullScreenListener(key);
-  }, [
-    getCurrentTime,
-    isPausedByUser,
-    isLiveStream,
-    player,
-    mode,
-    registerFullScreenListener,
-    unregisterFullScreenListener,
-  ]);
-
   const onLoadedMetaDataHandler = useCallback((e: LoadedMetadataEvent) => {
     const duration = e.duration === Infinity ? 0 : e.duration;
     setDuration(duration);
@@ -193,7 +150,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   }, []);
 
   const onPlayHandler = useCallback((_: Event<PlayerEventType.PLAY>) => {
-    setIsPausedByUser(false);
     trackPlay(streamUri, getCurrentTime() / 1000);
   }, []);
 
@@ -295,13 +251,11 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     } else if (player) {
       if (player.paused) {
         player.play();
-        setIsPausedByUser(false);
       } else {
         player.pause();
-        setIsPausedByUser(true);
       }
     }
-  }, [player, client, mediaStatus, setIsPausedByUser]);
+  }, [player, client, mediaStatus]);
 
   const _fullScreenControl = useCallback(() => {
     if (player) {
