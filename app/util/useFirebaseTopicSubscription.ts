@@ -17,6 +17,7 @@ const useFirebaseTopicSubscription = () => {
   const subscribeToTopic = useCallback(
     async (topicSlug: string) => {
       if (subscriptions.indexOf(topicSlug) === -1) {
+        const originalSubscriptions = [...subscriptions];
         const list = [...subscriptions, topicSlug];
         setSubscriptions(list);
         messaging()
@@ -24,7 +25,7 @@ const useFirebaseTopicSubscription = () => {
           .then(() => AsyncStorage.setItem(TOPICS_STORAGE_KEY, JSON.stringify(list)))
           .then(() => console.log('Subscribed to topic: ' + topicSlug))
           //revert if failed
-          .catch(() => setSubscriptions(subscriptions));
+          .catch(() => setSubscriptions(originalSubscriptions));
       }
     },
     [subscriptions],
@@ -32,6 +33,7 @@ const useFirebaseTopicSubscription = () => {
 
   const unsubscribeFromTopic = useCallback(
     async (topicSlug: string) => {
+      const originalSubscriptions = [...subscriptions];
       const list = subscriptions.filter((item) => item !== topicSlug);
       setSubscriptions(list);
       messaging()
@@ -39,7 +41,7 @@ const useFirebaseTopicSubscription = () => {
         .then(() => AsyncStorage.setItem(TOPICS_STORAGE_KEY, JSON.stringify(list)))
         .then(() => console.log('Unsubscribed from topic: ' + topicSlug))
         //revert if failed
-        .catch(() => setSubscriptions(subscriptions));
+        .catch(() => setSubscriptions(originalSubscriptions));
     },
     [subscriptions],
   );
