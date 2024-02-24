@@ -1,11 +1,10 @@
 import {useCallback, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {putDailyQuestionVote} from '../../api/Endpoints';
-import {put} from '../../api/HttpClient';
 import {DailyQuestionChoice} from '../../api/Types';
 import {setDailyQuestionChoice} from '../../redux/actions';
+import {setDailyQuestionVote} from '../../api';
 
-export const useSetDailyQuestionChoise = () => {
+export const useSetDailyQuestionChoice = () => {
   const [state, setState] = useState({
     isLoading: false,
   });
@@ -13,7 +12,7 @@ export const useSetDailyQuestionChoise = () => {
   const dispatch = useDispatch();
 
   const callApi = useCallback(
-    async (questionId: number, choise: DailyQuestionChoice) => {
+    async (questionId: number, choice: DailyQuestionChoice) => {
       if (state.isLoading) {
         console.log('Wait for the request to end...');
         return;
@@ -21,9 +20,9 @@ export const useSetDailyQuestionChoise = () => {
       setState({isLoading: true});
 
       try {
-        const response = await put<any | null>(putDailyQuestionVote(questionId, choise.id));
+        const response = await setDailyQuestionVote(questionId, choice.id);
         if (response.status >= 200 && response.status < 300) {
-          dispatch(setDailyQuestionChoice(questionId, choise));
+          dispatch(setDailyQuestionChoice(questionId, choice));
         }
         setState({isLoading: false});
       } catch (e) {

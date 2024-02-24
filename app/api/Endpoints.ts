@@ -147,6 +147,13 @@ export const putDailyQuestionVote = (questionId: number | string, answerId: numb
 };
 
 /**
+ * Gets daily question.
+ */
+export const getDailyQuestion = (questionId: number | string) => {
+  return `https://www.lrt.lt/api/v1/daily-question/${questionId}`;
+};
+
+/**
  * Returns forecast for selected city
  */
 export const forecastGet = (cityCode: string) => {

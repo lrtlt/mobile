@@ -12,9 +12,8 @@ import {getSmallestDim} from '../../util/UI';
 import {StreamData} from '../../components/videoComponent/useVideoData';
 import TextComponent from '../../components/text/Text';
 
-import CheckBox from '../../components/checkBox/CheckBox';
-import ToggleButton from '../../components/settingsToggleButton/SettingsToggleButton';
 import {CameraIcon, IconNote} from '../../components/svg';
+import DailyQuestionWrapper from '../../components/dailyQuestion/DailyQuestionWrapper';
 
 /** Count of visible program items below player */
 const PROGRAM_ITEMS_VISIBLE = 2;
@@ -105,7 +104,7 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
     : undefined;
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <View style={styles.playerContainer}>
         <VideoComponent
           key={channel_info.channel_id}
@@ -117,22 +116,23 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
           streamData={selectedStream}
         />
       </View>
+      {channel_info.daily_question && <DailyQuestionWrapper id={channel_info.daily_question} />}
       <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>
         {streamSelectionComponent}
+
         {programComponent}
-        {
-          <TouchableOpacity onPress={onProgramPressHandler}>
-            <Text
-              // eslint-disable-next-line react-native/no-inline-styles
-              style={{
-                ...styles.fullProgramText,
-                marginTop: programComponent !== undefined ? 8 : 0,
-                backgroundColor: colors.background,
-              }}>
-              {strings.tvProgramButtonText}
-            </Text>
-          </TouchableOpacity>
-        }
+
+        <TouchableOpacity onPress={onProgramPressHandler}>
+          <Text
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{
+              ...styles.fullProgramText,
+              marginTop: programComponent !== undefined ? 8 : 0,
+              backgroundColor: colors.background,
+            }}>
+            {strings.tvProgramButtonText}
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

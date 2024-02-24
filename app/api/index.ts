@@ -5,6 +5,7 @@ import {
   categoryGet,
   channelGet,
   forecastGet,
+  getDailyQuestion,
   homeGet,
   liveFeedGet,
   mediatekaGet,
@@ -13,15 +14,17 @@ import {
   opusPlaylistGet,
   popularArticlesGet,
   programGet,
+  putDailyQuestionVote,
   searchArticles,
   weatherLocationsGet,
 } from './Endpoints';
-import {get} from './HttpClient';
+import {get, put} from './HttpClient';
 import {
   ArticleContentResponse,
   AudiotekaResponse,
   CategoryArticlesResponse,
   ChannelResponse,
+  DailyQuestionResponse,
   ForecastLocation,
   ForecastResponse,
   HomeDataResponse,
@@ -84,3 +87,9 @@ export const fetchOpusPlaylist = () => get<OpusPlaylistResponse>(opusPlaylistGet
 
 export const fetchLiveFeed = (id: string | number, count: number, order: 'asc' | 'desc') =>
   get<LiveFeedResponse>(liveFeedGet(id, count, order));
+
+export const setDailyQuestionVote = (questionId: number | string, choiceId: number | string) =>
+  put<any | null>(putDailyQuestionVote(questionId, choiceId));
+
+export const fetchDailyQuestion = (questionId: number | string) =>
+  get<DailyQuestionResponse>(getDailyQuestion(questionId));
