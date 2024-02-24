@@ -1,5 +1,3 @@
-import {store} from '../redux/store';
-
 export const BASE_IMG_URL = 'https://www.lrt.lt';
 
 export type ImageSize = {
@@ -27,9 +25,8 @@ const sizes = [IMG_SIZE_XXS, IMG_SIZE_XS, IMG_SIZE_S, IMG_SIZE_M, IMG_SIZE_L, IM
 export const getImageSizeForWidth = (width: number) => {
   return (
     sizes.find((s) => {
-      const offset = 100;
-      return s.width + offset >= width;
-    }) || IMG_SIZE_M
+      return s.width >= width;
+    }) || IMG_SIZE_S
   );
 };
 

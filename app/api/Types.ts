@@ -613,6 +613,7 @@ export type ChannelResponse = {
     player_background_image: string;
     is_permanent?: 0 | 1;
     is_radio?: 0 | 1;
+    daily_question?: string | number;
   };
   prog: ProgramItemType[];
 };
@@ -659,6 +660,8 @@ export type DailyQuestionChoice = {
 
 export type DailyQuestionResponse = {
   id: number;
+  can_vote: boolean;
+  is_ended: boolean;
   title: string;
   votes: number;
   choices: DailyQuestionChoice[];

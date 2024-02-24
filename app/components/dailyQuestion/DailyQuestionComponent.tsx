@@ -7,7 +7,7 @@ import {selectDailyQuestionChoice} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {IconCheck} from '../svg';
 import TextComponent from '../text/Text';
-import {useSetDailyQuestionChoise} from './useSetDailyQuestionChoise';
+import {useSetDailyQuestionChoice} from './useSetDailyQuestionChoice';
 
 interface DailyQuestionComponentProps {
   block: HomeBlockDailyQuestion;
@@ -18,9 +18,9 @@ const DailyQuestionComponent: React.FC<DailyQuestionComponentProps> = ({block}) 
   const {colors, strings} = useTheme();
 
   const answer = useSelector(selectDailyQuestionChoice);
-  const callVoteAPI = useSetDailyQuestionChoise();
+  const callVoteAPI = useSetDailyQuestionChoice();
 
-  const renderChoise = useCallback(
+  const renderChoice = useCallback(
     (choice: DailyQuestionChoice) => {
       return (
         <View key={choice.id} style={{...styles.choiceContainer, borderColor: colors.buttonBorder}}>
@@ -82,22 +82,23 @@ const DailyQuestionComponent: React.FC<DailyQuestionComponentProps> = ({block}) 
     return null;
   }
 
+  const votingEnabled = dailyQuestion.can_vote && !dailyQuestion.is_ended;
   const isUserVoteAccepted = answer && dailyQuestion.id === answer.daily_question_id;
-
+  const canUserVote = votingEnabled && !isUserVoteAccepted;
   return (
     <View style={{...styles.container, borderColor: colors.buttonBorder}}>
       <View style={styles.topContainer}>
         <TextComponent style={styles.title} fontFamily="PlayfairDisplay-Regular">
           {dailyQuestion.title}
         </TextComponent>
-        {isUserVoteAccepted && (
+        {!canUserVote && (
           <TextComponent style={styles.subtitle}>
             Iš viso balsavo:{' '}
             <TextComponent style={{color: colors.primaryDark}}>{dailyQuestion.votes}</TextComponent>
           </TextComponent>
         )}
       </View>
-      {dailyQuestion.choices.map(isUserVoteAccepted ? renderChoiceVoted : renderChoise)}
+      {dailyQuestion.choices.map(canUserVote ? renderChoice : renderChoiceVoted)}
     </View>
   );
 };
@@ -106,20 +107,19 @@ export default React.memo(DailyQuestionComponent);
 
 const styles = StyleSheet.create({
   container: {
-    margin: 8,
-    borderWidth: 1,
     flex: 1,
+    margin: 12,
+    borderWidth: 1,
   },
   topContainer: {
     padding: 16,
   },
   choiceContainer: {
     flexDirection: 'row',
-    paddingVertical: 8,
+    gap: 12,
+    paddingVertical: 16,
     paddingHorizontal: 16,
     borderTopWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   title: {
     fontSize: 20,
@@ -130,15 +130,12 @@ const styles = StyleSheet.create({
   },
   choice: {
     flex: 1,
-    height: '100%',
-    marginTop: 16,
-    fontSize: 15,
+    fontSize: 14,
+    textAlignVertical: 'center',
   },
   voteButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    marginLeft: 12,
   },
   voteText: {
     fontSize: 13,
@@ -152,9 +149,10 @@ const styles = StyleSheet.create({
   checkBubble: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+    alignSelf: 'center',
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: 'white',
     marginRight: 8,
   },
