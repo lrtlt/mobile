@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     lineHeight: 34,
     fontSize: 23,
+    alignSelf: 'center',
   },
   playerContainer: {
     width: '100%',
