@@ -89,7 +89,7 @@ export const fetchLiveFeed = (id: string | number, count: number, order: 'asc' |
   get<LiveFeedResponse>(liveFeedGet(id, count, order));
 
 export const setDailyQuestionVote = (questionId: number | string, choiceId: number | string) =>
-  put<any | null>(putDailyQuestionVote(questionId, choiceId));
+  put<any>(putDailyQuestionVote(questionId, choiceId));
 
 export const fetchDailyQuestion = (questionId: number | string) =>
   get<DailyQuestionResponse>(getDailyQuestion(questionId));
