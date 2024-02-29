@@ -125,6 +125,8 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
     () => ({
       p: {
         marginVertical: 4,
+        alignSelf: 'center',
+        minWidth: '100%',
       },
       strong: {
         fontFamily: 'SourceSansPro-SemiBold',
@@ -193,7 +195,7 @@ const styles = StyleSheet.create({
   },
   quoteSimbol: {
     fontSize: 70,
-    marginRight: 12,
+    marginRight: 4,
   },
   quoteText: {
     margin: 8,
