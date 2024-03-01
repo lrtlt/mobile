@@ -10,7 +10,10 @@ const useGoogleAnalyticsSetup = () => {
         ad_user_data: true,
         analytics_storage: true,
       })
-      .then(() => analytics().setAnalyticsCollectionEnabled(true));
+      .then(() => {
+        console.log('GOOGLE ANALYTICS CONSENTS SET');
+        analytics().setAnalyticsCollectionEnabled(true);
+      });
   }, []);
 };
 

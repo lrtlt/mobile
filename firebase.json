@@ -1,7 +1,8 @@
 {
+  "$schema": "./node_modules/@react-native-firebase/app/firebase-schema.json",
   "react-native": {
+    "app_log_level": "debug",
     "analytics_auto_collection_enabled": false,
-
     "analytics_default_allow_analytics_storage": true,
     "analytics_default_allow_ad_storage": true,
     "analytics_default_allow_ad_user_data": true,

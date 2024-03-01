@@ -10,7 +10,7 @@ interface Props {
 const LiveBadge: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {strings} = useTheme();
   return (
-    <View style={[styles.container, {backgroundColor: 'black' ?? '#C00'}, props.style]}>
+    <View style={[styles.container, {backgroundColor: 'black'}, props.style]}>
       <TextComponent style={styles.text} fontFamily="SourceSansPro-Regular" allowFontScaling={false}>
         {strings?.liveChannelTitle ?? 'Gyvai'}
       </TextComponent>
