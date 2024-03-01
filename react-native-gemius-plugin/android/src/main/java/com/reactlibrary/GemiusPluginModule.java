@@ -154,7 +154,7 @@ public class GemiusPluginModule extends ReactContextBaseJavaModule {
             while (iterator.hasNextKey()) {
                 String key = iterator.nextKey();
                 String value = paramsMap.getString(key);
-                Log.d("GemiusPluginModule", key + " = " + value);
+                Log.d(TAG, key + " = " + value);
                 event.addExtraParameter(key, value);
             }
         }

@@ -14,8 +14,8 @@ const persistConfig = {
   blacklist: ['navigation', 'articles', 'program'],
 };
 
-let saggaMiddleWare = createSagaMiddleware();
-let composeEnhancers = composeWithDevTools({});
+const saggaMiddleWare = createSagaMiddleware();
+const composeEnhancers = composeWithDevTools({});
 
 const middlewaresToApply = [saggaMiddleWare];
 
@@ -24,7 +24,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = createStore(persistedReducer, composeEnhancers(applyMiddleware(...middlewaresToApply)));
 
-let persistor = persistStore(store);
+const persistor = persistStore(store);
 
 saggaMiddleWare.run(rootSaga);
 
