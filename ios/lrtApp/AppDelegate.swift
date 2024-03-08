@@ -29,16 +29,61 @@ class AppDelegate: RCTAppDelegate, GCKLoggerDelegate {
     GCKCastContext.setSharedInstanceWith(options)
   
     moduleName = "lrtApp"
+    return true;
     
-    let app = super.application(application, didFinishLaunchingWithOptions: launchOptions);
+// Moved initialization to scenes
     
-    self.rootView = self.createRootView(
-      with: self.bridge,
-      moduleName: self.moduleName,
-      initProps: self.prepareInitialProps()
-    );
-    return app;
+//    let app = super.application(application, didFinishLaunchingWithOptions: launchOptions);
+//    
+//    
+//    self.rootView = self.createRootView(
+//      with: self.bridge,
+//      moduleName: self.moduleName,
+//      initProps: self.prepareInitialProps()
+//    );
+//    return app;
   }
+  
+  func initAppFromScene(connectionOptions: UIScene.ConnectionOptions?) {
+     // If bridge has already been initiated by another scene, there's nothing to do here
+     if (self.bridge != nil) {
+       return;
+     }
+
+     let enableTM = false;
+ #if RCT_NEW_ARCH_ENABLED
+     enableTM = self.turboModuleEnabled;
+ #endif
+
+     let application = UIApplication.shared;
+     RCTAppSetupPrepareApp(application, enableTM);
+
+     if (self.bridge == nil) {
+       self.bridge = super.createBridge(
+         with: self,
+         launchOptions: [:]
+       )
+     }
+
+ #if RCT_NEW_ARCH_ENABLED
+     _contextContainer = UnsafeMutablePointer<ContextContainer>.allocate(capacity: 1)
+     _contextContainer?.initialize(to: ContextContainer())
+     _reactNativeConfig = UnsafeMutablePointer<EmptyReactNativeConfig>.allocate(capacity: 1)
+     _reactNativeConfig?.initialize(to: EmptyReactNativeConfig())
+     _contextContainer?.pointee.insert("ReactNativeConfig", _reactNativeConfig)
+     self.bridgeAdapter = RCTSurfacePresenterBridgeAdapter(bridge: self.bridge, contextContainer: _contextContainer)
+     self.bridge?.surfacePresenter = self.bridgeAdapter?.surfacePresenter
+ #endif
+
+     let initProps = self.prepareInitialProps();
+     self.rootView = self.createRootView(with: self.bridge, moduleName: self.moduleName, initProps: initProps)
+
+     if #available(iOS 13.0, *) {
+       self.rootView!.backgroundColor = UIColor.systemBackground
+     } else {
+       self.rootView!.backgroundColor = UIColor.white
+     }
+   }
 
   override func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
     if (connectingSceneSession.role == UISceneSession.Role.carTemplateApplication) {
@@ -51,6 +96,7 @@ class AppDelegate: RCTAppDelegate, GCKLoggerDelegate {
       return scene
     }
   }
+  
 
   override func sourceURL(for bridge: RCTBridge!) -> URL! {
     #if DEBUG
@@ -69,7 +115,8 @@ class AppDelegate: RCTAppDelegate, GCKLoggerDelegate {
     return initProps
   }
   
-  override func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-      return RCTLinkingManager.application(application, open: url, options: options)
-  }
+  // Not working any more because it's setup is moved to PhoneScene
+  //  override func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+  //      return RCTLinkingManager.application(application, open: url, options: options)
+  //  }
 }
