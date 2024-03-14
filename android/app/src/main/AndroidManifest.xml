@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="lt.mediapark.lrt">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+
+   <!-- <uses-permission android:name="androidx.car.app.MAP_TEMPLATES" tools:node="remove" />
+   <uses-permission android:name="androidx.car.app.NAVIGATION_TEMPLATES" tools:node="remove" /> -->
 
     <application
         android:name=".MainApplication"
@@ -13,6 +17,10 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
 
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
