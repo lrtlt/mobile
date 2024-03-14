@@ -99,6 +99,13 @@ export const selectProgramScreenState = memoize((state: RootState) => {
 export const selectHomeChannels = memoize((state: RootState) => {
   const channelsBlock = state.articles.home.items.find((i) => i.type === 'channels') as HomeBlockChannels;
 
+  if (!channelsBlock) {
+    return {
+      channels: [],
+      liveChannels: [],
+      tempLiveChannels: [],
+    };
+  }
   return {
     channels: channelsBlock.data.items,
     liveChannels: channelsBlock.data.live_items?.filter((c) => !c.web_permanent),

@@ -1,7 +1,7 @@
 import {ListTemplate} from 'react-native-carplay';
 import {PlayListItem} from './CarPlayContext';
 
-const createCarPlayLiveTemplate = (items: PlayListItem[]) => {
+const createCarPlayLiveTemplate = (items: PlayListItem[], onItemSelect: (item: PlayListItem) => void) => {
   return new ListTemplate({
     title: 'LRT.lt',
     id: 'lrt-list-templates',
@@ -20,6 +20,7 @@ const createCarPlayLiveTemplate = (items: PlayListItem[]) => {
 
     onItemSelect: async ({index}) => {
       console.log('onItemSelect', index);
+      onItemSelect(items[index]);
     },
   });
 };
