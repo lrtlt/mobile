@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect} from 'react';
+import React, {PropsWithChildren} from 'react';
 import {CarPlayContext} from './CarPlayContext';
 import useCarPlayController from './useCarPlayController';
 import CarScreen from './screen/CarScreen';
