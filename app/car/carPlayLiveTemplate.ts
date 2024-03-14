@@ -17,14 +17,10 @@ const createCarPlayLiveTemplate = (items: PlayListItem[]) => {
         })),
       },
     ],
-
-    // onItemSelect: async ({index}) => {
-    //   console.log('onItemSelect', index);
-    //   onItemSelect(items[index]);
-    // },
   });
 };
 
+//TODO: test grid template later if needed
 // const createCarPlayGridTemplate = (items: PlayListItem[]) => {
 //   return new GridTemplate({
 //     buttons: [

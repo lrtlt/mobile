@@ -51,7 +51,7 @@ const CarScreen: React.FC = () => {
           {playlist.map((item, index) => {
             return (
               <TouchableDebounce
-                key={index}
+                key={`${index}-${item.id}`}
                 onPress={() => {
                   playItem(item);
                 }}>

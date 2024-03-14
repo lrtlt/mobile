@@ -6,14 +6,14 @@ import createCarPlayLiveTemplate from './carPlayLiveTemplate';
 type ReturnType = CarPlayContextType;
 
 const useCarPlayController = (): ReturnType => {
-  const [isConnected, setConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
   const [template, setTemplate] = useState<ListTemplate>();
-  const [playlist, setCurrentPlaylist] = useState<PlayListItem[]>([]);
+  const [currentPlaylist, setCurrentPlaylist] = useState<PlayListItem[]>([]);
 
   useEffect(() => {
     if (template) {
       template.config.onItemSelect = async ({index}) => {
-        playItem(playlist[index]);
+        playItem(currentPlaylist[index]);
       };
       return () => {
         template.config.onItemSelect = undefined;
@@ -27,7 +27,7 @@ const useCarPlayController = (): ReturnType => {
     // return () => {
     //   CarPlay.emitter.removeAllListeners('didSelectListItem');
     // };
-  }, [playlist, template]);
+  }, [currentPlaylist, template]);
 
   // const onConnectHandler: OnConnectCallback = useCallback(
   //   (windowInfo) => {
@@ -76,7 +76,7 @@ const useCarPlayController = (): ReturnType => {
 
       if (CarPlay.connected) {
         console.log('useCarPlayController: auto connected for real');
-        setConnected(true);
+        setIsConnected(true);
       }
     });
     CarPlay.emitter.addListener('backButtonPressed', () => {
@@ -92,7 +92,7 @@ const useCarPlayController = (): ReturnType => {
 
   const playItem = (item: PlayListItem) => {
     if (CarPlay.connected) {
-      const newPlayList = playlist.map((i) => ({...i, isPlaying: i.id === item.id}));
+      const newPlayList = currentPlaylist.map((i) => ({...i, isPlaying: i.id === item.id}));
       setCurrentPlaylist(newPlayList);
 
       // const template = createCarPlayLiveTemplate(newPlayList);
@@ -143,7 +143,7 @@ const useCarPlayController = (): ReturnType => {
   return {
     isConnected: isConnected,
     setPlaylist,
-    playlist,
+    playlist: currentPlaylist,
     playItem,
   };
 };

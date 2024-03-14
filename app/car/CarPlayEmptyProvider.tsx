@@ -1,15 +1,18 @@
-import React, {PropsWithChildren} from 'react';
-import {CarPlayContext} from './CarPlayContext';
+import React, {PropsWithChildren, useMemo} from 'react';
+import {CarPlayContext, CarPlayContextType} from './CarPlayContext';
 
 const CarPlayEmptyProvider: React.FC<PropsWithChildren<{}>> = (props) => {
-  return (
-    <CarPlayContext.Provider
-      value={{
-        isConnected: false,
-      }}>
-      {props.children}
-    </CarPlayContext.Provider>
+  const context: CarPlayContextType = useMemo(
+    () => ({
+      isConnected: false,
+      playItem: () => {},
+      playlist: [],
+      setPlaylist: () => {},
+    }),
+    [],
   );
+
+  return <CarPlayContext.Provider value={context}>{props.children}</CarPlayContext.Provider>;
 };
 
 export default CarPlayEmptyProvider;
