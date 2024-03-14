@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, ActivityIndicator, StyleSheet} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useSplashScreenState from '../../screens/splash/useSplashScreenState';
 import {useCarPlay} from '../useCarPlay';
@@ -11,7 +11,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import FastImage from 'react-native-fast-image';
 import {Text, TouchableDebounce, VideoComponent} from '../../components';
 import {PlayListItem} from '../CarPlayContext';
-import {set} from 'lodash';
+import useOrientation from '../../util/useOrientation';
 
 const CarScreen: React.FC = () => {
   const {colors} = themeDark;
@@ -85,13 +85,13 @@ const CarScreen: React.FC = () => {
   }
 
   const nowPlaying = playlist.find((item) => item.isPlaying);
-
+  const orientation = useOrientation();
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'black'}} edges={['top', 'bottom']}>
+    <SafeAreaView style={{flex: 1, backgroundColor: 'black'}} edges={['left', 'right', 'top', 'bottom']}>
       <View style={{flex: 1}}>
         {nowPlaying ? (
           <VideoComponent
-            style={{width: '100%', aspectRatio: 16 / 9}}
+            style={{width: '100%', maxHeight: '100%', aspectRatio: 16 / 9, alignSelf: 'center'}}
             key={nowPlaying.streamUrl}
             autoPlay={true}
             streamUrl={nowPlaying?.streamUrl}
@@ -99,13 +99,15 @@ const CarScreen: React.FC = () => {
             backgroundImage={nowPlaying.imgUrl}
           />
         ) : null}
-        <ScrollView
-          style={{flex: 1}}
-          contentContainerStyle={{
-            margin: 12,
-          }}>
-          {content}
-        </ScrollView>
+        {orientation === 'portrait' || !nowPlaying ? (
+          <ScrollView
+            style={{flex: 1}}
+            contentContainerStyle={{
+              margin: 12,
+            }}>
+            {content}
+          </ScrollView>
+        ) : null}
       </View>
     </SafeAreaView>
   );

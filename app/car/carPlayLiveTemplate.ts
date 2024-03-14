@@ -1,7 +1,7 @@
 import {ListTemplate} from 'react-native-carplay';
 import {PlayListItem} from './CarPlayContext';
 
-const createCarPlayLiveTemplate = (items: PlayListItem[], onItemSelect: (item: PlayListItem) => void) => {
+const createCarPlayLiveTemplate = (items: PlayListItem[]) => {
   return new ListTemplate({
     title: 'LRT.lt',
     id: 'lrt-list-templates',
@@ -18,11 +18,32 @@ const createCarPlayLiveTemplate = (items: PlayListItem[], onItemSelect: (item: P
       },
     ],
 
-    onItemSelect: async ({index}) => {
-      console.log('onItemSelect', index);
-      onItemSelect(items[index]);
-    },
+    // onItemSelect: async ({index}) => {
+    //   console.log('onItemSelect', index);
+    //   onItemSelect(items[index]);
+    // },
   });
 };
+
+// const createCarPlayGridTemplate = (items: PlayListItem[]) => {
+//   return new GridTemplate({
+//     buttons: [
+//       ...items.map((item) => {
+//         const btn: GridButton = {
+//           id: item.id.toString(),
+//           disabled: true,
+//           image: {
+//             uri: item.imgUrl,
+//             width: 100,
+//             height: 100,
+//             cache: 'reload',
+//           },
+//           titleVariants: [item.text, item.detailText],
+//         };
+//         return btn;
+//       }),
+//     ],
+//   });
+// };
 
 export default createCarPlayLiveTemplate;
