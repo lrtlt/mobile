@@ -32,84 +32,78 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
   const {isDarkMode, textSizeMultiplier} = config;
 
   return (
-    <SafeAreaView style={{...styles.root, backgroundColor: colors.greyBackground}} edges={['top', 'bottom']}>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.content}>
-          <Text style={styles.label} type="secondary" fontFamily="SourceSansPro-SemiBold">
-            {'Bendri nustatymai'}
-          </Text>
-          <View style={{...styles.card, backgroundColor: colors.background}}>
-            <View
-              style={{
-                ...styles.cell,
-                borderColor: colors.border,
-              }}>
-              <Text style={styles.title}>{strings.nightModeTitle}</Text>
-              <SettingsToggleButton
-                style={styles.toggleButton}
-                selected={!isDarkMode}
-                onPress={() => handleSetDarkMode(false)}>
-                <SunIcon size={20} selected={!isDarkMode} />
-              </SettingsToggleButton>
-              <SettingsToggleButton
-                style={styles.toggleButton}
-                selected={isDarkMode}
-                onPress={() => handleSetDarkMode(true)}>
-                <MoonIcon size={20} selected={isDarkMode} />
-              </SettingsToggleButton>
-            </View>
-            <View style={{...styles.cell, borderColor: colors.listSeparator}}>
-              <Text style={styles.title}>{strings.textSizeTitle}</Text>
-              <SettingsToggleButton
-                style={styles.toggleButton}
-                selected={textSizeMultiplier === TEXT_SIZE_NORMAL}
-                onPress={() => handleSetTextSize(TEXT_SIZE_NORMAL)}>
-                <Text
-                  style={styles.textNormal}
-                  allowFontScaling={false}
-                  scalingEnabled={false}
-                  type="secondary">
-                  aA
-                </Text>
-              </SettingsToggleButton>
-              <SettingsToggleButton
-                style={styles.toggleButton}
-                selected={textSizeMultiplier === TEXT_SIZE_LARGE}
-                onPress={() => handleSetTextSize(TEXT_SIZE_LARGE)}>
-                <Text
-                  style={styles.textLarge}
-                  allowFontScaling={false}
-                  scalingEnabled={false}
-                  type="secondary">
-                  aA
-                </Text>
-              </SettingsToggleButton>
-              <SettingsToggleButton
-                style={styles.toggleButton}
-                selected={textSizeMultiplier === TEXT_SIZE_EXTRA_LARGE}
-                onPress={() => handleSetTextSize(TEXT_SIZE_EXTRA_LARGE)}>
-                <Text
-                  style={styles.textExtraLarge}
-                  allowFontScaling={false}
-                  scalingEnabled={false}
-                  type="secondary">
-                  aA
-                </Text>
-              </SettingsToggleButton>
-            </View>
+    <ScrollView style={styles.scrollView}>
+      <View style={styles.content}>
+        <Text style={styles.label} type="secondary" fontFamily="SourceSansPro-SemiBold">
+          {'Bendri nustatymai'}
+        </Text>
+        <View style={{...styles.card, backgroundColor: colors.background}}>
+          <View
+            style={{
+              ...styles.cell,
+              borderColor: 'transparent',
+            }}>
+            <Text style={styles.title}>{strings.nightModeTitle}</Text>
+            <SettingsToggleButton
+              style={styles.toggleButton}
+              selected={!isDarkMode}
+              onPress={() => handleSetDarkMode(false)}>
+              <SunIcon size={20} selected={!isDarkMode} />
+            </SettingsToggleButton>
+            <SettingsToggleButton
+              style={styles.toggleButton}
+              selected={isDarkMode}
+              onPress={() => handleSetDarkMode(true)}>
+              <MoonIcon size={20} selected={isDarkMode} />
+            </SettingsToggleButton>
           </View>
-          <Text style={styles.label} type="secondary" fontFamily="SourceSansPro-SemiBold">
-            {'Pranešimai'}
-          </Text>
-          <View style={{...styles.card, backgroundColor: colors.background}}>
-            <SettingsNotifications
-              cellStyle={{...styles.cell, borderColor: colors.listSeparator}}
-              titleStyle={styles.title}
-            />
+          <View style={{...styles.cell, borderColor: colors.listSeparator}}>
+            <Text style={styles.title}>{strings.textSizeTitle}</Text>
+            <SettingsToggleButton
+              style={styles.toggleButton}
+              selected={textSizeMultiplier === TEXT_SIZE_NORMAL}
+              onPress={() => handleSetTextSize(TEXT_SIZE_NORMAL)}>
+              <Text
+                style={styles.textNormal}
+                allowFontScaling={false}
+                scalingEnabled={false}
+                type="secondary">
+                aA
+              </Text>
+            </SettingsToggleButton>
+            <SettingsToggleButton
+              style={styles.toggleButton}
+              selected={textSizeMultiplier === TEXT_SIZE_LARGE}
+              onPress={() => handleSetTextSize(TEXT_SIZE_LARGE)}>
+              <Text style={styles.textLarge} allowFontScaling={false} scalingEnabled={false} type="secondary">
+                aA
+              </Text>
+            </SettingsToggleButton>
+            <SettingsToggleButton
+              style={styles.toggleButton}
+              selected={textSizeMultiplier === TEXT_SIZE_EXTRA_LARGE}
+              onPress={() => handleSetTextSize(TEXT_SIZE_EXTRA_LARGE)}>
+              <Text
+                style={styles.textExtraLarge}
+                allowFontScaling={false}
+                scalingEnabled={false}
+                type="secondary">
+                aA
+              </Text>
+            </SettingsToggleButton>
           </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+        <Text style={styles.label} type="secondary" fontFamily="SourceSansPro-SemiBold">
+          {'Pranešimai'}
+        </Text>
+        <View style={{...styles.card, backgroundColor: colors.background}}>
+          <SettingsNotifications
+            cellStyle={{...styles.cell, borderColor: colors.listSeparator}}
+            titleStyle={styles.title}
+          />
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 

@@ -166,7 +166,7 @@ type ColorScheme = {
 
 const colorsLight: ColorScheme = {
   //#region React-Navigation colors
-  primary: '#007aff',
+  primary: '#2F357D',
   background: '#FFFFFF',
   card: '#F9F9F9',
   text: '#2E2E2F',
@@ -175,8 +175,8 @@ const colorsLight: ColorScheme = {
   //#endregion
 
   statusBar: '#F9F9F9',
-  primaryLight: '#a8d2ff',
-  primaryDark: '#003d80',
+  primaryLight: '#bbbdd7',
+  primaryDark: '#202557',
   textError: '#C00',
   onPrimary: '#FFFFFF',
   textSecondary: '#666666',
