@@ -27,7 +27,7 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
 
   const [{article, loadingState}, acceptAdultContent] = useArticleScreenState(articleId);
 
-  useArticleHeader(article);
+  const snackBar = useArticleHeader(article);
 
   const adultContentAcceptHandler = useCallback(() => {
     acceptAdultContent(true);
@@ -93,7 +93,12 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
       );
     }
     case 'ready': {
-      return <ArticleContentComponent article={article!} itemPressHandler={articleItemPressHandler} />;
+      return (
+        <>
+          <ArticleContentComponent article={article!} itemPressHandler={articleItemPressHandler} />
+          {snackBar}
+        </>
+      );
     }
     default: {
       return (

@@ -1376,8 +1376,6 @@ PODS:
     - React-Core
   - RNShare (9.4.1):
     - React-Core
-  - RNSnackbar (2.6.2):
-    - React-Core
   - RNSVG (14.1.0):
     - React-Core
   - SDWebImage (5.11.1):
@@ -1460,7 +1458,6 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNShare (from `../node_modules/react-native-share`)
-  - RNSnackbar (from `../node_modules/react-native-snackbar`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1627,8 +1624,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNShare:
     :path: "../node_modules/react-native-share"
-  RNSnackbar:
-    :path: "../node_modules/react-native-snackbar"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -1730,7 +1725,6 @@ SPEC CHECKSUMS:
   RNReanimated: 8a6a83984cb4d61ebf1065b6137150b6b31ce609
   RNScreens: 1c2444658fbb696a094272d946708167b1f63409
   RNShare: 32e97adc8d8c97d4a26bcdd3c45516882184f8b6
-  RNSnackbar: 3727b42bf6c4314a53c18185b5203e915a4ab020
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
