@@ -132,7 +132,7 @@ type ColorScheme = {
   border: string;
   notification: string;
   //#endregion
-
+  tertiary: string;
   primaryLight: string;
   primaryDark: string;
   onPrimary: string;
@@ -174,6 +174,7 @@ const colorsLight: ColorScheme = {
   notification: '#C00',
   //#endregion
 
+  tertiary: '#007AFF',
   statusBar: '#F9F9F9',
   primaryLight: '#bbbdd7',
   primaryDark: '#202557',
@@ -215,6 +216,7 @@ const colorsDark: ColorScheme = {
   notification: '#C00',
   //#endregion
 
+  tertiary: '#FFFFFF',
   statusBar: '#242D36',
   primaryLight: '#333333',
   primaryDark: '#CCCCCC',

@@ -27,6 +27,7 @@ import {MainDrawerParamList, MainStackParamList} from '../../navigation/MainStac
 import {StackNavigationProp} from '@react-navigation/stack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import ArticleTabScreen from './tabScreen/ArticleTabScreen';
+import NotificationsModal from '../../components/notificationsModal/NotificationsModal';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -42,6 +43,8 @@ type Props = {
 
 const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [notificationsModalVisible, setNotificationsModalVisible] = useState(true);
+
   const {colors, dim} = useTheme();
 
   const state = useSelector(selectMainScreenState, (left, right) => {
@@ -148,21 +151,29 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right']}>
-      <TabView
-        renderLazyPlaceholder={renderLazyPlaceHolder}
-        tabBarPosition="top"
-        navigationState={{
-          routes: state.routes,
-          index: selectedTabIndex,
-        }}
-        swipeEnabled={true}
-        renderScene={renderScene}
-        renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
-        onIndexChange={setSelectedTabIndex}
-        lazy={true}
-        lazyPreloadDistance={0}
-        initialLayout={{height: 0, width: Dimensions.get('screen').width}}
-      />
+      <>
+        <TabView
+          renderLazyPlaceholder={renderLazyPlaceHolder}
+          tabBarPosition="top"
+          navigationState={{
+            routes: state.routes,
+            index: selectedTabIndex,
+          }}
+          swipeEnabled={true}
+          renderScene={renderScene}
+          renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
+          onIndexChange={setSelectedTabIndex}
+          lazy={true}
+          lazyPreloadDistance={0}
+          initialLayout={{height: 0, width: Dimensions.get('screen').width}}
+        />
+        <NotificationsModal
+          visible={notificationsModalVisible}
+          onClose={() => {
+            setNotificationsModalVisible(false);
+          }}
+        />
+      </>
     </SafeAreaView>
   );
 };

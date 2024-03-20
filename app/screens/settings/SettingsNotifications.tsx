@@ -28,7 +28,7 @@ const SettingsNotifications: React.FC<PropsWithChildren<SettingsNotificationsPro
               <Switch
                 thumbColor={dark ? colors.text : colors.greyBackground}
                 trackColor={{
-                  true: dark ? colors.primaryLight : colors.primary,
+                  true: dark ? colors.textDisbled : colors.primary,
                 }}
                 onValueChange={(value) => {
                   if (value) {
