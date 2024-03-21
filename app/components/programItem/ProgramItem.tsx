@@ -17,6 +17,7 @@ interface Props {
   record_article_id?: string;
   startTime: string;
   percent: string;
+  channelId?: number;
 }
 
 const ProgramItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
@@ -26,6 +27,7 @@ const ProgramItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
 
   const proc = Math.max(0, Math.min(Number(props.percent), 100));
   const hasEnded = proc === 100;
+  const isNowPlaying = proc > 0 && proc < 100;
 
   const renderIcon = useCallback(() => {
     if (proc < 100 && proc > 0) {
@@ -44,20 +46,25 @@ const ProgramItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
     return null;
   }, [proc, props.record_article_id]);
 
-  const openArticleHandler = useCallback(() => {
+  const onPressHandler = useCallback(() => {
     try {
-      const articleId = Number(props.record_article_id);
-      navigation.navigate('Article', {articleId});
+      console.log('test', isNowPlaying, props.channelId, props.record_article_id);
+      if (isNowPlaying && props.channelId) {
+        navigation.navigate('Channel', {channelId: props.channelId});
+      } else {
+        const articleId = Number(props.record_article_id);
+        navigation.navigate('Article', {articleId});
+      }
     } catch (e) {
       console.log(e);
     }
-  }, [navigation, props.record_article_id]);
+  }, [navigation, isNowPlaying, props.record_article_id]);
 
   return (
     <TouchableDebounce
       style={[styles.container, props.style, {backgroundColor: colors.programItem}]}
-      disabled={!props.record_article_id}
-      onPress={openArticleHandler}>
+      disabled={!props.record_article_id && !isNowPlaying}
+      onPress={onPressHandler}>
       <View style={styles.content}>
         <View
           style={{...styles.elapsedIndicator, width: `${proc}%`, backgroundColor: colors.programProgress}}
