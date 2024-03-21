@@ -168,7 +168,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           initialLayout={{height: 0, width: Dimensions.get('screen').width}}
         />
         <NotificationsModal
-          visible={notificationsModalVisible}
+          visible={false}
           onClose={() => {
             setNotificationsModalVisible(false);
           }}
