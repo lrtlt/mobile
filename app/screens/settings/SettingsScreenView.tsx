@@ -6,7 +6,6 @@ import {setConfig} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import {selectSettings} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 import SettingsNotifications from './SettingsNotifications';
 import {ScrollView} from 'react-native-gesture-handler';

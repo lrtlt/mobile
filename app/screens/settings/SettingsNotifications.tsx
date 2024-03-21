@@ -3,7 +3,7 @@ import {View, ViewStyle} from 'react-native';
 import {Text} from '../../components';
 import useFirebaseTopicSubscription from '../../util/useFirebaseTopicSubscription';
 import {Switch} from 'react-native-gesture-handler';
-import {themeLight, useTheme} from '../../Theme';
+import {useTheme} from '../../Theme';
 
 interface SettingsNotificationsProps {
   cellStyle: ViewStyle;

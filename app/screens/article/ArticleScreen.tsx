@@ -95,7 +95,9 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
     case 'ready': {
       return (
         <>
-          <ArticleContentComponent article={article!} itemPressHandler={articleItemPressHandler} />
+          {article && (
+            <ArticleContentComponent article={article} itemPressHandler={articleItemPressHandler} />
+          )}
           {snackBar}
         </>
       );

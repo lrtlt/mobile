@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, StyleSheet} from 'react-native';
 import Modal from 'react-native-modal';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../../Theme';
@@ -8,7 +8,6 @@ import PagerView from 'react-native-pager-view';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import PagerDots from './Dots';
 import {Page1, Page2, Page3} from './Pages';
-import {once} from 'lodash';
 
 const PAGE_COUNT = 3;
 
