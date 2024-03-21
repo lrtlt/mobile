@@ -591,7 +591,8 @@ export type ProgramItemType = {
 };
 
 export type SingleDayProgram = {
-  channel_id: number;
+  channel_id?: number;
+  id?: number;
   title: string;
   prog: ProgramItemType[];
 };

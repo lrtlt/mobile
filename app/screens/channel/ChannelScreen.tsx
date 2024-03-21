@@ -29,6 +29,10 @@ export const PROGRAM_RELOAD_TIME = 1000 * 60 * 2; //2 minutes
 const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const [selectedChannel, setSelectedChannel] = useState(route.params.channelId);
 
+  useEffect(() => {
+    setSelectedChannel(route.params.channelId);
+  }, [route.params.channelId]);
+
   const {
     channelData,
     streamData,

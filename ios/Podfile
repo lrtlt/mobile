@@ -12,7 +12,8 @@ node_require('react-native-permissions/scripts/setup.rb')
 
 $RNFirebaseAsStaticFramework = true
   
-platform :ios, min_ios_version_supported
+platform :ios, '13.4'
+
 prepare_react_native_project!
 
 # ⬇️ uncomment wanted permissions

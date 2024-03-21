@@ -9,9 +9,10 @@ import {PROGRAM_ITEM_HEIGHT} from '../../../components/programItem/ProgramItem';
 interface Props {
   items: ProgramItemType[];
   scrollToIndex: number;
+  channel_id: number;
 }
 
-const ProgramList: React.FC<React.PropsWithChildren<Props>> = ({items, scrollToIndex}) => {
+const ProgramList: React.FC<React.PropsWithChildren<Props>> = ({items, scrollToIndex, channel_id}) => {
   const ref = useRef<FlashList<any>>(null);
 
   useEffect(() => {
@@ -23,6 +24,7 @@ const ProgramList: React.FC<React.PropsWithChildren<Props>> = ({items, scrollToI
 
   const renderProgramItem = useCallback((val: ListRenderItemInfo<ProgramItemType>) => {
     const item = val.item;
+
     return (
       <View key={`${item.time_start}-${item.title}`}>
         <ProgramItem
@@ -31,6 +33,7 @@ const ProgramList: React.FC<React.PropsWithChildren<Props>> = ({items, scrollToI
           percent={item.proc}
           record_article_id={item.record_article_id}
           description={item.description}
+          channelId={channel_id}
         />
         <Divider style={styles.programItemDivider} />
       </View>

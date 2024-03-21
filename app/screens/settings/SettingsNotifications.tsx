@@ -3,7 +3,7 @@ import {View, ViewStyle} from 'react-native';
 import {Text} from '../../components';
 import useFirebaseTopicSubscription from '../../util/useFirebaseTopicSubscription';
 import {Switch} from 'react-native-gesture-handler';
-import {themeLight, useTheme} from '../../Theme';
+import {useTheme} from '../../Theme';
 
 interface SettingsNotificationsProps {
   cellStyle: ViewStyle;
@@ -16,7 +16,7 @@ const SettingsNotifications: React.FC<PropsWithChildren<SettingsNotificationsPro
 }) => {
   const {topics, subscriptions, subscribeToTopic, unsubscribeFromTopic} = useFirebaseTopicSubscription();
 
-  const {dark} = useTheme();
+  const {dark, colors} = useTheme();
   return (
     <>
       {topics
@@ -26,9 +26,9 @@ const SettingsNotifications: React.FC<PropsWithChildren<SettingsNotificationsPro
             <View key={topic.slug} style={cellStyle}>
               <Text style={titleStyle}>{topic.name}</Text>
               <Switch
-                thumbColor={dark ? themeLight.colors.primaryLight : themeLight.colors.greyBackground}
+                thumbColor={dark ? colors.text : colors.greyBackground}
                 trackColor={{
-                  true: dark ? themeLight.colors.primaryDark : themeLight.colors.primary,
+                  true: dark ? colors.textDisbled : colors.primary,
                 }}
                 onValueChange={(value) => {
                   if (value) {

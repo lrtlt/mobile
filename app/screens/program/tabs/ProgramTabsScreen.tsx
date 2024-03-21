@@ -26,7 +26,7 @@ const TabsScreen: React.FC<React.PropsWithChildren<Props>> = ({program}) => {
     return program.map((channel, i) => {
       return {
         key: String(channel.channel_id || `unknown-channel-${i}`),
-        channelId: channel.channel_id ?? -1,
+        channelId: channel.channel_id ?? channel.id ?? -1,
         title: channel.title,
         program: channel.prog,
       };
@@ -77,7 +77,11 @@ const TabsScreen: React.FC<React.PropsWithChildren<Props>> = ({program}) => {
 
       return (
         <View key={`${route.key}`}>
-          <ProgramList items={programItems || []} scrollToIndex={scrollToIndex} />
+          <ProgramList
+            items={programItems || []}
+            scrollToIndex={scrollToIndex}
+            channel_id={route.channelId}
+          />
         </View>
       );
     },

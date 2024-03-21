@@ -99,16 +99,16 @@ const useCarPlayController = (): ReturnType => {
       // CarPlay.setRootTemplate(template);
       // setTemplate(template);
 
-      template?.updateSections([
-        {
-          items: newPlayList.map((i) => ({
-            text: i.text,
-            detailText: i.detailText,
-            imgUrl: i.imgUrl as any,
-            isPlaying: i.isPlaying,
-          })),
-        },
-      ]);
+      // template?.updateSections([
+      //   {
+      //     items: newPlayList.map((i) => ({
+      //       text: i.text,
+      //       detailText: i.detailText,
+      //       imgUrl: i.imgUrl as any,
+      //       isPlaying: i.isPlaying,
+      //     })),
+      //   },
+      // ]);
 
       // template?.updateListTemplateItem({
       //   sectionIndex: 0,

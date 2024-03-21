@@ -3,7 +3,6 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import Share from 'react-native-share';
-import Snackbar from 'react-native-snackbar';
 import {useDispatch, useSelector} from 'react-redux';
 import {ArticleContent, isDefaultArticle} from '../../api/Types';
 import {ActionButton} from '../../components';
@@ -11,7 +10,8 @@ import {SaveIcon, ShareIcon} from '../../components/svg';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {removeArticle, saveArticle} from '../../redux/actions';
 import {selectArticleBookmarked} from '../../redux/selectors';
-import {useTheme} from '../../Theme';
+import {themeLight, useTheme} from '../../Theme';
+import Snackbar from '../../components/snackbar/SnackBar';
 
 const getArticleId = (article?: ArticleContent) => {
   if (!article) {
@@ -27,6 +27,7 @@ const getArticleId = (article?: ArticleContent) => {
 
 const useArticleHeader = (article?: ArticleContent) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Article'>>();
+  const [snackbar, setSnackbar] = React.useState<React.ReactElement>();
   const {colors, dim, strings} = useTheme();
 
   const dispatch = useDispatch();
@@ -40,18 +41,19 @@ const useArticleHeader = (article?: ArticleContent) => {
     const _saveArticlePress = () => {
       if (isBookmarked) {
         dispatch(removeArticle(getArticleId(article)));
+        setSnackbar(undefined);
       } else {
         dispatch(saveArticle(article));
-        Snackbar.show({
-          text: strings.articleHasBeenSaved,
-          duration: Snackbar.LENGTH_SHORT,
-        });
+        setSnackbar(
+          <Snackbar message={strings.articleHasBeenSaved} backgroundColor={themeLight.colors.primaryDark} />,
+        );
       }
     };
 
     const _handleSharePress = () => {
       if (isDefaultArticle(article)) {
         const url = `https://lrt.lt${article.article_url}`;
+
         Share.open({
           title: 'LRT',
           message: article.article_title,
@@ -92,6 +94,8 @@ const useArticleHeader = (article?: ArticleContent) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [article, isBookmarked]);
+
+  return snackbar;
 };
 
 const styles = StyleSheet.create({

@@ -51,6 +51,7 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
           style={{
             ...styles.streamSelectionButton,
             backgroundColor: selectedStream === streamData ? colors.primaryLight : undefined,
+            borderColor: colors.primaryLight,
           }}>
           <CameraIcon
             size={16}
@@ -64,6 +65,7 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
         style={{
           ...styles.streamSelectionButton,
           backgroundColor: selectedStream === audioStreamData ? colors.primaryLight : undefined,
+          borderColor: colors.primaryLight,
         }}
         onPress={() => setSelectedStream(audioStreamData)}>
         <IconNote
