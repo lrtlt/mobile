@@ -28,6 +28,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import ArticleTabScreen from './tabScreen/ArticleTabScreen';
 import NotificationsModal from '../../components/notificationsModal/NotificationsModal';
+import useOnboardingLogic from './useOnboardingLogic';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -43,9 +44,9 @@ type Props = {
 
 const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const [notificationsModalVisible, setNotificationsModalVisible] = useState(true);
-
   const {colors, dim} = useTheme();
+
+  const {isVisible, onClose} = useOnboardingLogic();
 
   const state = useSelector(selectMainScreenState, (left, right) => {
     return left.routes.length === right.routes.length;
@@ -167,12 +168,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           lazyPreloadDistance={0}
           initialLayout={{height: 0, width: Dimensions.get('screen').width}}
         />
-        <NotificationsModal
-          visible={false}
-          onClose={() => {
-            setNotificationsModalVisible(false);
-          }}
-        />
+        <NotificationsModal visible={isVisible} onClose={onClose} />
       </>
     </SafeAreaView>
   );

@@ -28,7 +28,8 @@ const _handleNotificationOpen = (data: NotificationData | undefined, isInitial: 
           const initialUrl = await AsyncStorage.getItem(INITIAL_URL_STORAGE_KEY);
           if (initialUrl === url) {
             console.debug('initialUrl already handled');
-            return;
+            //TODO: check if this helps with article notifications not being opened issue.
+            //return;
           } else {
             AsyncStorage.setItem(INITIAL_URL_STORAGE_KEY, url);
           }
