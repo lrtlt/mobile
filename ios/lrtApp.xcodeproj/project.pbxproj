@@ -789,7 +789,7 @@
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "i386 arm64";
 				INFOPLIST_FILE = lrtApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.39.1;
+				MARKETING_VERSION = 2.39.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -821,7 +821,7 @@
 				DEVELOPMENT_TEAM = TGMUP98888;
 				INFOPLIST_FILE = lrtApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.39.1;
+				MARKETING_VERSION = 2.39.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
