@@ -6,7 +6,6 @@ import {MediaIndicator, Text, TouchableDebounce} from '../../../../../../compone
 import {useTheme} from '../../../../../../Theme';
 import {IconLRTEpika} from '../../../../../../components/svg';
 
-//TODO: update block type
 interface EpikaBlockProps {
   block: HomeBlockEpikaBlock;
 }
@@ -17,7 +16,7 @@ const EpikaBlock: React.FC<EpikaBlockProps> = ({block}) => {
   const {data} = block;
   const {background_image, cta_title, cta_url, list} = data;
 
-  const {colors, strings} = useTheme();
+  const {colors} = useTheme();
 
   const openUrl = useCallback((url: string) => {
     Linking.openURL(url);
@@ -59,9 +58,9 @@ const EpikaBlock: React.FC<EpikaBlockProps> = ({block}) => {
         <Text style={{...styles.titleText, color: colors.epikaGreen}}>{'\nnemokamai'}</Text>
       </Text>
 
-      <TouchableDebounce onPress={() => openUrl(data.cta_url)}>
+      <TouchableDebounce onPress={() => openUrl(cta_url)}>
         <View style={{...styles.cta, backgroundColor: colors.epikaGreen}}>
-          <Text style={styles.ctaText}>{strings.moreButtonText}</Text>
+          <Text style={styles.ctaText}>{cta_title.toUpperCase()}</Text>
         </View>
       </TouchableDebounce>
 
