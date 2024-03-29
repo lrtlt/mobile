@@ -210,7 +210,6 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
     }
     case API_HOME_RESULT: {
       const homeItems = action.data.homepage_data;
-      console.log('HOME ITEMS', homeItems);
 
       return {
         ...state,
@@ -234,6 +233,7 @@ const reducer = (state = initialState, action: ArticlesActionType): ArticlesStat
     }
     case API_MEDIATEKA_RESULT: {
       const mediatekaItems = action.data;
+
       return {
         ...state,
         mediateka: {

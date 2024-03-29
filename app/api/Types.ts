@@ -130,6 +130,20 @@ export type HomeBlockFeedBlock = {
   block_title: string;
 };
 
+export type HomeBlockEpikaBlock = {
+  type: 'banner';
+  template: 'epika_banner';
+  data: {
+    background_image: string;
+    cta_title: string;
+    cta_url: string;
+    list: {
+      href: string;
+      image: string;
+    }[];
+  };
+};
+
 export type HomeBlockTopFeedBlock = {
   //TODO: remove this template after audioteka api update
   template: 'top_feed';
@@ -183,6 +197,7 @@ export type HomeBlockType =
   | HomeBlockFeedBlock
   | HomeBlockTopFeedBlock
   | HomeBlockDailyQuestion
+  | HomeBlockEpikaBlock
   | AudiotekaTopUrlList;
 
 export type HomeDataResponse = {

@@ -29,6 +29,7 @@ import TopFeedBlock from './blocks/TopFeedBlock/TopFeedBlock';
 import TopUrlBlock from './blocks/TopUrlsBlock/TopUrlBlock';
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
+import EpikaBlock from './blocks/EpikaBlock/EpikaBlock';
 
 interface Props {
   isCurrent: boolean;
@@ -154,6 +155,9 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
         }
         case 'daily_question': {
           return <DailyQuestionComponent block={block} />;
+        }
+        case 'banner': {
+          return <EpikaBlock block={block} />;
         }
         default: {
           console.warn('Unknown list item type: ' + val.item.type);
