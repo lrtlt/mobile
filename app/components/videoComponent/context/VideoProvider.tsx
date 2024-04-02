@@ -1,10 +1,8 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
+import React, {useCallback, useRef, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import useOrientation from '../../../util/useOrientation';
 import {MediaType, VideoBaseData, VideoContext} from './VideoContext';
 import Animated, {FadeOut, SlideInDown} from 'react-native-reanimated';
-import {PlayerMode} from '../PlayerMode';
-import TheoMediaPlayer from '../TheoMediaPlayer';
 
 export type FullScreenListener = {
   onFullScreenEnter: () => void;
@@ -13,33 +11,10 @@ export type FullScreenListener = {
 
 const VideoProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
   const [videoBaseData, setVideoBaseData] = useState<VideoBaseData>({mediaType: MediaType.VIDEO});
-  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
-  const [isMuted, setIsMuted] = useState<boolean>(false);
-  const [isPausedByUser, setIsPausedByUser] = useState<boolean>(true);
+  const [playlist, setPlaylist] = useState<VideoBaseData[]>([]);
 
   const orientation = useOrientation();
-
   const currentTimeRef = useRef(0);
-  const fullScreenListeners = useRef<Record<string, FullScreenListener>>({});
-
-  const registerFullScreenListener = useCallback((key: string, listener: FullScreenListener) => {
-    fullScreenListeners.current[key] = listener;
-  }, []);
-
-  const unregisterFullScreenListener = useCallback((key: string) => {
-    delete fullScreenListeners.current[key];
-  }, []);
-
-  const handleSetFullScreen = useCallback((fullScreen: boolean) => {
-    Object.keys(fullScreenListeners.current).forEach((key) => {
-      if (fullScreen) {
-        fullScreenListeners.current[key]?.onFullScreenEnter();
-      } else {
-        fullScreenListeners.current[key]?.onFullScreenExit();
-      }
-    });
-    setIsFullScreen(fullScreen);
-  }, []);
 
   const handleSetCurrentTime = useCallback((time: number) => {
     currentTimeRef.current = time;
@@ -47,18 +22,7 @@ const VideoProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
 
   const handleGetCurrentTime = useCallback(() => currentTimeRef.current, []);
 
-  useEffect(() => {
-    const handler = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (isFullScreen) {
-        handleSetFullScreen(false);
-        return true;
-      }
-      return false;
-    });
-    return () => handler.remove();
-  }, [handleSetFullScreen, isFullScreen]);
-
-  const renderFullScreenPlayer = useCallback(() => {
+  const renderMiniPlayer = useCallback(() => {
     const {uri, mediaType, poster, title, isLiveStream} = videoBaseData;
     if (!uri) {
       console.log('Cannot render full screen player URI is empty!');
@@ -66,42 +30,29 @@ const VideoProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
     }
     return (
       <Animated.View style={styles.root} entering={SlideInDown.duration(300)} exiting={FadeOut.duration(250)}>
-        <StatusBar hidden={isFullScreen} />
         <View
           style={orientation === 'portrait' ? styles.videoContainerPortrait : styles.videoContainerLandscape}>
-          <TheoMediaPlayer
-            streamUri={uri}
-            mode={PlayerMode.FULLSCREEN}
-            mediaType={mediaType}
-            poster={poster}
-            title={title}
-            autoStart={!isPausedByUser}
-            isLiveStream={Boolean(isLiveStream)}
-            startTime={isLiveStream ? undefined : currentTimeRef.current / 1000}
-          />
+          {/* TheoMediaPlayer is a custom component */}
         </View>
       </Animated.View>
     );
-  }, [isFullScreen, isPausedByUser, orientation, videoBaseData]);
+  }, [orientation, videoBaseData]);
+
+  const handleClose = useCallback(() => {
+    setPlaylist([]);
+  }, []);
 
   return (
     <VideoContext.Provider
       value={{
         ...videoBaseData,
-        isFullScreen,
-        isPausedByUser,
-        isMuted,
         setVideoBaseData,
-        setIsMuted,
-        setIsPausedByUser,
         getCurrentTime: handleGetCurrentTime,
         setCurrentTime: handleSetCurrentTime,
-        setIsFullScreen: handleSetFullScreen,
-        registerFullScreenListener,
-        unregisterFullScreenListener,
+        close: handleClose,
       }}>
       {props.children}
-      {isFullScreen === true ? renderFullScreenPlayer() : null}
+      {playlist.length > 0 ? renderMiniPlayer() : null}
     </VideoContext.Provider>
   );
 };
@@ -118,6 +69,7 @@ const styles = StyleSheet.create({
   videoContainerPortrait: {
     width: '100%',
     aspectRatio: 16 / 9,
+    backgroundColor: 'red',
   },
   videoContainerLandscape: {
     height: '100%',

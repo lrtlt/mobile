@@ -18,6 +18,7 @@ export type VideoContextType = VideoBaseData & {
   getCurrentTime: () => number;
   setCurrentTime: (time: number) => void;
   setVideoBaseData: (data: VideoBaseData) => void;
+  close: () => void;
 };
 
 const noOp = (): any => {
@@ -29,4 +30,5 @@ export const VideoContext = React.createContext<VideoContextType>({
   setCurrentTime: noOp,
   getCurrentTime: noOp,
   setVideoBaseData: noOp,
+  close: noOp,
 });
