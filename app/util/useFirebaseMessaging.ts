@@ -73,17 +73,18 @@ const useFirebaseMessaging = (isNavigationReady: boolean) => {
     const init = async () => {
       const token = await messaging().getToken();
       const apnsToken = await messaging().getAPNSToken();
+
       console.log('FCM-token', token);
       console.log('APNS-token', apnsToken);
 
       const isChannelCreated = await notifee.isChannelCreated(FOREGROUND_NOTIFICATION_CHANNEL_ID);
-
       if (!isChannelCreated) {
         await notifee.createChannel({
           id: FOREGROUND_NOTIFICATION_CHANNEL_ID,
           name: 'Foreground notifications',
         });
       }
+      await messaging().setDeliveryMetricsExportToBigQuery(true);
     };
     init();
   }, []);
