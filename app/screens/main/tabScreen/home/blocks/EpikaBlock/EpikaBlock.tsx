@@ -65,14 +65,18 @@ const EpikaBlock: React.FC<EpikaBlockProps> = ({block}) => {
       </TouchableDebounce>
 
       <View style={{gap: listGapSize}}>
-        <View style={{flexDirection: 'row', gap: listGapSize}}>
-          {renderListItem(list[0])}
-          {renderListItem(list[1])}
-        </View>
-        <View style={{flexDirection: 'row', gap: listGapSize}}>
-          {renderListItem(list[2])}
-          {renderListItem(list[3])}
-        </View>
+        {list.length >= 2 ? (
+          <View style={{flexDirection: 'row', gap: listGapSize}}>
+            {renderListItem(list[0])}
+            {renderListItem(list[1])}
+          </View>
+        ) : null}
+        {list.length >= 4 ? (
+          <View style={{flexDirection: 'row', gap: listGapSize}}>
+            {renderListItem(list[2])}
+            {renderListItem(list[3])}
+          </View>
+        ) : null}
       </View>
     </View>
   );
