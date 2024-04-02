@@ -162,6 +162,7 @@ type ColorScheme = {
   ripple: '#99999940';
   lightGreyBackground: '#F9F9F9';
   dailyQuestionProgress: string;
+  epikaGreen: '#58EB52';
 };
 
 const colorsLight: ColorScheme = {
@@ -204,6 +205,7 @@ const colorsLight: ColorScheme = {
   darkIcon: '#222222',
   lightGreyBackground: '#F9F9F9',
   ripple: '#99999940',
+  epikaGreen: '#58EB52',
 };
 
 const colorsDark: ColorScheme = {
@@ -246,6 +248,7 @@ const colorsDark: ColorScheme = {
   lightGreyBackground: '#F9F9F9',
   ripple: '#99999940',
   dailyQuestionProgress: '#36414f',
+  epikaGreen: '#58EB52',
 };
 //#endregion
 
