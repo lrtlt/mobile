@@ -8,8 +8,7 @@ import CastContext, {
   RemoteMediaClient,
 } from 'react-native-google-cast';
 import {THEOplayer} from 'react-native-theoplayer';
-import {useVideo} from './context/useVideo';
-import {MediaType} from './context/VideoContext';
+import {MediaType} from './context/PlayerContext';
 
 type Props = {
   player?: THEOplayer;
@@ -21,7 +20,6 @@ type Props = {
 };
 
 const useChromecast = ({player, mediaType, isLiveStream, poster, streamUri, title}: Props) => {
-  const {getCurrentTime} = useVideo();
   const [client, setClient] = useState<RemoteMediaClient>();
   const [mediaStatus, setMediaStatus] = useState<MediaStatus | null>(null);
 
@@ -47,7 +45,7 @@ const useChromecast = ({player, mediaType, isLiveStream, poster, streamUri, titl
           player.pause();
           client?.loadMedia({
             autoplay: true,
-            startTime: getCurrentTime() / 1000,
+            startTime: player.currentTime / 1000,
             mediaInfo: {
               hlsSegmentFormat: isLiveStream ? MediaHlsSegmentFormat.TS : MediaHlsSegmentFormat.AAC,
               hlsVideoSegmentFormat: MediaHlsVideoSegmentFormat.MPEG2_TS,

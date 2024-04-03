@@ -11,7 +11,7 @@ import {persistor, store} from './app/redux/store';
 import useAppTrackingPermission from './app/util/useAppTrackingPermission';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, StyleSheet} from 'react-native';
-import VideoProvider from './app/components/videoComponent/context/VideoProvider';
+import PlayerProvider from './app/components/videoComponent/context/PlayerProvider';
 import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import CarPlayProvider from './app/car/CarPlayProvider';
@@ -39,11 +39,11 @@ const App: React.FC = () => {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <SettingsProvider>
         <AppBackground>
-          <VideoProvider>
+          <PlayerProvider>
             <CarPlayProviderImpl>
               <Navigation />
             </CarPlayProviderImpl>
-          </VideoProvider>
+          </PlayerProvider>
         </AppBackground>
       </SettingsProvider>
     </SafeAreaProvider>
