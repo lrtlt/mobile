@@ -7,7 +7,7 @@ import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
 import TheoMediaPlayer from './TheoMediaPlayer';
-import {MediaType} from './context/VideoContext';
+import {MediaType} from './context/PlayerContext';
 
 interface Props {
   style?: ViewStyle;

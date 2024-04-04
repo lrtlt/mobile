@@ -17,7 +17,7 @@ const useMediaTracking = (): ReturnType => {
   const sendPlay = useMemo(
     () =>
       debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: play');
+        console.log('MediaPlayer event: play', time);
         Gemius.sendPlay(mediaId, time ? time : 0);
       }, EVENT_DEBOUNCE_DURATION),
     [],
@@ -26,7 +26,7 @@ const useMediaTracking = (): ReturnType => {
   const sendPause = useMemo(
     () =>
       debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: pause');
+        console.log('MediaPlayer event: pause', time);
         Gemius.sendPause(mediaId, time ? time : 0);
       }, EVENT_DEBOUNCE_DURATION),
     [],
@@ -35,7 +35,7 @@ const useMediaTracking = (): ReturnType => {
   const sendClose = useMemo(
     () =>
       debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: close');
+        console.log('MediaPlayer event: close, time');
         Gemius.sendClose(mediaId, time ? time : 0);
       }, EVENT_DEBOUNCE_DURATION),
     [],

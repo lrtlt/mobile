@@ -45,6 +45,7 @@ export const HIT_SLOP: Insets = {
 interface Props {
   enabled: boolean;
   enableFullScreen: boolean;
+  isFullScreen: boolean;
   enableMute: boolean;
   mediaDuration: number;
   currentTime: number;
@@ -53,7 +54,7 @@ interface Props {
   seekerStart: number;
   seekerEnd: number;
   isBuffering?: boolean;
-
+  isMini?: boolean;
   extraControls?: JSX.Element;
 
   isPaused: boolean;
@@ -70,6 +71,7 @@ interface Props {
 const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   enabled,
   enableFullScreen,
+  isFullScreen,
   enableMute,
   currentTime,
   seekerStart,
@@ -77,12 +79,12 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   mediaDuration,
   title,
   loading = false,
+  isMini = false,
   isBuffering,
   isPaused,
   onPlayPausePress,
   isMuted,
   onMutePress,
-
   onFullScreenPress,
 
   onSeekRequest,
@@ -96,6 +98,7 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   const seekPanResponder = useRef<PanResponderInstance>();
   const seekerWidth = useRef(0);
 
+  const isMiniPlayer = isMini && !isFullScreen;
   const isLiveStream = isNaN(mediaDuration) || !isFinite(mediaDuration) || mediaDuration <= 0;
   const showSeeker = !isLiveStream || seekerEnd - seekerStart > 60;
 
@@ -208,37 +211,49 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   const PlayPauseControl = useMemo(
     () => (
       <TouchableOpacity
-        style={styles.playPauseIcon}
+        style={{
+          ...styles.playPauseIcon,
+          width: styles.playPauseIcon.width - (isMiniPlayer ? 8 : 0),
+          height: styles.playPauseIcon.height - (isMiniPlayer ? 8 : 0),
+        }}
         onPress={handlePlayPauseToggle}
         hitSlop={HIT_SLOP}
         activeOpacity={0.6}>
         {isPaused ? (
-          <IconPlayerPlay size={ICON_SIZE} color={ICON_COLOR} />
+          <IconPlayerPlay size={ICON_SIZE - (isMiniPlayer ? 6 : 0)} color={ICON_COLOR} />
         ) : (
-          <IconPlayerPause size={ICON_SIZE} color={ICON_COLOR} />
+          <IconPlayerPause size={ICON_SIZE - (isMiniPlayer ? 6 : 0)} color={ICON_COLOR} />
         )}
       </TouchableOpacity>
     ),
-    [handlePlayPauseToggle, isPaused],
+    [handlePlayPauseToggle, isPaused, isMiniPlayer],
   );
 
   const CenterControls = useMemo(
     () => (
       <View style={styles.conterControlsRow}>
-        {showSeeker && (
+        {showSeeker && !isMiniPlayer && (
           <TouchableOpacity onPress={handleSeekBack} hitSlop={HIT_SLOP} activeOpacity={0.6}>
-            <IconPlayerRewind style={styles.rewindIcon} size={ICON_SIZE + 12} color={ICON_COLOR} />
+            <IconPlayerRewind
+              style={styles.rewindIcon}
+              size={ICON_SIZE + (isMiniPlayer ? 6 : 12)}
+              color={ICON_COLOR}
+            />
           </TouchableOpacity>
         )}
         {PlayPauseControl}
-        {showSeeker && (
+        {showSeeker && !isMiniPlayer && (
           <TouchableOpacity onPress={handleSeekForward} hitSlop={HIT_SLOP} activeOpacity={0.6}>
-            <IconPlayerForward style={styles.forwardIcon} size={ICON_SIZE + 12} color={ICON_COLOR} />
+            <IconPlayerForward
+              style={styles.forwardIcon}
+              size={ICON_SIZE + (isMiniPlayer ? 6 : 12)}
+              color={ICON_COLOR}
+            />
           </TouchableOpacity>
         )}
       </View>
     ),
-    [PlayPauseControl, handleSeekBack, handleSeekForward, isLiveStream],
+    [PlayPauseControl, handleSeekBack, handleSeekForward, isLiveStream, isMiniPlayer],
   );
 
   const VolumeControl = useCallback(
@@ -274,16 +289,17 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   const ChromeCastControl = <CastButton style={[styles.fullScreenIcon, styles.center]} tintColor="white" />;
 
   const Title = useCallback(
-    () => (
-      <TextComponent
-        style={styles.titleText}
-        allowFontScaling={false}
-        fontFamily="SourceSansPro-SemiBold"
-        numberOfLines={2}>
-        {title}
-      </TextComponent>
-    ),
-    [title],
+    () =>
+      title && !isMiniPlayer ? (
+        <TextComponent
+          style={styles.titleText}
+          allowFontScaling={false}
+          fontFamily="SourceSansPro-SemiBold"
+          numberOfLines={2}>
+          {title}
+        </TextComponent>
+      ) : null,
+    [title, isMiniPlayer],
   );
 
   const TimerControl = useCallback(
@@ -295,26 +311,35 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
     [],
   );
 
-  const SeekBar = useCallback(({position}: {position: number}) => {
-    return (
-      <View style={styles.seekBar_container} {...seekPanResponder.current?.panHandlers} hitSlop={HIT_SLOP}>
+  const SeekBar = useCallback(
+    ({position}: {position: number}) => {
+      return (
         <View
-          style={styles.seekBar_track}
-          onLayout={(event) => (seekerWidth.current = event.nativeEvent.layout.width)}
-          pointerEvents={'none'}>
+          style={{
+            ...styles.seekBar_container,
+            marginVertical: isMiniPlayer ? 0 : styles.seekBar_container.marginVertical,
+          }}
+          {...seekPanResponder.current?.panHandlers}
+          hitSlop={HIT_SLOP}>
           <View
-            style={[
-              styles.seekBar_fill,
-              {
-                width: position,
-              },
-            ]}
-            pointerEvents={'none'}
-          />
+            style={styles.seekBar_track}
+            onLayout={(event) => (seekerWidth.current = event.nativeEvent.layout.width)}
+            pointerEvents={'none'}>
+            <View
+              style={[
+                styles.seekBar_fill,
+                {
+                  width: position,
+                },
+              ]}
+              pointerEvents={'none'}
+            />
+          </View>
         </View>
-      </View>
-    );
-  }, []);
+      );
+    },
+    [isMiniPlayer],
+  );
 
   if (loading) {
     return (
@@ -342,6 +367,7 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
       <Pressable style={{...StyleSheet.absoluteFillObject, bottom: ICON_SIZE}} onPress={handleHideControls} />
       <Title />
       {CenterControls}
+
       <View style={styles.bottomControlsContainer}>
         {showSeeker && (
           <View>
@@ -413,7 +439,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: 8,
-    minHeight: ICON_SIZE + 8,
+    minHeight: ICON_SIZE,
   },
   volumeIcon: {
     width: ICON_SIZE + 8,

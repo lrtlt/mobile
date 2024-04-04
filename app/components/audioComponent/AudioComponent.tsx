@@ -3,7 +3,7 @@ import {View, ViewStyle} from 'react-native';
 import {buildArticleImageUri, IMG_SIZE_L} from '../../util/ImageUtil';
 import {ArticlePhotoType} from '../../api/Types';
 import TheoMediaPlayer from '../videoComponent/TheoMediaPlayer';
-import {MediaType} from '../videoComponent/context/VideoContext';
+import {MediaType} from '../videoComponent/context/PlayerContext';
 
 interface AudioComponentProps {
   style?: ViewStyle;

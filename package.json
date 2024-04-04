@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@native-html/table-plugin": "^5.3.1",
+    "@ngenux/react-native-draggable-view": "^0.1.6",
     "@notifee/react-native": "^7.8.2",
     "@react-native-async-storage/async-storage": "^1.22.1",
     "@react-native-community/slider": "^4.5.0",
