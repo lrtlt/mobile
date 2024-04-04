@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {StyleSheet, View, useWindowDimensions} from 'react-native';
 import useOrientation from '../../../util/useOrientation';
-import {MediaBaseData, MediaType, PlayerContext} from './PlayerContext';
+import {MediaBaseData, MediaType, PlayerContext, PlayerContextType} from './PlayerContext';
 import TheoMediaPlayer from '../TheoMediaPlayer';
 import Draggable from '@ngenux/react-native-draggable-view';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
@@ -72,12 +72,16 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
     );
   }, [orientation, playerData, width, height, colors, strings]);
 
+  const context: PlayerContextType = useMemo(
+    () => ({
+      setPlayerData,
+      close: handleClose,
+    }),
+    [setPlayerData, handleClose],
+  );
+
   return (
-    <PlayerContext.Provider
-      value={{
-        setPlayerData,
-        close: handleClose,
-      }}>
+    <PlayerContext.Provider value={context}>
       {props.children}
       {renderMiniPlayer()}
     </PlayerContext.Provider>
