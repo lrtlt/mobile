@@ -87,6 +87,13 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const {setPlayerData, close} = useMediaPlayer();
 
+  //Close floating player before loading new one
+  useEffect(() => {
+    if (!isFloating) {
+      close();
+    }
+  }, []);
+
   useEffect(() => {
     return () => {
       if (player) {
