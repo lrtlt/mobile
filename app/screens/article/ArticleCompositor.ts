@@ -174,6 +174,7 @@ const getAudioContent = (article: ArticleContentMedia): ArticleContentItemType =
   return {
     type: TYPE_AUDIO_CONTENT,
     data: {
+      title: article.title,
       about_episode: article.content,
       about_show: article.category_decription,
       image: article.category_img_info,
@@ -196,6 +197,7 @@ const getAudio = (article: ArticleContentMedia): ArticleContentItemType => {
   return {
     type: TYPE_AUDIO,
     data: {
+      title: article.title,
       cover: article.main_photo,
       streamUri: article.stream_url,
       mediaId: String(article.id),
@@ -207,6 +209,7 @@ const getTextToSpeech = (article: ArticleContentDefault): ArticleContentItemType
   return {
     type: TYPE_TEXT_TO_SPEECH,
     data: {
+      title: article.article_title,
       cover: article.main_photo,
       streamUri: article.text2speech_file_url,
       mediaId: article.text2speech_file_url,

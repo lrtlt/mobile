@@ -2,6 +2,8 @@ import {useEffect, useState} from 'react';
 import {CarPlay, ListTemplate} from 'react-native-carplay';
 import {CarPlayContextType, PlayListItem} from './CarPlayContext';
 import createCarPlayLiveTemplate from './carPlayLiveTemplate';
+import {useMediaPlayer} from '../components/videoComponent/context/useMediaPlayer';
+import {MediaType} from '../components/videoComponent/context/PlayerContext';
 
 type ReturnType = CarPlayContextType;
 
@@ -10,118 +12,49 @@ const useCarPlayController = (): ReturnType => {
   const [template, setTemplate] = useState<ListTemplate>();
   const [currentPlaylist, setCurrentPlaylist] = useState<PlayListItem[]>([]);
 
+  const {setPlayerData} = useMediaPlayer();
+
   useEffect(() => {
     if (template) {
       template.config.onItemSelect = async ({index}) => {
-        playItem(currentPlaylist[index]);
+        console.log('useCarPlayController: onItemSelect', index);
+        console.log('useCarPlayController: onItemSelect', currentPlaylist[index]);
+
+        setPlayerData({
+          uri: currentPlaylist[index].streamUrl,
+          mediaType: MediaType.VIDEO,
+          isLiveStream: true,
+          poster: currentPlaylist[index].imgUrl,
+          title: currentPlaylist[index].text,
+        });
       };
       return () => {
         template.config.onItemSelect = undefined;
       };
     }
-
-    // CarPlay.emitter.addListener('didSelectListItem', (event) => {
-    //   console.log(event);
-    //   playItem(playlist[event.index]);
-    // });
-    // return () => {
-    //   CarPlay.emitter.removeAllListeners('didSelectListItem');
-    // };
-  }, [currentPlaylist, template]);
-
-  // const onConnectHandler: OnConnectCallback = useCallback(
-  //   (windowInfo) => {
-  //     console.log('CarPlay connected', windowInfo);
-  //     setConnected(true);
-
-  //     setTimeout(() => {
-  //       // CarPlay.enableNowPlaying(true);
-  //       // CarPlay.bridge.reload();
-  //       CarPlay.setRootTemplate(createTemplate());
-  //     }, 1000);
-  //   },
-  //   [createTemplate],
-  // );
-
-  // const onDisconnectHandler: OnDisconnectCallback = useCallback(() => {
-  //   console.log('CarPlay disconnected');
-  //   setConnected(false);
-  //   CarPlay.dismissTemplate();
-  // }, []);
-
-  // useEffect(() => {
-  //   CarPlay.registerOnConnect(onConnectHandler);
-  //   const subscription = CarPlay.emitter.addListener('myListener', (event) => {
-  //     console.log(event);
-  //   });
-  //   return () => {
-  //     CarPlay.unregisterOnConnect(onConnectHandler);
-  //     subscription.remove();
-  //   };
-  // }, [onConnectHandler]);
-
-  useEffect(() => {
-    if (CarPlay.connected) {
-      // CarPlay.bridge.reload();
-      console.log('useCarPlayController: settings root template');
-      // CarPlay.setRootTemplate(createCarListTemplate());
-    } else {
-      console.log('useCarPlayController: not connected');
-    }
-  }, [isConnected]);
+  }, [template, currentPlaylist]);
 
   useEffect(() => {
     CarPlay.emitter.addListener('didConnect', () => {
-      console.log('useCarPlayController: Android Auto connected');
+      console.log('useCarPlayController: CarPlay connected');
+      setIsConnected(true);
+    });
 
-      if (CarPlay.connected) {
-        console.log('useCarPlayController: auto connected for real');
-        setIsConnected(true);
-      }
+    CarPlay.emitter.addListener('didDisconnect', () => {
+      console.log('useCarPlayController: CarPlay disconnected');
+      setIsConnected(false);
     });
     CarPlay.emitter.addListener('backButtonPressed', () => {
-      console.log('useCarPlayController: auto back button pressed');
+      console.log('useCarPlayController: back button pressed');
       CarPlay.popTemplate();
     });
 
     return () => {
       CarPlay.emitter.removeAllListeners('didConnect');
+      CarPlay.emitter.removeAllListeners('didDisconnect');
       CarPlay.emitter.removeAllListeners('backButtonPressed');
     };
   }, []);
-
-  const playItem = (item: PlayListItem) => {
-    if (CarPlay.connected) {
-      const newPlayList = currentPlaylist.map((i) => ({...i, isPlaying: i.id === item.id}));
-      setCurrentPlaylist(newPlayList);
-
-      // const template = createCarPlayLiveTemplate(newPlayList);
-      // CarPlay.setRootTemplate(template);
-      // setTemplate(template);
-
-      // template?.updateSections([
-      //   {
-      //     items: newPlayList.map((i) => ({
-      //       text: i.text,
-      //       detailText: i.detailText,
-      //       imgUrl: i.imgUrl as any,
-      //       isPlaying: i.isPlaying,
-      //     })),
-      //   },
-      // ]);
-
-      // template?.updateListTemplateItem({
-      //   sectionIndex: 0,
-      //   itemIndex: newPlayList.findIndex((i) => i.id === item.id),
-      //   text: item.text,
-      //   imgUrl: item.imgUrl as any,
-      //   detailText: item.detailText,
-      //   isPlaying: true,
-      // });
-    } else {
-      console.log('playItem', 'not connected');
-    }
-  };
 
   const setPlaylist = (playlist: PlayListItem[]) => {
     console.log('setPlaylist', playlist);
@@ -135,16 +68,10 @@ const useCarPlayController = (): ReturnType => {
     }
   };
 
-  // useEffect(() => {
-  //   CarPlay.registerOnDisconnect(onDisconnectHandler);
-  //   return () => CarPlay.unregisterOnDisconnect(onDisconnectHandler);
-  // }, [onDisconnectHandler]);
-
   return {
     isConnected: isConnected,
     setPlaylist,
     playlist: currentPlaylist,
-    playItem,
   };
 };
 

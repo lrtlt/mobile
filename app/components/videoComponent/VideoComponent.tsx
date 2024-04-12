@@ -2,7 +2,7 @@ import React, {useEffect, useCallback, useRef, PropsWithChildren} from 'react';
 import {View, ActivityIndicator, StyleSheet, ViewStyle} from 'react-native';
 import VideoCover, {VideoCoverType} from './VideoCover';
 import {useTheme} from '../../Theme';
-import useVideoData, {StreamData} from './useVideoData';
+import useStreamData, {StreamData} from './useStreamData';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
@@ -25,7 +25,7 @@ const ERROR_DELAY = 1000;
 
 const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
   const {colors, strings} = useTheme();
-  const {isLoading, data, load} = useVideoData(props.streamData);
+  const {isLoading, data, load} = useStreamData(props.streamData);
 
   const errorCountRef = useRef(0);
 

@@ -24,6 +24,9 @@ import useChromecast from './useChromecast';
 import {MediaPlayerState} from 'react-native-google-cast';
 import {useTheme} from '../../Theme';
 import usePlayerLanguage from './usePlayerLanguage';
+import {EventRegister} from 'react-native-event-listeners';
+
+export type PlayerAction = 'togglePlay' | 'setFullScreen';
 
 interface Props {
   mediaType: MediaType;
@@ -34,6 +37,8 @@ interface Props {
   autoStart: boolean;
   startTime?: number;
   isFloating?: boolean;
+  uuid?: string;
+  controls?: boolean;
   onError?: (e?: any) => void;
 }
 
@@ -73,6 +78,8 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   isLiveStream,
   startTime,
   isFloating = false,
+  uuid,
+  controls = true,
   onError,
 }) => {
   const [player, setPlayer] = useState<THEOplayer>();
@@ -315,6 +322,27 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     [player, client],
   );
 
+  useEffect(() => {
+    if (!uuid) {
+      return;
+    }
+
+    const listener = EventRegister.addEventListener(uuid, (action: PlayerAction) => {
+      switch (action) {
+        case 'togglePlay':
+          _playPauseControl();
+          break;
+        case 'setFullScreen':
+          _fullScreenControl();
+          break;
+      }
+    });
+
+    return () => {
+      EventRegister.removeEventListener(listener as string);
+    };
+  }, [uuid, _playPauseControl, _fullScreenControl]);
+
   const {LanguageButton, LanguageMenu} = usePlayerLanguage({player: player});
 
   return (
@@ -332,14 +360,14 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
           {!isLoading && player ? (
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <MediaControls
-                enabled={true}
+                enabled={!!controls || player.presentationMode === PresentationMode.fullscreen}
                 currentTime={currentTime / 1000}
                 mediaDuration={duration / 1000}
                 isMuted={player.muted ?? false}
                 isPaused={mediaStatus ? mediaStatus?.playerState === MediaPlayerState.PAUSED : !isPlaying}
                 loading={isLoading}
                 isBuffering={player.seeking && !player.paused}
-                enableFullScreen={mediaType == MediaType.VIDEO}
+                enableFullScreen={true}
                 enableMute={false}
                 seekerStart={player.seekable[0].start / 1000}
                 seekerEnd={player.seekable[0].end / 1000}

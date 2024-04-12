@@ -13,7 +13,6 @@ const createCarPlayLiveTemplate = (items: PlayListItem[]) => {
           text: item.text,
           detailText: item.detailText,
           imgUrl: item.imgUrl as any,
-          isPlaying: item.isPlaying,
         })),
       },
     ],
