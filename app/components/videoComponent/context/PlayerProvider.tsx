@@ -4,7 +4,7 @@ import {MediaBaseData, MediaType, PlayerContext, PlayerContextType} from './Play
 import TheoMediaPlayer, {PlayerAction} from '../TheoMediaPlayer';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import {IconClose} from '../../svg';
-import {themeDark} from '../../../Theme';
+import {themeDark, themeLight} from '../../../Theme';
 import Text from '../../text/Text';
 import {uniqueId} from 'lodash';
 import {EventRegister} from 'react-native-event-listeners';
@@ -31,11 +31,14 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
       <TouchableDebounce onPress={handleFullScreen}>
         <View
           style={{
-            height: 48,
+            height: 56,
+            borderBottomWidth: 2,
+            borderColor: themeLight.colors.primary,
             flexDirection: 'row',
             backgroundColor: 'black',
             alignItems: 'center',
-            gap: 12,
+            paddingEnd: 8,
+            gap: 8,
           }}>
           <View key={`${playerData.uri}-${playerData.startTime}`} style={styles.videoContainer}>
             <TheoMediaPlayer
@@ -53,7 +56,7 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
           </View>
           <View style={{flex: 1, gap: 4}}>
             <Text
-              style={{color: themeDark.colors.text, fontSize: 14, width: '100%'}}
+              style={{color: themeDark.colors.text, fontSize: 14.3, width: '100%'}}
               ellipsizeMode="tail"
               numberOfLines={2}>
               {playerData.title}
