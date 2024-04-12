@@ -19,7 +19,7 @@ const CarScreen: React.FC = () => {
   const state = useSplashScreenState();
   const channelsData = useSelector(selectHomeChannels, checkEqual);
 
-  const {playlist, setPlaylist, playItem} = useCarPlay();
+  const {playlist, setPlaylist} = useCarPlay();
 
   useEffect(() => {
     const playlist: PlayListItem[] =
@@ -53,7 +53,7 @@ const CarScreen: React.FC = () => {
               <TouchableDebounce
                 key={`${index}-${item.id}`}
                 onPress={() => {
-                  playItem(item);
+                  // playItem(item);
                 }}>
                 <View
                   style={{
@@ -62,7 +62,7 @@ const CarScreen: React.FC = () => {
                     borderColor: colors.buttonBorder,
                     borderRadius: 8,
                     overflow: 'hidden',
-                    backgroundColor: item.isPlaying ? colors.greyBackground : 'black',
+                    // backgroundColor: item.isPlaying ? colors.greyBackground : 'black',
                   }}>
                   <View>
                     <FastImage style={{width: 70, height: 70}} source={{uri: item.imgUrl}} />
@@ -84,7 +84,9 @@ const CarScreen: React.FC = () => {
       break;
   }
 
-  const nowPlaying = playlist.find((item) => item.isPlaying);
+  // const nowPlaying = playlist.find((item) => item.isPlaying);
+  const nowPlaying: any = undefined;
+
   const orientation = useOrientation();
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'black'}} edges={['left', 'right', 'top', 'bottom']}>

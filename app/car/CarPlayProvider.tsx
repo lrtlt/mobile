@@ -1,35 +1,28 @@
-import React, {PropsWithChildren, useMemo} from 'react';
+import React, {PropsWithChildren, useEffect, useMemo} from 'react';
 import {CarPlayContext, CarPlayContextType} from './CarPlayContext';
 import useCarPlayController from './useCarPlayController';
-import CarScreen from './screen/CarScreen';
+import useCarLiveChannels from './useCarLiveChannels';
 
 const CarPlayProvider: React.FC<PropsWithChildren<{}>> = (props) => {
-  const {isConnected, setPlaylist, playlist, playItem} = useCarPlayController();
+  const {isConnected, setPlaylist, playlist} = useCarPlayController();
+  const {channels} = useCarLiveChannels(isConnected);
 
-  // //TODO: remove this temporary fix later. Think of a better way to handle this.
-  // useEffect(() => {
-  //   if (!isConnected && Platform.OS === 'android') {
-  //     setTimeout(() => {
-  //       CarPlay.bridge.reload();
-  //     }, 3000);
-  //   }
-  // }, [isConnected]);
+  useEffect(() => {
+    if (channels.length > 0) {
+      setPlaylist(channels);
+    }
+  }, [channels]);
 
   const context: CarPlayContextType = useMemo(
     () => ({
       isConnected,
       setPlaylist,
       playlist: playlist,
-      playItem,
     }),
-    [isConnected, setPlaylist, playlist, playItem],
+    [isConnected, setPlaylist, playlist],
   );
 
-  return (
-    <CarPlayContext.Provider value={context}>
-      {isConnected ? <CarScreen /> : props.children}
-    </CarPlayContext.Provider>
-  );
+  return <CarPlayContext.Provider value={context}>{props.children}</CarPlayContext.Provider>;
 };
 
 export default CarPlayProvider;

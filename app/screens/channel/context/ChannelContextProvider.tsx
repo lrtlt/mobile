@@ -3,7 +3,7 @@ import {ChannelContext, ChannelContextType} from './ChannelContext';
 import useCancellablePromise from '../../../hooks/useCancellablePromise';
 import {fetchChannel, fetchVideoData} from '../../../api';
 import {isVideoLiveStream} from '../../../api/Types';
-import {StreamData} from '../../../components/videoComponent/useVideoData';
+import {StreamData} from '../../../components/videoComponent/useStreamData';
 import {LRT_KLASIKA, LRT_OPUS, LRT_RADIJAS} from '../../../constants';
 
 const getPosterByChannelId = (channelId: string) => {
@@ -37,6 +37,7 @@ const ChannelProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
             if (isVideoLiveStream(streamResponse)) {
               const {data} = streamResponse.response;
               const streamData: StreamData = {
+                channelTitle: channelResponse.channel_info.channel,
                 isLiveStream: true,
                 streamUri: data.content.trim(),
                 title: channelResponse.channel_info?.title ?? 'untitled-live-stream',

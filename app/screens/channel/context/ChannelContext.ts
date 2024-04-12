@@ -1,6 +1,6 @@
 import React from 'react';
 import {ChannelResponse} from '../../../api/Types';
-import {StreamData} from '../../../components/videoComponent/useVideoData';
+import {StreamData} from '../../../components/videoComponent/useStreamData';
 
 const STATE_LOADING = 'loading';
 const STATE_ERROR = 'error';

@@ -9,7 +9,7 @@ import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
 import {getSmallestDim} from '../../util/UI';
-import {StreamData} from '../../components/videoComponent/useVideoData';
+import {StreamData} from '../../components/videoComponent/useStreamData';
 import TextComponent from '../../components/text/Text';
 
 import {CameraIcon, IconNote} from '../../components/svg';

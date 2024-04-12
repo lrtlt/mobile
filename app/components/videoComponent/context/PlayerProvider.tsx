@@ -1,31 +1,26 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {StyleSheet, View, useWindowDimensions} from 'react-native';
-import useOrientation from '../../../util/useOrientation';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {MediaBaseData, MediaType, PlayerContext, PlayerContextType} from './PlayerContext';
-import TheoMediaPlayer from '../TheoMediaPlayer';
-import Draggable from '@ngenux/react-native-draggable-view';
+import TheoMediaPlayer, {PlayerAction} from '../TheoMediaPlayer';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import {IconClose} from '../../svg';
-import {themeLight} from '../../../Theme';
+import {themeDark, themeLight} from '../../../Theme';
 import Text from '../../text/Text';
+import {uniqueId} from 'lodash';
+import {EventRegister} from 'react-native-event-listeners';
 
 const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
   const [playerData, setPlayerData] = useState<MediaBaseData>();
-
-  const draggableRef = React.useRef<Draggable>(null);
-
-  const orientation = useOrientation();
-  const {width, height} = useWindowDimensions();
+  const uuid = useRef<string>(uniqueId('player-'));
 
   const handleClose = useCallback(() => {
     setPlayerData(undefined);
   }, []);
 
-  useEffect(() => {
-    draggableRef.current?.resetPosition();
-  }, [orientation]);
-
-  const {colors, strings} = themeLight;
+  const handleFullScreen = useCallback(() => {
+    const action: PlayerAction = 'setFullScreen';
+    EventRegister.emit(uuid.current, action);
+  }, [uuid]);
 
   const renderMiniPlayer = useCallback(() => {
     if (!playerData) {
@@ -33,30 +28,21 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
     }
 
     return (
-      <Draggable
-        ref={draggableRef}
-        orientation={orientation}
-        width={width * 2}
-        height={height * 2}
-        shouldStartDrag={true}
-        childrenHeight={240}
-        childrenWidth={135}
-        edgeSpacing={4}>
-        <View style={{padding: 2, alignItems: 'flex-end'}}>
-          <TouchableDebounce onPress={handleClose} hitSlop={12}>
-            <View
-              style={{
-                ...styles.closeButtonContainer,
-                backgroundColor: colors.card,
-              }}>
-              <Text style={{letterSpacing: 0, textTransform: 'uppercase', fontSize: 12}}>
-                {strings.close}
-              </Text>
-              <IconClose size={8} color={'red'} />
-            </View>
-          </TouchableDebounce>
-          <View key={`${playerData.uri}-${playerData.startTime}`} style={styles.videoContainerPortrait}>
+      <TouchableDebounce onPress={handleFullScreen}>
+        <View
+          style={{
+            height: 56,
+            borderBottomWidth: 2,
+            borderColor: themeLight.colors.primary,
+            flexDirection: 'row',
+            backgroundColor: 'black',
+            alignItems: 'center',
+            paddingEnd: 8,
+            gap: 8,
+          }}>
+          <View key={`${playerData.uri}-${playerData.startTime}`} style={styles.videoContainer}>
             <TheoMediaPlayer
+              uuid={uuid.current}
               isLiveStream={!!playerData.isLiveStream}
               mediaType={playerData.mediaType ?? MediaType.VIDEO}
               poster={playerData.poster}
@@ -65,12 +51,26 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
               startTime={playerData.startTime}
               autoStart={true}
               isFloating={true}
+              controls={false}
             />
           </View>
+          <View style={{flex: 1, gap: 4}}>
+            <Text
+              style={{color: themeDark.colors.text, fontSize: 14.3, width: '100%'}}
+              ellipsizeMode="tail"
+              numberOfLines={2}>
+              {playerData.title}
+            </Text>
+          </View>
+          <View style={{paddingHorizontal: 10, flexDirection: 'row', gap: 16, alignItems: 'center'}}>
+            <TouchableDebounce onPress={handleClose} hitSlop={12}>
+              <IconClose size={16} color={'white'} />
+            </TouchableDebounce>
+          </View>
         </View>
-      </Draggable>
+      </TouchableDebounce>
     );
-  }, [orientation, playerData, width, height, colors, strings]);
+  }, [playerData, uuid]);
 
   const context: PlayerContextType = useMemo(
     () => ({
@@ -111,6 +111,12 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
+  },
+  videoContainer: {
+    overflow: 'hidden',
+    //Aspect ratio 16:9
+    height: '100%',
+    aspectRatio: 16 / 9,
   },
   closeButtonContainer: {
     // width: 24,
