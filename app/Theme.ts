@@ -1,4 +1,6 @@
 import {Theme, useTheme as useReactNavigationTheme} from '@react-navigation/native';
+import {ThemeContext} from './theme/ThemeContext';
+import {useContext} from 'react';
 
 export interface AppTheme extends Theme {
   dark: boolean;
@@ -274,5 +276,5 @@ export const themeDark: AppTheme = {
 
 /** Custom hook to retrieve a theme of type AppTheme */
 export function useTheme(): AppTheme {
-  return useReactNavigationTheme() as AppTheme;
+  return useContext(ThemeContext);
 }

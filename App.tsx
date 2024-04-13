@@ -16,6 +16,7 @@ import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import CarPlayProvider from './app/car/CarPlayProvider';
 import CarPlayEmptyProvider from './app/car/CarPlayEmptyProvider';
+import ThemeProvider from './app/theme/ThemeProvider';
 
 const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
   return (
@@ -38,13 +39,15 @@ const App: React.FC = () => {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <SettingsProvider>
-        <AppBackground>
-          <PlayerProvider>
-            <CarPlayProviderImpl>
-              <Navigation />
-            </CarPlayProviderImpl>
-          </PlayerProvider>
-        </AppBackground>
+        <ThemeProvider>
+          <AppBackground>
+            <PlayerProvider>
+              <CarPlayProviderImpl>
+                <Navigation />
+              </CarPlayProviderImpl>
+            </PlayerProvider>
+          </AppBackground>
+        </ThemeProvider>
       </SettingsProvider>
     </SafeAreaProvider>
   );

@@ -8,14 +8,14 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 
 import {selectAppIsReady} from '../redux/selectors';
-import {themeDark, themeLight} from '../Theme';
-import {useSettings} from '../settings/useSettings';
+
 import {DEEP_LINKING_URL_PREFIX, GEMIUS_VIEW_SCRIPT_ID} from '../constants';
 import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
 import MainStack, {MainStackParamList} from './MainStack';
 import {SplashScreen} from '../screens';
 import useHandleLaunchUrl from './useHandleLaunchUrl';
 import useFirebaseMessaging from '../util/useFirebaseMessaging';
+import {useTheme} from '../Theme';
 
 const linking: LinkingOptions<MainStackParamList> = {
   prefixes: [DEEP_LINKING_URL_PREFIX],
@@ -36,11 +36,10 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const [isNavigatorReady, setNavigatorReady] = useState(false);
   const isAppReady = useSelector(selectAppIsReady);
 
-  const settings = useSettings();
-  console.log('SETTINGS', settings);
-
   const routeNameRef = useRef<string>();
   const navRef = useRef<NavigationContainerRef<MainStackParamList>>(null);
+
+  const theme = useTheme();
 
   useFirebaseMessaging(isNavigatorReady);
   useHandleLaunchUrl(isNavigatorReady);
@@ -77,11 +76,10 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
     return <SplashScreen />;
   }
 
-  const theme = settings.isDarkMode ? themeDark : themeLight;
   return (
     <>
       <StatusBar
-        barStyle={settings.isDarkMode ? 'light-content' : 'dark-content'}
+        barStyle={theme.dark ? 'light-content' : 'dark-content'}
         translucent={false}
         backgroundColor={theme.colors.statusBar}
       />
