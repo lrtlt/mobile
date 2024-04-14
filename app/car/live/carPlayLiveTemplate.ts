@@ -1,11 +1,18 @@
 import {ListTemplate} from 'react-native-carplay';
-import {PlayListItem} from './CarPlayContext';
+import {PlayListItem} from '../CarPlayContext';
 
-const createCarPlayLiveTemplate = (items: PlayListItem[]) => {
+const createCarPlayLiveTemplate = (items: PlayListItem[], onItemSelect: (item: PlayListItem) => void) => {
   return new ListTemplate({
     title: 'LRT.lt',
     id: 'lrt-list-templates',
     backButtonHidden: true,
+    trailingNavigationBarButtons: [
+      {
+        id: 'reload',
+        type: 'text',
+        title: 'Atnaujinti',
+      },
+    ],
     sections: [
       {
         header: 'LRT Gyvai',
@@ -16,6 +23,9 @@ const createCarPlayLiveTemplate = (items: PlayListItem[]) => {
         })),
       },
     ],
+    onItemSelect: async ({index}) => {
+      onItemSelect(items[index]);
+    },
   });
 };
 

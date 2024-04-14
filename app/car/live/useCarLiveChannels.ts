@@ -1,14 +1,15 @@
 import {useSelector} from 'react-redux';
-import {selectHomeChannels} from '../redux/selectors';
-import {checkEqual} from '../util/LodashEqualityCheck';
+import {selectHomeChannels} from '../../redux/selectors';
+import {checkEqual} from '../../util/LodashEqualityCheck';
 import {useEffect, useState} from 'react';
-import {PlayListItem} from './CarPlayContext';
-import {fetchStreamData} from '../components/videoComponent/fetchStreamData';
-import useCancellablePromise from '../hooks/useCancellablePromise';
-import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../constants';
+import {PlayListItem} from '../CarPlayContext';
+import {fetchStreamData} from '../../components/videoComponent/fetchStreamData';
+import useCancellablePromise from '../../hooks/useCancellablePromise';
+import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 
 const useCarLiveChannels = (isActive: boolean) => {
   const [channels, setChannels] = useState<PlayListItem[]>([]);
+  const [lastLoadTime, setLastLoadTime] = useState<number>(0);
   const channelsData = useSelector(selectHomeChannels, checkEqual);
 
   const cancellablePromise = useCancellablePromise();
@@ -40,10 +41,11 @@ const useCarLiveChannels = (isActive: boolean) => {
         setChannels(channels);
       }
     });
-  }, [channelsData, isActive]);
+  }, [channelsData, isActive, lastLoadTime]);
 
   return {
     channels,
+    reload: () => setLastLoadTime(Date.now()),
   };
 };
 
