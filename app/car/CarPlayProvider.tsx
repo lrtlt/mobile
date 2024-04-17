@@ -1,25 +1,15 @@
-import React, {PropsWithChildren, useEffect, useMemo} from 'react';
+import React, {PropsWithChildren, useMemo} from 'react';
 import {CarPlayContext, CarPlayContextType} from './CarPlayContext';
 import useCarPlayController from './useCarPlayController';
-import useCarLiveChannels from './live/useCarLiveChannels';
 
 const CarPlayProvider: React.FC<PropsWithChildren<{}>> = (props) => {
-  const {isConnected, setPlaylist, playlist} = useCarPlayController();
-  const {channels} = useCarLiveChannels(isConnected);
-
-  useEffect(() => {
-    if (channels.length > 0) {
-      setPlaylist(channels);
-    }
-  }, [channels]);
+  const {isConnected} = useCarPlayController();
 
   const context: CarPlayContextType = useMemo(
     () => ({
       isConnected,
-      setPlaylist,
-      playlist: playlist,
     }),
-    [isConnected, setPlaylist, playlist],
+    [isConnected],
   );
 
   return <CarPlayContext.Provider value={context}>{props.children}</CarPlayContext.Provider>;

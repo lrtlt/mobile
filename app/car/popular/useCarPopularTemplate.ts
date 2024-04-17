@@ -1,18 +1,19 @@
 import {useEffect, useState} from 'react';
-import useCarLiveChannels from './useCarLiveChannels';
 import {ListTemplate} from 'react-native-carplay';
-import {carPlayLiveTemplate} from './createPlayLiveTemplate';
 import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
 import {MediaType} from '../../components/videoComponent/context/PlayerContext';
+import {carPlayPopularTemplate} from './createPlayPopularTemplate';
+import useCarPlayPopularPlaylist from './useCarPopularPlaylist';
 
-const useCarLiveTemplate = (isConnected: boolean) => {
-  const [template] = useState<ListTemplate>(carPlayLiveTemplate);
-  const {channels, reload} = useCarLiveChannels(isConnected);
+const useCarPopularTemplate = (isConnected: boolean) => {
+  const [template] = useState<ListTemplate>(carPlayPopularTemplate);
+
+  const {channels, reload} = useCarPlayPopularPlaylist(isConnected);
 
   const {setPlayerData} = useMediaPlayer();
 
   useEffect(() => {
-    console.log('updating live template');
+    console.log('updating popular template');
     template.updateSections([
       {
         items: channels.map((item) => ({
@@ -26,7 +27,7 @@ const useCarLiveTemplate = (isConnected: boolean) => {
       const item = channels[index];
       setPlayerData({
         uri: item.streamUrl,
-        mediaType: MediaType.VIDEO,
+        mediaType: MediaType.AUDIO,
         isLiveStream: true,
         poster: item.imgUrl,
         title: item.text,
@@ -54,4 +55,4 @@ const useCarLiveTemplate = (isConnected: boolean) => {
   return template;
 };
 
-export default useCarLiveTemplate;
+export default useCarPopularTemplate;

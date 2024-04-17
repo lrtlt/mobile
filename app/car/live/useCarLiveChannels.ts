@@ -7,7 +7,7 @@ import {fetchStreamData} from '../../components/videoComponent/fetchStreamData';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 
-const useCarLiveChannels = (isActive: boolean) => {
+const useCarLiveChannels = (isConnected: boolean) => {
   const [channels, setChannels] = useState<PlayListItem[]>([]);
   const [lastLoadTime, setLastLoadTime] = useState<number>(0);
   const channelsData = useSelector(selectHomeChannels, checkEqual);
@@ -15,7 +15,7 @@ const useCarLiveChannels = (isActive: boolean) => {
   const cancellablePromise = useCancellablePromise();
 
   useEffect(() => {
-    if (!isActive) {
+    if (!isConnected) {
       return;
     }
 
@@ -34,14 +34,14 @@ const useCarLiveChannels = (isActive: boolean) => {
         const channels: PlayListItem[] = data.map((stream) => ({
           id: stream.mediaId,
           text: stream.channelTitle ?? stream.title,
-          // detailText: 'stream.title',
+          // detailText: stream.title,
           imgUrl: stream.poster || VIDEO_DEFAULT_BACKGROUND_IMAGE,
           streamUrl: stream.streamUri,
         }));
         setChannels(channels);
       }
     });
-  }, [channelsData, isActive, lastLoadTime]);
+  }, [channelsData, isConnected, lastLoadTime]);
 
   return {
     channels,

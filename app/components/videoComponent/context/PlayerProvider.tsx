@@ -53,7 +53,9 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
             shadowOpacity: 0.27,
             shadowRadius: 3.65,
           }}>
-          <View key={`${playerData.uri}-${playerData.startTime}`} style={styles.videoContainer}>
+          <View
+            // key={`${playerData.uri}-${playerData.startTime}`}
+            style={styles.videoContainer}>
             <TheoMediaPlayer
               uuid={uuid.current}
               isLiveStream={!!playerData.isLiveStream}

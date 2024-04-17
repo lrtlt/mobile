@@ -52,15 +52,19 @@ const license = Platform.select({
 const config: PlayerConfiguration = {
   license,
   chromeless: true,
-  mediaControl: {
-    mediaSessionEnabled: true,
-  },
+  // mediaControl: {
+  //   mediaSessionEnabled: true,
+  // },
 };
 
 const makeSource = (uri: string, title?: string, poster?: string): SourceDescription => ({
   poster: poster,
   metadata: {
     title: title,
+    subtitle: 'The Subtitle',
+    album: 'Album',
+    displayIconUri: poster,
+    artist: 'Artist',
   },
   sources: [
     {
@@ -185,7 +189,15 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     (player: THEOplayer) => (_: Event<PlayerEventType.ENDED>) => {
       trackComplete(streamUri, player.currentTime / 1000);
       setIsPlaying(false);
-      close();
+
+      if (isFloating) {
+        if (player.presentationMode === PresentationMode.fullscreen) {
+          player.presentationMode = PresentationMode.inline;
+        }
+        setTimeout(() => {
+          close();
+        }, 250);
+      }
     },
     [],
   );
@@ -264,13 +276,17 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     //player.playbackRate = 1.5;
     //player.selectedVideoTrack = player.videoTracks[0];
     //player.pipConfiguration = {startsAutomatically: true};
-
-    player.source = makeSource(streamUri, title, poster);
-    if (!isLiveStream) {
-      console.log('startTime:', startTime);
-      player.currentTime = startTime ? startTime * 1000 : 0;
-    }
   };
+
+  useEffect(() => {
+    if (player && streamUri) {
+      player.source = makeSource(streamUri, title, poster);
+      if (!isLiveStream) {
+        console.log('startTime:', startTime);
+        player.currentTime = startTime ? startTime * 1000 : 0;
+      }
+    }
+  }, [player, streamUri, startTime, isLiveStream, title, poster]);
 
   const _playPauseControl = useCallback(async () => {
     if (client) {
@@ -369,8 +385,8 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
                 isBuffering={player.seeking && !player.paused}
                 enableFullScreen={true}
                 enableMute={false}
-                seekerStart={player.seekable[0].start / 1000}
-                seekerEnd={player.seekable[0].end / 1000}
+                seekerStart={(player.seekable[0]?.start ?? 1) / 1000}
+                seekerEnd={(player.seekable[0]?.end ?? 1) / 1000}
                 title={title}
                 onPlayPausePress={_playPauseControl}
                 onMutePress={() => {}}

@@ -1,18 +1,20 @@
 import {useEffect, useState} from 'react';
-import useCarLiveChannels from './useCarLiveChannels';
-import {ListTemplate} from 'react-native-carplay';
-import {carPlayLiveTemplate} from './createPlayLiveTemplate';
+import {CarPlay, ListTemplate} from 'react-native-carplay';
 import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
 import {MediaType} from '../../components/videoComponent/context/PlayerContext';
+import {carPlayRecommendedTemplate} from './createPlayRecommendedTemplate';
+import useCarPlayRecommendedPlaylist from './useCarRecommendedPlaylist';
+import {carPlayNowPlayingTemplate} from '../nowPlaying/createNowPlayingTemplate';
 
-const useCarLiveTemplate = (isConnected: boolean) => {
-  const [template] = useState<ListTemplate>(carPlayLiveTemplate);
-  const {channels, reload} = useCarLiveChannels(isConnected);
+const useCarRecommendedTemplate = (isConnected: boolean) => {
+  const [template] = useState<ListTemplate>(carPlayRecommendedTemplate);
+
+  const {channels, reload} = useCarPlayRecommendedPlaylist(isConnected);
 
   const {setPlayerData} = useMediaPlayer();
 
   useEffect(() => {
-    console.log('updating live template');
+    console.log('updating Recommended template');
     template.updateSections([
       {
         items: channels.map((item) => ({
@@ -24,13 +26,17 @@ const useCarLiveTemplate = (isConnected: boolean) => {
     ]);
     template.config.onItemSelect = async ({index}) => {
       const item = channels[index];
+
       setPlayerData({
         uri: item.streamUrl,
-        mediaType: MediaType.VIDEO,
+        mediaType: MediaType.AUDIO,
         isLiveStream: true,
         poster: item.imgUrl,
         title: item.text,
       });
+
+      CarPlay.enableNowPlaying(true);
+      CarPlay.pushTemplate(carPlayNowPlayingTemplate);
     };
     return () => {
       template.config.onItemSelect = undefined;
@@ -54,4 +60,4 @@ const useCarLiveTemplate = (isConnected: boolean) => {
   return template;
 };
 
-export default useCarLiveTemplate;
+export default useCarRecommendedTemplate;

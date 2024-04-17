@@ -163,3 +163,9 @@ export const forecastGet = (cityCode: string) => {
 export const liveFeedGet = (id: string | number, count: number, order: 'desc' | 'asc') => {
   return `${BASE_URL}get-feed-items/${id}?count=${count}&order=${order}`;
 };
+
+export const carPlaylistNewestGet = () => 'https://www.lrt.lt/static/carplay/naujausi.json';
+
+export const carPlaylistPopularGet = () => 'https://www.lrt.lt/static/carplay/pop.json';
+
+export const carPlaylistRecommendedGet = () => 'https://www.lrt.lt/static/carplay/rekomenduoja.json';
