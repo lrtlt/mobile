@@ -25,16 +25,16 @@ const useCarPlayRootTemplate = (isConnected: boolean) => {
       console.log('Root template onItemSelect', index);
       switch (index) {
         case CATEGORY_LIVE:
-          CarPlay.pushTemplate(liveTemplate);
+          CarPlay.pushTemplate(liveTemplate, true);
           break;
         case CATEGORY_POPULAR:
-          CarPlay.pushTemplate(popularTemplate);
+          CarPlay.pushTemplate(popularTemplate, true);
           break;
         case CATEGORY_NEWEST:
-          CarPlay.pushTemplate(newestTemplate);
+          CarPlay.pushTemplate(newestTemplate, true);
           break;
         case CATEGORY_RECOMMENDED:
-          CarPlay.pushTemplate(recommendedTemplate);
+          CarPlay.pushTemplate(recommendedTemplate, true);
           break;
       }
     };

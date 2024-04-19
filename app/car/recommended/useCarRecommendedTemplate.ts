@@ -36,7 +36,7 @@ const useCarRecommendedTemplate = (isConnected: boolean) => {
       });
 
       CarPlay.enableNowPlaying(true);
-      CarPlay.pushTemplate(carPlayNowPlayingTemplate);
+      CarPlay.pushTemplate(carPlayNowPlayingTemplate, true);
     };
     return () => {
       template.config.onItemSelect = undefined;

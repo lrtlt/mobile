@@ -65,6 +65,8 @@ const makeSource = (uri: string, title?: string, poster?: string): SourceDescrip
     album: 'Album',
     displayIconUri: poster,
     artist: 'Artist',
+    nowPlayingServiceIdentifier: 'lrt-nowPlayingServiceIdentifier',
+    nowPlayingContentIdentifier: 'lrt-nowPlayingContentIdentifier',
   },
   sources: [
     {

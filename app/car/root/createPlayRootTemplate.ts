@@ -9,6 +9,9 @@ export const carPlayRootTemplate = new ListTemplate({
   title: 'LRT.lt',
   id: 'lrt-root-template',
   backButtonHidden: true,
+  // tabTitle: 'Tab title',
+  // tabImage: require('./star.png'),
+
   sections: [
     {
       // header: 'Lrt.lt',

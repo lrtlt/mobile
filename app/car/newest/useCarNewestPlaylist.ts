@@ -19,17 +19,15 @@ const useCarPlayNewestPlaylist = (isConnected: boolean) => {
     }
     cancellablePromise(
       fetchCarNewestPlaylist().then((data) => {
-        {
-          if (data?.length) {
-            const channels: PlayListItem[] = data.map((item) => ({
-              id: item.title,
-              text: item.title,
-              detailText: item.content,
-              imgUrl: item.cover,
-              streamUrl: item.streamUrl,
-            }));
-            setChannels(channels);
-          }
+        if (data?.length) {
+          const channels: PlayListItem[] = data.map((item) => ({
+            id: item.title,
+            text: item.title,
+            detailText: item.content,
+            imgUrl: item.cover,
+            streamUrl: item.streamUrl,
+          }));
+          setChannels(channels);
         }
       }),
     );
