@@ -11,7 +11,7 @@ const useCarRecommendedTemplate = (isConnected: boolean) => {
 
   const {channels, reload} = useCarPlayRecommendedPlaylist(isConnected);
 
-  const {setPlayerData} = useMediaPlayer();
+  const {setPlaylist} = useMediaPlayer();
 
   useEffect(() => {
     console.log('updating Recommended template');
@@ -25,17 +25,17 @@ const useCarRecommendedTemplate = (isConnected: boolean) => {
       },
     ]);
     template.config.onItemSelect = async ({index}) => {
-      const item = channels[index];
+      setPlaylist(
+        channels.map((item) => ({
+          uri: item.streamUrl,
+          mediaType: MediaType.AUDIO,
+          isLiveStream: true,
+          poster: item.imgUrl,
+          title: item.text,
+        })),
+        index,
+      );
 
-      setPlayerData({
-        uri: item.streamUrl,
-        mediaType: MediaType.AUDIO,
-        isLiveStream: true,
-        poster: item.imgUrl,
-        title: item.text,
-      });
-
-      CarPlay.enableNowPlaying(true);
       CarPlay.pushTemplate(carPlayNowPlayingTemplate, true);
     };
     return () => {

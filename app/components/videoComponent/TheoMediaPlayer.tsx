@@ -40,6 +40,7 @@ interface Props {
   uuid?: string;
   controls?: boolean;
   onError?: (e?: any) => void;
+  onEnded?: () => void;
 }
 
 const license = Platform.select({
@@ -61,12 +62,12 @@ const makeSource = (uri: string, title?: string, poster?: string): SourceDescrip
   poster: poster,
   metadata: {
     title: title,
-    subtitle: 'The Subtitle',
-    album: 'Album',
+    // subtitle: title,
+    // album: 'Album',
     displayIconUri: poster,
-    artist: 'Artist',
-    nowPlayingServiceIdentifier: 'lrt-nowPlayingServiceIdentifier',
-    nowPlayingContentIdentifier: 'lrt-nowPlayingContentIdentifier',
+    // artist: 'Artist',
+    // nowPlayingServiceIdentifier: 'lrt-nowPlayingServiceIdentifier',
+    // nowPlayingContentIdentifier: 'lrt-nowPlayingContentIdentifier',
   },
   sources: [
     {
@@ -87,6 +88,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   uuid,
   controls = true,
   onError,
+  onEnded,
 }) => {
   const [player, setPlayer] = useState<THEOplayer>();
   const [duration, setDuration] = useState(0);
@@ -98,7 +100,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const {colors} = useTheme();
 
-  const {setPlayerData, close} = useMediaPlayer();
+  const {setPlaylist, close} = useMediaPlayer();
 
   //Close floating player before loading new one
   useEffect(() => {
@@ -111,14 +113,16 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     return () => {
       if (player) {
         if (!player.paused && !isFloating) {
-          setPlayerData({
-            mediaType: mediaType,
-            poster: poster,
-            title: title,
-            uri: streamUri,
-            isLiveStream: isLiveStream,
-            startTime: player.currentTime / 1000,
-          });
+          setPlaylist([
+            {
+              mediaType: mediaType,
+              poster: poster,
+              title: title,
+              uri: streamUri,
+              isLiveStream: isLiveStream,
+              startTime: player.currentTime / 1000,
+            },
+          ]);
         }
         trackClose(streamUri, player.currentTime / 1000);
       }
@@ -192,17 +196,28 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
       trackComplete(streamUri, player.currentTime / 1000);
       setIsPlaying(false);
 
-      if (isFloating) {
-        if (player.presentationMode === PresentationMode.fullscreen) {
-          player.presentationMode = PresentationMode.inline;
-        }
-        setTimeout(() => {
-          close();
-        }, 250);
-      }
+      // if (isFloating) {
+      //   if (player.presentationMode === PresentationMode.fullscreen) {
+      //     player.presentationMode = PresentationMode.inline;
+      //   }
+      //   setTimeout(() => {
+      //     close();
+      //   }, 250);
+      // }
     },
     [],
   );
+
+  useEffect(() => {
+    if (onEnded) {
+      player?.addEventListener(PlayerEventType.ENDED, onEnded);
+    }
+    return () => {
+      if (onEnded) {
+        player?.removeEventListener(PlayerEventType.ENDED, onEnded);
+      }
+    };
+  }, [onEnded, player]);
 
   const onTimeUpdateHandler = useCallback((e: TimeUpdateEvent) => {
     setCurrentTimeInternal(e.currentTime);

@@ -13,6 +13,7 @@ const useCarPlayController = (): ReturnType => {
   useEffect(() => {
     if (isConnected) {
       CarPlay.setRootTemplate(rootTemplate);
+      CarPlay.enableNowPlaying(true);
     }
   }, [isConnected]);
 
