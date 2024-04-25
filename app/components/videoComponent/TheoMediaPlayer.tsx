@@ -195,15 +195,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     (player: THEOplayer) => (_: Event<PlayerEventType.ENDED>) => {
       trackComplete(streamUri, player.currentTime / 1000);
       setIsPlaying(false);
-
-      // if (isFloating) {
-      //   if (player.presentationMode === PresentationMode.fullscreen) {
-      //     player.presentationMode = PresentationMode.inline;
-      //   }
-      //   setTimeout(() => {
-      //     close();
-      //   }, 250);
-      // }
     },
     [],
   );

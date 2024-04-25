@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {MediaBaseData, MediaType, PlayerContext, PlayerContextType} from './PlayerContext';
 import TheoMediaPlayer, {PlayerAction} from '../TheoMediaPlayer';
@@ -110,12 +110,10 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
         setPlaylist(playlist);
         if (current) {
           setCurrentMedia(playlist[current]);
+        } else if (playlist.length > 0) {
+          setCurrentMedia(playlist[0]);
         } else {
-          if (playlist.length > 0) {
-            setCurrentMedia(playlist[0]);
-          } else {
-            setCurrentMedia(undefined);
-          }
+          setCurrentMedia(undefined);
         }
       },
       close: handleClose,

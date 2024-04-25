@@ -5,7 +5,6 @@ import {MediaType} from '../../components/videoComponent/context/PlayerContext';
 import {carPlayPopularTemplate} from './createPlayPopularTemplate';
 import useCarPlayPopularPlaylist from './useCarPopularPlaylist';
 import {carPlayNowPlayingTemplate} from '../nowPlaying/createNowPlayingTemplate';
-import {set} from 'lodash';
 
 const useCarPopularTemplate = (isConnected: boolean) => {
   const [template] = useState<ListTemplate>(carPlayPopularTemplate);
