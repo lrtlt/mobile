@@ -1,5 +1,7 @@
 import React from 'react';
 
+export type CarCategory = 'live' | 'newest';
+
 export type PlayListItem = {
   id: string | number;
   text: string;
@@ -10,14 +12,11 @@ export type PlayListItem = {
 
 export type CarPlayContextType = {
   isConnected: boolean;
-  playlist: PlayListItem[];
-  setPlaylist: (playlist: PlayListItem[]) => void;
+  selectedCategory?: CarCategory;
 };
 
 const defaults: CarPlayContextType = {
   isConnected: false,
-  playlist: [],
-  setPlaylist: () => {},
 };
 
 export const CarPlayContext = React.createContext<CarPlayContextType>(defaults);

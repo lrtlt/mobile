@@ -4,18 +4,23 @@ import {MediaBaseData, MediaType, PlayerContext, PlayerContextType} from './Play
 import TheoMediaPlayer, {PlayerAction} from '../TheoMediaPlayer';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import {IconClose} from '../../svg';
-import {themeDark, themeLight, useTheme} from '../../../Theme';
+import {useTheme} from '../../../Theme';
 import Text from '../../text/Text';
 import {uniqueId} from 'lodash';
 import {EventRegister} from 'react-native-event-listeners';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
-  const [playerData, setPlayerData] = useState<MediaBaseData>();
+  const [playlist, setPlaylist] = useState<MediaBaseData[]>([]);
+  const [currentMedia, setCurrentMedia] = useState<MediaBaseData>();
   const uuid = useRef<string>(uniqueId('player-'));
 
+  const {colors, dark} = useTheme();
+  const {bottom} = useSafeAreaInsets();
+
   const handleClose = useCallback(() => {
-    setPlayerData(undefined);
+    setPlaylist([]);
+    setCurrentMedia(undefined);
   }, []);
 
   const handleFullScreen = useCallback(() => {
@@ -23,14 +28,26 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
     EventRegister.emit(uuid.current, action);
   }, [uuid]);
 
-  const {colors, dark} = useTheme();
-  const {bottom} = useSafeAreaInsets();
+  const playNext = useCallback(() => {
+    if (playlist.length === 0) {
+      return;
+    }
+    const nextIndex = playlist.findIndex((item) => item === currentMedia) + 1;
+    if (nextIndex >= playlist.length) {
+      if (playlist.length === 1) {
+        handleClose();
+      } else {
+        setCurrentMedia(playlist[0]);
+      }
+    } else {
+      setCurrentMedia(playlist[nextIndex]);
+    }
+  }, [uuid, playlist, currentMedia]);
 
   const renderMiniPlayer = useCallback(() => {
-    if (!playerData) {
+    if (!currentMedia) {
       return null;
     }
-    console.log('text color', colors.text);
     return (
       <TouchableDebounce onPress={handleFullScreen}>
         <View
@@ -53,18 +70,19 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
             shadowOpacity: 0.27,
             shadowRadius: 3.65,
           }}>
-          <View key={`${playerData.uri}-${playerData.startTime}`} style={styles.videoContainer}>
+          <View style={styles.videoContainer}>
             <TheoMediaPlayer
               uuid={uuid.current}
-              isLiveStream={!!playerData.isLiveStream}
-              mediaType={playerData.mediaType ?? MediaType.VIDEO}
-              poster={playerData.poster}
-              title={playerData.title}
-              streamUri={playerData.uri!}
-              startTime={playerData.startTime}
+              isLiveStream={!!currentMedia.isLiveStream}
+              mediaType={currentMedia.mediaType ?? MediaType.VIDEO}
+              poster={currentMedia.poster}
+              title={currentMedia.title}
+              streamUri={currentMedia.uri!}
+              startTime={currentMedia.startTime}
               autoStart={true}
               isFloating={true}
               controls={false}
+              onEnded={playNext}
             />
           </View>
           <View style={{flex: 1, gap: 4}}>
@@ -72,7 +90,7 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
               style={{color: colors.text, fontSize: 14.3, width: '100%'}}
               ellipsizeMode="tail"
               numberOfLines={2}>
-              {playerData.title}
+              {currentMedia.title}
             </Text>
           </View>
           <View style={{paddingHorizontal: 10, flexDirection: 'row', gap: 16, alignItems: 'center'}}>
@@ -84,14 +102,23 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
         <View style={{height: bottom - 8, backgroundColor: colors.background}} />
       </TouchableDebounce>
     );
-  }, [playerData, uuid, colors, dark, handleFullScreen]);
+  }, [uuid, colors, dark, handleFullScreen, currentMedia, playNext]);
 
   const context: PlayerContextType = useMemo(
     () => ({
-      setPlayerData,
+      setPlaylist: (playlist: MediaBaseData[], current?: number) => {
+        setPlaylist(playlist);
+        if (current) {
+          setCurrentMedia(playlist[current]);
+        } else if (playlist.length > 0) {
+          setCurrentMedia(playlist[0]);
+        } else {
+          setCurrentMedia(undefined);
+        }
+      },
       close: handleClose,
     }),
-    [setPlayerData, handleClose],
+    [setPlaylist, handleClose, playlist],
   );
 
   return (

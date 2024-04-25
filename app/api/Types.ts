@@ -501,6 +501,13 @@ export type ArticleEmbedTimelineType = {
   src: string;
 };
 
+export type CarPlaylistItem = {
+  title: string;
+  content: string;
+  cover: string;
+  streamUrl: string;
+};
+
 export type ArticleContentDefault = {
   article_id: number;
   article_title: string;

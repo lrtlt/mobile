@@ -16,7 +16,7 @@ export type MediaBaseData = {
 };
 
 export type PlayerContextType = {
-  setPlayerData: (data?: MediaBaseData) => void;
+  setPlaylist: (data: MediaBaseData[], current?: number) => void;
   close: () => void;
 };
 
@@ -25,6 +25,6 @@ const noOp = (): any => {
 };
 
 export const PlayerContext = React.createContext<PlayerContextType>({
-  setPlayerData: noOp,
+  setPlaylist: noOp,
   close: noOp,
 });

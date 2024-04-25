@@ -11,6 +11,7 @@ import notifee, {
   AndroidCategory,
   AndroidStyle,
 } from '@notifee/react-native';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const INITIAL_URL_STORAGE_KEY = 'initialUrl';
 const FOREGROUND_NOTIFICATION_CHANNEL_ID = 'lrt_foreground_notifications';
@@ -19,24 +20,22 @@ type NotificationData = {
   launchUrl?: string;
 };
 
-const _handleNotificationOpen = (data: NotificationData | undefined, isInitial: boolean) => {
+const _handleNotificationOpen = async (data: NotificationData | undefined, isInitial: boolean) => {
   const url = data?.launchUrl;
+  crashlytics().log(`_handleNotificationOpen: isInitial:${isInitial} data:${JSON.stringify(data)}`);
   if (url) {
-    Linking.canOpenURL(url).then(async (supported) => {
-      if (supported) {
-        if (isInitial) {
-          const initialUrl = await AsyncStorage.getItem(INITIAL_URL_STORAGE_KEY);
-          if (initialUrl === url) {
-            console.debug('initialUrl already handled');
-            //TODO: check if this helps with article notifications not being opened issue.
-            //return;
-          } else {
-            AsyncStorage.setItem(INITIAL_URL_STORAGE_KEY, url);
-          }
-        }
-        Linking.openURL(url);
+    if (isInitial) {
+      const initialUrl = await AsyncStorage.getItem(INITIAL_URL_STORAGE_KEY);
+      if (initialUrl === url) {
+        crashlytics().log(`_handleNotificationOpen: initialUrl already handled: ${url}`);
+        console.debug('initialUrl already handled');
+        return;
+      } else {
+        crashlytics().log(`_handleNotificationOpen: saving initial url: ${url}`);
+        AsyncStorage.setItem(INITIAL_URL_STORAGE_KEY, url);
       }
-    });
+    }
+    Linking.openURL(url);
   }
 };
 
@@ -71,11 +70,15 @@ const useFirebaseMessaging = (isNavigationReady: boolean) => {
   //Setup firebase messaging && notification channels
   useEffect(() => {
     const init = async () => {
-      const token = await messaging().getToken();
-      const apnsToken = await messaging().getAPNSToken();
+      if (!messaging().isDeviceRegisteredForRemoteMessages) {
+        await messaging().registerDeviceForRemoteMessages();
+      }
 
-      console.log('FCM-token', token);
+      const apnsToken = await messaging().getAPNSToken();
+      const token = await messaging().getToken();
+
       console.log('APNS-token', apnsToken);
+      console.log('FCM-token', token);
 
       const isChannelCreated = await notifee.isChannelCreated(FOREGROUND_NOTIFICATION_CHANNEL_ID);
       if (!isChannelCreated) {

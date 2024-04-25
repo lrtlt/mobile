@@ -2,6 +2,9 @@ import {
   articleGet,
   articlesGetByTag,
   audiotekaGet,
+  carPlaylistNewestGet,
+  carPlaylistPopularGet,
+  carPlaylistRecommendedGet,
   categoryGet,
   channelGet,
   forecastGet,
@@ -22,6 +25,7 @@ import {get, put} from './HttpClient';
 import {
   ArticleContentResponse,
   AudiotekaResponse,
+  CarPlaylistItem,
   CategoryArticlesResponse,
   ChannelResponse,
   DailyQuestionResponse,
@@ -93,3 +97,9 @@ export const setDailyQuestionVote = (questionId: number | string, choiceId: numb
 
 export const fetchDailyQuestion = (questionId: number | string) =>
   get<DailyQuestionResponse>(getDailyQuestion(questionId));
+
+export const fetchCarNewestPlaylist = () => get<CarPlaylistItem[]>(carPlaylistNewestGet());
+
+export const fetchCarPopularPlaylist = () => get<CarPlaylistItem[]>(carPlaylistPopularGet());
+
+export const fetchCarRecommendedPlaylist = () => get<CarPlaylistItem[]>(carPlaylistRecommendedGet());
