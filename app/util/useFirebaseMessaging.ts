@@ -26,34 +26,34 @@ const _handleNotificationOpen = async (data: NotificationData | undefined, isIni
   if (url) {
     if (isInitial) {
       const initialUrl = await AsyncStorage.getItem(INITIAL_URL_STORAGE_KEY);
-      if (initialUrl === url) {
+      if (initialUrl == url) {
         crashlytics().log(`_handleNotificationOpen: initialUrl already handled: ${url}`);
         console.debug('initialUrl already handled');
         return;
       } else {
         crashlytics().log(`_handleNotificationOpen: saving initial url: ${url}`);
-        AsyncStorage.setItem(INITIAL_URL_STORAGE_KEY, url);
+        await AsyncStorage.setItem(INITIAL_URL_STORAGE_KEY, url);
       }
     }
-    Linking.openURL(url);
+    await Linking.openURL(url);
   }
 };
 
 const _handleInitialNotification = async () => {
   const firebaseNotification = await messaging().getInitialNotification();
   if (firebaseNotification) {
-    _handleNotificationOpen(firebaseNotification.data as NotificationData, true);
+    await _handleNotificationOpen(firebaseNotification.data as NotificationData, true);
   } else {
     const notifeeNotification = await notifee.getInitialNotification();
     if (notifeeNotification) {
-      _handleNotificationOpen(notifeeNotification.notification.data as NotificationData, true);
+      await _handleNotificationOpen(notifeeNotification.notification.data as NotificationData, true);
     }
   }
 };
 
 const _onNotificationEvent = async ({type, detail}: Event) => {
   if (type === EventType.PRESS) {
-    _handleNotificationOpen(detail.notification?.data as NotificationData, false);
+    await _handleNotificationOpen(detail.notification?.data as NotificationData, false);
   }
 };
 
