@@ -3,6 +3,7 @@ import {
   articlesGetByTag,
   audiotekaGet,
   carPlaylistNewestGet,
+  carPlaylistPodcastsGet,
   carPlaylistPopularGet,
   carPlaylistRecommendedGet,
   categoryGet,
@@ -25,6 +26,7 @@ import {get, put} from './HttpClient';
 import {
   ArticleContentResponse,
   AudiotekaResponse,
+  CarPlayPodcastsResponse,
   CarPlaylistItem,
   CategoryArticlesResponse,
   ChannelResponse,
@@ -103,3 +105,6 @@ export const fetchCarNewestPlaylist = () => get<CarPlaylistItem[]>(carPlaylistNe
 export const fetchCarPopularPlaylist = () => get<CarPlaylistItem[]>(carPlaylistPopularGet());
 
 export const fetchCarRecommendedPlaylist = () => get<CarPlaylistItem[]>(carPlaylistRecommendedGet());
+
+export const fetchCarPodcasts = (count: number) =>
+  get<CarPlayPodcastsResponse>(carPlaylistPodcastsGet(count));

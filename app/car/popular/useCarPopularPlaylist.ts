@@ -9,7 +9,6 @@ import {fetchCarPopularPlaylist} from '../../api';
 const useCarPlayPopularPlaylist = (isConnected: boolean) => {
   const [channels, setChannels] = useState<PlayListItem[]>([]);
   const [lastLoadTime, setLastLoadTime] = useState<number>(0);
-  const channelsData = useSelector(selectHomeChannels, checkEqual);
 
   const cancellablePromise = useCancellablePromise();
 
@@ -31,7 +30,7 @@ const useCarPlayPopularPlaylist = (isConnected: boolean) => {
         }
       }),
     );
-  }, [channelsData, isConnected, lastLoadTime]);
+  }, [isConnected, lastLoadTime]);
 
   return {
     channels,

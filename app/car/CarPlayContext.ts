@@ -12,7 +12,6 @@ export type PlayListItem = {
 
 export type CarPlayContextType = {
   isConnected: boolean;
-  selectedCategory?: CarCategory;
 };
 
 const defaults: CarPlayContextType = {

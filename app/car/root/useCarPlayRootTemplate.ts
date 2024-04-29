@@ -4,6 +4,7 @@ import useCarLiveTemplate from '../live/useCarLiveTemplate';
 import {
   CATEGORY_LIVE,
   CATEGORY_NEWEST,
+  CATEGORY_PODCASTS,
   CATEGORY_POPULAR,
   CATEGORY_RECOMMENDED,
   carPlayRootTemplate,
@@ -11,6 +12,7 @@ import {
 import useCarNewestTemplate from '../newest/useCarNewestTemplate';
 import useCarPopularTemplate from '../popular/useCarPopularTemplate';
 import useCarRecommendedTemplate from '../recommended/useCarRecommendedTemplate';
+import useCarPodcastsTemplate from '../podcasts/useCarPodcastsTemplate';
 
 const useCarPlayRootTemplate = (isConnected: boolean) => {
   const [template] = useState<ListTemplate>(carPlayRootTemplate);
@@ -19,6 +21,7 @@ const useCarPlayRootTemplate = (isConnected: boolean) => {
   const newestTemplate = useCarNewestTemplate(isConnected);
   const popularTemplate = useCarPopularTemplate(isConnected);
   const recommendedTemplate = useCarRecommendedTemplate(isConnected);
+  const podcastsTemplate = useCarPodcastsTemplate(isConnected);
 
   useEffect(() => {
     template.config.onItemSelect = async ({index}) => {
@@ -35,6 +38,9 @@ const useCarPlayRootTemplate = (isConnected: boolean) => {
           break;
         case CATEGORY_RECOMMENDED:
           CarPlay.pushTemplate(recommendedTemplate, true);
+          break;
+        case CATEGORY_PODCASTS:
+          CarPlay.pushTemplate(podcastsTemplate, true);
           break;
       }
     };

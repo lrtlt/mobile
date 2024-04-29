@@ -508,6 +508,16 @@ export type CarPlaylistItem = {
   streamUrl: string;
 };
 
+export type CarPlayPodcastsResponse = {
+  total_found: number;
+  items: CarPlayPodcastItem[];
+};
+
+export type CarPlayPodcastItem = {
+  id: number;
+  title: string;
+};
+
 export type ArticleContentDefault = {
   article_id: number;
   article_title: string;
