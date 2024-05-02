@@ -169,3 +169,9 @@ export const carPlaylistNewestGet = () => 'https://www.lrt.lt/static/carplay/nau
 export const carPlaylistPopularGet = () => 'https://www.lrt.lt/static/carplay/pop.json';
 
 export const carPlaylistRecommendedGet = () => 'https://www.lrt.lt/static/carplay/rekomenduoja.json';
+
+export const carPlaylistPodcastsGet = (count: number) =>
+  `https://www.lrt.lt/api/json/search/categories?type=audio&count=${count}`;
+
+export const carPlaylistCategoryGet = (id: number | string) =>
+  `https://www.lrt.lt/api/json/category?id=${id}`;

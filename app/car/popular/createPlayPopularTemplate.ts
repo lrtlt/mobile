@@ -2,6 +2,8 @@ import {ListTemplate} from 'react-native-carplay';
 
 export const carPlayPopularTemplate = new ListTemplate({
   title: 'Populiariausi',
+  tabTitle: 'Populiariausi',
+  tabSystemImageName: 'star.fill',
   id: 'lrt-list-template-popular',
   trailingNavigationBarButtons: [
     {

@@ -1,6 +1,7 @@
-import React, {useCallback, useState} from 'react';
-import {View, useWindowDimensions} from 'react-native';
-import {WebViewSource} from 'react-native-webview/lib/WebViewTypes';
+import React, {useState} from 'react';
+import {View} from 'react-native';
+import {WebViewSource} from 'react-native-webview/src/WebViewTypes';
+
 import {ArticleEmbedHTMLType} from '../../../../api/Types';
 import SafeAutoHeightWebView from '../../../safeWebView/SafeAutoHeightWebView';
 

@@ -4,6 +4,7 @@ export const CATEGORY_LIVE = 0;
 export const CATEGORY_RECOMMENDED = 1;
 export const CATEGORY_POPULAR = 2;
 export const CATEGORY_NEWEST = 3;
+export const CATEGORY_PODCASTS = 4;
 
 export const carPlayRootTemplate = new ListTemplate({
   title: 'LRT.lt',
@@ -28,6 +29,9 @@ export const carPlayRootTemplate = new ListTemplate({
         },
         {
           text: 'Naujausi',
+        },
+        {
+          text: 'Radijo laidos (A-Z)',
         },
       ],
     },

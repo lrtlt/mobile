@@ -2,6 +2,13 @@ import React from 'react';
 
 export type CarCategory = 'live' | 'newest';
 
+export type CategoryListItem = {
+  articleId: number;
+  text: string;
+  detailText?: string;
+  imgUrl: string;
+};
+
 export type PlayListItem = {
   id: string | number;
   text: string;
@@ -12,7 +19,6 @@ export type PlayListItem = {
 
 export type CarPlayContextType = {
   isConnected: boolean;
-  selectedCategory?: CarCategory;
 };
 
 const defaults: CarPlayContextType = {
