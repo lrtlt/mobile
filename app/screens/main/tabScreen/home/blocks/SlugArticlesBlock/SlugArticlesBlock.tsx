@@ -1,5 +1,4 @@
 import {useNavigation} from '@react-navigation/core';
-import {ThemeProvider} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
@@ -12,6 +11,7 @@ import {themeDark, themeLight, useTheme} from '../../../../../../Theme';
 import {formatArticles} from '../../../../../../util/articleFormatters';
 import {buildArticleImageUri, IMG_SIZE_L} from '../../../../../../util/ImageUtil';
 import FastImage from 'react-native-fast-image';
+import ThemeProvider from '../../../../../../theme/ThemeProvider';
 
 interface SlugArticlesBlockProps {
   block: HomeBlockSlug;
@@ -24,10 +24,10 @@ const SlugArticlesBlock: React.FC<SlugArticlesBlockProps> = ({block}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const theme = useTheme();
 
-  const formattedArticles = useMemo(() => formatArticles(template_id, articles_list), [
-    articles_list,
-    template_id,
-  ]);
+  const formattedArticles = useMemo(
+    () => formatArticles(template_id, articles_list),
+    [articles_list, template_id],
+  );
 
   const articlePressHandler = useCallback(
     (article: Article) => {
@@ -81,7 +81,7 @@ const SlugArticlesBlock: React.FC<SlugArticlesBlockProps> = ({block}) => {
           onPress={onHeaderPressHandler}
           color={template_id === 9 ? themeDark.colors.text : undefined}
         />
-        <ThemeProvider value={template_id === 9 ? themeLight : theme}>{articleList}</ThemeProvider>
+        <ThemeProvider forceTheme={template_id === 9 ? themeLight : theme}>{articleList}</ThemeProvider>
       </>
     </View>
   );

@@ -9,8 +9,8 @@ import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import TextComponent from '../../text/Text';
 import {channelColors, themeLight, useTheme} from '../../../Theme';
 import {isLiveChannel, LiveChannel, TVChannel} from '../../../api/Types';
-import {ThemeProvider} from '@react-navigation/native';
 import {IconPlay} from '../../svg';
+import ThemeProvider from '../../../theme/ThemeProvider';
 
 interface Props {
   data: TVChannel | LiveChannel;
@@ -55,7 +55,7 @@ const Channel: React.FC<React.PropsWithChildren<Props>> = ({data, onPress}) => {
             <CoverImage style={styles.cover} source={{uri: coverUrl}} />
             <View style={styles.coverContentContainer}>
               <View style={styles.channelImageContainer}>
-                <ThemeProvider value={themeLight}>
+                <ThemeProvider forceTheme={themeLight}>
                   {getIconForChannel(data.channel, {height: 28})}
                 </ThemeProvider>
                 <View style={styles.playIconContainer}>
