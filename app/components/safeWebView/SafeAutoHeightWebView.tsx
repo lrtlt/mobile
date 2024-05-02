@@ -4,7 +4,7 @@ import React, {forwardRef, useCallback, useRef} from 'react';
 import {LayoutChangeEvent, Linking} from 'react-native';
 import {StyleSheet, View} from 'react-native';
 import WebView, {AutoHeightWebViewProps} from 'react-native-autoheight-webview';
-import {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
+import {type ShouldStartLoadRequest} from 'react-native-webview/src/WebViewTypes';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
 

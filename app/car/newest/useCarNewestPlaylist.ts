@@ -1,6 +1,3 @@
-import {useSelector} from 'react-redux';
-import {selectHomeChannels} from '../../redux/selectors';
-import {checkEqual} from '../../util/LodashEqualityCheck';
 import {useEffect, useState} from 'react';
 import {PlayListItem} from '../CarPlayContext';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
