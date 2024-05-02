@@ -1,10 +1,12 @@
 import {ListTemplate} from 'react-native-carplay';
 
+export const TEMPLATE_ID_LIVE = 'lrt-list-template-live';
+
 export const carPlayLiveTemplate = new ListTemplate({
   title: 'Tiesiogiai',
   tabTitle: 'Tiesiogiai',
   tabSystemImageName: 'play.square.fill',
-  id: 'lrt-list-template-live',
+  id: TEMPLATE_ID_LIVE,
   trailingNavigationBarButtons: [
     {
       id: 'reload',

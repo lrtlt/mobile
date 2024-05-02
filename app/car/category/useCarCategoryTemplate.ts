@@ -7,6 +7,14 @@ import {CategoryListItem} from '../CarPlayContext';
 import useCarPlayCategoryEpisodeStream from './useCarPlayCategoryEpisodeStream';
 import {MediaType} from '../../components/videoComponent/context/PlayerContext';
 import {carPlayNowPlayingTemplate} from '../nowPlaying/createNowPlayingTemplate';
+import {debounce} from 'lodash';
+import Gemius from 'react-native-gemius-plugin';
+import analytics from '@react-native-firebase/analytics';
+
+const sendAnalyticsEvent = debounce((eventName: string) => {
+  Gemius.sendPageViewedEvent(eventName);
+  analytics().logEvent(eventName);
+}, 200);
 
 const useCarCategoryTemplate = (podcast?: CarPlayPodcastItem) => {
   const [template, setTemplate] = useState<ListTemplate>();
@@ -39,6 +47,8 @@ const useCarCategoryTemplate = (podcast?: CarPlayPodcastItem) => {
       setSelectedEpisode(episodes[index]);
     };
     setTemplate(t);
+    sendAnalyticsEvent('carplay_podcast_open_' + podcast?.id);
+
     return () => {
       t.config.onItemSelect = undefined;
     };

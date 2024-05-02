@@ -6,9 +6,10 @@ export const CATEGORY_POPULAR = 2;
 export const CATEGORY_NEWEST = 3;
 export const CATEGORY_PODCASTS = 4;
 
+export const TEMPLATE_ID_ROOT = 'lrt-root-template';
 export const carPlayRootTemplate = new ListTemplate({
   title: 'LRT.lt',
-  id: 'lrt-root-template',
+  id: TEMPLATE_ID_ROOT,
   backButtonHidden: true,
   // tabTitle: 'Tab title',
   // tabImage: require('./star.png'),
