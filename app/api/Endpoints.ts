@@ -172,3 +172,6 @@ export const carPlaylistRecommendedGet = () => 'https://www.lrt.lt/static/carpla
 
 export const carPlaylistPodcastsGet = (count: number) =>
   `https://www.lrt.lt/api/json/search/categories?type=audio&count=${count}`;
+
+export const carPlaylistCategoryGet = (id: number | string) =>
+  `https://www.lrt.lt/api/json/category?id=${id}`;

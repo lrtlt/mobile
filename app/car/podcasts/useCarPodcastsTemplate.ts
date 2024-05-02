@@ -1,13 +1,18 @@
 import {useEffect, useState} from 'react';
-import {ListTemplate} from 'react-native-carplay';
+import {CarPlay, ListTemplate} from 'react-native-carplay';
 import {carPlayPodcastsTemplate} from './createPlayPodcastsTemplate';
 import useCarPlayPodcastsPlaylist from './useCarPodcastsPlaylist';
 import {ListSection} from 'react-native-carplay/lib/interfaces/ListSection';
+import {CarPlayPodcastItem} from '../../api/Types';
+import useCarCategoryTemplate from '../category/useCarCategoryTemplate';
 
 const useCarPodcastsTemplate = (isConnected: boolean) => {
   const [template] = useState<ListTemplate>(carPlayPodcastsTemplate);
+  const [selectedPodcast, setSelectedPodcast] = useState<CarPlayPodcastItem | undefined>(undefined);
 
   const {podcasts, reload} = useCarPlayPodcastsPlaylist(isConnected);
+
+  const categoryTemplate = useCarCategoryTemplate(selectedPodcast);
 
   useEffect(() => {
     console.log('updating podcasts template');
@@ -30,7 +35,7 @@ const useCarPodcastsTemplate = (isConnected: boolean) => {
     const listSections: ListSection[] = Object.entries(sections).map(([letter, items]) => ({
       header: letter,
       title: letter,
-      sectionIndexTitle: letter,
+      sectionIndexTitle: letter.charAt(0).toUpperCase(),
       items: items.map((item) => ({
         text: item.title,
       })),
@@ -41,7 +46,7 @@ const useCarPodcastsTemplate = (isConnected: boolean) => {
     template.config.onItemSelect = async ({index}) => {
       const podcast = podcasts[index];
       console.log('Podcast selected', podcast);
-      // CarPlay.pushTemplate(carPlayNowPlayingTemplate, true);
+      setSelectedPodcast(podcast);
     };
     return () => {
       template.config.onItemSelect = undefined;
@@ -61,6 +66,13 @@ const useCarPodcastsTemplate = (isConnected: boolean) => {
       };
     }
   }, [template, reload]);
+
+  useEffect(() => {
+    console.log('pushing category template', categoryTemplate);
+    if (categoryTemplate) {
+      CarPlay.pushTemplate(categoryTemplate, true);
+    }
+  }, [categoryTemplate]);
 
   return template;
 };

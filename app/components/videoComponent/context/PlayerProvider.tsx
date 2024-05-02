@@ -29,6 +29,7 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
   }, [uuid]);
 
   const playNext = useCallback(() => {
+    console.log('playNext', playlist.length);
     if (playlist.length === 0) {
       return;
     }
@@ -42,7 +43,20 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
     } else {
       setCurrentMedia(playlist[nextIndex]);
     }
-  }, [uuid, playlist, currentMedia]);
+  }, [playlist, currentMedia]);
+
+  const playPrevious = useCallback(() => {
+    console.log('playPrevious', playlist.length);
+    if (playlist.length === 0) {
+      return;
+    }
+    const nextIndex = playlist.findIndex((item) => item === currentMedia) - 1;
+    if (nextIndex < 0) {
+      setCurrentMedia(playlist[playlist.length - 1]);
+    } else {
+      setCurrentMedia(playlist[nextIndex]);
+    }
+  }, [playlist, currentMedia]);
 
   const renderMiniPlayer = useCallback(() => {
     if (!currentMedia) {
@@ -116,9 +130,11 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
           setCurrentMedia(undefined);
         }
       },
+      playNext: playNext,
+      playPrevious: playPrevious,
       close: handleClose,
     }),
-    [setPlaylist, handleClose, playlist],
+    [setPlaylist, handleClose, playNext, playPrevious, playlist],
   );
 
   return (

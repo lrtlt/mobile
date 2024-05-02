@@ -518,6 +518,21 @@ export type CarPlayPodcastItem = {
   title: string;
 };
 
+export type CarPlayCategoryResponse = {
+  articles: CarPlayCategoryItem[];
+  category_info: any;
+  page: number;
+  next_page: number | null;
+};
+
+export type CarPlayCategoryItem = {
+  id: number;
+  title: string;
+  img_path_postfix: string;
+  img_path_prefix: string;
+  item_date: string;
+};
+
 export type ArticleContentDefault = {
   article_id: number;
   article_title: string;
