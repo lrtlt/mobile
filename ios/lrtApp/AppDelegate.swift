@@ -111,7 +111,7 @@ class AppDelegate: RCTAppDelegate, GCKLoggerDelegate {
     #if DEBUG
       return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
     #else
-      return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+      return Bundle.main.url(forResource: "main", withExtension: "jsbundle")!
     #endif
   }
 
