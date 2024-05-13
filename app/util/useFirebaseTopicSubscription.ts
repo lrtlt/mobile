@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import messaging from '@react-native-firebase/messaging';
+import messaging, {firebase} from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TOPICS_STORAGE_KEY = 'initialTopicSubscription';
@@ -9,8 +9,16 @@ const useFirebaseTopicSubscription = () => {
   const [subscriptions, setSubscriptions] = useState<string[]>([]);
 
   useEffect(() => {
+    const subscribeToTestTopic = async () => {
+      try {
+        await messaging().subscribeToTopic('test');
+      } catch (e) {
+        // ignore emulator issues
+      }
+    };
+
     if (__DEV__) {
-      messaging().subscribeToTopic('test');
+      subscribeToTestTopic();
     }
   }, []);
 
@@ -62,10 +70,14 @@ const useFirebaseTopicSubscription = () => {
           activeSubscriptions = JSON.parse(topicsJson);
         }
 
-        data.forEach((topic) => {
+        data.forEach(async (topic) => {
           const shouldSubscribe = isFirstRun || topic.hidden === 1;
           if (shouldSubscribe) {
-            messaging().subscribeToTopic(topic.slug);
+            try {
+              await messaging().subscribeToTopic(topic.slug);
+            } catch (e) {
+              // ignore emulator issues
+            }
             if (activeSubscriptions.indexOf(topic.slug) === -1) {
               activeSubscriptions.push(topic.slug);
             }

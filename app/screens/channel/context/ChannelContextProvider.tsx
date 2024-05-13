@@ -46,10 +46,10 @@ const ChannelProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
               };
 
               let audioStreamData: StreamData | undefined;
-              if (data.content2) {
+              if (data.audio) {
                 audioStreamData = {
                   ...streamData,
-                  streamUri: data.content2.trim(),
+                  streamUri: data.audio.trim(),
                   poster: getPosterByChannelId(String(channelId)),
                 };
               }

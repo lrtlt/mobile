@@ -93,7 +93,9 @@ const ArticleEmbed: React.FC<React.PropsWithChildren<Props>> = ({embedArray, ite
                 );
               }
               case 'timeline': {
-                return <EmbedTimeline data={e as ArticleEmbedTimelineType[]} />;
+                return (
+                  <EmbedTimeline key={`embed-timeline-${index}`} data={e as ArticleEmbedTimelineType[]} />
+                );
               }
               case 'photoalbum': {
                 return (

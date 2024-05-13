@@ -26,6 +26,10 @@ const useCarCategoryTemplate = (podcast?: CarPlayPodcastItem) => {
   const {setPlaylist} = useMediaPlayer();
 
   useEffect(() => {
+    if (!podcast) {
+      return;
+    }
+
     const t = new ListTemplate({
       title: podcast?.title,
       id: 'lrt-list-template-podcast-' + podcast?.id,

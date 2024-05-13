@@ -226,7 +226,7 @@ export type VideoDataLiveStream = {
     data: {
       content: string;
       content2?: string;
-      content3?: string;
+      audio?: string;
     };
   };
 };

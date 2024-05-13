@@ -12,6 +12,7 @@ import LiveFeedArticleItem from './LiveFeedArticleItem';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
+import LiveFeedCountdown from './LiveFeedCountdown';
 
 interface Props {
   id: string;
@@ -20,7 +21,6 @@ interface Props {
 const ITEM_COUNT_INCREMENT = 5;
 
 const ArticleLiveFeed: React.FC<React.PropsWithChildren<Props>> = ({id}) => {
-  const [countDown, setCountDown] = useState(60);
   const [itemCount, setItemCount] = useState(ITEM_COUNT_INCREMENT);
   const {state, reload} = useLiveFeedState(id);
 
@@ -29,29 +29,7 @@ const ArticleLiveFeed: React.FC<React.PropsWithChildren<Props>> = ({id}) => {
   const theme = useTheme();
 
   useEffect(() => {
-    // Fetch articles data
     reload();
-
-    // Refresh data every 60 seconds
-    const interval = setInterval(() => {
-      setCountDown(60);
-      reload();
-    }, 60000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  useEffect(() => {
-    // Update countdown every 1 seconds
-    const interval = setInterval(() => {
-      setCountDown((countDown) => Math.max(countDown - 1, 0));
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
   }, []);
 
   const getTimeDifference = useCallback((minutesAgo: number) => {
@@ -70,12 +48,12 @@ const ArticleLiveFeed: React.FC<React.PropsWithChildren<Props>> = ({id}) => {
       return `Prieš ${minutes} min.`;
     }
   }, []);
+
   const renderItem = useCallback(
     ({item}: ListRenderItemInfo<LiveFeedItem>) => {
       let imgUri: string | undefined;
       if (item.img_path_prefix && item.img_path_postfix) {
         imgUri = buildImageUri(IMG_SIZE_M, item.img_path_prefix, item.img_path_postfix);
-        console.log(imgUri);
       }
 
       return (
@@ -133,12 +111,7 @@ const ArticleLiveFeed: React.FC<React.PropsWithChildren<Props>> = ({id}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.refreshTimeContainer}>
-        <TextComponent style={styles.refreshTime}>
-          <TextComponent style={{...styles.refreshTime, fontWeight: 'bold'}}>{'TIESIOGIAI'}</TextComponent>
-          {`  ${countDown} sek.`}
-        </TextComponent>
-      </View>
+      <LiveFeedCountdown onDeadline={() => reload()} />
       {state.feed ? (
         <FlatList
           style={{marginTop: 16}}
@@ -163,20 +136,6 @@ const styles = StyleSheet.create({
     aspectRatio: 1.5,
     marginTop: 12,
     marginBottom: 8,
-  },
-  refreshTimeContainer: {
-    height: 80,
-    alignContent: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(238,0,14,.05)',
-    borderRadius: 6,
-    overflow: 'hidden',
-  },
-  refreshTime: {
-    color: 'rgb(238, 0, 14)',
-    textAlign: 'center',
-    fontSize: 14,
-    letterSpacing: 0.8,
   },
   itemContainer: {
     marginBottom: 8,
