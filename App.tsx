@@ -10,12 +10,13 @@ import {initialWindowMetrics, SafeAreaProvider} from 'react-native-safe-area-con
 import {persistor, store} from './app/redux/store';
 import useAppTrackingPermission from './app/util/useAppTrackingPermission';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import PlayerProvider from './app/components/videoComponent/context/PlayerProvider';
 import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
-import CarPlayProvider from './app/car/CarPlayProvider';
 import ThemeProvider from './app/theme/ThemeProvider';
+import useCarPlayController from './app/car/useCarPlayController';
+import useTrackPlayerSetup from './app/car/useTrackPlayerSetup';
 
 const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
   return (
@@ -32,6 +33,14 @@ const App: React.FC = () => {
   useAppTrackingPermission();
   useGoogleAnalyticsSetup();
   useGemiusSetup();
+  useTrackPlayerSetup();
+
+  const {isConnected: _} =
+    Platform.OS === 'ios'
+      ? useCarPlayController()
+      : {
+          isConnected: false,
+        };
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
@@ -39,9 +48,7 @@ const App: React.FC = () => {
         <ThemeProvider>
           <AppBackground>
             <PlayerProvider>
-              <CarPlayProvider>
-                <Navigation />
-              </CarPlayProvider>
+              <Navigation />
             </PlayerProvider>
           </AppBackground>
         </ThemeProvider>

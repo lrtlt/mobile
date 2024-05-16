@@ -1992,6 +1992,9 @@ PODS:
     - React-Core
     - THEOplayer-Integration-GoogleCast/Base (~> 7.0)
     - THEOplayerSDK-core (~> 7.0)
+  - react-native-track-player (4.1.1):
+    - React-Core
+    - SwiftAudioEx (= 1.1.0)
   - react-native-webview (13.8.4):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -2224,6 +2227,7 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.6.1)
+  - SwiftAudioEx (1.1.0)
   - THEOplayer-Integration-GoogleCast/Base (7.1.0)
   - THEOplayerSDK-core (7.1.0)
   - Yoga (1.14.0)
@@ -2270,6 +2274,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-theoplayer (from `../node_modules/react-native-theoplayer`)
+  - react-native-track-player (from `../node_modules/react-native-track-player`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -2341,6 +2346,7 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
+    - SwiftAudioEx
     - THEOplayer-Integration-GoogleCast
     - THEOplayerSDK-core
 
@@ -2419,6 +2425,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/slider"
   react-native-theoplayer:
     :path: "../node_modules/react-native-theoplayer"
+  react-native-track-player:
+    :path: "../node_modules/react-native-track-player"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-nativeconfig:
@@ -2564,6 +2572,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   react-native-slider: 6a65aa2e1f1816ee80b9684ff9a07118dfab1bf6
   react-native-theoplayer: fc99df4728ce32b819305736fe91136012ccced6
+  react-native-track-player: 82ef1756ffeea61140fea17519ecd6d64ec3cf3e
   react-native-webview: 3bfbca2a3ae90e753573e5cc4c64d3ba4b5eec59
   React-nativeconfig: 1c018931dcd44532a5df80426c4387d71f66c737
   React-NativeModulesApple: fe9afa0c30c58c6e7f01ad34cd5012e7e42a8cad
@@ -2603,6 +2612,7 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  SwiftAudioEx: f6aa653770f3a0d3851edaf8d834a30aee4a7646
   THEOplayer-Integration-GoogleCast: 1e652a028ea70017487b80d8919bdc7a82ecd748
   THEOplayerSDK-core: 7abc1738274a0fafee0b791a8ac3998c49cd9eb8
   Yoga: 07db09965bc46c4902e20d3ae6990d95e53af8a8

@@ -4,10 +4,20 @@ import useCancellablePromise from '../../../hooks/useCancellablePromise';
 import {fetchChannel, fetchVideoData} from '../../../api';
 import {isVideoLiveStream} from '../../../api/Types';
 import {StreamData} from '../../../components/videoComponent/useStreamData';
-import {LRT_KLASIKA, LRT_OPUS, LRT_RADIJAS} from '../../../constants';
+import {LRT_KLASIKA, LRT_LITHUANICA, LRT_OPUS, LRT_PLUS, LRT_RADIJAS, LRT_TV} from '../../../constants';
+import {MediaType} from '../../../components/videoComponent/context/PlayerContext';
 
 const getPosterByChannelId = (channelId: string) => {
   switch (channelId) {
+    case '1': {
+      return LRT_TV;
+    }
+    case '2': {
+      return LRT_PLUS;
+    }
+    case '3': {
+      return LRT_LITHUANICA;
+    }
     case '5': {
       return LRT_KLASIKA;
     }
@@ -42,6 +52,7 @@ const ChannelProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
                 streamUri: data.content.trim(),
                 title: channelResponse.channel_info?.title ?? 'untitled-live-stream',
                 mediaId: data.content,
+                mediaType: MediaType.VIDEO,
                 offset: undefined,
               };
 
@@ -50,6 +61,7 @@ const ChannelProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
                 audioStreamData = {
                   ...streamData,
                   streamUri: data.audio.trim(),
+                  mediaType: MediaType.AUDIO,
                   poster: getPosterByChannelId(String(channelId)),
                 };
               }

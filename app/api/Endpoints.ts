@@ -175,3 +175,5 @@ export const carPlaylistPodcastsGet = (count: number) =>
 
 export const carPlaylistCategoryGet = (id: number | string) =>
   `https://www.lrt.lt/api/json/category?id=${id}`;
+
+export const carPlaylistLiveGet = () => 'https://www.lrt.lt/static/tvprog/tvprog.json';

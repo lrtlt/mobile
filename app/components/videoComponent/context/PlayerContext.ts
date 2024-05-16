@@ -1,4 +1,5 @@
 import React from 'react';
+import defaultPlayerContext from './DefaultPlayerContext';
 
 // eslint-disable-next-line no-shadow
 export enum MediaType {
@@ -22,13 +23,4 @@ export type PlayerContextType = {
   close: () => void;
 };
 
-const noOp = (): any => {
-  console.warn('VideoContext: NO OP CALLED!');
-};
-
-export const PlayerContext = React.createContext<PlayerContextType>({
-  setPlaylist: noOp,
-  playNext: noOp,
-  playPrevious: noOp,
-  close: noOp,
-});
+export const PlayerContext = React.createContext<PlayerContextType>(defaultPlayerContext);
