@@ -29,7 +29,7 @@ const useCarPopularTemplate = (isConnected: boolean) => {
         channels.map((item) => ({
           uri: item.streamUrl,
           mediaType: MediaType.AUDIO,
-          isLiveStream: true,
+          isLiveStream: false,
           poster: item.imgUrl,
           title: item.text,
         })),
