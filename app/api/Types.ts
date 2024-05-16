@@ -66,6 +66,20 @@ export type MenuResponse = {
   main_menu: (MenuItem | MenuItemCategory | MenuItemPage | MenuItemChannels | MenuItemProjects)[];
 };
 
+export type TVProgramResponse = {
+  tvprog: {
+    has_tvprog?: 0 | 1;
+    items: TVProgramChannel[];
+    live_items?: TVProgramChannel[];
+  };
+};
+
+export type TVProgramChannel = Omit<TVChannel, 'certification' | 'get_streams_url'> & {
+  description?: string;
+  stream_url: string;
+  app_logo: string;
+};
+
 /**
  * Channel type in home page
  */
@@ -79,7 +93,7 @@ export type TVChannel = {
   certification: string;
   time_start: string;
   time_end: string;
-  stream_embed: string;
+  stream_embed?: string;
   get_streams_url: string;
   is_radio?: 0 | 1;
   block_all?: 0 | 1;

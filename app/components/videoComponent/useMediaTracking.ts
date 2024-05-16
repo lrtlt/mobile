@@ -1,8 +1,7 @@
 import {debounce} from 'lodash';
-import {useMemo} from 'react';
 import Gemius from 'react-native-gemius-plugin';
 
-type ReturnType = {
+type MediaAnalyticsTracker = {
   trackPlay: (mediaId: string, time: number) => void;
   trackPause: (mediaId: string, time: number) => void;
   trackClose: (mediaId: string, time: number) => void;
@@ -13,69 +12,47 @@ type ReturnType = {
 
 const EVENT_DEBOUNCE_DURATION = 200;
 
-const useMediaTracking = (): ReturnType => {
-  const sendPlay = useMemo(
-    () =>
-      debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: play', time);
-        Gemius.sendPlay(mediaId, time ? time : 0);
-      }, EVENT_DEBOUNCE_DURATION),
-    [],
-  );
+const trackPlay = debounce((mediaId: string, time: number) => {
+  console.log('MediaAnalyticsTracker event: play', time);
+  Gemius.sendPlay(mediaId, time ? time : 0);
+}, EVENT_DEBOUNCE_DURATION);
 
-  const sendPause = useMemo(
-    () =>
-      debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: pause', time);
-        Gemius.sendPause(mediaId, time ? time : 0);
-      }, EVENT_DEBOUNCE_DURATION),
-    [],
-  );
+const trackPause = debounce((mediaId: string, time: number) => {
+  console.log('MediaAnalyticsTracker event: pause', time);
+  Gemius.sendPause(mediaId, time ? time : 0);
+}, EVENT_DEBOUNCE_DURATION);
 
-  const sendClose = useMemo(
-    () =>
-      debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: close, time');
-        Gemius.sendClose(mediaId, time ? time : 0);
-      }, EVENT_DEBOUNCE_DURATION),
-    [],
-  );
+const trackClose = debounce((mediaId: string, time: number) => {
+  console.log('MediaAnalyticsTracker event: close', time);
+  Gemius.sendClose(mediaId, time ? time : 0);
+}, EVENT_DEBOUNCE_DURATION);
 
-  const sendBuffer = useMemo(
-    () =>
-      debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: buffering');
-        Gemius.sendBuffer(mediaId, time ? time : 0);
-      }, EVENT_DEBOUNCE_DURATION),
-    [],
-  );
+const trackBuffer = debounce((mediaId: string, time: number) => {
+  console.log('MediaAnalyticsTracker event: buffering');
+  Gemius.sendBuffer(mediaId, time ? time : 0);
+}, EVENT_DEBOUNCE_DURATION);
 
-  const sendComplete = useMemo(
-    () =>
-      debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: complete');
-        Gemius.sendComplete(mediaId, time ? time : 0);
-      }, EVENT_DEBOUNCE_DURATION),
-    [],
-  );
+const trackComplete = debounce((mediaId: string, time: number) => {
+  console.log('MediaAnalyticsTracker event: complete');
+  Gemius.sendComplete(mediaId, time ? time : 0);
+}, EVENT_DEBOUNCE_DURATION);
 
-  const sendSeek = useMemo(
-    () =>
-      debounce((mediaId: string, time: number) => {
-        console.log('MediaPlayer event: seek ' + time);
-        Gemius.sendSeek(mediaId, time);
-      }, EVENT_DEBOUNCE_DURATION),
-    [],
-  );
+const trackSeek = debounce((mediaId: string, time: number) => {
+  console.log('MediaAnalyticsTracker event: seek ' + time);
+  Gemius.sendSeek(mediaId, time);
+}, EVENT_DEBOUNCE_DURATION);
 
-  return {
-    trackPlay: sendPlay,
-    trackPause: sendPause,
-    trackSeek: sendSeek,
-    trackBuffer: sendBuffer,
-    trackClose: sendClose,
-    trackComplete: sendComplete,
-  };
+export const tracker: MediaAnalyticsTracker = {
+  trackPlay,
+  trackPause,
+  trackClose,
+  trackBuffer,
+  trackComplete,
+  trackSeek,
+};
+
+const useMediaTracking = (): MediaAnalyticsTracker => {
+  return tracker;
 };
 
 export default useMediaTracking;

@@ -7,10 +7,12 @@ export const fetchStreamData = ({
   url,
   title,
   poster,
+  prioritizeAudio,
 }: {
   url: string;
   title?: string;
   poster?: string;
+  prioritizeAudio?: boolean;
 }): Promise<StreamData> =>
   fetchVideoData(url)
     .then((response) => {
@@ -19,7 +21,11 @@ export const fetchStreamData = ({
         return {
           channelTitle: title,
           isLiveStream: true,
-          streamUri: data.content.trim(),
+          streamUri: prioritizeAudio
+            ? data.audio
+              ? data.audio.trim()
+              : data.content.trim()
+            : data.content.trim(),
           title: title ?? 'untitled-live-stream',
           poster: poster,
           mediaId: data.content,

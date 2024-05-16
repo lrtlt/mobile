@@ -39,6 +39,9 @@ export const ARTICLE_TYPE_VIDEO = 6;
 export const ARTICLE_TYPE_AUDIO = 7;
 
 //Audio only stream covers
+export const LRT_TV = 'https://www.lrt.lt/media/logo/LTV1.jpg?v=20245121947';
+export const LRT_PLUS = 'https://www.lrt.lt/media/logo/LTV2.jpg?v=20245121948';
+export const LRT_LITHUANICA = 'https://www.lrt.lt/media/logo/WORLD.jpg?v=20245121949';
 export const LRT_RADIJAS = 'https://www.lrt.lt/media/logo/LR.jpg?v=2024152153';
 export const LRT_KLASIKA = 'https://www.lrt.lt/media/logo/Klasika.jpg?v=2024152156';
 export const LRT_OPUS = 'https://www.lrt.lt/media/logo/Opus.jpg?v=2024152157';

@@ -3,6 +3,7 @@ import {
   articlesGetByTag,
   audiotekaGet,
   carPlaylistCategoryGet,
+  carPlaylistLiveGet,
   carPlaylistNewestGet,
   carPlaylistPodcastsGet,
   carPlaylistPopularGet,
@@ -46,6 +47,7 @@ import {
   SearchFilter,
   SearchResponse,
   SlugArticlesResponse,
+  TVProgramResponse,
   VideoDataDefault,
   VideoDataLiveStream,
 } from './Types';
@@ -113,3 +115,5 @@ export const fetchCarPodcasts = (count: number) =>
 
 export const fetchCarCategoryPlaylist = (id: string | number) =>
   get<CarPlayCategoryResponse>(carPlaylistCategoryGet(id));
+
+export const fetchCarLivePlaylist = () => get<TVProgramResponse>(carPlaylistLiveGet());
