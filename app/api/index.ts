@@ -47,7 +47,6 @@ import {
   SearchFilter,
   SearchResponse,
   SlugArticlesResponse,
-  TVProgramChannel,
   TVProgramResponse,
   VideoDataDefault,
   VideoDataLiveStream,

@@ -1,4 +1,4 @@
-import TrackPlayer, {Event, PlaybackState, State} from 'react-native-track-player';
+import TrackPlayer, {Event, State} from 'react-native-track-player';
 import {tracker} from './app/components/videoComponent/useMediaTracking';
 import Gemius from 'react-native-gemius-plugin';
 
@@ -58,21 +58,6 @@ const PlaybackService = async () => {
     }
     tracker.trackSeek(activeTrack.url, event.position);
   });
-  // TrackPlayer.addEventListener(Event.RemoteDuck, async (event) => {
-  //   console.log('Event.RemoteDuck', event);
-  // });
-  // TrackPlayer.addEventListener(Event.PlaybackQueueEnded, (event) => {
-  //   console.log('Event.PlaybackQueueEnded', event);
-  // });
-  // TrackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, (event) => {
-  //   console.log('Event.PlaybackActiveTrackChanged', event);
-  // });
-  // TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, (event) => {
-  //   console.log('Event.PlaybackProgressUpdated', event);
-  // });
-  // TrackPlayer.addEventListener(Event.PlaybackPlayWhenReadyChanged, (event) => {
-  //   console.log('Event.PlaybackPlayWhenReadyChanged', event);
-  // });
   TrackPlayer.addEventListener(Event.PlaybackState, async (event) => {
     console.log('Event.PlaybackState', event);
     const activeTrack = await TrackPlayer.getActiveTrack();
@@ -103,32 +88,6 @@ const PlaybackService = async () => {
         break;
     }
   });
-  // TrackPlayer.addEventListener(Event.PlaybackMetadataReceived, (event) => {
-  //   console.log('[Deprecated] Event.PlaybackMetadataReceived', event);
-  // });
-  // TrackPlayer.addEventListener(Event.MetadataChapterReceived, (event) => {
-  //   console.log('Event.MetadataChapterReceived', event);
-  // });
-  // TrackPlayer.addEventListener(Event.MetadataTimedReceived, (event) => {
-  //   console.log('Event.MetadataTimedReceived', event);
-  // });
-  // TrackPlayer.addEventListener(Event.MetadataCommonReceived, (event) => {
-  //   console.log('Event.MetadataCommonReceived', event);
-  // });
-  // TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, (event) => {
-  //   console.log('Event.PlaybackProgressUpdated', event);
-  // });
-  // TrackPlayer.addEventListener(Event.MetadataCommonReceived, async ({metadata}) => {
-  //   const activeTrack = await TrackPlayer.getActiveTrack();
-  //   console.log('Event.MetadataCommonReceived', metadata, activeTrack);
-  //   TrackPlayer.updateNowPlayingMetadata({
-  //     artist: [metadata.title, metadata.artist].filter(Boolean).join(' - '),
-  //     title: activeTrack?.title ?? metadata.title,
-  //     artwork: activeTrack?.artwork ?? metadata.artworkUri,
-  //     duration: activeTrack?.duration,
-  //     isLiveStream: activeTrack?.isLiveStream,
-  //   });
-  // });
 };
 
 export default PlaybackService;

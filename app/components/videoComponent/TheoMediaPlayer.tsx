@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ActivityIndicator, BackHandler, ImageBackground, Platform, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, BackHandler, Platform, StyleSheet, View} from 'react-native';
 import {
   PlayerConfiguration,
   SourceDescription,

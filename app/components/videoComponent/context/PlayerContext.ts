@@ -17,7 +17,7 @@ export type MediaBaseData = {
 };
 
 export type PlayerContextType = {
-  setPlaylist: (data: MediaBaseData[], current?: number) => void;
+  setPlaylist: (data: MediaBaseData[], current?: number) => Promise<void>;
   playNext: () => void;
   playPrevious: () => void;
   close: () => void;

@@ -21,11 +21,7 @@ export const fetchStreamData = ({
         return {
           channelTitle: title,
           isLiveStream: true,
-          streamUri: prioritizeAudio
-            ? data.audio
-              ? data.audio.trim()
-              : data.content.trim()
-            : data.content.trim(),
+          streamUri: prioritizeAudio ? data.audio?.trim() ?? data.content.trim() : data.content.trim(),
           title: title ?? 'untitled-live-stream',
           poster: poster,
           mediaId: data.content,

@@ -105,13 +105,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
         isLiveStream={data.isLiveStream}
         startTime={data.isLiveStream ? undefined : props.startTime || data.offset}
         poster={props.backgroundImage ?? data.poster}
-        mediaType={
-          data.mediaType != undefined
-            ? data.mediaType
-            : data.streamUri.includes('audio')
-            ? MediaType.AUDIO
-            : MediaType.VIDEO
-        }
+        mediaType={data.mediaType ?? data.streamUri.includes('audio') ? MediaType.AUDIO : MediaType.VIDEO}
         onError={onPlayerError}
       />
     </View>
