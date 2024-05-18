@@ -5,11 +5,15 @@ import useCarPlayRootTemplate from './root/useCarPlayRootTemplate';
 import Gemius from 'react-native-gemius-plugin';
 import analytics from '@react-native-firebase/analytics';
 import TrackPlayer from 'react-native-track-player';
+import useTrackPlayerSetup from './useTrackPlayerSetup';
 
 type ReturnType = CarPlayContextType;
 
 const useCarPlayController = (): ReturnType => {
   const [isConnected, setIsConnected] = useState(CarPlay.connected);
+
+  // Setup TrackPlayer
+  useTrackPlayerSetup();
 
   const rootTemplate = useCarPlayRootTemplate(isConnected);
 

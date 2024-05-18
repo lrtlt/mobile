@@ -16,7 +16,6 @@ import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import ThemeProvider from './app/theme/ThemeProvider';
 import useCarPlayController from './app/car/useCarPlayController';
-import useTrackPlayerSetup from './app/car/useTrackPlayerSetup';
 
 const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
   return (
@@ -33,7 +32,6 @@ const App: React.FC = () => {
   useAppTrackingPermission();
   useGoogleAnalyticsSetup();
   useGemiusSetup();
-  useTrackPlayerSetup();
 
   const {isConnected: _} =
     Platform.OS === 'ios'

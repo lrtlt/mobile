@@ -13,6 +13,5 @@ if (Platform.OS === 'android') {
   AppRegistry.registerComponent(appName, () => App);
 } else {
   AppRegistry.registerComponent(appName, () => App);
+  TrackPlayer.registerPlaybackService(() => PlaybackService);
 }
-
-TrackPlayer.registerPlaybackService(() => PlaybackService);
