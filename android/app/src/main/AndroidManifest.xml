@@ -20,6 +20,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
 
+        <service android:name="com.doublesymmetry.trackplayer.service.MusicService"
+            tools:node="remove" />
+
         <!-- <meta-data
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc" /> -->
