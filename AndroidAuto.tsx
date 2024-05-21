@@ -1,4 +1,4 @@
-import {CarPlay} from 'react-native-carplay';
+import {CarPlay} from 'react-native-carplay/src';
 
 export function AndroidAutoModule() {
   CarPlay.emitter.addListener('didConnect', () => {

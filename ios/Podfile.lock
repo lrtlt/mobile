@@ -2092,7 +2092,7 @@ PODS:
   - React-Mapbuffer (0.73.7):
     - glog
     - React-debug
-  - react-native-carplay (2.3.0):
+  - react-native-carplay (2.4.0-beta.2):
     - React
   - react-native-gemius-plugin (1.7.0):
     - React
@@ -2695,7 +2695,7 @@ SPEC CHECKSUMS:
   React-jsinspector: f356e49aa086380d3a4892708ca173ad31ac69c1
   React-logger: 7b19bdfb254772a0332d6cd4d66eceb0678b6730
   React-Mapbuffer: 401b164386595138c3ee5c2106ff117d54c3ba22
-  react-native-carplay: c0327ae947e4a12c7d66315d54254fdf87a982ec
+  react-native-carplay: 6ea89d662dad1fcc0a29302c5a37868acb6a7dad
   react-native-gemius-plugin: 003b164539125055787a816a7b65976b19bf4a27
   react-native-google-cast: d7bdfd1a0eeba84afde03b9722351ec29543e74c
   react-native-pager-view: 3796df305c59c352a26811ead0f6ea78acac1886

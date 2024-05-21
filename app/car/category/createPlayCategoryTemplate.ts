@@ -1,4 +1,4 @@
-import {ListTemplate} from 'react-native-carplay';
+import {ListTemplate} from 'react-native-carplay/src';
 
 export const carPlayCategoryTemplate = new ListTemplate({
   title: 'Laida',

@@ -1,4 +1,4 @@
-import {NowPlayingTemplate} from 'react-native-carplay';
+import {NowPlayingTemplate} from 'react-native-carplay/src';
 
 type Props = {
   onNextPress: () => void;

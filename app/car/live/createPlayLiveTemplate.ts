@@ -1,4 +1,4 @@
-import {ListTemplate} from 'react-native-carplay';
+import {ListTemplate} from 'react-native-carplay/src';
 
 export const TEMPLATE_ID_LIVE = 'lrt-list-template-live';
 

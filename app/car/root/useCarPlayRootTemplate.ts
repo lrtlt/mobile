@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {TabBarTemplate} from 'react-native-carplay';
+import {TabBarTemplate} from 'react-native-carplay/src';
 import useCarLiveTemplate from '../live/useCarLiveTemplate';
 
 import useCarNewestTemplate from '../newest/useCarNewestTemplate';
@@ -31,9 +31,8 @@ const useCarPlayRootTemplate = (isConnected: boolean) => {
         useCarNewestTemplate(isConnected),
         useCarPodcastsTemplate(isConnected),
       ],
-
       onTemplateSelect: (template, _params) => {
-        switch (template.config.id) {
+        switch (template?.config.id) {
           case TEMPLATE_ID_RECOMMENDED:
             sendAnalyticsEvent('carplay_recommended_open');
             break;

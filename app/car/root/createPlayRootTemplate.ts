@@ -1,4 +1,4 @@
-import {ListTemplate} from 'react-native-carplay';
+import {ListTemplate} from 'react-native-carplay/src';
 
 export const CATEGORY_LIVE = 0;
 export const CATEGORY_RECOMMENDED = 1;

@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {CarPlay} from 'react-native-carplay';
+import {CarPlay} from 'react-native-carplay/src';
 import {CarPlayContextType} from './CarPlayContext';
 import useCarPlayRootTemplate from './root/useCarPlayRootTemplate';
 import Gemius from 'react-native-gemius-plugin';

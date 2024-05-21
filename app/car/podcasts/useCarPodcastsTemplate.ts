@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {CarPlay, ListTemplate} from 'react-native-carplay';
+import {CarPlay, ListTemplate} from 'react-native-carplay/src';
 import {carPlayPodcastsTemplate} from './createPlayPodcastsTemplate';
 import useCarPlayPodcastsPlaylist from './useCarPodcastsPlaylist';
 import {ListSection} from 'react-native-carplay/lib/interfaces/ListSection';

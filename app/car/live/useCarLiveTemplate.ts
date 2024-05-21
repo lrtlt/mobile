@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import useCarLiveChannels from './useCarLiveChannels';
-import {CarPlay, ListTemplate} from 'react-native-carplay';
+import {CarPlay, ListTemplate} from 'react-native-carplay/src';
 import {carPlayLiveTemplate} from './createPlayLiveTemplate';
 import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
 import {MediaType} from '../../components/videoComponent/context/PlayerContext';
