@@ -10,7 +10,11 @@ export const carPlayPodcastsTemplate = new ListTemplate({
   id: TEMPLATE_ID_PODCASTS,
   sections: [
     {
-      items: [],
+      items: [
+        {
+          text: 'Loading...',
+        },
+      ],
     },
   ],
   backButtonHidden: true,

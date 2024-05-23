@@ -6,11 +6,11 @@ import {name as appName} from './app.json';
 import TrackPlayer from 'react-native-track-player';
 import PlaybackService from './PlaybackService';
 
-// import {AndroidAutoModule} from './AndroidAuto';
+import {AndroidAuto, AndroidAutoModule} from './AndroidAuto';
 
 if (Platform.OS === 'android') {
-  // AppRegistry.registerRunnable('AndroidAuto', AndroidAutoModule);
-  AppRegistry.registerComponent(appName, () => App);
+  AppRegistry.registerRunnable('AndroidAuto', AndroidAutoModule);
+  AppRegistry.registerComponent(appName, () => AndroidAuto);
 } else {
   AppRegistry.registerComponent(appName, () => App);
   TrackPlayer.registerPlaybackService(() => PlaybackService);

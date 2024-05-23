@@ -5,7 +5,11 @@ export const carPlayCategoryTemplate = new ListTemplate({
   id: 'lrt-list-template-Category',
   sections: [
     {
-      items: [],
+      items: [
+        {
+          text: 'Loading...',
+        },
+      ],
     },
   ],
   backButtonHidden: true,

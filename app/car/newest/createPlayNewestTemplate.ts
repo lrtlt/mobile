@@ -16,7 +16,11 @@ export const carPlayNewestTemplate = new ListTemplate({
   ],
   sections: [
     {
-      items: [],
+      items: [
+        {
+          text: 'Loading...',
+        },
+      ],
     },
   ],
   backButtonHidden: true,

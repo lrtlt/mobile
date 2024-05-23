@@ -6,7 +6,11 @@ export const carPlayEmptyTemplate = new ListTemplate({
   emptyViewSubtitleVariants: ['Prašome palaukti...'],
   sections: [
     {
-      items: [],
+      items: [
+        {
+          text: 'Loading...',
+        },
+      ],
     },
   ],
 });

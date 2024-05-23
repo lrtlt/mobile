@@ -15,31 +15,55 @@ const useCarRecommendedTemplate = (isConnected: boolean) => {
 
   useEffect(() => {
     console.log('updating Recommended template');
-    template.updateSections([
-      {
-        items: channels.map((item) => ({
-          text: item.text,
-          detailText: item.detailText,
-          imgUrl: item.imgUrl as any,
-        })),
-      },
-    ]);
-    template.config.onItemSelect = async ({index}) => {
-      setPlaylist(
-        channels.map((item) => ({
-          uri: item.streamUrl,
-          mediaType: MediaType.AUDIO,
-          isLiveStream: false,
-          poster: item.imgUrl,
-          title: item.text,
-        })),
-        index,
-      );
+    template.updateTemplate({
+      ...template.config,
+      items: channels.map((item, i) => ({
+        text: 'item.text' + i,
+        detailText: 'item.detailText' + i,
+        imgUrl: item.imgUrl as any,
+      })),
+      // onItemSelect: async ({index}) => {
+      //   setPlaylist(
+      //     channels.map((item) => ({
+      //       uri: item.streamUrl,
+      //       mediaType: MediaType.AUDIO,
+      //       isLiveStream: false,
+      //       poster: item.imgUrl,
+      //       title: item.text,
+      //     })),
+      //     index,
+      //   );
 
-      CarPlay.pushTemplate(carPlayNowPlayingTemplate, true);
-    };
+      //   CarPlay.pushTemplate(carPlayNowPlayingTemplate, true);
+      // },
+    });
+    // template.updateSections([
+    //   {
+    //     items: channels.map((item) => ({
+    //       text: item.text,
+    //       detailText: item.detailText,
+    //       imgUrl: item.imgUrl as any,
+    //     })),
+    //   },
+    // ]);
+    // template.config.onItemSelect = async ({index}) => {
+    //   setPlaylist(
+    //     channels.map((item) => ({
+    //       uri: item.streamUrl,
+    //       mediaType: MediaType.AUDIO,
+    //       isLiveStream: false,
+    //       poster: item.imgUrl,
+    //       title: item.text,
+    //     })),
+    //     index,
+    //   );
+
+    //   CarPlay.pushTemplate(carPlayNowPlayingTemplate, true);
+    // };
+    CarPlay.setRootTemplate(template, false);
+
     return () => {
-      template.config.onItemSelect = undefined;
+      // template.config.onItemSelect = undefined;
     };
   }, [channels]);
 

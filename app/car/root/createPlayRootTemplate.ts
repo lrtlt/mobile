@@ -1,40 +1,51 @@
-import {ListTemplate} from 'react-native-carplay/src';
+import {TabBarTemplate} from 'react-native-carplay/src';
+import {
+  TEMPLATE_ID_RECOMMENDED,
+  carPlayRecommendedTemplate,
+} from '../recommended/createPlayRecommendedTemplate';
+import {TEMPLATE_ID_LIVE, carPlayLiveTemplate} from '../live/createPlayLiveTemplate';
+import {TEMPLATE_ID_NEWEST, carPlayNewestTemplate} from '../newest/createPlayNewestTemplate';
+import {TEMPLATE_ID_PODCASTS, carPlayPodcastsTemplate} from '../podcasts/createPlayPodcastsTemplate';
+import {TEMPLATE_ID_POPULAR} from '../popular/createPlayPopularTemplate';
 
-export const CATEGORY_LIVE = 0;
-export const CATEGORY_RECOMMENDED = 1;
-export const CATEGORY_POPULAR = 2;
-export const CATEGORY_NEWEST = 3;
-export const CATEGORY_PODCASTS = 4;
+import Gemius from 'react-native-gemius-plugin';
+import analytics from '@react-native-firebase/analytics';
+import {debounce} from 'lodash';
 
 export const TEMPLATE_ID_ROOT = 'lrt-root-template';
-export const carPlayRootTemplate = new ListTemplate({
-  title: 'LRT.lt',
-  id: TEMPLATE_ID_ROOT,
-  backButtonHidden: true,
-  // tabTitle: 'Tab title',
-  // tabImage: require('./star.png'),
 
-  sections: [
-    {
-      // header: 'Lrt.lt',
-      items: [
-        {
-          // imgUrl: 'https://www.lrt.lt/img/2023/10/10/1604829-889266-615x345.jpg' as any,
-          text: 'Tiesiogiai',
-        },
-        {
-          text: 'Rekomenduojame',
-        },
-        {
-          text: 'Populiariausi',
-        },
-        {
-          text: 'Naujausi',
-        },
-        {
-          text: 'Radijo laidos (A-Z)',
-        },
-      ],
-    },
+const sendAnalyticsEvent = debounce((eventName: string) => {
+  Gemius.sendPageViewedEvent(eventName);
+  analytics().logEvent(eventName);
+}, 200);
+
+export const carPlayRootTemplate = new TabBarTemplate({
+  title: 'LRT',
+  tabTitle: 'LRT',
+  id: TEMPLATE_ID_ROOT,
+  templates: [
+    carPlayRecommendedTemplate,
+    // carPlayLiveTemplate,
+    // carPlayNewestTemplate,
+    // carPlayPodcastsTemplate,
   ],
+  onTemplateSelect: (template, _params) => {
+    switch (template?.config.id) {
+      case TEMPLATE_ID_RECOMMENDED:
+        sendAnalyticsEvent('carplay_recommended_open');
+        break;
+      case TEMPLATE_ID_LIVE:
+        sendAnalyticsEvent('carplay_live_open');
+        break;
+      case TEMPLATE_ID_NEWEST:
+        sendAnalyticsEvent('carplay_newest_open');
+        break;
+      case TEMPLATE_ID_PODCASTS:
+        sendAnalyticsEvent('carplay_podcasts_open');
+        break;
+      case TEMPLATE_ID_POPULAR:
+        sendAnalyticsEvent('carplay_popular_open');
+        break;
+    }
+  },
 });
