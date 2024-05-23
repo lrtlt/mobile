@@ -11,8 +11,6 @@ export const carPlayRootTemplate = new ListTemplate({
   title: 'LRT.lt',
   id: TEMPLATE_ID_ROOT,
   backButtonHidden: true,
-  // tabTitle: 'Tab title',
-  // tabImage: require('./star.png'),
 
   sections: [
     {

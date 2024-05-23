@@ -3,7 +3,7 @@ import {CarPlay, ListTemplate} from 'react-native-carplay';
 import {carPlayPodcastsTemplate} from './createPlayPodcastsTemplate';
 import useCarPlayPodcastsPlaylist from './useCarPodcastsPlaylist';
 import {ListSection} from 'react-native-carplay/lib/interfaces/ListSection';
-import {CarPlayPodcastItem} from '../../api/Types';
+import {CarPlayPodcastItem} from '../../../api/Types';
 import useCarCategoryTemplate from '../category/useCarCategoryTemplate';
 
 const useCarPodcastsTemplate = (isConnected: boolean) => {

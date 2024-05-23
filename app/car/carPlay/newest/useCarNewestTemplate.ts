@@ -1,20 +1,20 @@
 import {useEffect, useState} from 'react';
 import {CarPlay, ListTemplate} from 'react-native-carplay';
-import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
-import {MediaType} from '../../components/videoComponent/context/PlayerContext';
-import {carPlayPopularTemplate} from './createPlayPopularTemplate';
-import useCarPlayPopularPlaylist from './useCarPopularPlaylist';
+import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
+import {MediaType} from '../../../components/videoComponent/context/PlayerContext';
+import {carPlayNewestTemplate} from './createPlayNewestTemplate';
+import useCarPlayNewestPlaylist from './useCarNewestPlaylist';
 import {carPlayNowPlayingTemplate} from '../nowPlaying/createNowPlayingTemplate';
 
-const useCarPopularTemplate = (isConnected: boolean) => {
-  const [template] = useState<ListTemplate>(carPlayPopularTemplate);
+const useCarNewestTemplate = (isConnected: boolean) => {
+  const [template] = useState<ListTemplate>(carPlayNewestTemplate);
 
-  const {channels, reload} = useCarPlayPopularPlaylist(isConnected);
+  const {channels, reload} = useCarPlayNewestPlaylist(isConnected);
 
   const {setPlaylist} = useMediaPlayer();
 
   useEffect(() => {
-    console.log('updating popular template');
+    console.log('updating newest template');
     template.updateSections([
       {
         items: channels.map((item) => ({
@@ -59,4 +59,4 @@ const useCarPopularTemplate = (isConnected: boolean) => {
   return template;
 };
 
-export default useCarPopularTemplate;
+export default useCarNewestTemplate;

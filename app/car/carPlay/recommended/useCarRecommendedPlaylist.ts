@@ -1,9 +1,9 @@
 import {useEffect, useState} from 'react';
 import {PlayListItem} from '../CarPlayContext';
-import useCancellablePromise from '../../hooks/useCancellablePromise';
-import {fetchCarNewestPlaylist} from '../../api';
+import useCancellablePromise from '../../../hooks/useCancellablePromise';
+import {fetchCarRecommendedPlaylist} from '../../../api';
 
-const useCarPlayNewestPlaylist = (isConnected: boolean) => {
+const useCarPlayRecommendedPlaylist = (isConnected: boolean) => {
   const [channels, setChannels] = useState<PlayListItem[]>([]);
   const [lastLoadTime, setLastLoadTime] = useState<number>(0);
 
@@ -14,7 +14,7 @@ const useCarPlayNewestPlaylist = (isConnected: boolean) => {
       return;
     }
     cancellablePromise(
-      fetchCarNewestPlaylist().then((data) => {
+      fetchCarRecommendedPlaylist().then((data) => {
         if (data?.length) {
           const channels: PlayListItem[] = data.map((item) => ({
             id: item.title,
@@ -35,4 +35,4 @@ const useCarPlayNewestPlaylist = (isConnected: boolean) => {
   };
 };
 
-export default useCarPlayNewestPlaylist;
+export default useCarPlayRecommendedPlaylist;

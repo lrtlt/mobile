@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react';
 import {CategoryListItem} from '../CarPlayContext';
-import useCancellablePromise from '../../hooks/useCancellablePromise';
-import {fetchCarCategoryPlaylist} from '../../api';
-import {IMG_SIZE_XS, buildImageUri} from '../../util/ImageUtil';
+import useCancellablePromise from '../../../hooks/useCancellablePromise';
+import {fetchCarCategoryPlaylist} from '../../../api';
+import {IMG_SIZE_XS, buildImageUri} from '../../../util/ImageUtil';
 
 const useCarPlayCategoryPlaylist = (categoryId?: number) => {
   const [episodes, setEpisodes] = useState<CategoryListItem[]>([]);

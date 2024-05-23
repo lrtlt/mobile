@@ -1,19 +1,20 @@
 import {useEffect, useState} from 'react';
-import useCarLiveChannels from './useCarLiveChannels';
 import {CarPlay, ListTemplate} from 'react-native-carplay';
-import {carPlayLiveTemplate} from './createPlayLiveTemplate';
-import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
-import {MediaType} from '../../components/videoComponent/context/PlayerContext';
+import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
+import {MediaType} from '../../../components/videoComponent/context/PlayerContext';
+import {carPlayPopularTemplate} from './createPlayPopularTemplate';
+import useCarPlayPopularPlaylist from './useCarPopularPlaylist';
 import {carPlayNowPlayingTemplate} from '../nowPlaying/createNowPlayingTemplate';
 
-const useCarLiveTemplate = (isConnected: boolean) => {
-  const [template] = useState<ListTemplate>(carPlayLiveTemplate);
-  const {channels, reload} = useCarLiveChannels(isConnected);
+const useCarPopularTemplate = (isConnected: boolean) => {
+  const [template] = useState<ListTemplate>(carPlayPopularTemplate);
+
+  const {channels, reload} = useCarPlayPopularPlaylist(isConnected);
 
   const {setPlaylist} = useMediaPlayer();
 
   useEffect(() => {
-    console.log('updating live template');
+    console.log('updating popular template');
     template.updateSections([
       {
         items: channels.map((item) => ({
@@ -24,16 +25,16 @@ const useCarLiveTemplate = (isConnected: boolean) => {
       },
     ]);
     template.config.onItemSelect = async ({index}) => {
-      const item = channels[index];
-      setPlaylist([
-        {
+      setPlaylist(
+        channels.map((item) => ({
           uri: item.streamUrl,
-          mediaType: MediaType.VIDEO,
-          isLiveStream: true,
+          mediaType: MediaType.AUDIO,
+          isLiveStream: false,
           poster: item.imgUrl,
           title: item.text,
-        },
-      ]);
+        })),
+        index,
+      );
       CarPlay.pushTemplate(carPlayNowPlayingTemplate, true);
     };
     return () => {
@@ -58,4 +59,4 @@ const useCarLiveTemplate = (isConnected: boolean) => {
   return template;
 };
 
-export default useCarLiveTemplate;
+export default useCarPopularTemplate;

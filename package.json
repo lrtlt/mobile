@@ -37,6 +37,7 @@
     "proxy-memoize": "^2.0.5",
     "react": "18.2.0",
     "react-native": "0.73.7",
+    "react-native-android-auto": "https://github.com/susonthapa/react-native-android-auto",
     "react-native-autoheight-webview": "^1.6.5",
     "react-native-awesome-gallery": "^0.3.8",
     "react-native-carplay": "2.3.0",

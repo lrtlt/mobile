@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react';
 import {PlayListItem} from '../CarPlayContext';
-import {fetchStreamData} from '../../components/videoComponent/fetchStreamData';
-import useCancellablePromise from '../../hooks/useCancellablePromise';
-import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
-import {fetchCarLivePlaylist} from '../../api';
-import {BASE_IMG_URL} from '../../util/ImageUtil';
+import {fetchStreamData} from '../../../components/videoComponent/fetchStreamData';
+import useCancellablePromise from '../../../hooks/useCancellablePromise';
+import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../../constants';
+import {fetchCarLivePlaylist} from '../../../api';
+import {BASE_IMG_URL} from '../../../util/ImageUtil';
 
 const useCarLiveChannels = (isConnected: boolean) => {
   const [channels, setChannels] = useState<PlayListItem[]>([]);

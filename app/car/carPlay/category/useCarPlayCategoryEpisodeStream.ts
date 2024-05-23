@@ -1,9 +1,9 @@
 import {useEffect, useState} from 'react';
 import {CategoryListItem, PlayListItem} from '../CarPlayContext';
-import useCancellablePromise from '../../hooks/useCancellablePromise';
-import {fetchArticle} from '../../api';
-import {isMediaArticle} from '../../api/Types';
-import {IMG_SIZE_XS, buildArticleImageUri} from '../../util/ImageUtil';
+import useCancellablePromise from '../../../hooks/useCancellablePromise';
+import {fetchArticle} from '../../../api';
+import {isMediaArticle} from '../../../api/Types';
+import {IMG_SIZE_XS, buildArticleImageUri} from '../../../util/ImageUtil';
 
 const useCarPlayCategoryEpisodeStream = (episode?: CategoryListItem) => {
   const [streamInfo, setStreamInfo] = useState<PlayListItem>();

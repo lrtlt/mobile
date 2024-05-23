@@ -23,9 +23,9 @@
         <service android:name="com.doublesymmetry.trackplayer.service.MusicService"
             tools:node="remove" />
 
-        <!-- <meta-data
+        <meta-data
             android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" /> -->
+            android:resource="@xml/automotive_app_desc" />
 
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
@@ -52,6 +52,14 @@
                 <data android:scheme="lrt" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.shopify.rnandroidauto.CarService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.car.action.CAR_APP" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

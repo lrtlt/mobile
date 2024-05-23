@@ -15,7 +15,7 @@ import PlayerProvider from './app/components/videoComponent/context/PlayerProvid
 import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import ThemeProvider from './app/theme/ThemeProvider';
-import useCarPlayController from './app/car/useCarPlayController';
+import useCarPlayController from './app/car/carPlay/useCarPlayController';
 
 const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
   return (

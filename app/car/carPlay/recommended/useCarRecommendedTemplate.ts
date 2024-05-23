@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {CarPlay, ListTemplate} from 'react-native-carplay';
-import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
-import {MediaType} from '../../components/videoComponent/context/PlayerContext';
+import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
+import {MediaType} from '../../../components/videoComponent/context/PlayerContext';
 import {carPlayRecommendedTemplate} from './createPlayRecommendedTemplate';
 import useCarPlayRecommendedPlaylist from './useCarRecommendedPlaylist';
 import {carPlayNowPlayingTemplate} from '../nowPlaying/createNowPlayingTemplate';

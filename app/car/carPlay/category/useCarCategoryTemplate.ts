@@ -1,11 +1,11 @@
 import {useEffect, useState} from 'react';
 import {CarPlay, ListTemplate} from 'react-native-carplay';
-import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
+import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
 import useCarPlayCategoryPlaylist from './useCarCategoryPlaylist';
-import {CarPlayPodcastItem} from '../../api/Types';
+import {CarPlayPodcastItem} from '../../../api/Types';
 import {CategoryListItem} from '../CarPlayContext';
 import useCarPlayCategoryEpisodeStream from './useCarPlayCategoryEpisodeStream';
-import {MediaType} from '../../components/videoComponent/context/PlayerContext';
+import {MediaType} from '../../../components/videoComponent/context/PlayerContext';
 import {carPlayNowPlayingTemplate} from '../nowPlaying/createNowPlayingTemplate';
 import {debounce} from 'lodash';
 import Gemius from 'react-native-gemius-plugin';

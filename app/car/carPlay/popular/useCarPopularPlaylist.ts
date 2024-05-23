@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {PlayListItem} from '../CarPlayContext';
-import useCancellablePromise from '../../hooks/useCancellablePromise';
-import {fetchCarPopularPlaylist} from '../../api';
+import useCancellablePromise from '../../../hooks/useCancellablePromise';
+import {fetchCarPopularPlaylist} from '../../../api';
 
 const useCarPlayPopularPlaylist = (isConnected: boolean) => {
   const [channels, setChannels] = useState<PlayListItem[]>([]);
