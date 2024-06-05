@@ -1,5 +1,13 @@
 import {useCallback, useEffect} from 'react';
-import TrackPlayer, {Capability, IOSCategory, IOSCategoryMode, RepeatMode} from 'react-native-track-player';
+import TrackPlayer, {
+  AndroidAutoContentStyle,
+  Capability,
+  IOSCategory,
+  IOSCategoryMode,
+  MediaItemPlayable,
+  RepeatMode,
+} from 'react-native-track-player';
+import mediaBrowser from './browsable';
 
 const useTrackPlayerSetup = () => {
   const setup = useCallback(async () => {
@@ -42,6 +50,9 @@ const useTrackPlayerSetup = () => {
     });
     await TrackPlayer.setRepeatMode(RepeatMode.Queue);
     console.log('TrackPlayer ready!');
+
+    TrackPlayer.setBrowseTree(mediaBrowser);
+    TrackPlayer.setBrowseTreeStyle(AndroidAutoContentStyle.CategoryList, AndroidAutoContentStyle.Grid);
   }, []);
 
   useEffect(() => {

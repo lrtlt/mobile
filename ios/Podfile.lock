@@ -2092,6 +2092,8 @@ PODS:
   - React-Mapbuffer (0.73.7):
     - glog
     - React-debug
+  - react-native-android-auto (0.1.0):
+    - React-Core
   - react-native-carplay (2.3.0):
     - React
   - react-native-gemius-plugin (1.7.0):
@@ -2397,6 +2399,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector-modern`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - react-native-android-auto (from `../node_modules/react-native-android-auto`)
   - react-native-carplay (from `../node_modules/react-native-carplay`)
   - react-native-gemius-plugin (from `../node_modules/react-native-gemius-plugin`)
   - react-native-google-cast (from `https://github.com/Danesz/react-native-google-cast.git`, branch `feature/guestmode_apple_silicon`)
@@ -2539,6 +2542,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-android-auto:
+    :path: "../node_modules/react-native-android-auto"
   react-native-carplay:
     :path: "../node_modules/react-native-carplay"
   react-native-gemius-plugin:
@@ -2695,6 +2700,7 @@ SPEC CHECKSUMS:
   React-jsinspector: f356e49aa086380d3a4892708ca173ad31ac69c1
   React-logger: 7b19bdfb254772a0332d6cd4d66eceb0678b6730
   React-Mapbuffer: 401b164386595138c3ee5c2106ff117d54c3ba22
+  react-native-android-auto: 8aba08df8a1c8731b3e16132f501d46fe665fc79
   react-native-carplay: c0327ae947e4a12c7d66315d54254fdf87a982ec
   react-native-gemius-plugin: 003b164539125055787a816a7b65976b19bf4a27
   react-native-google-cast: d7bdfd1a0eeba84afde03b9722351ec29543e74c

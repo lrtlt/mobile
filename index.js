@@ -1,20 +1,22 @@
 import 'react-native-gesture-handler';
 
+import {createElement} from 'react';
 import App from './App';
 import {AppRegistry, Platform} from 'react-native';
 import {name as appName} from './app.json';
 import TrackPlayer from 'react-native-track-player';
 import PlaybackService from './PlaybackService';
 
-import {render} from 'react-native-android-auto';
-import AndroidAutoRoot from './app/car/androidAuto/AndroidAuto';
+import {render} from 'react-native-android-auto/src';
+import {AndroidAutoRoot} from './app/car/androidAuto/AndroidAuto';
+
+AppRegistry.registerComponent(appName, () => App);
 
 if (Platform.OS === 'android') {
-  AppRegistry.registerRunnable('androidAuto', () => {
-    render(React.createElement(AndroidAutoRoot));
+  AppRegistry.registerRunnable('androidAuto', async () => {
+    console.log('# running android auto...');
+    render(createElement(AndroidAutoRoot));
   });
-  AppRegistry.registerComponent(appName, () => App);
-} else {
-  AppRegistry.registerComponent(appName, () => App);
-  TrackPlayer.registerPlaybackService(() => PlaybackService);
 }
+
+TrackPlayer.registerPlaybackService(() => PlaybackService);

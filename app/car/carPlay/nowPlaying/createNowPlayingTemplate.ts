@@ -16,18 +16,18 @@ export const createNowPlayingTemplate = ({onNextPress, onPreviousPress}: Props) 
       }
     },
     albumArtistButtonEnabled: true,
-    buttons: [
-      {
-        id: 'previous',
-        type: 'image',
-        image: require('./assets/backward-solid.png'),
-      },
-      {
-        id: 'next',
-        type: 'image',
-        image: require('./assets/forward-solid.png'),
-      },
-    ],
+    // buttons: [
+    //   {
+    //     id: 'previous',
+    //     type: 'image',
+    //     image: require('./assets/backward-solid.png'),
+    //   },
+    //   {
+    //     id: 'next',
+    //     type: 'image',
+    //     image: require('./assets/forward-solid.png'),
+    //   },
+    // ],
   });
 };
 export const carPlayNowPlayingTemplate = new NowPlayingTemplate({
