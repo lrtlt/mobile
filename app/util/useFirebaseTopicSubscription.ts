@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import messaging, {firebase} from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TOPICS_STORAGE_KEY = 'initialTopicSubscription';

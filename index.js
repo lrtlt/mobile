@@ -1,4 +1,7 @@
+// Setup RN Gesture handler
 import 'react-native-gesture-handler';
+// Setup CarPlay
+import './app/car/CarPlay';
 
 import App from './App';
 import {AppRegistry, Platform} from 'react-native';

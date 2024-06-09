@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 import {LiveFeedResponse} from '../../../api/Types';
 import useCancellablePromise from '../../../hooks/useCancellablePromise';
 import {fetchLiveFeed} from '../../../api';

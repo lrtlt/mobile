@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, FlatList, StyleSheet, ListRenderItemInfo} from 'react-native';
+import {View, FlatList, StyleSheet, ListRenderItemInfo} from 'react-native';
 import {useLiveFeedState} from './useLiveFeedState';
 import {LiveFeedItem} from '../../../api/Types';
 import TextComponent from '../../../components/text/Text';

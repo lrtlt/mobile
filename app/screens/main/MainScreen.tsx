@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
 import {ActionButton, Logo} from '../../components';
 import {IconDrawerMenu, IconSettings} from '../../components/svg';
-import {BorderlessButton, DrawerLayout} from 'react-native-gesture-handler';
+import {BorderlessButton} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
 import {useSelector} from 'react-redux';
 import HomeScreen from './tabScreen/home/HomeScreen';
@@ -106,7 +106,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   }, [colors.headerTint, dim.appBarIconSize, navigation]);
 
   const renderScene = useCallback(
-    (sceneProps: SceneRendererProps & {route: typeof state.routes[0]}) => {
+    (sceneProps: SceneRendererProps & {route: (typeof state.routes)[0]}) => {
       const {route} = sceneProps;
       const routeIndex = state.routes.findIndex((r) => r.key === route.key);
 

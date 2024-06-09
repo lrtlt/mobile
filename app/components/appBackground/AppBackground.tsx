@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
-import {useSettings} from '../../settings/useSettings';
-import {themeDark, themeLight, useTheme} from '../../Theme';
+import {useTheme} from '../../Theme';
 
 interface Props {
   style?: ViewStyle;

@@ -3,7 +3,6 @@ import {ConfigState} from '../reducers/config';
 import {
   TOGGLE_DARK_MODE,
   SET_TEXT_SIZE_MULTIPLIER,
-  SET_IMAGE_SCALE_FACTOR,
   SET_CONFIG,
   SET_FORECAST_LOCATION,
   SET_DAILY_QUESTION_CHOICE,

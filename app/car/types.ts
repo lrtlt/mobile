@@ -1,5 +1,3 @@
-import React from 'react';
-
 export type CarCategory = 'live' | 'newest';
 
 export type CategoryListItem = {
@@ -15,14 +13,5 @@ export type PlayListItem = {
   detailText?: string;
   imgUrl: string;
   streamUrl: string;
+  isLiveStream?: boolean;
 };
-
-export type CarPlayContextType = {
-  isConnected: boolean;
-};
-
-const defaults: CarPlayContextType = {
-  isConnected: false,
-};
-
-export const CarPlayContext = React.createContext<CarPlayContextType>(defaults);
