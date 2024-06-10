@@ -10,12 +10,11 @@ import {initialWindowMetrics, SafeAreaProvider} from 'react-native-safe-area-con
 import {persistor, store} from './app/redux/store';
 import useAppTrackingPermission from './app/util/useAppTrackingPermission';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {Platform, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import PlayerProvider from './app/components/videoComponent/context/PlayerProvider';
 import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import ThemeProvider from './app/theme/ThemeProvider';
-import useCarPlayController from './app/car/useCarPlayController';
 
 const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
   return (
@@ -32,13 +31,6 @@ const App: React.FC = () => {
   useAppTrackingPermission();
   useGoogleAnalyticsSetup();
   useGemiusSetup();
-
-  const {isConnected: _} =
-    Platform.OS === 'ios'
-      ? useCarPlayController()
-      : {
-          isConnected: false,
-        };
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>

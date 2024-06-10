@@ -120,7 +120,7 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
 
   const context: PlayerContextType = useMemo(
     () => ({
-      setPlaylist: (playlist: MediaBaseData[], current?: number) => {
+      setPlaylist: async (playlist: MediaBaseData[], current?: number) => {
         setPlaylist(playlist);
         if (current) {
           setCurrentMedia(playlist[current]);
