@@ -1,6 +1,9 @@
 // Setup RN Gesture handler
 import 'react-native-gesture-handler';
 
+import {setupGemius} from './app/util/useGemiusSetup';
+setupGemius();
+
 // Setup CarPlay
 if (Platform.OS === 'ios') {
   require('./app/car/CarPlay');

@@ -3,7 +3,6 @@ import Navigation from './app/navigation';
 
 import SettingsProvider from './app/settings/SettingsProvider';
 import AppBackground from './app/components/appBackground/AppBackground';
-import useGemiusSetup from './app/util/useGemiusSetup';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {initialWindowMetrics, SafeAreaProvider} from 'react-native-safe-area-context';
@@ -30,7 +29,6 @@ const App: React.FC = () => {
   useNotificationsPermission();
   useAppTrackingPermission();
   useGoogleAnalyticsSetup();
-  useGemiusSetup();
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
