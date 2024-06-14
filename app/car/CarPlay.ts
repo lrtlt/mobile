@@ -1,4 +1,4 @@
-import {CarPlay} from 'react-native-carplay';
+import {AlertTemplate, CarPlay} from 'react-native-carplay';
 import Gemius from 'react-native-gemius-plugin';
 import analytics from '@react-native-firebase/analytics';
 import TrackPlayer from 'react-native-track-player';
@@ -11,7 +11,16 @@ CarPlay.emitter.addListener('didConnect', async () => {
   Gemius.sendPageViewedEvent('carplay_connected');
   analytics().logEvent('carplay_connected');
   setupTrackPlayer();
-  CarPlay.setRootTemplate(await RootTemplate.build());
+
+  CarPlay.presentTemplate(
+    new AlertTemplate({
+      id: 'loading-alert',
+      titleVariants: ['Prašome palaukti...'],
+    }),
+  );
+  const rootTemplate = await RootTemplate.build();
+  CarPlay.dismissTemplate();
+  CarPlay.setRootTemplate(rootTemplate);
   CarPlay.enableNowPlaying(true);
 });
 
