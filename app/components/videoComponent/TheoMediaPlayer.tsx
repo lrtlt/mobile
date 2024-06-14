@@ -26,6 +26,7 @@ import {useTheme} from '../../Theme';
 import usePlayerLanguage from './usePlayerLanguage';
 import {EventRegister} from 'react-native-event-listeners';
 import FastImage from 'react-native-fast-image';
+import {useSettings} from '../../settings/useSettings';
 
 export type PlayerAction = 'togglePlay' | 'setFullScreen';
 
@@ -99,6 +100,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   const {trackPlay, trackPause, trackBuffer, trackClose, trackComplete, trackSeek} = useMediaTracking();
 
   const {colors} = useTheme();
+  const {isContinuousPlayEnabled} = useSettings();
 
   const {setPlaylist, close} = useMediaPlayer();
 
@@ -112,7 +114,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     return () => {
       if (player) {
-        if (!player.paused && !isFloating) {
+        if (isContinuousPlayEnabled && !player.paused && !isFloating) {
           setPlaylist([
             {
               mediaType: mediaType,
@@ -127,7 +129,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
         trackClose(streamUri, player.currentTime / 1000);
       }
     };
-  }, [player, streamUri]);
+  }, [player, streamUri, isContinuousPlayEnabled]);
 
   useEffect(() => {
     const handler = BackHandler.addEventListener('hardwareBackPress', () => {

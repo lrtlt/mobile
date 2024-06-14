@@ -1,5 +1,5 @@
 import {PropsWithChildren} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, View} from 'react-native';
 import Text from '../text/Text';
 import SettingsNotifications from '../../screens/settings/SettingsNotifications';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -20,7 +20,7 @@ export const Page2: React.FC<PropsWithChildren<{}>> = () => {
   return (
     <View style={{flex: 1}}>
       <ScrollView>
-        <SettingsNotifications titleStyle={styles.title} cellStyle={styles.cell} />
+        <SettingsNotifications />
       </ScrollView>
     </View>
   );
@@ -36,10 +36,12 @@ export const Page3: React.FC<PropsWithChildren<{}>> = () => {
   );
 };
 
-const ImageTextPage: React.FC<PropsWithChildren<{
-  text: string;
-  image: any;
-}>> = ({text, image}) => {
+const ImageTextPage: React.FC<
+  PropsWithChildren<{
+    text: string;
+    image: any;
+  }>
+> = ({text, image}) => {
   return (
     <View style={{flex: 1}}>
       <Image style={{flex: 1, maxWidth: '100%'}} source={image} resizeMode="cover" />
@@ -49,20 +51,3 @@ const ImageTextPage: React.FC<PropsWithChildren<{
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  title: {
-    flex: 1,
-    fontSize: 16,
-    paddingVertical: 8,
-  },
-  cell: {
-    flexDirection: 'row',
-    gap: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    alignItems: 'center',
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: '#aaaaaa44',
-  },
-});

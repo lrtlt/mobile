@@ -1,30 +1,6 @@
 import {DailyQuestionChoice, ForecastLocation} from '../../api/Types';
 import {ConfigState} from '../reducers/config';
-import {
-  TOGGLE_DARK_MODE,
-  SET_TEXT_SIZE_MULTIPLIER,
-  SET_CONFIG,
-  SET_FORECAST_LOCATION,
-  SET_DAILY_QUESTION_CHOICE,
-  UPDATE_LOGO_CACHE,
-} from './actionTypes';
-
-export interface ToggleDarkModeAction {
-  type: typeof TOGGLE_DARK_MODE;
-}
-export const toggleDarkMode = (): ToggleDarkModeAction => ({
-  type: TOGGLE_DARK_MODE,
-});
-
-export interface SetTextSizeMultiplierAction {
-  type: typeof SET_TEXT_SIZE_MULTIPLIER;
-  multiplier: number;
-}
-
-export const setTextSizeMultiplier = (value: number): SetTextSizeMultiplierAction => ({
-  type: SET_TEXT_SIZE_MULTIPLIER,
-  multiplier: value,
-});
+import {SET_CONFIG, SET_FORECAST_LOCATION, SET_DAILY_QUESTION_CHOICE, UPDATE_LOGO_CACHE} from './actionTypes';
 
 export interface SetConfigAction {
   type: typeof SET_CONFIG;
@@ -76,8 +52,6 @@ export const updateLogoCache = (cache: {url: string; svg: string}): UpdateLogoCa
 });
 
 export type ConfigActionType =
-  | ToggleDarkModeAction
-  | SetTextSizeMultiplierAction
   | SetConfigAction
   | SetForecastLocationAction
   | SetDailyQuestionChoice

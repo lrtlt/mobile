@@ -1,8 +1,6 @@
 import {DailyQuestionChoice, ForecastLocation} from '../../api/Types';
 import {ConfigActionType} from '../actions';
 import {
-  TOGGLE_DARK_MODE,
-  SET_TEXT_SIZE_MULTIPLIER,
   SET_CONFIG,
   SET_FORECAST_LOCATION,
   SET_DAILY_QUESTION_CHOICE,
@@ -12,6 +10,8 @@ import {
 export type ConfigState = {
   isDarkMode: boolean;
   textSizeMultiplier: number;
+  isContinuousPlayEnabled: boolean;
+
   forecastLocation?: ForecastLocation;
 
   daily_question_response?: {
@@ -28,29 +28,12 @@ export type ConfigState = {
 const initialState = {
   isDarkMode: false,
   textSizeMultiplier: 0,
+  isContinuousPlayEnabled: true,
   forecastLocation: undefined,
 };
 
 const reducer = (state: ConfigState = initialState, action: ConfigActionType): ConfigState => {
   switch (action.type) {
-    case TOGGLE_DARK_MODE: {
-      const isDarkMode = !state.isDarkMode;
-
-      const newState = {
-        ...state,
-        isDarkMode,
-      };
-      return newState;
-    }
-
-    case SET_TEXT_SIZE_MULTIPLIER: {
-      const newState = {
-        ...state,
-        textSizeMultiplier: action.multiplier,
-      };
-      return newState;
-    }
-
     case SET_CONFIG: {
       return {...state, ...action.payload};
     }

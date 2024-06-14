@@ -9,6 +9,7 @@ import {useTheme} from '../../Theme';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 import SettingsNotifications from './SettingsNotifications';
 import {ScrollView} from 'react-native-gesture-handler';
+import SettingsSwitch from './SettingsSwitch';
 
 const TEXT_SIZE_NORMAL = 0;
 const TEXT_SIZE_LARGE = 2;
@@ -22,6 +23,10 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
 
   const handleSetDarkMode = (value: boolean) => {
     dispatch(setConfig({...config, isDarkMode: value}));
+  };
+
+  const handleSetContinuousPlayer = (value: boolean) => {
+    dispatch(setConfig({...config, isContinuousPlayEnabled: value}));
   };
 
   const handleSetTextSize = (value: number) => {
@@ -93,13 +98,22 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
           </View>
         </View>
         <Text style={styles.label} type="secondary" fontFamily="SourceSansPro-SemiBold">
+          {'Grotuvas'}
+        </Text>
+        <View style={{...styles.card, backgroundColor: colors.background}}>
+          <SettingsSwitch
+            key={'continuous-player'}
+            title="Nepetraukiamas grotuvas"
+            onValueChange={handleSetContinuousPlayer}
+            value={config.isContinuousPlayEnabled}
+            cellStyle={{borderBottomWidth: StyleSheet.hairlineWidth}}
+          />
+        </View>
+        <Text style={styles.label} type="secondary" fontFamily="SourceSansPro-SemiBold">
           {'Pranešimai'}
         </Text>
         <View style={{...styles.card, backgroundColor: colors.background}}>
-          <SettingsNotifications
-            cellStyle={{...styles.cell, borderColor: colors.listSeparator}}
-            titleStyle={styles.title}
-          />
+          <SettingsNotifications />
         </View>
       </View>
     </ScrollView>
