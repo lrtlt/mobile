@@ -3,7 +3,7 @@ import {PlayListItem} from './types';
 import TrackPlayer, {PitchAlgorithm} from 'react-native-track-player';
 import {carPlayNowPlayingTemplate} from './nowPlaying/createNowPlayingTemplate';
 
-export type PlaylistProvider = Promise<PlayListItem[]>;
+export type PlaylistProvider = () => Promise<PlayListItem[]>;
 
 export type BaseListTemplateOptions = {
   title: string;
@@ -42,7 +42,7 @@ export class BaseListTemplate {
   }
 
   async build() {
-    const items = await this.playlistProvider;
+    const items = await this.playlistProvider();
 
     if (this.template) {
       this.template.config.onItemSelect = undefined;
@@ -63,6 +63,7 @@ export class BaseListTemplate {
             items?.map((item) => ({
               text: item.text,
               detailText: item.detailText,
+              image: item.image,
               imgUrl: item.imgUrl as any,
             })) ?? [],
         },
