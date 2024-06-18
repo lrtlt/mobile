@@ -1,5 +1,5 @@
 import {PlayerContextType} from './PlayerContext';
-import TrackPlayer, {PitchAlgorithm} from 'react-native-track-player';
+import TrackPlayer, {PitchAlgorithm, TrackType} from 'react-native-track-player';
 
 const defaultPlayerContext: PlayerContextType = {
   setPlaylist: async (data, current) => {
@@ -9,6 +9,7 @@ const defaultPlayerContext: PlayerContextType = {
         artwork: item.poster,
         title: item.title,
         pitchAlgorithm: PitchAlgorithm.Voice,
+        type: TrackType.HLS,
         isLiveStream: item.isLiveStream,
       })),
     );

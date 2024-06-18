@@ -1,6 +1,7 @@
 import TrackPlayer, {Event, State} from 'react-native-track-player';
 import {tracker} from './app/components/videoComponent/useMediaTracking';
 import Gemius from 'react-native-gemius-plugin';
+import {Platform} from 'react-native';
 
 const PlaybackService = async () => {
   TrackPlayer.addEventListener(Event.RemotePause, () => {
@@ -88,6 +89,43 @@ const PlaybackService = async () => {
         break;
     }
   });
+
+  if (Platform.OS === 'android') {
+    setupAndroidAuto();
+  }
 };
+
+function setupAndroidAuto() {
+  TrackPlayer.addEventListener(Event.RemotePlayId, async (event) => {
+    console.log('Event.RemotePlayId', event);
+    // For demonstration purposes, the mediaId of playable mediaItems in the content hierarchy
+    // is set to its index, and thus we are able to use TrackPlayer.skip. It's recommended
+    // users build their own playback methods and mediaIds to handle playback.
+    TrackPlayer.skip(Number(event.id)).then(() => TrackPlayer.play());
+  });
+
+  TrackPlayer.addEventListener(Event.RemotePlaySearch, (event) => {
+    console.log('Event.RemotePlaySearch', event);
+    // For demonstration purposes, code below searches if queue contains "soul"; then
+    // TrackPlayer plays the 2nd song (Soul Searching) in the queue. users must build their own search-playback
+    // methods to handle this event.
+    if (event.query.toLowerCase().includes('soul')) {
+      TrackPlayer.skip(1).then(() => TrackPlayer.play());
+    }
+  });
+
+  TrackPlayer.addEventListener(Event.RemoteSkip, (event) => {
+    // As far as I can tell, Event.RemoteSkip is an android only event that handles the "queue" button (top right)
+    // clicks in android auto. it simply emits an index in the current queue to be played.
+    console.log('Event.RemoteSkip', event);
+    TrackPlayer.skip(event.index).then(() => TrackPlayer.play());
+  });
+
+  TrackPlayer.addEventListener(Event.RemoteBrowse, (event) => {
+    // This event is emitted when onLoadChildren is called. the mediaId is returned to allow RNTP to handle any
+    // content updates.
+    console.log('Event.RemoteBrowse', event);
+  });
+}
 
 export default PlaybackService;

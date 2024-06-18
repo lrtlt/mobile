@@ -14,6 +14,7 @@ import PlayerProvider from './app/components/videoComponent/context/PlayerProvid
 import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import ThemeProvider from './app/theme/ThemeProvider';
+import TestComponent from './test';
 
 const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
   return (
@@ -36,7 +37,7 @@ const App: React.FC = () => {
         <ThemeProvider>
           <AppBackground>
             <PlayerProvider>
-              <Navigation />
+              <TestComponent />
             </PlayerProvider>
           </AppBackground>
         </ThemeProvider>

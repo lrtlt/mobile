@@ -57,7 +57,7 @@
     "react-native-svg": "^15.3.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-theoplayer": "^7.4.0",
-    "react-native-track-player": "^4.1.1",
+    "react-native-track-player": "https://github.com/lovegaoshi/react-native-track-player#dev-android-auto",
     "react-native-webview": "13.10.3",
     "react-navigation-collapsible": "6.2.0",
     "react-redux": "^8.1.3",
