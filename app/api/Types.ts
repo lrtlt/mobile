@@ -668,6 +668,7 @@ export type ProgramResponse = {
 export type ChannelResponse = {
   channel_info: {
     channel_id: number;
+    channel_url: string;
     channel: string;
     title: string;
     get_streams_url: string;
