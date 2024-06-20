@@ -166,6 +166,7 @@ function setupAndroidAuto() {
         break;
       default:
         console.warn('Unhandled browse event', event);
+        break;
     }
   });
 }
