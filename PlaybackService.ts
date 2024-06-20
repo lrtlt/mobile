@@ -2,6 +2,18 @@ import TrackPlayer, {Event, State} from 'react-native-track-player';
 import {tracker} from './app/components/videoComponent/useMediaTracking';
 import Gemius from 'react-native-gemius-plugin';
 import {Platform} from 'react-native';
+import {
+  TAB_LIVE,
+  TAB_NEWEST,
+  TAB_PODCASTS,
+  TAB_RECOMMENDED,
+  onItemSelected,
+  onLiveTabOpened,
+  onNewestTabOpened,
+  onPodcastSelect,
+  onPodcastsTabOpened,
+  onRecommendedTabOpened,
+} from './app/car/AndroidAuto';
 
 const PlaybackService = async () => {
   TrackPlayer.addEventListener(Event.RemotePause, () => {
@@ -98,10 +110,7 @@ const PlaybackService = async () => {
 function setupAndroidAuto() {
   TrackPlayer.addEventListener(Event.RemotePlayId, async (event) => {
     console.log('Event.RemotePlayId', event);
-    // For demonstration purposes, the mediaId of playable mediaItems in the content hierarchy
-    // is set to its index, and thus we are able to use TrackPlayer.skip. It's recommended
-    // users build their own playback methods and mediaIds to handle playback.
-    TrackPlayer.skip(Number(event.id)).then(() => TrackPlayer.play());
+    onItemSelected(event.id, (event as any)['android.media.browse.CONTENT_STYLE_GROUP_TITLE_HINT']);
   });
 
   TrackPlayer.addEventListener(Event.RemotePlaySearch, (event) => {
@@ -125,6 +134,27 @@ function setupAndroidAuto() {
     // This event is emitted when onLoadChildren is called. the mediaId is returned to allow RNTP to handle any
     // content updates.
     console.log('Event.RemoteBrowse', event);
+    switch (true) {
+      case event.mediaId === '/':
+        onRecommendedTabOpened();
+      case event.mediaId === TAB_RECOMMENDED:
+        onRecommendedTabOpened();
+        break;
+      case event.mediaId === TAB_LIVE:
+        onLiveTabOpened();
+        break;
+      case event.mediaId === TAB_NEWEST:
+        onNewestTabOpened();
+        break;
+      case event.mediaId === TAB_PODCASTS:
+        onPodcastsTabOpened();
+        break;
+      case event.mediaId.startsWith('podcast-'):
+        onPodcastSelect(event.mediaId);
+        break;
+      default:
+        console.warn('Unhandled browse event', event);
+    }
   });
 }
 

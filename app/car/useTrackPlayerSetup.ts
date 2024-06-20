@@ -7,12 +7,11 @@ import TrackPlayer, {
   IOSCategoryMode,
   RepeatMode,
 } from 'react-native-track-player';
-import mediaBrowser from './mediaBrowser';
 
 let _isReady = false;
 
 export const setupTrackPlayer = async () => {
-  if (_isReady && __DEV__ === false) {
+  if (_isReady) {
     return;
   }
 
@@ -62,9 +61,7 @@ export const setupTrackPlayer = async () => {
     ],
   });
   await TrackPlayer.setRepeatMode(RepeatMode.Queue);
-
-  await TrackPlayer.setBrowseTree(mediaBrowser);
-  await TrackPlayer.setBrowseTreeStyle(AndroidAutoContentStyle.CategoryList, AndroidAutoContentStyle.Grid);
+  await TrackPlayer.setBrowseTreeStyle(AndroidAutoContentStyle.CategoryGrid, AndroidAutoContentStyle.List);
 
   console.log('TrackPlayer ready!');
 };
