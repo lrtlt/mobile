@@ -63,7 +63,6 @@ export class BaseListTemplate {
             items?.map((item) => ({
               text: item.text,
               detailText: item.detailText,
-              image: item.image,
               imgUrl: item.imgUrl as any,
             })) ?? [],
         },

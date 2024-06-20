@@ -2,6 +2,14 @@ import {fetchCarLivePlaylist} from '../../api';
 import {PlayListItem} from '../types';
 import {BaseListTemplate} from '../BaseListTemplate';
 import {fetchStreamData} from '../../components/videoComponent/fetchStreamData';
+import {
+  SQUARE_LRT_KLASIKA,
+  SQUARE_LRT_LITHUANICA,
+  SQUARE_LRT_OPUS,
+  SQUARE_LRT_PLUS,
+  SQUARE_LRT_RADIJAS,
+  SQUARE_LRT_TV,
+} from '../../constants';
 
 export const TEMPLATE_ID_LIVE = 'lrt-list-template-live';
 
@@ -34,8 +42,7 @@ class LiveTemplate extends BaseListTemplate {
                 id: stream.mediaId,
                 text: stream.channelTitle ?? stream.title,
                 // detailText: stream.title,
-                image: getImageByChannelId(stream.poster),
-                imgUrl: undefined,
+                imgUrl: getImageByChannelId(stream.poster),
                 streamUrl: stream.streamUri,
               }));
               return items;
@@ -49,22 +56,22 @@ class LiveTemplate extends BaseListTemplate {
 const getImageByChannelId = (channelId?: string) => {
   switch (channelId) {
     case '1': {
-      return require('./assets/ic_tv.png');
+      return SQUARE_LRT_TV;
     }
     case '2': {
-      return require('./assets/ic_plius.png');
+      return SQUARE_LRT_PLUS;
     }
     case '3': {
-      return require('./assets/ic_lituanica.png');
+      return SQUARE_LRT_LITHUANICA;
     }
     case '5': {
-      return require('./assets/ic_klasika.png');
+      return SQUARE_LRT_KLASIKA;
     }
     case '6': {
-      return require('./assets/ic_opus.png');
+      return SQUARE_LRT_OPUS;
     }
     default: {
-      return require('./assets/ic_radijas.png');
+      return SQUARE_LRT_RADIJAS;
     }
   }
 };

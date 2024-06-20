@@ -1,5 +1,12 @@
 import {useEffect} from 'react';
-import TrackPlayer, {Capability, IOSCategory, IOSCategoryMode, RepeatMode} from 'react-native-track-player';
+import TrackPlayer, {
+  AndroidAudioContentType,
+  AndroidAutoContentStyle,
+  Capability,
+  IOSCategory,
+  IOSCategoryMode,
+  RepeatMode,
+} from 'react-native-track-player';
 
 let _isReady = false;
 
@@ -7,15 +14,22 @@ export const setupTrackPlayer = async () => {
   if (_isReady) {
     return;
   }
+
+  console.log('TrackPlayer: setup starting...');
   _isReady = true;
 
-  await TrackPlayer.setupPlayer({
-    iosCategory: IOSCategory.Playback,
-    iosCategoryMode: IOSCategoryMode.SpokenAudio,
-    autoHandleInterruptions: true,
-    autoUpdateMetadata: true,
-    //androidAudioContentType: 'music',
-  });
+  try {
+    await TrackPlayer.setupPlayer({
+      iosCategory: IOSCategory.Playback,
+      iosCategoryMode: IOSCategoryMode.SpokenAudio,
+      androidAudioContentType: AndroidAudioContentType.Speech,
+      autoHandleInterruptions: true,
+      autoUpdateMetadata: true,
+    });
+  } catch (e) {
+    console.log('TrackPlayer setup error: ', e);
+  }
+
   await TrackPlayer.updateOptions({
     capabilities: [
       Capability.Play,
@@ -47,7 +61,9 @@ export const setupTrackPlayer = async () => {
     ],
   });
   await TrackPlayer.setRepeatMode(RepeatMode.Queue);
-  console.log('### TrackPlayer ready!');
+  await TrackPlayer.setBrowseTreeStyle(AndroidAutoContentStyle.CategoryGrid, AndroidAutoContentStyle.List);
+
+  console.log('TrackPlayer ready!');
 };
 
 const useTrackPlayerSetup = () => {

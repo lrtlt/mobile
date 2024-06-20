@@ -4,6 +4,8 @@ import 'react-native-gesture-handler';
 import {setupGemius} from './app/util/useGemiusSetup';
 setupGemius();
 
+import {setupTrackPlayer} from './app/car/useTrackPlayerSetup';
+
 // Setup CarPlay
 if (Platform.OS === 'ios') {
   require('./app/car/CarPlay');
@@ -17,7 +19,9 @@ import PlaybackService from './PlaybackService';
 
 if (Platform.OS === 'android') {
   AppRegistry.registerComponent(appName, () => App);
+  setupTrackPlayer();
 } else {
   AppRegistry.registerComponent(appName, () => App);
-  TrackPlayer.registerPlaybackService(() => PlaybackService);
 }
+
+TrackPlayer.registerPlaybackService(() => PlaybackService);
