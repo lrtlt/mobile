@@ -45,3 +45,11 @@ export const LRT_LITHUANICA = 'https://www.lrt.lt/media/logo/WORLD.jpg?v=2024512
 export const LRT_RADIJAS = 'https://www.lrt.lt/media/logo/LR.jpg?v=2024152153';
 export const LRT_KLASIKA = 'https://www.lrt.lt/media/logo/Klasika.jpg?v=2024152156';
 export const LRT_OPUS = 'https://www.lrt.lt/media/logo/Opus.jpg?v=2024152157';
+
+//Square stream covers
+export const SQUARE_LRT_TV = 'https://www.lrt.lt/images/app_logo/TV.png';
+export const SQUARE_LRT_PLUS = 'https://www.lrt.lt/images/app_logo/LTV2.png';
+export const SQUARE_LRT_LITHUANICA = 'https://www.lrt.lt/images/app_logo/WORLD.png';
+export const SQUARE_LRT_RADIJAS = 'https://www.lrt.lt/images/app_logo/LR.png';
+export const SQUARE_LRT_KLASIKA = 'https://www.lrt.lt/images/app_logo/Klasika.png';
+export const SQUARE_LRT_OPUS = 'https://www.lrt.lt/images/app_logo/Opus.png';

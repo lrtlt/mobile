@@ -17,6 +17,14 @@ import {fetchStreamData} from '../components/videoComponent/fetchStreamData';
 import {CarPlayPodcastItem, isMediaArticle} from '../api/Types';
 import {CategoryListItem, PlayListItem} from './types';
 import {IMG_SIZE_XS, buildArticleImageUri, buildImageUri} from '../util/ImageUtil';
+import {
+  SQUARE_LRT_KLASIKA,
+  SQUARE_LRT_LITHUANICA,
+  SQUARE_LRT_OPUS,
+  SQUARE_LRT_PLUS,
+  SQUARE_LRT_RADIJAS,
+  SQUARE_LRT_TV,
+} from '../constants';
 
 const TAB_DEBOUNCE_TIME = 30 * 1000;
 
@@ -143,8 +151,7 @@ export const onLiveTabOpened = withDebounce(
             [TAB_LIVE]: data.map((item) => ({
               title: item.channelTitle ?? item.title,
               url: item.streamUri,
-              //TODO: add local poster
-              artwork: item.poster,
+              artwork: getImageByChannelId(item.poster),
               isLiveStream: true,
               pitchAlgorithm: PitchAlgorithm.Voice,
               type: TrackType.HLS,
@@ -157,7 +164,7 @@ export const onLiveTabOpened = withDebounce(
               mediaId: String(i),
               title: item.channelTitle ?? item.title,
               playable: '0',
-              iconUri: item.poster,
+              iconUri: getImageByChannelId(item.poster),
               mediaUri: item.streamUri,
               groupTitle: TAB_LIVE,
             })),
@@ -215,9 +222,9 @@ export const onPodcastsTabOpened = withDebounce(
 
     const items = await fetchCarPodcasts(1000).then((data) => {
       if (data.items.length) {
-        data.items.forEach((item) => {
-          item.title = item.title.replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$/g, '');
-        });
+        // data.items.forEach((item) => {
+        //   item.title = item.title.replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$/g, '');
+        // });
         data.items.sort((a, b) => a.title.localeCompare(b.title));
         return data.items;
       }
@@ -327,3 +334,26 @@ export const onPodcastSelect = withDebounce(
   'podcast',
   2000,
 );
+
+const getImageByChannelId = (channelId?: string) => {
+  switch (channelId) {
+    case '1': {
+      return SQUARE_LRT_TV;
+    }
+    case '2': {
+      return SQUARE_LRT_PLUS;
+    }
+    case '3': {
+      return SQUARE_LRT_LITHUANICA;
+    }
+    case '5': {
+      return SQUARE_LRT_KLASIKA;
+    }
+    case '6': {
+      return SQUARE_LRT_OPUS;
+    }
+    default: {
+      return SQUARE_LRT_RADIJAS;
+    }
+  }
+};

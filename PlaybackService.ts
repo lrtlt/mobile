@@ -14,6 +14,13 @@ import {
   onPodcastsTabOpened,
   onRecommendedTabOpened,
 } from './app/car/AndroidAuto';
+import {debounce} from 'lodash';
+import analytics from '@react-native-firebase/analytics';
+
+const sendAnalyticsEvent = debounce((eventName: string) => {
+  Gemius.sendPageViewedEvent(eventName);
+  analytics().logEvent(eventName);
+}, 500);
 
 const PlaybackService = async () => {
   TrackPlayer.addEventListener(Event.RemotePause, () => {
@@ -139,18 +146,23 @@ function setupAndroidAuto() {
         onRecommendedTabOpened();
       case event.mediaId === TAB_RECOMMENDED:
         onRecommendedTabOpened();
+        sendAnalyticsEvent('android_auto_recommended_open');
         break;
       case event.mediaId === TAB_LIVE:
         onLiveTabOpened();
+        sendAnalyticsEvent('android_auto_live_open');
         break;
       case event.mediaId === TAB_NEWEST:
         onNewestTabOpened();
+        sendAnalyticsEvent('android_auto_newest_open');
         break;
       case event.mediaId === TAB_PODCASTS:
         onPodcastsTabOpened();
+        sendAnalyticsEvent('android_auto_podcasts_open');
         break;
       case event.mediaId.startsWith('podcast-'):
         onPodcastSelect(event.mediaId);
+        sendAnalyticsEvent(`android_auto_podcast_open_${event.mediaId.split('-')[1]}`);
         break;
       default:
         console.warn('Unhandled browse event', event);
