@@ -11,7 +11,8 @@
     "clean-build-win": "rmdir /s /q %appdata%\\..\\Temp\\react-native-* & rmdir /s /q node_modules & yarn cache clean --force & yarn install & cd android & gradlew clean & cd .. &  yarn start --reset-cache",
     "test": "jest",
     "lint": "eslint . --ext .ts,.tsx",
-    "ts": "tsc --skipLibCheck"
+    "ts": "tsc --skipLibCheck",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@native-html/table-plugin": "^5.3.1",
@@ -84,6 +85,8 @@
     "eslint": "^8.19.0",
     "eslint-plugin-prettier": "^3.4.0",
     "jest": "^29.6.3",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "2.8.8",
     "react-native-svg-app-icon": "^0.6.1",
     "react-test-renderer": "18.2.0",

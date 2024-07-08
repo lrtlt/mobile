@@ -1,0 +1,39 @@
+diff --git a/node_modules/react-native-track-player/android/src/main/AndroidManifest.xml b/node_modules/react-native-track-player/android/src/main/AndroidManifest.xml
+index 71d2f0a..807b94d 100644
+--- a/node_modules/react-native-track-player/android/src/main/AndroidManifest.xml
++++ b/node_modules/react-native-track-player/android/src/main/AndroidManifest.xml
+@@ -16,7 +16,7 @@
+             android:exported="true"
+             android:foregroundServiceType="mediaPlayback">
+             <intent-filter>
+-                <action android:name="android.intent.action.MEDIA_BUTTON" />
++<!--                <action android:name="android.intent.action.MEDIA_BUTTON" />-->
+                 <action android:name="android.media.browse.MediaBrowserService" />
+             </intent-filter>
+         </service>
+diff --git a/node_modules/react-native-track-player/android/src/main/java/com/doublesymmetry/trackplayer/service/MusicService.kt b/node_modules/react-native-track-player/android/src/main/java/com/doublesymmetry/trackplayer/service/MusicService.kt
+index 878dee2..c7796c1 100644
+--- a/node_modules/react-native-track-player/android/src/main/java/com/doublesymmetry/trackplayer/service/MusicService.kt
++++ b/node_modules/react-native-track-player/android/src/main/java/com/doublesymmetry/trackplayer/service/MusicService.kt
+@@ -162,7 +162,7 @@ class MusicService : HeadlessJsMediaService() {
+ 
+     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+         startTask(getTaskConfig(intent))
+-        startAndStopEmptyNotificationToAvoidANR()
++        if (intent != null) startAndStopEmptyNotificationToAvoidANR()
+         return START_STICKY
+     }
+ 
+@@ -679,9 +679,9 @@ class MusicService : HeadlessJsMediaService() {
+                             scope.launch {
+                                 delay(stopForegroundGracePeriod.toLong() * 1000)
+                                 if (shouldStopForeground()) {
+-                                    @Suppress("DEPRECATION")
+-                                    stopForeground(removeNotificationWhenNotOngoing)
+-                                    Timber.d("Notification has been stopped")
++//                                    @Suppress("DEPRECATION")
++//                                    stopForeground(removeNotificationWhenNotOngoing)
++//                                    Timber.d("Notification has been stopped")
+                                 }
+                             }
+                         }
