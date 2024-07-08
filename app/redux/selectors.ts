@@ -136,7 +136,7 @@ export const selectSettings = memoize((state: RootState) => {
 
   return {
     isDarkMode: config.isDarkMode,
-    isContinuousPlayEnabled: config.isContinuousPlayEnabled,
+    isContinuousPlayEnabled: config.isContinuousPlayEnabled ?? true,
     textSizeMultiplier: config.textSizeMultiplier,
   };
 });

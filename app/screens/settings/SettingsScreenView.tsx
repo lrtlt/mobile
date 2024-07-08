@@ -103,7 +103,7 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
         <View style={{...styles.card, backgroundColor: colors.background}}>
           <SettingsSwitch
             key={'continuous-player'}
-            title="Nepetraukiamas grotuvas"
+            title="Nepertraukiamas grotuvas"
             onValueChange={handleSetContinuousPlayer}
             value={config.isContinuousPlayEnabled}
             cellStyle={{borderBottomWidth: StyleSheet.hairlineWidth}}
