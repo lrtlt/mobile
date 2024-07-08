@@ -61,7 +61,7 @@ export const articlesGetByTag = (tag: string, count: number) => {
  * Return array of articles by search filter
  */
 export const searchArticles = (query: string, filter: SearchFilter) => {
-  let url = `${BASE_URL}search?q=${query}&type=${filter.type}&section=${filter.section}&days=${filter.days}`;
+  let url = `${BASE_URL}search?q=${query}&type=${filter.type}&section=${filter.section}&days=${filter.days}&count=50`;
 
   if (filter.searchExactPhrase) {
     url += '&exact=1';
