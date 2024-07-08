@@ -1,9 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {forwardRef, useCallback, useRef} from 'react';
-import {LayoutChangeEvent, Linking} from 'react-native';
+import {Linking, useWindowDimensions} from 'react-native';
 import {StyleSheet, View} from 'react-native';
-import WebView, {AutoHeightWebViewProps} from 'react-native-autoheight-webview';
+import WebView, {AutoHeightWebViewProps, SizeUpdate} from 'react-native-autoheight-webview';
 import {type ShouldStartLoadRequest} from 'react-native-webview/src/WebViewTypes';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
@@ -21,6 +21,8 @@ const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardR
     const {dark} = useTheme();
     const animationDisabled = useRef(false);
 
+    const {height: screenHeight} = useWindowDimensions();
+
     const handleShouldLoadWithRequest = useCallback((request: ShouldStartLoadRequest) => {
       const isUserClickAction = request.navigationType === 'click';
 
@@ -36,26 +38,22 @@ const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardR
 
     const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
-    const onLayout = useCallback(
-      (e: LayoutChangeEvent) => {
-        const {height} = e.nativeEvent.layout;
-        if (height > 1000 && !animationDisabled.current) {
-          console.log('Disabling animation because of webView height:', height);
-          navigation.setOptions({
-            animationEnabled: false,
-          });
-          animationDisabled.current = true;
-        }
-      },
-      [navigation],
-    );
+    const onSizeUpdate = useCallback(({height}: SizeUpdate) => {
+      if (height > screenHeight && !animationDisabled.current) {
+        console.log('Disabling animation because of webView height:', height);
+        navigation.setOptions({
+          animationEnabled: false,
+        });
+        animationDisabled.current = true;
+      }
+    }, []);
 
     return (
       <View style={[props.style as {}, styles.webViewContainer]}>
         <WebView
           ref={ref}
-          onLayout={onLayout}
           originWhitelist={['*']}
+          onSizeUpdated={onSizeUpdate}
           domStorageEnabled={true}
           javaScriptEnabled={true}
           automaticallyAdjustContentInsets={false}

@@ -1,0 +1,35 @@
+diff --git a/node_modules/react-native-autoheight-webview/autoHeightWebView/index.js b/node_modules/react-native-autoheight-webview/autoHeightWebView/index.js
+index 3d0dc75..edeaebb 100644
+--- a/node_modules/react-native-autoheight-webview/autoHeightWebView/index.js
++++ b/node_modules/react-native-autoheight-webview/autoHeightWebView/index.js
+@@ -1,6 +1,6 @@
+ import React, {useState, useEffect, forwardRef} from 'react';
+ 
+-import {StyleSheet, Platform} from 'react-native';
++import {StyleSheet, Platform, PixelRatio} from 'react-native';
+ 
+ import {ViewPropTypes} from 'deprecated-react-native-prop-types';
+ import PropTypes from 'prop-types';
+@@ -15,6 +15,9 @@ import {
+   shouldUpdate,
+ } from './utils';
+ 
++const MAX_HEIGHT_ANDROID =  Platform.Version < 29 ? Platform.Version < 24 ? MAX_HEIGHT / 2 : MAX_HEIGHT : -1;
++const MAX_HEIGHT = Platform.OS === 'android' ? MAX_HEIGHT_ANDROID : -1;
++
+ const AutoHeightWebView = React.memo(
+   forwardRef((props, ref) => {
+     const {
+@@ -44,9 +47,10 @@ const AutoHeightWebView = React.memo(
+             scrollEnabledWithZoomedin &&
+             setScrollable(!!zoomedin);
+           const {height: previousHeight, width: previousWidth} = size;
+-          isSizeChanged({height, previousHeight, width, previousWidth}) &&
++          const newHeight = MAX_HEIGHT ? Math.min(height, MAX_HEIGHT) : height;
++          isSizeChanged({height: newHeight, previousHeight, width, previousWidth}) &&
+             setSize({
+-              height,
++              height: newHeight,
+               width,
+             });
+         } catch (error) {
