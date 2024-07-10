@@ -2140,7 +2140,7 @@ PODS:
   - react-native-track-player (4.1.1):
     - React-Core
     - SwiftAudioEx (= 1.1.0)
-  - react-native-webview (13.10.3):
+  - react-native-webview (13.10.5):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2723,7 +2723,7 @@ SPEC CHECKSUMS:
   react-native-slider: 9cfd2f0af9efe89a3ed372fcda8eca65109aa94c
   react-native-theoplayer: 1f6d9e2946b80f74cf2549cce9ee894aa390a3e1
   react-native-track-player: 82ef1756ffeea61140fea17519ecd6d64ec3cf3e
-  react-native-webview: af5750ca782633c6c730a015946fb921497b4e7b
+  react-native-webview: f8f61799dda94b4cc3a864b06c4c229d1a9ced1d
   React-nativeconfig: b42fe8e97a8d164aebeb6821a27076406b64fbb9
   React-NativeModulesApple: a641fb50cd15f37522f5f5cd7e09fd85789219d2
   React-perflogger: f9367428cf475f4606b5965c1d5a71781bb95299
