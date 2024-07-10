@@ -245,6 +245,13 @@ export type VideoDataLiveStream = {
   };
 };
 
+export type VideoTextTrack = {
+  src: string;
+  kind: string;
+  label: string;
+  default: boolean;
+};
+
 export type VideoDataDefault = {
   id: number;
   title: string;
@@ -261,6 +268,7 @@ export type VideoDataDefault = {
     file: string;
     title: string;
     image: string;
+    tracks?: VideoTextTrack[];
   };
 };
 

@@ -105,6 +105,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
         isLiveStream={data.isLiveStream}
         startTime={data.isLiveStream ? undefined : props.startTime || data.offset}
         poster={props.backgroundImage ?? data.poster}
+        tracks={data.tracks}
         mediaType={
           data.mediaType != undefined
             ? data.mediaType

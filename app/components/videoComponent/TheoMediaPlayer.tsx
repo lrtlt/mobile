@@ -27,6 +27,7 @@ import usePlayerLanguage from './usePlayerLanguage';
 import {EventRegister} from 'react-native-event-listeners';
 import FastImage from 'react-native-fast-image';
 import {useSettings} from '../../settings/useSettings';
+import {VideoTextTrack} from '../../api/Types';
 
 export type PlayerAction = 'togglePlay' | 'setFullScreen';
 
@@ -41,6 +42,7 @@ interface Props {
   isFloating?: boolean;
   uuid?: string;
   controls?: boolean;
+  tracks?: VideoTextTrack[];
   onError?: (e?: any) => void;
   onEnded?: () => void;
 }
@@ -54,13 +56,20 @@ const license = Platform.select({
 const config: PlayerConfiguration = {
   license,
   chromeless: true,
+
   // mediaControl: {
   //   mediaSessionEnabled: true,
   // },
 };
 
-const makeSource = (uri: string, title?: string, poster?: string): SourceDescription => ({
+const makeSource = (
+  uri: string,
+  title?: string,
+  poster?: string,
+  tracks?: VideoTextTrack[],
+): SourceDescription => ({
   poster: poster,
+  textTracks: tracks,
   metadata: {
     title: title,
     // subtitle: title,
@@ -85,6 +94,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   autoStart,
   isLiveStream,
   startTime,
+  tracks,
   isFloating = false,
   uuid,
   controls = true,
@@ -102,7 +112,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   const {colors} = useTheme();
   const {isContinuousPlayEnabled} = useSettings();
 
-  const {setPlaylist, close} = useMediaPlayer();
+  const {setMediaData, close} = useMediaPlayer();
 
   //Close floating player before loading new one
   useEffect(() => {
@@ -115,16 +125,15 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     return () => {
       if (player) {
         if (isContinuousPlayEnabled && !player.paused && !isFloating) {
-          setPlaylist([
-            {
-              mediaType: mediaType,
-              poster: poster,
-              title: title,
-              uri: streamUri,
-              isLiveStream: isLiveStream,
-              startTime: player.currentTime / 1000,
-            },
-          ]);
+          setMediaData({
+            mediaType: mediaType,
+            poster: poster,
+            title: title,
+            uri: streamUri,
+            isLiveStream: isLiveStream,
+            startTime: player.currentTime / 1000,
+            tracks: tracks,
+          });
         }
         trackClose(streamUri, player.currentTime / 1000);
       }
@@ -290,13 +299,13 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     if (player && streamUri) {
-      player.source = makeSource(streamUri, title, poster);
+      player.source = makeSource(streamUri, title, poster, tracks);
       if (!isLiveStream) {
         console.log('startTime:', startTime);
         player.currentTime = startTime ? startTime * 1000 : 0;
       }
     }
-  }, [player, streamUri, startTime, isLiveStream, title, poster]);
+  }, [player, streamUri, startTime, isLiveStream, title, poster, tracks]);
 
   const _playPauseControl = useCallback(async () => {
     if (client) {

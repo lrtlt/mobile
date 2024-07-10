@@ -1,7 +1,6 @@
 import React from 'react';
-import defaultPlayerContext from './DefaultPlayerContext';
+import {VideoTextTrack} from '../../../api/Types';
 
-// eslint-disable-next-line no-shadow
 export enum MediaType {
   AUDIO,
   VIDEO,
@@ -14,13 +13,17 @@ export type MediaBaseData = {
   mediaType: MediaType;
   isLiveStream: boolean;
   startTime?: number;
+  tracks?: VideoTextTrack[];
 };
 
 export type PlayerContextType = {
-  setPlaylist: (data: MediaBaseData[], current?: number) => Promise<void>;
-  playNext: () => void;
-  playPrevious: () => void;
+  setMediaData: (data: MediaBaseData) => void;
   close: () => void;
 };
 
-export const PlayerContext = React.createContext<PlayerContextType>(defaultPlayerContext);
+const _noOp = () => {};
+
+export const PlayerContext = React.createContext<PlayerContextType>({
+  setMediaData: _noOp,
+  close: _noOp,
+});

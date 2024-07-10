@@ -2,6 +2,7 @@ import {useCallback, useEffect, useState} from 'react';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {fetchStreamData} from './fetchStreamData';
 import {MediaType} from './context/PlayerContext';
+import {VideoTextTrack} from '../../api/Types';
 
 export type StreamData = {
   channelTitle?: string;
@@ -12,6 +13,7 @@ export type StreamData = {
   offset?: number;
   poster?: string;
   mediaType?: MediaType;
+  tracks?: VideoTextTrack[];
 };
 
 type VideoState = {

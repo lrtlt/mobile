@@ -11,7 +11,6 @@ import {EventRegister} from 'react-native-event-listeners';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
-  const [playlist, setPlaylist] = useState<MediaBaseData[]>([]);
   const [currentMedia, setCurrentMedia] = useState<MediaBaseData>();
   const uuid = useRef<string>(uniqueId('player-'));
 
@@ -19,7 +18,6 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
   const {bottom} = useSafeAreaInsets();
 
   const handleClose = useCallback(() => {
-    setPlaylist([]);
     setCurrentMedia(undefined);
   }, []);
 
@@ -27,36 +25,6 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
     const action: PlayerAction = 'setFullScreen';
     EventRegister.emit(uuid.current, action);
   }, [uuid]);
-
-  const playNext = useCallback(() => {
-    console.log('playNext', playlist.length);
-    if (playlist.length === 0) {
-      return;
-    }
-    const nextIndex = playlist.findIndex((item) => item === currentMedia) + 1;
-    if (nextIndex >= playlist.length) {
-      if (playlist.length === 1) {
-        handleClose();
-      } else {
-        setCurrentMedia(playlist[0]);
-      }
-    } else {
-      setCurrentMedia(playlist[nextIndex]);
-    }
-  }, [playlist, currentMedia]);
-
-  const playPrevious = useCallback(() => {
-    console.log('playPrevious', playlist.length);
-    if (playlist.length === 0) {
-      return;
-    }
-    const nextIndex = playlist.findIndex((item) => item === currentMedia) - 1;
-    if (nextIndex < 0) {
-      setCurrentMedia(playlist[playlist.length - 1]);
-    } else {
-      setCurrentMedia(playlist[nextIndex]);
-    }
-  }, [playlist, currentMedia]);
 
   const renderMiniPlayer = useCallback(() => {
     if (!currentMedia) {
@@ -93,10 +61,11 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
               title={currentMedia.title}
               streamUri={currentMedia.uri!}
               startTime={currentMedia.startTime}
+              tracks={currentMedia.tracks}
               autoStart={true}
               isFloating={true}
               controls={false}
-              onEnded={playNext}
+              onEnded={handleClose}
             />
           </View>
           <View style={{flex: 1, gap: 4}}>
@@ -116,25 +85,17 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
         <View style={{height: bottom - 8, backgroundColor: colors.background}} />
       </TouchableDebounce>
     );
-  }, [uuid, colors, dark, handleFullScreen, currentMedia, playNext]);
+  }, [uuid, colors, dark, handleFullScreen, currentMedia]);
 
   const context: PlayerContextType = useMemo(
     () => ({
-      setPlaylist: async (playlist: MediaBaseData[], current?: number) => {
-        setPlaylist(playlist);
-        if (current) {
-          setCurrentMedia(playlist[current]);
-        } else if (playlist.length > 0) {
-          setCurrentMedia(playlist[0]);
-        } else {
-          setCurrentMedia(undefined);
-        }
+      setMediaData: (data: MediaBaseData) => {
+        console.log('setMediaData', data);
+        setCurrentMedia(data);
       },
-      playNext: playNext,
-      playPrevious: playPrevious,
       close: handleClose,
     }),
-    [setPlaylist, handleClose, playNext, playPrevious, playlist],
+    [setCurrentMedia, handleClose],
   );
 
   return (

@@ -18,7 +18,7 @@ export const fetchStreamData = ({
     .then((response) => {
       if (isVideoLiveStream(response)) {
         const {data} = response.response;
-        return {
+        const streamData: StreamData = {
           channelTitle: title,
           isLiveStream: true,
           streamUri: prioritizeAudio
@@ -31,18 +31,23 @@ export const fetchStreamData = ({
           mediaId: data.content,
           offset: undefined,
         };
+        return streamData;
       } else {
         const {playlist_item} = response;
-        return {
+        const streamData: StreamData = {
           channelTitle: title,
           isLiveStream: false,
           streamUri: playlist_item.file.trim(),
           mediaId: playlist_item.mediaid ? playlist_item.mediaid.toString() : 'no-media-id',
           title: response.title,
-
           offset: response.offset,
           poster: poster ?? playlist_item.image ? BASE_IMG_URL + playlist_item.image : undefined,
+          tracks: playlist_item.tracks?.map((track) => ({
+            ...track,
+            src: track.src.startsWith('http') ? track.src : BASE_IMG_URL + track.src,
+          })),
         };
+        return streamData;
       }
     })
     .then((data) => {
