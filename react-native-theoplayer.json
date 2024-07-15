@@ -1,5 +1,5 @@
 {
   "ios": {
-    "features": ["CHROMECAST"]
+    "features": ["CHROMECAST", "SIDELOADED_TEXTTRACKS"]
   }
 }

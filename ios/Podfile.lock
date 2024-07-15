@@ -956,6 +956,7 @@ PODS:
   - BVLinearGradient (2.8.3):
     - React-Core
   - DoubleConversion (1.1.6)
+  - DSFRegex (3.3.1)
   - FBLazyVector (0.73.8)
   - FBReactNativeSpec (0.73.8):
     - RCT-Folly (= 2022.05.16.00)
@@ -2135,6 +2136,7 @@ PODS:
   - react-native-theoplayer (7.6.0):
     - google-cast-sdk-dynamic-xcframework (~> 4.8)
     - React-Core
+    - THEOplayer-Connector-SideloadedSubtitle (~> 7.4)
     - THEOplayer-Integration-GoogleCast/Base (~> 7.4)
     - THEOplayerSDK-core (~> 7.4)
   - react-native-track-player (4.1.1):
@@ -2376,8 +2378,17 @@ PODS:
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.6.1)
   - SwiftAudioEx (1.1.0)
+  - Swifter (1.5.0)
+  - SwiftSubtitles (0.9.1):
+    - DSFRegex (~> 3.3.1)
+    - TinyCSV (~> 0.6.1)
+  - THEOplayer-Connector-SideloadedSubtitle (7.7.1):
+    - Swifter (= 1.5.0)
+    - SwiftSubtitles (= 0.9.1)
+    - THEOplayerSDK-core (~> 7)
   - THEOplayer-Integration-GoogleCast/Base (7.5.0)
   - THEOplayerSDK-core (7.5.0)
+  - TinyCSV (0.6.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -2465,6 +2476,7 @@ SPEC REPOS:
   trunk:
     - abseil
     - BoringSSL-GRPC
+    - DSFRegex
     - Firebase
     - FirebaseAnalytics
     - FirebaseAppCheckInterop
@@ -2496,8 +2508,12 @@ SPEC REPOS:
     - SDWebImageWebPCoder
     - SocketRocket
     - SwiftAudioEx
+    - Swifter
+    - SwiftSubtitles
+    - THEOplayer-Connector-SideloadedSubtitle
     - THEOplayer-Integration-GoogleCast
     - THEOplayerSDK-core
+    - TinyCSV
 
 EXTERNAL SOURCES:
   boost:
@@ -2662,6 +2678,7 @@ SPEC CHECKSUMS:
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
+  DSFRegex: 8493187c71ac199695245eb9ec98bad4f87a2f0b
   FBLazyVector: df34a309e356a77581809834f6ec3fbe7153f620
   FBReactNativeSpec: bbe8b686178e5ce03d1d8a356789f211f91f31b8
   Firebase: 91fefd38712feb9186ea8996af6cbdef41473442
@@ -2721,7 +2738,7 @@ SPEC CHECKSUMS:
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: 422017db8bcabbada9ad607d010996c56713234c
   react-native-slider: 9cfd2f0af9efe89a3ed372fcda8eca65109aa94c
-  react-native-theoplayer: 1f6d9e2946b80f74cf2549cce9ee894aa390a3e1
+  react-native-theoplayer: 90b4904af8c6b07514ead3837c8e0703d75efac9
   react-native-track-player: 82ef1756ffeea61140fea17519ecd6d64ec3cf3e
   react-native-webview: f8f61799dda94b4cc3a864b06c4c229d1a9ced1d
   React-nativeconfig: b42fe8e97a8d164aebeb6821a27076406b64fbb9
@@ -2763,8 +2780,12 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftAudioEx: f6aa653770f3a0d3851edaf8d834a30aee4a7646
+  Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
+  SwiftSubtitles: c659af19d710a2946779015464c0577d07fe4666
+  THEOplayer-Connector-SideloadedSubtitle: 34b16f90f8bdaa04a0dc0d6719812aafce5ff390
   THEOplayer-Integration-GoogleCast: 2f2cb49221e0c5b7b92ec09d542c8400420d17bb
   THEOplayerSDK-core: b701dd19841b8850522eec6f5944e9ac5cab7b94
+  TinyCSV: fd6228edbcf1c07466ac34b76dac5e052143eaba
   Yoga: 428500217b7b2dba1074041bd3ccf0cad3555925
 
 PODFILE CHECKSUM: 7e339a0caa0f5779792bcde7c7a641a4aa47323b

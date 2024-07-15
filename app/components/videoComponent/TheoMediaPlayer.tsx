@@ -56,10 +56,6 @@ const license = Platform.select({
 const config: PlayerConfiguration = {
   license,
   chromeless: true,
-
-  // mediaControl: {
-  //   mediaSessionEnabled: true,
-  // },
 };
 
 const makeSource = (
@@ -69,7 +65,7 @@ const makeSource = (
   tracks?: VideoTextTrack[],
 ): SourceDescription => ({
   poster: poster,
-  textTracks: tracks,
+  textTracks: Platform.OS === 'android' ? tracks : undefined,
   metadata: {
     title: title,
     // subtitle: title,
