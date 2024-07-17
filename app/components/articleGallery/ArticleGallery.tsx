@@ -2,11 +2,12 @@ import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
 import CoverImage from '../coverImage/CoverImage';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
-import {buildArticleImageUri, getImageSizeForWidth} from '../../util/ImageUtil';
+import {buildArticleImageUri, IMG_SIZE_M} from '../../util/ImageUtil';
 import {ArticlePhotoType} from '../../api/Types';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
+import {Stack, Tiles} from '@grapp/stacks';
 
 const DEFAULT_ASPECT_RATIO = 1.5;
 
@@ -22,18 +23,14 @@ const getAspectRatio = (w_h: string | number) => {
   return DEFAULT_ASPECT_RATIO;
 };
 
-const PhotoComponent = (
-  photo: ArticlePhotoType,
-  width: number,
-  pressHandler?: (selectedPhoto: any) => void,
-) => {
+const PhotoComponent = (photo: ArticlePhotoType, pressHandler?: (selectedPhoto: any) => void) => {
   const {colors} = useTheme();
   return (
     <View
       style={{
         ...styles.imageContainer,
         backgroundColor: colors.photoBackground,
-        width,
+        flex: 1,
       }}>
       <TouchableDebounce
         style={styles.flex}
@@ -44,10 +41,9 @@ const PhotoComponent = (
           <CoverImage
             style={{
               ...styles.image,
-              width,
               aspectRatio: getAspectRatio(photo.w_h),
             }}
-            source={{uri: buildArticleImageUri(getImageSizeForWidth(width), photo.path)}}
+            source={{uri: buildArticleImageUri(IMG_SIZE_M, photo.path)}}
           />
         )}
       </TouchableDebounce>
@@ -57,7 +53,6 @@ const PhotoComponent = (
 
 const PhotoWithOverlayComponent = (
   photo: ArticlePhotoType,
-  width: number,
   pressHandler: (selectedPhoto: any) => void,
   count: number,
 ) => {
@@ -68,7 +63,7 @@ const PhotoWithOverlayComponent = (
   return (
     <TouchableDebounce onPress={onPressHandler}>
       <View style={styles.imageContainer}>
-        {PhotoComponent(photo, width)}
+        {PhotoComponent(photo)}
 
         <View style={styles.imageCountOverlay}>
           <TextComponent style={styles.imageCountOverlayText} fontFamily="SourceSansPro-SemiBold">
@@ -82,39 +77,30 @@ const PhotoWithOverlayComponent = (
 
 interface Props {
   data: ArticlePhotoType[];
-  expectedWidth: number;
   itemSelectHandler: (photo: {type: 'photo'; item: ArticlePhotoType}) => void;
 }
-const ArticleGallery: React.FC<React.PropsWithChildren<Props>> = ({
-  data,
-  expectedWidth,
-  itemSelectHandler,
-}) => {
+const ArticleGallery: React.FC<React.PropsWithChildren<Props>> = ({data, itemSelectHandler}) => {
   if (!data?.length) {
     return null;
   }
 
   return (
-    <View style={styles.container}>
-      {data.length > 0 && PhotoComponent(data[0], expectedWidth, itemSelectHandler)}
-      <View style={styles.row}>
-        {data.length > 1 && PhotoComponent(data[1], expectedWidth / 2, itemSelectHandler)}
-        <View style={styles.space} />
-        {data.length > 2 && PhotoComponent(data[2], expectedWidth / 2, itemSelectHandler)}
-      </View>
-      <View style={styles.row}>
-        {data.length > 3 && PhotoComponent(data[3], expectedWidth / 2, itemSelectHandler)}
-        <View style={styles.space} />
-        {data.length > 4 && PhotoComponent(data[4], expectedWidth / 2, itemSelectHandler)}
-      </View>
-      <View style={styles.space} />
-
+    <Stack space={4} paddingTop={8} paddingBottom={4}>
+      {data.length > 0 && PhotoComponent(data[0], itemSelectHandler)}
+      <Tiles space={4} columns={2} flex={'fluid'}>
+        {data.length > 1 && PhotoComponent(data[1], itemSelectHandler)}
+        {data.length > 2 && PhotoComponent(data[2], itemSelectHandler)}
+      </Tiles>
+      <Tiles space={4} columns={2} flex={'fluid'}>
+        {data.length > 3 && PhotoComponent(data[3], itemSelectHandler)}
+        {data.length > 4 && PhotoComponent(data[4], itemSelectHandler)}
+      </Tiles>
       {data[6]
-        ? PhotoWithOverlayComponent(data[5], expectedWidth, itemSelectHandler, data.length - 6)
+        ? PhotoWithOverlayComponent(data[5], itemSelectHandler, data.length - 6)
         : data[5]
-        ? PhotoComponent(data[5], expectedWidth, itemSelectHandler)
+        ? PhotoComponent(data[5], itemSelectHandler)
         : null}
-    </View>
+    </Stack>
   );
 };
 

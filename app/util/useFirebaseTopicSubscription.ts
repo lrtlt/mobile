@@ -73,11 +73,6 @@ const useFirebaseTopicSubscription = () => {
         data.forEach(async (topic) => {
           const shouldSubscribe = isFirstRun || topic.hidden === 1;
           if (shouldSubscribe) {
-            try {
-              await messaging().subscribeToTopic(topic.slug);
-            } catch (e) {
-              // ignore emulator issues
-            }
             if (activeSubscriptions.indexOf(topic.slug) === -1) {
               activeSubscriptions.push(topic.slug);
             }
@@ -87,6 +82,14 @@ const useFirebaseTopicSubscription = () => {
         await AsyncStorage.setItem(TOPICS_STORAGE_KEY, JSON.stringify(activeSubscriptions));
         setSubscriptions(activeSubscriptions);
         setTopics(data);
+
+        for (const subscription of activeSubscriptions) {
+          try {
+            await messaging().subscribeToTopic(subscription);
+          } catch (e) {
+            // ignore emulator issues
+          }
+        }
       })
       .catch((error) => {
         console.error(error);

@@ -4,6 +4,7 @@ import ArticleComponent, {ArticleStyleType} from '../article/ArticleComponent';
 import {Article} from '../../../../Types';
 import {SavedArticle} from '../../../redux/reducers/articleStorage';
 import MyScrollView from '../../MyScrollView/MyScrollView';
+import {Tiles} from '@grapp/stacks';
 
 //TODO calculate for bigger screens.
 const articleFitCount = 2;
@@ -35,7 +36,7 @@ const ArticleRow: React.FC<React.PropsWithChildren<Props>> = (props) => {
       data.map((a, i) => {
         return (
           <ArticleComponent
-            style={{...styles.article, ...props.articleStyle}}
+            style={{...props.articleStyle}}
             article={a as Article}
             onPress={onArticlePress}
             styleType={articleStyleType}
@@ -53,16 +54,17 @@ const ArticleRow: React.FC<React.PropsWithChildren<Props>> = (props) => {
       </MyScrollView>
     );
   } else {
-    return <View style={styles.container}>{content}</View>;
+    return (
+      <Tiles space={4} margin={2} columns={content.length} flex={'fluid'}>
+        {content}
+      </Tiles>
+    );
   }
 };
 
 export default ArticleRow;
 
 const styles = StyleSheet.create({
-  article: {
-    padding: 8,
-  },
   container: {
     flex: 1,
     justifyContent: 'center',

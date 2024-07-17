@@ -86,13 +86,7 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
           );
         }
         case TYPE_GALLERY: {
-          return (
-            <ArticleGallery
-              data={data.photos}
-              expectedWidth={contentWidth}
-              itemSelectHandler={itemPressHandler}
-            />
-          );
+          return <ArticleGallery data={data.photos} itemSelectHandler={itemPressHandler} />;
         }
         case TYPE_PARAGRAPH: {
           return <ArticleContentItem data={data} itemPressHandler={itemPressHandler} />;
@@ -188,7 +182,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     lineHeight: 34,
     fontSize: 23,
-    alignSelf: 'center',
+    alignSelf: 'baseline',
   },
   playerContainer: {
     width: '100%',

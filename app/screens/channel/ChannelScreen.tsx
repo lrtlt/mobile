@@ -33,15 +33,8 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
     setSelectedChannel(route.params.channelId);
   }, [route.params.channelId]);
 
-  const {
-    channelData,
-    streamData,
-    audioStreamData,
-    lastFetchTime,
-    loadingState,
-    loadChannel,
-    reloadProgram,
-  } = useChannel();
+  const {channelData, streamData, audioStreamData, lastFetchTime, loadingState, loadChannel, reloadProgram} =
+    useChannel();
 
   const {strings} = useTheme();
 
@@ -136,7 +129,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: 'center',
+    marginBottom: 12,
   },
   player: {
     width: '100%',

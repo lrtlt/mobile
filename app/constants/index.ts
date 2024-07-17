@@ -31,7 +31,7 @@ export const URL_FEEDBACK = 'https://apie.lrt.lt/kontaktai/rasykite-mums';
 export const DEFAULT_FORECAST_LOCATION = 'vilnius';
 
 export const VIDEO_ASPECT_RATIO = 16 / 9;
-export const VIDEO_DEFAULT_BACKGROUND_IMAGE = 'https://www.lrt.lt/images/video-no-thumbnail.jpg';
+export const VIDEO_DEFAULT_BACKGROUND_IMAGE = 'https://www.lrt.lt/media/logo/LTV1.jpg?v=20245121947';
 
 //Article types
 export const ARTICLE_TYPE_TEXT = 1;
