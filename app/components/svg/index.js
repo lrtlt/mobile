@@ -30,6 +30,7 @@ export {default as IconClose} from './ic_close';
 export {default as IconDrawerMenu} from './ic_drawer_menu';
 export {default as Icon404} from './ic_404';
 export {default as IconPlay} from './ic_play';
+export {default as IconSubtitles} from './ic_subtitles';
 export {default as IconPlayerPlay} from './ic_player_play';
 export {default as IconPlayerPause} from './ic_player_pause';
 export {default as IconPlayerVolume} from './ic_player_volume';

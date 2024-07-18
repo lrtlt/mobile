@@ -55,7 +55,7 @@ interface Props {
   seekerEnd: number;
   isBuffering?: boolean;
   isMini?: boolean;
-  extraControls?: JSX.Element;
+  extraControls?: JSX.Element[];
 
   isPaused: boolean;
   onPlayPausePress: () => void;

@@ -67,9 +67,11 @@ const usePlayerLanguage = ({player}: Options) => {
   }, []);
 
   return {
-    LanguageButton: <LanguageButton audioTracks={audioTracks} onPress={handleLanguageButtonPress} />,
+    LanguageButton: (
+      <LanguageButton key={'btn-language'} audioTracks={audioTracks} onPress={handleLanguageButtonPress} />
+    ),
     LanguageMenu: showMenu ? (
-      <View key={'close'} style={{...styles.menuContainer, backgroundColor: '#222222'}}>
+      <View key={'menu-language'} style={{...styles.menuContainer, backgroundColor: '#222222'}}>
         {audioTracks.map((track) => renderAudioTrackItem({item: track}))}
         {renderBackButton()}
       </View>
@@ -94,7 +96,7 @@ const LanguageButton: React.FC<React.PropsWithChildren<Props>> = ({audioTracks, 
         onPress={() => onPress()}
         hitSlop={HIT_SLOP}
         activeOpacity={0.6}>
-        <IconLanguage size={ICON_SIZE} color={ICON_COLOR} />
+        <IconLanguage size={ICON_SIZE - 2} color={ICON_COLOR} />
       </TouchableOpacity>
     );
   }
