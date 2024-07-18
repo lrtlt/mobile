@@ -15,6 +15,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@grapp/stacks": "^3.1.0",
     "@native-html/table-plugin": "^5.3.1",
     "@notifee/react-native": "^7.8.2",
     "@react-native-async-storage/async-storage": "^1.22.1",
@@ -59,6 +60,7 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-theoplayer": "^7.6.0",
     "react-native-track-player": "https://github.com/lovegaoshi/react-native-track-player#dev-android-auto",
+    "react-native-unistyles": "^2.8.4",
     "react-native-webview": "13.10.5",
     "react-navigation-collapsible": "6.2.0",
     "react-redux": "^8.1.3",

@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
   titleText: {
     paddingStart: 0,
     fontSize: 15,
+    letterSpacing: 0.1,
   },
   descriptionText: {
     paddingStart: 0,

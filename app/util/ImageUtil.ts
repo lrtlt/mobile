@@ -14,18 +14,13 @@ export const IMG_SIZE_L: ImageSize = {width: 756, height: 425, aspectRatio: 1.78
 export const IMG_SIZE_XL: ImageSize = {width: 756, height: 425, aspectRatio: 1.78};
 export const IMG_SIZE_XXL: ImageSize = {width: 1287, height: 836, aspectRatio: 1.54};
 
-/**
- * Maximum available scale factor in percent
- * Where 1.0 = 100%
- */
-
 const sizes = [IMG_SIZE_XXS, IMG_SIZE_XS, IMG_SIZE_S, IMG_SIZE_M, IMG_SIZE_L, IMG_SIZE_XL];
 
 //Finds the image size for given width by finding smallest width offset.
 export const getImageSizeForWidth = (width: number) => {
   return (
     sizes.find((s) => {
-      return s.width >= width;
+      return s.width >= width + 50;
     }) || IMG_SIZE_S
   );
 };

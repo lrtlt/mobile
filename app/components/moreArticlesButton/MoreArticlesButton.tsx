@@ -34,13 +34,13 @@ export default MoreArticlesButton;
 
 const styles = StyleSheet.create({
   container: {
-    height: 60,
+    height: 48,
     alignItems: 'center',
     justifyContent: 'center',
     margin: 8,
   },
   title: {
     padding: 8,
-    fontSize: 16,
+    fontSize: 14,
   },
 });

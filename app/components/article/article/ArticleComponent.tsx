@@ -1,11 +1,11 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
 
 import CoverImage from '../../coverImage/CoverImage';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 
-import {getImageSizeForWidth, buildImageUri, buildArticleImageUri} from '../../../util/ImageUtil';
+import {buildImageUri, buildArticleImageUri, IMG_SIZE_M, IMG_SIZE_S} from '../../../util/ImageUtil';
 import {themeLight, useTheme} from '../../../Theme';
 import TextComponent from '../../text/Text';
 import {Article} from '../../../../Types';
@@ -39,10 +39,9 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
   style: styleProp,
   article,
   styleType,
-  dateEnabled,
+  dateEnabled = true,
   onPress,
 }) => {
-  const [dimensions, setDimensions] = useState({width: 0, height: 0});
   const {colors} = useTheme();
   const style = getArticleStyle(styleType);
 
@@ -81,16 +80,14 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
   );
 
   let imgUri;
-  if (dimensions.width > 0) {
-    if (article.img_path_prefix && article.img_path_postfix) {
-      imgUri = buildImageUri(
-        getImageSizeForWidth(dimensions.width),
-        article.img_path_prefix,
-        article.img_path_postfix,
-      );
-    } else if (article.photo) {
-      imgUri = buildArticleImageUri(getImageSizeForWidth(dimensions.width), article.photo);
-    }
+  if (article.img_path_prefix && article.img_path_postfix) {
+    imgUri = buildImageUri(
+      styleType === 'single' ? IMG_SIZE_M : IMG_SIZE_S,
+      article.img_path_prefix,
+      article.img_path_postfix,
+    );
+  } else if (article.photo) {
+    imgUri = buildArticleImageUri(styleType === 'single' ? IMG_SIZE_M : IMG_SIZE_S, article.photo);
   }
 
   return (
@@ -103,9 +100,6 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
               ...style.imageContainer,
               backgroundColor: colors.greyBackground,
               borderRadius: article.is_audio ? 8 : 0,
-            }}
-            onLayout={(event) => {
-              setDimensions(event.nativeEvent.layout);
             }}>
             <CoverImage
               style={style.image}
@@ -150,10 +144,6 @@ export default React.memo(ArticleComponent, (prevProps, nextProps) => {
   );
 });
 
-ArticleComponent.defaultProps = {
-  dateEnabled: true,
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -162,7 +152,6 @@ const styles = StyleSheet.create({
     flex: 1,
     overflow: 'hidden',
   },
-
   imageContainer: {
     justifyContent: 'center',
     aspectRatio: 3 / 2,
@@ -194,8 +183,8 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   subtitle: {
-    marginTop: 4,
-    fontSize: 14,
+    marginTop: 8,
+    fontSize: 13.5,
   },
   mediaIndicator: {
     position: 'absolute',
@@ -217,9 +206,6 @@ const styles = StyleSheet.create({
   badges: {
     paddingTop: 8,
   },
-  mediaIconContainer: {
-    paddingEnd: 8,
-  },
   listenCount: {
     position: 'absolute',
     bottom: 8,
@@ -229,13 +215,15 @@ const styles = StyleSheet.create({
 
 const stylesScroll = {
   ...styles,
+
   container: {
     ...styles.container,
     width: 280,
+    padding: 8,
   },
   title: {
     ...styles.title,
-    fontSize: 18,
+    fontSize: 17,
   },
 };
 
@@ -243,6 +231,6 @@ const stylesMulti = {
   ...styles,
   title: {
     ...styles.title,
-    fontSize: 17,
+    fontSize: 16,
   },
 };

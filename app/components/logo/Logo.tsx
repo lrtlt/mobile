@@ -4,8 +4,8 @@ import {useSettings} from '../../settings/useSettings';
 import {useSelector} from 'react-redux';
 import {selectLogo} from '../../redux/selectors';
 import {SvgCss} from 'react-native-svg/css';
-import {LogoDark, LogoLight} from '../svg';
-import {themeDark} from '../../Theme';
+import {LRTLogo} from '../svg';
+import {themeDark, useTheme} from '../../Theme';
 
 interface Props {
   width?: number;
@@ -19,6 +19,7 @@ const LogoComponent: React.FC<React.PropsWithChildren<Props>> = ({
   useOnlyInternal = false,
 }) => {
   const {isDarkMode} = useSettings();
+  const {colors} = useTheme();
 
   const logo = useSelector(selectLogo);
 
@@ -30,11 +31,7 @@ const LogoComponent: React.FC<React.PropsWithChildren<Props>> = ({
     return <SvgCss xml={formattedSvg} width={width} height={height} />;
   }
 
-  return isDarkMode ? (
-    <LogoDark width={width} height={height} />
-  ) : (
-    <LogoLight width={width} height={height} />
-  );
+  return <LRTLogo height={height} color={colors.headerTint} />;
 };
 
 export default React.memo(LogoComponent);

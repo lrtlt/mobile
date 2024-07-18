@@ -59,7 +59,7 @@ export const strings: Dictionary = {
   today: 'Šiandien',
   drawerMenu: 'NAUJIENOS',
   mainWindow: 'Pagrindinis',
-  tvProgramTitle: 'Tiesiogiai',
+  tvProgramTitle: 'Šiuo metu eteryje',
   tvProgram: 'PROGRAMA',
   tvProgramButtonText: 'VISA PROGRAMA',
   history: 'ISTORIJA',

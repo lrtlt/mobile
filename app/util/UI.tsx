@@ -20,10 +20,11 @@ import {
   IconWeatherSnow,
   IconWeatherSnowWind,
   IconWeatherSprinkle,
-  LogoLight,
+  LRTLogo,
 } from '../components/svg';
 
 import {ChannelColor, channelColors} from '../Theme';
+import {Color} from 'react-native-unistyles/lib/typescript/src/types';
 
 export type IconSize = {
   width?: number;
@@ -87,28 +88,28 @@ export const getColorsForChannelById = (channel_id?: number, fallback?: ChannelC
   }
 };
 
-export const getIconForChannel = (channel: string, size?: IconSize) => {
+export const getIconForChannel = (channel: string, size?: IconSize, color?: Color) => {
   switch (channel.toLowerCase()) {
     case 'ltv1': {
-      return <ChannelLRTHDIcon {...size} />;
+      return <ChannelLRTHDIcon {...size} color={color} />;
     }
     case 'ltv2': {
-      return <ChannelLRTPliusIcon {...size} />;
+      return <ChannelLRTPliusIcon {...size} color={color} />;
     }
     case 'world': {
-      return <ChannelLRTWorldIcon {...size} />;
+      return <ChannelLRTWorldIcon {...size} color={color} />;
     }
     case 'lr': {
-      return <ChannelLRadioIcon {...size} />;
+      return <ChannelLRadioIcon {...size} color={color} />;
     }
     case 'klasika': {
-      return <ChannelClassicIcon {...size} />;
+      return <ChannelClassicIcon {...size} color={color} />;
     }
     case 'opus': {
-      return <ChannelOpusIcon {...size} />;
+      return <ChannelOpusIcon {...size} color={color} />;
     }
     default: {
-      return <LogoLight {...size} />;
+      return <LRTLogo {...size} color={color} />;
     }
   }
 };
