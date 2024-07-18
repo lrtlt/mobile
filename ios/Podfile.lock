@@ -2142,6 +2142,10 @@ PODS:
   - react-native-track-player (4.1.1):
     - React-Core
     - SwiftAudioEx (= 1.1.0)
+  - react-native-unistyles (2.8.4):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - react-native-webview (13.10.5):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -2356,7 +2360,7 @@ PODS:
     - React-Core
   - RNPermissions (3.10.1):
     - React-Core
-  - RNReanimated (3.13.0):
+  - RNReanimated (3.14.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2434,6 +2438,7 @@ DEPENDENCIES:
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-theoplayer (from `../node_modules/react-native-theoplayer`)
   - react-native-track-player (from `../node_modules/react-native-track-player`)
+  - react-native-unistyles (from `../node_modules/react-native-unistyles`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -2592,6 +2597,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-theoplayer"
   react-native-track-player:
     :path: "../node_modules/react-native-track-player"
+  react-native-unistyles:
+    :path: "../node_modules/react-native-unistyles"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-nativeconfig:
@@ -2740,6 +2747,7 @@ SPEC CHECKSUMS:
   react-native-slider: 9cfd2f0af9efe89a3ed372fcda8eca65109aa94c
   react-native-theoplayer: 90b4904af8c6b07514ead3837c8e0703d75efac9
   react-native-track-player: 82ef1756ffeea61140fea17519ecd6d64ec3cf3e
+  react-native-unistyles: b90e371633819bb6eb4ae79cb46dcd1ee490910e
   react-native-webview: f8f61799dda94b4cc3a864b06c4c229d1a9ced1d
   React-nativeconfig: b42fe8e97a8d164aebeb6821a27076406b64fbb9
   React-NativeModulesApple: a641fb50cd15f37522f5f5cd7e09fd85789219d2
@@ -2772,7 +2780,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: bbb04bccfd972fc228f7307815ccd11f47324605
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
   RNPermissions: 60d60ce58c13537514288f285910c8b1cd12908d
-  RNReanimated: fdee63ce166e670399f94fcf488f5bad83b06e3e
+  RNReanimated: bdad5bb985369b2661a63f9e928faf78443bf37f
   RNScreens: 136d868cc4a78b41042a1a5f1cb42b99a47033f5
   RNShare: 0fad69ae2d71de9d1f7b9a43acf876886a6cb99c
   RNSVG: a48668fd382115bc89761ce291a81c4ca5f2fd2e

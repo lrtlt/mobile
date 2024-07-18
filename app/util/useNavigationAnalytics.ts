@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useEffect, useMemo} from 'react';
 import {ChartbeatTracker} from './useChartbeatSetup';
 import {debounce} from 'lodash';
+import analytics from '@react-native-firebase/analytics';
 
 const EVENT_DEBOUNCE_DURATION = 200;
 
@@ -24,6 +25,11 @@ const useNavigationAnalytics = (params?: TrackingParams) => {
           title: p.title,
           authors: p.authors,
           sections: p.sections,
+        });
+
+        analytics().logScreenView({
+          screen_name: p.title,
+          screen_class: p.viewId.replace('https://www.lrt.lt', ''),
         });
       }, EVENT_DEBOUNCE_DURATION),
     [],
