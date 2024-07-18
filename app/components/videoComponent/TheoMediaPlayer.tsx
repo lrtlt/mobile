@@ -28,6 +28,7 @@ import {EventRegister} from 'react-native-event-listeners';
 import FastImage from 'react-native-fast-image';
 import {useSettings} from '../../settings/useSettings';
 import {VideoTextTrack} from '../../api/Types';
+import usePlayerSubtitles from './usePlayerSubtitles';
 
 export type PlayerAction = 'togglePlay' | 'setFullScreen';
 
@@ -65,7 +66,6 @@ const makeSource = (
   tracks?: VideoTextTrack[],
 ): SourceDescription => ({
   poster: poster,
-  textTracks: Platform.OS === 'android' ? tracks : undefined,
   metadata: {
     title: title,
     // subtitle: title,
@@ -80,6 +80,7 @@ const makeSource = (
       src: uri,
     },
   ],
+  textTracks: Platform.OS === 'android' ? tracks : undefined,
 });
 
 const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
@@ -375,6 +376,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   }, [uuid, _playPauseControl, _fullScreenControl]);
 
   const {LanguageButton, LanguageMenu} = usePlayerLanguage({player: player});
+  const {SubtitlesButton, SubtitlesMenu} = usePlayerSubtitles({player: player});
 
   return (
     <View style={styles.container}>
@@ -409,7 +411,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
                 isFullScreen={player.presentationMode === PresentationMode.fullscreen}
                 onSeekRequest={_seekControl}
                 onSeekByRequest={_seekByControl}
-                extraControls={LanguageButton}
+                extraControls={[SubtitlesButton, LanguageButton]}
                 isMini={isFloating}
               />
             </View>
@@ -418,6 +420,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
       </THEOplayerView>
 
       {LanguageMenu}
+      {SubtitlesMenu}
     </View>
   );
 };
