@@ -147,11 +147,11 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
 
   //TODO: using default SafeAreaView because react-native-safe-area-context stutters
   return (
-    <SafeAreaView style={styles.flex}>
+    <SafeAreaView style={styles.root}>
       <View style={styles.container}>
         <Animated.FlatList
           onScroll={onScroll}
-          contentContainerStyle={{paddingTop: containerPaddingTop}}
+          contentContainerStyle={{paddingTop: containerPaddingTop, paddingBottom: 24}}
           scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
           data={articleData}
           windowSize={6}
@@ -170,7 +170,7 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
 export default ArticleContentComponent;
 
 const styles = StyleSheet.create({
-  flex: {
+  root: {
     flex: 1,
   },
   container: {
