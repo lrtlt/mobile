@@ -97,7 +97,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
   }
 
   return (
-    <View style={props.style}>
+    <View key={data.streamUri} style={props.style}>
       <TheoMediaPlayer
         streamUri={data.streamUri}
         title={data.title}
