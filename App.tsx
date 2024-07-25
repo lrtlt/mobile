@@ -14,6 +14,7 @@ import PlayerProvider from './app/components/videoComponent/context/PlayerProvid
 import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import ThemeProvider from './app/theme/ThemeProvider';
+import useAppCheckSetup from './app/util/useAppCheckSetup';
 
 const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
   return (
@@ -26,6 +27,7 @@ const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
 };
 
 const App: React.FC = () => {
+  useAppCheckSetup();
   useNotificationsPermission();
   useAppTrackingPermission();
   useGoogleAnalyticsSetup();

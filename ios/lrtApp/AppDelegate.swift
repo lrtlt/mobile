@@ -2,6 +2,7 @@ import CarPlay
 import Firebase
 import GoogleCast
 import React
+import RNFBAppCheck
 import React_RCTAppDelegate
 import UIKit
 
@@ -23,7 +24,9 @@ class AppDelegate: RCTAppDelegate, GCKLoggerDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+    RNFBAppCheckModule.sharedInstance()
     FirebaseApp.configure()
+    
     let kReceiverAppID = kGCKDefaultMediaReceiverApplicationID
     let criteria = GCKDiscoveryCriteria(applicationID: kReceiverAppID)
     let options = GCKCastOptions(discoveryCriteria: criteria)
