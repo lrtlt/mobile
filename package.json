@@ -22,6 +22,7 @@
     "@react-native-community/slider": "^4.5.0",
     "@react-native-firebase/analytics": "^19.3.0",
     "@react-native-firebase/app": "^19.3.0",
+    "@react-native-firebase/app-check": "^19.3.0",
     "@react-native-firebase/crashlytics": "^19.3.0",
     "@react-native-firebase/firestore": "^19.3.0",
     "@react-native-firebase/messaging": "^19.3.0",
