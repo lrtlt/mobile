@@ -16,6 +16,9 @@ import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import ThemeProvider from './app/theme/ThemeProvider';
 import useAppCheckSetup from './app/util/useAppCheckSetup';
 
+import {enableFreeze} from 'react-native-screens';
+enableFreeze(true);
+
 const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
   return (
     <Provider store={store}>
