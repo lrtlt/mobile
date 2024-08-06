@@ -1,8 +1,9 @@
 import {firebase} from '@react-native-firebase/app-check';
 import {useEffect} from 'react';
+import analytics from '@react-native-firebase/analytics';
 
-const rnfbProvider = firebase.appCheck().newReactNativeFirebaseAppCheckProvider();
-rnfbProvider.configure({
+const appCheckProvider = firebase.appCheck().newReactNativeFirebaseAppCheckProvider();
+appCheckProvider.configure({
   android: {
     provider: __DEV__ ? 'debug' : 'playIntegrity',
     debugToken: '62BDDD90-4D52-41F2-9F2C-6DC6F3B398C9',
@@ -13,25 +14,27 @@ rnfbProvider.configure({
   },
 });
 
-const setup = async () => {
-  await firebase.appCheck().initializeAppCheck({provider: rnfbProvider, isTokenAutoRefreshEnabled: true});
-};
-
 const verify = async () => {
   try {
     const {token} = await firebase.appCheck().getToken(true);
 
     if (token.length > 0) {
       console.log('AppCheck verification passed');
+      analytics().logEvent('app_check_verification_passed');
     }
   } catch (error) {
     console.warn('AppCheck verification failed');
+    analytics().logEvent('app_check_verification_failed');
   }
 };
 
 const useAppCheckSetup = () => {
   useEffect(() => {
-    setup().then(verify).catch(console.error);
+    firebase
+      .appCheck()
+      .initializeAppCheck({provider: appCheckProvider, isTokenAutoRefreshEnabled: true})
+      .then(verify)
+      .catch(console.error);
   }, []);
 };
 
