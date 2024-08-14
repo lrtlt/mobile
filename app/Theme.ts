@@ -113,11 +113,11 @@ type ChannelColorScheme = {
 };
 
 export const channelColors: ChannelColorScheme = {
-  color_set_lrtHD: {primary: '#83a8d9', secondary: '#0a45bc'},
-  color_set_lrtPlius: {primary: '#A91B73', secondary: '#721F47'},
-  color_set_lrt_world: {primary: '#6D9B36', secondary: '#007A3C'},
-  color_set_l_radio: {primary: '#EA8D7A', secondary: '#D92053'},
-  color_set_classic: {primary: '#C47FAA', secondary: '#441D56'},
+  color_set_lrtHD: {primary: '#83a8d9', secondary: '#2C478B'},
+  color_set_lrtPlius: {primary: '#A91B73', secondary: '#7D2B7C'},
+  color_set_lrt_world: {primary: '#6D9B36', secondary: '#64B445'},
+  color_set_l_radio: {primary: '#EA8D7A', secondary: '#C4242C'},
+  color_set_classic: {primary: '#C47FAA', secondary: '#603680'},
   color_set_opus: {primary: '#F2B12E', secondary: '#E7792B'},
   color_set_lrtLT: {primary: '#545a94', secondary: '#2f357d'},
   color_set_default: {primary: '#BADAFB', secondary: '#93BDE7'},

@@ -28,14 +28,14 @@ const ChannelV2: React.FC<React.PropsWithChildren<Props>> = ({data, onPress}) =>
       <View
         style={{
           ...styles.bottomBar,
-          backgroundColor: dark ? colors.primary : colorsSet.secondary,
+          backgroundColor: colorsSet.secondary,
         }}
       />
       <View
         style={{
           ...styles.bottomBarOverlay,
           width: `${Math.max(0, Math.min(Number(data.proc), 100))}%`,
-          backgroundColor: dark ? colors.primary : colorsSet.secondary,
+          backgroundColor: colorsSet.secondary,
         }}
       />
     </View>
@@ -53,14 +53,16 @@ const ChannelV2: React.FC<React.PropsWithChildren<Props>> = ({data, onPress}) =>
             height: '100%',
             justifyContent: 'flex-start',
             alignItems: 'flex-start',
-            backgroundColor: colorsSet.primary + '10',
+            backgroundColor: dark ? '#FFFFFF08' : colorsSet.primary + '10',
             borderRadius: 6,
             paddingVertical: 12,
             paddingHorizontal: 8,
             borderColor: isLive ? colors.listSeparator : 'transparent',
             borderWidth: isLive ? StyleSheet.hairlineWidth : undefined,
           }}>
-          {getIconForChannel(data.channel, {height: 24}, dark ? colors.primary : colorsSet.secondary)}
+          <View style={{backgroundColor: '#FFFFFF00', paddingHorizontal: 4, borderRadius: 4}}>
+            {getIconForChannel(data.channel, {height: 24}, dark ? colors.text : colorsSet.secondary)}
+          </View>
           <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
             <TextComponent style={{...styles.timeText, color: colors.text}}>
               {data.time_start + ' - ' + data.time_end}

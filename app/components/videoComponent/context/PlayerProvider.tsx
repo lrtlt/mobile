@@ -82,7 +82,7 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
             </TouchableDebounce>
           </View>
         </View>
-        <View style={{height: bottom - 8, backgroundColor: colors.background}} />
+        <View style={{height: bottom, backgroundColor: colors.background}} />
       </TouchableDebounce>
     );
   }, [uuid, colors, dark, handleFullScreen, currentMedia]);

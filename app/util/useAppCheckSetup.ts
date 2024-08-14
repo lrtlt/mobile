@@ -21,6 +21,9 @@ const verify = async () => {
     if (token.length > 0) {
       console.log('AppCheck verification passed');
       analytics().logEvent('app_check_verification_passed');
+    } else {
+      console.warn('AppCheck verification warning');
+      analytics().logEvent('app_check_verification_empty_token');
     }
   } catch (error) {
     console.warn('AppCheck verification failed');
@@ -34,7 +37,10 @@ const useAppCheckSetup = () => {
       .appCheck()
       .initializeAppCheck({provider: appCheckProvider, isTokenAutoRefreshEnabled: true})
       .then(verify)
-      .catch(console.error);
+      .catch((e) => {
+        console.warn('AppCheck initialization failed', e);
+        analytics().logEvent('app_check_initialization_error');
+      });
   }, []);
 };
 

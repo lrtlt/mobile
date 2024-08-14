@@ -78,9 +78,20 @@ const makeSource = (
   sources: [
     {
       src: uri,
+      // src: 'https://cdn.theoplayer.com/video/elephants-dream/playlistCorrectionENG.m3u8',
+      // type: 'application/x-mpegurl',
     },
   ],
-  textTracks: Platform.OS === 'android' ? tracks : undefined,
+  // textTracks: [
+  //   {
+  //     default: true,
+  //     src: 'https://www.lrt.lt/media/VIDEO/2024-07/ZIN42126_W_828f0acf-e712-4f53-a1c3-7f4ba05dea2a.txt',
+  //     label: 'LRT Test',
+  //     kind: 'subtitles',
+  //     srclang: 'lt',
+  //   },
+  // ],
+  textTracks: tracks,
 });
 
 const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({

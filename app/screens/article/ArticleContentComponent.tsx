@@ -1,12 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {
-  View,
-  Animated,
-  StyleSheet,
-  ListRenderItemInfo,
-  useWindowDimensions,
-  SafeAreaView,
-} from 'react-native';
+import {View, Animated, StyleSheet, ListRenderItemInfo, useWindowDimensions} from 'react-native';
 import Header from './header/Header';
 import {getSmallestDim} from '../../util/UI';
 import {ArticleGallery, VideoComponent, AudioComponent, Text, ArticleContentItem} from '../../components';
@@ -31,6 +24,7 @@ import {ArticleContent} from '../../api/Types';
 import AudioContent from './audioContent/AudioContent';
 import ArticleMainPhoto from './mainPhoto/ArticleMainPhoto';
 import ArticleKeywords from './keywords/ArticleKeywords';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export type ArticleSelectableItem = {
   type: 'photo' | 'article';
@@ -145,13 +139,12 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
     0,
   );
 
-  //TODO: using default SafeAreaView because react-native-safe-area-context stutters
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.container}>
         <Animated.FlatList
           onScroll={onScroll}
-          contentContainerStyle={{paddingTop: containerPaddingTop, paddingBottom: 24}}
+          contentContainerStyle={{paddingTop: containerPaddingTop}}
           scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
           data={articleData}
           windowSize={6}

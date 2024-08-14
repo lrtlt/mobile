@@ -30,6 +30,7 @@ class LiveTemplate extends BaseListTemplate {
                 fetchStreamData({
                   url: channel.stream_url,
                   title: channel.channel_title,
+                  prioritizeAudio: true,
                   //Return channel id as poster so we can map it to the actual image later
                   poster: channel.channel_id.toString(),
                 }),
@@ -44,6 +45,7 @@ class LiveTemplate extends BaseListTemplate {
                 // detailText: stream.title,
                 imgUrl: getImageByChannelId(stream.poster),
                 streamUrl: stream.streamUri,
+                isLiveStream: true,
               }));
               return items;
             }

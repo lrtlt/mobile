@@ -21,7 +21,7 @@ const SvgComponent = (props) => {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M35.599 31.853h2.697V.305h-2.697v31.548Z"
-        fill={props.color ? props.color : '#7D2B7C'}
+        fill="#7D2B7C"
       />
     </Svg>
   );

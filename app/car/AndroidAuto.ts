@@ -138,6 +138,7 @@ export const onLiveTabOpened = withDebounce(
             fetchStreamData({
               url: channel.stream_url,
               title: channel.channel_title,
+              prioritizeAudio: true,
               //Return channel id as poster so we can map it to the actual image later
               poster: channel.channel_id.toString(),
             }),

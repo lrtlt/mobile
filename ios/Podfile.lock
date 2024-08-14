@@ -2143,7 +2143,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.10.8):
     - React-Core
-  - react-native-theoplayer (7.7.1):
+  - react-native-theoplayer (7.8.0):
     - google-cast-sdk-dynamic-xcframework (~> 4.8)
     - React-Core
     - THEOplayer-Connector-SideloadedSubtitle (~> 7.8)
@@ -2774,7 +2774,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: ce73434826e4dca60108c3b3a30d83792ff28b0c
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
-  react-native-theoplayer: 7f7578a010abde01dcc0a11c1e7456e7ff05d919
+  react-native-theoplayer: 984919afa3298209c64d42970795620d0495d58e
   react-native-track-player: 82ef1756ffeea61140fea17519ecd6d64ec3cf3e
   react-native-unistyles: 09e05ab8e91560b9f7c27a051c1b3295717bf705
   react-native-webview: f8f61799dda94b4cc3a864b06c4c229d1a9ced1d
