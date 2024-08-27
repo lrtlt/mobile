@@ -247,6 +247,7 @@ export type VideoDataLiveStream = {
 
 export type VideoTextTrack = {
   src: string;
+  srclang: string;
   kind: string;
   label: string;
   default: boolean;

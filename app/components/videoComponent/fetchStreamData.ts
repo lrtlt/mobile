@@ -45,8 +45,7 @@ export const fetchStreamData = ({
           tracks: playlist_item.tracks?.map((track) => ({
             ...track,
             src: track.src.startsWith('http') ? track.src : BASE_IMG_URL + track.src,
-            //TODO: remove hardcoded language when backend will provide it
-            srclang: 'lt',
+            srclang: track.srclang ?? 'lt',
           })),
         };
         return streamData;
