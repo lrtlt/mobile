@@ -7,11 +7,12 @@ import {selectDailyQuestionChoice} from '../../redux/selectors';
 
 interface DailyQuestionWrapperProps {
   id: string | number;
+  contentMargin?: number;
 }
 
 const VOTES_REFRESH_RATE = 1000 * 15; // 15 sec
 
-const DailyQuestionWrapper: React.FC<DailyQuestionWrapperProps> = ({id}) => {
+const DailyQuestionWrapper: React.FC<DailyQuestionWrapperProps> = ({id, contentMargin}) => {
   const {question, refresh} = useDailyQuestionData(id);
   const answer = useSelector(selectDailyQuestionChoice);
 
@@ -32,7 +33,7 @@ const DailyQuestionWrapper: React.FC<DailyQuestionWrapperProps> = ({id}) => {
 
   if (question) {
     return (
-      <View style={styles.container}>
+      <View style={{...styles.container, margin: contentMargin}}>
         <DailyQuestionComponent block={question} />
       </View>
     );

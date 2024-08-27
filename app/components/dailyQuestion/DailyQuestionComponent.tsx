@@ -108,7 +108,6 @@ export default React.memo(DailyQuestionComponent);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 12,
     borderWidth: 1,
   },
   topContainer: {

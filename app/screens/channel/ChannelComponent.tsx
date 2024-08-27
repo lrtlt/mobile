@@ -118,7 +118,9 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
           streamData={selectedStream}
         />
       </View>
-      {channel_info.daily_question && <DailyQuestionWrapper id={channel_info.daily_question} />}
+      {channel_info.daily_question && (
+        <DailyQuestionWrapper id={channel_info.daily_question} contentMargin={12} />
+      )}
       <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>
         {streamSelectionComponent}
 

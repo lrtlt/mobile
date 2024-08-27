@@ -4,6 +4,7 @@ import {
   ArticleEmbedArticleType,
   ArticleEmbedAudioType,
   ArticleEmbedBroadcastType,
+  ArticleEmbedDailyQuestionType,
   ArticleEmbedHTMLType,
   ArticleEmbedPhotoalbumType,
   ArticleEmbedPhotoType,
@@ -21,6 +22,7 @@ import EmbedPhotoalbum from './embedComponents/EmbedPhotoalbum';
 import EmbedPhotos from './embedComponents/EmbedPhotos';
 import EmbedVideo from './embedComponents/EmbedVideo';
 import EmbedTimeline from './embedComponents/EmbedTimeline';
+import DailyQuestionWrapper from '../../dailyQuestion/DailyQuestionWrapper';
 
 interface Props {
   embedArray: ArticleEmbedType[];
@@ -104,6 +106,9 @@ const ArticleEmbed: React.FC<React.PropsWithChildren<Props>> = ({embedArray, ite
                     data={(e as ArticleEmbedPhotoalbumType[])[0]}
                   />
                 );
+              }
+              case 'daily_question': {
+                return <DailyQuestionWrapper id={(e as ArticleEmbedDailyQuestionType[])[0].question_id} />;
               }
               default: {
                 console.warn('Unkown embed:' + JSON.stringify(e));
