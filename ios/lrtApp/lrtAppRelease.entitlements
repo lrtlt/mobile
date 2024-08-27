@@ -3,10 +3,12 @@
 <plist version="1.0">
 	<dict>
 		<key>aps-environment</key>
-		<string>development</string>
-		<key>com.apple.developer.networking.wifi-info</key>
-		<true />
+		<string>production</string>
 		<key>com.apple.developer.carplay-audio</key>
+		<true />
+		<key>com.apple.developer.devicecheck.appattest-environment</key>
+		<string>production</string>
+		<key>com.apple.developer.networking.wifi-info</key>
 		<true />
 	</dict>
 </plist>
