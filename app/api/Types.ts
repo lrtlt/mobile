@@ -438,7 +438,8 @@ export type ArticleEmbedType =
   | ArticleEmbedBroadcastType
   | ArticleEmbedHTMLType
   | ArticleEmbedPhotoalbumType
-  | ArticleEmbedTimelineType;
+  | ArticleEmbedTimelineType
+  | ArticleEmbedDailyQuestionType;
 
 export type ArticleEmbedPhotoType = {
   embed_type: 'photo';
@@ -521,6 +522,12 @@ export type ArticleEmbedPhotoalbumType = {
 export type ArticleEmbedTimelineType = {
   embed_type: 'timeline';
   src: string;
+};
+
+export type ArticleEmbedDailyQuestionType = {
+  embed_type: 'daily_question';
+  question_id: number;
+  is_daily_question: 0 | 1;
 };
 
 export type CarPlaylistItem = {
