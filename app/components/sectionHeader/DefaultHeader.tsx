@@ -41,10 +41,9 @@ const styles = StyleSheet.create({
   },
   separator: {
     flex: 1,
-    height: 2,
+    height: StyleSheet.hairlineWidth,
     marginStart: 8,
     marginEnd: 8,
-    marginTop: 4,
     marginBottom: 4,
   },
 });

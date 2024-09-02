@@ -30,6 +30,7 @@ import TopUrlBlock from './blocks/TopUrlsBlock/TopUrlBlock';
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
 import EpikaBlock from './blocks/EpikaBlock/EpikaBlock';
+import VideoListBlock from './blocks/VideoListBlock/VideoListBlock';
 
 interface Props {
   isCurrent: boolean;
@@ -137,6 +138,9 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
         }
         case 'top_feed': {
           return <TopFeedBlock block={block} />;
+        }
+        case 'vertical_video_list': {
+          return <VideoListBlock block={block} />;
         }
         case 'top_articles': {
           return <TopArticlesBlock block={block} />;
