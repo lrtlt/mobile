@@ -1,0 +1,235 @@
+openapi: '3.0.3'
+security:
+  - BearerAuth: [accessToken, serverToken]
+
+info:
+  title: LRT users API
+  version: '1.0'
+servers:
+  - url: https://lrt.lt/api/v1
+paths:
+  /users/{id}:
+    get:
+      summary: Get User by ID
+      description: Retrieve a user by their ID
+      security:
+        - BearerAuth: [accessToken]
+      tags: [Users]
+
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the user to retrieve
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto' # Reference the User schema
+
+  /users:
+    post:
+      summary: Create User
+      description: Create a new user
+      security:
+        - BearerAuth: [serverToken]
+      tags: [Users]
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto' # Reference the User schema
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto' # Reference the User schema
+
+  /users/{id}/articles:
+    post:
+      summary: Save User Article
+      description: Save an article for a user
+      security:
+        - BearerAuth: [accessToken]
+      tags: [Articles]
+
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the user
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSavedArticle' # Reference the UserSavedArticle schema
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSavedArticle' # Reference the UserSavedArticle schema
+    get:
+      summary: Get User Saved Articles
+      description: Retrieve all saved articles for a user
+      security:
+        - BearerAuth: [accessToken]
+      tags: [Articles]
+
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the user
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSavedArticle' # Reference the UserSavedArticle schema
+
+    delete:
+      summary: Remove User Saved Article
+      description: Remove a saved article for a user
+      security:
+        - BearerAuth: [accessToken]
+      tags: [Articles]
+
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the user
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteArticleDto' # Reference the UserSavedArticle schema
+
+      responses:
+        '204':
+          description: No Content
+
+  /users/{id}/article-history:
+    post:
+      summary: Save User Article History
+      description: Save the history of an article for a user
+      security:
+        - BearerAuth: [accessToken]
+      tags: [ArticleHistory]
+
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the user
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSavedArticle' # Reference the UserSavedArticle schema
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSavedArticle' # Reference the UserSavedArticle schema
+
+    get:
+      summary: Get User Article History
+      description: Retrieve the history of articles for a user
+      security:
+        - BearerAuth: []
+      tags: [ArticleHistory]
+
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the user
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSavedArticle' # Reference the UserSavedArticle schema
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          readOnly: true
+    UserSavedArticle:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        userId:
+          type: integer
+        articleId:
+          type: integer
+        createdAt:
+          type: string
+          readOnly: true
+    DeleteArticleDto:
+      type: object
+      properties:
+        articleId:
+          type: integer
