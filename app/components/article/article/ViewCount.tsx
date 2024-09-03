@@ -3,7 +3,7 @@ import {View, StyleSheet, ViewStyle} from 'react-native';
 import {Article} from '../../../../Types';
 import {ARTICLE_TYPE_VIDEO} from '../../../constants';
 import {useTheme} from '../../../Theme';
-import {Icon404, IconAudioReadCount, IconView} from '../../svg';
+import {IconView} from '../../svg';
 import TextComponent from '../../text/Text';
 
 interface ViewCountProps {

@@ -63,7 +63,7 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
               startTime={currentMedia.startTime}
               tracks={currentMedia.tracks}
               autoStart={true}
-              isFloating={true}
+              isMini={true}
               controls={false}
               onEnded={handleClose}
             />

@@ -2,17 +2,20 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {HomeBlockVideoList} from '../../../../../../api/Types';
 import {Article} from '../../../../../../../Types';
 import {StyleSheet, View} from 'react-native';
-import {buildArticleImageUri, buildImageUri, IMG_SIZE_L, IMG_SIZE_XL} from '../../../../../../util/ImageUtil';
-import {SectionHeader} from '../../../../../../components';
+import {buildArticleImageUri, buildImageUri, IMG_SIZE_XL} from '../../../../../../util/ImageUtil';
+import {SectionHeader, TouchableDebounce} from '../../../../../../components';
 import {useCallback} from 'react';
 import {openCategoryForId} from '../../../../../../redux/actions';
 import {useDispatch} from 'react-redux';
 import TextComponent from '../../../../../../components/text/Text';
-import {themeDark, useTheme} from '../../../../../../Theme';
+import {themeDark, themeLight, useTheme} from '../../../../../../Theme';
 import LinearGradient from 'react-native-linear-gradient';
 import {IconPlay} from '../../../../../../components/svg';
 import ViewCount from '../../../../../../components/article/article/ViewCount';
 import FastImage from 'react-native-fast-image';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MainStackParamList} from '../../../../../../navigation/MainStack';
 
 interface VideoListBlockProps {
   block: HomeBlockVideoList;
@@ -23,6 +26,7 @@ const VideoListBlock: React.FC<VideoListBlockProps> = ({block}) => {
   const {category_id, category_title} = block.data;
 
   const dispatch = useDispatch();
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const onHeaderPressHandler = useCallback(() => {
     dispatch(openCategoryForId(category_id, category_title));
@@ -42,8 +46,18 @@ const VideoListBlock: React.FC<VideoListBlockProps> = ({block}) => {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{gap: 8, paddingHorizontal: 8, paddingVertical: 24}}>
-        {articles.map((article) => (
-          <VerticalVideoComponent key={article.id} article={article} />
+        {articles.map((article, i) => (
+          <TouchableDebounce
+            key={article.id}
+            onPress={() =>
+              navigation.navigate('VideoList', {
+                title: category_title,
+                articles: articles,
+                initialIndex: i,
+              })
+            }>
+            <VerticalVideoComponent article={article} />
+          </TouchableDebounce>
         ))}
       </ScrollView>
     </View>
@@ -70,7 +84,7 @@ const VerticalVideoComponent: React.FC<{article: Article}> = ({article}) => {
     <View
       style={{
         borderRadius: 4,
-        backgroundColor: colors.primary,
+        backgroundColor: themeLight.colors.primary,
         width: 32,
         height: 32,
         justifyContent: 'center',

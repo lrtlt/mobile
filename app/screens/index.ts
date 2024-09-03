@@ -15,3 +15,4 @@ export {default as CustomPageScreen} from './customPage/CustomPageScreen';
 export {default as WebPageScreen} from './webPage/WebPageScreen';
 export {default as WeatherScreen} from './weather/WeatherScreen';
 export {default as CategoryScreen} from './category/CategoryScreen';
+export {default as VerticalVideosScreen} from './verticalVideos/VerticalVideosScreen';

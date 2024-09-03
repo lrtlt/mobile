@@ -18,27 +18,40 @@ interface Props {
   autoPlay: boolean;
   startTime?: number;
   streamData?: StreamData;
+  minifyEnabled?: boolean;
+  aspectRatio?: number;
 }
 
 const MAX_ERROR_COUNT = 3;
 const ERROR_DELAY = 1000;
 
-const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
+const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
+  style,
+  cover,
+  backgroundImage,
+  streamUrl,
+  title,
+  autoPlay = true,
+  startTime,
+  streamData,
+  minifyEnabled = true,
+  aspectRatio,
+}) => {
   const {colors, strings} = useTheme();
-  const {isLoading, data, load} = useStreamData(props.streamData);
+  const {isLoading, data, load} = useStreamData(streamData);
 
   const errorCountRef = useRef(0);
 
   useEffect(() => {
-    if (props.autoPlay && !data) {
-      load(props.streamUrl, props.title);
+    if (autoPlay && !data) {
+      load(streamUrl, title);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onPlayPress = useCallback(() => {
-    load(props.streamUrl, props.title);
-  }, [load, props.streamUrl, props.title]);
+    load(streamUrl, title);
+  }, [load, streamUrl, title]);
 
   const onPlayerError = useCallback(
     (e: any) => {
@@ -47,18 +60,18 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
         if (errorCountRef.current < MAX_ERROR_COUNT) {
           errorCountRef.current = errorCountRef.current + 1;
           console.log('Video error count:', errorCountRef.current);
-          load(props.streamUrl, props.title);
+          load(streamUrl, title);
         } else {
           console.log('Max error count reached!');
         }
       }, errorCountRef.current * ERROR_DELAY);
     },
-    [load, props.streamUrl, props.title],
+    [load, streamUrl, title],
   );
 
   if (errorCountRef.current >= MAX_ERROR_COUNT) {
     return (
-      <View style={{...props.style}}>
+      <View style={{...style}}>
         <View style={styles.loaderContainer}>
           <TextComponent type="error" style={styles.errorText}>
             {strings.liveChanelError}
@@ -67,7 +80,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
             style={{...styles.button, borderColor: colors.textError}}
             onPress={() => {
               errorCountRef.current = 0;
-              load(props.streamUrl, props.title);
+              load(streamUrl, title);
             }}>
             <TextComponent style={{color: colors.onPrimary}}>{strings.tryAgain}</TextComponent>
           </RectButton>
@@ -79,7 +92,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
   if (!data) {
     if (isLoading) {
       return (
-        <View style={props.style}>
+        <View style={style}>
           <View style={{...styles.loaderContainer}}>
             <ActivityIndicator size="small" animating={isLoading} color={colors.primary} />
           </View>
@@ -87,9 +100,9 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
       );
     } else {
       return (
-        <View style={props.style}>
+        <View style={style}>
           <TouchableDebounce onPress={onPlayPress}>
-            <VideoCover {...props.cover} />
+            <VideoCover {...cover} />
           </TouchableDebounce>
         </View>
       );
@@ -97,15 +110,17 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
   }
 
   return (
-    <View key={data.streamUri} style={props.style}>
+    <View key={data.streamUri} style={style}>
       <TheoMediaPlayer
         streamUri={data.streamUri}
         title={data.title}
         autoStart={true}
         isLiveStream={data.isLiveStream}
-        startTime={data.isLiveStream ? undefined : props.startTime || data.offset}
-        poster={props.backgroundImage ?? data.poster}
+        startTime={data.isLiveStream ? undefined : startTime || data.offset}
+        poster={backgroundImage ?? data.poster}
         tracks={data.tracks}
+        minifyEnabled={minifyEnabled}
+        aspectRatio={aspectRatio}
         mediaType={
           data.mediaType != undefined
             ? data.mediaType
@@ -117,10 +132,6 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = (props) => {
       />
     </View>
   );
-};
-
-VideoComponent.defaultProps = {
-  autoPlay: true,
 };
 
 export default VideoComponent;
