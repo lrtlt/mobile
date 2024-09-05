@@ -20,6 +20,7 @@ interface Props {
   streamData?: StreamData;
   minifyEnabled?: boolean;
   aspectRatio?: number;
+  backgroundAudioEnabled?: boolean;
 }
 
 const MAX_ERROR_COUNT = 3;
@@ -35,6 +36,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
   startTime,
   streamData,
   minifyEnabled = true,
+  backgroundAudioEnabled = true,
   aspectRatio,
 }) => {
   const {colors, strings} = useTheme();
@@ -102,7 +104,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
       return (
         <View style={style}>
           <TouchableDebounce onPress={onPlayPress}>
-            <VideoCover {...cover} />
+            <VideoCover {...cover} aspectRatio={aspectRatio} />
           </TouchableDebounce>
         </View>
       );
@@ -121,6 +123,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
         tracks={data.tracks}
         minifyEnabled={minifyEnabled}
         aspectRatio={aspectRatio}
+        backgroundAudioEnabled={backgroundAudioEnabled}
         mediaType={
           data.mediaType != undefined
             ? data.mediaType

@@ -45,6 +45,7 @@ interface Props {
   uuid?: string;
   controls?: boolean;
   aspectRatio?: number;
+  backgroundAudioEnabled?: boolean;
   tracks?: VideoTextTrack[];
   onError?: (e?: any) => void;
   onEnded?: () => void;
@@ -110,6 +111,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   uuid,
   controls = true,
   aspectRatio = 16 / 9,
+  backgroundAudioEnabled = true,
   onError,
   onEnded,
 }) => {
@@ -243,13 +245,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     setIsLoading(!isReady);
   }, []);
 
-  //TODO: remove after theo player fix for audio only streams
-  useEffect(() => {
-    if (!isLoading && autoStart) {
-      player?.play();
-    }
-  }, [isLoading, autoStart]);
-
   const onErrorHandler = useCallback(
     (e: ErrorEvent) => {
       console.log('Player error:', e);
@@ -282,16 +277,14 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     // player.addEventListener(PlayerEventType.ENDED, console.log);
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
     player.addEventListener(PlayerEventType.READYSTATE_CHANGE, onReadyStateChangeHandler);
-    player.backgroundAudioConfiguration = {enabled: true};
+    player.backgroundAudioConfiguration = {enabled: backgroundAudioEnabled};
 
-    //TODO: enabled after theo player fix for audio only streams
-    //player.autoplay = autoStart;
-
+    player.autoplay = autoStart;
     player.preload = 'auto';
     player.muted = false;
     player.pipConfiguration = {
       //TODO: enable on android after the fix on TheoPlayer side
-      startsAutomatically: Platform.OS === 'ios',
+      startsAutomatically: backgroundAudioEnabled && Platform.OS === 'ios',
     };
 
     player.aspectRatio = AspectRatio.FIT;
@@ -306,7 +299,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     // console.log('targetVideoQuality:', player.targetVideoQuality);
     //player.playbackRate = 1.5;
     //player.selectedVideoTrack = player.videoTracks[0];
-    //player.pipConfiguration = {startsAutomatically: true};
   };
 
   useEffect(() => {
