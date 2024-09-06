@@ -40,9 +40,12 @@ interface Props {
   poster?: string;
   autoStart: boolean;
   startTime?: number;
-  isFloating?: boolean;
+  isMini?: boolean;
+  minifyEnabled?: boolean;
   uuid?: string;
   controls?: boolean;
+  aspectRatio?: number;
+  backgroundAudioEnabled?: boolean;
   tracks?: VideoTextTrack[];
   onError?: (e?: any) => void;
   onEnded?: () => void;
@@ -103,9 +106,12 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   isLiveStream,
   startTime,
   tracks,
-  isFloating = false,
+  isMini = false,
+  minifyEnabled = true,
   uuid,
   controls = true,
+  aspectRatio = 16 / 9,
+  backgroundAudioEnabled = true,
   onError,
   onEnded,
 }) => {
@@ -122,9 +128,9 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const {setMediaData, close} = useMediaPlayer();
 
-  //Close floating player before loading new one
+  //Close isMini player before loading new one
   useEffect(() => {
-    if (!isFloating) {
+    if (!isMini) {
       close();
     }
   }, []);
@@ -132,7 +138,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     return () => {
       if (player) {
-        if (isContinuousPlayEnabled && !player.paused && !isFloating) {
+        if (isContinuousPlayEnabled && !player.paused && !isMini && minifyEnabled) {
           setMediaData({
             mediaType: mediaType,
             poster: poster,
@@ -239,13 +245,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     setIsLoading(!isReady);
   }, []);
 
-  //TODO: remove after theo player fix for audio only streams
-  useEffect(() => {
-    if (!isLoading && autoStart) {
-      player?.play();
-    }
-  }, [isLoading, autoStart]);
-
   const onErrorHandler = useCallback(
     (e: ErrorEvent) => {
       console.log('Player error:', e);
@@ -278,16 +277,14 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     // player.addEventListener(PlayerEventType.ENDED, console.log);
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
     player.addEventListener(PlayerEventType.READYSTATE_CHANGE, onReadyStateChangeHandler);
-    player.backgroundAudioConfiguration = {enabled: true};
+    player.backgroundAudioConfiguration = {enabled: backgroundAudioEnabled};
 
-    //TODO: enabled after theo player fix for audio only streams
-    //player.autoplay = autoStart;
-
+    player.autoplay = autoStart;
     player.preload = 'auto';
     player.muted = false;
     player.pipConfiguration = {
       //TODO: enable on android after the fix on TheoPlayer side
-      startsAutomatically: Platform.OS === 'ios',
+      startsAutomatically: backgroundAudioEnabled && Platform.OS === 'ios',
     };
 
     player.aspectRatio = AspectRatio.FIT;
@@ -302,7 +299,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     // console.log('targetVideoQuality:', player.targetVideoQuality);
     //player.playbackRate = 1.5;
     //player.selectedVideoTrack = player.videoTracks[0];
-    //player.pipConfiguration = {startsAutomatically: true};
   };
 
   useEffect(() => {
@@ -390,7 +386,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   const {SubtitlesButton, SubtitlesMenu} = usePlayerSubtitles({player: player});
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, aspectRatio}}>
       <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady}>
         <>
           {mediaType == MediaType.AUDIO ? (
@@ -405,6 +401,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <MediaControls
                 enabled={!!controls || player.presentationMode === PresentationMode.fullscreen}
+                aspectRatio={aspectRatio}
                 currentTime={currentTime / 1000}
                 mediaDuration={duration / 1000}
                 isMuted={player.muted ?? false}
@@ -423,7 +420,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
                 onSeekRequest={_seekControl}
                 onSeekByRequest={_seekByControl}
                 extraControls={[SubtitlesButton, LanguageButton]}
-                isMini={isFloating}
+                isMini={isMini}
               />
             </View>
           ) : null}
@@ -441,7 +438,6 @@ export default TheoMediaPlayer;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    aspectRatio: 16 / 9,
   },
   video: {
     ...StyleSheet.absoluteFillObject,

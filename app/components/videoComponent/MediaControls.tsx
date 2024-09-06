@@ -56,6 +56,7 @@ interface Props {
   isBuffering?: boolean;
   isMini?: boolean;
   extraControls?: JSX.Element[];
+  aspectRatio?: number;
 
   isPaused: boolean;
   onPlayPausePress: () => void;
@@ -90,6 +91,7 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   onSeekRequest,
   onSeekByRequest,
   extraControls,
+  aspectRatio,
 }) => {
   const [visible, setVisible] = useState(enabled);
   const [scrubbing, setScrubbing] = useState(false);
@@ -355,7 +357,7 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
 
   return shouldBeVisible ? (
     <Animated.View
-      style={[styles.flex, styles.center]}
+      style={[styles.flex, styles.center, {aspectRatio}]}
       entering={FadeIn.duration(400)}
       exiting={FadeOut.duration(400)}>
       <LinearGradient
@@ -401,7 +403,7 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
       </View>
     </Animated.View>
   ) : (
-    <Pressable style={styles.flex} onPress={handleShowControls} />
+    <Pressable style={{...styles.flex, aspectRatio}} onPress={handleShowControls} />
   );
 };
 
@@ -411,7 +413,6 @@ const styles = StyleSheet.create({
   flex: {
     width: '100%',
     maxHeight: '100%',
-    aspectRatio: 16 / 9,
   },
   center: {
     justifyContent: 'center',

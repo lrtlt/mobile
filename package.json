@@ -46,6 +46,7 @@
     "react-native-gemius-plugin": "./react-native-gemius-plugin",
     "react-native-gesture-handler": "2.18.1",
     "react-native-google-cast": "4.8.0",
+    "react-native-infinite-pager": "^0.3.18",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-modal": "^13.0.1",
     "react-native-pager-view": "6.4.1",

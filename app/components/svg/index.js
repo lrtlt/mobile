@@ -18,6 +18,7 @@ export {default as IconSettings} from './ic_settings';
 export {default as IconLituanica} from './ic_lituanica';
 export {default as IconUpload} from './ic_upload';
 export {default as IconError} from './ic_error';
+export {default as IconView} from './ic_view';
 export {default as IconPhone} from './ic_phone';
 export {default as IconInfo} from './ic_info';
 export {default as IconSearch} from './ic_search';

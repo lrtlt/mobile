@@ -131,6 +131,16 @@ export type HomeBlockTopArticles = {
   articles: FeedArticle[];
 };
 
+export type HomeBlockVideoList = {
+  type: 'vertical_video_list';
+  template_id: number;
+  data: {
+    category_title: string;
+    category_id: number;
+    articles_list: FeedArticle[];
+  };
+};
+
 export type HomeBlockChannels = {
   type: 'channels';
   data: HomeChannels;
@@ -205,6 +215,7 @@ export type HomeBlockType =
   | HomeBlockArticle
   | HomeBlockTopArticles
   | HomeBlockChannels
+  | HomeBlockVideoList
   | HomeBlockEmbed
   | HomeBlockCategory
   | HomeBlockSlug

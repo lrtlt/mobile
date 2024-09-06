@@ -12,13 +12,17 @@ type AlternativeVideoCoverType = {
   img_path_prefix?: string;
 };
 
-export type VideoCoverType = ArticlePhotoType | AlternativeVideoCoverType;
+export type VideoCoverType = (ArticlePhotoType | AlternativeVideoCoverType) & {aspectRatio?: number};
 
 const VideoCover: React.FC<VideoCoverType> = (props) => {
   const renderImage = useCallback((uri?: string, thumbUri?: string) => {
     return (
-      <View style={styles.videoImageContainer}>
-        <Image style={styles.photo} source={{uri}} thumbnailSource={{uri: thumbUri}} />
+      <View style={{...styles.videoImageContainer, aspectRatio: props.aspectRatio ?? VIDEO_ASPECT_RATIO}}>
+        <Image
+          style={{...styles.photo, aspectRatio: props.aspectRatio ?? VIDEO_ASPECT_RATIO}}
+          source={{uri}}
+          thumbnailSource={{uri: thumbUri}}
+        />
         <MediaIndicator style={styles.mediaIndicator} size="big" />
       </View>
     );
@@ -57,11 +61,9 @@ export default React.memo(VideoCover);
 const styles = StyleSheet.create({
   photo: {
     width: '100%',
-    aspectRatio: VIDEO_ASPECT_RATIO,
   },
   videoImageContainer: {
     width: '100%',
-    aspectRatio: VIDEO_ASPECT_RATIO,
     alignItems: 'center',
     justifyContent: 'center',
   },

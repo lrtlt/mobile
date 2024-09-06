@@ -11,6 +11,7 @@ import {ArticlePhotoType, MenuItemPage, SearchFilter} from '../api/Types';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import SearchContextProvider from '../screens/search/context/SearchContextProvider';
 import ChannelContextProvider from '../screens/channel/context/ChannelContextProvider';
+import {Article} from '../../Types';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -48,6 +49,11 @@ export type MainStackParamList = {
     id: number;
     name: string;
     url: string;
+  };
+  VideoList: {
+    title: string;
+    initialIndex: number;
+    articles: Article[];
   };
 };
 
@@ -164,6 +170,13 @@ export default () => {
       <Stack.Screen name="WebPage" component={Screens.WebPageScreen} />
       <Stack.Screen name="Weather" component={Screens.WeatherScreen} />
       <Stack.Screen name="Category" component={Screens.CategoryScreen} />
+      <Stack.Screen
+        name="VideoList"
+        component={Screens.VerticalVideosScreen}
+        options={{
+          presentation: 'transparentModal',
+        }}
+      />
     </Stack.Navigator>
   );
 };

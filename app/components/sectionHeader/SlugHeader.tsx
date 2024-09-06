@@ -15,7 +15,7 @@ const SlugHeader: React.FC<React.PropsWithChildren<Props>> = ({title, color}) =>
       <TextComponent style={{...styles.sectionHeaderText, color}} fontFamily="SourceSansPro-SemiBold">
         {title}
       </TextComponent>
-      <View style={{...styles.slugContainer, borderColor: color ?? colors.border}}>
+      <View style={{...styles.slugContainer, borderColor: color ?? colors.border + '88'}}>
         <TextComponent style={{...styles.slugText, color}} type="secondary">{`# ${title}`}</TextComponent>
       </View>
     </View>
@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   slugText: {
-    fontSize: 15,
+    fontSize: 13,
   },
 });
