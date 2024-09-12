@@ -15,6 +15,7 @@ import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import ThemeProvider from './app/theme/ThemeProvider';
 import useAppCheckSetup from './app/util/useAppCheckSetup';
+import Orientation from 'react-native-orientation-locker';
 
 import {enableFreeze} from 'react-native-screens';
 enableFreeze(true);
@@ -30,6 +31,12 @@ const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
 };
 
 const App: React.FC = () => {
+  Orientation.configure({
+    disableFaceUpDown: true,
+  });
+
+  Orientation.lockToPortrait();
+
   useAppCheckSetup();
   useNotificationsPermission();
   useAppTrackingPermission();

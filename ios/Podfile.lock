@@ -2135,6 +2135,8 @@ PODS:
   - react-native-google-cast/RNGoogleCast (4.6.2):
     - PromisesObjC
     - React
+  - react-native-orientation-locker (1.7.0):
+    - React-Core
   - react-native-pager-view (6.4.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -2458,6 +2460,7 @@ DEPENDENCIES:
   - react-native-carplay (from `../node_modules/react-native-carplay`)
   - react-native-gemius-plugin (from `../node_modules/react-native-gemius-plugin`)
   - react-native-google-cast (from `https://github.com/Danesz/react-native-google-cast.git`, branch `feature/guestmode_apple_silicon`)
+  - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -2613,6 +2616,8 @@ EXTERNAL SOURCES:
   react-native-google-cast:
     :branch: feature/guestmode_apple_silicon
     :git: https://github.com/Danesz/react-native-google-cast.git
+  react-native-orientation-locker:
+    :path: "../node_modules/react-native-orientation-locker"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-render-html:
@@ -2771,6 +2776,7 @@ SPEC CHECKSUMS:
   react-native-carplay: c0327ae947e4a12c7d66315d54254fdf87a982ec
   react-native-gemius-plugin: 003b164539125055787a816a7b65976b19bf4a27
   react-native-google-cast: d7bdfd1a0eeba84afde03b9722351ec29543e74c
+  react-native-orientation-locker: 5819fd23ca89cbac0d736fb4314745f62716d517
   react-native-pager-view: 208ae8f40c243f7dad4b3156206e3ed1d0c3c74b
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: ab8f4a3d8180913bd78ae75dd599c94cce3d5e9a

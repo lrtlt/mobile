@@ -13,6 +13,7 @@ import {
   AspectRatio,
   ReadyStateChangeEvent,
   PresentationMode,
+  PresentationModeChangeEvent,
 } from 'react-native-theoplayer';
 import MediaControls from './MediaControls';
 import {useMediaPlayer} from './context/useMediaPlayer';
@@ -29,6 +30,7 @@ import FastImage from 'react-native-fast-image';
 import {useSettings} from '../../settings/useSettings';
 import {VideoTextTrack} from '../../api/Types';
 import usePlayerSubtitles from './usePlayerSubtitles';
+import Orientation from 'react-native-orientation-locker';
 
 export type PlayerAction = 'togglePlay' | 'setFullScreen';
 
@@ -254,6 +256,16 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     // setIsLoading(!isReady);
   }, []);
 
+  const onPresentationChangeHandler = useCallback((e: PresentationModeChangeEvent) => {
+    if (e.presentationMode === PresentationMode.fullscreen) {
+      setTimeout(() => {
+        Orientation.unlockAllOrientations();
+      }, 250);
+    } else {
+      Orientation.lockToPortrait();
+    }
+  }, []);
+
   const onErrorHandler = useCallback(
     (e: ErrorEvent) => {
       console.log('Player error:', e);
@@ -286,6 +298,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     // player.addEventListener(PlayerEventType.ENDED, console.log);
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
     player.addEventListener(PlayerEventType.READYSTATE_CHANGE, onReadyStateChangeHandler);
+    player.addEventListener(PlayerEventType.PRESENTATIONMODE_CHANGE, onPresentationChangeHandler);
     player.backgroundAudioConfiguration = {enabled: backgroundAudioEnabled};
 
     player.autoplay = autoStart;
@@ -398,9 +411,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     <View style={{...styles.container, aspectRatio}}>
       <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady}>
         <>
-          {mediaType == MediaType.AUDIO ? (
-            <FastImage source={{uri: poster}} style={styles.video} resizeMode="contain" />
-          ) : null}
           {isLoading && (
             <View style={{flex: 1, justifyContent: 'center'}}>
               <ActivityIndicator size="large" animating={isLoading} color={colors.primary} />
@@ -408,6 +418,14 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
           )}
           {!isLoading && player ? (
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              {mediaType == MediaType.AUDIO ? (
+                <FastImage
+                  source={{uri: poster}}
+                  style={{width: '100%', position: 'absolute', aspectRatio}}
+                  resizeMode="contain"
+                />
+              ) : null}
+
               <MediaControls
                 enabled={!!controls || player.presentationMode === PresentationMode.fullscreen}
                 aspectRatio={aspectRatio}
