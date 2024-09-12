@@ -16,6 +16,7 @@ interface Props {
   streamUrl: string;
   title: string;
   autoPlay: boolean;
+  loop?: boolean;
   startTime?: number;
   streamData?: StreamData;
   minifyEnabled?: boolean;
@@ -33,6 +34,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
   streamUrl,
   title,
   autoPlay = true,
+  loop = false,
   startTime,
   streamData,
   minifyEnabled = true,
@@ -117,6 +119,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
         streamUri={data.streamUri}
         title={data.title}
         autoStart={true}
+        loop={loop}
         isLiveStream={data.isLiveStream}
         startTime={data.isLiveStream ? undefined : startTime || data.offset}
         poster={backgroundImage ?? data.poster}

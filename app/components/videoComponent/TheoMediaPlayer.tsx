@@ -44,6 +44,7 @@ interface Props {
   minifyEnabled?: boolean;
   uuid?: string;
   controls?: boolean;
+  loop?: boolean;
   aspectRatio?: number;
   backgroundAudioEnabled?: boolean;
   tracks?: VideoTextTrack[];
@@ -107,6 +108,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   startTime,
   tracks,
   isMini = false,
+  loop = false,
   minifyEnabled = true,
   uuid,
   controls = true,
@@ -194,6 +196,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const onLoadedDataHandler = useCallback((e: Event<PlayerEventType.LOADED_DATA>) => {
     Gemius.setProgramData(streamUri, title ?? '', duration, mediaType === MediaType.VIDEO);
+    setIsLoading(false);
   }, []);
 
   const onPauseHandler = useCallback(
@@ -220,20 +223,26 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     (player: THEOplayer) => (_: Event<PlayerEventType.ENDED>) => {
       trackComplete(streamUri, player.currentTime / 1000);
       setIsPlaying(false);
+
+      if (loop) {
+        setTimeout(() => {
+          player.play();
+        }, 600);
+      }
+
+      if (onEnded) {
+        onEnded();
+      }
     },
-    [],
+    [onEnded, loop],
   );
 
   useEffect(() => {
-    if (onEnded) {
-      player?.addEventListener(PlayerEventType.ENDED, onEnded);
-    }
+    player?.addEventListener(PlayerEventType.ENDED, onEndedHandler(player));
     return () => {
-      if (onEnded) {
-        player?.removeEventListener(PlayerEventType.ENDED, onEnded);
-      }
+      player?.removeEventListener(PlayerEventType.ENDED, onEndedHandler(player));
     };
-  }, [onEnded, player]);
+  }, [onEndedHandler, player]);
 
   const onTimeUpdateHandler = useCallback((e: TimeUpdateEvent) => {
     setCurrentTimeInternal(e.currentTime);
@@ -241,8 +250,8 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const onReadyStateChangeHandler = useCallback((e: ReadyStateChangeEvent) => {
     //https://docs.theoplayer.com/api-reference/ios/Enums/ReadyState.html#/c:@M@THEOplayerSDK@E@THEOplayerReadyState@THEOplayerReadyStateHAVE_ENOUGH_DATA
-    const isReady = e.readyState > 2;
-    setIsLoading(!isReady);
+    // const isReady = e.readyState > 2;
+    // setIsLoading(!isReady);
   }, []);
 
   const onErrorHandler = useCallback(
@@ -273,7 +282,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     player.addEventListener(PlayerEventType.PAUSE, onPauseHandler(player));
     // player.addEventListener(PlayerEventType.SEEKING, console.log);
 
-    player.addEventListener(PlayerEventType.ENDED, onEndedHandler(player));
+    // player.addEventListener(PlayerEventType.ENDED, onEndedHandler(player));
     // player.addEventListener(PlayerEventType.ENDED, console.log);
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
     player.addEventListener(PlayerEventType.READYSTATE_CHANGE, onReadyStateChangeHandler);

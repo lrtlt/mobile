@@ -57,6 +57,7 @@ const VerticalVideoWrapper: React.FC<{id: number | string; isActive: boolean}> =
               overflow: 'hidden',
             }}
             autoPlay={true}
+            loop={true}
             streamUrl={article.get_playlist_url}
             title={article.title}
             minifyEnabled={false}

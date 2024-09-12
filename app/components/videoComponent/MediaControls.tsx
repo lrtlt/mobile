@@ -26,7 +26,7 @@ import TextComponent from '../text/Text';
 import {CastButton} from 'react-native-google-cast';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 
-const CONTROLS_TIMEOUT_MS = 3000;
+const CONTROLS_TIMEOUT_MS = 2500;
 export const ICON_COLOR = '#FFFFFFDD';
 export const ICON_SIZE = 22;
 
@@ -40,6 +40,13 @@ export const HIT_SLOP: Insets = {
   bottom: HIT_SLOP_SIZE,
   left: HIT_SLOP_SIZE,
   right: HIT_SLOP_SIZE,
+};
+
+export const HIT_SLOP_BIG: Insets = {
+  top: HIT_SLOP_SIZE * 4,
+  bottom: HIT_SLOP_SIZE * 4,
+  left: HIT_SLOP_SIZE * 4,
+  right: HIT_SLOP_SIZE * 4,
 };
 
 interface Props {
@@ -102,7 +109,7 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
 
   const isMiniPlayer = isMini && !isFullScreen;
   const isLiveStream = isNaN(mediaDuration) || !isFinite(mediaDuration) || mediaDuration <= 0;
-  const showSeeker = !isLiveStream || seekerEnd - seekerStart > 60;
+  const showSeeker = (!isLiveStream || seekerEnd - seekerStart > 60) && !isNaN(seekerPosition);
 
   const resetControlsTimeout = useMemo(
     () =>
@@ -255,7 +262,7 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
         )}
       </View>
     ),
-    [PlayPauseControl, handleSeekBack, handleSeekForward, isLiveStream, isMiniPlayer],
+    [PlayPauseControl, handleSeekBack, handleSeekForward, isLiveStream, isMiniPlayer, showSeeker],
   );
 
   const VolumeControl = useCallback(
@@ -322,7 +329,7 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
             marginVertical: isMiniPlayer ? 0 : styles.seekBar_container.marginVertical,
           }}
           {...seekPanResponder.current?.panHandlers}
-          hitSlop={HIT_SLOP}>
+          hitSlop={HIT_SLOP_BIG}>
           <View
             style={styles.seekBar_track}
             onLayout={(event) => (seekerWidth.current = event.nativeEvent.layout.width)}
