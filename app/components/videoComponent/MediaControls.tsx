@@ -27,6 +27,7 @@ import {CastButton} from 'react-native-google-cast';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 
 const CONTROLS_TIMEOUT_MS = 2500;
+
 export const ICON_COLOR = '#FFFFFFDD';
 export const ICON_SIZE = 22;
 
@@ -222,20 +223,20 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
       <TouchableOpacity
         style={{
           ...styles.playPauseIcon,
-          width: styles.playPauseIcon.width - (isMiniPlayer ? 8 : 0),
-          height: styles.playPauseIcon.height - (isMiniPlayer ? 8 : 0),
+          width: styles.playPauseIcon.width,
+          height: styles.playPauseIcon.height,
         }}
         onPress={handlePlayPauseToggle}
         hitSlop={HIT_SLOP}
         activeOpacity={0.6}>
         {isPaused ? (
-          <IconPlayerPlay size={ICON_SIZE - (isMiniPlayer ? 6 : 0)} color={ICON_COLOR} />
+          <IconPlayerPlay size={ICON_SIZE} color={ICON_COLOR} />
         ) : (
-          <IconPlayerPause size={ICON_SIZE - (isMiniPlayer ? 6 : 0)} color={ICON_COLOR} />
+          <IconPlayerPause size={ICON_SIZE} color={ICON_COLOR} />
         )}
       </TouchableOpacity>
     ),
-    [handlePlayPauseToggle, isPaused, isMiniPlayer],
+    [handlePlayPauseToggle, isPaused],
   );
 
   const CenterControls = useMemo(
@@ -320,35 +321,32 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
     [],
   );
 
-  const SeekBar = useCallback(
-    ({position}: {position: number}) => {
-      return (
+  const SeekBar = useCallback(({position}: {position: number}) => {
+    return (
+      <View
+        style={{
+          ...styles.seekBar_container,
+          marginVertical: styles.seekBar_container.marginVertical,
+        }}
+        {...seekPanResponder.current?.panHandlers}
+        hitSlop={HIT_SLOP_BIG}>
         <View
-          style={{
-            ...styles.seekBar_container,
-            marginVertical: isMiniPlayer ? 0 : styles.seekBar_container.marginVertical,
-          }}
-          {...seekPanResponder.current?.panHandlers}
-          hitSlop={HIT_SLOP_BIG}>
+          style={styles.seekBar_track}
+          onLayout={(event) => (seekerWidth.current = event.nativeEvent.layout.width)}
+          pointerEvents={'none'}>
           <View
-            style={styles.seekBar_track}
-            onLayout={(event) => (seekerWidth.current = event.nativeEvent.layout.width)}
-            pointerEvents={'none'}>
-            <View
-              style={[
-                styles.seekBar_fill,
-                {
-                  width: position,
-                },
-              ]}
-              pointerEvents={'none'}
-            />
-          </View>
+            style={[
+              styles.seekBar_fill,
+              {
+                width: position,
+              },
+            ]}
+            pointerEvents={'none'}
+          />
         </View>
-      );
-    },
-    [isMiniPlayer],
-  );
+      </View>
+    );
+  }, []);
 
   if (loading) {
     return (
@@ -502,7 +500,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     height: 5,
     overflow: 'hidden',
-    backgroundColor: '#FFFFFFAA',
+    backgroundColor: '#FFFFFFFF',
     width: '100%',
   },
   seekBar_fill: {

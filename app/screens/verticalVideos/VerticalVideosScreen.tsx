@@ -39,7 +39,7 @@ const VerticalVideoScreen: React.FC<React.PropsWithChildren<Props>> = ({navigati
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: '#000000CC',
+        backgroundColor: '#000000DD',
       }}
       edges={['left', 'right']}>
       <InfinitePager

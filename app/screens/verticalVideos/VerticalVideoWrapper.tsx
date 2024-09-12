@@ -7,8 +7,8 @@ import VideoCover from '../../components/videoComponent/VideoCover';
 import useArticleAnalytics from '../article/useArticleAnalytics';
 import {useTheme} from '../../Theme';
 
-const VIDEO_ASPECT_RATIO = 0.562;
-const BORDER_RADIUS = 12;
+const VIDEO_ASPECT_RATIO = 9 / 16;
+const BORDER_RADIUS = 8;
 
 const VerticalVideoWrapper: React.FC<{id: number | string; isActive: boolean}> = ({id, isActive}) => {
   const [state, setState] = useState<'loading' | 'error' | 'ok'>('loading');
@@ -42,7 +42,13 @@ const VerticalVideoWrapper: React.FC<{id: number | string; isActive: boolean}> =
       if (isMediaArticle(article)) {
         if (!isActive) {
           return (
-            <View style={{flex: 1, borderRadius: BORDER_RADIUS, overflow: 'hidden'}}>
+            <View
+              style={{
+                width: '95%',
+                aspectRatio: VIDEO_ASPECT_RATIO,
+                borderRadius: BORDER_RADIUS,
+                overflow: 'hidden',
+              }}>
               <VideoCover aspectRatio={VIDEO_ASPECT_RATIO} {...article.main_photo} />
             </View>
           );
@@ -52,7 +58,7 @@ const VerticalVideoWrapper: React.FC<{id: number | string; isActive: boolean}> =
           <VideoComponent
             style={{
               aspectRatio: VIDEO_ASPECT_RATIO,
-              width: '90%',
+              width: '95%',
               borderRadius: BORDER_RADIUS,
               overflow: 'hidden',
             }}
