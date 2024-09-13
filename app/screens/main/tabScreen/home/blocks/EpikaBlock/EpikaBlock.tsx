@@ -3,7 +3,7 @@ import {Linking, StyleSheet, View} from 'react-native';
 import {HomeBlockEpikaBlock} from '../../../../../../api/Types';
 import FastImage from 'react-native-fast-image';
 import {MediaIndicator, Text, TouchableDebounce} from '../../../../../../components';
-import {useTheme} from '../../../../../../Theme';
+import {themeLight, useTheme} from '../../../../../../Theme';
 import {IconLRTEpika} from '../../../../../../components/svg';
 
 interface EpikaBlockProps {
@@ -22,7 +22,7 @@ const EpikaBlock: React.FC<EpikaBlockProps> = ({block}) => {
     Linking.openURL(url);
   }, []);
 
-  const renderListItem = useCallback((item: typeof data.list[0]) => {
+  const renderListItem = useCallback((item: (typeof data.list)[0]) => {
     return (
       <View key={item.image} style={{flex: 1, aspectRatio: 136 / 76.5}}>
         <TouchableDebounce
@@ -60,7 +60,7 @@ const EpikaBlock: React.FC<EpikaBlockProps> = ({block}) => {
 
       <TouchableDebounce onPress={() => openUrl(cta_url)}>
         <View style={{...styles.cta, backgroundColor: colors.epikaGreen}}>
-          <Text style={styles.ctaText}>{cta_title.toUpperCase()}</Text>
+          <Text style={{...styles.ctaText, color: themeLight.colors.text}}>{cta_title.toUpperCase()}</Text>
         </View>
       </TouchableDebounce>
 
