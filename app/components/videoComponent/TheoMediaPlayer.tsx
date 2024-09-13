@@ -139,10 +139,22 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     }
   }, []);
 
+  const {client, mediaStatus} = useChromecast({
+    player: player,
+    mediaType: mediaType,
+    streamUri: streamUri,
+    title: title,
+    poster: poster,
+    isLiveStream: isLiveStream,
+  });
+
   useEffect(() => {
     return () => {
       if (player) {
-        if (isContinuousPlayEnabled && !player.paused && !isMini && minifyEnabled) {
+        const isPlaying = !player.paused;
+        const isCasting = !!client;
+
+        if (isContinuousPlayEnabled && !isCasting && isPlaying && !isMini && minifyEnabled) {
           setMediaData({
             mediaType: mediaType,
             poster: poster,
@@ -156,7 +168,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
         trackClose(streamUri, player.currentTime / 1000);
       }
     };
-  }, [player, streamUri, isContinuousPlayEnabled]);
+  }, [player, streamUri, isContinuousPlayEnabled, client]);
 
   useEffect(() => {
     const handler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -168,15 +180,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     });
     return () => handler.remove();
   }, [player]);
-
-  const {client, mediaStatus} = useChromecast({
-    player: player,
-    mediaType: mediaType,
-    streamUri: streamUri,
-    title: title,
-    poster: poster,
-    isLiveStream: isLiveStream,
-  });
 
   useEffect(() => {
     if (player?.seeking === true) {
