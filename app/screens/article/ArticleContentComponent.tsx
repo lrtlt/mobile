@@ -18,13 +18,12 @@ import {
   TYPE_KEYWORDS,
 } from './ArticleCompositor';
 import {VIDEO_ASPECT_RATIO} from '../../constants';
-import {useCollapsibleHeader} from 'react-navigation-collapsible';
-import {useTheme} from '../../Theme';
 import {ArticleContent} from '../../api/Types';
 import AudioContent from './audioContent/AudioContent';
 import ArticleMainPhoto from './mainPhoto/ArticleMainPhoto';
 import ArticleKeywords from './keywords/ArticleKeywords';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import useArticleHeader from './useArticleHeader_v2';
+import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 
 export type ArticleSelectableItem = {
   type: 'photo' | 'article';
@@ -38,12 +37,13 @@ interface Props {
 
 const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({article, itemPressHandler}) => {
   const [isTextToSpeechPlaying, setTextToSpeechPlaying] = useState(false);
-  const {colors} = useTheme();
 
   const {width: screenWidth} = useWindowDimensions();
   const contentWidth = screenWidth - 12 * 2;
 
   const articleData = useMemo(() => compose(article), [article]);
+
+  const {appBar, snackbar, onScroll} = useArticleHeader(article);
 
   const renderItem = useCallback(
     (item: ListRenderItemInfo<ArticleContentItemType>): React.ReactElement | null => {
@@ -129,23 +129,15 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
     [contentWidth, isTextToSpeechPlaying, itemPressHandler],
   );
 
-  const {onScroll, containerPaddingTop, scrollIndicatorInsetTop} = useCollapsibleHeader(
-    {
-      config: {
-        collapsedColor: colors.card,
-        elevation: 2,
-      },
-    },
-    0,
-  );
+  const appBarHeight = useAppBarHeight();
 
   return (
-    <SafeAreaView style={styles.root}>
+    <>
+      {appBar}
       <View style={styles.container}>
         <Animated.FlatList
           onScroll={onScroll}
-          contentContainerStyle={{paddingTop: containerPaddingTop}}
-          scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+          contentContainerStyle={{paddingTop: appBarHeight.fullHeight, paddingBottom: 24}}
           data={articleData}
           windowSize={6}
           showsVerticalScrollIndicator={false}
@@ -156,7 +148,8 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
           }, [])}
         />
       </View>
-    </SafeAreaView>
+      {snackbar}
+    </>
   );
 };
 

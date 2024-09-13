@@ -143,7 +143,11 @@ export default () => {
         }}
       />
       <Stack.Screen name="Settings" component={Screens.SettingsScreen} />
-      <Stack.Screen name="Article" component={Screens.ArticleScreen} />
+      <Stack.Screen
+        name="Article"
+        component={Screens.ArticleScreen}
+        options={{headerShown: false}} //We use custom header in the screen
+      />
       <Stack.Screen name="Comments" component={Screens.CommentsScreen} />
       <Stack.Screen
         name="Gallery"

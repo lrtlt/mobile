@@ -5,6 +5,7 @@ export {default as ArticleRow} from './article/articleRow/ArticleRow';
 export {default as ArticleGallery} from './articleGallery/ArticleGallery';
 export {default as ArticleContentItem} from './articleParagraphs/ArticleContentItem';
 export {default as ArticlePhoto} from './articlePhoto/ArticlePhoto';
+export {default as AnimatedAppBar} from './appBar/AnimatedAppBar';
 export {default as AudioComponent} from './audioComponent/AudioComponent';
 export {default as CoverImage} from './coverImage/CoverImage';
 export {default as Drawer} from './drawer/Drawer';

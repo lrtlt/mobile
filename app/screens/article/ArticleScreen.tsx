@@ -8,7 +8,6 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import useArticleScreenState from './useArticleScreenState';
-import useArticleHeader from './useArticleHeader';
 import useArticleAnalytics from './useArticleAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Article'>;
@@ -26,8 +25,6 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   const {strings} = useTheme();
 
   const [{article, loadingState}, acceptAdultContent] = useArticleScreenState(articleId);
-
-  const snackBar = useArticleHeader(article);
 
   const adultContentAcceptHandler = useCallback(() => {
     acceptAdultContent(true);
@@ -98,7 +95,6 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
           {article && (
             <ArticleContentComponent article={article} itemPressHandler={articleItemPressHandler} />
           )}
-          {snackBar}
         </>
       );
     }
