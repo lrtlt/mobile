@@ -12,11 +12,19 @@ let isPlayerWaitingToResume = false;
 
 const DEBOUNCE_TIME = 1000;
 
-CarPlay.emitter.addListener('didConnect', async () => {
-  console.log('### CarPlay connected');
-
+const trackConnected = debounce(() => {
   Gemius.sendPageViewedEvent('carplay_connected');
   analytics().logEvent('carplay_connected');
+}, DEBOUNCE_TIME * 2);
+
+const trackDisconnected = debounce(() => {
+  Gemius.sendPageViewedEvent('carplay_disconnected');
+  analytics().logEvent('carplay_disconnected');
+}, DEBOUNCE_TIME * 2);
+
+CarPlay.emitter.addListener('didConnect', async () => {
+  console.log('### CarPlay connected');
+  trackConnected();
   await setupTrackPlayer();
 
   CarPlay.presentTemplate(
@@ -41,7 +49,6 @@ CarPlay.emitter.addListener('didConnect', async () => {
 
 const resumePlayback = debounce(async () => {
   if (isPlayerWaitingToResume) {
-    console.log('### Resuming playback');
     isPlayerWaitingToResume = false;
     TrackPlayer.getQueue().then((queue) => {
       console.log('queue', queue);
@@ -57,10 +64,7 @@ CarPlay.emitter.addListener(
   'didDisconnect',
   debounce(() => {
     console.log('### CarPlay disconnected');
-
-    Gemius.sendPageViewedEvent('carplay_disconnected');
-    analytics().logEvent('carplay_disconnected');
-
+    trackDisconnected();
     TrackPlayer.getPlaybackState()
       .then((state) => {
         if (state.state === State.Playing) {
