@@ -12,38 +12,46 @@ let isPlayerWaitingToResume = false;
 
 const DEBOUNCE_TIME = 1000;
 
-CarPlay.emitter.addListener(
-  'didConnect',
-  debounce(async () => {
-    console.log('### CarPlay connected');
+CarPlay.emitter.addListener('didConnect', async () => {
+  console.log('### CarPlay connected');
 
-    Gemius.sendPageViewedEvent('carplay_connected');
-    analytics().logEvent('carplay_connected');
-    await setupTrackPlayer();
+  Gemius.sendPageViewedEvent('carplay_connected');
+  analytics().logEvent('carplay_connected');
+  await setupTrackPlayer();
 
-    CarPlay.presentTemplate(
-      new AlertTemplate({
-        id: 'loading-alert',
-        titleVariants: ['Prašome palaukti...'],
-      }),
-    );
+  CarPlay.presentTemplate(
+    new AlertTemplate({
+      id: 'loading-alert',
+      titleVariants: ['Prašome palaukti...'],
+    }),
+  );
+
+  try {
     const rootTemplate = await RootTemplate.build();
     CarPlay.dismissTemplate();
     CarPlay.setRootTemplate(rootTemplate);
     CarPlay.enableNowPlaying(true);
+  } catch (e) {
+    analytics().logEvent('carplay_connection_error', {error: e});
+    console.log(e);
+  }
 
-    if (isPlayerWaitingToResume) {
-      isPlayerWaitingToResume = false;
-      TrackPlayer.getQueue().then((queue) => {
-        console.log('queue', queue);
-        if (queue.length > 0) {
-          CarPlay.pushTemplate(carPlayNowPlayingTemplate, true);
-          TrackPlayer.play();
-        }
-      });
-    }
-  }, DEBOUNCE_TIME),
-);
+  resumePlayback();
+});
+
+const resumePlayback = debounce(async () => {
+  if (isPlayerWaitingToResume) {
+    console.log('### Resuming playback');
+    isPlayerWaitingToResume = false;
+    TrackPlayer.getQueue().then((queue) => {
+      console.log('queue', queue);
+      if (queue.length > 0) {
+        CarPlay.pushTemplate(carPlayNowPlayingTemplate, true);
+        TrackPlayer.play();
+      }
+    });
+  }
+}, DEBOUNCE_TIME * 3);
 
 CarPlay.emitter.addListener(
   'didDisconnect',
@@ -60,7 +68,7 @@ CarPlay.emitter.addListener(
           TrackPlayer.pause();
         }
       })
-      .catch((e) => {
+      .catch((_) => {
         //ignore
       });
   }, DEBOUNCE_TIME),

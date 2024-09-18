@@ -9,7 +9,7 @@ import {initialWindowMetrics, SafeAreaProvider} from 'react-native-safe-area-con
 import {persistor, store} from './app/redux/store';
 import useAppTrackingPermission from './app/util/useAppTrackingPermission';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import PlayerProvider from './app/components/videoComponent/context/PlayerProvider';
 import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
@@ -31,11 +31,9 @@ const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
 };
 
 const App: React.FC = () => {
-  Orientation.configure({
-    disableFaceUpDown: true,
-  });
-
-  Orientation.lockToPortrait();
+  if (Platform.OS === 'android') {
+    Orientation.lockToPortrait();
+  }
 
   useAppCheckSetup();
   useNotificationsPermission();

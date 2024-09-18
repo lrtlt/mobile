@@ -260,12 +260,14 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   }, []);
 
   const onPresentationChangeHandler = useCallback((e: PresentationModeChangeEvent) => {
-    if (e.presentationMode === PresentationMode.fullscreen) {
-      setTimeout(() => {
-        Orientation.unlockAllOrientations();
-      }, 250);
-    } else {
-      Orientation.lockToPortrait();
+    if (Platform.OS === 'android') {
+      if (e.presentationMode === PresentationMode.fullscreen) {
+        setTimeout(() => {
+          Orientation.unlockAllOrientations();
+        }, 250);
+      } else {
+        Orientation.lockToPortrait();
+      }
     }
   }, []);
 
