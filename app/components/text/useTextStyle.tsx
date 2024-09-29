@@ -1,15 +1,15 @@
 import {useMemo} from 'react';
 import {Falsy, StyleSheet, TextStyle} from 'react-native';
-import {useSettings} from '../../settings/useSettings';
 import {useTheme} from '../../Theme';
 import {TextComponentProps} from './Text';
+import {useSettingsStore} from '../../state/settings';
+import {useShallow} from 'zustand/react/shallow';
 
 const DEFAULT_FONT_SIZE = 15;
 
 const useTextStyle = (props: TextComponentProps): TextStyle => {
   const {colors} = useTheme();
-  const {textSizeMultiplier} = useSettings();
-
+  const textSizeMultiplier = useSettingsStore(useShallow((state) => state.textSizeMultiplier));
   const style: TextStyle | Falsy = Array.isArray(props.style)
     ? StyleSheet.flatten(props.style)
     : (props.style as TextStyle);

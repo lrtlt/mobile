@@ -2,11 +2,11 @@ import React from 'react';
 import {View, ActivityIndicator, Button, StyleSheet, StatusBar} from 'react-native';
 import {Logo, Text} from '../../components';
 import {strings, themeDark, themeLight} from '../../Theme';
-import {useSettings} from '../../settings/useSettings';
 import useSplashScreenState from './useSplashScreenState';
+import {useSettingsStore} from '../../state/settings';
 
 const SplashScreen: React.FC<React.PropsWithChildren<{}>> = () => {
-  const {isDarkMode} = useSettings();
+  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const {colors} = isDarkMode ? themeDark : themeLight;
 
   const state = useSplashScreenState();

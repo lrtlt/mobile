@@ -2,15 +2,12 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {SettingsToggleButton, Text} from '../../components';
 import {SunIcon, MoonIcon} from '../../components/svg';
-import {setConfig} from '../../redux/actions';
-import {useSelector, useDispatch} from 'react-redux';
-import {selectSettings} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
-import {checkEqual} from '../../util/LodashEqualityCheck';
 import SettingsNotifications from './SettingsNotifications';
 import {ScrollView} from 'react-native-gesture-handler';
 import SettingsSwitch from './SettingsSwitch';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useSettingsStore} from '../../state/settings';
 
 const TEXT_SIZE_NORMAL = 0;
 const TEXT_SIZE_LARGE = 2;
@@ -18,23 +15,22 @@ const TEXT_SIZE_EXTRA_LARGE = 4;
 
 const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
   const {strings, colors} = useTheme();
-  const dispatch = useDispatch();
 
-  const config = useSelector(selectSettings, checkEqual);
+  const settingsStore = useSettingsStore((state) => state);
 
   const handleSetDarkMode = (value: boolean) => {
-    dispatch(setConfig({...config, isDarkMode: value}));
+    settingsStore.setIsDarkMode(value);
   };
 
   const handleSetContinuousPlayer = (value: boolean) => {
-    dispatch(setConfig({...config, isContinuousPlayEnabled: value}));
+    settingsStore.setIsContinuousPlayEnabled(value);
   };
 
   const handleSetTextSize = (value: number) => {
-    dispatch(setConfig({...config, textSizeMultiplier: value}));
+    settingsStore.setTextSizeMultiplier(value);
   };
 
-  const {isDarkMode, textSizeMultiplier} = config;
+  const {isDarkMode, textSizeMultiplier} = settingsStore;
 
   return (
     <SafeAreaView style={styles.root} edges={['bottom']}>
@@ -111,7 +107,7 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
               key={'continuous-player'}
               title="Nepertraukiamas grotuvas"
               onValueChange={handleSetContinuousPlayer}
-              value={config.isContinuousPlayEnabled}
+              value={settingsStore.isContinuousPlayEnabled}
               cellStyle={{borderBottomWidth: StyleSheet.hairlineWidth}}
             />
           </View>

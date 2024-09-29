@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
-import {useSettings} from '../../settings/useSettings';
 import {useTheme} from '../../Theme';
 import {IconPhotoCamera} from '../svg';
 import TextComponent from '../text/Text';
+import {useSettingsStore} from '../../state/settings';
 
 interface Props {
   style?: ViewStyle;
@@ -12,7 +12,7 @@ interface Props {
 
 const PhotoCount: React.FC<React.PropsWithChildren<Props>> = ({style, count}) => {
   const {colors} = useTheme();
-  const {textSizeMultiplier} = useSettings();
+  const textSizeMultiplier = useSettingsStore((state) => state.textSizeMultiplier);
 
   return (
     <View style={{...styles.container, backgroundColor: colors.lightGreyBackground, ...style}}>

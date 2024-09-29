@@ -48,13 +48,7 @@ const AnimatedAppBar: React.FC<Props> = ({translateY, onBackPress, actions, subH
         style={{
           flex: 1,
           flexDirection: 'row',
-          // justifyContent: 'space-around',
           alignContent: 'space-around',
-          // backgroundColor: 'rgba(52, 52, 52, 0)',
-          // backgroundColor: 'red',
-          width: '100%',
-          //for animation
-          height: actionBarHeigh,
         }}>
         <View
           style={{

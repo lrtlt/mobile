@@ -27,10 +27,10 @@ import {useTheme} from '../../Theme';
 import usePlayerLanguage from './usePlayerLanguage';
 import {EventRegister} from 'react-native-event-listeners';
 import FastImage from 'react-native-fast-image';
-import {useSettings} from '../../settings/useSettings';
 import {VideoTextTrack} from '../../api/Types';
 import usePlayerSubtitles from './usePlayerSubtitles';
 import Orientation from 'react-native-orientation-locker';
+import {useSettingsStore} from '../../state/settings';
 
 export type PlayerAction = 'togglePlay' | 'setFullScreen';
 
@@ -128,7 +128,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   const {trackPlay, trackPause, trackBuffer, trackClose, trackComplete, trackSeek} = useMediaTracking();
 
   const {colors} = useTheme();
-  const {isContinuousPlayEnabled} = useSettings();
+  const isContinuousPlayEnabled = useSettingsStore((state) => state.isContinuousPlayEnabled);
 
   const {setMediaData, close} = useMediaPlayer();
 

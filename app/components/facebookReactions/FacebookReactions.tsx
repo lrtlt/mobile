@@ -2,8 +2,8 @@ import React from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
-import {useSettings} from '../../settings/useSettings';
 import {IconFacebook} from '../svg';
+import {useSettingsStore} from '../../state/settings';
 
 interface Props {
   style?: ViewStyle;
@@ -12,7 +12,7 @@ interface Props {
 
 const FacebookReactions: React.FC<React.PropsWithChildren<Props>> = ({style, count}) => {
   const {colors} = useTheme();
-  const {textSizeMultiplier} = useSettings();
+  const textSizeMultiplier = useSettingsStore((state) => state.textSizeMultiplier);
 
   return (
     <View style={{...styles.root, ...style}}>

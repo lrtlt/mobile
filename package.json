@@ -67,7 +67,8 @@
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
-    "redux-saga": "^1.2.3"
+    "redux-saga": "^1.2.3",
+    "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

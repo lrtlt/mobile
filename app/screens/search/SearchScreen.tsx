@@ -19,7 +19,6 @@ import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Article} from '../../../Types';
 import useSearch from './context/useSearch';
 import useSearchApi from './useSearchApi';
-import {debounce} from 'lodash';
 import SearchSuggestions from './SearchSuggestions';
 import {defaultSearchFilter} from './context/SearchContext';
 import {SearchCategorySuggestion} from '../../api/Types';
@@ -44,26 +43,20 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
   const {loadingState, searchResults, searchSuggestions, callSearchApi} = useSearchApi();
   const {colors, strings, dim} = useTheme();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const callSearchApiWithDebounce = useCallback(
-    debounce(callSearchApi, 1000, {
-      leading: false,
-    }),
-    [],
-  );
-
   useEffect(() => {
     const initialQuery = route?.params?.q ?? '';
     const initialFilter = route?.params?.filter ?? defaultSearchFilter;
 
     setQuery(initialQuery);
     setFilter(initialFilter);
+
+    callSearchApi(initialQuery, initialFilter);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    callSearchApiWithDebounce(query, filter);
-  }, [callSearchApiWithDebounce, filter, query]);
+    callSearchApi(query, filter);
+  }, [filter]);
 
   useNavigationAnalytics({
     viewId: 'https://www.lrt.lt/paieska',

@@ -5,13 +5,13 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import * as Screens from '../screens';
 import {Platform} from 'react-native';
 import {Drawer, SearchFilterDrawer} from '../components';
-import {useSettings} from '../settings/useSettings';
 import {themeDark, themeLight} from '../Theme';
 import {ArticlePhotoType, MenuItemPage, SearchFilter} from '../api/Types';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import SearchContextProvider from '../screens/search/context/SearchContextProvider';
 import ChannelContextProvider from '../screens/channel/context/ChannelContextProvider';
 import {Article} from '../../Types';
+import {useSettingsStore} from '../state/settings';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -112,9 +112,8 @@ const SearchDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
 };
 
 export default () => {
-  const settings = useSettings();
-
-  const theme = settings.isDarkMode ? themeDark : themeLight;
+  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+  const theme = isDarkMode ? themeDark : themeLight;
 
   return (
     <Stack.Navigator

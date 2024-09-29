@@ -1,7 +1,6 @@
 import React from 'react';
 import Navigation from './app/navigation';
 
-import SettingsProvider from './app/settings/SettingsProvider';
 import AppBackground from './app/components/appBackground/AppBackground';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -42,15 +41,13 @@ const App: React.FC = () => {
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <SettingsProvider>
-        <ThemeProvider>
-          <AppBackground>
-            <PlayerProvider>
-              <Navigation />
-            </PlayerProvider>
-          </AppBackground>
-        </ThemeProvider>
-      </SettingsProvider>
+      <ThemeProvider>
+        <AppBackground>
+          <PlayerProvider>
+            <Navigation />
+          </PlayerProvider>
+        </AppBackground>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 };
