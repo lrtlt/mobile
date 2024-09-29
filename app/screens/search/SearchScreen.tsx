@@ -1,12 +1,18 @@
 import React, {useCallback, useEffect} from 'react';
-import {View, Button, TextInput, StyleSheet, Animated, ListRenderItemInfo} from 'react-native';
+import {
+  View,
+  Button,
+  TextInput,
+  StyleSheet,
+  Animated,
+  ListRenderItemInfo,
+  ScrollViewProps,
+} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {ArticleComponent, ActionButton, Text, ScreenLoader} from '../../components';
+import {ArticleComponent, ActionButton, Text, ScreenLoader, AnimatedAppBar} from '../../components';
 import {IconFilter, IconSearch} from '../../components/svg';
 import {useTheme} from '../../Theme';
-import {HeaderBackButton} from '@react-navigation/elements';
-import {CollapsibleSubHeaderAnimator, useCollapsibleSubHeader} from 'react-navigation-collapsible';
-import {BorderlessButton} from 'react-native-gesture-handler';
+import {BorderlessButton, FlatList} from 'react-native-gesture-handler';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {MainStackParamList, SearchDrawerParamList} from '../../navigation/MainStack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
@@ -18,6 +24,8 @@ import SearchSuggestions from './SearchSuggestions';
 import {defaultSearchFilter} from './context/SearchContext';
 import {SearchCategorySuggestion} from '../../api/Types';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import useAppBarHeight from '../../components/appBar/useAppBarHeight';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -37,7 +45,12 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
   const {colors, strings, dim} = useTheme();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const callSearchApiWithDebounce = useCallback(debounce(callSearchApi, 1000), []);
+  const callSearchApiWithDebounce = useCallback(
+    debounce(callSearchApi, 1000, {
+      leading: false,
+    }),
+    [],
+  );
 
   useEffect(() => {
     const initialQuery = route?.params?.q ?? '';
@@ -45,7 +58,6 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
 
     setQuery(initialQuery);
     setFilter(initialFilter);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -59,27 +71,18 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
     sections: ['Bendra'],
   });
 
-  useEffect(() => {
-    navigation.setOptions({
-      title: '',
+  const {fullHeight, subHeaderHeight} = useAppBarHeight();
+  const scrollY = new Animated.Value(0);
+  const diffClamp = Animated.diffClamp(scrollY, 0, subHeaderHeight * 2);
+  const translateY = diffClamp.interpolate({
+    inputRange: [0, subHeaderHeight, subHeaderHeight * 2],
+    outputRange: [0, 0, -subHeaderHeight],
+  });
 
-      headerRight: () => (
-        <View style={styles.row}>
-          <ActionButton onPress={() => navigation.toggleDrawer()}>
-            <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
-          </ActionButton>
-        </View>
-      ),
-
-      headerLeft: () => (
-        <HeaderBackButton
-          labelVisible={false}
-          tintColor={colors.headerTint}
-          onPress={() => navigation.goBack()}
-        />
-      ),
-    });
-  }, [colors.headerTint, dim.appBarIconSize, navigation]);
+  const onScroll: ScrollViewProps['onScroll'] = (e) => {
+    const y = e.nativeEvent.contentOffset.y;
+    if (y > 0) scrollY.setValue(e.nativeEvent.contentOffset.y);
+  };
 
   const articlePressHandler = useCallback(
     (article: Article) => {
@@ -138,20 +141,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
         </View>
       </View>
     );
-  }, [
-    colors.card,
-    colors.background,
-    colors.text,
-    colors.textDisbled,
-    colors.headerTint,
-    setQuery,
-    query,
-    dim.appBarIconSize,
-    callSearchApi,
-    filter,
-  ]);
-
-  const {onScroll, containerPaddingTop, scrollIndicatorInsetTop, translateY} = useCollapsibleSubHeader();
+  }, [setQuery, query, callSearchApi, filter]);
 
   let content;
   if (loadingState.isError) {
@@ -171,10 +161,9 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
     content = <ScreenLoader />;
   } else {
     content = (
-      <Animated.FlatList
+      <FlatList
         onScroll={onScroll}
-        contentContainerStyle={{paddingTop: containerPaddingTop}}
-        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+        contentContainerStyle={{paddingTop: fullHeight + subHeaderHeight}}
         showsVerticalScrollIndicator={false}
         data={searchResults}
         windowSize={4}
@@ -200,8 +189,19 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
 
   return (
     <View style={styles.root}>
-      {content}
-      <CollapsibleSubHeaderAnimator translateY={translateY}>{renderSearchBar()}</CollapsibleSubHeaderAnimator>
+      <AnimatedAppBar
+        onBackPress={() => {
+          navigation.goBack();
+        }}
+        translateY={translateY}
+        actions={
+          <ActionButton onPress={() => navigation.toggleDrawer()}>
+            <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
+          </ActionButton>
+        }
+        subHeader={renderSearchBar()}
+      />
+      <SafeAreaView edges={['bottom']}>{content}</SafeAreaView>
     </View>
   );
 };
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 8,
-    paddingVertical: 12,
+    paddingVertical: 8,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -231,10 +231,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
-
     elevation: 2,
   },
   searchInputHolder: {
+    borderRadius: 4,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -245,11 +245,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
-    elevation: 4,
+    elevation: 2,
   },
   searchInput: {
-    padding: 12,
-
+    padding: 8,
     fontSize: 17,
     flex: 1,
   },

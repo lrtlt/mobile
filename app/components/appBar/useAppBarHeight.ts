@@ -10,6 +10,7 @@ const useAppBarHeight = () => {
   return {
     fullHeight: getDefaultHeaderHeight(layout, false, statusBarHeight),
     actionBarHeigh: getDefaultHeaderHeight(layout, false, 0),
+    subHeaderHeight: 62,
   };
 };
 

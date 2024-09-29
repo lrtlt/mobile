@@ -103,7 +103,7 @@ const SearchDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
           name="SearchScreen"
           component={Screens.SearchScreen}
           options={{
-            headerShown: true,
+            headerShown: false,
           }}
         />
       </SearchDrawer.Navigator>

@@ -38,10 +38,10 @@ const useArticleHeader = (article?: ArticleContent) => {
 
   const {fullHeight: appBarHeight} = useAppBarHeight();
   const scrollY = new Animated.Value(0);
-  const diffClamp = Animated.diffClamp(scrollY, 0, appBarHeight);
+  const diffClamp = Animated.diffClamp(scrollY, 0, appBarHeight * 2);
   const translateY = diffClamp.interpolate({
-    inputRange: [0, appBarHeight],
-    outputRange: [0, -appBarHeight],
+    inputRange: [0, appBarHeight, appBarHeight * 2],
+    outputRange: [0, 0, -appBarHeight],
   });
 
   const onScroll: ScrollViewProps['onScroll'] = (e) => {
