@@ -1,15 +1,14 @@
 import {useCallback, useState} from 'react';
-import {useDispatch} from 'react-redux';
 import {DailyQuestionChoice} from '../../api/Types';
-import {setDailyQuestionChoice} from '../../redux/actions';
 import {setDailyQuestionVote} from '../../api';
+import {useSettingsStore} from '../../state/settings_store';
 
 export const useSetDailyQuestionChoice = () => {
   const [state, setState] = useState({
     isLoading: false,
   });
 
-  const dispatch = useDispatch();
+  const setDailyQuestionChoice = useSettingsStore((state) => state.setDailyQuestionChoice);
 
   const callApi = useCallback(
     async (questionId: number, choice: DailyQuestionChoice) => {
@@ -22,14 +21,14 @@ export const useSetDailyQuestionChoice = () => {
       try {
         const response = await setDailyQuestionVote(questionId, choice.id);
         if (response.status >= 200 && response.status < 300) {
-          dispatch(setDailyQuestionChoice(questionId, choice));
+          setDailyQuestionChoice(questionId, choice);
         }
         setState({isLoading: false});
       } catch (e) {
         setState({isLoading: false});
       }
     },
-    [dispatch, state.isLoading],
+    [state.isLoading],
   );
 
   return callApi;

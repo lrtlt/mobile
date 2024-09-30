@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import {Falsy, StyleSheet, TextStyle} from 'react-native';
 import {useTheme} from '../../Theme';
 import {TextComponentProps} from './Text';
-import {useSettingsStore} from '../../state/settings';
+import {useSettingsStore} from '../../state/settings_store';
 import {useShallow} from 'zustand/react/shallow';
 
 const DEFAULT_FONT_SIZE = 15;

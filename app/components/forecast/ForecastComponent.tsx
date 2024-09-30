@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, ActivityIndicator, ViewStyle} from 'react-native';
-import {useSelector} from 'react-redux';
 import {fetchForecast} from '../../api';
 import {Forecast, ForecastLocation} from '../../api/Types';
 import {DEFAULT_FORECAST_LOCATION} from '../../constants';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
-import {selectForecastLocation} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {getIconForWeatherConditions} from '../../util/UI';
 import TextComponent from '../text/Text';
+import {useSettingsStore} from '../../state/settings_store';
 
 interface Props {
   style?: ViewStyle;
@@ -21,7 +20,7 @@ const ForecastComponent: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const [forecast, setForecast] = useState<Forecast | undefined>();
   const {colors} = useTheme();
 
-  const storedLocation = useSelector(selectForecastLocation);
+  const storedLocation = useSettingsStore((state) => state.forecastLocation);
   const location = (props.location ? props.location : storedLocation) as ForecastLocation;
 
   const cancellablePromise = useCancellablePromise();

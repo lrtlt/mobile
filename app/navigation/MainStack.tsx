@@ -11,7 +11,7 @@ import {NavigatorScreenParams} from '@react-navigation/native';
 import SearchContextProvider from '../screens/search/context/SearchContextProvider';
 import ChannelContextProvider from '../screens/channel/context/ChannelContextProvider';
 import {Article} from '../../Types';
-import {useSettingsStore} from '../state/settings';
+import {useSettingsStore} from '../state/settings_store';
 
 export type MainStackParamList = {
   Home: undefined;

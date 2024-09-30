@@ -5,8 +5,6 @@ import {StyleSheet, View} from 'react-native';
 import {buildArticleImageUri, buildImageUri, IMG_SIZE_XL} from '../../../../../../util/ImageUtil';
 import {SectionHeader, TouchableDebounce} from '../../../../../../components';
 import {useCallback} from 'react';
-import {openCategoryForId} from '../../../../../../redux/actions';
-import {useDispatch} from 'react-redux';
 import TextComponent from '../../../../../../components/text/Text';
 import {themeDark, themeLight, useTheme} from '../../../../../../Theme';
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,6 +14,7 @@ import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
+import {useNavigationStore} from '../../../../../../state/navigation_store';
 
 interface VideoListBlockProps {
   block: HomeBlockVideoList;
@@ -25,12 +24,11 @@ const VideoListBlock: React.FC<VideoListBlockProps> = ({block}) => {
   const {articles_list: articles} = block.data;
   const {category_id, category_title} = block.data;
 
-  const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const onHeaderPressHandler = useCallback(() => {
-    dispatch(openCategoryForId(category_id, category_title));
-  }, [category_id, category_title, dispatch]);
+    useNavigationStore.getState().openCategoryById(category_id, category_title);
+  }, [category_id, category_title]);
 
   return (
     <View>

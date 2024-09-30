@@ -1,13 +1,12 @@
 import {DrawerNavigationHelpers} from '@react-navigation/drawer/lib/typescript/src/types';
 import React from 'react';
-import {useDispatch} from 'react-redux';
 import {MenuItem, MenuItemCategory} from '../../../api/Types';
-import {openCategoryForName} from '../../../redux/actions';
 import {useTheme} from '../../../Theme';
 import {checkEqual} from '../../../util/LodashEqualityCheck';
 import DrawerItem from '../../drawerItem/DrawerItem';
 
 import DrawerCollapsibleBlock from './DrawerCollapsibleBlock';
+import {useNavigationStore} from '../../../state/navigation_store';
 
 interface Props {
   navigation: DrawerNavigationHelpers;
@@ -16,8 +15,6 @@ interface Props {
 
 const DrawerBlockNews: React.FC<React.PropsWithChildren<Props>> = ({items, navigation}) => {
   const {strings} = useTheme();
-
-  const dispatch = useDispatch();
 
   if (!items || items.length <= 0) {
     console.log('invalid news data');
@@ -33,7 +30,7 @@ const DrawerBlockNews: React.FC<React.PropsWithChildren<Props>> = ({items, navig
             text={route.name}
             onPress={() => {
               navigation.closeDrawer();
-              dispatch(openCategoryForName(route.name));
+              useNavigationStore.getState().openCategoryByName(route.name);
             }}
           />
         );

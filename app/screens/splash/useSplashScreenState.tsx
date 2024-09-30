@@ -1,39 +1,39 @@
-import {useDispatch, useSelector} from 'react-redux';
-import {selectSplashScreenState} from '../../redux/selectors';
-import {checkEqual} from '../../util/LodashEqualityCheck';
+import {useDispatch} from 'react-redux';
 import {useCallback, useEffect} from 'react';
-import {fetchHome, fetchMenuItems} from '../../redux/actions';
+import {fetchHome} from '../../redux/actions';
+import {NavigationState, useNavigationStore} from '../../state/navigation_store';
+import {useShallow} from 'zustand/shallow';
 
-type ReturnProps = ReturnType<typeof selectSplashScreenState> & {
+type ReturnProps = NavigationState & {
   load: (ignoreError: boolean) => void;
 };
 
 const useSplashScreenState = (): ReturnProps => {
-  const state = useSelector(selectSplashScreenState, checkEqual);
+  const state = useNavigationStore(useShallow((state) => state));
+  const isLoaded = state.routes.length > 0;
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (state.isReady !== true) {
-      load();
+    load();
+  }, []);
+
+  useEffect(() => {
+    if (isLoaded) {
+      dispatch(fetchHome());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.hasMenuData]);
+  }, [isLoaded]);
 
   const load = useCallback(
     (ignoreError = false) => {
       if (state.isError && ignoreError === false) {
         return;
       }
-
       if (state.isLoading !== true) {
-        if (state.hasMenuData) {
-          dispatch(fetchHome());
-        } else {
-          dispatch(fetchMenuItems());
-        }
+        state.fetchMenuItems();
       }
     },
-    [dispatch, state.hasMenuData, state.isError, state.isLoading],
+    [state],
   );
 
   return {

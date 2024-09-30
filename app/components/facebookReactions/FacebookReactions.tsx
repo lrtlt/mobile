@@ -3,7 +3,7 @@ import {View, StyleSheet, ViewStyle} from 'react-native';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
 import {IconFacebook} from '../svg';
-import {useSettingsStore} from '../../state/settings';
+import {useSettingsStore} from '../../state/settings_store';
 
 interface Props {
   style?: ViewStyle;

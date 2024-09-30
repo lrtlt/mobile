@@ -6,20 +6,16 @@ import {
   fetchAudiotekaApi,
   fetchCategoryApi,
   fetchMediatekaApi,
-  fetchMenuItemsApi,
   fetchNewestApi,
   fetchPopularApi,
-  fetchProgramApi,
 } from '../api';
 import {
   AudiotekaResponse,
   CategoryArticlesResponse,
   HomeDataResponse,
   MediatekaDataResponse,
-  MenuResponse,
   NewestArticlesResponse,
   PopularArticlesResponse,
-  ProgramResponse,
 } from '../api/Types';
 import {
   fetchAudiotekaError,
@@ -31,35 +27,26 @@ import {
   fetchHomeResult,
   fetchMediatekaError,
   fetchMediatekaResult,
-  fetchMenuItemsError,
-  fetchMenuItemsResult,
-  FetchMenuItemsResultAction,
   FetchNewestArticlesAction,
   fetchNewestError,
   fetchNewestResult,
   FetchPopularArticlesAction,
   fetchPopularError,
   fetchPopularResult,
-  fetchProgramError,
-  fetchProgramResult,
   RefreshCategoryArticlesAction,
   RefreshNewestArticlesAction,
   RefreshPopularArticlesAction,
-  updateLogoCache,
 } from './actions';
 import {
   FETCH_HOME,
   FETCH_CATEGORY,
   REFRESH_CATEGORY,
-  FETCH_MENU_ITEMS,
   FETCH_NEWEST,
   REFRESH_NEWEST,
   FETCH_POPULAR,
   REFRESH_POPULAR,
   FETCH_MEDIATEKA,
-  FETCH_PROGRAM,
   FETCH_AUDIOTEKA,
-  API_MENU_ITEMS_RESULT,
 } from './actions/actionTypes';
 
 function report(error: any, message: string) {
@@ -72,18 +59,6 @@ function report(error: any, message: string) {
     },
     'APIError',
   );
-}
-
-function* fetchMenuItems() {
-  try {
-    const data: MenuResponse = yield call(fetchMenuItemsApi);
-    yield put(fetchMenuItemsResult(data));
-  } catch (e: any) {
-    console.log('Saga error', e);
-    report(e, 'Error getting menu items from API');
-    yield put(fetchMenuItemsError());
-  }
-  return 0;
 }
 
 function* fetchArticlesData() {
@@ -118,17 +93,6 @@ function* fetchAudiotekaData() {
     console.log('Saga error', e);
     report(e, 'Error getting audioteka data from API');
     yield put(fetchAudiotekaError());
-  }
-  return 0;
-}
-
-function* fetchProgramData() {
-  try {
-    const data: ProgramResponse = yield call(fetchProgramApi);
-    yield put(fetchProgramResult(data));
-  } catch (e) {
-    console.log('Saga error', e);
-    yield put(fetchProgramError());
   }
   return 0;
 }
@@ -215,28 +179,7 @@ function* refreshPopularData(action: RefreshPopularArticlesAction) {
   return 0;
 }
 
-function* fetchLogoSvg({data}: FetchMenuItemsResultAction) {
-  try {
-    const logoUrl = data.logo;
-    if (logoUrl) {
-      const svg: string = yield call(() => fetch(logoUrl).then((r) => r.text()));
-      if (svg) {
-        yield put(
-          updateLogoCache({
-            url: logoUrl,
-            svg: svg,
-          }),
-        );
-      }
-    }
-  } catch (e) {
-    console.log('Saga error', e);
-  }
-  return 0;
-}
-
 export default function* rootSaga() {
-  yield takeEvery(FETCH_MENU_ITEMS, fetchMenuItems);
   yield takeEvery(FETCH_HOME, fetchArticlesData);
   yield takeEvery(FETCH_CATEGORY, fetchCategoryData);
   yield takeEvery(REFRESH_CATEGORY, refreshCategoryData);
@@ -246,6 +189,4 @@ export default function* rootSaga() {
   yield takeEvery(REFRESH_POPULAR, refreshPopularData);
   yield takeEvery(FETCH_MEDIATEKA, fetchMediatekaData);
   yield takeEvery(FETCH_AUDIOTEKA, fetchAudiotekaData);
-  yield takeEvery(FETCH_PROGRAM, fetchProgramData);
-  yield takeEvery(API_MENU_ITEMS_RESULT, fetchLogoSvg);
 }

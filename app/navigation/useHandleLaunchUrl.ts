@@ -1,13 +1,15 @@
 import {useEffect} from 'react';
 import {Linking} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {clearLaunchUrl} from '../redux/actions';
-import {RootState} from '../redux/reducers';
+import {useNavigationStore} from '../state/navigation_store';
+import {useShallow} from 'zustand/shallow';
 
 const useHandleLaunchUrl = (enabled: boolean) => {
-  const launchUrl = useSelector((state: RootState) => state.navigation.launchUrl);
-
-  const dispatch = useDispatch();
+  const {launchUrl, setLaunchUrl} = useNavigationStore(
+    useShallow((state) => ({
+      launchUrl: state.launchUrl,
+      setLaunchUrl: state.setLaunchUrl,
+    })),
+  );
 
   useEffect(() => {
     if (launchUrl) {
@@ -15,7 +17,7 @@ const useHandleLaunchUrl = (enabled: boolean) => {
         console.log('LaunchUrl handler: waiting to be enabled...');
       } else {
         Linking.openURL(launchUrl);
-        dispatch(clearLaunchUrl());
+        setLaunchUrl(undefined);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

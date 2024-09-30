@@ -5,6 +5,7 @@ import {ProgramItem} from '../../../components';
 import Divider from '../../../components/divider/Divider';
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {PROGRAM_ITEM_HEIGHT} from '../../../components/programItem/ProgramItem';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface Props {
   items: ProgramItemType[];
@@ -42,11 +43,15 @@ const ProgramList: React.FC<React.PropsWithChildren<Props>> = ({items, scrollToI
 
   const keyExtractor = useCallback((item: any, i: number) => String(i) + String(item), []);
 
+  const {bottom} = useSafeAreaInsets();
   return (
     <View style={styles.root}>
       <FlashList
         ref={ref}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: bottom,
+        }}
         data={items}
         renderItem={renderProgramItem}
         initialScrollIndex={scrollToIndex}

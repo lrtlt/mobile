@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {debounce} from 'lodash';
 import {TouchableOpacity, TouchableOpacityProps} from 'react-native';
-import {GenericTouchableProps} from 'react-native-gesture-handler/lib/typescript/components/touchables/GenericTouchable';
+import {GenericTouchableProps} from 'react-native-gesture-handler/lib/typescript/components/touchables/GenericTouchableProps';
 
 type Props = TouchableOpacityProps &
   GenericTouchableProps & {

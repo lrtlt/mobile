@@ -3,7 +3,7 @@ import {View, ActivityIndicator, Button, StyleSheet, StatusBar} from 'react-nati
 import {Logo, Text} from '../../components';
 import {strings, themeDark, themeLight} from '../../Theme';
 import useSplashScreenState from './useSplashScreenState';
-import {useSettingsStore} from '../../state/settings';
+import {useSettingsStore} from '../../state/settings_store';
 
 const SplashScreen: React.FC<React.PropsWithChildren<{}>> = () => {
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);

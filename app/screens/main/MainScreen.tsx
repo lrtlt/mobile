@@ -1,16 +1,14 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
 import {ActionButton, Logo} from '../../components';
 import {IconDrawerMenu, IconSettings} from '../../components/svg';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
-import {useSelector} from 'react-redux';
 import HomeScreen from './tabScreen/home/HomeScreen';
 import TestScreen from '../testScreen/TestScreen';
 import {EventRegister} from 'react-native-event-listeners';
 import {EVENT_LOGO_PRESS, EVENT_OPEN_CATEGORY, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
-import {selectMainScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AudiotekaScreen from './tabScreen/audioteka/AudiotekaScreen';
@@ -29,6 +27,7 @@ import {DrawerNavigationProp} from '@react-navigation/drawer';
 import ArticleTabScreen from './tabScreen/ArticleTabScreen';
 import NotificationsModal from '../../components/notificationsModal/NotificationsModal';
 import useOnboardingLogic from './useOnboardingLogic';
+import {useNavigationStore} from '../../state/navigation_store';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -48,9 +47,18 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
 
   const {isVisible, onClose} = useOnboardingLogic();
 
-  const state = useSelector(selectMainScreenState, (left, right) => {
-    return left.routes.length === right.routes.length;
-  });
+  const routes = useNavigationStore((state) => state.routes);
+  const state = useMemo(() => {
+    return {
+      routes: routes.map((r) => {
+        if (r.type === ROUTE_TYPE_CATEGORY) {
+          return {type: r.type, key: r.name, title: r.name, categoryId: r.id, categoryUrl: r.url};
+        } else {
+          return {type: r.type, key: r.name, title: r.name};
+        }
+      }),
+    };
+  }, [routes]);
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_SELECT_CATEGORY_INDEX, (data) => {
@@ -64,13 +72,12 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   }, [state]);
 
   useEffect(() => {
-    const listener = EventRegister.addEventListener(EVENT_OPEN_CATEGORY, (data) => {
-      if (data?.category) {
-        const {category} = data;
+    const listener = EventRegister.addEventListener(EVENT_OPEN_CATEGORY, ({id, title}) => {
+      if (id) {
         navigation.navigate('Category', {
-          id: category.id,
-          name: category.title,
-          url: category.url,
+          id: id,
+          name: title ?? '',
+          url: '',
         });
       }
     });

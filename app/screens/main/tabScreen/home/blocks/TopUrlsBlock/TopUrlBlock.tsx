@@ -7,8 +7,7 @@ import Divider from '../../../../../../components/divider/Divider';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
-import {useDispatch} from 'react-redux';
-import {openCategoryForId} from '../../../../../../redux/actions';
+import {useNavigationStore} from '../../../../../../state/navigation_store';
 
 type Props = {
   block: AudiotekaTopUrlList;
@@ -16,14 +15,13 @@ type Props = {
 
 const TopUrlBlock: React.FC<React.PropsWithChildren<Props>> = ({block}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const dispatch = useDispatch();
 
   const {colors} = useTheme();
 
   const {title, items} = block.url_list;
 
   const onPressHandler = useCallback(
-    async (item: typeof items[number]) => {
+    async (item: (typeof items)[number]) => {
       switch (item.url_type) {
         case 'tag': {
           navigation.navigate('Slug', {
@@ -33,7 +31,7 @@ const TopUrlBlock: React.FC<React.PropsWithChildren<Props>> = ({block}) => {
           break;
         }
         case 'category': {
-          dispatch(openCategoryForId(item.category_id, item.title));
+          useNavigationStore.getState().openCategoryById(item.category_id, item.title);
           break;
         }
         case 'webpage': {
@@ -50,7 +48,7 @@ const TopUrlBlock: React.FC<React.PropsWithChildren<Props>> = ({block}) => {
         }
       }
     },
-    [dispatch, navigation],
+    [navigation],
   );
 
   const itemsComponents = useMemo(

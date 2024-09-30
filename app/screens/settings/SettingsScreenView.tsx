@@ -7,7 +7,7 @@ import SettingsNotifications from './SettingsNotifications';
 import {ScrollView} from 'react-native-gesture-handler';
 import SettingsSwitch from './SettingsSwitch';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useSettingsStore} from '../../state/settings';
+import {useSettingsStore} from '../../state/settings_store';
 
 const TEXT_SIZE_NORMAL = 0;
 const TEXT_SIZE_LARGE = 2;

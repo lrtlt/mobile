@@ -2,8 +2,7 @@ import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import useDailyQuestionData from './useDailyQuestionData';
 import DailyQuestionComponent from './DailyQuestionComponent';
-import {useSelector} from 'react-redux';
-import {selectDailyQuestionChoice} from '../../redux/selectors';
+import {useSettingsStore} from '../../state/settings_store';
 
 interface DailyQuestionWrapperProps {
   id: string | number;
@@ -14,7 +13,7 @@ const VOTES_REFRESH_RATE = 1000 * 15; // 15 sec
 
 const DailyQuestionWrapper: React.FC<DailyQuestionWrapperProps> = ({id, contentMargin}) => {
   const {question, refresh} = useDailyQuestionData(id);
-  const answer = useSelector(selectDailyQuestionChoice);
+  const answer = useSettingsStore((state) => state.daily_question_response);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;

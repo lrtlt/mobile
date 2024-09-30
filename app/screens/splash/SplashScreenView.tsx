@@ -3,7 +3,7 @@ import {View, StyleSheet} from 'react-native';
 
 import {themeDark, themeLight} from '../../Theme';
 import {Logo} from '../../components';
-import {useSettingsStore} from '../../state/settings';
+import {useSettingsStore} from '../../state/settings_store';
 
 const SplashViewComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);

@@ -30,7 +30,7 @@ import FastImage from 'react-native-fast-image';
 import {VideoTextTrack} from '../../api/Types';
 import usePlayerSubtitles from './usePlayerSubtitles';
 import Orientation from 'react-native-orientation-locker';
-import {useSettingsStore} from '../../state/settings';
+import {useSettingsStore} from '../../state/settings_store';
 
 export type PlayerAction = 'togglePlay' | 'setFullScreen';
 

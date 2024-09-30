@@ -1,14 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Forecast, MyScrollView, WeatherEmbed} from '../../components';
-import {useSelector, useDispatch} from 'react-redux';
 
 import {useTheme} from '../../Theme';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import WeatherLocations from './WeatherLocations';
 import ConfirmModal from './ConfirmModal';
-import {setForecastLocation} from '../../redux/actions/config';
-import {selectForecastLocation} from '../../redux/selectors';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
@@ -16,6 +13,7 @@ import {ForecastLocation} from '../../api/Types';
 import useFetchWeatherArticles from './useFetchWeatherArticles';
 import SlugArticlesBlock from '../main/tabScreen/home/blocks/SlugArticlesBlock/SlugArticlesBlock';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import {useSettingsStore} from '../../state/settings_store';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Weather'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Weather'>;
@@ -26,10 +24,10 @@ type Props = {
 };
 
 const WeatherScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
-  const [selectedLocation, setSelectedLocation] = useState(useSelector(selectForecastLocation));
-  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+  const {forecastLocation, setForecastLocation} = useSettingsStore();
 
-  const dispatch = useDispatch();
+  const [selectedLocation, setSelectedLocation] = useState(forecastLocation);
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
 
   const {strings} = useTheme();
 
@@ -89,7 +87,7 @@ const WeatherScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
         visible={confirmModalVisible}
         onCancel={() => setConfirmModalVisible(false)}
         onConfirm={() => {
-          dispatch(setForecastLocation(selectedLocation));
+          setForecastLocation(selectedLocation);
           setConfirmModalVisible(false);
         }}
       />

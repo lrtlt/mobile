@@ -1,10 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ScreenLoader, ProgramDay, ActionButton} from '../../components';
-import {fetchProgram} from '../../redux/actions';
-import {useSelector, useDispatch} from 'react-redux';
 import ProgramTabs from './tabs/ProgramTabsScreen';
-import {selectProgramScreenState} from '../../redux/selectors';
 import {useTheme} from '../../Theme';
 import {IconCalendar} from '../../components/svg';
 import {MainStackParamList} from '../../navigation/MainStack';
@@ -15,6 +12,7 @@ import useAppStateCallback from '../../hooks/useAppStateCallback';
 import {ARTICLE_EXPIRE_DURATION} from '../../constants';
 import {delay} from 'lodash';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import {useProgramStore} from '../../state/program_store';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Program'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Program'>;
@@ -35,12 +33,19 @@ const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
   const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined);
 
   const {colors, dim} = useTheme();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  // const state = useSelector(selectProgramScreenState);
 
-  const state = useSelector(selectProgramScreenState);
-  const loadingState = state.loadingState;
-  const program = state.program?.all_programs;
-  const lastFetchTime = state.lastFetchTime;
+  const programStore = useProgramStore((state) => state);
+
+  const loadingState = programStore.isError
+    ? STATE_ERROR
+    : programStore.isFetching || !programStore.program
+    ? STATE_LOADING
+    : STATE_READY;
+
+  const program = programStore.program?.all_programs;
+  const lastFetchTime = programStore.lastFetchTime;
 
   useEffect(() => {
     if (program && !selectedDate) {
@@ -49,7 +54,7 @@ const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
   }, [program, selectedDate]);
 
   useEffect(() => {
-    dispatch(fetchProgram());
+    programStore.fetchProgram();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -62,9 +67,9 @@ const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
   useAppStateCallback(
     useCallback(() => {
       if (Date.now() - lastFetchTime > ARTICLE_EXPIRE_DURATION) {
-        dispatch(fetchProgram());
+        programStore.fetchProgram();
       }
-    }, [dispatch, lastFetchTime]),
+    }, [lastFetchTime]),
   );
 
   useEffect(() => {
@@ -83,7 +88,7 @@ const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
 
   let content;
   switch (true) {
-    case loadingState === STATE_READY || state.lastFetchTime > 0: {
+    case loadingState === STATE_READY || programStore.lastFetchTime > 0: {
       const selectedDay = selectedDate || program?.days[0];
       const selectedDayProgram = program![selectedDay];
 
