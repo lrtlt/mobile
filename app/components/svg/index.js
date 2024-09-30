@@ -75,3 +75,4 @@ export {default as IconNumber2} from './ic_number_2';
 export {default as IconNumber3} from './ic_number_3';
 export {default as IconNumber4} from './ic_number_4';
 export {default as IconNumber5} from './ic_number_5';
+export {default as IconUser} from './ic_user';

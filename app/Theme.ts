@@ -58,6 +58,8 @@ interface Dictionary {
   stream_blocked_warning: string;
   remove_from_bookmarks: string;
   related_genres: string;
+  login: string;
+  logout: string;
 }
 
 export const strings: Dictionary = {
@@ -102,6 +104,8 @@ export const strings: Dictionary = {
   stream_blocked_warning: 'Transliacija internetu negalima dėl autorių teisių apribojimų.',
   remove_from_bookmarks: 'Pašalinti iš išsaugotų',
   related_genres: 'Susiję žanrai',
+  login: 'Prisijungti',
+  logout: 'Atsijungti',
 };
 //#endregion
 

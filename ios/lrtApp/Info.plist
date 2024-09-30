@@ -32,6 +32,16 @@
 				<string>lrt</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>CFBundleURLName</key>
+			<string>auth0</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(PRODUCT_BUNDLE_IDENTIFIER).auth0</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -63,17 +73,14 @@
 	<string>${PRODUCT_NAME} uses the local network to discover Cast-enabled devices on your WiFi
 			network.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Optional permission required by 3rd party library. If you see this, you can deny
-			access.</string>
+	<string>Optional permission required by 3rd party library. If you see this, you can deny access.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Optional permission required by 3rd party library. If you see this, you can deny
-			access.</string>
+	<string>Optional permission required by 3rd party library. If you see this, you can deny access.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Optional permission required by 3rd party library. If you see this, you can deny
-			access.</string>
+	<string>Optional permission required by 3rd party library. If you see this, you can deny access.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>${PRODUCT_NAME} uses microphone access to listen for ultrasonic tokens when pairing
-			with nearby Cast devices.</string>
+	<string>${PRODUCT_NAME} uses microphone access to listen for ultrasonic tokens when pairing with
+			nearby Cast devices.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>${PRODUCT_NAME} uses photo library access to select images for sharing.</string>
 	<key>NSUserTrackingUsageDescription</key>
