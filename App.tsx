@@ -12,6 +12,7 @@ import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import ThemeProvider from './app/theme/ThemeProvider';
 import useAppCheckSetup from './app/util/useAppCheckSetup';
 import Orientation from 'react-native-orientation-locker';
+import {Auth0Provider} from 'react-native-auth0';
 
 import {enableFreeze} from 'react-native-screens';
 import {runArticleStorageMigration} from './app/state/article_storage_store';
@@ -52,7 +53,9 @@ const App: React.FC = () => {
 
 export default () => (
   <GestureHandlerRootView style={styles.flex}>
-    <App />
+    <Auth0Provider domain={'dev-lrt.eu.auth0.com'} clientId={'uHv95muRXcS6e8RbQfovKf3D5wxO6ARQ'}>
+      <App />
+    </Auth0Provider>
   </GestureHandlerRootView>
 );
 

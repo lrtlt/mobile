@@ -1,10 +1,11 @@
 import {DrawerNavigationHelpers} from '@react-navigation/drawer/lib/typescript/src/types';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useCallback} from 'react';
 import {View} from 'react-native';
 import {useTheme} from '../../../Theme';
 import DrawerItem from '../../drawerItem/DrawerItem';
-import {IconBookmark, IconClock, IconSearch, IconTelevision} from '../../svg';
+import {IconBookmark, IconClock, IconSearch, IconTelevision, IconUser} from '../../svg';
+import {useAuth0} from 'react-native-auth0';
 
 interface Props {
   navigation: DrawerNavigationHelpers;
@@ -12,14 +13,34 @@ interface Props {
 
 const DrawerBlockTop: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const {colors, strings, dim} = useTheme();
+  const {authorize, clearSession, user, getCredentials} = useAuth0();
 
   const handleSearchClick = useCallback(() => navigation.navigate('Search'), [navigation]);
   const handleHistoryClick = useCallback(() => navigation.navigate('History'), [navigation]);
   const handleBookmarksClick = useCallback(() => navigation.navigate('Bookmarks'), [navigation]);
   const handleProgramClick = useCallback(() => navigation.navigate('Program'), [navigation]);
 
+  useEffect(() => {
+    getCredentials().then((credentials) => {
+      console.log('user', user);
+      console.log('getCredentials', credentials);
+    });
+  }, [user]);
+
   return (
     <View style={{paddingVertical: dim.drawerPadding}}>
+      <DrawerItem
+        key={user ? strings.logout : strings.login}
+        text={user ? strings.logout : strings.login}
+        iconComponent={<IconUser size={dim.drawerIconSize} color={colors.textSecondary} />}
+        onPress={async () => {
+          if (user) {
+            await clearSession();
+          } else {
+            await authorize();
+          }
+        }}
+      />
       <DrawerItem
         key={strings.search}
         text={strings.search}

@@ -1,4 +1,9 @@
 PODS:
+  - A0Auth0 (3.2.1):
+    - Auth0 (= 2.7.2)
+    - JWTDecode (= 3.1.0)
+    - React-Core
+    - SimpleKeychain (= 1.1.0)
   - abseil/algorithm (1.20240116.2):
     - abseil/algorithm/algorithm (= 1.20240116.2)
     - abseil/algorithm/container (= 1.20240116.2)
@@ -950,6 +955,9 @@ PODS:
     - GoogleUtilities/Environment (~> 7.13)
     - GoogleUtilities/UserDefaults (~> 7.13)
     - PromisesObjC (~> 2.3)
+  - Auth0 (2.7.2):
+    - JWTDecode (~> 3.1)
+    - SimpleKeychain (~> 1.1)
   - boost (1.83.0)
   - BoringSSL-GRPC (0.0.32):
     - BoringSSL-GRPC/Implementation (= 0.0.32)
@@ -1228,6 +1236,7 @@ PODS:
   - hermes-engine (0.73.8):
     - hermes-engine/Pre-built (= 0.73.8)
   - hermes-engine/Pre-built (0.73.8)
+  - JWTDecode (3.1.0)
   - leveldb-library (1.22.5)
   - libevent (2.1.12)
   - libwebp (1.3.2):
@@ -2416,6 +2425,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
+  - SimpleKeychain (1.1.0)
   - SocketRocket (0.6.1)
   - SwiftAudioEx (1.1.0)
   - Swifter (1.5.0)
@@ -2432,6 +2442,7 @@ PODS:
   - Yoga (1.14.0)
 
 DEPENDENCIES:
+  - A0Auth0 (from `../node_modules/react-native-auth0`)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -2519,6 +2530,7 @@ SPEC REPOS:
   trunk:
     - abseil
     - AppCheckCore
+    - Auth0
     - BoringSSL-GRPC
     - DSFRegex
     - Firebase
@@ -2543,6 +2555,7 @@ SPEC REPOS:
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
+    - JWTDecode
     - leveldb-library
     - libevent
     - libwebp
@@ -2553,6 +2566,7 @@ SPEC REPOS:
     - PromisesSwift
     - SDWebImage
     - SDWebImageWebPCoder
+    - SimpleKeychain
     - SocketRocket
     - SwiftAudioEx
     - Swifter
@@ -2563,6 +2577,8 @@ SPEC REPOS:
     - TinyCSV
 
 EXTERNAL SOURCES:
+  A0Auth0:
+    :path: "../node_modules/react-native-auth0"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   BVLinearGradient:
@@ -2726,8 +2742,10 @@ CHECKOUT OPTIONS:
     :git: https://github.com/Danesz/react-native-google-cast.git
 
 SPEC CHECKSUMS:
+  A0Auth0: 47cb14c87d549b95b92242675ff2198ccd9dcbc5
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   AppCheckCore: 9feb4300caa596a36416cde10674dc5bec1e022e
+  Auth0: 28cb24cb19ebd51f0b07751f16d83b59f4019532
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
@@ -2759,6 +2777,7 @@ SPEC CHECKSUMS:
   "gRPC-C++": e725ef63c4475d7cdb7e2cf16eb0fde84bd9ee51
   gRPC-Core: eee4be35df218649fe66d721a05a7f27a28f069b
   hermes-engine: b12d9bb1b7cee546f5e48212e7ea7e3c1665a367
+  JWTDecode: 3eaab1e06b6f4dcbdd6716aff09ba4c2104ca8b7
   leveldb-library: e8eadf9008a61f9e1dde3978c086d2b6d9b9dc28
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
@@ -2838,6 +2857,7 @@ SPEC CHECKSUMS:
   RNSVG: 4590aa95758149fa27c5c83e54a6a466349a1688
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
+  SimpleKeychain: f8707c8e97b38c6a6e687b17732afc9bcef06439
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftAudioEx: f6aa653770f3a0d3851edaf8d834a30aee4a7646
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
