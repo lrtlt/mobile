@@ -90,6 +90,7 @@ android {
         versionCode 204701
         versionName "2.47.1"
         multiDexEnabled true
+        manifestPlaceholders = [auth0Domain: "dev-lrt.eu.auth0.com", auth0Scheme: "${applicationId}.auth0"]
     }
     signingConfigs {
         debug {
