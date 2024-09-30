@@ -63,6 +63,8 @@ interface Dictionary {
   menu_newsletter: string;
   menu_contacts: string;
   menu_about: string;
+  login: string;
+  logout: string;
 }
 
 export const strings: Dictionary = {
@@ -112,6 +114,8 @@ export const strings: Dictionary = {
   menu_shop: 'LRT parduotuvė',
   menu_contacts: 'Susisiekite',
   menu_about: 'Apie LRT',
+  login: 'Prisijungti',
+  logout: 'Atsijungti',
 };
 //#endregion
 

@@ -96,6 +96,7 @@ android {
         versionName "2.62.0"
         multiDexEnabled true
         resValue "string", "build_config_package", "lt.mediapark.lrt"
+        manifestPlaceholders = [auth0Domain: "dev-lrt.eu.auth0.com", auth0Scheme: "${applicationId}.auth0"]
     }
     signingConfigs {
         debug {
