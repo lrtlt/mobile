@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Navigation from './app/navigation';
 
 import AppBackground from './app/components/appBackground/AppBackground';
@@ -17,6 +17,7 @@ import useAppCheckSetup from './app/util/useAppCheckSetup';
 import Orientation from 'react-native-orientation-locker';
 
 import {enableFreeze} from 'react-native-screens';
+import {runArticleStorageMigration} from './app/state/article_storage_store';
 enableFreeze(true);
 
 const ReduxProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
@@ -33,6 +34,10 @@ const App: React.FC = () => {
   if (Platform.OS === 'android') {
     Orientation.lockToPortrait();
   }
+
+  useEffect(() => {
+    runArticleStorageMigration();
+  }, []);
 
   useAppCheckSetup();
   useNotificationsPermission();

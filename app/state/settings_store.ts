@@ -1,9 +1,9 @@
 import {create} from 'zustand';
-import {createJSONStorage, persist, StateStorage} from 'zustand/middleware';
+import {createJSONStorage, persist} from 'zustand/middleware';
 import {DailyQuestionChoice, ForecastLocation} from '../api/Types';
-import {MMKV} from 'react-native-mmkv';
+import {zustandStorage} from './mmkv';
 
-export type SettingsStore = {
+type SettingsStore = {
   isDarkMode: boolean;
   isContinuousPlayEnabled: boolean;
   textSizeMultiplier: number;
@@ -37,23 +37,6 @@ const initialState: Omit<
   isDarkMode: false,
   isContinuousPlayEnabled: true,
   textSizeMultiplier: 0,
-};
-
-const storage = new MMKV({
-  id: 'settings-storage',
-});
-
-const zustandStorage: StateStorage = {
-  setItem: (name, value) => {
-    return storage.set(name, value);
-  },
-  getItem: (name) => {
-    const value = storage.getString(name);
-    return value ?? null;
-  },
-  removeItem: (name) => {
-    return storage.delete(name);
-  },
 };
 
 export const useSettingsStore = create<SettingsStore>()(

@@ -1,10 +1,9 @@
 import {useNavigation} from '@react-navigation/core';
 import {useCallback, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
 import {fetchArticle} from '../../api';
 import {ArticleContent} from '../../api/Types';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
-import {addArticleToHistory} from '../../redux/actions';
+import {useArticleStorageStore} from '../../state/article_storage_store';
 
 type ScreenState = {
   article?: ArticleContent;
@@ -26,7 +25,7 @@ const useArticleScreenState = (articleId: number): [ScreenState, (accept: boolea
     loadingState: STATE_LOADING,
   });
 
-  const dispatch = useDispatch();
+  const articleStorage = useArticleStorageStore.getState();
   const navigation = useNavigation();
 
   const cancellablePromise = useCancellablePromise();
@@ -50,7 +49,7 @@ const useArticleScreenState = (articleId: number): [ScreenState, (accept: boolea
           article,
           loadingState: loadingState,
         });
-        dispatch(addArticleToHistory(article));
+        articleStorage.addArticleToHistory(article);
       })
       .catch((e) => {
         console.log(e);
@@ -59,7 +58,7 @@ const useArticleScreenState = (articleId: number): [ScreenState, (accept: boolea
           loadingState: STATE_ERROR,
         });
       });
-  }, [articleId, cancellablePromise, dispatch]);
+  }, [articleId, cancellablePromise]);
 
   const acceptAdultContent = useCallback(
     (accept: boolean) => {

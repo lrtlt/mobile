@@ -3,16 +3,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
 import {Animated, ScrollViewProps, StyleSheet, View} from 'react-native';
 import Share from 'react-native-share';
-import {useDispatch, useSelector} from 'react-redux';
 import {ArticleContent, isDefaultArticle} from '../../api/Types';
 import {ActionButton, AnimatedAppBar} from '../../components';
 import {SaveIcon, ShareIcon} from '../../components/svg';
 import {MainStackParamList} from '../../navigation/MainStack';
-import {removeArticle, saveArticle} from '../../redux/actions';
-import {selectArticleBookmarked} from '../../redux/selectors';
 import {themeLight, useTheme} from '../../Theme';
 import Snackbar from '../../components/snackbar/SnackBar';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
+import {useArticleStorageStore} from '../../state/article_storage_store';
 
 const getArticleId = (article?: ArticleContent) => {
   if (!article) {
@@ -33,8 +31,11 @@ const useArticleHeader = (article?: ArticleContent) => {
 
   const {colors, dim, strings} = useTheme();
 
-  const dispatch = useDispatch();
-  const isBookmarked = useSelector(selectArticleBookmarked(getArticleId(article)));
+  const articleStorage = useArticleStorageStore.getState();
+
+  const isBookmarked = useArticleStorageStore((state) =>
+    state.savedArticles.some((a) => a.id === getArticleId(article)),
+  );
 
   const {fullHeight: appBarHeight} = useAppBarHeight();
   const scrollY = new Animated.Value(0);
@@ -56,10 +57,10 @@ const useArticleHeader = (article?: ArticleContent) => {
 
     const _saveArticlePress = () => {
       if (isBookmarked) {
-        dispatch(removeArticle(getArticleId(article)));
+        articleStorage.removeArticle(getArticleId(article));
         setSnackbar(undefined);
       } else {
-        dispatch(saveArticle(article));
+        articleStorage.saveArticle(article);
         setSnackbar(
           <Snackbar message={strings.articleHasBeenSaved} backgroundColor={themeLight.colors.primaryDark} />,
         );

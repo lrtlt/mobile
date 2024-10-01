@@ -2,7 +2,7 @@ import {create} from 'zustand';
 import {ProgramResponse} from '../api/Types';
 import {fetchProgramApi} from '../api';
 
-export type ProgramStore = {
+type ProgramStore = {
   isFetching: boolean;
   isError: boolean;
   program?: ProgramResponse;

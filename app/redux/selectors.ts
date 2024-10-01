@@ -1,7 +1,6 @@
 import {HomePageType} from '../../Types';
 import {HomeBlockChannels, ROUTE_TYPE_MEDIA} from '../api/Types';
 import {RootState} from './reducers';
-import {SavedArticle} from './reducers/articleStorage';
 import {memoize} from 'proxy-memoize';
 import {CategoryState} from './reducers/articles';
 
@@ -53,10 +52,6 @@ export const selectAudiotekaScreenState = memoize((state: RootState) => {
   };
 });
 
-export const selectBookmarkedArticles = (state: RootState) => state.articleStorage.savedArticles;
-
-export const selectHistoryArticles = (state: RootState) => state.articleStorage.history;
-
 export const selectHomeChannels = memoize((state: RootState) => {
   const channelsBlock = state.articles.home.items.find((i) => i.type === 'channels') as HomeBlockChannels;
 
@@ -73,8 +68,3 @@ export const selectHomeChannels = memoize((state: RootState) => {
     tempLiveChannels: channelsBlock.data.live_items?.filter((c) => Boolean(c.web_permanent)),
   };
 });
-
-export const selectArticleBookmarked = (articleId: string | number) => (state: RootState) => {
-  const {savedArticles} = state.articleStorage;
-  return Boolean(savedArticles && savedArticles.find((article: SavedArticle) => article.id === articleId));
-};
