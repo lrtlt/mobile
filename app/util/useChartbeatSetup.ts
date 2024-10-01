@@ -1,14 +1,18 @@
 import ChartbeatReactNativeTracker from 'chartbeat-react-native-sdk';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MMKV} from 'react-native-mmkv';
+
+const storage = new MMKV({
+  id: 'chartbeat-storage',
+});
 
 export const ChartbeatTracker = new ChartbeatReactNativeTracker({
   accountId: '65978',
   dashboardId: 'lrt.lt',
   storageGetter: async (key): Promise<string> => {
-    return (await AsyncStorage.getItem(key)) ?? '';
+    return storage.getString(key) ?? '';
   },
   storageSetter: async (key, value) => {
-    await AsyncStorage.setItem(key, value);
+    storage.set(key, value);
     return true;
   },
 });

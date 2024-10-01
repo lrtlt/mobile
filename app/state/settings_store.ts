@@ -1,7 +1,7 @@
 import {create} from 'zustand';
-import {persist, createJSONStorage} from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {createJSONStorage, persist, StateStorage} from 'zustand/middleware';
 import {DailyQuestionChoice, ForecastLocation} from '../api/Types';
+import {MMKV} from 'react-native-mmkv';
 
 export type SettingsStore = {
   isDarkMode: boolean;
@@ -39,6 +39,23 @@ const initialState: Omit<
   textSizeMultiplier: 0,
 };
 
+const storage = new MMKV({
+  id: 'settings-storage',
+});
+
+const zustandStorage: StateStorage = {
+  setItem: (name, value) => {
+    return storage.set(name, value);
+  },
+  getItem: (name) => {
+    const value = storage.getString(name);
+    return value ?? null;
+  },
+  removeItem: (name) => {
+    return storage.delete(name);
+  },
+};
+
 export const useSettingsStore = create<SettingsStore>()(
   persist(
     (set) => ({
@@ -66,7 +83,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-store',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandStorage),
     },
   ),
 );

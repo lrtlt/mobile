@@ -1,24 +1,43 @@
 import {useCallback, useEffect, useState} from 'react';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MMKV} from 'react-native-mmkv';
+import {InteractionManager} from 'react-native';
 
 const TOPICS_STORAGE_KEY = 'initialTopicSubscription';
+
+const storage = new MMKV({
+  id: 'topics-storage',
+});
+
+const hasMigratedFromAsyncStorage = storage.getBoolean('hasMigratedFromAsyncStorage');
+
+async function migrateFromAsyncStorage(): Promise<void> {
+  const topicsJson = await AsyncStorage.getItem(TOPICS_STORAGE_KEY);
+  if (topicsJson) {
+    storage.set(TOPICS_STORAGE_KEY, topicsJson);
+    await AsyncStorage.removeItem(TOPICS_STORAGE_KEY);
+    storage.set('hasMigratedFromAsyncStorage', true);
+  }
+}
 
 const useFirebaseTopicSubscription = () => {
   const [topics, setTopics] = useState<FirebaseTopicsResponse>([]);
   const [subscriptions, setSubscriptions] = useState<string[]>([]);
 
   useEffect(() => {
-    const subscribeToTestTopic = async () => {
-      try {
-        await messaging().subscribeToTopic('test');
-      } catch (e) {
-        // ignore emulator issues
-      }
-    };
+    if (!hasMigratedFromAsyncStorage) {
+      migrateFromAsyncStorage();
+    }
 
     if (__DEV__) {
-      subscribeToTestTopic();
+      InteractionManager.runAfterInteractions(async () => {
+        try {
+          await messaging().subscribeToTopic('test');
+        } catch (e) {
+          // ignore emulator issues
+        }
+      });
     }
   }, []);
 
@@ -30,7 +49,7 @@ const useFirebaseTopicSubscription = () => {
         setSubscriptions(list);
         messaging()
           .subscribeToTopic(topicSlug)
-          .then(() => AsyncStorage.setItem(TOPICS_STORAGE_KEY, JSON.stringify(list)))
+          .then(() => storage.set(TOPICS_STORAGE_KEY, JSON.stringify(list)))
           .then(() => console.log('Subscribed to topic: ' + topicSlug))
           //revert if failed
           .catch(() => setSubscriptions(originalSubscriptions));
@@ -46,7 +65,7 @@ const useFirebaseTopicSubscription = () => {
       setSubscriptions(list);
       messaging()
         .unsubscribeFromTopic(topicSlug)
-        .then(() => AsyncStorage.setItem(TOPICS_STORAGE_KEY, JSON.stringify(list)))
+        .then(() => storage.set(TOPICS_STORAGE_KEY, JSON.stringify(list)))
         .then(() => console.log('Unsubscribed from topic: ' + topicSlug))
         //revert if failed
         .catch(() => setSubscriptions(originalSubscriptions));
@@ -60,7 +79,7 @@ const useFirebaseTopicSubscription = () => {
     })
       .then(async (response) => {
         const data = (await response.json()) as FirebaseTopicsResponse;
-        const topicsJson = await AsyncStorage.getItem(TOPICS_STORAGE_KEY);
+        const topicsJson = storage.getString(TOPICS_STORAGE_KEY);
 
         let isFirstRun = true;
         let activeSubscriptions: string[] = [];
@@ -79,7 +98,7 @@ const useFirebaseTopicSubscription = () => {
           }
         });
 
-        await AsyncStorage.setItem(TOPICS_STORAGE_KEY, JSON.stringify(activeSubscriptions));
+        storage.set(TOPICS_STORAGE_KEY, JSON.stringify(activeSubscriptions));
         setSubscriptions(activeSubscriptions);
         setTopics(data);
 

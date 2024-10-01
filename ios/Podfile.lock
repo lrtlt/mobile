@@ -1242,6 +1242,9 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
+  - MMKV (1.3.9):
+    - MMKVCore (~> 1.3.9)
+  - MMKVCore (1.3.9)
   - nanopb (2.30909.1):
     - nanopb/decode (= 2.30909.1)
     - nanopb/encode (= 2.30909.1)
@@ -2135,6 +2138,11 @@ PODS:
   - react-native-google-cast/RNGoogleCast (4.6.2):
     - PromisesObjC
     - React
+  - react-native-mmkv (2.12.2):
+    - glog
+    - MMKV (>= 1.3.3)
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - react-native-orientation-locker (1.7.0):
     - React-Core
   - react-native-pager-view (6.4.1):
@@ -2460,6 +2468,7 @@ DEPENDENCIES:
   - react-native-carplay (from `../node_modules/react-native-carplay`)
   - react-native-gemius-plugin (from `../node_modules/react-native-gemius-plugin`)
   - react-native-google-cast (from `https://github.com/Danesz/react-native-google-cast.git`, branch `feature/guestmode_apple_silicon`)
+  - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-render-html (from `../node_modules/react-native-render-html`)
@@ -2537,6 +2546,8 @@ SPEC REPOS:
     - leveldb-library
     - libevent
     - libwebp
+    - MMKV
+    - MMKVCore
     - nanopb
     - PromisesObjC
     - PromisesSwift
@@ -2616,6 +2627,8 @@ EXTERNAL SOURCES:
   react-native-google-cast:
     :branch: feature/guestmode_apple_silicon
     :git: https://github.com/Danesz/react-native-google-cast.git
+  react-native-mmkv:
+    :path: "../node_modules/react-native-mmkv"
   react-native-orientation-locker:
     :path: "../node_modules/react-native-orientation-locker"
   react-native-pager-view:
@@ -2749,6 +2762,8 @@ SPEC CHECKSUMS:
   leveldb-library: e8eadf9008a61f9e1dde3978c086d2b6d9b9dc28
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
+  MMKV: 817ba1eea17421547e01e087285606eb270a8dcb
+  MMKVCore: af055b00e27d88cd92fad301c5fecd1ff9b26dd9
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
@@ -2776,6 +2791,7 @@ SPEC CHECKSUMS:
   react-native-carplay: c0327ae947e4a12c7d66315d54254fdf87a982ec
   react-native-gemius-plugin: 003b164539125055787a816a7b65976b19bf4a27
   react-native-google-cast: d7bdfd1a0eeba84afde03b9722351ec29543e74c
+  react-native-mmkv: c405cc720dbdd8b1330b1bcf064196ca8cbb5a7c
   react-native-orientation-locker: 5819fd23ca89cbac0d736fb4314745f62716d517
   react-native-pager-view: 208ae8f40c243f7dad4b3156206e3ed1d0c3c74b
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe

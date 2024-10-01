@@ -1,7 +1,6 @@
 import {useEffect} from 'react';
 import messaging from '@react-native-firebase/messaging';
 import {Linking} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import useFirebaseTopicSubscription from './useFirebaseTopicSubscription';
 import notifee, {
   AndroidImportance,
@@ -12,6 +11,7 @@ import notifee, {
   AndroidStyle,
 } from '@notifee/react-native';
 import crashlytics from '@react-native-firebase/crashlytics';
+import {MMKV} from 'react-native-mmkv';
 
 const INITIAL_URL_STORAGE_KEY = 'initialUrl';
 const FOREGROUND_NOTIFICATION_CHANNEL_ID = 'lrt_foreground_notifications';
@@ -20,19 +20,23 @@ type NotificationData = {
   launchUrl?: string;
 };
 
+const storage = new MMKV({
+  id: 'messaging-storage',
+});
+
 const _handleNotificationOpen = async (data: NotificationData | undefined, isInitial: boolean) => {
   const url = data?.launchUrl;
   crashlytics().log(`_handleNotificationOpen: isInitial:${isInitial} data:${JSON.stringify(data)}`);
   if (url) {
     if (isInitial) {
-      const initialUrl = await AsyncStorage.getItem(INITIAL_URL_STORAGE_KEY);
+      const initialUrl = storage.getString(INITIAL_URL_STORAGE_KEY);
       if (initialUrl == url) {
         crashlytics().log(`_handleNotificationOpen: initialUrl already handled: ${url}`);
         console.debug('initialUrl already handled');
         return;
       } else {
         crashlytics().log(`_handleNotificationOpen: saving initial url: ${url}`);
-        await AsyncStorage.setItem(INITIAL_URL_STORAGE_KEY, url);
+        storage.set(INITIAL_URL_STORAGE_KEY, url);
       }
     }
     await Linking.openURL(url);
