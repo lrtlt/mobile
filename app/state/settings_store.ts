@@ -2,19 +2,38 @@ import {create} from 'zustand';
 import {createJSONStorage, persist} from 'zustand/middleware';
 import {DailyQuestionChoice, ForecastLocation} from '../api/Types';
 import {zustandStorage} from './mmkv';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const runSettingsStorageMigration = async () => {
+  if (zustandStorage.getItem('settings-storage-migrated')) return;
+
+  const rootJson = await AsyncStorage.getItem('persist:root');
+  if (rootJson) {
+    console.log('## Migrating settings storage');
+    const root = JSON.parse(rootJson);
+    const settings = JSON.parse(root['config']);
+    if (settings) {
+      useSettingsStore.setState(settings);
+      zustandStorage.setItem('settings-storage-migrated', 'true');
+    }
+  }
+};
 
 type SettingsStoreState = {
   isDarkMode: boolean;
   isContinuousPlayEnabled: boolean;
   textSizeMultiplier: number;
-  forecastLocation?: ForecastLocation;
-  daily_question_response?: {
-    daily_question_id: number;
-    choice: DailyQuestionChoice;
-  };
+  //TODO: export to separate store
   logo?: {
     url: string;
     svg: string;
+  };
+  //TODO: export to separate store
+  forecastLocation?: ForecastLocation;
+  //TODO: export to separate store
+  daily_question_response?: {
+    daily_question_id: number;
+    choice: DailyQuestionChoice;
   };
 };
 

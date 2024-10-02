@@ -8,6 +8,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {formatArticles} from '../../util/articleFormatters';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import {SavedArticle, useArticleStorageStore} from '../../state/article_storage_store';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Bookmarks'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Bookmarks'>;
@@ -46,10 +47,13 @@ const BookmarksScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation})
     sections: ['Bendra'],
   });
 
+  const {bottom} = useSafeAreaInsets();
+
   return (
     <View style={styles.container}>
       <MyFlatList
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: bottom}}
         data={articles}
         windowSize={4}
         renderItem={renderItem}

@@ -21,7 +21,7 @@ const ForecastComponent: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
 
   const storedLocation = useSettingsStore((state) => state.forecastLocation);
-  const location = (props.location ? props.location : storedLocation) as ForecastLocation;
+  const location = props.location ? props.location : storedLocation;
 
   const cancellablePromise = useCancellablePromise();
 
