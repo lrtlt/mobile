@@ -16,8 +16,8 @@ import {
 import {IconArrowLeft} from '../../../components/svg';
 import {EVENT_SELECT_CATEGORY_INDEX} from '../../../constants';
 import {MainStackParamList} from '../../../navigation/MainStack';
-import {PagingState} from '../../../redux/reducers/articles';
 import {useTheme} from '../../../Theme';
+import {PagingState} from '../../../state/article_store';
 
 interface Props {
   data: PagingState;
@@ -98,7 +98,7 @@ const TabScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   //Handle loading state
-  if (isFetching === true && articles.length === 0) {
+  if (isFetching === true && !articles?.length) {
     return <ScreenLoader />;
   }
 

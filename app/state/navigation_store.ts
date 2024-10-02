@@ -29,16 +29,18 @@ export type NavigationState = {
   isReady: boolean;
   isError: boolean;
   launchUrl?: string;
+};
+
+type NavigationActions = {
   fetchMenuItems: () => void;
   openCategoryById: (id: number, title?: string) => void;
   openCategoryByName: (name: string) => void;
   setLaunchUrl: (url?: string) => void;
 };
 
-const initialState: Omit<
-  NavigationState,
-  'fetchMenuItems' | 'openCategoryByName' | 'openCategoryById' | 'setLaunchUrl'
-> = {
+type NavigationStore = NavigationState & NavigationActions;
+
+const initialState: NavigationState = {
   routes: [],
   pages: [],
   projects: [],
@@ -47,7 +49,7 @@ const initialState: Omit<
   isError: false,
 };
 
-export const useNavigationStore = create<NavigationState>((set) => ({
+export const useNavigationStore = create<NavigationStore>((set) => ({
   ...initialState,
   fetchMenuItems: async () => {
     set({isLoading: true, isError: false, isReady: false});

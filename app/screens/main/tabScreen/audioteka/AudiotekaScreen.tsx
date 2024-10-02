@@ -1,13 +1,10 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {View, RefreshControl, StyleSheet, StatusBar} from 'react-native';
 import {ScreenLoader} from '../../../../components';
-import {fetchAudioteka} from '../../../../redux/actions/index';
 import {GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
-import {useDispatch, useSelector} from 'react-redux';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {useTheme} from '../../../../Theme';
-import {selectAudiotekaScreenState} from '../../../../redux/selectors';
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {AudiotekaTemplate} from '../../../../api/Types';
 import TopArticle from './components/topArticle/TopArticle';
@@ -22,17 +19,19 @@ import TopFeedBlock from '../home/blocks/TopFeedBlock/TopFeedBlock';
 import TopUrlBlock from '../home/blocks/TopUrlsBlock/TopUrlBlock';
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
+import {selectAudiotekaScreenState, useArticleStore} from '../../../../state/article_store';
+import {useShallow} from 'zustand/shallow';
 
 interface Props {
   isCurrent: boolean;
 }
 
 const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
-  const dispatch = useDispatch();
   const listRef = useRef<FlashList<any>>(null);
   const {colors, dark} = useTheme();
 
-  const state = useSelector(selectAudiotekaScreenState);
+  const {fetchAudioteka} = useArticleStore.getState();
+  const state = useArticleStore(useShallow(selectAudiotekaScreenState));
   const {refreshing, lastFetchTime, data} = state;
 
   useEffect(() => {
@@ -54,7 +53,7 @@ const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
           animated: true,
           index: 0,
         });
-        dispatch(fetchAudioteka());
+        fetchAudioteka();
       }
     });
     return () => {
@@ -65,7 +64,7 @@ const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
   const refresh = useCallback(() => {
     if (!refreshing && Date.now() - lastFetchTime > ARTICLE_EXPIRE_DURATION) {
       console.log('Audioteka data expired!');
-      dispatch(fetchAudioteka());
+      fetchAudioteka();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing, state.lastFetchTime]);
@@ -149,9 +148,7 @@ const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             lastFetchTime: lastFetchTime,
           }}
           renderItem={renderItem}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={() => dispatch(fetchAudioteka())} />
-          }
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => fetchAudioteka()} />}
           data={data}
           removeClippedSubviews={false}
           estimatedFirstItemOffset={500}

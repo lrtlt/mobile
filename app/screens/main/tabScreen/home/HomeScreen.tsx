@@ -9,12 +9,9 @@ import {
   BannerComponent,
 } from '../../../../components';
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
-import {fetchHome, fetchMediateka} from '../../../../redux/actions/index';
 import {ARTICLE_EXPIRE_DURATION, GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS} from '../../../../constants';
-import {useDispatch, useSelector} from 'react-redux';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
-import {selectHomeScreenState} from '../../../../redux/selectors';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../../../Theme';
 import {HomeBlockType, ROUTE_TYPE_HOME, ROUTE_TYPE_MEDIA} from '../../../../api/Types';
@@ -31,6 +28,8 @@ import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
 import EpikaBlock from './blocks/EpikaBlock/EpikaBlock';
 import VideoListBlock from './blocks/VideoListBlock/VideoListBlock';
+import {useShallow} from 'zustand/shallow';
+import {selectHomeScreenState, useArticleStore} from '../../../../state/article_store';
 
 interface Props {
   isCurrent: boolean;
@@ -38,11 +37,11 @@ interface Props {
 }
 
 const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type}) => {
-  const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const listRef = useRef<FlashList<any>>(null);
 
-  const state = useSelector(selectHomeScreenState(type), (l, r) => l.lastFetchTime === r.lastFetchTime);
+  const {fetchHome, fetchMediateka} = useArticleStore.getState();
+  const state = useArticleStore(useShallow(selectHomeScreenState(type)));
 
   const {colors, dark} = useTheme();
 
@@ -102,11 +101,11 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
 
   const callApi = useCallback(() => {
     if (type === ROUTE_TYPE_MEDIA) {
-      dispatch(fetchMediateka());
+      fetchMediateka();
     } else {
-      dispatch(fetchHome());
+      fetchHome();
     }
-  }, [dispatch, type]);
+  }, [type]);
 
   const onForecastPressHandler = useCallback(() => {
     navigation.navigate('Weather');

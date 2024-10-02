@@ -7,8 +7,7 @@ import {ARTICLE_HISTORY_COUNT, ARTICLE_SAVED_MAX_COUNT} from '../constants';
 
 //TODO: 2024-10-01 remove migration after a while.
 export const runArticleStorageMigration = async () => {
-  const migrated = zustandStorage.getItem('article-storage-migrated');
-  if (migrated) return;
+  if (zustandStorage.getItem('article-storage-migrated')) return;
 
   const rootJson = await AsyncStorage.getItem('persist:root');
   if (rootJson) {
@@ -33,15 +32,20 @@ export type SavedArticle = {
   is_video?: 1 | 0;
 };
 
-type ArticleStorageStore = {
+type ArticleStorageState = {
   history: SavedArticle[];
   savedArticles: SavedArticle[];
+};
+
+type ArticleStorageActions = {
   saveArticle: (article: ArticleContent) => void;
   removeArticle: (articleId: number) => void;
   addArticleToHistory: (article: ArticleContent) => void;
 };
 
-const initialState: Omit<ArticleStorageStore, 'saveArticle' | 'removeArticle' | 'addArticleToHistory'> = {
+type ArticleStorageStore = ArticleStorageState & ArticleStorageActions;
+
+const initialState: ArticleStorageState = {
   history: [],
   savedArticles: [],
 };

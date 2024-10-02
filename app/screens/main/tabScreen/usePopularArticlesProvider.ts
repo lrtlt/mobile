@@ -1,24 +1,22 @@
 import {useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 
 import {ARTICLES_PER_PAGE_COUNT} from '../../../constants';
-import {fetchPopular, refreshPopular} from '../../../redux/actions';
-import {selectPopularArticlesScreenState} from '../../../redux/selectors';
 import {ArticleScreenAdapter} from './Types';
+import {useArticleStore} from '../../../state/article_store';
+import {useShallow} from 'zustand/shallow';
 
 const usePopularArticlesProvider: ArticleScreenAdapter = () => {
-  const state = useSelector(selectPopularArticlesScreenState);
+  const {fetchPopular} = useArticleStore.getState();
+  const state = useArticleStore(useShallow((state) => state.popular));
   const {page} = state;
 
-  const dispatch = useDispatch();
-
   const loadNextPage = useCallback(() => {
-    dispatch(fetchPopular(page + 1, ARTICLES_PER_PAGE_COUNT));
-  }, [dispatch, page]);
+    fetchPopular(page + 1, ARTICLES_PER_PAGE_COUNT);
+  }, [page]);
 
   const refresh = useCallback(() => {
-    dispatch(refreshPopular(ARTICLES_PER_PAGE_COUNT));
-  }, [dispatch]);
+    fetchPopular(1, ARTICLES_PER_PAGE_COUNT, true);
+  }, []);
 
   return {
     state,

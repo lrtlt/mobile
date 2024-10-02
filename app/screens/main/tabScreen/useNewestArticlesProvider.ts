@@ -1,34 +1,30 @@
 import {useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {ARTICLES_PER_PAGE_COUNT} from '../../../constants';
-import {fetchNewest, refreshNewest} from '../../../redux/actions';
-import {selectNewestArticlesScreenState} from '../../../redux/selectors';
 import {ArticleScreenAdapter} from './Types';
+import {useArticleStore} from '../../../state/article_store';
+import {useShallow} from 'zustand/shallow';
 
 const useNewestArticlesProvider: ArticleScreenAdapter = () => {
-  const state = useSelector(selectNewestArticlesScreenState);
+  const {fetchNewest} = useArticleStore.getState();
+  const state = useArticleStore(useShallow((state) => state.newest));
   const {page} = state;
-
-  const dispatch = useDispatch();
 
   const loadNextPage = useCallback(() => {
     if (state.lastArticle) {
-      dispatch(
-        fetchNewest(
-          page + 1,
-          ARTICLES_PER_PAGE_COUNT,
-          state.lastArticle.item_date,
-          String(state.lastArticle.id),
-        ),
+      fetchNewest(
+        page + 1,
+        ARTICLES_PER_PAGE_COUNT,
+        state.lastArticle.item_date,
+        String(state.lastArticle.id),
       );
     } else {
-      dispatch(fetchNewest(page + 1, ARTICLES_PER_PAGE_COUNT));
+      fetchNewest(page + 1, ARTICLES_PER_PAGE_COUNT);
     }
-  }, [dispatch, page, state.lastArticle]);
+  }, [page, state.lastArticle]);
 
   const refresh = useCallback(() => {
-    dispatch(refreshNewest(ARTICLES_PER_PAGE_COUNT));
-  }, [dispatch]);
+    fetchNewest(1, ARTICLES_PER_PAGE_COUNT, undefined, undefined, true);
+  }, []);
 
   return {
     state,

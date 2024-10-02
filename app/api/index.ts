@@ -83,11 +83,11 @@ export const fetchPopularApi = (page: number, count: number) =>
 
 export const fetchCategoryApi = (
   categoryId: number,
-  count: number,
   page: number,
+  count: number,
   date_max?: string,
   not_id?: string,
-) => get<CategoryArticlesResponse>(categoryGet(categoryId, count, page, date_max, not_id));
+) => get<CategoryArticlesResponse>(categoryGet(categoryId, page, count, date_max, not_id));
 
 export const fetchWeatherLocations = () => get<ForecastLocation[]>(weatherLocationsGet());
 

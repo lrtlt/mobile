@@ -8,26 +8,22 @@ const storage = new MMKV({
   id: 'onboarding-storage',
 });
 
-const hasMigratedFromAsyncStorage = storage.getBoolean('hasMigratedFromAsyncStorage');
-
-async function migrateFromAsyncStorage(): Promise<void> {
+//TODO: 2024-10-01 remove migration after a while.
+export const runOnboardingStorageMigration = async () => {
+  if (storage.getBoolean('hasMigratedFromAsyncStorage')) return;
   const value = await AsyncStorage.getItem(LOCAL_STORAGE_KEY);
   if (value) {
     storage.set(LOCAL_STORAGE_KEY, value);
     await AsyncStorage.removeItem(LOCAL_STORAGE_KEY);
-    storage.set('hasMigratedFromAsyncStorage', true);
   }
-}
+  storage.set('hasMigratedFromAsyncStorage', true);
+};
 
 const useOnboardingLogic = () => {
   const [showNotificationModal, setShowNotificationModal] = useState(true);
   const [isFirstTime, setIsFirstTime] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!hasMigratedFromAsyncStorage) {
-      migrateFromAsyncStorage();
-    }
-
     const value = storage.getString(LOCAL_STORAGE_KEY);
     if (!value) {
       setIsFirstTime(true);

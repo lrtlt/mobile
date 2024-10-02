@@ -1,8 +1,8 @@
 import React from 'react';
 import DefaultHeader from './DefaultHeader';
 import SlugHeader from './SlugHeader';
-import {Category} from '../../redux/reducers/articles';
 import {TouchableOpacity} from 'react-native';
+import {Category} from '../../state/article_store';
 
 interface Props {
   category: Category;

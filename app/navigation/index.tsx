@@ -1,12 +1,9 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {StatusBar} from 'react-native';
-import {useSelector} from 'react-redux';
 import {LinkingOptions, NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
 import SplashViewComponent from '../screens/splash/SplashScreenView';
 
 import crashlytics from '@react-native-firebase/crashlytics';
-
-import {selectAppIsReady} from '../redux/selectors';
 
 import {DEEP_LINKING_URL_PREFIX, GEMIUS_VIEW_SCRIPT_ID} from '../constants';
 import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
@@ -15,6 +12,8 @@ import {SplashScreen} from '../screens';
 import useHandleLaunchUrl from './useHandleLaunchUrl';
 import useFirebaseMessaging from '../util/useFirebaseMessaging';
 import {useTheme} from '../Theme';
+import {useArticleStore} from '../state/article_store';
+import {useShallow} from 'zustand/shallow';
 
 const linking: LinkingOptions<MainStackParamList> = {
   prefixes: [DEEP_LINKING_URL_PREFIX],
@@ -33,8 +32,7 @@ const linking: LinkingOptions<MainStackParamList> = {
 
 const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const [isNavigatorReady, setNavigatorReady] = useState(false);
-  const isAppReady = useSelector(selectAppIsReady);
-
+  const isAppReady = useArticleStore(useShallow((state) => state.home.items.length > 0));
   const routeNameRef = useRef<string>();
   const navRef = useRef<NavigationContainerRef<MainStackParamList>>(null);
 

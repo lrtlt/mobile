@@ -28,8 +28,8 @@ export const articleGet = (articleId: number | string) => {
  */
 export const categoryGet = (
   id: number | string,
-  count: number,
   page: number,
+  count: number,
   date_max?: string,
   not_id?: string,
 ) => {

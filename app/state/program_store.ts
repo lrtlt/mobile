@@ -2,15 +2,20 @@ import {create} from 'zustand';
 import {ProgramResponse} from '../api/Types';
 import {fetchProgramApi} from '../api';
 
-type ProgramStore = {
+type ProgramStoreState = {
   isFetching: boolean;
   isError: boolean;
   program?: ProgramResponse;
   lastFetchTime: number;
+};
+
+type ProgramStoreActions = {
   fetchProgram: () => void;
 };
 
-const initialState: Omit<ProgramStore, 'fetchProgram'> = {
+type ProgramStore = ProgramStoreState & ProgramStoreActions;
+
+const initialState: ProgramStoreState = {
   isFetching: false,
   isError: false,
   program: undefined,

@@ -1,44 +1,43 @@
 import {useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {ARTICLES_PER_PAGE_COUNT} from '../../../constants';
-import {fetchCategory, refreshCategory} from '../../../redux/actions';
-import {PagingState} from '../../../redux/reducers/articles';
-import {selectCategoryScreenState} from '../../../redux/selectors';
 import {ArticleScreenAdapter} from './Types';
+import {initialCategoryState, PagingState, useArticleStore} from '../../../state/article_store';
 
 const useCategoryArticlesProvider: ArticleScreenAdapter = (categoryId?: number, categoryTitle?: string) => {
-  const state = useSelector(selectCategoryScreenState(categoryId!, categoryTitle));
-  const {nextPage} = state;
+  const {fetchCategory} = useArticleStore.getState();
+  const state = useArticleStore((state) => state.categories[categoryId ?? -1]) ?? {
+    ...initialCategoryState,
+    id: categoryId ?? initialCategoryState.id,
+    title: categoryTitle ?? initialCategoryState.id,
+  };
 
-  const dispatch = useDispatch();
+  const {nextPage, lastArticle} = state;
 
   const loadNextPage = useCallback(() => {
     if (nextPage !== null && categoryId) {
-      if (state.lastArticle) {
-        dispatch(
-          fetchCategory(
-            categoryId,
-            ARTICLES_PER_PAGE_COUNT,
-            nextPage,
-            state.lastArticle.item_date,
-            String(state.lastArticle.id),
-          ),
+      if (lastArticle) {
+        fetchCategory(
+          categoryId,
+          nextPage,
+          ARTICLES_PER_PAGE_COUNT,
+          lastArticle.item_date,
+          String(lastArticle.id),
         );
       } else {
-        dispatch(fetchCategory(categoryId, ARTICLES_PER_PAGE_COUNT, nextPage));
+        fetchCategory(categoryId, nextPage, ARTICLES_PER_PAGE_COUNT);
       }
     } else {
       console.warn('Category ID cannot be empty');
     }
-  }, [categoryId, dispatch, nextPage, state.lastArticle]);
+  }, [categoryId, nextPage, lastArticle]);
 
   const refresh = useCallback(() => {
     if (categoryId) {
-      dispatch(refreshCategory(categoryId, ARTICLES_PER_PAGE_COUNT));
+      fetchCategory(categoryId, 1, ARTICLES_PER_PAGE_COUNT, undefined, undefined, true);
     } else {
       console.warn('Category ID cannot be empty');
     }
-  }, [categoryId, dispatch]);
+  }, [categoryId]);
 
   return {
     state: state as PagingState,

@@ -3,7 +3,7 @@ import {createJSONStorage, persist} from 'zustand/middleware';
 import {DailyQuestionChoice, ForecastLocation} from '../api/Types';
 import {zustandStorage} from './mmkv';
 
-type SettingsStore = {
+type SettingsStoreState = {
   isDarkMode: boolean;
   isContinuousPlayEnabled: boolean;
   textSizeMultiplier: number;
@@ -16,7 +16,9 @@ type SettingsStore = {
     url: string;
     svg: string;
   };
+};
 
+type SettingsStoreActions = {
   setIsDarkMode: (isDarkMode: boolean) => void;
   setIsContinuousPlayEnabled: (isContinuousPlayEnabled: boolean) => void;
   setTextSizeMultiplier: (textSizeMultiplier: number) => void;
@@ -25,15 +27,9 @@ type SettingsStore = {
   fetchLogo: (url?: string) => Promise<void>;
 };
 
-const initialState: Omit<
-  SettingsStore,
-  | 'setIsDarkMode'
-  | 'setIsContinuousPlayEnabled'
-  | 'setTextSizeMultiplier'
-  | 'setForecastLocation'
-  | 'setDailyQuestionChoice'
-  | 'fetchLogo'
-> = {
+type SettingsStore = SettingsStoreState & SettingsStoreActions;
+
+const initialState: SettingsStoreState = {
   isDarkMode: false,
   isContinuousPlayEnabled: true,
   textSizeMultiplier: 0,

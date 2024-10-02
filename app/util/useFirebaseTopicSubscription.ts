@@ -10,26 +10,21 @@ const storage = new MMKV({
   id: 'topics-storage',
 });
 
-const hasMigratedFromAsyncStorage = storage.getBoolean('hasMigratedFromAsyncStorage');
-
-async function migrateFromAsyncStorage(): Promise<void> {
+export const runFirebaseTopicSubsriptionMigration = async () => {
+  if (storage.getBoolean('hasMigratedFromAsyncStorage')) return;
   const topicsJson = await AsyncStorage.getItem(TOPICS_STORAGE_KEY);
   if (topicsJson) {
     storage.set(TOPICS_STORAGE_KEY, topicsJson);
     await AsyncStorage.removeItem(TOPICS_STORAGE_KEY);
-    storage.set('hasMigratedFromAsyncStorage', true);
   }
-}
+  storage.set('hasMigratedFromAsyncStorage', true);
+};
 
 const useFirebaseTopicSubscription = () => {
   const [topics, setTopics] = useState<FirebaseTopicsResponse>([]);
   const [subscriptions, setSubscriptions] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!hasMigratedFromAsyncStorage) {
-      migrateFromAsyncStorage();
-    }
-
     if (__DEV__) {
       InteractionManager.runAfterInteractions(async () => {
         try {

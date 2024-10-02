@@ -3,9 +3,6 @@ import {View, StyleSheet} from 'react-native';
 import {CHANNEL_TYPE_DEFAULT, CHANNEL_TYPE_LIVE} from '../../constants';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
-import {useSelector} from 'react-redux';
-import {selectHomeChannels} from '../../redux/selectors';
-import {checkEqual} from '../../util/LodashEqualityCheck';
 import {isLiveChannel, LiveChannel, TVChannel} from '../../api/Types';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import {useNavigation} from '@react-navigation/native';
@@ -13,6 +10,8 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Box, Tiles} from '@grapp/stacks';
 import ChannelV2 from './channel_v2/Channel_v2';
+import {useArticleStore} from '../../state/article_store';
+import {useShallow} from 'zustand/shallow';
 
 type LiveChannelData = {
   type: typeof CHANNEL_TYPE_LIVE;
@@ -34,7 +33,7 @@ const ScrollingChannels: React.FC<React.PropsWithChildren<Props>> = ({onChannelP
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const {colors, strings} = useTheme();
-  const channelsData = useSelector(selectHomeChannels, checkEqual);
+  const channelsData = useArticleStore(useShallow((state) => state.channels));
 
   const onChannelPressHandler = useCallback(
     (channel: TVChannel | LiveChannel) => {

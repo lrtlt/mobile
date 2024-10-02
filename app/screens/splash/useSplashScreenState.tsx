@@ -1,28 +1,30 @@
-import {useDispatch} from 'react-redux';
 import {useCallback, useEffect} from 'react';
-import {fetchHome} from '../../redux/actions';
-import {NavigationState, useNavigationStore} from '../../state/navigation_store';
+import {useNavigationStore} from '../../state/navigation_store';
 import {useShallow} from 'zustand/shallow';
+import {useArticleStore} from '../../state/article_store';
 
-type ReturnProps = NavigationState & {
-  load: (ignoreError: boolean) => void;
-};
+const useSplashScreenState = () => {
+  const {fetchMenuItems} = useNavigationStore.getState();
+  const {fetchHome} = useArticleStore.getState();
 
-const useSplashScreenState = (): ReturnProps => {
-  const state = useNavigationStore(useShallow((state) => state));
-  const isLoaded = state.routes.length > 0;
-
-  const dispatch = useDispatch();
+  const state = useNavigationStore(
+    useShallow((state) => ({
+      routes: state.routes,
+      isError: state.isError,
+      isLoading: state.isLoading,
+      isReady: state.routes.length > 0,
+    })),
+  );
 
   useEffect(() => {
     load();
   }, []);
 
   useEffect(() => {
-    if (isLoaded) {
-      dispatch(fetchHome());
+    if (state.isReady) {
+      fetchHome();
     }
-  }, [isLoaded]);
+  }, [state.isReady]);
 
   const load = useCallback(
     (ignoreError = false) => {
@@ -30,7 +32,7 @@ const useSplashScreenState = (): ReturnProps => {
         return;
       }
       if (state.isLoading !== true) {
-        state.fetchMenuItems();
+        fetchMenuItems();
       }
     },
     [state],
