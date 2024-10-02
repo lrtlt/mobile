@@ -19,12 +19,21 @@ import TopFeedBlock from '../home/blocks/TopFeedBlock/TopFeedBlock';
 import TopUrlBlock from '../home/blocks/TopUrlsBlock/TopUrlBlock';
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
-import {selectAudiotekaScreenState, useArticleStore} from '../../../../state/article_store';
+import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import {useShallow} from 'zustand/shallow';
 
 interface Props {
   isCurrent: boolean;
 }
+
+const selectAudiotekaScreenState = (state: ArticleState) => {
+  const block = state.audioteka;
+  return {
+    refreshing: block.isFetching && block.data.length > 0,
+    lastFetchTime: block.lastFetchTime,
+    data: block.data,
+  };
+};
 
 const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
   const listRef = useRef<FlashList<any>>(null);

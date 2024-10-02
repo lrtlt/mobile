@@ -1,14 +1,7 @@
 import {create} from 'zustand';
 import {produce} from 'immer';
-import {Article, HomePageType} from '../../Types';
-import {
-  AudiotekaResponse,
-  HomeBlockChannels,
-  HomeBlockType,
-  LiveChannel,
-  ROUTE_TYPE_MEDIA,
-  TVChannel,
-} from '../api/Types';
+import {Article} from '../../Types';
+import {AudiotekaResponse, HomeBlockChannels, HomeBlockType, LiveChannel, TVChannel} from '../api/Types';
 import {
   fetchAudiotekaApi,
   fetchCategoryApi,
@@ -368,41 +361,6 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
     }
   },
 }));
-
-export const selectHomeScreenState = (type: HomePageType) => (state: ArticleState) => {
-  const block = type === ROUTE_TYPE_MEDIA ? state.mediateka : state.home;
-  return {
-    refreshing: block.isFetching && block.items.length > 0,
-    lastFetchTime: block.lastFetchTime,
-    items: block.items,
-  };
-};
-
-export const selectAudiotekaScreenState = (state: ArticleState) => {
-  const block = state.audioteka;
-  return {
-    refreshing: block.isFetching && block.data.length > 0,
-    lastFetchTime: block.lastFetchTime,
-    data: block.data,
-  };
-};
-
-// export const selectCategoryScreenState =
-//   (categoryId: number, categoryTitle?: string) => (state: ArticleState) => {
-//     const categoryState: CategoryState = state.categories[categoryId] ?? {
-//       id: categoryId,
-//       title: categoryTitle ?? '-',
-//       articles: [],
-//       isFetching: false,
-//       lastArticle: undefined,
-//       isRefreshing: false,
-//       isError: false,
-//       lastFetchTime: 0,
-//       page: 0,
-//       nextPage: 1,
-//     };
-//     return categoryState;
-//   };
 
 const _parseChannels = (state: HomeState): ChannelState => {
   const block = state.items.find((i) => i.type === 'channels') as HomeBlockChannels;

@@ -29,7 +29,17 @@ import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
 import EpikaBlock from './blocks/EpikaBlock/EpikaBlock';
 import VideoListBlock from './blocks/VideoListBlock/VideoListBlock';
 import {useShallow} from 'zustand/shallow';
-import {selectHomeScreenState, useArticleStore} from '../../../../state/article_store';
+import {ArticleState, useArticleStore} from '../../../../state/article_store';
+import {HomePageType} from '../../../../../Types';
+
+export const selectHomeScreenState = (type: HomePageType) => (state: ArticleState) => {
+  const block = type === ROUTE_TYPE_MEDIA ? state.mediateka : state.home;
+  return {
+    refreshing: block.isFetching && block.items.length > 0,
+    lastFetchTime: block.lastFetchTime,
+    items: block.items,
+  };
+};
 
 interface Props {
   isCurrent: boolean;
