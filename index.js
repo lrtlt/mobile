@@ -1,5 +1,7 @@
 // Setup RN Gesture handler
 import 'react-native-gesture-handler';
+//Might help with crash https://github.com/jpudysz/react-native-unistyles/issues/151
+import 'react-native-unistyles';
 
 import {setupGemius} from './app/util/useGemiusSetup';
 setupGemius();

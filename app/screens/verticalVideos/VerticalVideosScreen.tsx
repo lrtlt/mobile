@@ -9,6 +9,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import InfinitePager from 'react-native-infinite-pager';
 import {pageInterpolatorTurnIn} from './pageInterpolator';
 import VerticalVideoWrapper from './VerticalVideoWrapper';
+import {ScreenError} from '../../components';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'VideoList'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'VideoList'>;
@@ -21,7 +22,7 @@ type Props = {
 const HEADER_BACKGROUND_COLOR = '#000000';
 
 const VerticalVideoScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
-  const {colors} = useTheme();
+  const {colors, strings} = useTheme();
   const {articles, initialIndex, title} = route.params;
 
   useEffect(() => {
@@ -51,7 +52,12 @@ const VerticalVideoScreen: React.FC<React.PropsWithChildren<Props>> = ({navigati
         initialIndex={initialIndex}
         renderPage={(props) => {
           let validIndex = ((props.index % articles.length) + articles.length) % articles.length;
-          return <VerticalVideoWrapper id={articles[validIndex].id} isActive={props.isActive} />;
+          if (!articles[validIndex]) {
+            console.error('Invalid index', validIndex);
+            return <ScreenError text={strings.articleError} />;
+          } else {
+            return <VerticalVideoWrapper id={articles[validIndex].id} isActive={props.isActive} />;
+          }
         }}
       />
     </SafeAreaView>
