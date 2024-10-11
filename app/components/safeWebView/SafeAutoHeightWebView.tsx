@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {forwardRef, useCallback, useRef} from 'react';
-import {Linking, useWindowDimensions} from 'react-native';
+import {Linking, Platform, useWindowDimensions} from 'react-native';
 import {StyleSheet, View} from 'react-native';
 import WebView, {AutoHeightWebViewProps, SizeUpdate} from 'react-native-autoheight-webview';
 import {type ShouldStartLoadRequest} from 'react-native-webview/src/WebViewTypes';
@@ -53,7 +53,7 @@ const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardR
         <WebView
           ref={ref}
           originWhitelist={['*']}
-          onSizeUpdated={onSizeUpdate}
+          onSizeUpdated={Platform.OS === 'android' ? onSizeUpdate : undefined}
           domStorageEnabled={true}
           javaScriptEnabled={true}
           automaticallyAdjustContentInsets={false}
