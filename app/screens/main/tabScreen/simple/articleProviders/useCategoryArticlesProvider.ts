@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
-import {ARTICLES_PER_PAGE_COUNT} from '../../../constants';
+import {ARTICLES_PER_PAGE_COUNT} from '../../../../../constants';
 import {ArticleScreenAdapter} from './Types';
-import {initialCategoryState, PagingState, useArticleStore} from '../../../state/article_store';
+import {initialCategoryState, PagingState, useArticleStore} from '../../../../../state/article_store';
 
 const useCategoryArticlesProvider: ArticleScreenAdapter = (categoryId?: number, categoryTitle?: string) => {
   const {fetchCategory} = useArticleStore.getState();

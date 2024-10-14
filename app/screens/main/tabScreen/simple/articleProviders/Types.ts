@@ -1,4 +1,4 @@
-import {PagingState} from '../../../state/article_store';
+import {PagingState} from '../../../../../state/article_store';
 
 export type ArticleScreenAdapter = (categorId?: number, categoryTitle?: string) => ArticleScreenAdapterState;
 

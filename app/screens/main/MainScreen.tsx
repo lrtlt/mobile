@@ -24,7 +24,7 @@ import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {MainDrawerParamList, MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
-import ArticleTabScreen from './tabScreen/ArticleTabScreen';
+import SimpleArticleScreen from './tabScreen/simple/SimpleArticleScreen';
 import NotificationsModal from '../../components/notificationsModal/NotificationsModal';
 import useOnboardingLogic from './useOnboardingLogic';
 import {useNavigationStore} from '../../state/navigation_store';
@@ -132,7 +132,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           return <AudiotekaScreen isCurrent={current} />;
         case ROUTE_TYPE_CATEGORY:
           return (
-            <ArticleTabScreen
+            <SimpleArticleScreen
               type={ROUTE_TYPE_CATEGORY}
               isCurrent={current}
               showTitle
@@ -143,9 +143,13 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
             />
           );
         case ROUTE_TYPE_NEWEST:
-          return <ArticleTabScreen type={ROUTE_TYPE_NEWEST} isCurrent={current} showTitle showBackToHome />;
+          return (
+            <SimpleArticleScreen type={ROUTE_TYPE_NEWEST} isCurrent={current} showTitle showBackToHome />
+          );
         case ROUTE_TYPE_POPULAR:
-          return <ArticleTabScreen type={ROUTE_TYPE_POPULAR} isCurrent={current} showTitle showBackToHome />;
+          return (
+            <SimpleArticleScreen type={ROUTE_TYPE_POPULAR} isCurrent={current} showTitle showBackToHome />
+          );
         default:
           return <TestScreen text={'Unkown type: ' + JSON.stringify(route)} />;
       }

@@ -32,6 +32,7 @@ export type MenuItemCategory = {
   name: string;
   id: number;
   url: string;
+  has_home_blocks?: boolean;
 };
 
 export type MenuItemProjects = {

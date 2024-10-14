@@ -4,7 +4,7 @@ import React, {useCallback, useEffect, useRef} from 'react';
 import {View, StyleSheet, Button, RefreshControl} from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
-import {Article} from '../../../../Types';
+import {Article} from '../../../../../Types';
 import {
   ArticleRow,
   DefaultSectionHeader,
@@ -12,12 +12,12 @@ import {
   ScreenLoader,
   Text,
   TouchableDebounce,
-} from '../../../components';
-import {IconArrowLeft} from '../../../components/svg';
-import {EVENT_SELECT_CATEGORY_INDEX} from '../../../constants';
-import {MainStackParamList} from '../../../navigation/MainStack';
-import {useTheme} from '../../../Theme';
-import {PagingState} from '../../../state/article_store';
+} from '../../../../components';
+import {IconArrowLeft} from '../../../../components/svg';
+import {EVENT_SELECT_CATEGORY_INDEX} from '../../../../constants';
+import {MainStackParamList} from '../../../../navigation/MainStack';
+import {useTheme} from '../../../../Theme';
+import {PagingState} from '../../../../state/article_store';
 
 interface Props {
   data: PagingState;
@@ -27,7 +27,7 @@ interface Props {
   requestRefresh: () => void;
 }
 
-const TabScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
+const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
   data,
   showTitle,
   showBackToHome,
@@ -125,7 +125,7 @@ const TabScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
   );
 };
 
-export default TabScreenContent;
+export default SimpleArticleScreenContent;
 
 const styles = StyleSheet.create({
   container: {

@@ -5,7 +5,7 @@ import TabBar from '../main/tabBar/TabBar';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import ArticleTabScreen from '../main/tabScreen/ArticleTabScreen';
+import SimpleArticleScreen from '../main/tabScreen/simple/SimpleArticleScreen';
 import {ROUTE_TYPE_CATEGORY} from '../../api/Types';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 
@@ -60,7 +60,7 @@ const CustomPageScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation,
           } else {
             const {route: sceneRounte} = sceneProps;
             return (
-              <ArticleTabScreen
+              <SimpleArticleScreen
                 type={ROUTE_TYPE_CATEGORY}
                 showTitle
                 isCurrent={false}

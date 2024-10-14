@@ -1,15 +1,15 @@
 import React, {useEffect, useMemo} from 'react';
 
 import Gemius from 'react-native-gemius-plugin';
-import {ROUTE_TYPE_CATEGORY, ROUTE_TYPE_NEWEST, ROUTE_TYPE_POPULAR} from '../../../api/Types';
-import {EVENT_LOGO_PRESS, GEMIUS_VIEW_SCRIPT_ID} from '../../../constants';
-import useNewestArticlesProvider from './useNewestArticlesProvider';
-import usePopularArticlesProvider from './usePopularArticlesProvider';
-import TabScreenContent from './ArticleTabScreenContent';
-import {ArticleScreenAdapter} from './Types';
-import useCategoryArticlesProvider from './useCategoryArticlesProvider';
+import {ROUTE_TYPE_CATEGORY, ROUTE_TYPE_NEWEST, ROUTE_TYPE_POPULAR} from '../../../../api/Types';
+import {EVENT_LOGO_PRESS, GEMIUS_VIEW_SCRIPT_ID} from '../../../../constants';
+import useNewestArticlesProvider from './articleProviders/useNewestArticlesProvider';
+import usePopularArticlesProvider from './articleProviders/usePopularArticlesProvider';
+import TabScreenContent from './SimpleArticleScreenContent';
+import {ArticleScreenAdapter} from './articleProviders/Types';
+import useCategoryArticlesProvider from './articleProviders/useCategoryArticlesProvider';
 import {EventRegister} from 'react-native-event-listeners';
-import useArticleTabScreenAnalytics from './useArticleTabScreenAnalytics';
+import useSimpleArticleScreenAnalytics from './useSimpleArticleScreenAnalytics';
 
 interface Props {
   isCurrent: boolean;
@@ -23,7 +23,7 @@ interface Props {
 
 const TWO_MINUTES = 1000 * 60 * 2;
 
-const ArticleTabScreen: React.FC<React.PropsWithChildren<Props>> = ({
+const SimpleArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({
   isCurrent,
   type,
   showTitle,
@@ -48,7 +48,7 @@ const ArticleTabScreen: React.FC<React.PropsWithChildren<Props>> = ({
 
   const {state, loadNextPage, refresh} = provider(categoryId, categoryTitle);
 
-  useArticleTabScreenAnalytics({type, categoryTitle, categoryUrl});
+  useSimpleArticleScreenAnalytics({type, categoryTitle, categoryUrl});
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
@@ -86,4 +86,4 @@ const ArticleTabScreen: React.FC<React.PropsWithChildren<Props>> = ({
   );
 };
 
-export default ArticleTabScreen;
+export default SimpleArticleScreen;
