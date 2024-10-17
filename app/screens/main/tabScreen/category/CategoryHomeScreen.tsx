@@ -39,7 +39,6 @@ import ArticlesListByDateBlock from '../home/blocks/ArticlesListByDateBlock/Arti
 import TopUrlInlineBlock from '../home/blocks/TopUrlInlineBlock/TopUrlInlineBlock';
 import {IconArrowLeft} from '../../../../components/svg';
 import {useTheme} from '../../../../Theme';
-import Divider from '../../../../components/divider/Divider';
 
 const selectCategoryState = (id: number) => (state: ArticleState) => {
   const block = state.advancedCategories[id];

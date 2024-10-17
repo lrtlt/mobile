@@ -19,7 +19,7 @@ const TopUrlInlineBlock: React.FC<React.PropsWithChildren<Props>> = ({block}) =>
 
   const {colors} = useTheme();
 
-  const {title, items} = block.url_list;
+  const {items} = block.url_list;
 
   const onPressHandler = useCallback(
     async (item: (typeof items)[number]) => {
