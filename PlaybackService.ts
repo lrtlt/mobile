@@ -144,6 +144,7 @@ function setupAndroidAuto() {
     switch (true) {
       case event.mediaId === '/':
         onRecommendedTabOpened();
+        break;
       case event.mediaId === TAB_RECOMMENDED:
         onRecommendedTabOpened();
         sendAnalyticsEvent('android_auto_recommended_open');
