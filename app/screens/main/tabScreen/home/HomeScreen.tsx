@@ -23,7 +23,7 @@ import DailyQuestionComponent from '../../../../components/dailyQuestion/DailyQu
 import CategoryArticlesBlock from './blocks/CategoryArticlesBlock/CategoryArticlesBlock';
 import SlugArticlesBlock from './blocks/SlugArticlesBlock/SlugArticlesBlock';
 import TopFeedBlock from './blocks/TopFeedBlock/TopFeedBlock';
-import TopUrlBlock from './blocks/TopUrlsBlock/TopUrlBlock';
+import TopUrlBlock from './blocks/TopUrlBlock/TopUrlBlock';
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
 import EpikaBlock from './blocks/EpikaBlock/EpikaBlock';
@@ -31,8 +31,9 @@ import VideoListBlock from './blocks/VideoListBlock/VideoListBlock';
 import {useShallow} from 'zustand/shallow';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import {HomePageType} from '../../../../../Types';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-export const selectHomeScreenState = (type: HomePageType) => (state: ArticleState) => {
+const selectHomeScreenState = (type: HomePageType) => (state: ArticleState) => {
   const block = type === ROUTE_TYPE_MEDIA ? state.mediateka : state.home;
   return {
     refreshing: block.isFetching && block.items.length > 0,
@@ -193,6 +194,7 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
     }
   }, [onForecastPressHandler, type]);
 
+  const insets = useSafeAreaInsets();
   const keyExtractor = useCallback((item: HomeBlockType, index: number) => `${index}-${item.type}`, []);
 
   if (items.length === 0) {
@@ -210,6 +212,7 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
         <FlashList
           showsVerticalScrollIndicator={false}
           //style={styles.container}
+          contentContainerStyle={{paddingBottom: insets.bottom}}
           ref={listRef}
           extraData={{
             lastFetchTime: lastFetchTime,

@@ -46,6 +46,13 @@ export const categoryGet = (
   return url;
 };
 
+/**
+ * Returns home page data for a category by it's id.
+ */
+export const categoryHomeGet = (id: number | string) => {
+  return `${BASE_URL}category-home?id=${id}`;
+};
+
 export const categoryTopsGet = (id: number | string, count: number) => {
   return `${BASE_URL}category/top?id=${id}&count=${count}`;
 };

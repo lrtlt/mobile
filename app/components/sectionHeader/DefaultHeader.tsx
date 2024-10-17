@@ -1,15 +1,13 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
+import Divider from '../divider/Divider';
 
 interface Props {
   title?: string;
 }
 
 const DefaultHeader: React.FC<React.PropsWithChildren<Props>> = ({title}) => {
-  const {colors} = useTheme();
-
   return (
     <View>
       <View style={styles.sectionHeaderContainer}>
@@ -17,7 +15,7 @@ const DefaultHeader: React.FC<React.PropsWithChildren<Props>> = ({title}) => {
           {title}
         </TextComponent>
       </View>
-      <View style={{...styles.separator, backgroundColor: colors.primaryDark}} />
+      <Divider style={{flex: 1, margin: 8}} />
     </View>
   );
 };
@@ -38,12 +36,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingStart: 16,
     paddingEnd: 16,
-  },
-  separator: {
-    flex: 1,
-    height: StyleSheet.hairlineWidth,
-    marginStart: 8,
-    marginEnd: 8,
-    marginBottom: 4,
   },
 });

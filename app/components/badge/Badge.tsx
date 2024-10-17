@@ -7,17 +7,19 @@ interface Props {
   style?: ViewStyle;
   type: Article['badge_class'];
   label: string;
+  size?: 'small' | 'big';
 }
 
-const Badge: React.FC<React.PropsWithChildren<Props>> = ({style, type, label}) => {
+const Badge: React.FC<React.PropsWithChildren<Props>> = ({style, type, label, size = 'big'}) => {
   return (
     <View style={[styles.container, style]}>
       <TextComponent
         numberOfLines={2}
-        fontFamily="SourceSansPro-SemiBold"
+        fontFamily={size === 'big' ? 'SourceSansPro-Regular' : 'SourceSansPro-SemiBold'}
         style={{
           ...styles.badgeBase,
           ...(styles[type ?? 'default'] ?? styles.default),
+          fontSize: size === 'big' ? 12 : 10,
         }}>
         {label}
       </TextComponent>
@@ -32,10 +34,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   badgeBase: {
-    fontSize: 13,
-    paddingVertical: 1,
-    paddingHorizontal: 4,
-    borderRadius: 6,
+    fontSize: 12,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    borderRadius: 4,
     overflow: 'hidden',
     textTransform: 'uppercase',
   },

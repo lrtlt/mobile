@@ -28,6 +28,7 @@ import SimpleArticleScreen from './tabScreen/simple/SimpleArticleScreen';
 import NotificationsModal from '../../components/notificationsModal/NotificationsModal';
 import useOnboardingLogic from './useOnboardingLogic';
 import {useNavigationStore} from '../../state/navigation_store';
+import CategoryHomeScreen from './tabScreen/category/CategoryHomeScreen';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -52,7 +53,14 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
     return {
       routes: routes.map((r) => {
         if (r.type === ROUTE_TYPE_CATEGORY) {
-          return {type: r.type, key: r.name, title: r.name, categoryId: r.id, categoryUrl: r.url};
+          return {
+            type: r.type,
+            key: r.name,
+            title: r.name,
+            categoryId: r.id,
+            categoryUrl: r.url,
+            hasHome: r.has_home_blocks,
+          };
         } else {
           return {type: r.type, key: r.name, title: r.name};
         }
@@ -131,7 +139,14 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
         case ROUTE_TYPE_AUDIOTEKA:
           return <AudiotekaScreen isCurrent={current} />;
         case ROUTE_TYPE_CATEGORY:
-          return (
+          return route.hasHome ? (
+            <CategoryHomeScreen
+              id={route.categoryId}
+              title={route.title}
+              url={route.categoryUrl}
+              isCurrent={current}
+            />
+          ) : (
             <SimpleArticleScreen
               type={ROUTE_TYPE_CATEGORY}
               isCurrent={current}
