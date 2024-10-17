@@ -4,7 +4,7 @@ import React, {useCallback, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Article} from '../../../../../../../Types';
 import {HomeBlockArticlesBlock} from '../../../../../../api/Types';
-import {ArticleComponent, ArticleFeedItem} from '../../../../../../components';
+import {ArticleComponent, ArticleFeedItem, Text} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import ArticleTextOnlyItem from '../../../../../../components/article/articleTextOnlyItem/ArticleTextOnlyItem';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -47,8 +47,11 @@ const FeedArticlesBlock: React.FC<FeedArticlesBlockProps> = ({block}) => {
     <View style={styles.root}>
       <ArticleComponent article={articles_list[0]} onPress={articlePressHandler} styleType="single" />
       {articleList}
+      <Text style={{fontSize: 16, marginTop: 8}} fontFamily="SourceSansPro-SemiBold">
+        SKAITOMIAUSI
+      </Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={{flexDirection: 'row', gap: 12}}>{horizontalArticleList}</View>
+        <View style={{flexDirection: 'row', gap: 32}}>{horizontalArticleList}</View>
       </ScrollView>
     </View>
   );
