@@ -32,6 +32,7 @@ export type MenuItemCategory = {
   name: string;
   id: number;
   url: string;
+  has_home_blocks?: boolean;
 };
 
 export type MenuItemProjects = {
@@ -146,12 +147,13 @@ export type HomeBlockChannels = {
   data: HomeChannels;
 };
 
-/** @deprecated */
-export type HomeBlockFeedBlock = {
+export type HomeBlockArticlesBlock = {
   type: 'articles_block';
-  articles_list: FeedArticle[];
-  template_id: 999;
-  block_title: string;
+  data: {
+    articles_list: FeedArticle[];
+    articles_list2: FeedArticle[];
+  };
+  template_id: 29;
 };
 
 export type HomeBlockEpikaBlock = {
@@ -211,6 +213,12 @@ export type HomeBlockSlug = {
   };
 };
 
+export type HomeBlockArticlesByDate = {
+  type: 'articles_list_by_date';
+  template_id: number;
+  articles_list: FeedArticle[];
+};
+
 export type HomeBlockType =
   | HomeBlockArticle
   | HomeBlockTopArticles
@@ -219,11 +227,12 @@ export type HomeBlockType =
   | HomeBlockEmbed
   | HomeBlockCategory
   | HomeBlockSlug
-  | HomeBlockFeedBlock
+  | HomeBlockArticlesBlock
   | HomeBlockTopFeedBlock
   | HomeBlockDailyQuestion
   | HomeBlockEpikaBlock
-  | AudiotekaTopUrlList;
+  | AudiotekaTopUrlList
+  | HomeBlockArticlesByDate;
 
 export type HomeDataResponse = {
   homepage_data: HomeBlockType[];
@@ -646,6 +655,10 @@ export const isMediaArticle = (article?: ArticleContent): article is ArticleCont
 export const isDefaultArticle = (article?: ArticleContent): article is ArticleContentDefault => {
   const a = article as ArticleContentDefault | undefined;
   return Boolean(a?.article_id);
+};
+
+export const isCatageoryMenuItem = (item?: MenuItem | MenuItemCategory): item is MenuItemCategory => {
+  return Boolean((item as MenuItemCategory)?.type === ROUTE_TYPE_CATEGORY);
 };
 
 export const isVideoLiveStream = (

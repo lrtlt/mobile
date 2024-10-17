@@ -5,7 +5,7 @@ import {StyleSheet, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {Article} from '../../../../../../../Types';
 import {HomeBlockSlug} from '../../../../../../api/Types';
-import {ArticleRow, SectionHeader} from '../../../../../../components';
+import {ArticleRow, MoreArticlesButton, SectionHeader} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import {themeDark, themeLight, useTheme} from '../../../../../../Theme';
 import {formatArticles} from '../../../../../../util/articleFormatters';
@@ -16,6 +16,8 @@ import ThemeProvider from '../../../../../../theme/ThemeProvider';
 interface SlugArticlesBlockProps {
   block: HomeBlockSlug;
 }
+
+const defaultBackgroundImage = require('../../../../../../../assets/img/tag-bg-lrt-default.jpg');
 
 const SlugArticlesBlock: React.FC<SlugArticlesBlockProps> = ({block}) => {
   const {data, template_id} = block;
@@ -59,30 +61,37 @@ const SlugArticlesBlock: React.FC<SlugArticlesBlockProps> = ({block}) => {
   );
 
   return (
-    <View>
-      <FastImage
-        style={StyleSheet.absoluteFillObject}
-        source={{
-          uri: buildArticleImageUri(IMG_SIZE_L, block.background_image),
-        }}
-        resizeMode={FastImage.resizeMode.cover}
-      />
-      <>
-        {template_id === 9 && (
-          <LinearGradient
+    <View style={styles.root}>
+      <View>
+        {template_id === 9 ? (
+          <FastImage
             style={StyleSheet.absoluteFillObject}
-            colors={['#000000EE', '#00000099', '#00000050']}
-            useAngle={true}
-            angle={0}
+            source={
+              block.background_image
+                ? {uri: buildArticleImageUri(IMG_SIZE_L, block.background_image)}
+                : defaultBackgroundImage
+            }
+            resizeMode={FastImage.resizeMode.cover}
           />
-        )}
-        <SectionHeader
-          category={{name: slug_title, template_id: template_id, is_slug_block: 1, slug_url: slug_url}}
-          onPress={onHeaderPressHandler}
-          color={template_id === 9 ? themeDark.colors.text : undefined}
-        />
-        <ThemeProvider forceTheme={template_id === 9 ? themeLight : theme}>{articleList}</ThemeProvider>
-      </>
+        ) : null}
+        <>
+          {template_id === 9 && (
+            <LinearGradient
+              style={StyleSheet.absoluteFillObject}
+              colors={['#000000EE', '#00000099', '#00000050']}
+              useAngle={true}
+              angle={0}
+            />
+          )}
+          <SectionHeader
+            category={{name: slug_title, template_id: template_id, is_slug_block: 1, slug_url: slug_url}}
+            onPress={onHeaderPressHandler}
+            color={template_id === 9 ? themeDark.colors.text : undefined}
+          />
+          <ThemeProvider forceTheme={template_id === 9 ? themeLight : theme}>{articleList}</ThemeProvider>
+        </>
+      </View>
+      <MoreArticlesButton onPress={onHeaderPressHandler} />
     </View>
   );
 };
@@ -90,6 +99,9 @@ const SlugArticlesBlock: React.FC<SlugArticlesBlockProps> = ({block}) => {
 export default SlugArticlesBlock;
 
 const styles = StyleSheet.create({
+  root: {
+    marginBottom: 12,
+  },
   article: {
     borderRadius: 4,
     margin: 12,

@@ -49,9 +49,9 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
     onPress(article);
   }, [onPress, article]);
 
-  const date = Boolean(article.date) && Boolean(dateEnabled) && (
+  const date = Boolean(article.item_date) && Boolean(dateEnabled) && (
     <TextComponent style={style.categoryTitle} type="secondary">
-      {article.date}
+      {article.item_date}
     </TextComponent>
   );
 
@@ -114,21 +114,27 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
           </View>
           <View style={style.categoryTitleContainer}>
             {mediaIcon}
-            <TextComponent style={style.categoryTitle} type="secondary">
-              {article.category_title}
-            </TextComponent>
+            <View style={style.dateContainer}>
+              <TextComponent style={style.categoryTitle}>{article.category_title}</TextComponent>
+              {date}
+            </View>
           </View>
-          <View style={style.dateContainer}>{date}</View>
           {badge}
+
           <TextComponent style={style.title} fontFamily="PlayfairDisplay-Regular">
             {article.title}
           </TextComponent>
-          <ArticleBadges style={style.badges} article={article} />
+          {Boolean(article.summary) && (
+            <TextComponent style={style.subtitle} type="secondary" numberOfLines={3}>
+              {article.summary}
+            </TextComponent>
+          )}
           {Boolean(article.subtitle) && (
             <TextComponent style={style.subtitle} type="error">
               {article.subtitle}
             </TextComponent>
           )}
+          <ArticleBadges style={style.badges} article={article} />
         </View>
       </TouchableDebounce>
     </View>
@@ -161,23 +167,22 @@ const styles = StyleSheet.create({
     marginEnd: 4,
   },
   categoryTitle: {
-    fontSize: 13.5,
+    fontSize: 12,
     paddingEnd: 6,
   },
   categoryTitleContainer: {
     flexDirection: 'row',
     paddingTop: 6,
+    paddingBottom: 4,
     justifyContent: 'flex-start',
     alignItems: 'center',
     flexWrap: 'wrap',
   },
   dateContainer: {
     flexDirection: 'row',
-    paddingTop: 4,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-
   title: {
     marginTop: 4,
     fontSize: 22,

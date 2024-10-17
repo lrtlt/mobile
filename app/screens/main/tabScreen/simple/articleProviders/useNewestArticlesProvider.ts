@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
-import {ARTICLES_PER_PAGE_COUNT} from '../../../constants';
+import {ARTICLES_PER_PAGE_COUNT} from '../../../../../constants';
 import {ArticleScreenAdapter} from './Types';
-import {useArticleStore} from '../../../state/article_store';
+import {useArticleStore} from '../../../../../state/article_store';
 import {useShallow} from 'zustand/shallow';
 
 const useNewestArticlesProvider: ArticleScreenAdapter = () => {

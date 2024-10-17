@@ -7,7 +7,7 @@ import template9Formatter from './articleFormatterTemplate9';
 import template999Formatter from './articleFormatterTemplate999';
 
 export const formatArticles = <T>(template_id: number, articles: T[], clipLast = true): T[][] => {
-  if (articles && articles.length === 0) {
+  if (!articles || articles.length === 0) {
     return [];
   }
 

@@ -1,5 +1,5 @@
-import {ROUTE_TYPE_CATEGORY, ROUTE_TYPE_NEWEST, ROUTE_TYPE_POPULAR} from '../../../api/Types';
-import useNavigationAnalytics, {TrackingParams} from '../../../util/useNavigationAnalytics';
+import {ROUTE_TYPE_CATEGORY, ROUTE_TYPE_NEWEST, ROUTE_TYPE_POPULAR} from '../../../../api/Types';
+import useNavigationAnalytics, {TrackingParams} from '../../../../util/useNavigationAnalytics';
 
 type Params = {
   type: typeof ROUTE_TYPE_CATEGORY | typeof ROUTE_TYPE_NEWEST | typeof ROUTE_TYPE_POPULAR;
@@ -7,7 +7,7 @@ type Params = {
   categoryUrl?: string;
 };
 
-const useArticleTabScreenAnalytics = (params: Params) => {
+const useSimpleArticleScreenAnalytics = (params: Params) => {
   const trackingParams = toTrackingParams(params);
   useNavigationAnalytics(trackingParams);
 };
@@ -44,4 +44,4 @@ const toTrackingParams = ({type, categoryTitle, categoryUrl}: Params): TrackingP
   };
 };
 
-export default useArticleTabScreenAnalytics;
+export default useSimpleArticleScreenAnalytics;

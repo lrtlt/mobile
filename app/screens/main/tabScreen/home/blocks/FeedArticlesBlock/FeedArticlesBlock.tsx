@@ -1,23 +1,23 @@
 import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useMemo} from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Article} from '../../../../../../../Types';
-import {HomeBlockFeedBlock} from '../../../../../../api/Types';
-import {ArticleFeedItem, MoreArticlesButton, SectionHeader} from '../../../../../../components';
+import {HomeBlockArticlesBlock} from '../../../../../../api/Types';
+import {ArticleComponent, ArticleFeedItem} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
-import {useTheme} from '../../../../../../Theme';
-import {useNavigationStore} from '../../../../../../state/navigation_store';
+import ArticleTextOnlyItem from '../../../../../../components/article/articleTextOnlyItem/ArticleTextOnlyItem';
+import {ScrollView} from 'react-native-gesture-handler';
 
 interface FeedArticlesBlockProps {
-  block: HomeBlockFeedBlock;
+  block: HomeBlockArticlesBlock;
 }
 
 const FeedArticlesBlock: React.FC<FeedArticlesBlockProps> = ({block}) => {
-  const {articles_list, block_title, template_id} = block;
-  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
+  const {data} = block;
+  const {articles_list, articles_list2} = data;
 
-  const {colors} = useTheme();
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const articlePressHandler = useCallback(
     (article: Article) => {
@@ -26,28 +26,42 @@ const FeedArticlesBlock: React.FC<FeedArticlesBlockProps> = ({block}) => {
     [navigation],
   );
 
-  const onHeaderPressHandler = useCallback(() => {
-    useNavigationStore.getState().openCategoryByName('Naujausi');
-  }, []);
-
   const articleList = useMemo(
     () =>
-      articles_list.map((article, index) => (
-        <ArticleFeedItem key={index} article={article} onPress={articlePressHandler} />
-      )),
+      articles_list
+        .slice(1, articles_list.length)
+        .map((article, index) => (
+          <ArticleFeedItem key={article.id} article={article} onPress={articlePressHandler} />
+        )),
     [articlePressHandler, articles_list],
   );
 
+  const horizontalArticleList = useMemo(
+    () =>
+      articles_list2.map((article, index) => (
+        <ArticleTextOnlyItem key={article.id} index={index} article={article} onPress={articlePressHandler} />
+      )),
+    [articlePressHandler, articles_list],
+  );
   return (
-    <View>
-      <SectionHeader
-        category={{name: block_title, template_id: template_id}}
-        onPress={onHeaderPressHandler}
-      />
+    <View style={styles.root}>
+      <ArticleComponent article={articles_list[0]} onPress={articlePressHandler} styleType="single" />
       {articleList}
-      <MoreArticlesButton onPress={onHeaderPressHandler} backgroundColor={colors.slugBackground} />
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={{flexDirection: 'row', gap: 12}}>{horizontalArticleList}</View>
+      </ScrollView>
     </View>
   );
 };
 
 export default FeedArticlesBlock;
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    paddingTop: 24,
+    paddingHorizontal: 8,
+    gap: 24,
+    paddingBottom: 32,
+  },
+});

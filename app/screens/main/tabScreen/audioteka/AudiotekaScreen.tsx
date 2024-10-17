@@ -16,7 +16,7 @@ import PopularBlock from './components/popular/PopularBlock';
 import NewestBlock from './components/newest/NewestBlock';
 import AudiotekaSearch from './components/search/AudiotekaSearch';
 import TopFeedBlock from '../home/blocks/TopFeedBlock/TopFeedBlock';
-import TopUrlBlock from '../home/blocks/TopUrlsBlock/TopUrlBlock';
+import TopUrlBlock from '../home/blocks/TopUrlBlock/TopUrlBlock';
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';

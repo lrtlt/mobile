@@ -27,6 +27,7 @@ export type Article = {
   category_img_path_postfix?: string;
   url: string;
   read_count: number;
+  summary?: string;
   media_duration?: string;
   photo_count?: number;
   photo_horizontal?: 1 | 0;

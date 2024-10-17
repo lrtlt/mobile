@@ -9,6 +9,7 @@ import {
   carPlaylistPopularGet,
   carPlaylistRecommendedGet,
   categoryGet,
+  categoryHomeGet,
   channelGet,
   forecastGet,
   getDailyQuestion,
@@ -88,6 +89,8 @@ export const fetchCategoryApi = (
   date_max?: string,
   not_id?: string,
 ) => get<CategoryArticlesResponse>(categoryGet(categoryId, page, count, date_max, not_id));
+
+export const fetchCategoryHome = (id: number) => get<HomeDataResponse>(categoryHomeGet(id));
 
 export const fetchWeatherLocations = () => get<ForecastLocation[]>(weatherLocationsGet());
 

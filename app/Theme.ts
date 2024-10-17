@@ -68,7 +68,7 @@ export const strings: Dictionary = {
   channelScreenTitle: 'LRT GYVAI',
   weatherScreenTitle: 'ORAI',
   locationSearch: 'Įveskite miestą',
-  moreButtonText: 'DAUGIAU',
+  moreButtonText: 'Daugiau',
   tryAgain: 'Bandykite dar kartą',
   nightModeTitle: 'Nakties režimas',
   settings: 'NUSTATYMAI',

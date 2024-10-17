@@ -5,6 +5,7 @@ import {AudiotekaResponse, HomeBlockChannels, HomeBlockType, LiveChannel, TVChan
 import {
   fetchAudiotekaApi,
   fetchCategoryApi,
+  fetchCategoryHome,
   fetchHomeApi,
   fetchMediatekaApi,
   fetchNewestApi,
@@ -23,6 +24,10 @@ type BaseBlockState = {
 type HomeState = {
   items: HomeBlockType[];
 } & BaseBlockState;
+
+type CategoryHomeState = {
+  id: number;
+} & HomeState;
 
 type AudiotekaState = {
   data: AudiotekaResponse;
@@ -58,7 +63,9 @@ export type ArticleState = {
   home: HomeState;
   mediateka: HomeState;
   audioteka: AudiotekaState;
+  advancedCategories: {[key: number]: CategoryHomeState};
   categories: {[key: number]: CategoryState};
+
   newest: PagingState;
   popular: PagingState;
   channels: ChannelState;
@@ -84,6 +91,7 @@ type ArticleActions = {
     not_id?: string,
     withOverride?: boolean,
   ) => void;
+  fetchCategoryHome: (categoryId: number, withOverride?: boolean) => void;
 };
 
 type ArticleStore = ArticleState & ArticleActions;
@@ -107,6 +115,7 @@ const initialState: ArticleState = {
     lastFetchTime: 0,
     data: [],
   },
+  advancedCategories: {},
   newest: {
     title: '',
     isFetching: false,
@@ -352,6 +361,48 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
       set(
         produce((state: ArticleState) => {
           state.categories[categoryId] = {
+            isFetching: false,
+            isError: true,
+            isRefreshing: false,
+          } as any;
+        }),
+      );
+    }
+  },
+  fetchCategoryHome: async (categoryId: number, withOverride?: boolean) => {
+    set(
+      produce((state: ArticleState) => {
+        state.advancedCategories[categoryId] = {
+          id: categoryId,
+          items: state.advancedCategories[categoryId]?.items ?? [],
+          lastFetchTime: state.advancedCategories[categoryId]?.lastFetchTime ?? 0,
+          isFetching: true,
+          isError: false,
+          isRefreshing: withOverride ?? initialCategoryState.isRefreshing,
+        };
+      }),
+    );
+    try {
+      const data = await fetchCategoryHome(categoryId);
+      set(
+        produce((state: ArticleState) => {
+          state.advancedCategories[categoryId] = {
+            id: categoryId,
+            // title: data.category_info.category_title,
+            items: data.homepage_data,
+            isFetching: false,
+            isError: false,
+            isRefreshing: false,
+            lastFetchTime: Date.now(),
+          };
+        }),
+      );
+    } catch (e) {
+      console.log('Fetch category home error', e);
+      set(
+        produce((state: ArticleState) => {
+          state.advancedCategories[categoryId] = {
+            id: categoryId,
             isFetching: false,
             isError: true,
             isRefreshing: false,

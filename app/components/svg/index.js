@@ -62,3 +62,8 @@ export {default as IconCheck} from './ic_check';
 export {default as IconCarretDown} from './ic_carret_down';
 export {default as IconLanguage} from './ic_language';
 export {default as IconLRTEpika} from './ic_epika';
+export {default as IconNumber1} from './ic_number_1';
+export {default as IconNumber2} from './ic_number_2';
+export {default as IconNumber3} from './ic_number_3';
+export {default as IconNumber4} from './ic_number_4';
+export {default as IconNumber5} from './ic_number_5';
