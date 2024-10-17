@@ -49,13 +49,11 @@ const selectCategoryState = (id: number) => (state: ArticleState) => {
       items: block.items,
     };
   } else {
-    {
-      return {
-        refreshing: false,
-        lastFetchTime: 0,
-        items: [],
-      };
-    }
+    return {
+      refreshing: false,
+      lastFetchTime: 0,
+      items: [],
+    };
   }
 };
 

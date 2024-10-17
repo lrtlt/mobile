@@ -31,7 +31,7 @@ const FeedArticlesBlock: React.FC<FeedArticlesBlockProps> = ({block}) => {
       articles_list
         .slice(1, articles_list.length)
         .map((article, index) => (
-          <ArticleFeedItem key={index} article={article} onPress={articlePressHandler} />
+          <ArticleFeedItem key={article.id} article={article} onPress={articlePressHandler} />
         )),
     [articlePressHandler, articles_list],
   );
@@ -39,7 +39,7 @@ const FeedArticlesBlock: React.FC<FeedArticlesBlockProps> = ({block}) => {
   const horizontalArticleList = useMemo(
     () =>
       articles_list2.map((article, index) => (
-        <ArticleTextOnlyItem key={index} index={index} article={article} onPress={articlePressHandler} />
+        <ArticleTextOnlyItem key={article.id} index={index} article={article} onPress={articlePressHandler} />
       )),
     [articlePressHandler, articles_list],
   );

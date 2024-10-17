@@ -48,7 +48,7 @@ const ArticlesListByDateBlock: React.FC<ArticlesListByDateBlockProps> = ({
   const articleList = useMemo(
     () =>
       formattedArticles.map((row, index) => (
-        <ArticleRow key={index} data={row} onArticlePress={articlePressHandler} />
+        <ArticleRow key={`row-${index}`} data={row} onArticlePress={articlePressHandler} />
       )),
     [articlePressHandler, formattedArticles],
   );
