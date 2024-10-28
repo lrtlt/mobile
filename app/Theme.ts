@@ -53,6 +53,7 @@ interface Dictionary {
   error_no_search_query: string;
   daily_question_vote: string;
   close: string;
+  stream_blocked_warning: string;
 }
 
 export const strings: Dictionary = {
@@ -92,6 +93,7 @@ export const strings: Dictionary = {
   error_no_search_query: 'Įveskite paieškos tekstą',
   daily_question_vote: 'BALSUOTI',
   close: 'Uždaryti',
+  stream_blocked_warning: 'Transliacija internetu negalima dėl autorių teisių apribojimų.',
 };
 //#endregion
 

@@ -1,7 +1,8 @@
-import {CarPlay, ListTemplate} from 'react-native-carplay';
+import {AlertTemplate, CarPlay, ListTemplate} from 'react-native-carplay';
 import {PlayListItem} from './types';
 import TrackPlayer, {PitchAlgorithm} from 'react-native-track-player';
 import {carPlayNowPlayingTemplate} from './nowPlaying/createNowPlayingTemplate';
+import {strings} from '../Theme';
 
 export type PlaylistProvider = () => Promise<PlayListItem[]>;
 
@@ -11,6 +12,20 @@ export type BaseListTemplateOptions = {
   tabSystemImageName: string;
   id: string;
 };
+
+const streamWarningAlert = new AlertTemplate({
+  id: 'stream-blocked-alert',
+  onActionButtonPressed: async (_) => {
+    CarPlay.dismissTemplate();
+  },
+  titleVariants: [strings.stream_blocked_warning],
+  actions: [
+    {
+      id: 'close',
+      title: 'Uždaryti',
+    },
+  ],
+});
 
 export class BaseListTemplate {
   playlistProvider: PlaylistProvider;
@@ -24,6 +39,11 @@ export class BaseListTemplate {
 
   async onItemSelectHandler(item: PlayListItem, allItems: PlayListItem[]) {
     console.log('### onItemSelect', item.id);
+
+    if (item.isDisabled) {
+      CarPlay.presentTemplate(streamWarningAlert);
+      return;
+    }
     const index = allItems.indexOf(item);
 
     await TrackPlayer.setQueue(

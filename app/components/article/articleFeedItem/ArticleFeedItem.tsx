@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     width: 110,
   },
   categoryTitle: {
-    fontSize: 11,
+    fontSize: 12,
     paddingEnd: 6,
   },
   dateContainer: {
@@ -97,6 +97,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   subtitle: {
-    fontSize: 11,
+    fontSize: 12,
   },
 });

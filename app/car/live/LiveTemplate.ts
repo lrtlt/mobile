@@ -42,9 +42,10 @@ class LiveTemplate extends BaseListTemplate {
               const items: PlayListItem[] = data.map((stream) => ({
                 id: stream.mediaId,
                 text: stream.channelTitle ?? stream.title,
-                // detailText: stream.title,
+                // detailText: stream.isBlocked ? strings.stream_blocked_warning : undefined,
                 imgUrl: getImageByChannelId(stream.poster),
                 streamUrl: stream.streamUri,
+                isDisabled: stream.isBlocked,
                 isLiveStream: true,
               }));
               return items;

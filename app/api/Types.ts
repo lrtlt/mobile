@@ -261,6 +261,7 @@ export type VideoDataLiveStream = {
       content: string;
       content2?: string;
       audio?: string;
+      restriction?: string;
     };
   };
 };

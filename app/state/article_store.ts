@@ -249,7 +249,7 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
     );
     try {
       const data = await fetchPopularApi(page, count);
-      const formattedArticles = formatArticles(-1, data.articles);
+      const formattedArticles = formatArticles(-1, data.articles, false);
       const articles = withOverride ? formattedArticles : get().popular.articles.concat(formattedArticles);
       set({
         popular: {
@@ -288,7 +288,7 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
     );
     try {
       const data = await fetchNewestApi(page, count, date_max, not_id);
-      const formattedArticles = formatArticles(-1, data.articles);
+      const formattedArticles = formatArticles(-1, data.articles, false);
       const articles = withOverride ? formattedArticles : get().newest.articles.concat(formattedArticles);
       set({
         newest: {
@@ -333,7 +333,7 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
 
     try {
       const data = await fetchCategoryApi(categoryId, page, count, date_max, not_id);
-      const formattedArticles = formatArticles(-1, data.articles);
+      const formattedArticles = formatArticles(-1, data.articles, false);
 
       const categoryArticles: Article[][] = get().categories[categoryId]?.articles ?? [];
       const newCategoryarticles = withOverride

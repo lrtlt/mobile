@@ -114,10 +114,8 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
           </View>
           <View style={style.categoryTitleContainer}>
             {mediaIcon}
-            <View style={style.dateContainer}>
-              <TextComponent style={style.categoryTitle}>{article.category_title}</TextComponent>
-              {date}
-            </View>
+            <TextComponent style={style.categoryTitle}>{article.category_title}</TextComponent>
+            {date}
           </View>
           {badge}
 
@@ -167,7 +165,7 @@ const styles = StyleSheet.create({
     marginEnd: 4,
   },
   categoryTitle: {
-    fontSize: 12,
+    fontSize: 12.5,
     paddingEnd: 6,
   },
   categoryTitleContainer: {
@@ -182,6 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   title: {
     marginTop: 4,
@@ -189,7 +188,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     marginTop: 8,
-    fontSize: 13.5,
+    fontSize: 14.5,
   },
   mediaIndicator: {
     position: 'absolute',

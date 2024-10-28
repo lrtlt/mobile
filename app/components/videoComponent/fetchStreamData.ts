@@ -30,6 +30,7 @@ export const fetchStreamData = ({
           poster: poster,
           mediaId: data.content,
           offset: undefined,
+          isBlocked: !!data.restriction,
         };
         return streamData;
       } else {
@@ -42,6 +43,7 @@ export const fetchStreamData = ({
           title: response.title,
           offset: response.offset,
           poster: poster ?? playlist_item.image ? BASE_IMG_URL + playlist_item.image : undefined,
+          isBlocked: false,
           tracks: playlist_item.tracks?.map((track) => ({
             ...track,
             src: track.src.startsWith('http') ? track.src : BASE_IMG_URL + track.src,

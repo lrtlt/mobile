@@ -14,6 +14,7 @@ export type StreamData = {
   poster?: string;
   mediaType?: MediaType;
   tracks?: VideoTextTrack[];
+  isBlocked?: boolean;
 };
 
 type VideoState = {

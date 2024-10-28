@@ -14,4 +14,5 @@ export type PlayListItem = {
   imgUrl?: string;
   streamUrl: string;
   isLiveStream?: boolean;
+  isDisabled?: boolean;
 };

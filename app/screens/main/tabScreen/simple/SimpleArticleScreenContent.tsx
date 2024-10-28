@@ -18,6 +18,7 @@ import {EVENT_SELECT_CATEGORY_INDEX} from '../../../../constants';
 import {MainStackParamList} from '../../../../navigation/MainStack';
 import {useTheme} from '../../../../Theme';
 import {PagingState} from '../../../../state/article_store';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface Props {
   data: PagingState;
@@ -39,6 +40,8 @@ const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const listRef = useRef<FlashList<any>>(null);
+
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     //Scroll to top when it's finished refreshing
@@ -110,6 +113,7 @@ const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
         showsVerticalScrollIndicator={false}
         //style={styles.container}
         data={articles}
+        contentContainerStyle={{paddingBottom: insets.bottom}}
         ListHeaderComponent={showTitle ? renderTitle() : null}
         //windowSize={4}
         estimatedItemSize={320}
