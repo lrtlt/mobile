@@ -1,0 +1,22 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "lt.mediapark.lrt",
+      "sha256_cert_fingerprints": [
+        "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "lt.mediapark.lrt",
+      "sha256_cert_fingerprints": [
+        "98:06:38:D1:6D:08:C2:B5:E3:6D:CF:33:45:7B:95:A2:15:05:F1:07:81:BE:74:B1:62:37:7A:F8:09:C8:AA:0E"
+      ]
+    }
+  }
+]
