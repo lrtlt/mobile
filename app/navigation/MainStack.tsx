@@ -18,7 +18,10 @@ export type MainStackParamList = {
   Settings: undefined;
   Article: {
     articleId: number;
+    isMedia?: boolean;
   };
+  ArticleDeepLinkProxy: MainStackParamList['Article'];
+  MediaArticleDeepLinkProxy: MainStackParamList['Article'];
   Comments: {
     url: string;
   };
@@ -145,6 +148,19 @@ export default () => {
       <Stack.Screen
         name="Article"
         component={Screens.ArticleScreen}
+        options={{headerShown: false}} //We use custom header in the screen
+      />
+      <Stack.Screen
+        name="ArticleDeepLinkProxy"
+        component={Screens.ArticleScreen as any}
+        options={{headerShown: false}} //We use custom header in the screen
+      />
+      <Stack.Screen
+        name="MediaArticleDeepLinkProxy"
+        component={Screens.ArticleScreen as any}
+        initialParams={{
+          isMedia: true,
+        }}
         options={{headerShown: false}} //We use custom header in the screen
       />
       <Stack.Screen name="Comments" component={Screens.CommentsScreen} />

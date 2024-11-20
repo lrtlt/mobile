@@ -20,8 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
 
-<!--        <service android:name="com.doublesymmetry.trackplayer.service.MusicService"-->
-<!--            tools:node="remove" />-->
+        <!--        <service android:name="com.doublesymmetry.trackplayer.service.MusicService"-->
+        <!--            tools:node="remove" />-->
 
         <meta-data
             android:name="com.google.android.gms.car.application"
@@ -43,6 +43,19 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="www.lrt.lt" />
+                <data android:pathPattern="/naujienos/.*/.*/.*/.*" />
+                <data android:pathPattern="/mediateka/irasas/.*/.*" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

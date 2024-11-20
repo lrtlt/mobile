@@ -19,8 +19,8 @@ export const homeGet = () => {
 /**
  * Returns article screen data by articleId
  */
-export const articleGet = (articleId: number | string) => {
-  return `${BASE_URL}article/${articleId}`;
+export const articleGet = (articleId: number | string, isMedia?: boolean) => {
+  return `${BASE_URL}article/${articleId}${isMedia ? '?media' : ''}`;
 };
 
 /**

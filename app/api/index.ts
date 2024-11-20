@@ -59,8 +59,8 @@ export const fetchHomeApi = () => get<HomeDataResponse>(homeGet());
 
 export const fetchMediatekaApi = () => get<MediatekaDataResponse>(mediatekaGet());
 
-export const fetchArticle = (articleId: number | string) =>
-  get<ArticleContentResponse>(articleGet(articleId));
+export const fetchArticle = (articleId: number | string, isMedia?: boolean) =>
+  get<ArticleContentResponse>(articleGet(articleId, isMedia));
 
 export const fetchArticlesByTag = (tag: string, count: number) =>
   get<SlugArticlesResponse>(articlesGetByTag(tag, count));

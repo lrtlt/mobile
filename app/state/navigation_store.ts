@@ -28,14 +28,12 @@ export type NavigationState = {
   isLoading: boolean;
   isReady: boolean;
   isError: boolean;
-  launchUrl?: string;
 };
 
 type NavigationActions = {
   fetchMenuItems: () => void;
   openCategoryById: (id: number, title?: string) => void;
   openCategoryByName: (name: string) => void;
-  setLaunchUrl: (url?: string) => void;
 };
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -90,7 +88,6 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
       EventRegister.emit(EVENT_OPEN_CATEGORY, {id, title});
     }
   },
-  setLaunchUrl: (url) => set({launchUrl: url}),
 }));
 
 const parseRoutes = (apiResponse: MenuResponse): (MenuItem | MenuItemCategory)[] => {

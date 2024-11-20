@@ -9,17 +9,22 @@ import {DEEP_LINKING_URL_PREFIX, GEMIUS_VIEW_SCRIPT_ID} from '../constants';
 import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
 import MainStack, {MainStackParamList} from './MainStack';
 import {SplashScreen} from '../screens';
-import useHandleLaunchUrl from './useHandleLaunchUrl';
 import useFirebaseMessaging from '../util/useFirebaseMessaging';
 import {useTheme} from '../Theme';
 import {useArticleStore} from '../state/article_store';
 import {useShallow} from 'zustand/shallow';
 
 const linking: LinkingOptions<MainStackParamList> = {
-  prefixes: [DEEP_LINKING_URL_PREFIX],
+  prefixes: [DEEP_LINKING_URL_PREFIX, 'https://www.lrt.lt'],
   config: {
     initialRouteName: 'Home',
     screens: {
+      ArticleDeepLinkProxy: {
+        path: '/naujienos/:category/*/:articleId/:title',
+      },
+      MediaArticleDeepLinkProxy: {
+        path: '/mediateka/irasas/:articleId/:title',
+      },
       Article: {
         path: 'article/:articleId',
       },
@@ -39,7 +44,6 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const theme = useTheme();
 
   useFirebaseMessaging(isNavigatorReady);
-  useHandleLaunchUrl(isNavigatorReady);
 
   const onNavigationReady = useCallback(() => {
     routeNameRef.current = navRef.current?.getCurrentRoute()?.name;
