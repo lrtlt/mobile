@@ -27,7 +27,9 @@ const verify = async () => {
     }
   } catch (error) {
     console.warn('AppCheck verification failed');
-    analytics().logEvent('app_check_verification_failed');
+    analytics().logEvent('app_check_verification_failed', {
+      error: JSON.stringify(error),
+    });
   }
 };
 
