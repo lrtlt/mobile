@@ -19,12 +19,12 @@ type Props = {
 };
 
 const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
-  const {articleId} = route.params;
-  console.log('articleId', articleId);
+  const {articleId, isMedia} = route.params;
+  console.log(`articleId: ${articleId}, isMedia: ${isMedia}`);
 
   const {strings} = useTheme();
 
-  const [{article, loadingState}, acceptAdultContent] = useArticleScreenState(articleId);
+  const [{article, loadingState}, acceptAdultContent] = useArticleScreenState(articleId, isMedia);
 
   const adultContentAcceptHandler = useCallback(() => {
     acceptAdultContent(true);

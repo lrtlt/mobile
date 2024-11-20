@@ -19,7 +19,10 @@ const STATE_ADULT_CONTENT_WARNING = 'adult-content-warning';
 const STATE_ERROR = 'error';
 const STATE_READY = 'ready';
 
-const useArticleScreenState = (articleId: number): [ScreenState, (accept: boolean) => void] => {
+const useArticleScreenState = (
+  articleId: number,
+  isMedia?: boolean,
+): [ScreenState, (accept: boolean) => void] => {
   const [state, setState] = useState<ScreenState>({
     article: undefined,
     loadingState: STATE_LOADING,
@@ -36,7 +39,7 @@ const useArticleScreenState = (articleId: number): [ScreenState, (accept: boolea
       loadingState: STATE_LOADING,
     });
 
-    cancellablePromise(fetchArticle(articleId))
+    cancellablePromise(fetchArticle(articleId, isMedia))
       .then((response) => {
         const article = response.article;
         const loadingState = !article

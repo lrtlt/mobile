@@ -1228,7 +1228,7 @@ PODS:
   - hermes-engine (0.73.8):
     - hermes-engine/Pre-built (= 0.73.8)
   - hermes-engine/Pre-built (0.73.8)
-  - leveldb-library (1.22.5)
+  - leveldb-library (1.22.6)
   - libevent (2.1.12)
   - libwebp (1.3.2):
     - libwebp/demux (= 1.3.2)
@@ -1242,9 +1242,9 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
-  - MMKV (1.3.9):
-    - MMKVCore (~> 1.3.9)
-  - MMKVCore (1.3.9)
+  - MMKV (2.0.0):
+    - MMKVCore (~> 2.0.0)
+  - MMKVCore (2.0.0)
   - nanopb (2.30909.1):
     - nanopb/decode (= 2.30909.1)
     - nanopb/encode (= 2.30909.1)
@@ -2153,12 +2153,11 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.11.0):
     - React-Core
-  - react-native-theoplayer (7.9.0):
-    - google-cast-sdk-dynamic-xcframework (~> 4.8)
+  - react-native-theoplayer (8.8.0):
     - React-Core
-    - THEOplayer-Connector-SideloadedSubtitle (~> 7.12)
-    - THEOplayer-Integration-GoogleCast/Base (~> 7.12)
-    - THEOplayerSDK-core (~> 7.12)
+    - THEOplayer-Connector-SideloadedSubtitle (~> 8.3)
+    - THEOplayer-Integration-GoogleCast (~> 8.3)
+    - THEOplayerSDK-core (~> 8.3)
   - react-native-track-player (4.1.1):
     - React-Core
     - SwiftAudioEx (= 1.1.0)
@@ -2369,11 +2368,11 @@ PODS:
     - FirebaseCoreExtension
     - React-Core
     - RNFBApp
-  - RNFlashList (1.7.1):
+  - RNFlashList (1.7.2):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNGestureHandler (2.18.1):
+  - RNGestureHandler (2.21.2):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2408,7 +2407,7 @@ PODS:
     - React-RCTImage
   - RNShare (10.2.1):
     - React-Core
-  - RNSVG (15.7.1):
+  - RNSVG (15.9.0):
     - React-Core
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
@@ -2422,12 +2421,17 @@ PODS:
   - SwiftSubtitles (0.9.1):
     - DSFRegex (~> 3.3.1)
     - TinyCSV (~> 0.6.1)
-  - THEOplayer-Connector-SideloadedSubtitle (7.12.0):
+  - THEOplayer-Connector-SideloadedSubtitle (8.4.2):
     - Swifter (= 1.5.0)
     - SwiftSubtitles (= 0.9.1)
-    - THEOplayerSDK-core (~> 7.10)
-  - THEOplayer-Integration-GoogleCast/Base (7.12.0)
-  - THEOplayerSDK-core (7.12.0)
+    - THEOplayerSDK-core (~> 8)
+  - THEOplayer-Integration-GoogleCast (8.4.2):
+    - THEOplayer-Integration-GoogleCast/Base (= 8.4.2)
+    - THEOplayer-Integration-GoogleCast/Dependencies (= 8.4.2)
+  - THEOplayer-Integration-GoogleCast/Base (8.4.2)
+  - THEOplayer-Integration-GoogleCast/Dependencies (8.4.2):
+    - google-cast-sdk-dynamic-xcframework (~> 4.8)
+  - THEOplayerSDK-core (8.4.2)
   - TinyCSV (0.6.1)
   - Yoga (1.14.0)
 
@@ -2759,11 +2763,11 @@ SPEC CHECKSUMS:
   "gRPC-C++": e725ef63c4475d7cdb7e2cf16eb0fde84bd9ee51
   gRPC-Core: eee4be35df218649fe66d721a05a7f27a28f069b
   hermes-engine: b12d9bb1b7cee546f5e48212e7ea7e3c1665a367
-  leveldb-library: e8eadf9008a61f9e1dde3978c086d2b6d9b9dc28
+  leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
-  MMKV: 817ba1eea17421547e01e087285606eb270a8dcb
-  MMKVCore: af055b00e27d88cd92fad301c5fecd1ff9b26dd9
+  MMKV: f7d1d5945c8765f97f39c3d121f353d46735d801
+  MMKVCore: c04b296010fcb1d1638f2c69405096aac12f6390
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
@@ -2796,7 +2800,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: 208ae8f40c243f7dad4b3156206e3ed1d0c3c74b
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: 851c62c48dce80ccaa5637b6aa5991a1bc36eca9
-  react-native-theoplayer: 2bd53ea79bd1719419ebab59588ea2839bb02b8c
+  react-native-theoplayer: 1374d5ae55c7a3a4cada05cbcf12558d63c64043
   react-native-track-player: 82ef1756ffeea61140fea17519ecd6d64ec3cf3e
   react-native-unistyles: 2c8e1e4eea3a0d993563aae5973e0a23b1ef64ae
   react-native-webview: f8f61799dda94b4cc3a864b06c4c229d1a9ced1d
@@ -2828,23 +2832,23 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: cc2c22e812c529c1cacb1d1df1b02f76f8d911f4
   RNFBFirestore: 5250af3b06d1fe90b75c905d8b29d155e603d040
   RNFBMessaging: 81f9447a3790df25c72753b446247ebeba95b182
-  RNFlashList: fd6ab19a4be97c8cff03e7badd023ae835ea9e1a
-  RNGestureHandler: 9a413b04f827e0169f0f9f97a845c266da61f87c
+  RNFlashList: f283ecaae50743f71fe16cfcd1982c177a3fa559
+  RNGestureHandler: 703ad8ac7a8c0999cfb58d5d54809fd4a8ee1c5a
   RNNotifee: 935f3ea8c134c88cbf8b13ea0c97c72c09ad2116
   RNPermissions: 60d60ce58c13537514288f285910c8b1cd12908d
   RNReanimated: 3552edc240891c3e0bfe0016d3ae6f4ac16feb67
   RNScreens: b7eeec2c5d2658dac8c30d2de57dcaabd368d239
   RNShare: 0fad69ae2d71de9d1f7b9a43acf876886a6cb99c
-  RNSVG: 4590aa95758149fa27c5c83e54a6a466349a1688
+  RNSVG: 3d2bdcaef51c8071880a9c0072fe324f4423a3ba
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftAudioEx: f6aa653770f3a0d3851edaf8d834a30aee4a7646
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   SwiftSubtitles: c659af19d710a2946779015464c0577d07fe4666
-  THEOplayer-Connector-SideloadedSubtitle: d85e580211d4327be7ed8faf0633bcd6401f38dd
-  THEOplayer-Integration-GoogleCast: c4d49b120b05005a90b03fff6d711ef0300b64a1
-  THEOplayerSDK-core: b162d868db9229c3c9bc6f2e2e2ba0edab47035b
+  THEOplayer-Connector-SideloadedSubtitle: a4fcdcc86ee886aa9e35a81a812ec6554e8dc6bd
+  THEOplayer-Integration-GoogleCast: ae5ebfd867b5c3526deab7d45b1e55acd9309ef1
+  THEOplayerSDK-core: 654634de2947c2e07faabee207cb8e69719c23c4
   TinyCSV: fd6228edbcf1c07466ac34b76dac5e052143eaba
   Yoga: 428500217b7b2dba1074041bd3ccf0cad3555925
 
