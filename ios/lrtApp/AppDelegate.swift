@@ -62,10 +62,17 @@ class AppDelegate: RCTAppDelegate, GCKLoggerDelegate {
     let application = UIApplication.shared
     RCTAppSetupPrepareApp(application, enableTM)
 
+    //Prepare launchOptions if application launched from Universal Link
+    var launchOptions: [AnyHashable : Any]? = [:]
+    let launchUrl = connectionOptions?.userActivities.first?.webpageURL;
+    if(launchUrl != nil){
+      launchOptions = [UIApplication.LaunchOptionsKey.url: launchUrl ?? ""]
+    }
+    
     if self.bridge == nil {
       self.bridge = super.createBridge(
         with: self,
-        launchOptions: [:]
+        launchOptions: launchOptions
       )
     }
 

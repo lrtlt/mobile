@@ -28,20 +28,30 @@ class PhoneSceneDelegate: UIResponder, UIWindowSceneDelegate {
     window.makeKeyAndVisible()
   }
 
+  //Called when deep link is opened from push notifications
   func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
     URLContexts.forEach({ context in
       RCTLinkingManager.application(UIApplication.shared, open: context.url)
     })
   }
+  
+  //Called when universal link is opened from browser
+  func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+    RCTLinkingManager.application(UIApplication.shared, continue: userActivity) { _ in
+      // Handle any additional restoration logic if needed
+    }
+  }
 
+  //This is probably not called but just left here just in case
   func scene(
-    _ application: UIApplication,
+    _ scene: UIScene,
     continue userActivity: NSUserActivity,
     restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
   ) -> Bool {
     return RCTLinkingManager.application(
-      application,
+      UIApplication.shared,
       continue: userActivity,
       restorationHandler: restorationHandler)
   }
+  
 }
