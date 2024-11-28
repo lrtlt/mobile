@@ -1,11 +1,12 @@
-import {DrawerNavigationHelpers} from '@react-navigation/drawer/lib/typescript/src/types';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 import React from 'react';
 import {MenuItemPage} from '../../../api/Types';
 import DrawerItem from '../../drawerItem/DrawerItem';
 import {IconLituanica} from '../../svg';
+import {MainStackParamList} from '../../../navigation/MainStack';
 
 interface Props {
-  navigation: DrawerNavigationHelpers;
+  navigation: DrawerNavigationProp<MainStackParamList>;
   pages?: MenuItemPage[];
 }
 

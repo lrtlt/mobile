@@ -1,19 +1,27 @@
-import {DrawerNavigationHelpers} from '@react-navigation/drawer/lib/typescript/src/types';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 import React from 'react';
 import {useCallback} from 'react';
 import {View} from 'react-native';
 import {useTheme} from '../../../Theme';
 import DrawerItem from '../../drawerItem/DrawerItem';
 import {IconBookmark, IconClock, IconSearch, IconTelevision} from '../../svg';
+import {MainStackParamList} from '../../../navigation/MainStack';
 
 interface Props {
-  navigation: DrawerNavigationHelpers;
+  navigation: DrawerNavigationProp<MainStackParamList>;
 }
 
 const DrawerBlockTop: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const {colors, strings, dim} = useTheme();
 
-  const handleSearchClick = useCallback(() => navigation.navigate('Search'), [navigation]);
+  const handleSearchClick = useCallback(
+    () =>
+      navigation.navigate('Search', {
+        screen: 'SearchScreen',
+        params: {},
+      }),
+    [navigation],
+  );
   const handleHistoryClick = useCallback(() => navigation.navigate('History'), [navigation]);
   const handleBookmarksClick = useCallback(() => navigation.navigate('Bookmarks'), [navigation]);
   const handleProgramClick = useCallback(() => navigation.navigate('Program'), [navigation]);

@@ -262,11 +262,31 @@ const dimensions: Dimensions = {
   drawerPadding: 10,
 };
 
+const fonts: Theme['fonts'] = {
+  regular: {
+    fontFamily: 'SourceSansPro-Regular',
+    fontWeight: 'normal',
+  },
+  medium: {
+    fontFamily: 'SourceSansPro-Regular',
+    fontWeight: 'normal',
+  },
+  bold: {
+    fontFamily: 'SourceSansPro-SemiBold',
+    fontWeight: 'bold',
+  },
+  heavy: {
+    fontFamily: 'PlayfairDisplay-Regular',
+    fontWeight: 'bold',
+  },
+};
+
 export const themeLight: AppTheme = {
   dark: false,
   colors: colorsLight,
   strings,
   dim: dimensions,
+  fonts: fonts,
 };
 
 export const themeDark: AppTheme = {
@@ -274,6 +294,7 @@ export const themeDark: AppTheme = {
   colors: colorsDark,
   strings,
   dim: dimensions,
+  fonts: fonts,
 };
 
 /** Custom hook to retrieve a theme of type AppTheme */

@@ -1,4 +1,4 @@
-import {DrawerNavigationHelpers} from '@react-navigation/drawer/lib/typescript/src/types';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 import React from 'react';
 import {View} from 'react-native';
 import {MenuItemProjects} from '../../../api/Types';
@@ -8,9 +8,10 @@ import Divider from '../../divider/Divider';
 import DrawerItem from '../../drawerItem/DrawerItem';
 
 import DrawerCollapsibleBlock from './DrawerCollapsibleBlock';
+import {MainStackParamList} from '../../../navigation/MainStack';
 
 interface Props {
-  navigation: DrawerNavigationHelpers;
+  navigation: DrawerNavigationProp<MainStackParamList>;
   projectBlocks?: MenuItemProjects[];
 }
 

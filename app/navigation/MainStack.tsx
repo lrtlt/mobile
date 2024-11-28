@@ -124,7 +124,7 @@ export default () => {
         presentation: 'card',
         headerMode: Platform.OS === 'android' ? 'screen' : 'float',
         cardShadowEnabled: false,
-        headerBackTitleVisible: false,
+        headerBackButtonDisplayMode: 'minimal',
         headerRightContainerStyle: {paddingEnd: 4},
         headerTitle: '',
         headerTitleStyle: {

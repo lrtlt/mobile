@@ -73,7 +73,7 @@ const AnimatedAppBar: React.FC<Props> = ({translateY, onBackPress, actions, subH
               height: actionBarHeigh,
               justifyContent: 'center',
             }}>
-            <HeaderBackButton labelVisible={false} tintColor={colors.headerTint} onPress={onBackPress} />
+            <HeaderBackButton tintColor={colors.headerTint} onPress={onBackPress} displayMode="minimal" />
           </View>
           <View
             style={{

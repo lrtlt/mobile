@@ -1,4 +1,3 @@
-import {DrawerNavigationHelpers} from '@react-navigation/drawer/lib/typescript/src/types';
 import React from 'react';
 import {View} from 'react-native';
 import {MenuItemChannels} from '../../../api/Types';
@@ -7,9 +6,11 @@ import {getIconForChannelById} from '../../../util/UI';
 import DrawerItem from '../../drawerItem/DrawerItem';
 
 import DrawerCollapsibleBlock from './DrawerCollapsibleBlock';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import {MainStackParamList} from '../../../navigation/MainStack';
 
 interface Props {
-  navigation: DrawerNavigationHelpers;
+  navigation: DrawerNavigationProp<MainStackParamList>;
   channels?: MenuItemChannels;
 }
 

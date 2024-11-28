@@ -19,7 +19,6 @@ const useNavigationAnalytics = (params?: TrackingParams) => {
   const pushToAnalytics = useMemo(
     () =>
       debounce((p: TrackingParams) => {
-        // console.log('#Analytics', p);
         ChartbeatTracker.trackView({
           viewId: p.viewId,
           title: p.title,
