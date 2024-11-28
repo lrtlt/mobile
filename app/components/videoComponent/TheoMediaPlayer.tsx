@@ -31,6 +31,7 @@ import {VideoTextTrack} from '../../api/Types';
 import usePlayerSubtitles from './usePlayerSubtitles';
 import Orientation from 'react-native-orientation-locker';
 import {useSettingsStore} from '../../state/settings_store';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 export type PlayerAction = 'togglePlay' | 'setFullScreen';
 
@@ -141,6 +142,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   //Close isMini player before loading new one
   useEffect(() => {
     if (!isMini) {
+      crashlytics().log('TheoMediaPlayer: Close mini player, because new player is loading');
       close();
     }
   }, []);
@@ -161,6 +163,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
         const isCasting = !!client;
 
         if (isContinuousPlayEnabled && !isCasting && isPlaying && !isMini && minifyEnabled) {
+          crashlytics().log('TheoMediaPlayer: Saving media data for continuous play');
           setMediaData({
             mediaType: mediaType,
             poster: poster,
@@ -266,6 +269,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   }, []);
 
   const onPresentationChangeHandler = useCallback((e: PresentationModeChangeEvent) => {
+    crashlytics().log('TheoMediaPlayer: Presentation mode changed to ' + e.presentationMode);
     if (Platform.OS === 'android') {
       if (e.presentationMode === PresentationMode.fullscreen) {
         setTimeout(() => {
@@ -279,6 +283,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const onErrorHandler = useCallback(
     (e: ErrorEvent) => {
+      crashlytics().log('TheoMediaPlayer: Player error: ' + JSON.stringify(e));
       console.log('Player error:', e);
       if (onError) {
         onError();
@@ -288,6 +293,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   );
 
   const onPlayerReady = (player: THEOplayer) => {
+    crashlytics().log('TheoMediaPlayer: Player ready');
     Gemius.setProgramData(streamUri, title ?? '', 0, mediaType === MediaType.VIDEO);
     setPlayer(player);
     // player.addEventListener(PlayerEventType.SOURCE_CHANGE, console.log);
@@ -338,7 +344,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     if (player && streamUri) {
       player.source = makeSource(streamUri, title, poster, tracks);
       if (!isLiveStream) {
-        console.log('startTime:', startTime);
         player.currentTime = startTime ? startTime * 1000 : 0;
       }
     }
@@ -400,6 +405,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     }
 
     const listener = EventRegister.addEventListener(uuid, (action: PlayerAction) => {
+      crashlytics().log('TheoMediaPlayer: Received event bus action: ' + action);
       switch (action) {
         case 'togglePlay':
           _playPauseControl();

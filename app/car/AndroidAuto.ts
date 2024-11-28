@@ -93,6 +93,14 @@ const withDebounce = (fn: Function, key: string, time: number) => (p1?: any) => 
   }
 };
 
+export const onHomeOpenned = () => {
+  if (mediaBrowser[TAB_RECOMMENDED]) {
+    //Already loaded
+  } else {
+    onRecommendedTabOpened();
+  }
+};
+
 export const onRecommendedTabOpened = withDebounce(
   async () => {
     fetchCarRecommendedPlaylist().then((data) => {

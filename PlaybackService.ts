@@ -7,6 +7,7 @@ import {
   TAB_NEWEST,
   TAB_PODCASTS,
   TAB_RECOMMENDED,
+  onHomeOpenned,
   onItemSelected,
   onLiveTabOpened,
   onNewestTabOpened,
@@ -143,7 +144,7 @@ function setupAndroidAuto() {
     console.log('Event.RemoteBrowse', event);
     switch (true) {
       case event.mediaId === '/':
-        onRecommendedTabOpened();
+        onHomeOpenned();
         break;
       case event.mediaId === TAB_RECOMMENDED:
         onRecommendedTabOpened();

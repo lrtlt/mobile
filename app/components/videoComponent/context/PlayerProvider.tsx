@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import {MediaBaseData, MediaType, PlayerContext, PlayerContextType} from './PlayerContext';
 import TheoMediaPlayer, {PlayerAction} from '../TheoMediaPlayer';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
@@ -91,7 +91,9 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
     () => ({
       setMediaData: (data: MediaBaseData) => {
         console.log('setMediaData', data);
-        setCurrentMedia(data);
+        setTimeout(() => {
+          setCurrentMedia(data);
+        }, Platform.select({ios: 0, android: 350}));
       },
       close: handleClose,
     }),
