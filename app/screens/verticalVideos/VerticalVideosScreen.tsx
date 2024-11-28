@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Platform, StatusBar, View} from 'react-native';
+import {Platform, StatusBar} from 'react-native';
 
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -30,7 +30,7 @@ const VerticalVideoScreen: React.FC<React.PropsWithChildren<Props>> = ({navigati
       headerTitle: title?.toUpperCase(),
       headerTintColor: colors.onPrimary,
       headerTitleStyle: {color: colors.onPrimary, fontSize: 16},
-      headerBackground: () => <View style={{flex: 1, backgroundColor: HEADER_BACKGROUND_COLOR}}></View>,
+      headerStyle: {backgroundColor: HEADER_BACKGROUND_COLOR},
     });
   }, [route.params]);
 
@@ -42,7 +42,7 @@ const VerticalVideoScreen: React.FC<React.PropsWithChildren<Props>> = ({navigati
         flex: 1,
         backgroundColor: '#000000DD',
       }}
-      edges={['left', 'right']}>
+      edges={['left', 'right', 'bottom']}>
       <InfinitePager
         style={{flex: 1}}
         pageWrapperStyle={{flex: 1, alignItems: 'center', justifyContent: 'center'}}

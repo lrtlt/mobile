@@ -91,9 +91,15 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
     () => ({
       setMediaData: (data: MediaBaseData) => {
         console.log('setMediaData', data);
-        setTimeout(() => {
+        if (Platform.OS === 'android') {
+          //Possible fix:
+          //We use a timeout to avoid null pointer exception in the player initialization
+          setTimeout(() => {
+            setCurrentMedia(data);
+          }, 200);
+        } else {
           setCurrentMedia(data);
-        }, Platform.select({ios: 0, android: 350}));
+        }
       },
       close: handleClose,
     }),

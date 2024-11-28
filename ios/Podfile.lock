@@ -2145,7 +2145,7 @@ PODS:
     - React-Core
   - react-native-orientation-locker (1.7.0):
     - React-Core
-  - react-native-pager-view (6.4.1):
+  - react-native-pager-view (6.5.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2400,7 +2400,7 @@ PODS:
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNScreens (3.34.0):
+  - RNScreens (4.3.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2797,7 +2797,7 @@ SPEC CHECKSUMS:
   react-native-google-cast: d7bdfd1a0eeba84afde03b9722351ec29543e74c
   react-native-mmkv: a742cb1f2cac58aa1baee8bb6484c716bd38c8b6
   react-native-orientation-locker: cc6f357b289a2e0dd2210fea0c52cb8e0727fdaa
-  react-native-pager-view: 74e54090d1c8cb1c319b22409fd715e08cf617a0
+  react-native-pager-view: ab7702e9f9660572c70f3d9d1b5025a351c6ef3f
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: ca0ebcd9798c5a45863c608c961d4f3f984b6ed2
   react-native-theoplayer: d52d79ce725b1157506168bb8a37d31e2eb76a2e
@@ -2837,7 +2837,7 @@ SPEC CHECKSUMS:
   RNNotifee: 271cfeb505183d2cd1b858c14c3968b6ca30a642
   RNPermissions: b6f31d0082d40b8b89ee2f66aa307aba331c2c93
   RNReanimated: 70c0e833eeed9d134fe9a50f123e2ec6334efad7
-  RNScreens: da54176e30d05e30cf6d4dc7c1b72dd50e0513bb
+  RNScreens: 15bb96da0c446987934afc55c8ea9573a303c960
   RNShare: 694e19d7f74ac4c04de3a8af0649e9ccc03bd8b1
   RNSVG: bb4bfcb8ec723a6f34b074a1b7cd40ee35246fe5
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d

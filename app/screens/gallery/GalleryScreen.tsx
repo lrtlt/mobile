@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   backButtonContainer: {
     margin: 8,
     padding: 16,
-    borderRadius: 12,
+    borderRadius: 8,
     backgroundColor: '#545454cc',
   },
   backButtonContent: {

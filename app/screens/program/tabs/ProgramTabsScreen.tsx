@@ -1,10 +1,10 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
-import {TabView, TabBar, TabViewProps} from 'react-native-tab-view';
+import {TabView, TabBar, TabViewProps, TabBarItem} from 'react-native-tab-view';
 import {getIconForChannelById} from '../../../util/UI';
 import {useTheme} from '../../../Theme';
 import {ProgramItemType, SingleDayProgram} from '../../../api/Types';
-import {Scene} from 'react-native-tab-view/src/types';
+
 import ProgramList from './ProgramList';
 
 interface Props {
@@ -33,7 +33,7 @@ const TabsScreen: React.FC<React.PropsWithChildren<Props>> = ({program}) => {
     });
   }, [program]);
 
-  const renderTabLabel = useCallback(({route}: Scene<Route>) => {
+  const renderTabLabel = useCallback(({route}: {route: Route}) => {
     const {channelId, title} = route;
     return (
       <View key={`${channelId}-${title}`} style={styles.centerContainer}>
@@ -49,14 +49,13 @@ const TabsScreen: React.FC<React.PropsWithChildren<Props>> = ({program}) => {
           {...tabBarProps}
           scrollEnabled={true}
           pressColor={colors.androidTouchFeedback}
-          renderLabel={renderTabLabel}
+          renderTabBarItem={(props) => <TabBarItem {...props} label={renderTabLabel as any} />}
           indicatorStyle={{backgroundColor: colors.primary}}
           style={{backgroundColor: colors.background}}
           tabStyle={styles.tab}
         />
       );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [renderTabLabel],
   );
 

@@ -78,6 +78,7 @@ const AnimatedAppBar: React.FC<Props> = ({translateY, onBackPress, actions, subH
           <View
             style={{
               height: actionBarHeigh,
+              paddingEnd: 4,
               justifyContent: 'center',
             }}>
             {actions}

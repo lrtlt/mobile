@@ -3,9 +3,9 @@ import {View, StyleSheet} from 'react-native';
 import {Text} from '../../../components';
 import {IconHome} from '../../../components/svg';
 import {useTheme} from '../../../Theme';
-import {Route, Scene} from 'react-native-tab-view/src/types';
+import {Route} from 'react-native-tab-view';
 
-export type TabLabelProps = Scene<Route> & {focused: boolean};
+export type TabLabelProps = {route: Route; focused: boolean};
 
 const TabLabel: React.FC<TabLabelProps> = ({route, focused}) => {
   const {colors, strings} = useTheme();
@@ -32,7 +32,6 @@ export default TabLabel;
 const styles = StyleSheet.create({
   label: {
     fontSize: 14,
-
     width: '100%',
     textTransform: 'uppercase',
   },

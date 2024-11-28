@@ -1,9 +1,8 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import * as Screens from '../screens';
-import {Platform} from 'react-native';
 import {Drawer, SearchFilterDrawer} from '../components';
 import {themeDark, themeLight} from '../Theme';
 import {ArticlePhotoType, MenuItemPage, SearchFilter} from '../api/Types';
@@ -12,6 +11,7 @@ import SearchContextProvider from '../screens/search/context/SearchContextProvid
 import ChannelContextProvider from '../screens/channel/context/ChannelContextProvider';
 import {Article} from '../../Types';
 import {useSettingsStore} from '../state/settings_store';
+import {Platform} from 'react-native';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -60,7 +60,7 @@ export type MainStackParamList = {
   };
 };
 
-const Stack = createStackNavigator<MainStackParamList>();
+const Stack = createNativeStackNavigator<MainStackParamList>();
 
 export type MainDrawerParamList = {
   Main: undefined;
@@ -122,10 +122,8 @@ export default () => {
     <Stack.Navigator
       screenOptions={{
         presentation: 'card',
-        headerMode: Platform.OS === 'android' ? 'screen' : 'float',
-        cardShadowEnabled: false,
         headerBackButtonDisplayMode: 'minimal',
-        headerRightContainerStyle: {paddingEnd: 4},
+        // headerRightContainerStyle: {paddingEnd: 4},
         headerTitle: '',
         headerTitleStyle: {
           color: theme.colors.headerTint,
@@ -169,8 +167,6 @@ export default () => {
         component={Screens.GalleryScreen}
         options={{
           headerShown: false,
-          //TODO: disable animation after this fix: https://github.com/react-navigation/react-navigation/issues/10611
-          //animationEnabled: false,
         }}
       />
       <Stack.Screen name="Channel">
@@ -193,7 +189,12 @@ export default () => {
         name="VideoList"
         component={Screens.VerticalVideosScreen}
         options={{
-          presentation: 'transparentModal',
+          animation: 'slide_from_bottom',
+          animationDuration: 250,
+          presentation: Platform.select({
+            android: 'transparentModal',
+            ios: 'card',
+          }),
         }}
       />
     </Stack.Navigator>
