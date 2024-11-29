@@ -62,7 +62,7 @@
     "react-native-svg": "^15.9.0",
     "react-native-tab-view": "^4.0.4",
     "react-native-theoplayer": "^8.8.0",
-    "react-native-track-player": "https://github.com/lovegaoshi/react-native-track-player#dev-android-auto",
+    "react-native-track-player": "^4.1.1",
     "react-native-unistyles": "^2.9.1",
     "react-native-webview": "13.10.5",
     "zustand": "^5.0.1"
