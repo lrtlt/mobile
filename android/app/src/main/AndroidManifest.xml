@@ -8,9 +8,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"
         tools:node="remove" />
 
-    <!-- <uses-permission android:name="androidx.car.app.MAP_TEMPLATES" tools:node="remove" />
-   <uses-permission android:name="androidx.car.app.NAVIGATION_TEMPLATES" tools:node="remove" /> -->
-
     <application
         android:name=".MainApplication"
         android:allowBackup="false"
@@ -19,13 +16,6 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
-
-        <!--        <service android:name="com.doublesymmetry.trackplayer.service.MusicService"-->
-        <!--            tools:node="remove" />-->
-
-        <meta-data
-            android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" />
 
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
@@ -39,6 +29,7 @@
             android:windowSoftInputMode="adjustResize"
             android:supportsPictureInPicture="true"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -46,10 +37,8 @@
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="https" />
                 <data android:host="www.lrt.lt" />
                 <data android:pathPattern="/naujienos/.*/.*/.*/.*" />
@@ -58,10 +47,8 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="lrt" />
             </intent-filter>
         </activity>
