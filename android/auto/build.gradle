@@ -28,7 +28,14 @@ android {
 //    }
 }
 
+
 dependencies {
+    // !!IMPORTANT: Might need to update from time to time
+    // Check gradle dependencies on react-native-firebase-* packages for required version
+    // Also it's shown during build process in terminal
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation "com.google.firebase:firebase-analytics"
+
     implementation 'androidx.media3:media3-session:1.4.1'
     implementation 'androidx.media3:media3-exoplayer:1.4.1'
     implementation 'androidx.media3:media3-exoplayer-hls:1.4.1'

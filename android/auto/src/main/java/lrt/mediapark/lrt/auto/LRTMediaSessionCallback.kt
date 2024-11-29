@@ -12,6 +12,8 @@ import androidx.media3.session.SessionError
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.runBlocking
 import lrt.mediapark.lrt.auto.data.LRTAutoRepository
 import lrt.mediapark.lrt.auto.data.LRTAutoService
@@ -36,7 +38,11 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         mediaSession: MediaSession,
         controller: MediaSession.ControllerInfo
     ): MediaSession.ConnectionResult {
-        Log.d(TAG, "onConnect() called")
+        try{
+            Firebase.analytics.logEvent("android_auto_connected", null)
+        }catch (e: Exception){
+            //
+        }
         return super.onConnect(mediaSession, controller)
     }
 
@@ -68,6 +74,11 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
         if (parentId == MediaItemTree.RECOMMENDED) {
+            try{
+                Firebase.analytics.logEvent("android_auto_recommended_open", null)
+            }catch (e: Exception){
+                //
+            }
             runBlocking {
                 val recommendedItems = repository.getRecommended()
                 MediaItemTree.setRecommendedItems(recommendedItems)
@@ -75,6 +86,11 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         }
 
         if (parentId == MediaItemTree.NEWEST) {
+            try{
+                Firebase.analytics.logEvent("android_auto_newest_open", null)
+            }catch (e: Exception){
+                //
+            }
             runBlocking {
                 val newestItems = repository.getNewest()
                 MediaItemTree.setNewestItems(newestItems)
@@ -82,6 +98,11 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         }
 
         if (parentId == MediaItemTree.LIVE) {
+            try{
+                Firebase.analytics.logEvent("android_auto_live_open", null)
+            }catch (e: Exception){
+                //
+            }
             runBlocking {
                 val liveItems = repository.getLive()
                 MediaItemTree.setLiveItems(liveItems)
@@ -89,6 +110,11 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         }
 
         if(parentId == MediaItemTree.PODCAST_CATEGORIES) {
+            try{
+                Firebase.analytics.logEvent("android_auto_podcasts_open", null)
+            }catch (e: Exception){
+                //
+            }
             runBlocking {
                 val podcastCategories = repository.getPodcastCategories()
                 MediaItemTree.setPodcastCategories(podcastCategories)
