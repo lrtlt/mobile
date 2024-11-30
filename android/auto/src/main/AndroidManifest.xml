@@ -22,7 +22,7 @@
 
         <provider
             android:name=".BitmapContentProvider"
-            android:authorities="lt.mediapark.lrt.auto.BitmapContentProvider"
+            android:authorities="lt.mediapark.lrt"
             android:exported="true" />
 
     </application>
