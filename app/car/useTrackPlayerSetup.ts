@@ -1,7 +1,6 @@
 import {useEffect} from 'react';
 import TrackPlayer, {
   AndroidAudioContentType,
-  AndroidAutoContentStyle,
   Capability,
   IOSCategory,
   IOSCategoryMode,
@@ -61,8 +60,6 @@ export const setupTrackPlayer = async () => {
     ],
   });
   await TrackPlayer.setRepeatMode(RepeatMode.Queue);
-  await TrackPlayer.setBrowseTreeStyle(AndroidAutoContentStyle.CategoryGrid, AndroidAutoContentStyle.List);
-
   console.log('TrackPlayer ready!');
 };
 

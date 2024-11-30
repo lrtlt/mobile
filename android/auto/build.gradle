@@ -1,0 +1,45 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'lt.mediapark.lrt.auto'
+    compileSdk rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+//    kotlinOptions {
+//        jvmTarget = '1.8'
+//    }
+}
+
+
+dependencies {
+    // !!IMPORTANT: Might need to update from time to time
+    // Check gradle dependencies on react-native-firebase-* packages for required version
+    // Also it's shown during build process in terminal
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation "com.google.firebase:firebase-analytics"
+
+    implementation 'androidx.media3:media3-session:1.4.1'
+    implementation 'androidx.media3:media3-exoplayer:1.4.1'
+    implementation 'androidx.media3:media3-exoplayer-hls:1.4.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
+}
