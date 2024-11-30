@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {Platform, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {MediaBaseData, MediaType, PlayerContext, PlayerContextType} from './PlayerContext';
 import TheoMediaPlayer, {PlayerAction} from '../TheoMediaPlayer';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
@@ -91,15 +91,7 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
     () => ({
       setMediaData: (data: MediaBaseData) => {
         console.log('setMediaData', data);
-        if (Platform.OS === 'android') {
-          //Possible fix:
-          //We use a timeout to avoid null pointer exception in the player initialization
-          setTimeout(() => {
-            setCurrentMedia(data);
-          }, 200);
-        } else {
-          setCurrentMedia(data);
-        }
+        setCurrentMedia(data);
       },
       close: handleClose,
     }),

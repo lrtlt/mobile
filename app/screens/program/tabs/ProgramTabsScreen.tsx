@@ -23,6 +23,10 @@ const TabsScreen: React.FC<React.PropsWithChildren<Props>> = ({program}) => {
   const {colors} = useTheme();
 
   const routes: Route[] = useMemo(() => {
+    if (!program) {
+      return [];
+    }
+
     return program.map((channel, i) => {
       return {
         key: String(channel.channel_id || `unknown-channel-${i}`),
