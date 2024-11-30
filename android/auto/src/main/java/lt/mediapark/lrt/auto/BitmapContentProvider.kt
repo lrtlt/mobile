@@ -1,4 +1,4 @@
-package lrt.mediapark.lrt.auto
+package lt.mediapark.lrt.auto
 
 import android.content.ContentProvider
 import android.content.ContentValues

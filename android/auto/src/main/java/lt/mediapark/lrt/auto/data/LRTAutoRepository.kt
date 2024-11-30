@@ -1,4 +1,4 @@
-package lrt.mediapark.lrt.auto.data
+package lt.mediapark.lrt.auto.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -11,7 +11,7 @@
             android:resource="@xml/automotive_app_desc" />
 
         <service
-            android:name="lrt.mediapark.lrt.auto.MyMusicService"
+            android:name=".MyMusicService"
             android:foregroundServiceType="mediaPlayback"
             android:exported="true">
             <intent-filter>
@@ -21,8 +21,8 @@
         </service>
 
         <provider
-            android:name="lrt.mediapark.lrt.auto.BitmapContentProvider"
-            android:authorities="androidx.media3"
+            android:name=".BitmapContentProvider"
+            android:authorities="lt.mediapark.lrt.auto.BitmapContentProvider"
             android:exported="true" />
 
     </application>

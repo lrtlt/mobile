@@ -1,4 +1,4 @@
-package lrt.mediapark.lrt.auto
+package lt.mediapark.lrt.auto
 
 import android.net.Uri
 import androidx.annotation.OptIn
@@ -7,9 +7,9 @@ import androidx.media3.common.MediaItem.SubtitleConfiguration
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.util.UnstableApi
 import com.google.common.collect.ImmutableList
-import lrt.mediapark.lrt.auto.data.PlaylistItem
-import lrt.mediapark.lrt.auto.data.PodcastCategory
-import lrt.mediapark.lrt.auto.data.PodcastEpisode
+import lt.mediapark.lrt.auto.data.PlaylistItem
+import lt.mediapark.lrt.auto.data.PodcastCategory
+import lt.mediapark.lrt.auto.data.PodcastEpisode
 
 object MediaItemTree {
     private var treeNodes: MutableMap<String, MediaItemNode> = mutableMapOf()

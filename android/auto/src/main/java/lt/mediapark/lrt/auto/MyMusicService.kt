@@ -1,4 +1,4 @@
-package lrt.mediapark.lrt.auto
+package lt.mediapark.lrt.auto
 
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.MediaItem

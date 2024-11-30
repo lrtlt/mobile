@@ -1,6 +1,5 @@
-package lrt.mediapark.lrt.auto
+package lt.mediapark.lrt.auto
 
-import android.util.Log
 import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
@@ -15,8 +14,8 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.runBlocking
-import lrt.mediapark.lrt.auto.data.LRTAutoRepository
-import lrt.mediapark.lrt.auto.data.LRTAutoService
+import lt.mediapark.lrt.auto.data.LRTAutoRepository
+import lt.mediapark.lrt.auto.data.LRTAutoService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

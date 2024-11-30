@@ -1,4 +1,4 @@
-package lrt.mediapark.lrt.auto.data
+package lt.mediapark.lrt.auto.data
 
 import retrofit2.http.GET
 import retrofit2.http.Path
