@@ -2145,15 +2145,15 @@ PODS:
     - React-Core
   - react-native-orientation-locker (1.7.0):
     - React-Core
-  - react-native-pager-view (6.5.1):
+  - react-native-pager-view (6.6.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - react-native-render-html (6.3.4):
     - React-Core
-  - react-native-safe-area-context (4.11.0):
+  - react-native-safe-area-context (4.14.0):
     - React-Core
-  - react-native-theoplayer (8.8.0):
+  - react-native-theoplayer (8.9.0):
     - React-Core
     - THEOplayer-Connector-SideloadedSubtitle (~> 8.3)
     - THEOplayer-Integration-GoogleCast (~> 8.3)
@@ -2797,10 +2797,10 @@ SPEC CHECKSUMS:
   react-native-google-cast: d7bdfd1a0eeba84afde03b9722351ec29543e74c
   react-native-mmkv: a742cb1f2cac58aa1baee8bb6484c716bd38c8b6
   react-native-orientation-locker: cc6f357b289a2e0dd2210fea0c52cb8e0727fdaa
-  react-native-pager-view: ab7702e9f9660572c70f3d9d1b5025a351c6ef3f
+  react-native-pager-view: b8e67761da4b80532511f7bc13b40b81befb3266
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
-  react-native-safe-area-context: ca0ebcd9798c5a45863c608c961d4f3f984b6ed2
-  react-native-theoplayer: d52d79ce725b1157506168bb8a37d31e2eb76a2e
+  react-native-safe-area-context: b13be9714d9771fbde0120bc519c963484de3a71
+  react-native-theoplayer: 142cfd2abfd567b4345ee595b30ea172baf3a16c
   react-native-track-player: 6dc2e2633265704b8ab6d8124b80239d4ed1f911
   react-native-unistyles: 3c8c2c44cbee464e565c3f8e8e9875b14427d91f
   react-native-webview: f3b926122e38919f81bb7d61b83d775e34e0eac7
