@@ -44,9 +44,9 @@ const selectCategoryState = (id: number) => (state: ArticleState) => {
   const block = state.advancedCategories[id];
   if (block) {
     return {
-      refreshing: block.isFetching && block.items.length > 0,
+      refreshing: block.isFetching && Boolean(block.items?.length),
       lastFetchTime: block.lastFetchTime,
-      items: block.items,
+      items: block.items ?? [],
     };
   } else {
     return {
@@ -216,7 +216,7 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
 
   const insets = useSafeAreaInsets();
 
-  if (items.length === 0) {
+  if (!items.length) {
     return <ScreenLoader />;
   }
 

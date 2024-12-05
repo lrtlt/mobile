@@ -2145,7 +2145,7 @@ PODS:
     - React-Core
   - react-native-orientation-locker (1.7.0):
     - React-Core
-  - react-native-pager-view (6.6.0):
+  - react-native-pager-view (6.6.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2161,7 +2161,7 @@ PODS:
   - react-native-track-player (4.1.1):
     - React-Core
     - SwiftAudioEx (= 1.1.0)
-  - react-native-unistyles (2.9.2):
+  - react-native-unistyles (2.20.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2797,12 +2797,12 @@ SPEC CHECKSUMS:
   react-native-google-cast: d7bdfd1a0eeba84afde03b9722351ec29543e74c
   react-native-mmkv: a742cb1f2cac58aa1baee8bb6484c716bd38c8b6
   react-native-orientation-locker: cc6f357b289a2e0dd2210fea0c52cb8e0727fdaa
-  react-native-pager-view: b8e67761da4b80532511f7bc13b40b81befb3266
+  react-native-pager-view: 2d5c49cd454a2c575efdabe421c7560b9e0dcb4d
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: b13be9714d9771fbde0120bc519c963484de3a71
   react-native-theoplayer: 142cfd2abfd567b4345ee595b30ea172baf3a16c
   react-native-track-player: 6dc2e2633265704b8ab6d8124b80239d4ed1f911
-  react-native-unistyles: 3c8c2c44cbee464e565c3f8e8e9875b14427d91f
+  react-native-unistyles: 070c18127c72a14bc1a776566e7c50afefca7d5d
   react-native-webview: f3b926122e38919f81bb7d61b83d775e34e0eac7
   React-nativeconfig: b42fe8e97a8d164aebeb6821a27076406b64fbb9
   React-NativeModulesApple: 8736bc6bfbe20908721984f8d384f35ebdd8372e
