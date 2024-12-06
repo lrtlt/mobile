@@ -17,6 +17,7 @@ import {runArticleStorageMigration} from './app/state/article_storage_store';
 import {runOnboardingStorageMigration} from './app/screens/main/useOnboardingLogic';
 import {runFirebaseTopicSubsriptionMigration} from './app/util/useFirebaseTopicSubscription';
 import {runSettingsStorageMigration} from './app/state/settings_store';
+import {TestScreen} from './app/screens';
 enableFreeze(true);
 
 const App: React.FC = () => {
@@ -33,23 +34,15 @@ const App: React.FC = () => {
   useGoogleAnalyticsSetup();
 
   return (
-    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <ThemeProvider>
-        <AppBackground>
-          <PlayerProvider>
-            <Navigation />
-          </PlayerProvider>
-        </AppBackground>
-      </ThemeProvider>
-    </SafeAreaProvider>
+    <ThemeProvider>
+      <AppBackground>
+        <TestScreen />
+      </AppBackground>
+    </ThemeProvider>
   );
 };
 
-export default () => (
-  <GestureHandlerRootView style={styles.flex}>
-    <App />
-  </GestureHandlerRootView>
-);
+export default () => <App />;
 
 const styles = StyleSheet.create({
   flex: {
