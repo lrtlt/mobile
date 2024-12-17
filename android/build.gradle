@@ -1,3 +1,9 @@
+def gemiusProperties = new Properties()
+def gemiusPropertiesFile = rootProject.file('gemius.properties')
+if (gemiusPropertiesFile.exists()) {
+    gemiusProperties.load(new FileInputStream(gemiusPropertiesFile))
+}
+
 buildscript {
     ext {
         buildToolsVersion = "34.0.0"
@@ -30,8 +36,8 @@ buildscript {
      repositories {
          maven {
              credentials {
-                 username project.properties["mavenGemiusUser"] as String
-                 password project.properties["mavenGemiusPassword"] as String
+                 username gemiusProperties["MAVEN_GEMIUS_USER"] as String
+                 password gemiusProperties["MAVEN_GEMIUS_PASSWORD"] as String
              }
              url 'https://mobilesdk.gemius.com/releases/'
          }

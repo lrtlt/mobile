@@ -9,7 +9,7 @@ import {
   BannerComponent,
 } from '../../../../components';
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
-import {ARTICLE_EXPIRE_DURATION, GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS} from '../../../../constants';
+import {ARTICLE_EXPIRE_DURATION, EVENT_LOGO_PRESS} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {useNavigation} from '@react-navigation/native';
@@ -32,6 +32,7 @@ import {useShallow} from 'zustand/shallow';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import {HomePageType} from '../../../../../Types';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import Config from 'react-native-config';
 
 const selectHomeScreenState = (type: HomePageType) => (state: ArticleState) => {
   const block = type === ROUTE_TYPE_MEDIA ? state.mediateka : state.home;
@@ -59,7 +60,7 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
   const {items, lastFetchTime, refreshing} = state;
 
   useEffect(() => {
-    Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
+    Gemius.sendPartialPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
       page: type,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

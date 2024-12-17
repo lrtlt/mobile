@@ -1,6 +1,6 @@
 {
   "name": "lrt.lt",
-  "version": "2.50.1",
+  "version": "2.51.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -42,6 +42,7 @@
     "react-native-autoheight-webview": "^1.6.5",
     "react-native-awesome-gallery": "^0.4.3",
     "react-native-carplay": "2.3.0",
+    "react-native-config": "^1.5.3",
     "react-native-event-listeners": "^1.0.7",
     "react-native-fast-image": "^8.6.3",
     "react-native-gemius-plugin": "./react-native-gemius-plugin",

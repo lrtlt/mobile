@@ -3,7 +3,7 @@ import {View, StyleSheet} from 'react-native';
 import {ScrollingChannels, ScreenLoader, ScreenError, MyScrollView} from '../../components';
 import {getIconForChannelById, getSmallestDim} from '../../util/UI';
 
-import {GEMIUS_VIEW_SCRIPT_ID, VIDEO_ASPECT_RATIO} from '../../constants';
+import {VIDEO_ASPECT_RATIO} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -15,6 +15,7 @@ import ChannelComponent from './ChannelComponent';
 import useAppStateCallback from '../../hooks/useAppStateCallback';
 import useChannelAnalytics from './useChannelAnalytics';
 import {useChannel} from './context/useChannel';
+import Config from 'react-native-config';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Channel'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Channel'>;
@@ -60,7 +61,7 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   );
 
   useEffect(() => {
-    Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
+    Gemius.sendPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
       screen: 'channel',
       channelId: selectedChannel.toString(),
     });

@@ -4,7 +4,7 @@ import {View, StyleSheet} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../../Theme';
 import Divider from '../divider/Divider';
-import {DrawerContentComponentProps} from '@react-navigation/drawer';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 import DrawerBlockProjects from './components/DrawerBlockProjects';
 import DrawerBlockChannels from './components/DrawerBlockChannels';
 import DrawerBlockNews from './components/DrawerBlockNews';
@@ -17,8 +17,11 @@ import {useRef} from 'react';
 import MyScrollView from '../MyScrollView/MyScrollView';
 import {useNavigationStore} from '../../state/navigation_store';
 import {useShallow} from 'zustand/shallow';
+import {MainStackParamList} from '../../navigation/MainStack';
 
-type Props = DrawerContentComponentProps;
+type Props = {
+  navigation: DrawerNavigationProp<MainStackParamList>;
+};
 
 const DrawerComponent: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const {colors, dim} = useTheme();

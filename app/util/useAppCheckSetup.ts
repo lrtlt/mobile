@@ -1,16 +1,17 @@
 import {firebase} from '@react-native-firebase/app-check';
 import {useEffect} from 'react';
 import analytics from '@react-native-firebase/analytics';
+import Config from 'react-native-config';
 
 const appCheckProvider = firebase.appCheck().newReactNativeFirebaseAppCheckProvider();
 appCheckProvider.configure({
   android: {
     provider: __DEV__ ? 'debug' : 'playIntegrity',
-    debugToken: '62BDDD90-4D52-41F2-9F2C-6DC6F3B398C9',
+    debugToken: Config.APP_CHECK_DEBUG_TOKEN_ANDROID,
   },
   apple: {
     provider: __DEV__ ? 'debug' : 'appAttestWithDeviceCheckFallback',
-    debugToken: '36DD3397-3EFC-4FB1-BD2B-8AF1151D7B85',
+    debugToken: Config.APP_CHECK_DEBUG_TOKEN_IOS,
   },
 });
 

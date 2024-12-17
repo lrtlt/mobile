@@ -9,12 +9,7 @@ import {
   Text,
 } from '../../../../components';
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
-import {
-  ARTICLE_EXPIRE_DURATION,
-  GEMIUS_VIEW_SCRIPT_ID,
-  EVENT_LOGO_PRESS,
-  EVENT_SELECT_CATEGORY_INDEX,
-} from '../../../../constants';
+import {ARTICLE_EXPIRE_DURATION, EVENT_LOGO_PRESS, EVENT_SELECT_CATEGORY_INDEX} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {useNavigation} from '@react-navigation/native';
@@ -39,6 +34,7 @@ import ArticlesListByDateBlock from '../home/blocks/ArticlesListByDateBlock/Arti
 import TopUrlInlineBlock from '../home/blocks/TopUrlInlineBlock/TopUrlInlineBlock';
 import {IconArrowLeft} from '../../../../components/svg';
 import {useTheme} from '../../../../Theme';
+import Config from 'react-native-config';
 
 const selectCategoryState = (id: number) => (state: ArticleState) => {
   const block = state.advancedCategories[id];
@@ -75,7 +71,7 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
   const {colors} = useTheme();
 
   useEffect(() => {
-    Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
+    Gemius.sendPartialPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
       page: ROUTE_TYPE_CATEGORY,
       categoryId: id.toString(),
     });

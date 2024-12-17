@@ -2,7 +2,7 @@ import React, {useEffect, useMemo} from 'react';
 
 import Gemius from 'react-native-gemius-plugin';
 import {ROUTE_TYPE_CATEGORY, ROUTE_TYPE_NEWEST, ROUTE_TYPE_POPULAR} from '../../../../api/Types';
-import {EVENT_LOGO_PRESS, GEMIUS_VIEW_SCRIPT_ID} from '../../../../constants';
+import {EVENT_LOGO_PRESS} from '../../../../constants';
 import useNewestArticlesProvider from './articleProviders/useNewestArticlesProvider';
 import usePopularArticlesProvider from './articleProviders/usePopularArticlesProvider';
 import TabScreenContent from './SimpleArticleScreenContent';
@@ -10,6 +10,7 @@ import {ArticleScreenAdapter} from './articleProviders/Types';
 import useCategoryArticlesProvider from './articleProviders/useCategoryArticlesProvider';
 import {EventRegister} from 'react-native-event-listeners';
 import useSimpleArticleScreenAnalytics from './useSimpleArticleScreenAnalytics';
+import Config from 'react-native-config';
 
 interface Props {
   isCurrent: boolean;
@@ -51,7 +52,7 @@ const SimpleArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({
   useSimpleArticleScreenAnalytics({type, categoryTitle, categoryUrl});
 
   useEffect(() => {
-    Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
+    Gemius.sendPartialPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
       page: type,
       categoryId: categoryId?.toString(),
     });

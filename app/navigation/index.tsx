@@ -5,7 +5,7 @@ import SplashViewComponent from '../screens/splash/SplashScreenView';
 
 import crashlytics from '@react-native-firebase/crashlytics';
 
-import {DEEP_LINKING_URL_PREFIX, GEMIUS_VIEW_SCRIPT_ID} from '../constants';
+import {DEEP_LINKING_URL_PREFIX} from '../constants';
 import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
 import MainStack, {MainStackParamList} from './MainStack';
 import {SplashScreen} from '../screens';
@@ -13,6 +13,7 @@ import useFirebaseMessaging from '../util/useFirebaseMessaging';
 import {useTheme} from '../Theme';
 import {useArticleStore} from '../state/article_store';
 import {useShallow} from 'zustand/shallow';
+import Config from 'react-native-config';
 
 const linking: LinkingOptions<MainStackParamList> = {
   prefixes: [DEEP_LINKING_URL_PREFIX, 'https://www.lrt.lt'],
@@ -63,7 +64,7 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
 
       console.log('Current route:', currentRoute);
       crashlytics().log(`Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
-      Gemius.sendPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, params);
+      Gemius.sendPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, params);
     }
     routeNameRef.current = currentRouteName;
   }, []);

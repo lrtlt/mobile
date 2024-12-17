@@ -14,9 +14,6 @@ export const CHANNEL_TYPE_LIVE = 'live';
 export const CHANNEL_TYPE_DEFAULT = 'channel';
 
 //Gemius
-export const GEMIUS_APP_NAME = 'lrt.lt_app';
-export const GEMIUS_VIEW_SCRIPT_ID = 'ByM1j_rseQxqJpUz1t03Y6ScXtdux_Nex_L85JMn39v.67';
-export const GEMIUS_PLAYER_SCRIPT_ID = 'zP2V7SulUZxVv54GDWn9fOTlXhxpw7ulIJCOTYgrQKL.a7';
 export const GEMIUS_HIT_COLLECTOR_HOST = 'https://galt.hit.gemius.pl';
 
 //DeepLinks

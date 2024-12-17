@@ -1,6 +1,6 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createDrawerNavigator, DrawerNavigationProp} from '@react-navigation/drawer';
 
 import * as Screens from '../screens';
 import {Drawer, SearchFilterDrawer} from '../components';
@@ -69,7 +69,10 @@ const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
 
 const MainDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
   return (
-    <MainDrawer.Navigator drawerContent={(props) => <Drawer {...props} />}>
+    <MainDrawer.Navigator
+      drawerContent={(props) => (
+        <Drawer navigation={props.navigation as unknown as DrawerNavigationProp<MainStackParamList>} />
+      )}>
       <MainDrawer.Screen
         name="Main"
         component={Screens.MainScreen}

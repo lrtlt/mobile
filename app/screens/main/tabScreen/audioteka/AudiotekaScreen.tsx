@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {View, RefreshControl, StyleSheet, StatusBar} from 'react-native';
 import {ScreenLoader} from '../../../../components';
-import {GEMIUS_VIEW_SCRIPT_ID, EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
+import {EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {useTheme} from '../../../../Theme';
@@ -21,6 +21,7 @@ import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import {useShallow} from 'zustand/shallow';
+import Config from 'react-native-config';
 
 interface Props {
   isCurrent: boolean;
@@ -44,7 +45,7 @@ const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
   const {refreshing, lastFetchTime, data} = state;
 
   useEffect(() => {
-    Gemius.sendPartialPageViewedEvent(GEMIUS_VIEW_SCRIPT_ID, {
+    Gemius.sendPartialPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
       page: 'audioteka',
     });
   }, []);

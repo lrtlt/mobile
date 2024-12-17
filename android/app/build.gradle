@@ -9,6 +9,8 @@ apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: "com.facebook.react"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -90,6 +92,7 @@ android {
         versionCode 205002
         versionName "2.50.2"
         multiDexEnabled true
+        resValue "string", "build_config_package", "lt.mediapark.lrt"
     }
     signingConfigs {
         debug {

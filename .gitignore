@@ -25,6 +25,7 @@ ios/.xcode.env.local
 # Android/IntelliJ
 #
 build/
+android/gemius.properties
 android/app/release
 .idea
 .gradle
@@ -78,3 +79,5 @@ fcm-service/
 /coverage
 contents.xcworkspacedata
 .xcode.env
+
+.env
