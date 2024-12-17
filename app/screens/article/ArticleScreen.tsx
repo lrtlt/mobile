@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
 import ArticleContentComponent, {ArticleSelectableItem} from './ArticleContentComponent';
-import {ScreenLoader, ScreenError, AdultContentWarning} from '../../components';
+import {ScreenLoader, ScreenError, AdultContentWarning, Text, TouchableDebounce} from '../../components';
 import {useTheme} from '../../Theme';
 import {isDefaultArticle} from '../../api/Types';
 import {RouteProp} from '@react-navigation/native';
@@ -9,6 +9,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import useArticleScreenState from './useArticleScreenState';
 import useArticleAnalytics from './useArticleAnalytics';
+import {useArticleStorageStore} from '../../state/article_storage_store';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Article'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Article'>;
@@ -22,7 +23,13 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   const {articleId, isMedia} = route.params;
   console.log(`articleId: ${articleId}, isMedia: ${isMedia}`);
 
-  const {strings} = useTheme();
+  const {colors, strings} = useTheme();
+
+  const articleStorage = useArticleStorageStore.getState();
+
+  const isBookmarked = useArticleStorageStore((state) =>
+    state.savedArticles.some((a) => a.id === route.params.articleId),
+  );
 
   const [{article, loadingState}, acceptAdultContent] = useArticleScreenState(articleId, isMedia);
 
@@ -73,7 +80,23 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
     case 'error': {
       return (
         <View style={styles.screen}>
-          <ScreenError text={strings.articleError} />
+          <ScreenError
+            text={strings.articleError}
+            actions={
+              isBookmarked ? (
+                <TouchableDebounce
+                  style={{backgroundColor: colors.primary, borderRadius: 6, marginTop: 24}}
+                  onPress={() => {
+                    articleStorage.removeArticle(route.params.articleId);
+                    navigation.goBack();
+                  }}>
+                  <Text style={{color: colors.onPrimary, padding: 12}} fontFamily="SourceSansPro-Regular">
+                    {strings.remove_from_bookmarks}
+                  </Text>
+                </TouchableDebounce>
+              ) : undefined
+            }
+          />
         </View>
       );
     }

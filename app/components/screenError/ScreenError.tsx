@@ -8,6 +8,7 @@ import TextComponent from '../text/Text';
 interface Props {
   style?: ViewStyle;
   text: string;
+  actions?: JSX.Element;
 }
 
 const ScreenError: React.FC<React.PropsWithChildren<Props>> = (props) => {
@@ -16,6 +17,7 @@ const ScreenError: React.FC<React.PropsWithChildren<Props>> = (props) => {
     <View style={[styles.container, props.style]}>
       <IconScreenError size={64} color={colors.textError} />
       <TextComponent style={styles.text}>{props.text}</TextComponent>
+      {props.actions ? props.actions : null}
     </View>
   );
 };

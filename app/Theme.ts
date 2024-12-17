@@ -54,6 +54,7 @@ interface Dictionary {
   daily_question_vote: string;
   close: string;
   stream_blocked_warning: string;
+  remove_from_bookmarks: string;
 }
 
 export const strings: Dictionary = {
@@ -94,6 +95,7 @@ export const strings: Dictionary = {
   daily_question_vote: 'BALSUOTI',
   close: 'Uždaryti',
   stream_blocked_warning: 'Transliacija internetu negalima dėl autorių teisių apribojimų.',
+  remove_from_bookmarks: 'Pašalinti iš išsaugotų',
 };
 //#endregion
 
