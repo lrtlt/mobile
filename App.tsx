@@ -5,13 +5,12 @@ import AppBackground from './app/components/appBackground/AppBackground';
 import {initialWindowMetrics, SafeAreaProvider} from 'react-native-safe-area-context';
 import useAppTrackingPermission from './app/util/useAppTrackingPermission';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {Platform, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import PlayerProvider from './app/components/videoComponent/context/PlayerProvider';
 import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import ThemeProvider from './app/theme/ThemeProvider';
 import useAppCheckSetup from './app/util/useAppCheckSetup';
-import Orientation from 'react-native-orientation-locker';
 
 import {enableFreeze} from 'react-native-screens';
 import {runArticleStorageMigration} from './app/state/article_storage_store';
@@ -21,10 +20,6 @@ import {runSettingsStorageMigration} from './app/state/settings_store';
 enableFreeze(true);
 
 const App: React.FC = () => {
-  if (Platform.OS === 'android') {
-    Orientation.lockToPortrait();
-  }
-
   useEffect(() => {
     runFirebaseTopicSubsriptionMigration();
     runOnboardingStorageMigration();

@@ -29,7 +29,6 @@ import {EventRegister} from 'react-native-event-listeners';
 import FastImage from 'react-native-fast-image';
 import {VideoTextTrack} from '../../api/Types';
 import usePlayerSubtitles from './usePlayerSubtitles';
-import Orientation from 'react-native-orientation-locker';
 import {useSettingsStore} from '../../state/settings_store';
 import crashlytics from '@react-native-firebase/crashlytics';
 
@@ -271,15 +270,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const onPresentationChangeHandler = useCallback((e: PresentationModeChangeEvent) => {
     crashlytics().log('TheoMediaPlayer: Presentation mode changed to ' + e.presentationMode);
-    if (Platform.OS === 'android') {
-      if (e.presentationMode === PresentationMode.fullscreen) {
-        setTimeout(() => {
-          Orientation.unlockAllOrientations();
-        }, 250);
-      } else {
-        Orientation.lockToPortrait();
-      }
-    }
   }, []);
 
   const onErrorHandler = useCallback(
