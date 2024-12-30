@@ -9,8 +9,6 @@ end
 
 node_require('react-native/scripts/react_native_pods.rb')
 node_require('react-native-permissions/scripts/setup.rb')
-
-$RNFirebaseAsStaticFramework = true
   
 platform :ios, '13.4'
 
@@ -59,10 +57,11 @@ target 'lrtApp' do
   
   config = use_native_modules!
   use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
 
   pod 'react-native-google-cast', :git => 'https://github.com/Danesz/react-native-google-cast.git', branch: 'feature/guestmode_apple_silicon'
   #THIS IS A WORKAROUND FOR ARCHIVE BUILD BECAUSE OF FCMImageNotification
-  pod 'GoogleUtilities', '~> 7.13.3'
+  pod 'GoogleUtilities', '~> 8.0.2'
 
   use_react_native!(
     :path => config[:reactNativePath],
@@ -93,8 +92,8 @@ end
 
 target 'FCMImageNotification' do
   use_frameworks! :linkage => :static
-  pod 'Firebase/Messaging', '~> 10.29.0'
+  pod 'Firebase/Messaging', '~> 11.5.0'
   #This was added manually
   #Change version if needed, just copy from Podfile.lock
-  pod 'GoogleUtilities', '~> 7.13.3'
+  pod 'GoogleUtilities', '~> 8.0.2'
 end
