@@ -20,7 +20,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
     suspend fun getRecommended() = withContext(Dispatchers.IO) {
         if (System.currentTimeMillis() - recommendedLastFetchTime > CACHE_DURATION || recommended.isEmpty()) {
             try{
-                recommended = api.getRecommendedPlaylist()
+                recommended = api.getRecommendedPlaylist().filter { it.streamUrl != null }
                 if (recommended.isNotEmpty()) {
                     recommendedLastFetchTime = System.currentTimeMillis()
                 }
@@ -34,7 +34,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
     suspend fun getNewest() = withContext(Dispatchers.IO) {
         if (System.currentTimeMillis() - newestLastFetchTime > CACHE_DURATION || newest.isEmpty()) {
             try{
-                newest = api.getNewestPlaylist()
+                newest = api.getNewestPlaylist().filter { it.streamUrl != null }
                 if (newest.isNotEmpty()){
                     newestLastFetchTime = System.currentTimeMillis()
                 }
