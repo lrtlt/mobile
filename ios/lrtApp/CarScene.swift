@@ -7,13 +7,14 @@ import MediaPlayer
 import UIKit
 
 class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBarTemplateDelegate {
-  var interfaceController: CPInterfaceController?
-
+  private var interfaceController: CPInterfaceController?
   private var player: AVPlayer?
-  private var nowPlayingTemplate: CPNowPlayingTemplate?
   private var currentPlaylist: [CarPlayItem] = []
   private var currentIndex: Int = 0
-  private var playerObserver: Any?
+  private var uiManager: CarPlayUIManager?
+
+  private var mediaEndObserver: Any?
+  private var playerIntervalObserver: Any?
 
   func templateApplicationScene(
     _ templateApplicationScene: CPTemplateApplicationScene,
@@ -22,80 +23,74 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     print("CarPlay interface controller connected")
     Analytics.logEvent("carplay_connected", parameters: nil)
     self.interfaceController = interfaceController
-    setupRemoteControlCenter()
 
-    // Create tab templates with icons
-    let recommendedTab = createListTemplate(
-      title: "Siūlome", imageName: "star.fill", loadInitialData: false)
-    let liveTab = createListTemplate(
-      title: "Tiesiogiai", imageName: "play.square.fill", loadInitialData: false)
-    let latestTab = createListTemplate(
-      title: "Naujausi", imageName: "newspaper.fill", loadInitialData: false)
-    let showsTab = createListTemplate(
-      title: "Laidos", imageName: "circle.grid.3x3.fill", loadInitialData: false)
+    uiManager = CarPlayUIManager(
+      interfaceController: interfaceController, tabBarTemplateDelegate: self)
+    uiManager?.setupInitialUI()
+    setupControls()
+  }
 
-    // Create tab bar template with delegate
-    let tabBarTemplate = CPTabBarTemplate(templates: [recommendedTab, liveTab, latestTab, showsTab])
-    tabBarTemplate.delegate = self
+  private func setupControls() {
+    RemoteControlManager.shared.setupRemoteCommands(
+      playAction: { [weak self] in
+        guard let self = self, let player = self.player else { return }
+        player.play()
+        MPNowPlayingInfoCenter.default().playbackState = .playing
+      },
+      pauseAction: { [weak self] in
+        guard let self = self, let player = self.player else { return }
+        player.pause()
+        MPNowPlayingInfoCenter.default().playbackState = .paused
+      },
+      nextTrackAction: { [weak self] in
+        self?.playNext()
+      },
+      previousTrackAction: { [weak self] in
+        self?.playPrevious()
+      },
+      changePlaybackPositionAction: { [weak self] position in
+        self?.seekTo(position: position)
+      }
+    )
 
-    interfaceController.setRootTemplate(tabBarTemplate, animated: true, completion: nil)
+    uiManager?.setBackwardButtonHandler { [weak self] in
+      self?.seekBackward()
+    }
+    uiManager?.setForwardButtonHandler { [weak self] in
+      self?.seekForward()
+    }
   }
 
   func tabBarTemplate(_ tabBarTemplate: CPTabBarTemplate, didSelect selectedTemplate: CPTemplate) {
     if let listTemplate = selectedTemplate as? CPListTemplate {
       print("Selected tab: \(listTemplate.title ?? "Untitled")")
-      loadTemplateData(for: listTemplate, title: listTemplate.title ?? "")
-    }
-  }
-
-  private func createListTemplate(title: String, imageName: String, loadInitialData: Bool)
-    -> CPListTemplate
-  {
-    // Create tab image
-    let image = UIImage(systemName: imageName)
-
-    // Create empty list template
-    let listTemplate = CPListTemplate(title: title, sections: [])
-    listTemplate.tabImage = image
-
-    // Load initial data
-    if loadInitialData {
-      loadTemplateData(for: listTemplate, title: title)
-    }
-
-    return listTemplate
-  }
-
-  private func loadTemplateData(for template: CPListTemplate, title: String) {
-    print("Loading data for template: \(title)")
-    Task {
-      do {
-        let items = try await loadItems(for: title)
-        let section = CPListSection(items: items)
-        template.updateSections([section])
-      } catch {
-        print("Failed to load items: \(error.localizedDescription)")
-        // Fallback to empty state
-        let section = CPListSection(items: [
-          CPListItem(text: "Nepavyko įkelti duomenų", detailText: "Bandykite vėliau")
-        ])
-        template.updateSections([section])
+      Task {
+        do {
+          let listItems: [CPListItem]
+          listItems = try await loadItems(for: listTemplate.title ?? "")
+          listTemplate.updateSections([CPListSection(items: listItems)])
+        } catch {
+          listTemplate.updateSections([
+            CPListSection(items: [
+              CPListItem(
+                text: "Nepavyko užkrauti duomenų",
+                detailText: "Patikrinkite interneto ryšį"
+              )
+            ])
+          ])
+        }
       }
     }
   }
 
-  private func createListItems(from items: [CarPlayItem]) async -> [CPListItem] {
-    var listItems = [CPListItem]()
-
-    // Create list items in order first
-    for item in items {
-      let listItem = CPListItem(text: item.title, detailText: item.content)
-      listItem.accessoryType = .disclosureIndicator
-      listItem.handler = { [weak self] _, completion in
-        Task { @MainActor [weak self] in
+  private func loadItems(for tab: String) async throws -> [CPListItem] {
+    switch tab {
+    case "Siūlome":
+      let items = try await CarPlayService.shared.fetchRecommended()
+      currentPlaylist = items
+      return await uiManager!.createListItems(from: items) { [weak self] item in
+        Task { [weak self] in
           guard let self = self else { return }
-          // Update playlist with current tab's items
-          self.currentPlaylist = items
 
           // Find index of selected item
           if let index = items.firstIndex(where: { $0.streamUrl == item.streamUrl }) {
@@ -104,44 +99,44 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
             self.currentIndex = 0
           }
           self.playAudio(from: item)
-          completion()
+
         }
       }
-      listItems.append(listItem)
-    }
-
-    // Load images concurrently while preserving order
-    await withTaskGroup(of: (Int, UIImage?).self) { group in
-      for (index, item) in items.enumerated() {
-        if let coverUrl = item.cover {
-          group.addTask {
-            let image = await self.loadImage(from: coverUrl)
-            return (index, image)
-          }
-        }
-      }
-
-      for await (index, image) in group {
-        if let image = image {
-          listItems[index].setImage(image)
-        }
-      }
-    }
-
-    return listItems
-  }
-
-  private func loadItems(for tab: String) async throws -> [CPListItem] {
-    switch tab {
-    case "Siūlome":
-      let items = try await CarPlayService.shared.fetchRecommended()
-      return await createListItems(from: items)
     case "Naujausi":
       let items = try await CarPlayService.shared.fetchNewest()
-      return await createListItems(from: items)
+      currentPlaylist = items
+      return await uiManager!.createListItems(from: items) { [weak self] item in
+        Task { @MainActor [weak self] in
+          guard let self = self else { return }
+
+          // Find index of selected item
+          if let index = items.firstIndex(where: { $0.streamUrl == item.streamUrl }) {
+            self.currentIndex = index
+          } else {
+            self.currentIndex = 0
+          }
+          self.playAudio(from: item)
+
+        }
+      }
+
     case "Tiesiogiai":
       let items = try await CarPlayService.shared.fetchLive()
-      return await createListItems(from: items)
+      currentPlaylist = items
+      return await uiManager!.createListItems(from: items) { [weak self] item in
+        Task { @MainActor [weak self] in
+          guard let self = self else { return }
+
+          // Find index of selected item
+          if let index = items.firstIndex(where: { $0.streamUrl == item.streamUrl }) {
+            self.currentIndex = index
+          } else {
+            self.currentIndex = 0
+          }
+          self.playAudio(from: item)
+
+        }
+      }
     default:
       return []
     }
@@ -156,25 +151,13 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     self.interfaceController = nil
     self.player?.pause()
     self.player = nil
-    removePlayerObservers()
     MPNowPlayingInfoCenter.default().playbackState = .stopped
-
-    // Clean up remote command center
-    let commandCenter = MPRemoteCommandCenter.shared()
-    commandCenter.playCommand.removeTarget(nil)
-    commandCenter.pauseCommand.removeTarget(nil)
-    commandCenter.togglePlayPauseCommand.removeTarget(nil)
-    commandCenter.stopCommand.removeTarget(nil)
-    commandCenter.nextTrackCommand.removeTarget(nil)
-    commandCenter.previousTrackCommand.removeTarget(nil)
-    commandCenter.skipForwardCommand.removeTarget(nil)
-    commandCenter.skipBackwardCommand.removeTarget(nil)
-    commandCenter.changePlaybackPositionCommand.removeTarget(nil)
-
+    removeObservers()
+    RemoteControlManager.shared.removeHandlers()
+    uiManager?.cleanup()
     MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
   }
 
-  @MainActor
   private func playAudio(from item: CarPlayItem) {
     guard let urlString = item.streamUrl, let url = URL(string: urlString) else {
       print("Invalid stream URL")
@@ -182,7 +165,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     }
 
     if player != nil {
-      removePlayerObservers()
+      removeObservers()
     }
 
     // Stop current playback
@@ -197,49 +180,20 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       print("Failed to configure audio session: \(error.localizedDescription)")
     }
 
-    // Remove observers from previous player if exists
-
     // Create new player
     player = AVPlayer(url: url)
     player?.play()
     MPNowPlayingInfoCenter.default().playbackState = .playing
     addPlayerObservers()
-
-    // Configure Now Playing Info
     configureNowPlayingInfo()
-
-    // Create NowPlaying template if not already created
-    if nowPlayingTemplate == nil {
-      nowPlayingTemplate = CPNowPlayingTemplate.shared
-      nowPlayingTemplate?.isUpNextButtonEnabled = false
-      nowPlayingTemplate?.isAlbumArtistButtonEnabled = false
-    }
-
-    if item.isLive == true {
-      nowPlayingTemplate?.updateNowPlayingButtons([])
-    } else {
-      let backwardButton = CPNowPlayingImageButton(image: UIImage(systemName: "gobackward.15")!) {
-        [weak self] _ in
-        self?.seekBackward()
-      }
-      let forwardButton = CPNowPlayingImageButton(image: UIImage(systemName: "goforward.15")!) {
-        [weak self] _ in
-        self?.seekForward()
-      }
-      nowPlayingTemplate?.updateNowPlayingButtons([backwardButton, forwardButton])
-    }
-
-    // Only push template if it's not already visible
-    if interfaceController?.topTemplate !== nowPlayingTemplate {
-      interfaceController?.pushTemplate(nowPlayingTemplate!, animated: true, completion: nil)
-    }
+    uiManager?.showNowPlayingTemplate(isLive: item.isLive == true)
   }
 
   private func addPlayerObservers() {
     guard let player = player else { return }
 
     // Add player item observer
-    playerObserver = NotificationCenter.default.addObserver(
+    mediaEndObserver = NotificationCenter.default.addObserver(
       forName: .AVPlayerItemDidPlayToEndTime,
       object: player.currentItem,
       queue: .main
@@ -249,67 +203,9 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
 
     // Add periodic time observer
     let interval = CMTime(seconds: 1, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
-    playerObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) {
+    playerIntervalObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) {
       [weak self] _ in
       self?.updateNowPlayingTime()
-    }
-  }
-
-  private func setupRemoteControlCenter() {
-    let commandCenter = MPRemoteCommandCenter.shared()
-
-    commandCenter.togglePlayPauseCommand.isEnabled = true
-    commandCenter.playCommand.addTarget { event in
-      guard let player = self.player else { return MPRemoteCommandHandlerStatus.commandFailed }
-      player.play()
-      MPNowPlayingInfoCenter.default().playbackState = .playing
-      return MPRemoteCommandHandlerStatus.success
-    }
-
-    commandCenter.pauseCommand.addTarget { event in
-      guard let player = self.player else { return MPRemoteCommandHandlerStatus.commandFailed }
-      player.pause()
-      MPNowPlayingInfoCenter.default().playbackState = .paused
-      return MPRemoteCommandHandlerStatus.success
-    }
-
-    commandCenter.nextTrackCommand.isEnabled = true
-    commandCenter.nextTrackCommand.addTarget { event in
-      self.playNext()
-      return MPRemoteCommandHandlerStatus.success
-    }
-
-    commandCenter.previousTrackCommand.isEnabled = true
-    commandCenter.previousTrackCommand.addTarget { event in
-      self.playPrevious()
-      return MPRemoteCommandHandlerStatus.success
-    }
-
-    //We disable this command because it overrides nextTrackCommand
-    commandCenter.skipForwardCommand.isEnabled = false
-    commandCenter.skipForwardCommand.preferredIntervals = [15]
-    commandCenter.skipForwardCommand.addTarget { event in
-      self.seekForward()
-      return .success
-    }
-
-    //We disable this command because it overrides previousTrackCommand
-    commandCenter.skipBackwardCommand.isEnabled = false
-    commandCenter.skipBackwardCommand.preferredIntervals = [15]
-    commandCenter.skipBackwardCommand.addTarget { event in
-      self.seekBackward()
-      return .success
-    }
-
-    commandCenter.changePlaybackPositionCommand.isEnabled = true
-    commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
-      guard let self = self,
-        let positionEvent = event as? MPChangePlaybackPositionCommandEvent
-      else {
-        return .commandFailed
-      }
-      self.seekTo(position: positionEvent.positionTime)
-      return .success
     }
   }
 
@@ -344,11 +240,15 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
   }
 
-  //TODO: probably remove this function later
-  private func removePlayerObservers() {
-    if let observer = playerObserver {
+  private func removeObservers() {
+    if let observer = mediaEndObserver {
       NotificationCenter.default.removeObserver(observer)
-      playerObserver = nil
+      mediaEndObserver = nil
+    }
+
+    if let observer = playerIntervalObserver, let player = player {
+      player.removeTimeObserver(observer)
+      playerIntervalObserver = nil
     }
   }
 
@@ -366,73 +266,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
 
   private func configureNowPlayingInfo() {
     guard currentIndex >= 0 && currentIndex < currentPlaylist.count else { return }
-    let playlistItem = currentPlaylist[currentIndex]
-
-    var nowPlayingInfo = [String: Any]()
-    nowPlayingInfo[MPMediaItemPropertyTitle] = playlistItem.title
-    nowPlayingInfo[MPMediaItemPropertyArtist] = playlistItem.content
-
-    // Set initial progress
-    if let player = player {
-      nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(
-        player.currentTime())
-    }
-
-    // Set duration when player item becomes ready
-    if let player = player, let currentItem = player.currentItem {
-      let observer = currentItem.observe(\.status, options: [.new]) { item, _ in
-        guard item.status == .readyToPlay else { return }
-
-        if playlistItem.isLive == true {
-          var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
-          nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = true
-          MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-        } else {
-          let duration = CMTimeGetSeconds(item.duration)
-          if duration.isFinite && !duration.isNaN {
-            var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
-            nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = false
-            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = duration
-            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-          }
-        }
-      }
-      // Store observer for cleanup
-      playerObserver = observer
-    }
-
-    // Load image asynchronously if available
-    if let coverUrl = playlistItem.cover {
-      Task {
-        if let image = await loadImage(from: coverUrl) {
-          nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) {
-            _ in
-            return image
-          }
-          MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-        }
-      }
-    } else {
-      MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-    }
-  }
-
-  private func loadImage(from urlString: String) async -> UIImage? {
-    guard let url = URL(string: urlString) else { return nil }
-
-    do {
-      let (data, _) = try await URLSession.shared.data(from: url)
-      return UIImage(data: data)
-    } catch {
-      print("Failed to load image: \(error.localizedDescription)")
-      return nil
-    }
-  }
-
-  // MARK: - CPListTemplateDelegate
-  func templateDidAppear(_ template: CPListTemplate, animated: Bool) {
-    // Reload template data when it appears
-    guard let title = template.title else { return }
-    loadTemplateData(for: template, title: title)
+    guard let player = player else { return }
+    uiManager?.configureNowPlayingInfo(playlistItem: currentPlaylist[currentIndex], player: player)
   }
 }

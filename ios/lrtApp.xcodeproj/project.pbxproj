@@ -23,6 +23,8 @@
 		9C54AE322D2D8886009F63EC /* CarPlayNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2C2D2D8886009F63EC /* CarPlayNetwork.swift */; };
 		9C54AE332D2D8886009F63EC /* CarPlayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2D2D2D8886009F63EC /* CarPlayService.swift */; };
 		9C54AE342D2D8886009F63EC /* CarPlayUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2E2D2D8886009F63EC /* CarPlayUtils.swift */; };
+		9C54AE382D2D8E93009F63EC /* RemoteControlManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE352D2D8E93009F63EC /* RemoteControlManager.swift */; };
+		9C54AE3A2D2D8E93009F63EC /* CarPlayUIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE372D2D8E93009F63EC /* CarPlayUIManager.swift */; };
 		9C6632FA2B839B1100E82A8E /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6632F92B839B1100E82A8E /* NotificationService.m */; };
 		9C6632FE2B839B1100E82A8E /* FCMImageNotification.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9C6632F62B839B1100E82A8E /* FCMImageNotification.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		9C78266B2B5887FD00B7183B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C78266A2B5887FD00B7183B /* AppDelegate.swift */; };
@@ -94,12 +96,14 @@
 		9C54AE2C2D2D8886009F63EC /* CarPlayNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayNetwork.swift; sourceTree = "<group>"; };
 		9C54AE2D2D2D8886009F63EC /* CarPlayService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayService.swift; sourceTree = "<group>"; };
 		9C54AE2E2D2D8886009F63EC /* CarPlayUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayUtils.swift; sourceTree = "<group>"; };
+		9C54AE352D2D8E93009F63EC /* RemoteControlManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RemoteControlManager.swift; path = lrtApp/RemoteControlManager.swift; sourceTree = "<group>"; };
+		9C54AE372D2D8E93009F63EC /* CarPlayUIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CarPlayUIManager.swift; path = lrtApp/CarPlayUIManager.swift; sourceTree = "<group>"; };
 		9C6632F62B839B1100E82A8E /* FCMImageNotification.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FCMImageNotification.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C6632F82B839B1100E82A8E /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		9C6632F92B839B1100E82A8E /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		9C6632FB2B839B1100E82A8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C7826692B5887FD00B7183B /* lrtApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "lrtApp-Bridging-Header.h"; sourceTree = "<group>"; };
-		9C78266A2B5887FD00B7183B /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = lrtApp/AppDelegate.swift; sourceTree = "<group>"; };
+		9C78266A2B5887FD00B7183B /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C78266C2B588AD800B7183B /* PhoneScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhoneScene.swift; path = lrtApp/PhoneScene.swift; sourceTree = "<group>"; };
 		9C78266D2B588AD800B7183B /* CarScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CarScene.swift; path = lrtApp/CarScene.swift; sourceTree = "<group>"; };
 		9C808A8D2C19AEAE00C5A257 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -154,9 +158,11 @@
 			isa = PBXGroup;
 			children = (
 				9C54AE2F2D2D8886009F63EC /* api */,
+				9C54AE372D2D8E93009F63EC /* CarPlayUIManager.swift */,
+				9C78266A2B5887FD00B7183B /* AppDelegate.swift */,
+				9C54AE352D2D8E93009F63EC /* RemoteControlManager.swift */,
 				9C78266D2B588AD800B7183B /* CarScene.swift */,
 				9C78266C2B588AD800B7183B /* PhoneScene.swift */,
-				9C78266A2B5887FD00B7183B /* AppDelegate.swift */,
 				9CB19FE32B0EAC2B00F49E23 /* lrtAppRelease.entitlements */,
 				9C0CA4EC28291CF100E1601F /* logo2.png */,
 				6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */,
@@ -742,6 +748,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C54AE3A2D2D8E93009F63EC /* CarPlayUIManager.swift in Sources */,
 				9C78266B2B5887FD00B7183B /* AppDelegate.swift in Sources */,
 				9C54AE302D2D8886009F63EC /* CarPlayCache.swift in Sources */,
 				9C54AE342D2D8886009F63EC /* CarPlayUtils.swift in Sources */,
@@ -749,6 +756,7 @@
 				9C54AE322D2D8886009F63EC /* CarPlayNetwork.swift in Sources */,
 				9C78266F2B588AD800B7183B /* CarScene.swift in Sources */,
 				9C78266E2B588AD800B7183B /* PhoneScene.swift in Sources */,
+				9C54AE382D2D8E93009F63EC /* RemoteControlManager.swift in Sources */,
 				9C54AE332D2D8886009F63EC /* CarPlayService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
