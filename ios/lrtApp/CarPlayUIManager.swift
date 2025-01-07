@@ -5,38 +5,42 @@ import MediaPlayer
 
 class CarPlayUIManager {
   private weak var interfaceController: CPInterfaceController?
-  private weak var tabBarTemplateDelegate: CPTabBarTemplateDelegate?
 
   private var nowPlayingTemplate: CPNowPlayingTemplate?
   private var backwardButtonHandler: (() -> Void)?
   private var forwardButtonHandler: (() -> Void)?
   private var playerObserver: NSKeyValueObservation?
 
-  init(interfaceController: CPInterfaceController, tabBarTemplateDelegate: CPTabBarTemplateDelegate)
-  {
+  init(interfaceController: CPInterfaceController) {
     self.interfaceController = interfaceController
-    self.tabBarTemplateDelegate = tabBarTemplateDelegate
   }
 
-  func setupInitialUI() {
-    // Create tab templates with icons
-    let recommendedTab = createListTemplate(
-      title: "Siūlome", imageName: "star.fill", loadInitialData: false)
-    let liveTab = createListTemplate(
-      title: "Tiesiogiai", imageName: "play.square.fill", loadInitialData: false)
-    let latestTab = createListTemplate(
-      title: "Naujausi", imageName: "newspaper.fill", loadInitialData: false)
-    let showsTab = createListTemplate(
-      title: "Laidos", imageName: "circle.grid.3x3.fill", loadInitialData: false)
+  func setupInitialUI(delegate: CPTabBarTemplateDelegate, initialTemplate: String?) {
+    let recommendedTab = createListTemplate(title: "Siūlome", imageName: "star.fill")
+    let liveTab = createListTemplate(title: "Tiesiogiai", imageName: "play.square.fill")
+    let newestTab = createListTemplate(title: "Naujausi", imageName: "newspaper.fill")
+    let podcastsTab = createListTemplate(title: "Laidos", imageName: "circle.grid.3x3.fill")
 
-    // Create tab bar template
-    let tabBarTemplate = CPTabBarTemplate(templates: [recommendedTab, liveTab, latestTab, showsTab])
-    tabBarTemplate.delegate = tabBarTemplateDelegate
+    let tabBarTemplate = CPTabBarTemplate(templates: [
+      recommendedTab, liveTab, newestTab, podcastsTab,
+    ])
 
-    interfaceController?.setRootTemplate(tabBarTemplate, animated: true, completion: nil)
+    tabBarTemplate.delegate = delegate
+
+    interfaceController?.setRootTemplate(tabBarTemplate, animated: true) { success, error in
+      if let initialTemplate = initialTemplate {
+        if #available(iOS 17.0, *) {
+          if let templateIndex = tabBarTemplate.templates.firstIndex(where: {
+            ($0 as? CPListTemplate)?.title == initialTemplate
+          }) {
+            tabBarTemplate.selectTemplate(at: templateIndex)
+          }
+        }
+      }
+    }
   }
 
-  private func createListTemplate(title: String, imageName: String, loadInitialData: Bool)
+  private func createListTemplate(title: String, imageName: String)
     -> CPListTemplate
   {
     let image = UIImage(systemName: imageName)
@@ -114,11 +118,11 @@ class CarPlayUIManager {
   func configureNowPlayingInfo(playlistItem: CarPlayItem, player: AVPlayer) {
     var nowPlayingInfo = [String: Any]()
     nowPlayingInfo[MPMediaItemPropertyTitle] = playlistItem.title
-    
+
     if playlistItem.isLive != true {
       nowPlayingInfo[MPMediaItemPropertyArtist] = playlistItem.content
     }
-    
+
     nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(
       player.currentTime())
 

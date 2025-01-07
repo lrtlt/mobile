@@ -9,9 +9,13 @@ import UIKit
 class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBarTemplateDelegate {
   private var interfaceController: CPInterfaceController?
   private var player: AVPlayer?
+  private var currentTemplateTitle: String?
   private var currentPlaylist: [CarPlayItem] = []
   private var currentIndex: Int = 0
   private var uiManager: CarPlayUIManager?
+
+  //Used to track connection time. To avoid duplicated events on simulator
+  private var connectionTimestamp: Date?
 
   private var mediaEndObserver: Any?
   private var playerIntervalObserver: Any?
@@ -23,11 +27,22 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     print("CarPlay interface controller connected")
     Analytics.logEvent("carplay_connected", parameters: nil)
     self.interfaceController = interfaceController
+    self.connectionTimestamp = Date()
 
-    uiManager = CarPlayUIManager(
-      interfaceController: interfaceController, tabBarTemplateDelegate: self)
-    uiManager?.setupInitialUI()
+    uiManager = CarPlayUIManager(interfaceController: interfaceController)
     setupControls()
+
+    // Attempt to resume playback if state exists
+    if let playbackState = CarPlayCache.shared.getPlaybackState() {
+      uiManager?.setupInitialUI(delegate: self, initialTemplate: playbackState.tab)
+      playAudio(from: playbackState.item)
+      // Seek to saved position after a short delay to allow player to initialize
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+        self?.seekTo(position: playbackState.position)
+      }
+    } else {
+      uiManager?.setupInitialUI(delegate: self, initialTemplate: nil)
+    }
   }
 
   private func setupControls() {
@@ -70,13 +85,21 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
           listItems = try await loadItems(for: listTemplate.title ?? "")
           listTemplate.updateSections([CPListSection(items: listItems)])
         } catch {
+          let item = CPListItem(
+            text: "Įvyko klaida! Patikrinkite interneto ryšį",
+            detailText: "Paspauskite noredami pabandyti dar kartą"
+          )
+          item.handler = { [weak self] _, completion in
+            Task { [weak self] in
+              guard self != nil else { return }
+              self!.tabBarTemplate(tabBarTemplate, didSelect: listTemplate)
+              completion()
+            }
+          }
+         
+
           listTemplate.updateSections([
-            CPListSection(items: [
-              CPListItem(
-                text: "Nepavyko užkrauti duomenų",
-                detailText: "Patikrinkite interneto ryšį"
-              )
-            ])
+            CPListSection(items: [item])
           ])
         }
       }
@@ -84,61 +107,36 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   }
 
   private func loadItems(for tab: String) async throws -> [CPListItem] {
+    self.currentTemplateTitle = tab
     switch tab {
     case "Siūlome":
-      let items = try await CarPlayService.shared.fetchRecommended()
-      currentPlaylist = items
-      return await uiManager!.createListItems(from: items) { [weak self] item in
-        Task { [weak self] in
-          guard let self = self else { return }
-
-          // Find index of selected item
-          if let index = items.firstIndex(where: { $0.streamUrl == item.streamUrl }) {
-            self.currentIndex = index
-          } else {
-            self.currentIndex = 0
-          }
-          self.playAudio(from: item)
-
-        }
-      }
+      return try await updateCurrentIndexAndPlaylist(with: CarPlayService.shared.fetchRecommended())
     case "Naujausi":
-      let items = try await CarPlayService.shared.fetchNewest()
-      currentPlaylist = items
-      return await uiManager!.createListItems(from: items) { [weak self] item in
-        Task { @MainActor [weak self] in
-          guard let self = self else { return }
-
-          // Find index of selected item
-          if let index = items.firstIndex(where: { $0.streamUrl == item.streamUrl }) {
-            self.currentIndex = index
-          } else {
-            self.currentIndex = 0
-          }
-          self.playAudio(from: item)
-
-        }
-      }
-
+      return try await updateCurrentIndexAndPlaylist(with: CarPlayService.shared.fetchNewest())
     case "Tiesiogiai":
-      let items = try await CarPlayService.shared.fetchLive()
-      currentPlaylist = items
-      return await uiManager!.createListItems(from: items) { [weak self] item in
-        Task { @MainActor [weak self] in
-          guard let self = self else { return }
-
-          // Find index of selected item
-          if let index = items.firstIndex(where: { $0.streamUrl == item.streamUrl }) {
-            self.currentIndex = index
-          } else {
-            self.currentIndex = 0
-          }
-          self.playAudio(from: item)
-
-        }
-      }
+      return try await updateCurrentIndexAndPlaylist(with: CarPlayService.shared.fetchLive())
     default:
       return []
+    }
+  }
+
+  private func updateCurrentIndexAndPlaylist(with items: [CarPlayItem]) async -> [CPListItem] {
+    currentPlaylist = items
+
+    if let currentItem = player?.currentItem,
+      let currentUrl = (currentItem.asset as? AVURLAsset)?.url.absoluteString,
+      let index = items.firstIndex(where: { $0.streamUrl == currentUrl })
+    {
+      currentIndex = index
+    }
+
+    return await uiManager!.createListItems(from: items) { [weak self] selectedItem in
+      guard let self = self else { return }
+
+      if let index = items.firstIndex(where: { $0.streamUrl == selectedItem.streamUrl }) {
+        self.currentIndex = index
+      }
+      self.playAudio(from: selectedItem)
     }
   }
 
@@ -148,6 +146,28 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   ) {
     print("CarPlay interface controller disconnected")
     Analytics.logEvent("carplay_disconnected", parameters: nil)
+
+    if let connectionTimestamp = connectionTimestamp,
+      Date().timeIntervalSince(connectionTimestamp) > 2
+    {
+      if let player = player,
+        player.rate > 0,  // Only save if actually playing
+        currentPlaylist.count > 0,
+        currentIndex < currentPlaylist.count
+      {
+        print("Saving playback state")
+        let position = CMTimeGetSeconds(player.currentTime())
+        CarPlayCache.shared.savePlaybackState(
+          item: currentPlaylist[currentIndex], position: position, tab: currentTemplateTitle
+        )
+      } else {
+        print("Clearing playback state cache")
+        CarPlayCache.shared.clearPlaybackState()
+      }
+    } else {
+      print("Not connected for more than 2 seconds")
+    }
+
     self.interfaceController = nil
     self.player?.pause()
     self.player = nil
@@ -158,18 +178,23 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
   }
 
-  private func playAudio(from item: CarPlayItem) {
-    guard let urlString = item.streamUrl, let url = URL(string: urlString) else {
+  private func playAudio(from selectedItem: CarPlayItem) {
+    guard let urlString = selectedItem.streamUrl, let url = URL(string: urlString) else {
       print("Invalid stream URL")
       return
     }
 
-    if player != nil {
-      removeObservers()
+    if let currentItem = player?.currentItem,
+      let currentUrl = (currentItem.asset as? AVURLAsset)?.url,
+      currentUrl == url
+    {
+      //Just open NowPlayingTemplate becuase the stream is already playing
+      uiManager?.showNowPlayingTemplate(isLive: selectedItem.isLive == true)
+      return
     }
 
-    // Stop current playback
     player?.pause()
+    removeObservers()
 
     // Configure audio session
     let audioSession = AVAudioSession.sharedInstance()
@@ -183,22 +208,25 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     // Create new player
     player = AVPlayer(url: url)
     player?.play()
+
     MPNowPlayingInfoCenter.default().playbackState = .playing
+
     addPlayerObservers()
-    configureNowPlayingInfo()
-    uiManager?.showNowPlayingTemplate(isLive: item.isLive == true)
+    uiManager?.configureNowPlayingInfo(playlistItem: selectedItem, player: player!)
+    uiManager?.showNowPlayingTemplate(isLive: selectedItem.isLive == true)
   }
 
   private func addPlayerObservers() {
     guard let player = player else { return }
 
-    // Add player item observer
+    // Add player selectedItem observer
     mediaEndObserver = NotificationCenter.default.addObserver(
       forName: .AVPlayerItemDidPlayToEndTime,
       object: player.currentItem,
       queue: .main
     ) { _ in
       MPNowPlayingInfoCenter.default().playbackState = .stopped
+      self.playNext()
     }
 
     // Add periodic time observer
@@ -262,11 +290,5 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     guard !currentPlaylist.isEmpty else { return }
     currentIndex = (currentIndex - 1 + currentPlaylist.count) % currentPlaylist.count
     playAudio(from: currentPlaylist[currentIndex])
-  }
-
-  private func configureNowPlayingInfo() {
-    guard currentIndex >= 0 && currentIndex < currentPlaylist.count else { return }
-    guard let player = player else { return }
-    uiManager?.configureNowPlayingInfo(playlistItem: currentPlaylist[currentIndex], player: player)
   }
 }
