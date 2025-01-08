@@ -6,6 +6,7 @@ class CarPlayNetwork {
   private let recommendedUrl = URL(string: "https://www.lrt.lt/static/carplay/rekomenduoja.json")!
   private let newestUrl = URL(string: "https://www.lrt.lt/static/carplay/naujausi.json")!
   private let liveUrl = URL(string: "https://www.lrt.lt/static/tvprog/tvprog.json")!
+  private let podcastsUrl = URL(string: "https://www.lrt.lt/api/json/search/categories?type=audio")!
 
   private init() {}
 
@@ -19,7 +20,7 @@ class CarPlayNetwork {
 
   func fetchLive() async throws -> [CarPlayItem] {
     // Check cache first
-    if let cached = CarPlayCache.shared.getCachedItems(for: liveUrl) {
+    if let cached = CarPlayCache.shared.getCachedItems(for: liveUrl) as? [CarPlayItem] {
       return cached
     }
 
@@ -52,6 +53,50 @@ class CarPlayNetwork {
     return items
   }
 
+  func fetchPodcasts() async throws -> [PodcastCategory] {
+    // Check cache first
+    if let cached = CarPlayCache.shared.getCachedItems(for: podcastsUrl) as? [PodcastCategory] {
+      return cached
+    }
+
+    // Fetch fresh data
+    let (data, _) = try await URLSession.shared.data(from: podcastsUrl)
+    let response = try JSONDecoder().decode(PodcastCategoriesResponse.self, from: data)
+    let items = response.items ?? []
+
+    // Update cache
+    CarPlayCache.shared.setCachedItems(items, for: podcastsUrl)
+    return items
+  }
+
+  func fetchPodcastEpisodes(categoryId: Int) async throws -> [PodcastEpisode] {
+    let episodesUrl = URL(string: "https://www.lrt.lt/api/json/category?id=\(categoryId)")!
+
+    print("Fetching episodes \(episodesUrl)")
+
+    // Check cache first
+    if let cached = CarPlayCache.shared.getCachedItems(for: episodesUrl) as? [PodcastEpisode] {
+      return cached
+    }
+
+    // Fetch fresh data
+    let (data, _) = try await URLSession.shared.data(from: episodesUrl)
+    let response = try JSONDecoder().decode(PodcastEpisodesResponse.self, from: data)
+    let episodes = response.items ?? []
+
+    // Update cache
+    CarPlayCache.shared.setCachedItems(episodes, for: episodesUrl)
+    return episodes
+  }
+
+  func fetchEpisodeInfo(episodeId: Int) async throws -> PodcastEpisodeInfoResponse {
+    let episodeUrl = URL(string: "https://www.lrt.lt/api/json/article/\(episodeId)")!
+    print("Fetching episode info \(episodeUrl)")
+    let (data, _) = try await URLSession.shared.data(from: episodeUrl)
+    let episodeInfo = try JSONDecoder().decode(PodcastEpisodeInfoResponse.self, from: data)
+    return episodeInfo
+  }
+
   private func fetchStreamInfo(streamUrl: String) async throws -> StreamInfo {
     let url = URL(string: streamUrl)!
     let (data, _) = try await URLSession.shared.data(from: url)
@@ -61,7 +106,7 @@ class CarPlayNetwork {
 
   private func fetchItems(from url: URL) async throws -> [CarPlayItem] {
     // Check cache first
-    if let cached = CarPlayCache.shared.getCachedItems(for: url) {
+    if let cached = CarPlayCache.shared.getCachedItems(for: url) as? [CarPlayItem] {
       return cached
     }
 

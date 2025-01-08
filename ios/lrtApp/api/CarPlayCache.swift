@@ -9,14 +9,14 @@ struct PlaybackState {
 class CarPlayCache {
   static let shared = CarPlayCache()
 
-  private var cache: [URL: (items: [CarPlayItem], timestamp: Date)] = [:]
+  private var cache: [URL: (items: [Any], timestamp: Date)] = [:]
   private var playbackState: PlaybackState?
   private let cacheExpiration: TimeInterval = 180  // 3 minutes
   private let cacheQueue = DispatchQueue(label: "com.lrt.carplay.cache", attributes: .concurrent)
 
   private init() {}
 
-  func getCachedItems(for url: URL) -> [CarPlayItem]? {
+  func getCachedItems(for url: URL) -> [Any]? {
     return cacheQueue.sync {
       guard let cached = cache[url],
         Date().timeIntervalSince(cached.timestamp) < cacheExpiration
@@ -27,7 +27,7 @@ class CarPlayCache {
     }
   }
 
-  func setCachedItems(_ items: [CarPlayItem], for url: URL) {
+  func setCachedItems(_ items: [Any], for url: URL) {
     cacheQueue.async(flags: .barrier) {
       self.cache[url] = (items: items, timestamp: Date())
     }

@@ -89,6 +89,78 @@ class CarPlayUIManager {
     return listItems
   }
 
+  func showEpisodesList(
+    episodes: [PodcastEpisode], categoryTitle: String,
+    onEpisodeSelected: @escaping (CarPlayItem) -> Void
+  ) async {
+    guard let interfaceController = self.interfaceController else { return }
+
+    let listTemplate = CPListTemplate(title: categoryTitle, sections: [])
+    var items = [CPListItem]()
+
+    // Create list items first
+    for episode in episodes {
+      let item = CPListItem(text: episode.title ?? "", detailText: nil)
+      item.handler = { [weak self] _, completion in
+        Task { [weak self] in
+          guard let self = self else {
+            completion()
+            return
+          }
+
+          // Fetch episode info to get stream URL
+          if let episodeId = episode.id {
+            do {
+              let episodeInfo = try await CarPlayService.shared.fetchEpisodeInfo(
+                episodeId: episodeId
+              )
+
+              // Convert PodcastEpisode to CarPlayItem with stream URL
+              let carPlayItem = CarPlayItem(
+                title: episode.title ?? "",
+                content: categoryTitle,
+                cover: episode.imgPathPrefix != nil && episode.imgPathPostfix != nil
+                  ? "https://lrt.lt\(episode.imgPathPrefix!)282x158\(episode.imgPathPostfix!)"
+                  : nil,
+                streamUrl: episodeInfo.info!.streamUrl,
+                isLive: false
+              )
+              onEpisodeSelected(carPlayItem)
+            } catch {
+              self.showErrorAlert()
+            }
+          }
+
+          completion()
+        }
+      }
+      items.append(item)
+    }
+
+    // Load images concurrently while preserving order
+    await withTaskGroup(of: (Int, UIImage?).self) { group in
+      for (index, episode) in episodes.enumerated() {
+        guard let prefix = episode.imgPathPrefix, let postfix = episode.imgPathPostfix else {
+          continue
+        }
+        let imageUrl = "https://lrt.lt\(prefix)282x158\(postfix)"
+        group.addTask {
+          let image = await self.loadImage(from: imageUrl)
+          return (index, image)
+        }
+      }
+
+      for await (index, image) in group {
+        if let image = image {
+          items[index].setImage(image)
+        }
+      }
+    }
+
+    listTemplate.updateSections([CPListSection(items: items)])
+    interfaceController.pushTemplate(listTemplate, animated: true, completion: nil)
+  }
+
   func showNowPlayingTemplate(isLive: Bool) {
     if nowPlayingTemplate == nil {
       nowPlayingTemplate = CPNowPlayingTemplate.shared
@@ -164,6 +236,18 @@ class CarPlayUIManager {
         }
       }
     }
+  }
+
+  func showErrorAlert() {
+    let alert = CPAlertTemplate(
+      titleVariants: ["Įvyko klaida"],
+      actions: [
+        CPAlertAction(title: "Uždaryti", style: .cancel) { _ in
+          self.interfaceController?.dismissTemplate(animated: true, completion: nil)
+        }
+      ]
+    )
+    self.interfaceController?.presentTemplate(alert, animated: true, completion: nil)
   }
 
   private func loadImage(from urlString: String) async -> UIImage? {

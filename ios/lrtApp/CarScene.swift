@@ -76,9 +76,60 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     }
   }
 
+  private func loadPodcasts(for listTemplate: CPListTemplate) async {
+    do {
+      let categories = try await CarPlayService.shared.fetchPodcasts()
+
+      // Group categories by first letter
+      let groupedCategories = Dictionary(grouping: categories) { category in
+        String((category.title ?? "").trimmingCharacters(in: .punctuationCharacters).first ?? "#")
+          .uppercased()
+      }
+
+      // Sort sections alphabetically
+      let sortedSections = groupedCategories.keys.sorted().map { letter in
+        let items = (groupedCategories[letter] ?? []).map { category in
+          let item = CPListItem(text: category.title ?? "", detailText: nil)
+          item.handler = { [weak self] _, completion in
+            guard let self = self, let categoryId = category.id else {
+              completion()
+              return
+            }
+
+            Task {
+              do {
+                let episodes = try await CarPlayService.shared.fetchEpisodes(categoryId: categoryId)
+                await self.uiManager?.showEpisodesList(
+                  episodes: episodes, categoryTitle: category.title ?? "") { episode in
+                    self.playAudio(from: episode)
+                  }
+              } catch {
+                print("Failed to fetch episodes: \(error.localizedDescription)")
+              }
+              completion()
+            }
+          }
+          return item
+        }
+        return CPListSection(items: items, header: letter, sectionIndexTitle: letter)
+      }
+      listTemplate.updateSections(sortedSections)
+    } catch {
+      print("Failed to load podcasts: \(error.localizedDescription)")
+    }
+  }
+
   func tabBarTemplate(_ tabBarTemplate: CPTabBarTemplate, didSelect selectedTemplate: CPTemplate) {
     if let listTemplate = selectedTemplate as? CPListTemplate {
       print("Selected tab: \(listTemplate.title ?? "Untitled")")
+
+      if listTemplate.title == "Laidos" {
+        Task {
+          await loadPodcasts(for: listTemplate)
+        }
+        return
+      }
+
       Task {
         do {
           let listItems: [CPListItem]
@@ -96,7 +147,6 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
               completion()
             }
           }
-         
 
           listTemplate.updateSections([
             CPListSection(items: [item])
@@ -170,12 +220,11 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
 
     self.interfaceController = nil
     self.player?.pause()
-    self.player = nil
+    //    self.player = nil
     MPNowPlayingInfoCenter.default().playbackState = .stopped
-    removeObservers()
-    RemoteControlManager.shared.removeHandlers()
+    //    removeObservers()
+    //    RemoteControlManager.shared.removeHandlers()
     uiManager?.cleanup()
-    MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
   }
 
   private func playAudio(from selectedItem: CarPlayItem) {
