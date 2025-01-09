@@ -60,6 +60,7 @@ const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardR
           bounces={false}
           forceDarkOn={dark && props.allowDarkMode}
           sharedCookiesEnabled={true}
+          setSupportMultipleWindows={false}
           {...props}
           style={[styles.webView, props.style]}
           containerStyle={[styles.webViewContainer, props.containerStyle]}

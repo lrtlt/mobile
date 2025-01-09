@@ -20,6 +20,7 @@ const SafeWebView: React.FC<React.PropsWithChildren<Props>> = forwardRef<WebView
         originWhitelist={['*']}
         cacheEnabled={false}
         domStorageEnabled={true}
+        setSupportMultipleWindows={false}
         javaScriptEnabled={true}
         forceDarkOn={dark && props.allowDarkMode}
         androidLayerType="hardware"

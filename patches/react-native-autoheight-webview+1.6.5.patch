@@ -14,7 +14,7 @@ index 3d0dc75..7138615 100644
    shouldUpdate,
  } from './utils';
  
-+const MAX_HEIGHT_ANDROID =  Platform.Version < 29 ? Platform.Version < 24 ? 8190 / 2 : 8190 : -1;
++const MAX_HEIGHT_ANDROID =  Platform.Version < 29 ? Platform.Version < 24 ? (8190 / PixelRatio.get()) / 2 : (8190 / PixelRatio.get()) : -1;
 +const MAX_HEIGHT = Platform.OS === 'android' ? MAX_HEIGHT_ANDROID : -1;
 +
  const AutoHeightWebView = React.memo(
