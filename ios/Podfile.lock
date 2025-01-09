@@ -2329,8 +2329,6 @@ PODS:
   - React-Mapbuffer (0.73.8):
     - glog
     - React-debug
-  - react-native-carplay (2.3.0):
-    - React
   - react-native-config (1.5.3):
     - react-native-config/App (= 1.5.3)
   - react-native-config/App (1.5.3):
@@ -2366,9 +2364,6 @@ PODS:
     - THEOplayer-Integration-GoogleCast (~> 8.6)
     - THEOplayer-Integration-THEOlive (>= 8.6.3, ~> 8.6)
     - THEOplayerSDK-core (~> 8.6)
-  - react-native-track-player (4.1.1):
-    - React-Core
-    - SwiftAudioEx (= 1.1.0)
   - react-native-unistyles (2.20.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -2623,7 +2618,6 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.6.1)
-  - SwiftAudioEx (1.1.0)
   - Swifter (1.5.0)
   - SwiftSubtitles (0.9.1):
     - DSFRegex (~> 3.3.1)
@@ -2683,7 +2677,6 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector-modern`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
-  - react-native-carplay (from `../node_modules/react-native-carplay`)
   - react-native-config (from `../node_modules/react-native-config`)
   - react-native-gemius-plugin (from `../node_modules/react-native-gemius-plugin`)
   - react-native-google-cast (from `https://github.com/Danesz/react-native-google-cast.git`, branch `feature/guestmode_apple_silicon`)
@@ -2692,7 +2685,6 @@ DEPENDENCIES:
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-theoplayer (from `../node_modules/react-native-theoplayer`)
-  - react-native-track-player (from `../node_modules/react-native-track-player`)
   - react-native-unistyles (from `../node_modules/react-native-unistyles`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -2772,7 +2764,6 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
-    - SwiftAudioEx
     - Swifter
     - SwiftSubtitles
     - THEOliveSDK
@@ -2840,8 +2831,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
-  react-native-carplay:
-    :path: "../node_modules/react-native-carplay"
   react-native-config:
     :path: "../node_modules/react-native-config"
   react-native-gemius-plugin:
@@ -2859,8 +2848,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-theoplayer:
     :path: "../node_modules/react-native-theoplayer"
-  react-native-track-player:
-    :path: "../node_modules/react-native-track-player"
   react-native-unistyles:
     :path: "../node_modules/react-native-unistyles"
   react-native-webview:
@@ -3008,7 +2995,6 @@ SPEC CHECKSUMS:
   React-jsinspector: 1729acf5ffe2d4439d698da25fddf0c75d07d1a1
   React-logger: 7904abd7e1299754785e356af15ec9d1e9439901
   React-Mapbuffer: 191513cc24157a1fccd26889d8e20b8b57c44353
-  react-native-carplay: 013dc270dacdaf917968d7eb531e64eadd44bb1b
   react-native-config: ea75335a7cca1d3326de1da384227e580a7c082e
   react-native-gemius-plugin: 705cc53f6b7d882ad6bcc8f7ff484042bdd2842e
   react-native-google-cast: 872b05bf12f7db32c2f66818fdd5406474af25f1
@@ -3017,7 +3003,6 @@ SPEC CHECKSUMS:
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
   react-native-theoplayer: df64cec3d95ad1fd657a9807ed76288a66934fb4
-  react-native-track-player: 6dc2e2633265704b8ab6d8124b80239d4ed1f911
   react-native-unistyles: 070c18127c72a14bc1a776566e7c50afefca7d5d
   react-native-webview: f3b926122e38919f81bb7d61b83d775e34e0eac7
   React-nativeconfig: b42fe8e97a8d164aebeb6821a27076406b64fbb9
@@ -3059,7 +3044,6 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  SwiftAudioEx: f6aa653770f3a0d3851edaf8d834a30aee4a7646
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   SwiftSubtitles: c659af19d710a2946779015464c0577d07fe4666
   THEOliveSDK: 109b31511177686012f5e475c32edc40e2e52e9f
