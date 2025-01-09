@@ -10,6 +10,8 @@ class RemoteControlManager {
   private var previousTrackHandler: Any?
   private var changePlaybackPositionHandler: Any?
 
+  private init() {}
+
   func setupRemoteCommands(
     playAction: @escaping () -> Void,
     pauseAction: @escaping () -> Void,
@@ -18,10 +20,11 @@ class RemoteControlManager {
     changePlaybackPositionAction: @escaping (TimeInterval) -> Void
   ) {
     // Remove existing handlers if any
-    removeHandlers()
+    clearRemoteControls()
 
+    
     commandCenter.togglePlayPauseCommand.isEnabled = true
-    playHandler = commandCenter.playCommand.addTarget { _ in
+    playHandler = commandCenter.playCommand.addTarget { e in
       playAction()
       return .success
     }
@@ -38,7 +41,7 @@ class RemoteControlManager {
     }
 
     commandCenter.previousTrackCommand.isEnabled = true
-    previousTrackHandler = commandCenter.previousTrackCommand.addTarget { _ in
+    previousTrackHandler = commandCenter.previousTrackCommand.addTarget { e in
       previousTrackAction()
       return .success
     }
@@ -55,7 +58,7 @@ class RemoteControlManager {
     commandCenter.skipBackwardCommand.isEnabled = false
   }
 
-  func removeHandlers() {
+  func clearRemoteControls() {
     if let handler = playHandler {
       commandCenter.playCommand.removeTarget(handler)
     }

@@ -9,7 +9,6 @@ class CarPlayUIManager {
   private var nowPlayingTemplate: CPNowPlayingTemplate?
   private var backwardButtonHandler: (() -> Void)?
   private var forwardButtonHandler: (() -> Void)?
-  private var playerObserver: NSKeyValueObservation?
 
   init(interfaceController: CPInterfaceController) {
     self.interfaceController = interfaceController
@@ -73,7 +72,7 @@ class CarPlayUIManager {
       for (index, item) in items.enumerated() {
         if let coverUrl = item.cover {
           group.addTask {
-            let image = await self.loadImage(from: coverUrl)
+            let image = await CarPlayUIManager.loadImage(from: coverUrl)
             return (index, image)
           }
         }
@@ -145,7 +144,7 @@ class CarPlayUIManager {
         }
         let imageUrl = "https://lrt.lt\(prefix)282x158\(postfix)"
         group.addTask {
-          let image = await self.loadImage(from: imageUrl)
+          let image = await CarPlayUIManager.loadImage(from: imageUrl)
           return (index, image)
         }
       }
@@ -187,57 +186,6 @@ class CarPlayUIManager {
     }
   }
 
-  func configureNowPlayingInfo(playlistItem: CarPlayItem, player: AVPlayer) {
-    var nowPlayingInfo = [String: Any]()
-    nowPlayingInfo[MPMediaItemPropertyTitle] = playlistItem.title
-
-    if playlistItem.isLive != true {
-      nowPlayingInfo[MPMediaItemPropertyArtist] = playlistItem.content
-    }
-
-    nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(
-      player.currentTime())
-
-    // Set duration when player item becomes ready
-    if let currentItem = player.currentItem {
-      let observer = currentItem.observe(\.status, options: [.new]) { item, _ in
-        guard item.status == .readyToPlay else { return }
-
-        if playlistItem.isLive == true {
-          var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
-          nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = true
-          MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-        } else {
-          let duration = CMTimeGetSeconds(item.duration)
-          if duration.isFinite && !duration.isNaN {
-            var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
-            nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = false
-            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = duration
-            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-          }
-        }
-      }
-      playerObserver = observer
-    }
-
-    // Set initial info
-    MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-
-    // Load image asynchronously if available
-    if let coverUrl = playlistItem.cover {
-      Task {
-        if let image = await loadImage(from: coverUrl) {
-          var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
-          nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) {
-            _ in
-            return image
-          }
-          MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-        }
-      }
-    }
-  }
-
   func showErrorAlert() {
     let alert = CPAlertTemplate(
       titleVariants: ["Įvyko klaida"],
@@ -250,7 +198,7 @@ class CarPlayUIManager {
     self.interfaceController?.presentTemplate(alert, animated: true, completion: nil)
   }
 
-  private func loadImage(from urlString: String) async -> UIImage? {
+  static func loadImage(from urlString: String) async -> UIImage? {
     guard let url = URL(string: urlString) else { return nil }
 
     do {
@@ -268,10 +216,5 @@ class CarPlayUIManager {
 
   func setForwardButtonHandler(_ handler: @escaping () -> Void) {
     forwardButtonHandler = handler
-  }
-
-  func cleanup() {
-    playerObserver?.invalidate()
-    playerObserver = nil
   }
 }

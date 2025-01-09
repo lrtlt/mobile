@@ -1,16 +1,17 @@
 import Foundation
 
-struct PlaybackState {
-  let item: CarPlayItem
-  let position: TimeInterval
-  let tab: String?
-}
-
 class CarPlayCache {
   static let shared = CarPlayCache()
 
+  // Cache for fetched items
   private var cache: [URL: (items: [Any], timestamp: Date)] = [:]
-  private var playbackState: PlaybackState?
+
+  // Cache for playback state
+  private var shouldResumePlayer: Bool = false
+
+  //Cache for last selected tab title. Used to restore UI state after reconnection
+  private var currentTemplateTitle: String?
+
   private let cacheExpiration: TimeInterval = 180  // 3 minutes
   private let cacheQueue = DispatchQueue(label: "com.lrt.carplay.cache", attributes: .concurrent)
 
@@ -33,25 +34,28 @@ class CarPlayCache {
     }
   }
 
-  func savePlaybackState(item: CarPlayItem, position: TimeInterval, tab: String?) {
+  func setShouldResumePlayer(_ shouldResume: Bool) {
     cacheQueue.async(flags: .barrier) {
-      self.playbackState = PlaybackState(
-        item: item,
-        position: position,
-        tab: tab
-      )
+      self.shouldResumePlayer = shouldResume
     }
   }
 
-  func getPlaybackState() -> PlaybackState? {
+  func getShouldResumePlayer() -> Bool {
     return cacheQueue.sync {
-      return self.playbackState
+      return self.shouldResumePlayer
     }
   }
 
-  func clearPlaybackState() {
-    cacheQueue.async(flags: .barrier) {
-      self.playbackState = nil
+  func getCurrentTemplateTitle() -> String? {
+    return cacheQueue.sync {
+      return self.currentTemplateTitle
     }
   }
+
+  func setCurrentTemplateTitle(_ title: String?) {
+    cacheQueue.async(flags: .barrier) {
+      self.currentTemplateTitle = title
+    }
+  }
+
 }

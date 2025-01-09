@@ -31,6 +31,8 @@
 		9C78266E2B588AD800B7183B /* PhoneScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C78266C2B588AD800B7183B /* PhoneScene.swift */; };
 		9C78266F2B588AD800B7183B /* CarScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C78266D2B588AD800B7183B /* CarScene.swift */; };
 		9C808A8E2C19AEAE00C5A257 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 9C808A8D2C19AEAE00C5A257 /* PrivacyInfo.xcprivacy */; };
+		9C9EDE892D2FD77100C0E5D4 /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EDE882D2FD77100C0E5D4 /* PlayerController.swift */; };
+		9C9EDE8B2D2FE24200C0E5D4 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EDE8A2D2FE24200C0E5D4 /* Playlist.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +109,8 @@
 		9C78266C2B588AD800B7183B /* PhoneScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhoneScene.swift; path = lrtApp/PhoneScene.swift; sourceTree = "<group>"; };
 		9C78266D2B588AD800B7183B /* CarScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CarScene.swift; path = lrtApp/CarScene.swift; sourceTree = "<group>"; };
 		9C808A8D2C19AEAE00C5A257 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		9C9EDE882D2FD77100C0E5D4 /* PlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerController.swift; path = lrtApp/PlayerController.swift; sourceTree = "<group>"; };
+		9C9EDE8A2D2FE24200C0E5D4 /* Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Playlist.swift; path = lrtApp/Playlist.swift; sourceTree = "<group>"; };
 		9CB19FE32B0EAC2B00F49E23 /* lrtAppRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = lrtAppRelease.entitlements; path = lrtApp/lrtAppRelease.entitlements; sourceTree = "<group>"; };
 		B444A0B5A3869DA4136C766C /* Pods_lrtApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lrtApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -158,9 +162,11 @@
 			isa = PBXGroup;
 			children = (
 				9C54AE2F2D2D8886009F63EC /* api */,
-				9C54AE372D2D8E93009F63EC /* CarPlayUIManager.swift */,
 				9C78266A2B5887FD00B7183B /* AppDelegate.swift */,
+				9C9EDE882D2FD77100C0E5D4 /* PlayerController.swift */,
+				9C54AE372D2D8E93009F63EC /* CarPlayUIManager.swift */,
 				9C54AE352D2D8E93009F63EC /* RemoteControlManager.swift */,
+				9C9EDE8A2D2FE24200C0E5D4 /* Playlist.swift */,
 				9C78266D2B588AD800B7183B /* CarScene.swift */,
 				9C78266C2B588AD800B7183B /* PhoneScene.swift */,
 				9CB19FE32B0EAC2B00F49E23 /* lrtAppRelease.entitlements */,
@@ -757,7 +763,9 @@
 				9C78266F2B588AD800B7183B /* CarScene.swift in Sources */,
 				9C78266E2B588AD800B7183B /* PhoneScene.swift in Sources */,
 				9C54AE382D2D8E93009F63EC /* RemoteControlManager.swift in Sources */,
+				9C9EDE892D2FD77100C0E5D4 /* PlayerController.swift in Sources */,
 				9C54AE332D2D8886009F63EC /* CarPlayService.swift in Sources */,
+				9C9EDE8B2D2FE24200C0E5D4 /* Playlist.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
