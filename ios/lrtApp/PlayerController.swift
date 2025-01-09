@@ -73,7 +73,6 @@ class PlayerController {
 
   func seekForward() {
     guard let player = player else { return }
-    let currentTime = player.currentTime()
     let seekTime = CMTimeAdd(currentTime, CMTimeMake(value: 15, timescale: 1))
     player.seek(to: seekTime)
     updateNowPlayingTime()
@@ -81,7 +80,6 @@ class PlayerController {
 
   func seekBackward() {
     guard let player = player else { return }
-    let currentTime = player.currentTime()
     let seekTime = CMTimeSubtract(currentTime, CMTimeMake(value: 15, timescale: 1))
     player.seek(to: seekTime)
     updateNowPlayingTime()
