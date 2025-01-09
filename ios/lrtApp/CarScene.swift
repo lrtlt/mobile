@@ -125,7 +125,8 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
 
   func tabBarTemplate(_ tabBarTemplate: CPTabBarTemplate, didSelect selectedTemplate: CPTemplate) {
     if let listTemplate = selectedTemplate as? CPListTemplate {
-      print("Selected tab: \(listTemplate.title ?? "Untitled")")
+      print("Selected tab: \(listTemplate.title ?? "?")")
+      Analytics.logEvent("carplay_tab_open_\(listTemplate.title ?? "?")", parameters: nil)
       cache.setCurrentTemplateTitle(listTemplate.title)
 
       if listTemplate.title == "Laidos" {
