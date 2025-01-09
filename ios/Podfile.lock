@@ -2358,7 +2358,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.14.1):
     - React-Core
-  - react-native-theoplayer (8.11.1):
+  - react-native-theoplayer (8.12.0):
     - React-Core
     - THEOplayer-Connector-SideloadedSubtitle (~> 8.6)
     - THEOplayer-Integration-GoogleCast (~> 8.6)
@@ -2545,27 +2545,27 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBAnalytics (21.6.1):
+  - RNFBAnalytics (21.6.2):
     - Firebase/Analytics (= 11.5.0)
     - React-Core
     - RNFBApp
-  - RNFBApp (21.6.1):
+  - RNFBApp (21.6.2):
     - Firebase/CoreOnly (= 11.5.0)
     - React-Core
-  - RNFBAppCheck (21.6.1):
+  - RNFBAppCheck (21.6.2):
     - Firebase/AppCheck (= 11.5.0)
     - React-Core
     - RNFBApp
-  - RNFBCrashlytics (21.6.1):
+  - RNFBCrashlytics (21.6.2):
     - Firebase/Crashlytics (= 11.5.0)
     - FirebaseCoreExtension
     - React-Core
     - RNFBApp
-  - RNFBFirestore (21.6.1):
+  - RNFBFirestore (21.6.2):
     - Firebase/Firestore (= 11.5.0)
     - React-Core
     - RNFBApp
-  - RNFBMessaging (21.6.1):
+  - RNFBMessaging (21.6.2):
     - Firebase/Messaging (= 11.5.0)
     - FirebaseCoreExtension
     - React-Core
@@ -2585,19 +2585,25 @@ PODS:
     - React-Core
   - RNPermissions (3.10.1):
     - React-Core
-  - RNReanimated (3.15.2):
+  - RNReanimated (3.16.6):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.15.2)
-    - RNReanimated/worklets (= 3.15.2)
-  - RNReanimated/reanimated (3.15.2):
+    - RNReanimated/reanimated (= 3.16.6)
+    - RNReanimated/worklets (= 3.16.6)
+  - RNReanimated/reanimated (3.16.6):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNReanimated/worklets (3.15.2):
+    - RNReanimated/reanimated/apple (= 3.16.6)
+  - RNReanimated/reanimated/apple (3.16.6):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
+  - RNReanimated/worklets (3.16.6):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2609,7 +2615,7 @@ PODS:
     - React-RCTImage
   - RNShare (10.2.1):
     - React-Core
-  - RNSVG (15.9.0):
+  - RNSVG (15.11.1):
     - React-Core
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
@@ -3002,7 +3008,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: 2d5c49cd454a2c575efdabe421c7560b9e0dcb4d
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
-  react-native-theoplayer: df64cec3d95ad1fd657a9807ed76288a66934fb4
+  react-native-theoplayer: 35a590f86c473160d1c726b0a186456fb65a46b8
   react-native-unistyles: 070c18127c72a14bc1a776566e7c50afefca7d5d
   react-native-webview: f3b926122e38919f81bb7d61b83d775e34e0eac7
   React-nativeconfig: b42fe8e97a8d164aebeb6821a27076406b64fbb9
@@ -3027,20 +3033,20 @@ SPEC CHECKSUMS:
   ReactCommon: ec60842339958d6c9165e523eee8d1b3b241c015
   RNCAsyncStorage: b6410dead2732b5c72a7fdb1ecb5651bbcf4674b
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
-  RNFBAnalytics: fd3456c53ae31a39cbf72ce80dda0dcc806032fb
-  RNFBApp: 72b96921c64702d51eca9f3ed579c1777efd0d7e
-  RNFBAppCheck: 9e3bbada601e8c37fd066c04e46afdef5e4a3fed
-  RNFBCrashlytics: 22223ee96beba1130c8906253f5b900f629c2926
-  RNFBFirestore: d13b3429d574c8bb69867f08a8411b7c789bb492
-  RNFBMessaging: 2ad5a47bd81da9f2d65188292d24115f40cbba74
+  RNFBAnalytics: e2e349ba4dcec9c6c4425e349e349636e73face3
+  RNFBApp: fa019b2037b8ef205590ede97d6e4e212c7be970
+  RNFBAppCheck: cadc6f83b5826f9bb5f18f03c9c6ed4af38031ec
+  RNFBCrashlytics: f870cb2e290e34c790b1dde6f15abbedad96611f
+  RNFBFirestore: 8c0d43ab6d2637fcf9c0076864bb60ccd8bde87d
+  RNFBMessaging: 5ca448b58a07a42ad67a78ef88df46f172202047
   RNFlashList: 0958d5a65564d51632dbf8ebc88e8f3d52dc1f30
   RNGestureHandler: 203eb9113b9438f47e0c1f72d5ed8681742016a4
   RNNotifee: 271cfeb505183d2cd1b858c14c3968b6ca30a642
   RNPermissions: b6f31d0082d40b8b89ee2f66aa307aba331c2c93
-  RNReanimated: 70c0e833eeed9d134fe9a50f123e2ec6334efad7
+  RNReanimated: 461ea011e67f6e72d3b1e78f7215b45816d3e7e2
   RNScreens: dc7594e79d24a8e28c7f52309a5e6bb44ebee51b
   RNShare: 694e19d7f74ac4c04de3a8af0649e9ccc03bd8b1
-  RNSVG: bb4bfcb8ec723a6f34b074a1b7cd40ee35246fe5
+  RNSVG: f70944ff686a4fa2771cff9e81c9856a81738009
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
