@@ -17,11 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
 
-        <!-- We do not use react-native-track-player on android since native android auto
-        implementation" -->
-        <service android:name="com.doublesymmetry.trackplayer.service.MusicService"
-            tools:node="remove" />
-
         <service
             android:name="com.theoplayer.media.MediaPlaybackService">
             <!-- Removing MEDIA_BUTTON intent-filter because it's causing crashes -->
