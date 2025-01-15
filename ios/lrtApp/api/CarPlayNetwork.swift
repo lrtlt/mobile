@@ -28,10 +28,22 @@ class CarPlayNetwork {
     let (data, _) = try await URLSession.shared.data(from: liveUrl)
     let response = try JSONDecoder().decode(LiveProgramResponse.self, from: data)
     let program = response.tvprog
+    
+    let channelIdOrder = [4, 5, 6, 1, 2, 3]
+    let sortedProgramItems = program.items.sorted { (item1: LiveProgramItem, item2: LiveProgramItem) -> Bool in
+      let index1 = channelIdOrder.firstIndex(of: item1.channel_id) ?? Int.max
+      let index2 = channelIdOrder.firstIndex(of: item2.channel_id) ?? Int.max
+      if index1 != index2 {
+        return index1 < index2
+      }
+      // For items not in the ordered list, maintain their relative order
+      return false
+    }
 
     // Map program items to CarPlayItems with stream info
     var items: [CarPlayItem] = []
-    for item in program.items {
+    
+    for item in sortedProgramItems {
       if let streamUrl = item.stream_url {
         let streamInfo = try await fetchStreamInfo(streamUrl: streamUrl)
         let audioUrl = streamInfo.audio ?? streamInfo.content ?? ""

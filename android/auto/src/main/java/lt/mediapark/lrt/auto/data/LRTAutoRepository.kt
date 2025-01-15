@@ -61,6 +61,17 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                         streamUrl = streamInfo?.audio ?: streamInfo?.content ?: ""
                     )
                     }
+                    .sortedBy { item ->
+                        when(programItems.first { it.channelTitle == item.title }.channelId) {
+                            "4" -> 0
+                            "5" -> 1
+                            "6" -> 2
+                            "1" -> 3
+                            "2" -> 4
+                            "3" -> 5
+                            else -> 6
+                        }
+                    }
                 if(live.isNotEmpty()){
                     liveLastFetchTime = System.currentTimeMillis()
                 }
@@ -106,14 +117,13 @@ class LRTAutoRepository(private val api: LRTAutoService) {
     }
 
     private fun getCoverByChannelId(programItem: TvProgramItem): String {
-        val contentDir = "content://androidx.media3/"
         return when (programItem.channelId) {
-            "1" -> "${contentDir}ic_tv.png"
-            "2" -> "${contentDir}ic_plius.png"
-            "3" -> "${contentDir}ic_lituanica.png"
-            "5" -> "${contentDir}ic_klasika.png"
-            "6" -> "${contentDir}ic_opus.png"
-            else -> "${contentDir}ic_radijas.png"
+            "1" -> "https://www.lrt.lt/images/app_logo/LTV1.png?v=2"
+            "2" -> "https://www.lrt.lt/images/app_logo/LTV2.png?v=2"
+            "3" -> "https://www.lrt.lt/images/app_logo/WORLD.png?v=2"
+            "5" -> "https://www.lrt.lt/images/app_logo/Klasika.png?v=2"
+            "6" -> "https://www.lrt.lt/images/app_logo/Opus.png?v=2"
+            else -> "https://www.lrt.lt/images/app_logo/LR.png?v=2"
         }
     }
 

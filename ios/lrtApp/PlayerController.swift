@@ -11,6 +11,7 @@ class PlayerController {
   private var mediaEndObserver: Any?
   private var playerIntervalObserver: Any?
   private var readyToPlayObserver: NSKeyValueObservation?
+  private var interruptionObserver: Any?
 
   var currentTime: CMTime {
     return player?.currentTime() ?? .zero
@@ -28,7 +29,9 @@ class PlayerController {
     return (player?.currentItem?.asset as? AVURLAsset)?.url
   }
 
-  private init() {}
+  private init() {
+    addInterruptionObserver()
+  }
 
   func setupStream(for item: CarPlayItem) throws {
     player?.pause()
@@ -44,7 +47,7 @@ class PlayerController {
     let audioSession = AVAudioSession.sharedInstance()
     do {
       try audioSession.setCategory(.playback, mode: .spokenAudio, policy: .longFormAudio)
-      try audioSession.setActive(true)
+      try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
     } catch {
       print("Failed to configure audio session: \(error.localizedDescription)")
     }
@@ -137,6 +140,44 @@ class PlayerController {
     if let observer = playerIntervalObserver, let player = player {
       player.removeTimeObserver(observer)
       playerIntervalObserver = nil
+    }
+
+    if let observer = interruptionObserver {
+      NotificationCenter.default.removeObserver(observer)
+      interruptionObserver = nil
+    }
+  }
+
+  private func addInterruptionObserver() {
+    interruptionObserver = NotificationCenter.default.addObserver(
+      forName: AVAudioSession.interruptionNotification,
+      object: nil,
+      queue: .main
+    ) { [weak self] notification in
+      guard let self = self else { return }
+
+      guard let userInfo = notification.userInfo,
+        let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+        let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+      else {
+        return
+      }
+
+      switch type {
+      case .began:
+        // Pause playback when interruption begins
+        self.pause()
+      case .ended:
+        // Resume playback when interruption ends, if appropriate
+        if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
+          let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+          if options.contains(.shouldResume) {
+            self.play()
+          }
+        }
+      @unknown default:
+        break
+      }
     }
   }
 

@@ -20,10 +20,5 @@
             </intent-filter>
         </service>
 
-        <provider
-            android:name=".BitmapContentProvider"
-            android:authorities="lt.mediapark.lrt"
-            android:exported="true" />
-
     </application>
 </manifest>
