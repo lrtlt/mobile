@@ -43,9 +43,8 @@ class PlayerController {
 
     let audioSession = AVAudioSession.sharedInstance()
     do {
-      try audioSession.setCategory(
-        .playback, mode: .spokenAudio, policy: .default, options: .mixWithOthers)
-      try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+      try audioSession.setCategory(.playback, mode: .spokenAudio, policy: .longFormAudio)
+      try audioSession.setActive(true)
     } catch {
       print("Failed to configure audio session: \(error.localizedDescription)")
     }
@@ -123,7 +122,7 @@ class PlayerController {
 
     interruptionObserver = NotificationCenter.default.addObserver(
       forName: AVAudioSession.interruptionNotification,
-      object: AVAudioSession.sharedInstance(),
+      object: nil,
       queue: .main
     ) { [weak self] notification in
       guard let self = self else { return }
@@ -132,6 +131,7 @@ class PlayerController {
         let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
         let type = AVAudioSession.InterruptionType(rawValue: typeValue)
       else {
+        Analytics.logEvent("carplay_interruption_no_user_info", parameters: nil)
         return
       }
 
