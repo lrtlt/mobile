@@ -14,6 +14,7 @@ const Badge: React.FC<React.PropsWithChildren<Props>> = ({style, type, label, si
   return (
     <View style={[styles.container, style]}>
       <TextComponent
+        importantForAccessibility="no"
         numberOfLines={2}
         fontFamily={size === 'big' ? 'SourceSansPro-Regular' : 'SourceSansPro-SemiBold'}
         style={{

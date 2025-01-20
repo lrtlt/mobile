@@ -48,6 +48,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({visible, onClose
 
   return (
     <Modal
+      accessible={false}
       style={{
         ...styles.modal,
         // backgroundColor: colors.slugBackground,
@@ -71,7 +72,11 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({visible, onClose
             flexDirection: 'row',
           }}>
           <View style={{alignItems: 'flex-end'}}>
-            <TouchableDebounce onPress={() => onClose()}>
+            <TouchableDebounce
+              onPress={() => onClose()}
+              accessibilityLabel="Uždaryti"
+              accessibilityHint="Uždaryti dialogo langą"
+              accessibilityLanguage="lt">
               <View style={{justifyContent: 'flex-start'}}>
                 <Text
                   style={[
@@ -87,9 +92,29 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({visible, onClose
           </View>
         </View>
         <PagerView ref={pagerRef} style={styles.flex} initialPage={pageIndex} scrollEnabled={false}>
-          <Page1 />
-          <Page2 />
-          <Page3 />
+          <View
+            accessibilityState={{
+              selected: pageIndex === 0,
+              disabled: pageIndex !== 0,
+            }}>
+            <Page1 />
+          </View>
+
+          <View
+            accessibilityState={{
+              selected: pageIndex === 1,
+              disabled: pageIndex !== 1,
+            }}>
+            <Page2 />
+          </View>
+
+          <View
+            accessibilityState={{
+              selected: pageIndex === 2,
+              disabled: pageIndex !== 2,
+            }}>
+            <Page3 />
+          </View>
         </PagerView>
         <View
           style={{
@@ -110,7 +135,10 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({visible, onClose
           </View>
           <PagerDots count={3} currentIndex={pageIndex} />
           <View style={{flex: 1, alignItems: 'flex-end'}}>
-            <TouchableDebounce onPress={increment}>
+            <TouchableDebounce
+              onPress={increment}
+              accessibilityLabel="Toliau"
+              accessibilityHint="Eiti į kitą puslapį">
               <View style={{justifyContent: 'flex-start'}}>
                 <Text
                   style={[

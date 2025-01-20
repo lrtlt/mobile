@@ -49,12 +49,14 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
               <SettingsToggleButton
                 style={styles.toggleButton}
                 selected={!isDarkMode}
+                accessibilityLabel="dienos režimas"
                 onPress={() => handleSetDarkMode(false)}>
-                <SunIcon size={20} selected={!isDarkMode} />
+                <SunIcon size={20} selected={!isDarkMode} importantForAccessibility="no" />
               </SettingsToggleButton>
               <SettingsToggleButton
                 style={styles.toggleButton}
                 selected={isDarkMode}
+                accessibilityLabel="nakties režimas"
                 onPress={() => handleSetDarkMode(true)}>
                 <MoonIcon size={20} selected={isDarkMode} />
               </SettingsToggleButton>
@@ -63,6 +65,7 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
               <Text style={styles.title}>{strings.textSizeTitle}</Text>
               <SettingsToggleButton
                 style={styles.toggleButton}
+                accessibilityLabel="mažas šriftas"
                 selected={textSizeMultiplier === TEXT_SIZE_NORMAL}
                 onPress={() => handleSetTextSize(TEXT_SIZE_NORMAL)}>
                 <Text
@@ -75,6 +78,7 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
               </SettingsToggleButton>
               <SettingsToggleButton
                 style={styles.toggleButton}
+                accessibilityLabel="vidutinis šriftas"
                 selected={textSizeMultiplier === TEXT_SIZE_LARGE}
                 onPress={() => handleSetTextSize(TEXT_SIZE_LARGE)}>
                 <Text
@@ -87,6 +91,7 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
               </SettingsToggleButton>
               <SettingsToggleButton
                 style={styles.toggleButton}
+                accessibilityLabel="didelis šriftas"
                 selected={textSizeMultiplier === TEXT_SIZE_EXTRA_LARGE}
                 onPress={() => handleSetTextSize(TEXT_SIZE_EXTRA_LARGE)}>
                 <Text

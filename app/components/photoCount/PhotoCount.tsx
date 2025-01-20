@@ -19,7 +19,9 @@ const PhotoCount: React.FC<React.PropsWithChildren<Props>> = ({style, count}) =>
       <View style={styles.iconHolder}>
         <IconPhotoCamera size={18 + textSizeMultiplier} color={colors.darkIcon} />
       </View>
-      <TextComponent style={{...styles.countText, color: colors.darkIcon}}>{count}</TextComponent>
+      <TextComponent style={{...styles.countText, color: colors.darkIcon}} importantForAccessibility="no">
+        {count}
+      </TextComponent>
     </View>
   );
 };

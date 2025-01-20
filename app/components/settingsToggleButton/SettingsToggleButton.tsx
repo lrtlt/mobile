@@ -1,12 +1,13 @@
 import React from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
-import {RectButton} from 'react-native-gesture-handler';
 import {useTheme} from '../../Theme';
+import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 
 interface Props {
   style?: ViewStyle;
   selected: boolean;
   onPress: () => void;
+  accessibilityLabel: string;
 }
 const ToggleButton: React.FC<React.PropsWithChildren<Props>> = ({style, selected, onPress, ...props}) => {
   const {colors} = useTheme();
@@ -14,11 +15,16 @@ const ToggleButton: React.FC<React.PropsWithChildren<Props>> = ({style, selected
   const backgroundColor = selected ? colors.toggleButtonSelected : colors.background;
 
   return (
-    <View style={style}>
-      <View style={{...styles.container, backgroundColor, borderColor: colors.buttonBorder}}>
-        <RectButton style={styles.touchArea} rippleColor={colors.ripple} onPress={onPress}>
+    <View style={style} accessible={false}>
+      <View
+        style={{...styles.container, backgroundColor, borderColor: colors.buttonBorder}}
+        accessible={false}>
+        <TouchableDebounce
+          style={styles.touchArea}
+          onPress={onPress}
+          accessibilityLabel={props.accessibilityLabel}>
           {props.children}
-        </RectButton>
+        </TouchableDebounce>
       </View>
     </View>
   );

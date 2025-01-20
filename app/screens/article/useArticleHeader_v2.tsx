@@ -73,14 +73,14 @@ const useArticleHeader = (article?: ArticleContent) => {
 
         Share.open({
           title: 'LRT',
-          message: article.article_title,
+          // message: article.article_title,
           url,
         });
       } else {
         const url = `https://lrt.lt${article.url}`;
         Share.open({
           title: 'LRT',
-          message: article.title,
+          // message: article.title,
           url,
         });
       }
@@ -88,10 +88,10 @@ const useArticleHeader = (article?: ArticleContent) => {
 
     setActions(
       <View style={styles.row}>
-        <ActionButton onPress={() => _saveArticlePress()}>
+        <ActionButton onPress={() => _saveArticlePress()} accessibilityLabel="Išsaugoti straipsnį">
           <SaveIcon size={dim.appBarIconSize} color={colors.headerTint} filled={isBookmarked} />
         </ActionButton>
-        <ActionButton onPress={() => _handleSharePress()}>
+        <ActionButton onPress={() => _handleSharePress()} accessibilityLabel="Dalintis straipsniu">
           <ShareIcon size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       </View>,

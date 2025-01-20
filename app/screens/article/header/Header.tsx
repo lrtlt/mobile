@@ -37,7 +37,11 @@ const ArticleHeader: React.FC<React.PropsWithChildren<Props>> = ({
   }, [isText2SpeechPlaying, onPlayStateChange]);
 
   const text2SpeechComponent = text2SpeechEnabled ? (
-    <TouchableDebounce style={styles.text2SpeechContainer} onPress={text2SpeechPlayHander}>
+    <TouchableDebounce
+      style={styles.text2SpeechContainer}
+      onPress={text2SpeechPlayHander}
+      accessibilityLabel="Skaityti straipsnį garsu"
+      accessibilityLanguage="lt">
       <View
         style={{
           ...styles.iconButton,

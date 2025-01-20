@@ -70,6 +70,10 @@ const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
 const MainDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
   return (
     <MainDrawer.Navigator
+      screenOptions={{
+        overlayAccessibilityLabel: 'Uždaryti meniu',
+        freezeOnBlur: true,
+      }}
       drawerContent={(props) => (
         <Drawer navigation={props.navigation as unknown as DrawerNavigationProp<MainStackParamList>} />
       )}>
@@ -100,6 +104,7 @@ const SearchDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
       <SearchDrawer.Navigator
         backBehavior="initialRoute"
         screenOptions={{
+          overlayAccessibilityLabel: 'Uždaryti meniu',
           drawerPosition: 'right',
           drawerType: 'slide',
           drawerHideStatusBarOnOpen: false,

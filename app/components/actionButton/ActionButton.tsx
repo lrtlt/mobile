@@ -1,16 +1,23 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {BorderlessButton} from 'react-native-gesture-handler';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 interface Props {
   onPress: () => void;
+  accessibilityLabel: string;
+  accessibilityHint?: string;
 }
 
 const ActionButton: React.FC<React.PropsWithChildren<Props>> = (props) => {
   return (
-    <BorderlessButton style={styles.root} onPress={props.onPress}>
-      <View style={styles.clickArea}>{props.children}</View>
-    </BorderlessButton>
+    <View accessible={true} accessibilityRole="button" style={styles.root}>
+      <TouchableWithoutFeedback
+        onPress={props.onPress}
+        accessibilityLabel={props.accessibilityLabel}
+        accessibilityHint={props.accessibilityHint}>
+        <View style={styles.clickArea}>{props.children}</View>
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
 

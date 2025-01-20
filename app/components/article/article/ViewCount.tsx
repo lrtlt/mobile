@@ -26,7 +26,7 @@ const ViewCount: React.FC<ViewCountProps> = ({style, visible = true, article}) =
           style,
         ]}>
         <IconView size={16} color={colors.darkIcon} />
-        <TextComponent style={{...styles.countText, color: colors.darkIcon}}>
+        <TextComponent style={{...styles.countText, color: colors.darkIcon}} importantForAccessibility="no">
           {article.read_count}
         </TextComponent>
       </View>

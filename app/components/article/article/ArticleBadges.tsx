@@ -21,7 +21,7 @@ const ArticleBadges: React.FC<ArticleBadgesProps> = ({style, article}) => {
   );
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, style]} importantForAccessibility="no">
       {photoCount}
       {photoCount && facebookReactions && <View style={styles.badgeSpace} />}
       {facebookReactions}

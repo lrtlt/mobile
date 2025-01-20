@@ -131,6 +131,7 @@ class PlayerController {
         let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
         let type = AVAudioSession.InterruptionType(rawValue: typeValue)
       else {
+        print("Interruption: Invalid notification")
         Analytics.logEvent("carplay_interruption_no_user_info", parameters: nil)
         return
       }
@@ -138,15 +139,18 @@ class PlayerController {
       switch type {
       case .began:
         Analytics.logEvent("carplay_interruption_began", parameters: nil)
+        print("Interruption: began")
         // Pause playback when interruption begins
         self.pause()
       case .ended:
         Analytics.logEvent("carplay_interruption_ended", parameters: nil)
+        print("Interruption: ended")
         // Resume playback when interruption ends, if appropriate
         if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
           let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
           if options.contains(.shouldResume) {
             Analytics.logEvent("carplay_interruption_resuming", parameters: nil)
+            print("Interruption: Resuming playback")
             self.play()
           }
         }

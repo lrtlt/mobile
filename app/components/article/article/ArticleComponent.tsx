@@ -50,7 +50,7 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
   }, [onPress, article]);
 
   const date = Boolean(article.item_date) && Boolean(dateEnabled) && (
-    <TextComponent style={style.categoryTitle} type="secondary">
+    <TextComponent style={style.categoryTitle} type="secondary" importantForAccessibility="no">
       {article.item_date}
     </TextComponent>
   );
@@ -70,7 +70,9 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
   );
 
   const mediaDuration = Boolean(article.media_duration) && (
-    <TextComponent style={{...style.mediaDurationText, color: themeLight.colors.text}}>
+    <TextComponent
+      style={{...style.mediaDurationText, color: themeLight.colors.text}}
+      importantForAccessibility="no">
       {article.media_duration}
     </TextComponent>
   );
@@ -92,8 +94,12 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <View style={[style.container, styleProp]}>
-      <TouchableDebounce debounceTime={500} onPress={onPressHandler} activeOpacity={0.8}>
-        <View>
+      <TouchableDebounce
+        debounceTime={500}
+        onPress={onPressHandler}
+        activeOpacity={0.8}
+        accessibilityRole="link">
+        <View accessible={false}>
           <View
             // eslint-disable-next-line react-native/no-inline-styles
             style={{

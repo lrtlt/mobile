@@ -4,6 +4,7 @@ import {MenuItemPage} from '../../../api/Types';
 import DrawerItem from '../../drawerItem/DrawerItem';
 import {IconLituanica} from '../../svg';
 import {MainStackParamList} from '../../../navigation/MainStack';
+import {View} from 'react-native';
 
 interface Props {
   navigation: DrawerNavigationProp<MainStackParamList>;
@@ -19,12 +20,14 @@ const DrawerBlockPages: React.FC<React.PropsWithChildren<Props>> = ({navigation,
   return (
     <>
       {pages.map((page) => (
-        <DrawerItem
-          key={page.name}
-          // text={page.name}
-          iconComponent={<IconLituanica width={120} />}
-          onPress={() => navigation.navigate('Page', {page})}
-        />
+        <View accessibilityLabel={`${page.name} polapis`}>
+          <DrawerItem
+            key={page.name}
+            // text={page.name}
+            iconComponent={<IconLituanica width={120} />}
+            onPress={() => navigation.navigate('Page', {page})}
+          />
+        </View>
       ))}
     </>
   );

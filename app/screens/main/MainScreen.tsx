@@ -3,7 +3,7 @@ import {View, Dimensions, StyleSheet} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
 import {ActionButton, Logo} from '../../components';
 import {IconDrawerMenu, IconSettings} from '../../components/svg';
-import {BorderlessButton} from 'react-native-gesture-handler';
+import {BorderlessButton, TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
 import HomeScreen from './tabScreen/home/HomeScreen';
 import TestScreen from '../testScreen/TestScreen';
@@ -97,25 +97,35 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
-        <ActionButton onPress={() => navigation.toggleDrawer()}>
+        <ActionButton
+          onPress={() => navigation.toggleDrawer()}
+          accessibilityLabel="Šoninis meniu"
+          accessibilityHint="Atidaryti šoninį meniu">
           <IconDrawerMenu size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
       headerRight: () => (
-        <ActionButton onPress={() => navigation.navigate('Settings')}>
+        <ActionButton
+          onPress={() => navigation.navigate('Settings')}
+          accessibilityLabel="Nustatymai"
+          accessibilityHint="Atidaryti nustatymų ekraną">
           <IconSettings name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
 
       headerTitle: () => (
-        <BorderlessButton
+        <TouchableWithoutFeedback
           onPress={() => {
             EventRegister.emit(EVENT_LOGO_PRESS, null);
-          }}>
+          }}
+          accessibilityLabel="LRT logotipas"
+          accessibilityHint="Spauskite, kad atnaujinti naujienas"
+          accessibilityRole="button"
+          accessibilityLanguage="lt">
           <View style={styles.logoContainer}>
             <Logo height={dim.appBarIconSize + 6} />
           </View>
-        </BorderlessButton>
+        </TouchableWithoutFeedback>
       ),
     });
   }, [colors.headerTint, dim.appBarIconSize, navigation]);
@@ -177,9 +187,10 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right']}>
+    <SafeAreaView style={styles.container} edges={['left', 'right']} accessible={false}>
       <>
         <TabView
+          accessible={false}
           renderLazyPlaceholder={renderLazyPlaceHolder}
           tabBarPosition="top"
           navigationState={{

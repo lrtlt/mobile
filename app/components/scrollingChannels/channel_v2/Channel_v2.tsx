@@ -47,7 +47,10 @@ const ChannelV2: React.FC<React.PropsWithChildren<Props>> = ({data, onPress}) =>
 
   return (
     <Box flex={'fluid'}>
-      <TouchableDebounce debounceTime={500} onPress={onPressHandler}>
+      <TouchableDebounce
+        debounceTime={500}
+        onPress={onPressHandler}
+        accessibilityLabel={`${(data as TVChannel).channel_title ?? ''} ${data.title}`}>
         <View
           style={{
             height: '100%',
@@ -64,7 +67,7 @@ const ChannelV2: React.FC<React.PropsWithChildren<Props>> = ({data, onPress}) =>
             {getIconForChannel(data.channel, {height: 24}, dark ? colors.text : colorsSet.secondary)}
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-            <TextComponent style={{...styles.timeText, color: colors.text}}>
+            <TextComponent style={{...styles.timeText, color: colors.text}} importantForAccessibility="no">
               {data.time_start + ' - ' + data.time_end}
             </TextComponent>
             {bottomBarContainer}

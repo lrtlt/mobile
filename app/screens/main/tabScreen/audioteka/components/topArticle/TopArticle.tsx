@@ -40,6 +40,7 @@ const TopArticle: React.FC<TopArticleProps> = ({article}) => {
         <View style={styles.dateContainer}>
           <MediaIcon size={18} is_audio={1} channel_id={article.channel_id} />
           <TextComponent
+            importantForAccessibility="no"
             style={styles.date}>{`${article.category_title}    ${article.item_date}`}</TextComponent>
         </View>
 

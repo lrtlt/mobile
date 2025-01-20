@@ -42,11 +42,11 @@ const TopFeedBlock: React.FC<TopFeedBlockProps> = ({block}) => {
 
         let timeText: string | undefined;
         if (article.time_diff) {
-          timeText = `Prieš ${article.time_diff} MIN.`;
+          timeText = `Prieš ${article.time_diff} min.`;
         } else if (article.time_diff_hour) {
-          timeText = `Prieš ${article.time_diff_hour} VAL.`;
+          timeText = `Prieš ${article.time_diff_hour} val.`;
         } else if (article.time_diff_day) {
-          timeText = `Prieš ${article.time_diff_day} D.`;
+          timeText = `Prieš ${article.time_diff_day} d.`;
         } else {
           timeText = article.date;
         }

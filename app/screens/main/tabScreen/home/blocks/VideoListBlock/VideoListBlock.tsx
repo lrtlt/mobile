@@ -73,7 +73,9 @@ const VerticalVideoComponent: React.FC<{article: Article}> = ({article}) => {
   }
 
   const mediaDuration = Boolean(article.media_duration) && (
-    <TextComponent style={{...style.mediaDurationText, color: themeDark.colors.text}}>
+    <TextComponent
+      style={{...style.mediaDurationText, color: themeDark.colors.text}}
+      importantForAccessibility="no">
       {article.media_duration}
     </TextComponent>
   );

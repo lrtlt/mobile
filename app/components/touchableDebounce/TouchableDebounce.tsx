@@ -11,7 +11,8 @@ type Props = TouchableOpacityProps &
 const noOp = () => {};
 
 const TouchableDebounce: React.FC<React.PropsWithChildren<Props>> = ({
-  debounceTime,
+  debounceTime = 500,
+  activeOpacity = 0.7,
   onPress,
   children,
   ...rest
@@ -26,14 +27,10 @@ const TouchableDebounce: React.FC<React.PropsWithChildren<Props>> = ({
   );
 
   return (
-    <TouchableOpacity {...rest} onPress={debouncedOnPress}>
+    <TouchableOpacity {...rest} onPress={debouncedOnPress} activeOpacity={activeOpacity}>
       {children}
     </TouchableOpacity>
   );
 };
 
-TouchableDebounce.defaultProps = {
-  activeOpacity: 0.7,
-  debounceTime: 500,
-};
 export default TouchableDebounce;

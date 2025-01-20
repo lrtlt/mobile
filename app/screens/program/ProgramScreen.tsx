@@ -75,7 +75,7 @@ const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <ActionButton onPress={() => setModalVisible(!modalVisible)}>
+        <ActionButton onPress={() => setModalVisible(!modalVisible)} accessibilityLabel="Pasirinkti datą">
           <IconCalendar size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),

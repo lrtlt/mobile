@@ -17,7 +17,16 @@ const SectionHeader: React.FC<React.PropsWithChildren<Props>> = ({category, colo
       <DefaultHeader title={category.name} />
     );
 
-  return onPress ? <TouchableOpacity onPress={onPress}>{header}</TouchableOpacity> : header;
+  return onPress ? (
+    <TouchableOpacity
+      onPress={onPress}
+      accessibilityLabel={category.name}
+      accessibilityHint="Atidaryti kategoriją">
+      {header}
+    </TouchableOpacity>
+  ) : (
+    header
+  );
 };
 
 export default SectionHeader;

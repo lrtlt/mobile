@@ -30,7 +30,8 @@ const DrawerBlockChannels: React.FC<React.PropsWithChildren<Props>> = ({channels
             key={channel.channel_id}
             style={{
               transform: [{scale: 0.9}, {translateX: -12}],
-            }}>
+            }}
+            accessibilityLabel={channel.channel_title}>
             <DrawerItem
               key={channel.channel_title}
               // text={channel.channel_title}

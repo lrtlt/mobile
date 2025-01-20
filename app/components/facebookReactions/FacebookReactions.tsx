@@ -15,12 +15,14 @@ const FacebookReactions: React.FC<React.PropsWithChildren<Props>> = ({style, cou
   const textSizeMultiplier = useSettingsStore((state) => state.textSizeMultiplier);
 
   return (
-    <View style={{...styles.root, ...style}}>
+    <View style={{...styles.root, ...style}} importantForAccessibility="no">
       <View style={{...styles.container, borderColor: colors.buttonBorder}}>
         <View style={styles.iconHolder}>
           <IconFacebook size={16 + textSizeMultiplier} color={colors.facebook} />
         </View>
-        <TextComponent style={{...styles.countText, color: colors.facebook}}>{count}</TextComponent>
+        <TextComponent style={{...styles.countText, color: colors.facebook}} importantForAccessibility="no">
+          {count}
+        </TextComponent>
       </View>
     </View>
   );
