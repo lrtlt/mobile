@@ -20,9 +20,8 @@ const DrawerBlockPages: React.FC<React.PropsWithChildren<Props>> = ({navigation,
   return (
     <>
       {pages.map((page) => (
-        <View accessibilityLabel={`${page.name} polapis`}>
+        <View key={page.name} accessibilityLabel={`${page.name} polapis`}>
           <DrawerItem
-            key={page.name}
             // text={page.name}
             iconComponent={<IconLituanica width={120} />}
             onPress={() => navigation.navigate('Page', {page})}

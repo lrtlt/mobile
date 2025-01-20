@@ -12,7 +12,7 @@ interface ListenCountProps {
   article: Article;
 }
 
-const ListenCount: React.FC<ListenCountProps> = ({style, visible, article}) => {
+const ListenCount: React.FC<ListenCountProps> = ({style, visible = true, article}) => {
   const {colors} = useTheme();
 
   if ((article.is_audio || article.article_type === ARTICLE_TYPE_AUDIO) && visible) {
@@ -34,10 +34,6 @@ const ListenCount: React.FC<ListenCountProps> = ({style, visible, article}) => {
   } else {
     return null;
   }
-};
-
-ListenCount.defaultProps = {
-  visible: true,
 };
 
 export default ListenCount;

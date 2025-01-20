@@ -23,9 +23,4 @@ const TextComponent: React.FC<TextComponentProps> = (props) => {
   return <Text {...props} style={style} />;
 };
 
-TextComponent.defaultProps = {
-  scalingEnabled: true,
-  type: 'primary',
-};
-
 export default TextComponent;

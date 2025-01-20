@@ -17,7 +17,7 @@ const ProgressiveImage: React.FC<React.PropsWithChildren<Props>> = ({
   style,
   thumbnailSource,
   source,
-  useFastImage,
+  useFastImage = true,
 }) => {
   const [thumbnailAnimated] = useState(new Animated.Value(0));
   const [imageAnimated] = useState(new Animated.Value(0));
@@ -50,10 +50,6 @@ const ProgressiveImage: React.FC<React.PropsWithChildren<Props>> = ({
       </Animated.View>
     </View>
   );
-};
-
-ProgressiveImage.defaultProps = {
-  useFastImage: true,
 };
 
 export default ProgressiveImage;
