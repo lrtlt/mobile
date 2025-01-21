@@ -7,7 +7,7 @@ import {useShallow} from 'zustand/react/shallow';
 
 const DEFAULT_FONT_SIZE = 15;
 
-const useTextStyle = (props: TextComponentProps): TextStyle => {
+const useTextStyle = ({scalingEnabled = true, type = 'primary', ...props}: TextComponentProps): TextStyle => {
   const {colors} = useTheme();
   const textSizeMultiplier = useSettingsStore(useShallow((state) => state.textSizeMultiplier));
   const style: TextStyle | Falsy = Array.isArray(props.style)
@@ -15,7 +15,7 @@ const useTextStyle = (props: TextComponentProps): TextStyle => {
     : (props.style as TextStyle);
 
   const textColor = useMemo(() => {
-    switch (props.type) {
+    switch (type) {
       case 'primary':
         return colors.text;
       case 'secondary':
@@ -27,16 +27,16 @@ const useTextStyle = (props: TextComponentProps): TextStyle => {
       default:
         return colors.text;
     }
-  }, [colors, props.type]);
+  }, [colors, type]);
 
   const fontSize = useMemo(() => {
     let size = style?.fontSize ?? DEFAULT_FONT_SIZE;
-    if (props.scalingEnabled) {
+    if (scalingEnabled) {
       const multiplier = textSizeMultiplier;
       size += multiplier ? multiplier : 0;
     }
     return size;
-  }, [props.scalingEnabled, style?.fontSize, textSizeMultiplier]);
+  }, [scalingEnabled, style?.fontSize, textSizeMultiplier]);
 
   return {
     ...style,

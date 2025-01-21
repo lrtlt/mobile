@@ -6,7 +6,7 @@ import SplashViewComponent from '../screens/splash/SplashScreenView';
 import crashlytics from '@react-native-firebase/crashlytics';
 
 import {DEEP_LINKING_URL_PREFIX} from '../constants';
-import Gemius, {GemiusParams} from '../../react-native-gemius-plugin';
+import Gemius, {GemiusParams} from 'react-native-gemius-plugin';
 import MainStack, {MainStackParamList} from './MainStack';
 import {SplashScreen} from '../screens';
 import useFirebaseMessaging from '../util/useFirebaseMessaging';

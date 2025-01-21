@@ -1,16 +1,10 @@
 import CarPlay
 import Firebase
 import GoogleCast
-import React
 import RNFBAppCheck
+import React
 import React_RCTAppDelegate
 import UIKit
-
-#if DEBUG
-  #if FB_SONARKIT_ENABLED
-    import FlipperKit
-  #endif
-#endif
 
 @main
 class AppDelegate: RCTAppDelegate, GCKLoggerDelegate {
@@ -26,7 +20,7 @@ class AppDelegate: RCTAppDelegate, GCKLoggerDelegate {
   ) -> Bool {
     RNFBAppCheckModule.sharedInstance()
     FirebaseApp.configure()
-    
+
     let kReceiverAppID = kGCKDefaultMediaReceiverApplicationID
     let criteria = GCKDiscoveryCriteria(applicationID: kReceiverAppID)
     let options = GCKCastOptions(discoveryCriteria: criteria)
@@ -63,17 +57,21 @@ class AppDelegate: RCTAppDelegate, GCKLoggerDelegate {
     RCTAppSetupPrepareApp(application, enableTM)
 
     //Prepare launchOptions if application launched from Universal Link
-    var launchOptions: [AnyHashable : Any]? = [:]
-    let launchUrl = connectionOptions?.userActivities.first?.webpageURL;
-    if(launchUrl != nil){
+    var launchOptions: [AnyHashable: Any] = [:]
+    let launchUrl = connectionOptions?.userActivities.first?.webpageURL
+    if launchUrl != nil {
       launchOptions = [UIApplication.LaunchOptionsKey.url: launchUrl ?? ""]
     }
-    
+
+    var bridge: RCTBridge? = nil
+
     if self.bridge == nil {
-      self.bridge = super.createBridge(
+      print("Creating new bridge...")
+      bridge = super.createBridge(
         with: self,
         launchOptions: launchOptions
       )
+      self.bridge = bridge
     }
 
     #if RCT_NEW_ARCH_ENABLED
@@ -89,7 +87,7 @@ class AppDelegate: RCTAppDelegate, GCKLoggerDelegate {
 
     let initProps = self.prepareInitialProps()
     self.rootView = self.createRootView(
-      with: self.bridge, moduleName: self.moduleName, initProps: initProps)
+      with: bridge!, moduleName: self.moduleName!, initProps: initProps)
 
     if #available(iOS 13.0, *) {
       self.rootView!.backgroundColor = UIColor.systemBackground
@@ -113,13 +111,13 @@ class AppDelegate: RCTAppDelegate, GCKLoggerDelegate {
     }
   }
 
-  override func sourceURL(for bridge: RCTBridge!) -> URL {
+  override func sourceURL(for bridge: RCTBridge?) -> URL {
     return getBundleURL()
   }
 
   func getBundleURL() -> URL {
     #if DEBUG
-      return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+      return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")!
     #else
       return Bundle.main.url(forResource: "main", withExtension: "jsbundle")!
     #endif

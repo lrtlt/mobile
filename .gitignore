@@ -45,6 +45,14 @@ yarn-error.log
 yarn.lock
 package-lock.json
 
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # helpers
 /fcm-service
 
@@ -70,6 +78,7 @@ fcm-service/
 
 # CocoaPods
 /ios/Pods/
+**/Pods/
 /vendor/bundle/
 
 # Temporary files created by Metro to check the health of the file watcher
@@ -79,5 +88,7 @@ fcm-service/
 /coverage
 contents.xcworkspacedata
 .xcode.env
+**/.xcode.env.local
+
 
 .env
