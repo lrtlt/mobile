@@ -3,7 +3,7 @@ import {View, Dimensions, StyleSheet} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
 import {ActionButton, Logo} from '../../components';
 import {IconDrawerMenu, IconSettings} from '../../components/svg';
-import {BorderlessButton, TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
 import HomeScreen from './tabScreen/home/HomeScreen';
 import TestScreen from '../testScreen/TestScreen';
@@ -11,7 +11,6 @@ import {EventRegister} from 'react-native-event-listeners';
 import {EVENT_LOGO_PRESS, EVENT_OPEN_CATEGORY, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import AudiotekaScreen from './tabScreen/audioteka/AudiotekaScreen';
 import {
   ROUTE_TYPE_HOME,
   ROUTE_TYPE_AUDIOTEKA,
@@ -29,6 +28,7 @@ import NotificationsModal from '../../components/notificationsModal/Notification
 import useOnboardingLogic from './useOnboardingLogic';
 import {useNavigationStore} from '../../state/navigation_store';
 import CategoryHomeScreen from './tabScreen/category/CategoryHomeScreen';
+import RadiotekaScreen from './tabScreen/radioteka/RadiotekaScreen';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -147,7 +147,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
         case ROUTE_TYPE_MEDIA:
           return <HomeScreen type={ROUTE_TYPE_MEDIA} isCurrent={current} />;
         case ROUTE_TYPE_AUDIOTEKA:
-          return <AudiotekaScreen isCurrent={current} />;
+          return <RadiotekaScreen isCurrent={current} />;
         case ROUTE_TYPE_CATEGORY:
           return route.hasHome ? (
             <CategoryHomeScreen
@@ -197,7 +197,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
             routes: state.routes,
             index: selectedTabIndex,
           }}
-          swipeEnabled={true}
+          swipeEnabled={state.routes[selectedTabIndex]?.type !== ROUTE_TYPE_AUDIOTEKA}
           renderScene={renderScene}
           renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
           onIndexChange={setSelectedTabIndex}

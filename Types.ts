@@ -29,6 +29,7 @@ export type Article = {
   read_count: number;
   summary?: string;
   media_duration?: string;
+  media_duration_sec?: number;
   photo_count?: number;
   photo_horizontal?: 1 | 0;
   photo_horizontal_small?: 1 | 0;
@@ -50,4 +51,16 @@ export type Article = {
   badge_id: string | number | null;
   badge_class: 'badge-danger' | 'badge-primary' | 'badge-secondary' | 'badge-warning' | 'badge-info' | null;
   badge_title: string | null;
+  branch0_term?: string;
+  branch0_title?: string;
+  branch1_term?: string;
+  branch1_title?: string;
+  hero_photo?: {
+    w_h: string;
+    title: string;
+    img_path_prefix: string;
+    path: string;
+    author: string;
+    img_path_postfix: string;
+  };
 };

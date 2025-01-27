@@ -132,6 +132,10 @@ export const audiotekaGet = () => {
   return `${BASE_URL}audioteka-home`;
 };
 
+export const radiotekaGet = () => {
+  return `${BASE_URL}audioteka-home/v2`;
+};
+
 /**
  * Returns all channels TV program data for a week.
  */

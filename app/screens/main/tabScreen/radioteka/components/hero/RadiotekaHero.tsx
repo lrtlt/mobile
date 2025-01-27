@@ -1,70 +1,29 @@
 import React, {useState, useEffect} from 'react';
-import {View, Image, TouchableOpacity, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import Animated, {useAnimatedStyle, withSpring, useSharedValue} from 'react-native-reanimated';
-import {Text} from '../../../../../../components';
+import {Text, TouchableDebounce} from '../../../../../../components';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
 import {themeLight} from '../../../../../../Theme';
 import {IconPlay} from '../../../../../../components/svg';
+import {RadiotekaTopArticlesBlock} from '../../../../../../api/Types';
+import FastImage from 'react-native-fast-image';
+import {buildImageUri, IMG_SIZE_M, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
+import LinearGradient from 'react-native-linear-gradient';
 
 const {height} = Dimensions.get('window');
 const width = Math.min(Dimensions.get('window').width * 0.32, 150);
 
-const RadiotekaHero: React.FC = () => {
+interface Props {
+  block: RadiotekaTopArticlesBlock;
+}
+
+const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block}) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const podcastItems = [
-    {
-      id: 1,
-      title: 'LRT Aktualijų studija',
-      subtitle: 'Aktualios politinės, ekonominės ir socialinės temos',
-      image: 'https://placeholder.com/300x300',
-      backgroundColor: '#4A1515',
-    },
-    {
-      id: 2,
-      title: 'ŠVIESI ATEITIS',
-      subtitle: 'Pokalbiai apie technologijas ir inovacijas',
-      image: 'https://placeholder.com/300x300',
-      backgroundColor: '#1A1A3A',
-    },
-    {
-      id: 3,
-      title: 'Žaidžiam žmogų',
-      subtitle: 'Psichologijos ir saviugdos laida',
-      image: 'https://placeholder.com/300x300',
-      backgroundColor: '#FF8C42',
-    },
-    {
-      id: 4,
-      title: 'Ryto garsai',
-      subtitle: 'Rytinė muzikos ir pokalbių laida',
-      image: 'https://placeholder.com/300x300',
-      backgroundColor: '#2E8B57',
-    },
-    {
-      id: 5,
-      title: 'Kultūros savaitė',
-      subtitle: 'Savaitės kultūros įvykių apžvalga',
-      image: 'https://placeholder.com/300x300',
-      backgroundColor: '#4B0082',
-    },
-    {
-      id: 6,
-      title: 'Muzikinis pastišas',
-      subtitle: 'Įvairių muzikos stilių rinkinys',
-      image: 'https://placeholder.com/300x300',
-      backgroundColor: '#8B4513',
-    },
-    {
-      id: 7,
-      title: 'Vakaro pasaka',
-      subtitle: 'Pasakos vaikams ir suaugusiems',
-      image: 'https://placeholder.com/300x300',
-      backgroundColor: '#483D8B',
-    },
-  ];
+  const {data} = block;
+  const articles = data.articles_list;
 
-  const scaleValues = podcastItems.map(() => useSharedValue(1));
+  const scaleValues = articles?.map(() => useSharedValue(1));
 
   useEffect(() => {
     // Reset all scales to 1
@@ -87,32 +46,58 @@ const RadiotekaHero: React.FC = () => {
     setSelectedIndex(index);
   };
 
+  const imgUrl = buildImageUri(
+    IMG_SIZE_XXL,
+    articles[selectedIndex].hero_photo?.img_path_prefix ?? articles[selectedIndex].img_path_prefix,
+    articles[selectedIndex].hero_photo?.img_path_postfix ?? articles[selectedIndex].img_path_postfix,
+  );
+
+  const durationMinutes = Math.floor((articles[selectedIndex].media_duration_sec ?? 0) / 60);
   return (
     <ThemeProvider forceTheme={themeLight}>
-      <View style={[styles.container, {backgroundColor: podcastItems[selectedIndex].backgroundColor}]}>
+      <View style={styles.container}>
+        <FastImage
+          style={{
+            ...StyleSheet.absoluteFillObject,
+          }}
+          source={{uri: imgUrl}}
+          resizeMode="cover"
+        />
+        <LinearGradient
+          style={StyleSheet.absoluteFillObject}
+          colors={['#000000', '#00000033', '#00000000']}
+          useAngle={true}
+          angle={0}
+        />
+        <LinearGradient
+          style={StyleSheet.absoluteFillObject}
+          colors={['#00000066', '#00000000']}
+          useAngle={true}
+          angle={90}
+        />
         <View style={styles.header}>
           <Text style={styles.headerText} fontFamily="SourceSansPro-SemiBold" numberOfLines={1}>
-            {podcastItems[selectedIndex].title}
+            Radioteka rekomenduoja
           </Text>
         </View>
 
         <View style={styles.mainContent}>
           <View style={styles.mainContentText}>
-            <Text style={styles.duration}>53 min.</Text>
+            <Text style={styles.duration}>{durationMinutes}min.</Text>
             <Text style={styles.title} fontFamily="PlayfairDisplay-Regular">
-              {podcastItems[selectedIndex].title}
+              {articles[selectedIndex].category_title}
             </Text>
-            <Text style={styles.subtitle}>{podcastItems[selectedIndex].subtitle}</Text>
+            <Text style={styles.subtitle}>{articles[selectedIndex].title}</Text>
 
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.playButton}>
+              <TouchableDebounce style={styles.playButton}>
                 <IconPlay size={14} />
-                <Text style={styles.playButtonText}>Klausytis</Text>
-              </TouchableOpacity>
+                {/* <Text style={styles.playButtonText}>Klausytis</Text> */}
+              </TouchableDebounce>
 
-              <TouchableOpacity style={styles.moreButton}>
+              <TouchableDebounce style={styles.moreButton}>
                 <Text style={styles.moreButtonText}>Daugiau</Text>
-              </TouchableOpacity>
+              </TouchableDebounce>
             </View>
           </View>
           <ScrollView
@@ -120,10 +105,19 @@ const RadiotekaHero: React.FC = () => {
             showsHorizontalScrollIndicator={false}
             style={styles.bottomScrollView}
             contentContainerStyle={styles.bottomList}>
-            {podcastItems.map((item, index) => (
+            {articles.map((item, index) => (
               <TouchableOpacity key={item.id} onPress={() => handleItemPress(index)}>
                 <Animated.View style={[styles.thumbnailContainer, getAnimatedStyle(index)]}>
-                  <Image source={{uri: item.image}} style={styles.thumbnail} />
+                  <FastImage
+                    source={{
+                      uri: buildImageUri(
+                        IMG_SIZE_M,
+                        item.category_img_path_prefix,
+                        item.category_img_path_postfix,
+                      ),
+                    }}
+                    style={styles.thumbnail}
+                  />
                 </Animated.View>
               </TouchableOpacity>
             ))}
@@ -137,10 +131,11 @@ const RadiotekaHero: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: height,
+    height: height - 100,
     justifyContent: 'space-between',
     paddingTop: 80,
     paddingBottom: 40,
+    marginBottom: 64,
   },
   header: {
     paddingHorizontal: 12,
@@ -148,6 +143,7 @@ const styles = StyleSheet.create({
   headerText: {
     color: '#FFFFFF',
     fontSize: 19,
+    textTransform: 'uppercase',
   },
   mainContent: {
     justifyContent: 'center',
@@ -163,11 +159,11 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: '#000000A0',
     paddingVertical: 3,
-    paddingHorizontal: 6,
+    paddingHorizontal: 8,
   },
   title: {
     color: '#FFFFFF',
-    fontSize: 32,
+    fontSize: 34,
     marginVertical: 10,
   },
   subtitle: {
@@ -187,24 +183,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
-    paddingHorizontal: 24,
     borderRadius: 8,
-  },
-  playButtonText: {
-    color: '#000000',
-    fontSize: 16,
+    aspectRatio: 1,
   },
   moreButton: {
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     borderRadius: 8,
   },
   moreButtonText: {
     color: '#000000',
-    fontSize: 16,
+    fontSize: 15,
   },
   bottomScrollView: {},
   bottomList: {

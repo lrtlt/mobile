@@ -1,55 +1,49 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import Text from '../../../../../../components/text/Text';
-import RadiotekaHorizontalList, {RadiotekaItem} from './RadiotekaHorizontalList';
+import RadiotekaHorizontalList, {RadiotekaListItem} from './RadiotekaHorizontalList';
+import {Keyword} from '../../../../../../api/Types';
+import {TouchableDebounce} from '../../../../../../components';
+import {useTheme} from '../../../../../../Theme';
 
 interface RadiotekaHorizontalCategoryListProps {
   categoryTitle: string;
-  categorySubtitle: string;
-  data?: RadiotekaItem[];
+  keywords?: Keyword[];
   variation?: 'full' | 'minimal';
-  onItemPress?: (item: RadiotekaItem) => void;
+  items: RadiotekaListItem[];
+  onItemPress?: (index: number) => void;
+  onKeywordPress?: (keyword: Keyword) => void;
 }
 
-const MOCK_DATA: RadiotekaItem[] = [
-  {
-    id: '1',
-    category: 'Gyvenimo būdas',
-    title: 'Sugyvenimai',
-    imageUrl: 'https://picsum.photos/300/300?random=9',
-  },
-  {
-    id: '2',
-    category: 'Gyvenimo būdas',
-    title: 'Žaidžiam žmogų',
-    imageUrl: 'https://picsum.photos/300/300?random=8',
-  },
-  {
-    id: '3',
-    category: 'Test',
-    title: 'Test',
-    imageUrl: 'https://picsum.photos/300/300?random=5',
-  },
-];
-
 const RadiotekaHorizontalCategoryList: React.FC<RadiotekaHorizontalCategoryListProps> = ({
-  categoryTitle = 'GYVENIMO BŪDAS',
-  categorySubtitle = '#Gyvenimas',
-  data = MOCK_DATA,
+  categoryTitle,
+  keywords,
+  items,
   onItemPress,
+  onKeywordPress,
   variation,
 }) => {
+  const {colors} = useTheme();
   return (
     <View style={styles.container}>
+      <View style={{height: StyleSheet.hairlineWidth, backgroundColor: colors.listSeparator}} />
       <View style={styles.header}>
         <Text type="primary" fontFamily="SourceSansPro-SemiBold" style={styles.title}>
           {categoryTitle}
         </Text>
-        <Text type="secondary" fontFamily="SourceSansPro-Regular" style={styles.subtitle}>
-          {categorySubtitle}
-        </Text>
+        {keywords && (
+          <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 10}}>
+            {keywords.map((k) => (
+              <TouchableDebounce key={k.slug} onPress={() => onKeywordPress?.(k)}>
+                <Text type="secondary" fontFamily="SourceSansPro-Regular" style={styles.subtitle}>
+                  #{k.name}
+                </Text>
+              </TouchableDebounce>
+            ))}
+          </View>
+        )}
       </View>
-      <RadiotekaHorizontalList data={data} onItemPress={onItemPress} variation={variation} />
+      <RadiotekaHorizontalList items={items} onItemPress={onItemPress} variation={variation} />
     </View>
   );
 };
@@ -57,17 +51,19 @@ const RadiotekaHorizontalCategoryList: React.FC<RadiotekaHorizontalCategoryListP
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 24,
   },
   header: {
     paddingHorizontal: 16,
-    paddingTop: 24,
+    paddingTop: 12,
   },
   title: {
     fontSize: 20,
     marginBottom: 8,
+    textTransform: 'uppercase',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 15,
     opacity: 0.8,
   },
 });

@@ -8,15 +8,19 @@ import {
   useWindowDimensions,
   TouchableOpacity,
 } from 'react-native';
-import {RadiotekaItem} from '../horizontal_list/RadiotekaHorizontalList';
 import Text from '../../../../../../components/text/Text';
-import {ChannelClassicIcon, IconPlay} from '../../../../../../components/svg';
+import {IconPlay} from '../../../../../../components/svg';
 import FastImage from 'react-native-fast-image';
 import ListenCount from '../../../../../../components/article/article/ListenCount';
+import {TouchableDebounce} from '../../../../../../components';
+import {Article} from '../../../../../../../Types';
+import {buildImageUri, IMG_SIZE_L, IMG_SIZE_XL} from '../../../../../../util/ImageUtil';
+import {getIconForChannelById} from '../../../../../../util/UI';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface RadiotekaHeroCarouselProps {
-  items: RadiotekaItem[];
-  onItemPress?: (item: RadiotekaItem) => void;
+  items: Article[];
+  onItemPress?: (index: number) => void;
 }
 
 export const RadiotekaHeroCarousel: React.FC<RadiotekaHeroCarouselProps> = ({items, onItemPress}) => {
@@ -34,50 +38,61 @@ export const RadiotekaHeroCarousel: React.FC<RadiotekaHeroCarouselProps> = ({ite
     itemVisiblePercentThreshold: 50,
   }).current;
 
-  const renderItem = ({item}: {item: RadiotekaItem}) => (
-    <TouchableOpacity style={[styles.slide, {width}]} onPress={() => onItemPress?.(item)} activeOpacity={0.8}>
+  const renderItem = ({item, index}: {item: Article; index: number}) => (
+    <TouchableDebounce style={[styles.slide, {width}]} onPress={() => onItemPress?.(index)}>
       <View style={styles.cardContainer}>
-        <FastImage source={{uri: item.imageUrl}} style={styles.image} resizeMode="cover" />
-        {
-          //TODO: Change to actual article instead count
-        }
-        <ListenCount style={styles.listenCount} article={{} as any} count={120} />
-        <Text style={styles.durationText}>1 val. 15 min.</Text>
+        <FastImage
+          source={{
+            uri: buildImageUri(IMG_SIZE_L, item.img_path_prefix, item.img_path_postfix),
+          }}
+          style={styles.image}
+          resizeMode="cover"
+        />
+        <ListenCount style={styles.listenCount} article={{} as any} count={item.read_count} />
+        <Text style={styles.durationText}>{Math.floor((item.media_duration_sec ?? 0) / 60)} min.</Text>
       </View>
       <View style={styles.contentContainer}>
         <Text fontFamily="SourceSansPro-Regular" style={styles.category}>
-          {item.category}
+          {item.branch0_title ?? item.branch1_title}
         </Text>
         <Text fontFamily="PlayfairDisplay-Regular" style={styles.title}>
+          {item.category_title}
+        </Text>
+        <Text type="secondary" fontFamily="SourceSansPro-Regular" style={styles.subtitle} numberOfLines={4}>
           {item.title}
         </Text>
-        {item.subtitle && (
-          <Text fontFamily="SourceSansPro-Regular" style={styles.subtitle}>
-            {item.subtitle}
-          </Text>
-        )}
         <TouchableOpacity style={styles.playButton}>
           <IconPlay size={10} />
-          <Text type="primary" fontFamily="SourceSansPro-Regular" style={styles.playButtonText}>
-            Klausytis
-          </Text>
         </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </TouchableDebounce>
+  );
+
+  const imgUrl = buildImageUri(
+    IMG_SIZE_XL,
+    items[activeIndex]?.img_path_prefix,
+    items[activeIndex]?.img_path_postfix,
   );
 
   return (
     <View style={styles.container}>
       {/* Blurred Background */}
       <View style={[styles.backgroundContainer, {width}]}>
-        <Image source={{uri: items[activeIndex]?.imageUrl}} style={styles.backgroundImage} blurRadius={25} />
-        <View style={styles.overlay} />
+        <Image source={{uri: imgUrl}} style={styles.backgroundImage} blurRadius={25} />
       </View>
 
+      <LinearGradient
+        style={StyleSheet.absoluteFillObject}
+        colors={['#000000', '#00000066', '#00000033']}
+        useAngle={true}
+        angle={0}
+      />
       {/* Logo */}
-      <View style={styles.logoContainer}>
-        <ChannelClassicIcon height={20} />
-      </View>
+      {
+        <View style={styles.logoContainer}>
+          {getIconForChannelById(items[activeIndex].channel_id ?? 0, {height: 20})}
+        </View>
+      }
 
       {/* Carousel */}
       <FlatList
@@ -89,7 +104,7 @@ export const RadiotekaHeroCarousel: React.FC<RadiotekaHeroCarouselProps> = ({ite
         showsHorizontalScrollIndicator={false}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => `${index}`}
       />
 
       {/* Pagination Dots */}
@@ -112,8 +127,9 @@ export const RadiotekaHeroCarousel: React.FC<RadiotekaHeroCarouselProps> = ({ite
 
 const styles = StyleSheet.create({
   container: {
-    height: 525,
+    height: 560,
     overflow: 'hidden',
+    marginVertical: 48,
   },
   backgroundContainer: {
     position: 'absolute',
@@ -124,10 +140,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
   logoContainer: {
     position: 'absolute',
     top: 8,
@@ -136,7 +148,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#fafafa',
   },
   listenCount: {
     position: 'absolute',
@@ -159,7 +171,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     alignSelf: 'center',
-    width: 194,
+    width: 200,
     marginTop: 24,
     aspectRatio: 1,
     borderRadius: 8,
@@ -168,14 +180,13 @@ const styles = StyleSheet.create({
   },
   imageBackground: {
     flex: 1,
-    padding: 12,
   },
   image: {
     flex: 1,
     aspectRatio: 1,
     borderRadius: 8,
     borderColor: '#fff',
-    borderWidth: 2,
+    borderWidth: 1,
   },
   contentContainer: {
     paddingTop: 24,
@@ -194,24 +205,21 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   subtitle: {
-    fontSize: 14,
-    opacity: 0.8,
+    fontSize: 16,
     color: '#FFFFFF',
   },
   playButton: {
     flexDirection: 'row',
     backgroundColor: '#FFD600',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderRadius: 6,
     alignSelf: 'flex-start',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
+    aspectRatio: 1,
   },
-  playButtonText: {
-    color: '#000000',
-    fontSize: 13,
-  },
+
   pagination: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',

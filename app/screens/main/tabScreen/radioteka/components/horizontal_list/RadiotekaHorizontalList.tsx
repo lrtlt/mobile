@@ -1,64 +1,61 @@
 import React, {useEffect, useRef} from 'react';
-import {View, StyleSheet, FlatList, TouchableOpacity, ImageBackground, Dimensions} from 'react-native';
+import {View, StyleSheet, FlatList, Dimensions} from 'react-native';
 import Text from '../../../../../../components/text/Text';
 import {IconPlay} from '../../../../../../components/svg';
+import {TouchableDebounce} from '../../../../../../components';
+import FastImage from 'react-native-fast-image';
 
 const CARD_WIDTH_FULL = Math.min(Dimensions.get('window').width * 0.5, 300);
 const CARD_WIDTH_MINIMAL = Math.min(Dimensions.get('window').width * 0.33, 150);
 
-export type RadiotekaItem = {
-  id: string;
-  category: string;
+export type RadiotekaListItem = {
+  category?: string;
   title: string;
-  subtitle?: string;
   imageUrl: string;
 };
 
 interface RadiotekaHorizontalListProps {
-  data: RadiotekaItem[];
-  onItemPress?: (item: RadiotekaItem) => void;
+  items: RadiotekaListItem[];
+  onItemPress?: (index: number) => void;
   variation?: 'full' | 'minimal';
 }
 
 const RadiotekaHorizontalList: React.FC<RadiotekaHorizontalListProps> = ({
-  data,
+  items,
   onItemPress,
   variation = 'full',
 }) => {
-  const renderItem = ({item}: {item: RadiotekaItem}) => (
-    <TouchableOpacity
+  const renderItem = ({item, index}: {item: RadiotekaListItem; index: number}) => (
+    <TouchableDebounce
       style={[styles.card, variation === 'minimal' && styles.minimalCard]}
-      onPress={() => onItemPress?.(item)}
+      onPress={() => onItemPress?.(index)}
       activeOpacity={0.8}>
       <View style={variation === 'minimal' ? styles.imageContainerMinimal : styles.imageContainer}>
-        <ImageBackground
-          source={{uri: item.imageUrl}}
-          style={styles.imageBackground}
-          imageStyle={styles.image}>
+        <View style={styles.imageBackground}>
+          <FastImage
+            source={{
+              uri: item.imageUrl,
+            }}
+            style={styles.image}
+          />
           {variation === 'full' && (
-            <TouchableOpacity style={styles.playButton}>
+            <TouchableDebounce style={styles.playButton}>
               <IconPlay size={12} />
-              <Text type="primary" fontFamily="SourceSansPro-Regular" style={styles.playButtonText}>
-                Klausytis
-              </Text>
-            </TouchableOpacity>
+            </TouchableDebounce>
           )}
-        </ImageBackground>
+        </View>
       </View>
       {variation === 'full' && (
         <View style={styles.contentContainer}>
-          <Text type="secondary" fontFamily="SourceSansPro-Regular" style={styles.category}>
+          <Text type="secondary" fontFamily="SourceSansPro-Regular" style={styles.category} numberOfLines={1}>
             {item.category}
           </Text>
-          <Text type="primary" fontFamily="PlayfairDisplay-Regular" style={styles.title}>
+          <Text type="primary" fontFamily="PlayfairDisplay-Regular" style={styles.title} numberOfLines={2}>
             {item.title}
-          </Text>
-          <Text type="secondary" fontFamily="SourceSansPro-Regular" style={styles.subtitle}>
-            {item.subtitle}
           </Text>
         </View>
       )}
-    </TouchableOpacity>
+    </TouchableDebounce>
   );
 
   const listRef = useRef<FlatList>(null);
@@ -67,14 +64,14 @@ const RadiotekaHorizontalList: React.FC<RadiotekaHorizontalListProps> = ({
     if (listRef.current) {
       listRef.current.scrollToOffset({offset: 0, animated: false});
     }
-  }, [data]);
+  }, [items]);
 
   return (
     <FlatList
       ref={listRef}
-      data={data}
+      data={items}
       renderItem={renderItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(_item, index) => `${index}`}
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.listContainer}
@@ -91,11 +88,12 @@ const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH_FULL,
     borderRadius: 8,
-    overflow: 'hidden',
+    overflow: 'visible',
   },
   imageContainer: {
     width: CARD_WIDTH_FULL,
     aspectRatio: 1,
+    overflow: 'visible',
   },
   imageContainerMinimal: {
     width: CARD_WIDTH_MINIMAL,
@@ -107,7 +105,18 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   image: {
+    ...StyleSheet.absoluteFillObject,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   contentContainer: {
     flex: 1,
@@ -121,24 +130,16 @@ const styles = StyleSheet.create({
     fontSize: 19,
     marginBottom: 6,
   },
-  subtitle: {
-    fontSize: 14,
-    opacity: 0.8,
-  },
+
   playButton: {
     flexDirection: 'row',
     backgroundColor: '#FFD600',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
     borderRadius: 6,
     alignSelf: 'flex-start',
     alignItems: 'center',
     gap: 8,
-    marginTop: 16,
-  },
-  playButtonText: {
-    color: '#000000',
-    fontSize: 13,
   },
   minimalCard: {
     width: CARD_WIDTH_MINIMAL,

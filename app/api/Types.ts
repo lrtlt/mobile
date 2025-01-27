@@ -314,6 +314,131 @@ export type URLTypeExternalURL = {
   url: string;
 };
 
+export type RadiotekaResponse = RadiotekaTemplate[];
+
+export type RadiotekaTemplate =
+  | RadiotekaTopArticlesBlock
+  | RadiotekaSlugArticlesBlock
+  | RadiotekaCategoryCollectionBlock
+  | RadiotekaCategoryBlock;
+
+export type RadiotekaTopArticlesBlock = {
+  widget_id: 21;
+  widget_name: string;
+  type: 'articles_block';
+  template_id: 7;
+  data: {
+    articles_list: FeedArticle[];
+  };
+};
+
+export type RadiotekaCategoryBlock = {
+  template_id: 25 | 42 | 43; // 25 - hero style, 42, 43 - horizontal list
+  type: 'category';
+  data: {
+    category_id: number;
+    category_url: string;
+    category_title: string;
+    articles_list: FeedArticle[];
+  };
+};
+
+export type RadiotekaSlugArticlesBlock = {
+  type: 'slug';
+  template_id: 20;
+  data: {
+    template_id: 20;
+    slug_url: string;
+    articles_list: FeedArticle[];
+    slug_title: string;
+  };
+};
+
+export type RadiotekaCategoryCollectionBlock = {
+  type: 'audio_category_collection';
+  template_id: 44 | 45 | 46;
+  data: {
+    description: RadiotekaCategoryDescription;
+    category_list: RadiotekaCategory[];
+  };
+};
+
+export type RadiotekaCategoryDescription = {
+  article_is_photogallery: 1 | 0 | null;
+  badge_id: any;
+  category_title: string;
+  article_authors: {
+    name: string;
+    slug: string;
+  }[];
+  article_date: string;
+  article_url: string;
+  article_summary: string;
+  article_template: number;
+  is_audio_category_collection?: 1 | 0 | null;
+  article_type: number;
+  article_title_formated?: 1 | 0 | null;
+  category_id: number;
+  badge_class: any;
+  article_title: string;
+  badges_html: any;
+  paragraphs: any;
+  article_keywords: Keyword[];
+  read_count: any;
+  article_id: number;
+  badge_title: any;
+  category_url: string;
+  text2speech_file_url?: null | string;
+};
+
+export type RadiotekaCategory = {
+  id: number;
+  lrt_id: number;
+  branch_info_ary?: {
+    branch_term: string;
+    branch_id: number;
+    branch_title: string;
+  }[];
+  main_title: null;
+  is_children_category: null;
+  term: string;
+  related_channel_id: any;
+  lrt_description: string;
+  lrt_season_id: any;
+  lrt_code: string;
+  category_images: {
+    img1: {
+      img_path_postfix: string;
+      img_path: string;
+      img_path_prefix: string;
+      w_h: string;
+    };
+    img2: {
+      img_path_postfix: string;
+      img_path: string;
+      img_path_prefix: string;
+      w_h: string;
+    };
+  };
+  main_category_id: any;
+  branch_info?: {
+    branch_level2?: {
+      branch_term: string;
+      branch_id: number;
+      branch_title: string;
+    };
+    branch_level1?: {
+      branch_term: string;
+      branch_id: number;
+      branch_title: string;
+    };
+  };
+  lrt_show_id: number;
+  title: string;
+  //TODO: check if this is correct might be incosisntent type
+  LATEST_ITEM: ArticleContentMedia;
+};
+
 export type AudiotekaResponse = AudiotekaTemplate[];
 
 export type AudiotekaTemplate =
@@ -598,10 +723,7 @@ export type ArticleContentDefault = {
     name: string;
     slug: string;
   }[];
-  article_keywords: {
-    name: string;
-    slug: string;
-  }[];
+  article_keywords: Keyword[];
   category_id?: number;
   category_url?: string;
   category_title?: string;
@@ -638,10 +760,7 @@ export type ArticleContentMedia = {
     name: string;
     slug: string;
   }[];
-  keywords: {
-    name: string;
-    slug: string;
-  }[];
+  keywords: Keyword[];
   content: string;
   main_photo: ArticlePhotoType;
   'n-18'?: 0 | 1;
@@ -808,3 +927,8 @@ export interface LiveFeedArticle {
   item_date: string;
   title: string;
 }
+
+export type Keyword = {
+  name: string;
+  slug: string;
+};

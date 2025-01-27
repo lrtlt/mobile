@@ -22,6 +22,7 @@ import {
   popularArticlesGet,
   programGet,
   putDailyQuestionVote,
+  radiotekaGet,
   searchArticles,
   weatherLocationsGet,
 } from './Endpoints';
@@ -45,6 +46,7 @@ import {
   OpusPlaylistResponse,
   PopularArticlesResponse,
   ProgramResponse,
+  RadiotekaResponse,
   SearchFilter,
   SearchResponse,
   SlugArticlesResponse,
@@ -75,6 +77,8 @@ export const fetchChannel = (channelId: number | string) => get<ChannelResponse>
 export const fetchProgramApi = () => get<ProgramResponse>(programGet());
 
 export const fetchAudiotekaApi = () => get<AudiotekaResponse>(audiotekaGet());
+
+export const fetchRadiotekaApi = () => get<RadiotekaResponse>(radiotekaGet());
 
 export const fetchNewestApi = (page: number, count: number, date_max?: string, not_id?: string) =>
   get<NewestArticlesResponse>(newestArticlesGet(count, page, date_max, not_id));

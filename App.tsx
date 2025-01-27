@@ -17,7 +17,7 @@ import {runArticleStorageMigration} from './app/state/article_storage_store';
 import {runOnboardingStorageMigration} from './app/screens/main/useOnboardingLogic';
 import {runFirebaseTopicSubsriptionMigration} from './app/util/useFirebaseTopicSubscription';
 import {runSettingsStorageMigration} from './app/state/settings_store';
-import RadiotekaScreen from './app/screens/main/tabScreen/radioteka/RadiotekaScreen';
+
 enableFreeze(true);
 
 const App: React.FC = () => {
@@ -38,7 +38,7 @@ const App: React.FC = () => {
       <ThemeProvider>
         <AppBackground>
           <PlayerProvider>
-            <RadiotekaScreen />
+            <Navigation />
           </PlayerProvider>
         </AppBackground>
       </ThemeProvider>
