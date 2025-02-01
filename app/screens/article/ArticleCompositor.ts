@@ -15,7 +15,6 @@ export const TYPE_PARAGRAPH = 'content_paragraph';
 export const TYPE_VIDEO = 'content_video';
 export const TYPE_AUDIO = 'content_audio';
 export const TYPE_AUDIO_CONTENT = 'content_audio_content';
-export const TYPE_TEXT_TO_SPEECH = 'content_text2speech';
 
 export type ArticleContentItemType = {
   type:
@@ -27,8 +26,7 @@ export type ArticleContentItemType = {
     | typeof TYPE_PARAGRAPH
     | typeof TYPE_VIDEO
     | typeof TYPE_AUDIO
-    | typeof TYPE_AUDIO_CONTENT
-    | typeof TYPE_TEXT_TO_SPEECH;
+    | typeof TYPE_AUDIO_CONTENT;
   data: any;
 };
 
@@ -44,9 +42,7 @@ const composeDefault = (article: ArticleContentDefault) => {
   const data = [];
   data.push(getHeaderData(article));
   data.push(getMainPhoto(article));
-  if (article.text2speech_file_url) {
-    data.push(getTextToSpeech(article));
-  }
+
   if (article.article_summary) {
     data.push(getSummary(article));
   }
@@ -104,7 +100,7 @@ const getHeaderData = (article: ArticleContent): ArticleContentItemType => {
       subtitle: isDefaultArticle(article) ? article.article_subtitle : article.subtitle,
       facebookReactions: isDefaultArticle(article) ? article.reactions_count : undefined,
       author: author,
-      text2SpeechEnabled: isDefaultArticle(article) ? Boolean(article.text2speech_file_url) : false,
+      text2SpeechUrl: isDefaultArticle(article) ? article.text2speech_file_url : undefined,
     },
   };
 };
@@ -201,18 +197,6 @@ const getAudio = (article: ArticleContentMedia): ArticleContentItemType => {
       cover: article.main_photo,
       streamUri: article.stream_url,
       mediaId: String(article.id),
-    },
-  };
-};
-
-const getTextToSpeech = (article: ArticleContentDefault): ArticleContentItemType => {
-  return {
-    type: TYPE_TEXT_TO_SPEECH,
-    data: {
-      title: article.article_title,
-      cover: article.main_photo,
-      streamUri: article.text2speech_file_url,
-      mediaId: article.text2speech_file_url,
     },
   };
 };

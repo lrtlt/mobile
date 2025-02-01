@@ -89,13 +89,14 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
 
   const context: PlayerContextType = useMemo(
     () => ({
+      mediaData: currentMedia,
       setMediaData: (data: MediaBaseData) => {
         console.log('setMediaData', data);
         setCurrentMedia(data);
       },
       close: handleClose,
     }),
-    [setCurrentMedia, handleClose],
+    [currentMedia, setCurrentMedia, handleClose],
   );
 
   return (

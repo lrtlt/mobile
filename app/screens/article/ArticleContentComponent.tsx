@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {View, Animated, StyleSheet, ListRenderItemInfo, useWindowDimensions} from 'react-native';
 import Header from './header/Header';
 import {getSmallestDim} from '../../util/UI';
@@ -12,7 +12,6 @@ import {
   TYPE_GALLERY,
   TYPE_VIDEO,
   TYPE_AUDIO,
-  TYPE_TEXT_TO_SPEECH,
   ArticleContentItemType,
   TYPE_AUDIO_CONTENT,
   TYPE_KEYWORDS,
@@ -36,8 +35,6 @@ interface Props {
 }
 
 const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({article, itemPressHandler}) => {
-  const [isTextToSpeechPlaying, setTextToSpeechPlaying] = useState(false);
-
   const {width: screenWidth} = useWindowDimensions();
   const contentWidth = screenWidth - 12 * 2;
 
@@ -51,19 +48,9 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
 
       switch (type) {
         case TYPE_HEADER: {
-          return (
-            <Header
-              {...data}
-              isText2SpeechPlaying={isTextToSpeechPlaying}
-              onPlayStateChange={setTextToSpeechPlaying}
-            />
-          );
+          return <Header {...data} />;
         }
         case TYPE_MAIN_PHOTO: {
-          if (isTextToSpeechPlaying) {
-            //We will render text2Speech component instead
-            return null;
-          }
           return (
             <ArticleMainPhoto
               data={data.photo}
@@ -102,22 +89,6 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
         case TYPE_AUDIO_CONTENT: {
           return <AudioContent {...data} />;
         }
-        case TYPE_TEXT_TO_SPEECH: {
-          if (!isTextToSpeechPlaying) {
-            return null;
-          } else {
-            return (
-              <View style={styles.playerContainer}>
-                <AudioComponent
-                  {...data}
-                  style={styles.playerTextToSpeech}
-                  autoStart={true}
-                  isLiveStream={false}
-                />
-              </View>
-            );
-          }
-        }
         case TYPE_KEYWORDS: {
           return <ArticleKeywords keywords={data.keywords} />;
         }
@@ -126,7 +97,7 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
         }
       }
     },
-    [contentWidth, isTextToSpeechPlaying, itemPressHandler],
+    [contentWidth, itemPressHandler],
   );
 
   const appBarHeight = useAppBarHeight();
