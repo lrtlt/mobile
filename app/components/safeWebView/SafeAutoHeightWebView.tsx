@@ -24,7 +24,12 @@ const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardR
     const {height: screenHeight} = useWindowDimensions();
 
     const handleShouldLoadWithRequest = useCallback((request: ShouldStartLoadRequest) => {
-      const isUserClickAction = request.navigationType === 'click';
+      const isUserClickAction =
+        Platform.select({
+          //TODO: on android, navigationType is always 'undefined' even if user clicked on the link.
+          //Need to find a way to detect user click on android. Or wait for the fix
+          android: true,
+        }) ?? request.navigationType === 'click';
 
       if (isUserClickAction) {
         //User clicked on the link which should redirect to other page.
@@ -42,7 +47,8 @@ const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardR
       if (height > screenHeight && !animationDisabled.current) {
         console.log('Disabling animation because of webView height:', height);
         navigation.setOptions({
-          animation: 'none',
+          animationEnabled: false,
+          // animation: 'none',
         });
         animationDisabled.current = true;
       }
