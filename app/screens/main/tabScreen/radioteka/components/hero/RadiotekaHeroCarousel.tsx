@@ -1,13 +1,5 @@
 import React, {useState, useRef} from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Image,
-  ViewToken,
-  useWindowDimensions,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, FlatList, Image, ViewToken, useWindowDimensions} from 'react-native';
 import Text from '../../../../../../components/text/Text';
 import {IconPlay} from '../../../../../../components/svg';
 import FastImage from 'react-native-fast-image';
@@ -17,13 +9,20 @@ import {Article} from '../../../../../../../Types';
 import {buildImageUri, IMG_SIZE_L, IMG_SIZE_XL} from '../../../../../../util/ImageUtil';
 import {getIconForChannelById} from '../../../../../../util/UI';
 import LinearGradient from 'react-native-linear-gradient';
+import ThemeProvider from '../../../../../../theme/ThemeProvider';
+import {themeLight} from '../../../../../../Theme';
 
 interface RadiotekaHeroCarouselProps {
   items: Article[];
   onItemPress?: (index: number) => void;
+  onItemPlayPress?: (index: number) => void;
 }
 
-export const RadiotekaHeroCarousel: React.FC<RadiotekaHeroCarouselProps> = ({items, onItemPress}) => {
+export const RadiotekaHeroCarousel: React.FC<RadiotekaHeroCarouselProps> = ({
+  items,
+  onItemPress,
+  onItemPlayPress,
+}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
   const {width} = useWindowDimensions();
@@ -61,9 +60,9 @@ export const RadiotekaHeroCarousel: React.FC<RadiotekaHeroCarouselProps> = ({ite
         <Text type="secondary" fontFamily="SourceSansPro-Regular" style={styles.subtitle} numberOfLines={4}>
           {item.title}
         </Text>
-        <TouchableOpacity style={styles.playButton}>
+        <TouchableDebounce style={styles.playButton} onPress={() => onItemPlayPress?.(index)}>
           <IconPlay size={10} />
-        </TouchableOpacity>
+        </TouchableDebounce>
       </View>
     </TouchableDebounce>
   );
@@ -75,53 +74,55 @@ export const RadiotekaHeroCarousel: React.FC<RadiotekaHeroCarouselProps> = ({ite
   );
 
   return (
-    <View style={styles.container}>
-      {/* Blurred Background */}
-      <View style={[styles.backgroundContainer, {width}]}>
-        <Image source={{uri: imgUrl}} style={styles.backgroundImage} blurRadius={25} />
-      </View>
-
-      <LinearGradient
-        style={StyleSheet.absoluteFillObject}
-        colors={['#000000', '#00000066', '#00000033']}
-        useAngle={true}
-        angle={0}
-      />
-      {/* Logo */}
-      {
-        <View style={styles.logoContainer}>
-          {getIconForChannelById(items[activeIndex].channel_id ?? 0, {height: 20})}
+    <ThemeProvider forceTheme={themeLight}>
+      <View style={styles.container}>
+        {/* Blurred Background */}
+        <View style={[styles.backgroundContainer, {width}]}>
+          <Image source={{uri: imgUrl}} style={styles.backgroundImage} blurRadius={25} />
         </View>
-      }
 
-      {/* Carousel */}
-      <FlatList
-        ref={flatListRef}
-        data={items}
-        renderItem={renderItem}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onViewableItemsChanged={onViewableItemsChanged}
-        viewabilityConfig={viewabilityConfig}
-        keyExtractor={(item, index) => `${index}`}
-      />
+        <LinearGradient
+          style={StyleSheet.absoluteFillObject}
+          colors={['#000000', '#00000066', '#00000033']}
+          useAngle={true}
+          angle={0}
+        />
+        {/* Logo */}
+        {
+          <View style={styles.logoContainer}>
+            {getIconForChannelById(items[activeIndex].channel_id ?? 0, {height: 20})}
+          </View>
+        }
 
-      {/* Pagination Dots */}
-      <View style={styles.pagination}>
-        {items.map((_, index) => (
-          <TouchableOpacity
-            hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
-            key={index}
-            onPress={() => flatListRef.current?.scrollToIndex({index})}>
-            <View
+        {/* Carousel */}
+        <FlatList
+          ref={flatListRef}
+          data={items}
+          renderItem={renderItem}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onViewableItemsChanged={onViewableItemsChanged}
+          viewabilityConfig={viewabilityConfig}
+          keyExtractor={(item, index) => `${index}`}
+        />
+
+        {/* Pagination Dots */}
+        <View style={styles.pagination}>
+          {items.map((_, index) => (
+            <TouchableDebounce
+              hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
               key={index}
-              style={[styles.paginationDot, index === activeIndex && styles.paginationDotActive]}
-            />
-          </TouchableOpacity>
-        ))}
+              onPress={() => flatListRef.current?.scrollToIndex({index})}>
+              <View
+                key={index}
+                style={[styles.paginationDot, index === activeIndex && styles.paginationDotActive]}
+              />
+            </TouchableDebounce>
+          ))}
+        </View>
       </View>
-    </View>
+    </ThemeProvider>
   );
 };
 

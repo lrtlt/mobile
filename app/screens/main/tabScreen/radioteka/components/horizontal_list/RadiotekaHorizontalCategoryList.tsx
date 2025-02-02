@@ -12,6 +12,7 @@ interface RadiotekaHorizontalCategoryListProps {
   variation?: 'full' | 'minimal';
   items: RadiotekaListItem[];
   onItemPress?: (index: number) => void;
+  onItemPlayPress?: (index: number) => void;
   onKeywordPress?: (keyword: Keyword) => void;
 }
 
@@ -20,6 +21,7 @@ const RadiotekaHorizontalCategoryList: React.FC<RadiotekaHorizontalCategoryListP
   keywords,
   items,
   onItemPress,
+  onItemPlayPress,
   onKeywordPress,
   variation,
 }) => {
@@ -43,7 +45,12 @@ const RadiotekaHorizontalCategoryList: React.FC<RadiotekaHorizontalCategoryListP
           </View>
         )}
       </View>
-      <RadiotekaHorizontalList items={items} onItemPress={onItemPress} variation={variation} />
+      <RadiotekaHorizontalList
+        items={items}
+        onItemPress={onItemPress}
+        onItemPlayPress={onItemPlayPress}
+        variation={variation}
+      />
     </View>
   );
 };

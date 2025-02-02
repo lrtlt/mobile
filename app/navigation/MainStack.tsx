@@ -58,6 +58,9 @@ export type MainStackParamList = {
     initialIndex: number;
     articles: Article[];
   };
+  Podcast: {
+    articleId: number;
+  };
 };
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
@@ -194,6 +197,7 @@ export default () => {
       <Stack.Screen name="WebPage" component={Screens.WebPageScreen} />
       <Stack.Screen name="Weather" component={Screens.WeatherScreen} />
       <Stack.Screen name="Category" component={Screens.CategoryScreen} />
+      <Stack.Screen name="Podcast" component={Screens.PodcastScreen} />
       <Stack.Screen
         name="VideoList"
         component={Screens.VerticalVideosScreen}

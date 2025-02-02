@@ -17,12 +17,14 @@ export type RadiotekaListItem = {
 interface RadiotekaHorizontalListProps {
   items: RadiotekaListItem[];
   onItemPress?: (index: number) => void;
+  onItemPlayPress?: (index: number) => void;
   variation?: 'full' | 'minimal';
 }
 
 const RadiotekaHorizontalList: React.FC<RadiotekaHorizontalListProps> = ({
   items,
   onItemPress,
+  onItemPlayPress,
   variation = 'full',
 }) => {
   const renderItem = ({item, index}: {item: RadiotekaListItem; index: number}) => (
@@ -39,7 +41,7 @@ const RadiotekaHorizontalList: React.FC<RadiotekaHorizontalListProps> = ({
             style={styles.image}
           />
           {variation === 'full' && (
-            <TouchableDebounce style={styles.playButton}>
+            <TouchableDebounce style={styles.playButton} onPress={() => onItemPlayPress?.(index)}>
               <IconPlay size={12} />
             </TouchableDebounce>
           )}
@@ -114,9 +116,10 @@ const styles = StyleSheet.create({
       width: 0,
       height: 1,
     },
+    backgroundColor: '#888',
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
-    elevation: 3,
+    elevation: 2,
   },
   contentContainer: {
     flex: 1,

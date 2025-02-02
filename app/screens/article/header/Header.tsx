@@ -12,6 +12,7 @@ interface Props {
   date?: string;
   title: string;
   subtitle?: string;
+  image?: string;
   facebookReactions?: string;
   author: string;
   text2SpeechUrl?: string;
@@ -23,6 +24,7 @@ const ArticleHeader: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   date,
   facebookReactions,
+  image,
   subtitle,
   text2SpeechUrl,
 }) => {
@@ -40,6 +42,7 @@ const ArticleHeader: React.FC<React.PropsWithChildren<Props>> = ({
         mediaType: MediaType.AUDIO,
         title: title,
         uri: text2SpeechUrl!,
+        poster: image,
       });
     }
   }, [isText2SpeechPlaying]);

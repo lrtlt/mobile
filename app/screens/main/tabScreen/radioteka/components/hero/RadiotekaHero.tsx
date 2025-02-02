@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {View, TouchableOpacity, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {View, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import Animated, {useAnimatedStyle, withSpring, useSharedValue} from 'react-native-reanimated';
 import {Text, TouchableDebounce} from '../../../../../../components';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
@@ -9,21 +9,25 @@ import {RadiotekaTopArticlesBlock} from '../../../../../../api/Types';
 import FastImage from 'react-native-fast-image';
 import {buildImageUri, IMG_SIZE_M, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
 import LinearGradient from 'react-native-linear-gradient';
+import {useArticlePlayer} from '../../hooks/useArticlePlayer';
+import {Article} from '../../../../../../../Types';
 
 const {height} = Dimensions.get('window');
 const width = Math.min(Dimensions.get('window').width * 0.32, 150);
 
 interface Props {
   block: RadiotekaTopArticlesBlock;
+  onArticlePress: (article: Article) => void;
 }
 
-const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block}) => {
+const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArticlePress}) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const {data} = block;
   const articles = data.articles_list;
 
   const scaleValues = articles?.map(() => useSharedValue(1));
+  const {playArticle} = useArticlePlayer();
 
   useEffect(() => {
     // Reset all scales to 1
@@ -42,9 +46,9 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block}) => {
     });
   };
 
-  const handleItemPress = (index: number) => {
+  const handleItemPress = useCallback((index: number) => {
     setSelectedIndex(index);
-  };
+  }, []);
 
   const imgUrl = buildImageUri(
     IMG_SIZE_XXL,
@@ -88,14 +92,20 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block}) => {
               {articles[selectedIndex].category_title}
             </Text>
             <Text style={styles.subtitle}>{articles[selectedIndex].title}</Text>
-
             <View style={styles.buttonContainer}>
-              <TouchableDebounce style={styles.playButton}>
+              <TouchableDebounce
+                style={styles.playButton}
+                onPress={() => {
+                  playArticle(articles[selectedIndex].id);
+                }}>
                 <IconPlay size={14} />
-                {/* <Text style={styles.playButtonText}>Klausytis</Text> */}
               </TouchableDebounce>
 
-              <TouchableDebounce style={styles.moreButton}>
+              <TouchableDebounce
+                style={styles.moreButton}
+                onPress={() => {
+                  onArticlePress?.(articles[selectedIndex]);
+                }}>
                 <Text style={styles.moreButtonText}>Daugiau</Text>
               </TouchableDebounce>
             </View>
@@ -106,7 +116,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block}) => {
             style={styles.bottomScrollView}
             contentContainerStyle={styles.bottomList}>
             {articles.map((item, index) => (
-              <TouchableOpacity key={item.id} onPress={() => handleItemPress(index)}>
+              <TouchableDebounce key={item.id} onPress={() => handleItemPress(index)}>
                 <Animated.View style={[styles.thumbnailContainer, getAnimatedStyle(index)]}>
                   <FastImage
                     source={{
@@ -119,7 +129,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block}) => {
                     style={styles.thumbnail}
                   />
                 </Animated.View>
-              </TouchableOpacity>
+              </TouchableDebounce>
             ))}
           </ScrollView>
         </View>
@@ -133,7 +143,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: height - 100,
     justifyContent: 'space-between',
-    paddingTop: 80,
+    paddingTop: 32,
     paddingBottom: 40,
     marginBottom: 64,
   },
@@ -143,6 +153,9 @@ const styles = StyleSheet.create({
   headerText: {
     color: '#FFFFFF',
     fontSize: 19,
+    textShadowColor: '#00000088',
+    textShadowRadius: 8,
+    textShadowOffset: {width: 2, height: 1},
     textTransform: 'uppercase',
   },
   mainContent: {

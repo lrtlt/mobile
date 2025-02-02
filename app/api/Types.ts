@@ -736,6 +736,7 @@ export type ArticleContentDefault = {
   }[];
   'n-18'?: 0 | 1;
   is_video?: 0 | 1;
+  read_count?: number;
 };
 
 export type ArticleContentMedia = {
@@ -766,6 +767,8 @@ export type ArticleContentMedia = {
   'n-18'?: 0 | 1;
   is_video?: 0 | 1;
   is_audio?: 0 | 1;
+  read_count?: number;
+  media_duration: string;
 };
 
 export const isMediaArticle = (article?: ArticleContent): article is ArticleContentMedia => {
@@ -931,4 +934,41 @@ export interface LiveFeedArticle {
 export type Keyword = {
   name: string;
   slug: string;
+};
+
+export type ArticleRecommendationsResponse = {
+  result?: {
+    items?: {
+      id: string;
+      score: number;
+    }[];
+    id: string;
+  };
+};
+
+export type ArticleSearchItem = {
+  id_pos: number;
+  age_restriction?: string;
+  title: string;
+  year_interval: number;
+  is_epika: 0 | 1;
+  is_series: 0 | 1;
+  badges_html?: string;
+  subtitle?: string;
+  id: number;
+  date: string;
+  epika_valid_days?: string;
+  season_url: string;
+  photo: string;
+  article_category_id: number;
+  img_w_h: string;
+  category_id: number;
+  category_title: string;
+  is_movie: 0 | 1;
+  photo_id: number;
+  url: string;
+};
+
+export type ArticlesByIdsResponse = {
+  items: ArticleSearchItem[];
 };

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View, RefreshControl, StyleSheet, StatusBar} from 'react-native';
 import {ScreenLoader} from '../../../../components';
 import {EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
@@ -138,6 +138,8 @@ const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
     }
   }, []);
 
+  const extraData = useMemo(() => ({lastFetchTime: lastFetchTime}), [lastFetchTime]);
+
   if (data.length === 0) {
     return <ScreenLoader />;
   }
@@ -154,14 +156,12 @@ const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
           showsVerticalScrollIndicator={false}
           //style={styles.container}
           ref={listRef}
-          extraData={{
-            lastFetchTime: lastFetchTime,
-          }}
+          extraData={extraData}
           renderItem={renderItem}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => fetchAudioteka()} />}
           data={data}
           removeClippedSubviews={false}
-          estimatedFirstItemOffset={500}
+          estimatedFirstItemOffset={800}
           estimatedItemSize={400}
           // windowSize={4}
           // updateCellsBatchingPeriod={20}

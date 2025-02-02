@@ -175,6 +175,14 @@ export const liveFeedGet = (id: string | number, count: number, order: 'desc' | 
   return `${BASE_URL}get-feed-items/${id}?count=${count}&order=${order}`;
 };
 
+export const articleRecommendations = (articleId: number | string) => {
+  return `https://peach.ebu.io/api/v1/ltlrt/similar?article_id=${articleId}`;
+};
+
+export const articlesByIds = (ids: string[]) => {
+  return `https://www.lrt.lt/api/json/search?ids=${ids.join(',')}`;
+};
+
 export const carPlaylistNewestGet = () => 'https://www.lrt.lt/static/carplay/naujausi.json';
 
 export const carPlaylistPopularGet = () => 'https://www.lrt.lt/static/carplay/pop.json';

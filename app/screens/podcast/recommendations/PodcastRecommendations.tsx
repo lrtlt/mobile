@@ -1,0 +1,66 @@
+import {StyleSheet, View} from 'react-native';
+import {Text} from '../../../components';
+import useRecomendations from './useRecommendations';
+import RadiotekaHorizontalList from '../../main/tabScreen/radioteka/components/horizontal_list/RadiotekaHorizontalList';
+import {useArticlePlayer} from '../../main/tabScreen/radioteka/hooks/useArticlePlayer';
+import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MainStackParamList} from '../../../navigation/MainStack';
+import {useMemo} from 'react';
+
+interface Props {
+  articleId: number;
+}
+
+const PodcastRecommendations: React.FC<React.PropsWithChildren<Props>> = ({articleId}) => {
+  const recommendations = useRecomendations(articleId);
+
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Podcast'>>();
+
+  const {playArticle} = useArticlePlayer();
+
+  const items = useMemo(() => {
+    return recommendations.items.map((item) => ({
+      title: item.title,
+      category: item.category_title,
+      imageUrl: buildArticleImageUri(IMG_SIZE_M, item.photo)!,
+    }));
+  }, [recommendations.items]);
+
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <View style={styles.root}>
+      <Text style={styles.title} fontFamily="SourceSansPro-SemiBold">
+        Kiti taip pat klausė
+      </Text>
+      <RadiotekaHorizontalList
+        items={items}
+        onItemPlayPress={(index) => {
+          playArticle(recommendations.items[index].id);
+        }}
+        onItemPress={(index) => {
+          navigation.navigate('Podcast', {articleId: recommendations.items[index].id});
+        }}
+      />
+    </View>
+  );
+};
+
+export default PodcastRecommendations;
+
+const styles = StyleSheet.create({
+  root: {
+    paddingTop: 24,
+    paddingBottom: 100,
+    gap: 12,
+  },
+  title: {
+    fontSize: 20,
+    paddingHorizontal: 12,
+    textTransform: 'uppercase',
+  },
+});

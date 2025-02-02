@@ -1,5 +1,7 @@
 import {
   articleGet,
+  articleRecommendations,
+  articlesByIds,
   articlesGetByTag,
   audiotekaGet,
   carPlaylistCategoryGet,
@@ -29,6 +31,8 @@ import {
 import {get, put} from './HttpClient';
 import {
   ArticleContentResponse,
+  ArticleRecommendationsResponse,
+  ArticlesByIdsResponse,
   AudiotekaResponse,
   CarPlayCategoryResponse,
   CarPlayPodcastsResponse,
@@ -104,6 +108,11 @@ export const fetchOpusPlaylist = () => get<OpusPlaylistResponse>(opusPlaylistGet
 
 export const fetchLiveFeed = (id: string | number, count: number, order: 'asc' | 'desc') =>
   get<LiveFeedResponse>(liveFeedGet(id, count, order));
+
+export const fetchArticleRecommendations = (articleId: number | string) =>
+  get<ArticleRecommendationsResponse>(articleRecommendations(articleId));
+
+export const fetchArticlesByIds = (ids: string[]) => get<ArticlesByIdsResponse>(articlesByIds(ids));
 
 export const setDailyQuestionVote = (questionId: number | string, choiceId: number | string) =>
   put<any>(putDailyQuestionVote(questionId, choiceId));

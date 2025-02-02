@@ -86,8 +86,8 @@ export const strings: Dictionary = {
   about: 'Apie LRT',
   contacts: 'Kontaktai',
   feeback: 'Pranešk apie klaidą',
-  about_episode: 'APIE EPIZODĄ',
-  about_show: 'APIE LAIDĄ',
+  about_episode: 'Apie epizodą',
+  about_show: 'Apie laidą',
   previous_songs: 'ANKSTESNI',
   no_search_results: 'Deja, rezultatų pagal šią užklausą rasti nepavyko.',
   error_no_connection: 'Tinklo sutrikimas',
@@ -169,6 +169,7 @@ type ColorScheme = {
   lightGreyBackground: '#F9F9F9';
   dailyQuestionProgress: string;
   epikaGreen: '#58EB52';
+  playerIcons: 'rgb(217, 32, 83)';
 };
 
 const colorsLight: ColorScheme = {
@@ -212,6 +213,7 @@ const colorsLight: ColorScheme = {
   lightGreyBackground: '#F9F9F9',
   ripple: '#99999940',
   epikaGreen: '#58EB52',
+  playerIcons: 'rgb(217, 32, 83)',
 };
 
 const colorsDark: ColorScheme = {
@@ -255,6 +257,7 @@ const colorsDark: ColorScheme = {
   ripple: '#99999940',
   dailyQuestionProgress: '#36414f',
   epikaGreen: '#58EB52',
+  playerIcons: 'rgb(217, 32, 83)',
 };
 //#endregion
 

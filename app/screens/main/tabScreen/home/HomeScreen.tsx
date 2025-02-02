@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View, StyleSheet, StatusBar, RefreshControl} from 'react-native';
 import {
   ArticleRow,
@@ -197,6 +197,7 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
 
   const insets = useSafeAreaInsets();
   const keyExtractor = useCallback((item: HomeBlockType, index: number) => `${index}-${item.type}`, []);
+  const extraData = useMemo(() => ({lastFetchTime: lastFetchTime}), [lastFetchTime]);
 
   if (items.length === 0) {
     return <ScreenLoader />;
@@ -212,22 +213,15 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
       <View style={styles.container}>
         <FlashList
           showsVerticalScrollIndicator={false}
-          //style={styles.container}
           contentContainerStyle={{paddingBottom: insets.bottom}}
           ref={listRef}
-          extraData={{
-            lastFetchTime: lastFetchTime,
-          }}
+          extraData={extraData}
           renderItem={renderItem}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={callApi} />}
           ListHeaderComponent={renderForecast()}
           data={items}
           removeClippedSubviews={false}
-          estimatedItemSize={350}
-          // windowSize={6}
-          // updateCellsBatchingPeriod={20}
-          // maxToRenderPerBatch={4}
-          // initialNumToRender={8}
+          estimatedItemSize={400}
           keyExtractor={keyExtractor}
         />
       </View>

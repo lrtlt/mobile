@@ -17,14 +17,15 @@ import {
   IconFullscreen,
   IconPlayerForward,
   IconPlayerMute,
-  IconPlayerPause,
-  IconPlayerPlay,
+  IconPlayerPauseV2,
+  IconPlayerPlayV2,
   IconPlayerRewind,
   IconPlayerVolume,
 } from '../svg';
 import TextComponent from '../text/Text';
 import {CastButton} from 'react-native-google-cast';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
+import {useTheme} from '../../Theme';
 
 const CONTROLS_TIMEOUT_MS = 2500;
 
@@ -107,6 +108,9 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
 
   const seekPanResponder = useRef<PanResponderInstance>();
   const seekerWidth = useRef(0);
+  const offset = useRef(0);
+
+  const {colors} = useTheme();
 
   const isMiniPlayer = isMini && !isFullScreen;
   const isLiveStream = isNaN(mediaDuration) || !isFinite(mediaDuration) || mediaDuration <= 0;
@@ -153,18 +157,24 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
       onShouldBlockNativeResponder: () => true,
 
       onPanResponderGrant: (event, _gestureState) => {
+        const {pageX, locationX} = event.nativeEvent;
+        offset.current = pageX - locationX;
         setPosition(event.nativeEvent.locationX);
         setScrubbing(true);
         resetControlsTimeout();
       },
 
       onPanResponderMove: (event, _gestureState) => {
-        setPosition(event.nativeEvent.locationX);
+        const {pageX} = event.nativeEvent;
+        const positionX = pageX - offset.current;
+        setPosition(positionX);
         resetControlsTimeout();
       },
 
       onPanResponderRelease: (event, _gestureState) => {
-        const newPosition = setPosition(event.nativeEvent.locationX);
+        const {pageX} = event.nativeEvent;
+        const positionX = pageX - offset.current;
+        const newPosition = setPosition(positionX);
         const normalizedPosition = Math.max(0, Math.min(seekerWidth.current, newPosition));
         const percentage = normalizedPosition / seekerWidth.current;
         const newTime = (seekerEnd - seekerStart) * percentage;
@@ -230,9 +240,9 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
         hitSlop={HIT_SLOP}
         activeOpacity={0.6}>
         {isPaused ? (
-          <IconPlayerPlay size={ICON_SIZE} color={ICON_COLOR} />
+          <IconPlayerPlayV2 size={ICON_SIZE} color={ICON_COLOR} />
         ) : (
-          <IconPlayerPause size={ICON_SIZE} color={ICON_COLOR} />
+          <IconPlayerPauseV2 size={ICON_SIZE} color={ICON_COLOR} />
         )}
       </TouchableOpacity>
     ),
@@ -339,6 +349,7 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
               styles.seekBar_fill,
               {
                 width: position,
+                backgroundColor: colors.playerIcons,
               },
             ]}
             pointerEvents={'none'}
@@ -504,7 +515,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   seekBar_fill: {
-    backgroundColor: '#DD0000',
     height: 5,
   },
   activityIndicator: {

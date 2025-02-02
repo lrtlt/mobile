@@ -25,15 +25,12 @@ import useChromecast from './useChromecast';
 import {MediaPlayerState} from 'react-native-google-cast';
 import {useTheme} from '../../Theme';
 import usePlayerLanguage from './usePlayerLanguage';
-import {EventRegister} from 'react-native-event-listeners';
 import FastImage from 'react-native-fast-image';
 import {VideoTextTrack} from '../../api/Types';
 import usePlayerSubtitles from './usePlayerSubtitles';
 import {useSettingsStore} from '../../state/settings_store';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
-
-export type PlayerAction = 'togglePlay' | 'setFullScreen';
 
 interface Props {
   mediaType: MediaType;
@@ -45,7 +42,6 @@ interface Props {
   startTime?: number;
   isMini?: boolean;
   minifyEnabled?: boolean;
-  uuid?: string;
   controls?: boolean;
   loop?: boolean;
   aspectRatio?: number;
@@ -53,6 +49,7 @@ interface Props {
   tracks?: VideoTextTrack[];
   onError?: (e?: any) => void;
   onEnded?: () => void;
+  onPlayerReadyCallback?: (player: THEOplayer) => void;
 }
 
 const config: PlayerConfiguration = {
@@ -106,7 +103,7 @@ const makeSource = (
 
 const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   streamUri,
-  mediaType,
+  mediaType = MediaType.VIDEO,
   title,
   poster = VIDEO_DEFAULT_BACKGROUND_IMAGE,
   autoStart,
@@ -116,12 +113,12 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   isMini = false,
   loop = false,
   minifyEnabled = true,
-  uuid,
   controls = true,
   aspectRatio = 16 / 9,
   backgroundAudioEnabled = true,
   onError,
   onEnded,
+  onPlayerReadyCallback,
 }) => {
   const [player, setPlayer] = useState<THEOplayer>();
   const [duration, setDuration] = useState(0);
@@ -218,6 +215,13 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     [],
   );
 
+  const onSeekHandler = useCallback(
+    (player: THEOplayer) => (_: Event<PlayerEventType.SEEKED>) => {
+      trackSeek(streamUri, player.currentTime / 1000);
+    },
+    [],
+  );
+
   const onPlayHandler = useCallback(
     (player: THEOplayer) => (_: Event<PlayerEventType.PLAY>) => {
       if (player?.currentTime) {
@@ -297,7 +301,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     // player.addEventListener(PlayerEventType.PLAYING, console.log);
     player.addEventListener(PlayerEventType.PLAY, onPlayHandler(player));
     player.addEventListener(PlayerEventType.PAUSE, onPauseHandler(player));
-    // player.addEventListener(PlayerEventType.SEEKING, console.log);
+    player.addEventListener(PlayerEventType.SEEKED, onSeekHandler(player));
 
     // player.addEventListener(PlayerEventType.ENDED, onEndedHandler(player));
     // player.addEventListener(PlayerEventType.ENDED, console.log);
@@ -326,6 +330,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     // console.log('targetVideoQuality:', player.targetVideoQuality);
     //player.playbackRate = 1.5;
     //player.selectedVideoTrack = player.videoTracks[0];
+    onPlayerReadyCallback?.(player);
   };
 
   useEffect(() => {
@@ -367,7 +372,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   const _seekControl = useCallback(
     (time: number) => {
       if (player) {
-        trackSeek(streamUri, time);
         player.currentTime = time * 1000;
         client?.seek({position: time});
       }
@@ -379,35 +383,12 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     (time: number) => {
       if (player) {
         const newTime = player.currentTime + time * 1000;
-        trackSeek(streamUri, newTime / 1000);
         player.currentTime = newTime;
         client?.seek({position: time, relative: true});
       }
     },
     [player, client],
   );
-
-  useEffect(() => {
-    if (!uuid) {
-      return;
-    }
-
-    const listener = EventRegister.addEventListener(uuid, (action: PlayerAction) => {
-      crashlytics().log('TheoMediaPlayer: Received event bus action: ' + action);
-      switch (action) {
-        case 'togglePlay':
-          _playPauseControl();
-          break;
-        case 'setFullScreen':
-          _fullScreenControl();
-          break;
-      }
-    });
-
-    return () => {
-      EventRegister.removeEventListener(listener as string);
-    };
-  }, [uuid, _playPauseControl, _fullScreenControl]);
 
   const {LanguageButton, LanguageMenu} = usePlayerLanguage({player: player});
   const {SubtitlesButton, SubtitlesMenu} = usePlayerSubtitles({player: player});
@@ -418,7 +399,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
         <>
           {isLoading && (
             <View style={{flex: 1, justifyContent: 'center'}}>
-              <ActivityIndicator size="large" animating={isLoading} color={colors.primary} />
+              <ActivityIndicator size="large" animating={isLoading} color={colors.playerIcons} />
             </View>
           )}
           {!isLoading && player ? (
@@ -427,7 +408,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
                 <FastImage
                   source={{uri: poster}}
                   style={{width: '100%', position: 'absolute', aspectRatio}}
-                  resizeMode="contain"
+                  resizeMode="cover"
                 />
               ) : null}
 

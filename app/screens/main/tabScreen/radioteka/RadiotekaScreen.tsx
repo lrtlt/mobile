@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View, RefreshControl, StyleSheet, StatusBar} from 'react-native';
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {ScreenLoader} from '../../../../components';
@@ -21,6 +21,7 @@ import {RadiotekaHeroCarousel} from './components/hero/RadiotekaHeroCarousel';
 import {useNavigation} from '@react-navigation/native';
 import {MainStackParamList} from '../../../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useArticlePlayer} from './hooks/useArticlePlayer';
 
 const WIDGET_ID_HERO = 21;
 
@@ -44,6 +45,9 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Home'>>();
 
   const {fetchRadioteka} = useArticleStore.getState();
+
+  const {playArticle} = useArticlePlayer();
+
   const state = useArticleStore(useShallow(selectRadiotekaScreenState));
   const {refreshing, lastFetchTime, data} = state;
 
@@ -72,7 +76,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
     return () => {
       EventRegister.removeEventListener(listener as string);
     };
-  });
+  }, [isCurrent]);
 
   const refresh = useCallback(() => {
     if (!refreshing && Date.now() - lastFetchTime > ARTICLE_EXPIRE_DURATION) {
@@ -99,7 +103,16 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
     switch (item.type) {
       case 'articles_block': {
         if (item.widget_id === WIDGET_ID_HERO) {
-          return <RadiotekaHero block={item} />;
+          return (
+            <RadiotekaHero
+              block={item}
+              onArticlePress={(article) => {
+                navigation.push('Podcast', {
+                  articleId: article.id,
+                });
+              }}
+            />
+          );
         }
         break;
       }
@@ -114,7 +127,12 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
               }))}
               onItemPress={(index) => {
-                console.log('item pressed', item.data.articles_list[index].title);
+                navigation.push('Podcast', {
+                  articleId: item.data.articles_list[index].id,
+                });
+              }}
+              onItemPlayPress={(index) => {
+                playArticle(item.data.articles_list[index].id);
               }}
             />
           );
@@ -139,7 +157,12 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               ),
             }))}
             onItemPress={(index) => {
-              console.log('item pressed', item.data.category_list[index].title);
+              navigation.push('Podcast', {
+                articleId: item.data.category_list[index].LATEST_ITEM.id,
+              });
+            }}
+            onItemPlayPress={(index) => {
+              playArticle(item.data.category_list[index].LATEST_ITEM.id);
             }}
             onKeywordPress={(keyword) => {
               navigation.navigate('Slug', {
@@ -152,7 +175,19 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
       }
       case 'category': {
         if (item.template_id === 25) {
-          return <RadiotekaHeroCarousel items={item.data.articles_list} />;
+          return (
+            <RadiotekaHeroCarousel
+              items={item.data.articles_list}
+              onItemPress={(index) => {
+                navigation.push('Podcast', {
+                  articleId: item.data.articles_list[index].id,
+                });
+              }}
+              onItemPlayPress={(index) => {
+                playArticle(item.data.articles_list[index].id);
+              }}
+            />
+          );
         }
         if (item.template_id === 42 || item.template_id === 43) {
           return (
@@ -164,7 +199,12 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
               }))}
               onItemPress={(index) => {
-                console.log('item pressed', item.data.articles_list[index].title);
+                navigation.push('Podcast', {
+                  articleId: item.data.articles_list[index].id,
+                });
+              }}
+              onItemPlayPress={(index) => {
+                playArticle(item.data.articles_list[index].id);
               }}
             />
           );
@@ -180,6 +220,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
   }, []);
 
   const {bottom} = useSafeAreaInsets();
+  const extraData = useMemo(() => ({lastFetchTime: lastFetchTime}), [lastFetchTime]);
 
   if (data.length === 0) {
     return <ScreenLoader />;
@@ -196,16 +237,14 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
         <FlashList
           showsVerticalScrollIndicator={false}
           ref={listRef}
-          extraData={{
-            lastFetchTime: lastFetchTime,
-          }}
+          extraData={extraData}
           contentContainerStyle={{paddingBottom: bottom}}
           renderItem={renderItem}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => fetchRadioteka()} />}
           data={data}
           removeClippedSubviews={false}
           estimatedFirstItemOffset={500}
-          estimatedItemSize={600}
+          estimatedItemSize={300}
           keyExtractor={(item, index) => String(index) + String(item)}
         />
       </View>
