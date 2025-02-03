@@ -19,7 +19,7 @@ import {MainStackParamList} from '../../../../navigation/MainStack';
 import DailyQuestionComponent from '../../../../components/dailyQuestion/DailyQuestionComponent';
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 
-import {useShallow} from 'zustand/shallow';
+import {useShallow} from 'zustand/react/shallow';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import CategoryArticlesBlock from '../home/blocks/CategoryArticlesBlock/CategoryArticlesBlock';
 import EpikaBlock from '../home/blocks/EpikaBlock/EpikaBlock';
@@ -36,19 +36,21 @@ import {IconArrowLeft} from '../../../../components/svg';
 import {useTheme} from '../../../../Theme';
 import Config from 'react-native-config';
 
+const emptyArray: HomeBlockType[] = [];
+
 const selectCategoryState = (id: number) => (state: ArticleState) => {
   const block = state.advancedCategories[id];
   if (block) {
     return {
       refreshing: block.isFetching && Boolean(block.items?.length),
       lastFetchTime: block.lastFetchTime,
-      items: block.items ?? [],
+      items: block.items ?? emptyArray,
     };
   } else {
     return {
       refreshing: false,
       lastFetchTime: 0,
-      items: [],
+      items: emptyArray,
     };
   }
 };
@@ -97,7 +99,7 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
     return () => {
       EventRegister.removeEventListener(listener as string);
     };
-  });
+  }, [isCurrent, id]);
 
   const checkForRefresh = useCallback(() => {
     if (!refreshing && Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {

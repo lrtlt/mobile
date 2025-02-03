@@ -89,7 +89,7 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
     return () => {
       EventRegister.removeEventListener(listener as string);
     };
-  });
+  }, [isCurrent]);
 
   const refresh = useCallback(() => {
     if (!refreshing && Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {

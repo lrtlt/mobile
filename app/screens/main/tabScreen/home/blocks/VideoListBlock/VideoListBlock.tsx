@@ -22,7 +22,7 @@ interface VideoListBlockProps {
 
 const VideoListBlock: React.FC<VideoListBlockProps> = ({block}) => {
   const {articles_list: articles} = block.data;
-  const {category_id, category_title} = block.data;
+  const {category_id, category_title, slug_title} = block.data;
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
@@ -34,7 +34,7 @@ const VideoListBlock: React.FC<VideoListBlockProps> = ({block}) => {
     <View>
       <SectionHeader
         category={{
-          name: category_title,
+          name: category_title ?? slug_title ?? '',
           template_id: block.template_id,
           id: category_id,
         }}
@@ -49,7 +49,7 @@ const VideoListBlock: React.FC<VideoListBlockProps> = ({block}) => {
             key={article.id}
             onPress={() =>
               navigation.navigate('VideoList', {
-                title: category_title,
+                title: category_title ?? slug_title ?? '',
                 articles: articles,
                 initialIndex: i,
               })

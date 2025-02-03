@@ -136,7 +136,8 @@ export type HomeBlockVideoList = {
   type: 'vertical_video_list';
   template_id: number;
   data: {
-    category_title: string;
+    category_title?: string;
+    slug_title?: string;
     category_id: number;
     articles_list: FeedArticle[];
   };

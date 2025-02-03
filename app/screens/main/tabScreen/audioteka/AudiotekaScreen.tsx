@@ -69,7 +69,7 @@ const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
     return () => {
       EventRegister.removeEventListener(listener as string);
     };
-  });
+  }, [isCurrent, fetchAudioteka]);
 
   const refresh = useCallback(() => {
     if (!refreshing && Date.now() - lastFetchTime > ARTICLE_EXPIRE_DURATION) {
