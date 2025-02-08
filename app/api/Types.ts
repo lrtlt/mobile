@@ -696,18 +696,10 @@ export type CarPlayPodcastItem = {
 };
 
 export type CarPlayCategoryResponse = {
-  articles: CarPlayCategoryItem[];
+  articles: FeedArticle[];
   category_info: any;
   page: number;
   next_page: number | null;
-};
-
-export type CarPlayCategoryItem = {
-  id: number;
-  title: string;
-  img_path_postfix: string;
-  img_path_prefix: string;
-  item_date: string;
 };
 
 export type ArticleContentDefault = {

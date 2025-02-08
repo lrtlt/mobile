@@ -20,7 +20,7 @@ const PopularBlock: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
       <ArticleRow
         data={data.articles}
         onArticlePress={(article) => {
-          navigation.navigate('Article', {articleId: article.id});
+          navigation.navigate('Podcast', {articleId: article.id});
         }}
       />
     </View>

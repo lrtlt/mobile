@@ -79,7 +79,11 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
 
   const articlePressHandler = useCallback(
     (article: Article) => {
-      navigation.navigate('Article', {articleId: article.id});
+      if (article.is_audio) {
+        navigation.navigate('Podcast', {articleId: article.id});
+      } else {
+        navigation.navigate('Article', {articleId: article.id});
+      }
     },
     [navigation],
   );
@@ -188,7 +192,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
         }}
         translateY={translateY}
         actions={
-          <ActionButton onPress={() => navigation.toggleDrawer()}>
+          <ActionButton onPress={() => navigation.toggleDrawer()} accessibilityLabel={'šoninis meniu'}>
             <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
         }

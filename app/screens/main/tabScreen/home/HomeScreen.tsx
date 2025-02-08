@@ -131,7 +131,13 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
           return (
             <ArticleRow
               data={[block.article]}
-              onArticlePress={(article) => navigation.navigate('Article', {articleId: article.id})}
+              onArticlePress={(article) => {
+                if (article.is_audio) {
+                  navigation.navigate('Podcast', {articleId: article.id});
+                } else {
+                  navigation.navigate('Article', {articleId: article.id});
+                }
+              }}
             />
           );
         }

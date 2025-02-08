@@ -1,9 +1,9 @@
 import React, {useEffect, useRef} from 'react';
 import {View, StyleSheet, FlatList, Dimensions} from 'react-native';
 import Text from '../../../../../../components/text/Text';
-import {IconPlay} from '../../../../../../components/svg';
 import {TouchableDebounce} from '../../../../../../components';
 import FastImage from 'react-native-fast-image';
+import PlayButton from '../play_button/play_button';
 
 const CARD_WIDTH_FULL = Math.min(Dimensions.get('window').width * 0.5, 300);
 const CARD_WIDTH_MINIMAL = Math.min(Dimensions.get('window').width * 0.33, 150);
@@ -40,11 +40,7 @@ const RadiotekaHorizontalList: React.FC<RadiotekaHorizontalListProps> = ({
             }}
             style={styles.image}
           />
-          {variation === 'full' && (
-            <TouchableDebounce style={styles.playButton} onPress={() => onItemPlayPress?.(index)}>
-              <IconPlay size={12} />
-            </TouchableDebounce>
-          )}
+          {variation === 'full' && <PlayButton onPress={() => onItemPlayPress?.(index)} />}
         </View>
       </View>
       {variation === 'full' && (
@@ -132,17 +128,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 19,
     marginBottom: 6,
-  },
-
-  playButton: {
-    flexDirection: 'row',
-    backgroundColor: '#FFD600',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-    alignSelf: 'flex-start',
-    alignItems: 'center',
-    gap: 8,
   },
   minimalCard: {
     width: CARD_WIDTH_MINIMAL,

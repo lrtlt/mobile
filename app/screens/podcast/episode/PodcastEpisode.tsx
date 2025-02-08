@@ -1,12 +1,12 @@
 import {PropsWithChildren, useCallback} from 'react';
 import {ArticleContentMedia} from '../../../api/Types';
 import {StyleSheet, View} from 'react-native';
-import {Text, TouchableDebounce} from '../../../components';
-import {IconPlay} from '../../../components/svg';
+import {Text} from '../../../components';
 import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
 import {MediaType} from '../../../components/videoComponent/context/PlayerContext';
 import {useTheme} from '../../../Theme';
+import PlayButton from '../../main/tabScreen/radioteka/components/play_button/play_button';
 
 interface Props {
   article: ArticleContentMedia;
@@ -29,9 +29,7 @@ const PodcastEpisode: React.FC<PropsWithChildren<Props>> = ({article}) => {
 
   return (
     <View style={[styles.root, {backgroundColor: colors.tabBarBackground}]}>
-      <TouchableDebounce style={styles.playButton} onPress={play}>
-        <IconPlay size={14} />
-      </TouchableDebounce>
+      <PlayButton onPress={play} />
       <View style={{flex: 1, gap: 6}}>
         <View style={{flexDirection: 'row', gap: 8}}>
           <Text style={styles.caption}>{article.category_title}</Text>
@@ -55,16 +53,6 @@ const styles = StyleSheet.create({
     margin: 12,
     flexDirection: 'row',
     overflow: 'hidden',
-  },
-  playButton: {
-    backgroundColor: '#FFD600',
-    flexDirection: 'row',
-    width: 40,
-    gap: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
-    aspectRatio: 1,
   },
   title: {
     fontSize: 15,

@@ -12,9 +12,11 @@ import PodcastAbout from './about/PodcastAbout';
 import {ArticleContentMedia} from '../../api/Types';
 import {ScrollView} from 'react-native-gesture-handler';
 import FastImage from 'react-native-fast-image';
-import {buildArticleImageUri, IMG_SIZE_XL} from '../../util/ImageUtil';
+import {buildArticleImageUri, IMG_SIZE_XL, IMG_SIZE_XXL} from '../../util/ImageUtil';
 import PodcastEpisode from './episode/PodcastEpisode';
 import PodcastRecommendations from './recommendations/PodcastRecommendations';
+import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection';
+import useArticleAnalytics from '../article/useArticleAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Podcast'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Podcast'>;
@@ -29,6 +31,8 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
 
   const [{article, loadingState}, acceptAdultContent] = useArticleScreenState(articleId);
   const {strings, colors} = useTheme();
+
+  useArticleAnalytics({article});
 
   useEffect(() => {
     navigation.setOptions({
@@ -80,7 +84,8 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
             <SafeAreaView
               style={[styles.screen, {backgroundColor: colors.greyBackground}]}
               edges={['left', 'right']}>
-              <ScrollView contentContainerStyle={{paddingBottom: bottom + 12}}>
+              <ScrollView contentContainerStyle={{paddingBottom: bottom + 80}}>
+                <PodcastEpisodeSelection category_id={article.category_id} />
                 <PodcastEpisode article={article as ArticleContentMedia} />
                 <View style={styles.imageContainer}>
                   <FastImage
@@ -92,7 +97,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                       borderColor: '#fff',
                     }}
                     source={{
-                      uri: buildArticleImageUri(IMG_SIZE_XL, article.main_photo?.path),
+                      uri: buildArticleImageUri(IMG_SIZE_XXL, article.main_photo?.path),
                     }}
                   />
                 </View>

@@ -21,7 +21,7 @@ const TopArticle: React.FC<TopArticleProps> = ({article}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const onPressHandler = useCallback(() => {
-    navigation.navigate('Article', {articleId: article.id});
+    navigation.navigate('Podcast', {articleId: article.id});
   }, [article.id, navigation]);
 
   return (

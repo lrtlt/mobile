@@ -24,7 +24,7 @@ const CategoryBlock: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
 
   const onArticlePressHandler = useCallback(
     (article: Article) => {
-      navigation.navigate('Article', {articleId: article.id});
+      navigation.navigate('Podcast', {articleId: article.id});
     },
     [navigation],
   );

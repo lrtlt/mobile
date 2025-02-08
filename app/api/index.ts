@@ -129,7 +129,7 @@ export const fetchCarRecommendedPlaylist = () => get<CarPlaylistItem[]>(carPlayl
 export const fetchCarPodcasts = (count: number) =>
   get<CarPlayPodcastsResponse>(carPlaylistPodcastsGet(count));
 
-export const fetchCarCategoryPlaylist = (id: string | number) =>
+export const fetchCategoryPlaylist = (id: string | number) =>
   get<CarPlayCategoryResponse>(carPlaylistCategoryGet(id));
 
 export const fetchCarLivePlaylist = () => get<TVProgramResponse>(carPlaylistLiveGet());

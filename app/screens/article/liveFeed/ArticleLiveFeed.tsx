@@ -83,7 +83,10 @@ const ArticleLiveFeed: React.FC<React.PropsWithChildren<Props>> = ({id}) => {
           <ArticleParagraph htmlText={item.feed_item_content} textSize={17} />
           <View style={{gap: 8}}>
             {item.articles?.map((article) => (
-              <TouchableDebounce onPress={() => navigation.push('Article', {articleId: article.id})}>
+              <TouchableDebounce
+                onPress={() => {
+                  navigation.push('Article', {articleId: article.id});
+                }}>
                 <LiveFeedArticleItem article={article} />
               </TouchableDebounce>
             ))}

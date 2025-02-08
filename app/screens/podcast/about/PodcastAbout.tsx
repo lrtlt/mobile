@@ -70,7 +70,9 @@ const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article}) => {
             {getMediaDurationMinutes(article.media_duration)} min.
           </TextComponent>
         </View>
-        <ArticleParagraph htmlText={article.content} textSize={16} />
+        <View pointerEvents="none">
+          <ArticleParagraph htmlText={article.content} textSize={16} />
+        </View>
       </>
     );
   }, [article]);

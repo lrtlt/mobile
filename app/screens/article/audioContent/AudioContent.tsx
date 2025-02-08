@@ -31,8 +31,6 @@ const AudioContent: React.FC<AudioContentProps> = ({about_episode, about_show, i
     setSelectedContent('show');
   }, []);
 
-  console.log('selected: ', selectedContent);
-
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>

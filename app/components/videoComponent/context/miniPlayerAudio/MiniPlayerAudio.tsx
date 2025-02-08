@@ -115,9 +115,7 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<{}>> = (props) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}>
-              <TouchableDebounce onPress={() => handleSeekBy(-10)} hitSlop={12}>
-                <IconPlayerPrevious size={22} color={colors.darkIcon} />
-              </TouchableDebounce>
+              <IconPlayerPrevious size={22} color={colors.darkIcon + '33'} />
               <TouchableDebounce onPress={() => handleSeekBy(-10)} hitSlop={12}>
                 <IconPlayerRewind size={22} color={colors.darkIcon} />
               </TouchableDebounce>
@@ -131,9 +129,7 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<{}>> = (props) => {
               <TouchableDebounce onPress={() => handleSeekBy(10)} hitSlop={12}>
                 <IconPlayerForward size={22} color={colors.darkIcon} />
               </TouchableDebounce>
-              <TouchableDebounce onPress={() => handleSeekBy(10)} hitSlop={12}>
-                <IconPlayerNext size={22} color={colors.darkIcon} />
-              </TouchableDebounce>
+              <IconPlayerNext size={22} color={colors.darkIcon + '33'} />
             </View>
             {player ? <PlayerSekBar style={{width: '100%'}} player={player} /> : null}
           </View>

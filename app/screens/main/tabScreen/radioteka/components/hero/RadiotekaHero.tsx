@@ -4,13 +4,13 @@ import Animated, {useAnimatedStyle, withSpring, useSharedValue} from 'react-nati
 import {Text, TouchableDebounce} from '../../../../../../components';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
 import {themeLight} from '../../../../../../Theme';
-import {IconPlay} from '../../../../../../components/svg';
 import {RadiotekaTopArticlesBlock} from '../../../../../../api/Types';
 import FastImage from 'react-native-fast-image';
 import {buildImageUri, IMG_SIZE_M, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
 import LinearGradient from 'react-native-linear-gradient';
 import {useArticlePlayer} from '../../hooks/useArticlePlayer';
 import {Article} from '../../../../../../../Types';
+import PlayButton from '../play_button/play_button';
 
 const {height} = Dimensions.get('window');
 const width = Math.min(Dimensions.get('window').width * 0.32, 150);
@@ -93,14 +93,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
             </Text>
             <Text style={styles.subtitle}>{articles[selectedIndex].title}</Text>
             <View style={styles.buttonContainer}>
-              <TouchableDebounce
-                style={styles.playButton}
-                onPress={() => {
-                  playArticle(articles[selectedIndex].id);
-                }}>
-                <IconPlay size={14} />
-              </TouchableDebounce>
-
+              <PlayButton onPress={() => playArticle(articles[selectedIndex].id)} />
               <TouchableDebounce
                 style={styles.moreButton}
                 onPress={() => {
@@ -189,16 +182,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
   },
-  playButton: {
-    backgroundColor: '#FFD600',
-    flexDirection: 'row',
-    gap: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    borderRadius: 8,
-    aspectRatio: 1,
-  },
+
   moreButton: {
     backgroundColor: '#FFFFFF',
     alignItems: 'center',

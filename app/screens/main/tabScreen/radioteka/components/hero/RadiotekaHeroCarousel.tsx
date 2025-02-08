@@ -1,7 +1,6 @@
 import React, {useState, useRef} from 'react';
 import {View, StyleSheet, FlatList, Image, ViewToken, useWindowDimensions} from 'react-native';
 import Text from '../../../../../../components/text/Text';
-import {IconPlay} from '../../../../../../components/svg';
 import FastImage from 'react-native-fast-image';
 import ListenCount from '../../../../../../components/article/article/ListenCount';
 import {TouchableDebounce} from '../../../../../../components';
@@ -11,6 +10,7 @@ import {getIconForChannelById} from '../../../../../../util/UI';
 import LinearGradient from 'react-native-linear-gradient';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
 import {themeLight} from '../../../../../../Theme';
+import PlayButton from '../play_button/play_button';
 
 interface RadiotekaHeroCarouselProps {
   items: Article[];
@@ -60,9 +60,7 @@ export const RadiotekaHeroCarousel: React.FC<RadiotekaHeroCarouselProps> = ({
         <Text type="secondary" fontFamily="SourceSansPro-Regular" style={styles.subtitle} numberOfLines={4}>
           {item.title}
         </Text>
-        <TouchableDebounce style={styles.playButton} onPress={() => onItemPlayPress?.(index)}>
-          <IconPlay size={10} />
-        </TouchableDebounce>
+        <PlayButton onPress={() => onItemPlayPress?.(index)} />
       </View>
     </TouchableDebounce>
   );
@@ -209,18 +207,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFFFFF',
   },
-  playButton: {
-    flexDirection: 'row',
-    backgroundColor: '#FFD600',
-    paddingVertical: 12,
-    borderRadius: 6,
-    alignSelf: 'flex-start',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    aspectRatio: 1,
-  },
-
   pagination: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',

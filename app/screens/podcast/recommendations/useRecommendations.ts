@@ -17,7 +17,7 @@ const useRecomendations = (articleId: number) => {
         });
       }
     });
-  }, []);
+  }, [articleId]);
 
   return {
     items,
