@@ -1,5 +1,7 @@
 import {
   articleGet,
+  articleRecommendations,
+  articlesByIds,
   articlesGetByTag,
   audiotekaGet,
   carPlaylistCategoryGet,
@@ -22,12 +24,15 @@ import {
   popularArticlesGet,
   programGet,
   putDailyQuestionVote,
+  radiotekaGet,
   searchArticles,
   weatherLocationsGet,
 } from './Endpoints';
 import {get, put} from './HttpClient';
 import {
   ArticleContentResponse,
+  ArticleRecommendationsResponse,
+  ArticlesByIdsResponse,
   AudiotekaResponse,
   CarPlayCategoryResponse,
   CarPlayPodcastsResponse,
@@ -45,6 +50,7 @@ import {
   OpusPlaylistResponse,
   PopularArticlesResponse,
   ProgramResponse,
+  RadiotekaResponse,
   SearchFilter,
   SearchResponse,
   SlugArticlesResponse,
@@ -76,6 +82,8 @@ export const fetchProgramApi = () => get<ProgramResponse>(programGet());
 
 export const fetchAudiotekaApi = () => get<AudiotekaResponse>(audiotekaGet());
 
+export const fetchRadiotekaApi = () => get<RadiotekaResponse>(radiotekaGet());
+
 export const fetchNewestApi = (page: number, count: number, date_max?: string, not_id?: string) =>
   get<NewestArticlesResponse>(newestArticlesGet(count, page, date_max, not_id));
 
@@ -101,6 +109,11 @@ export const fetchOpusPlaylist = () => get<OpusPlaylistResponse>(opusPlaylistGet
 export const fetchLiveFeed = (id: string | number, count: number, order: 'asc' | 'desc') =>
   get<LiveFeedResponse>(liveFeedGet(id, count, order));
 
+export const fetchArticleRecommendations = (articleId: number | string) =>
+  get<ArticleRecommendationsResponse>(articleRecommendations(articleId));
+
+export const fetchArticlesByIds = (ids: string[]) => get<ArticlesByIdsResponse>(articlesByIds(ids));
+
 export const setDailyQuestionVote = (questionId: number | string, choiceId: number | string) =>
   put<any>(putDailyQuestionVote(questionId, choiceId));
 
@@ -116,7 +129,7 @@ export const fetchCarRecommendedPlaylist = () => get<CarPlaylistItem[]>(carPlayl
 export const fetchCarPodcasts = (count: number) =>
   get<CarPlayPodcastsResponse>(carPlaylistPodcastsGet(count));
 
-export const fetchCarCategoryPlaylist = (id: string | number) =>
+export const fetchCategoryPlaylist = (id: string | number) =>
   get<CarPlayCategoryResponse>(carPlaylistCategoryGet(id));
 
 export const fetchCarLivePlaylist = () => get<TVProgramResponse>(carPlaylistLiveGet());

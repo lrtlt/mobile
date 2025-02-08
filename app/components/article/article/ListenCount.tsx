@@ -10,12 +10,13 @@ interface ListenCountProps {
   style?: ViewStyle;
   visible?: boolean;
   article: Article;
+  count?: number;
 }
 
-const ListenCount: React.FC<ListenCountProps> = ({style, visible = true, article}) => {
+const ListenCount: React.FC<ListenCountProps> = ({style, visible = true, article, count}) => {
   const {colors} = useTheme();
 
-  if ((article.is_audio || article.article_type === ARTICLE_TYPE_AUDIO) && visible) {
+  if ((count || article.is_audio || article.article_type === ARTICLE_TYPE_AUDIO) && visible) {
     return (
       <View
         style={[
@@ -27,7 +28,7 @@ const ListenCount: React.FC<ListenCountProps> = ({style, visible = true, article
         ]}>
         <IconAudioReadCount size={16} color={colors.darkIcon} />
         <TextComponent style={{...styles.countText, color: colors.darkIcon}} importantForAccessibility="no">
-          {article.read_count}
+          {count ?? article.read_count}
         </TextComponent>
       </View>
     );

@@ -4,19 +4,18 @@ import {FacebookReactions, Text, TouchableDebounce} from '../../../components';
 import {useTheme} from '../../../Theme';
 import {IconVolume} from '../../../components/svg';
 import {checkEqual} from '../../../util/LodashEqualityCheck';
+import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
+import {MediaType} from '../../../components/videoComponent/context/PlayerContext';
 
 interface Props {
   category: string;
   date?: string;
   title: string;
   subtitle?: string;
+  image?: string;
   facebookReactions?: string;
   author: string;
-
-  //Text 2 speech params. Maybe move it elsewhere later on?
-  text2SpeechEnabled: boolean;
-  isText2SpeechPlaying: boolean;
-  onPlayStateChange: (play: boolean) => void;
+  text2SpeechUrl?: string;
 }
 
 const ArticleHeader: React.FC<React.PropsWithChildren<Props>> = ({
@@ -25,18 +24,30 @@ const ArticleHeader: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   date,
   facebookReactions,
+  image,
   subtitle,
-  text2SpeechEnabled,
-  isText2SpeechPlaying,
-  onPlayStateChange,
+  text2SpeechUrl,
 }) => {
   const {colors} = useTheme();
 
-  const text2SpeechPlayHander = useCallback(() => {
-    onPlayStateChange(!isText2SpeechPlaying);
-  }, [isText2SpeechPlaying, onPlayStateChange]);
+  const {setMediaData, mediaData, close} = useMediaPlayer();
+  const isText2SpeechPlaying = mediaData?.uri === text2SpeechUrl;
 
-  const text2SpeechComponent = text2SpeechEnabled ? (
+  const text2SpeechPlayHander = useCallback(() => {
+    if (isText2SpeechPlaying) {
+      close();
+    } else {
+      setMediaData({
+        isLiveStream: false,
+        mediaType: MediaType.AUDIO,
+        title: title,
+        uri: text2SpeechUrl!,
+        poster: image,
+      });
+    }
+  }, [isText2SpeechPlaying]);
+
+  const text2SpeechComponent = Boolean(text2SpeechUrl) ? (
     <TouchableDebounce
       style={styles.text2SpeechContainer}
       onPress={text2SpeechPlayHander}

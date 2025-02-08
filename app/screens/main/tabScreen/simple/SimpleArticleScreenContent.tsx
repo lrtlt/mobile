@@ -51,7 +51,13 @@ const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
   }, [isRefreshing]);
 
   const openArticleHandler = useCallback(
-    (article: Article) => navigation.push('Article', {articleId: article.id}),
+    (article: Article) => {
+      if (article.is_audio) {
+        navigation.push('Podcast', {articleId: article.id});
+      } else {
+        navigation.push('Article', {articleId: article.id});
+      }
+    },
     [navigation],
   );
 

@@ -109,7 +109,7 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
     <View style={{flex: 1}}>
       <View style={styles.playerContainer}>
         <VideoComponent
-          key={channel_info.channel_id}
+          key={selectedStream.streamUri}
           style={styles.player}
           autoPlay={true}
           backgroundImage={selectedStream.poster}

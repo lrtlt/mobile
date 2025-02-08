@@ -129,7 +129,13 @@ const SlugScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route
           return (
             <ArticleRow
               data={item.item}
-              onArticlePress={(article) => navigation.push('Article', {articleId: article.id})}
+              onArticlePress={(article) => {
+                if (article.is_audio) {
+                  navigation.push('Podcast', {articleId: article.id});
+                } else {
+                  navigation.push('Article', {articleId: article.id});
+                }
+              }}
             />
           );
         }}

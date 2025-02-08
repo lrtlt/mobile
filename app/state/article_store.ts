@@ -1,7 +1,14 @@
 import {create} from 'zustand';
 import {produce} from 'immer';
 import {Article} from '../../Types';
-import {AudiotekaResponse, HomeBlockChannels, HomeBlockType, LiveChannel, TVChannel} from '../api/Types';
+import {
+  AudiotekaResponse,
+  HomeBlockChannels,
+  HomeBlockType,
+  LiveChannel,
+  RadiotekaResponse,
+  TVChannel,
+} from '../api/Types';
 import {
   fetchAudiotekaApi,
   fetchCategoryApi,
@@ -10,6 +17,7 @@ import {
   fetchMediatekaApi,
   fetchNewestApi,
   fetchPopularApi,
+  fetchRadiotekaApi,
 } from '../api';
 
 import {formatArticles} from '../util/articleFormatters';
@@ -31,6 +39,10 @@ type CategoryHomeState = {
 
 type AudiotekaState = {
   data: AudiotekaResponse;
+} & BaseBlockState;
+
+type RadiotekaState = {
+  data: RadiotekaResponse;
 } & BaseBlockState;
 
 export type PagingState = {
@@ -63,6 +75,7 @@ export type ArticleState = {
   home: HomeState;
   mediateka: HomeState;
   audioteka: AudiotekaState;
+  radioteka: RadiotekaState;
   advancedCategories: {[key: number]: CategoryHomeState};
   categories: {[key: number]: CategoryState};
 
@@ -75,6 +88,7 @@ type ArticleActions = {
   fetchHome: () => void;
   fetchMediateka: () => void;
   fetchAudioteka: () => void;
+  fetchRadioteka: () => void;
   fetchPopular: (page: number, count: number, withOverride?: boolean) => void;
   fetchNewest: (
     page: number,
@@ -110,6 +124,12 @@ const initialState: ArticleState = {
     items: [],
   },
   audioteka: {
+    isFetching: false,
+    isError: false,
+    lastFetchTime: 0,
+    data: [],
+  },
+  radioteka: {
     isFetching: false,
     isError: false,
     lastFetchTime: 0,
@@ -240,11 +260,39 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
       );
     }
   },
+  fetchRadioteka: async () => {
+    set(
+      produce((state: ArticleState) => {
+        state.radioteka.isFetching = true;
+        state.radioteka.isError = false;
+      }),
+    );
+    try {
+      const data = await fetchRadiotekaApi();
+      set({
+        radioteka: {
+          data,
+          isFetching: false,
+          isError: false,
+          lastFetchTime: Date.now(),
+        },
+      });
+    } catch (e) {
+      console.log('Fetch radioteka error', e);
+      set(
+        produce((state: ArticleState) => {
+          state.radioteka.isFetching = false;
+          state.radioteka.isError = true;
+        }),
+      );
+    }
+  },
   fetchPopular: async (page: number, count: number, withOverride?: boolean) => {
     set(
       produce((state: ArticleState) => {
         state.popular.isFetching = true;
         state.popular.isError = false;
+        state.popular.isRefreshing = withOverride ?? initialCategoryState.isRefreshing;
       }),
     );
     try {
@@ -284,6 +332,7 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
       produce((state: ArticleState) => {
         state.newest.isFetching = true;
         state.newest.isError = false;
+        state.newest.isRefreshing = withOverride ?? initialCategoryState.isRefreshing;
       }),
     );
     try {

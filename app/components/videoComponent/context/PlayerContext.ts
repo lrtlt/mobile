@@ -17,6 +17,7 @@ export type MediaBaseData = {
 };
 
 export type PlayerContextType = {
+  mediaData?: MediaBaseData;
   setMediaData: (data: MediaBaseData) => void;
   close: () => void;
 };

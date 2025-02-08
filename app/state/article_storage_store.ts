@@ -30,6 +30,7 @@ export type SavedArticle = {
   url?: string;
   photo: string;
   is_video?: 1 | 0;
+  is_audio?: 1 | 0;
 };
 
 type ArticleStorageState = {
@@ -98,6 +99,7 @@ const mapArticleData = (article: ArticleContent): SavedArticle => {
       photo: article.main_photo?.path,
       subtitle: article.subtitle,
       is_video: article.is_video,
+      is_audio: article.is_audio,
     };
   } else {
     return {
@@ -109,6 +111,7 @@ const mapArticleData = (article: ArticleContent): SavedArticle => {
       photo: article.main_photo?.path,
       subtitle: article.article_subtitle,
       is_video: article.is_video,
+      is_audio: 0,
     };
   }
 };

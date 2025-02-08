@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View, StyleSheet, RefreshControl} from 'react-native';
 import {
   ArticleRow,
@@ -129,7 +129,13 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
           return (
             <ArticleRow
               data={[block.article]}
-              onArticlePress={(article) => navigation.navigate('Article', {articleId: article.id})}
+              onArticlePress={(article) => {
+                if (article.is_audio) {
+                  navigation.navigate('Podcast', {articleId: article.id});
+                } else {
+                  navigation.navigate('Article', {articleId: article.id});
+                }
+              }}
             />
           );
         }
@@ -213,6 +219,7 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
   const keyExtractor = useCallback((item: HomeBlockType, index: number) => `${index}-${item.type}`, []);
 
   const insets = useSafeAreaInsets();
+  const extraData = useMemo(() => ({lastFetchTime: lastFetchTime}), [lastFetchTime]);
 
   if (!items.length) {
     return <ScreenLoader />;
@@ -225,9 +232,7 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
         contentContainerStyle={{paddingBottom: insets.bottom}}
         ref={listRef}
         ListHeaderComponent={renderTitle()}
-        extraData={{
-          lastFetchTime: lastFetchTime,
-        }}
+        extraData={extraData}
         renderItem={renderItem}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={() => fetchCategoryHome(id, true)} />

@@ -21,7 +21,11 @@ const FeedArticlesBlock: React.FC<FeedArticlesBlockProps> = ({block}) => {
 
   const articlePressHandler = useCallback(
     (article: Article) => {
-      navigation.navigate('Article', {articleId: article.id});
+      if (article.is_audio) {
+        navigation.navigate('Podcast', {articleId: article.id});
+      } else {
+        navigation.navigate('Article', {articleId: article.id});
+      }
     },
     [navigation],
   );

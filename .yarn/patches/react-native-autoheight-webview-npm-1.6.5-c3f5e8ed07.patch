@@ -1,7 +1,7 @@
-diff --git a/node_modules/react-native-autoheight-webview/autoHeightWebView/index.js b/node_modules/react-native-autoheight-webview/autoHeightWebView/index.js
-index 3d0dc75..7138615 100644
---- a/node_modules/react-native-autoheight-webview/autoHeightWebView/index.js
-+++ b/node_modules/react-native-autoheight-webview/autoHeightWebView/index.js
+diff --git a/autoHeightWebView/index.js b/autoHeightWebView/index.js
+index 3d0dc752d665d51a1bc4197aede9aa0db7ea114a..c35cbf75b9be4d95b7df3925bb922349cbc393a0 100644
+--- a/autoHeightWebView/index.js
++++ b/autoHeightWebView/index.js
 @@ -1,6 +1,6 @@
  import React, {useState, useEffect, forwardRef} from 'react';
  
@@ -20,16 +20,21 @@ index 3d0dc75..7138615 100644
  const AutoHeightWebView = React.memo(
    forwardRef((props, ref) => {
      const {
-@@ -44,9 +47,10 @@ const AutoHeightWebView = React.memo(
+@@ -44,11 +47,12 @@ const AutoHeightWebView = React.memo(
              scrollEnabledWithZoomedin &&
              setScrollable(!!zoomedin);
            const {height: previousHeight, width: previousWidth} = size;
 -          isSizeChanged({height, previousHeight, width, previousWidth}) &&
+-            setSize({
+-              height,
+-              width,
+-            });
 +          const newHeight = MAX_HEIGHT !== -1 ? Math.min(height, MAX_HEIGHT) : height;
 +          isSizeChanged({height: newHeight, previousHeight, width, previousWidth}) &&
-             setSize({
--              height,
-+              height: newHeight,
-               width,
-             });
++             setSize({
++               height: newHeight,
++               width,
++             });
          } catch (error) {
+           onMessage && onMessage(event);
+         }

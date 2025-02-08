@@ -1,6 +1,6 @@
 {
   "name": "lrt.lt",
-  "version": "2.53.0",
+  "version": "2.54.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -101,5 +101,8 @@
       "node"
     ]
   },
-  "packageManager": "yarn@3.6.4"
+  "packageManager": "yarn@3.6.4",
+  "resolutions": {
+    "react-native-autoheight-webview@^1.6.5": "patch:react-native-autoheight-webview@npm%3A1.6.5#./.yarn/patches/react-native-autoheight-webview-npm-1.6.5-c3f5e8ed07.patch"
+  }
 }

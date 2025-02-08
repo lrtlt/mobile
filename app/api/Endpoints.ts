@@ -132,6 +132,10 @@ export const audiotekaGet = () => {
   return `${BASE_URL}audioteka-home`;
 };
 
+export const radiotekaGet = () => {
+  return `${BASE_URL}audioteka-home/v2`;
+};
+
 /**
  * Returns all channels TV program data for a week.
  */
@@ -169,6 +173,14 @@ export const forecastGet = (cityCode: string) => {
 
 export const liveFeedGet = (id: string | number, count: number, order: 'desc' | 'asc') => {
   return `${BASE_URL}get-feed-items/${id}?count=${count}&order=${order}`;
+};
+
+export const articleRecommendations = (articleId: number | string) => {
+  return `https://peach.ebu.io/api/v1/ltlrt/similar?article_id=${articleId}`;
+};
+
+export const articlesByIds = (ids: string[]) => {
+  return `https://www.lrt.lt/api/json/search?ids=${ids.join(',')}`;
 };
 
 export const carPlaylistNewestGet = () => 'https://www.lrt.lt/static/carplay/naujausi.json';
