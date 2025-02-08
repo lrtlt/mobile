@@ -95,7 +95,7 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<{}>> = (props) => {
             mediaType={mediaData.mediaType}
             poster={mediaData.poster}
             title={mediaData.title}
-            streamUri={mediaData.uri!}
+            streamUri={mediaData.uri}
             startTime={mediaData.startTime}
             tracks={mediaData.tracks}
             autoStart={true}

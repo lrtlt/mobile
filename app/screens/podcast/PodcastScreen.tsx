@@ -12,7 +12,7 @@ import PodcastAbout from './about/PodcastAbout';
 import {ArticleContentMedia} from '../../api/Types';
 import {ScrollView} from 'react-native-gesture-handler';
 import FastImage from 'react-native-fast-image';
-import {buildArticleImageUri, IMG_SIZE_XL, IMG_SIZE_XXL} from '../../util/ImageUtil';
+import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
 import PodcastEpisode from './episode/PodcastEpisode';
 import PodcastRecommendations from './recommendations/PodcastRecommendations';
 import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection';

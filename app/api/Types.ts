@@ -172,7 +172,6 @@ export type HomeBlockEpikaBlock = {
 };
 
 export type HomeBlockTopFeedBlock = {
-  //TODO: remove this template after audioteka api update
   template: 'top_feed';
   type: 'top_feed';
   articles: FeedArticle[];
@@ -435,7 +434,6 @@ export type RadiotekaCategory = {
   };
   lrt_show_id: number;
   title: string;
-  //TODO: check if this is correct might be incosisntent type
   LATEST_ITEM: ArticleContentMedia;
 };
 

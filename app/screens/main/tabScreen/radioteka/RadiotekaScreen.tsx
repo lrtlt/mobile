@@ -147,7 +147,6 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             categoryTitle={item.data.description.article_title}
             items={item.data.category_list.map((c) => ({
               title: c.title,
-              //TODO: need to check if this is correct
               category:
                 c.branch_info?.branch_level2?.branch_title ?? c.branch_info?.branch_level1?.branch_title,
               imageUrl: buildImageUri(
@@ -212,7 +211,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
         break;
       }
       default: {
-        // console.warn('Unknown list item: ', JSON.stringify(item, null, 4));
+        console.warn('Unknown list item: ', JSON.stringify(item, null, 4));
         return <View />;
       }
     }
