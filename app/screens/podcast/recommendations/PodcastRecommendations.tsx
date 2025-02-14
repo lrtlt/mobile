@@ -2,12 +2,13 @@ import {StyleSheet, View} from 'react-native';
 import {Text} from '../../../components';
 import useRecomendations from './useRecommendations';
 import RadiotekaHorizontalList from '../../main/tabScreen/radioteka/components/horizontal_list/RadiotekaHorizontalList';
-import {useArticlePlayer} from '../../main/tabScreen/radioteka/hooks/useArticlePlayer';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
-import {useMemo} from 'react';
+import {useCallback, useMemo} from 'react';
+import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
+import ArticlePlaylist from '../../../components/videoComponent/context/ArticlePlaylist';
 
 interface Props {
   articleId: number;
@@ -18,7 +19,7 @@ const PodcastRecommendations: React.FC<React.PropsWithChildren<Props>> = ({artic
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Podcast'>>();
 
-  const {playArticle} = useArticlePlayer();
+  const {setPlaylist} = useMediaPlayer();
 
   const items = useMemo(() => {
     return recommendations.items.map((item) => ({
@@ -27,6 +28,18 @@ const PodcastRecommendations: React.FC<React.PropsWithChildren<Props>> = ({artic
       imageUrl: buildArticleImageUri(IMG_SIZE_M, item.photo)!,
     }));
   }, [recommendations.items]);
+
+  const playItem = useCallback(
+    (index: number) => {
+      setPlaylist(
+        new ArticlePlaylist(
+          recommendations.items.map((item) => item.id),
+          index,
+        ),
+      );
+    },
+    [recommendations, setPlaylist],
+  );
 
   if (items.length === 0) {
     return null;
@@ -39,9 +52,7 @@ const PodcastRecommendations: React.FC<React.PropsWithChildren<Props>> = ({artic
       </Text>
       <RadiotekaHorizontalList
         items={items}
-        onItemPlayPress={(index) => {
-          playArticle(recommendations.items[index].id);
-        }}
+        onItemPlayPress={playItem}
         onItemPress={(index) => {
           navigation.navigate('Podcast', {articleId: recommendations.items[index].id});
         }}

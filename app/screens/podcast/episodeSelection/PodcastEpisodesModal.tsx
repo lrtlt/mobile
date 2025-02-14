@@ -1,7 +1,6 @@
 import {PropsWithChildren, useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
 import PlayButton from '../../main/tabScreen/radioteka/components/play_button/play_button';
-import {useArticlePlayer} from '../../main/tabScreen/radioteka/hooks/useArticlePlayer';
 import {MoreArticlesButton, Text, TouchableDebounce} from '../../../components';
 import Modal from 'react-native-modal';
 import {useTheme} from '../../../Theme';
@@ -16,11 +15,16 @@ interface Props {
   episodes: Article[];
   visible: boolean;
   onClose: () => void;
+  onPlayPress: (article: Article) => void;
 }
 
-const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({episodes, visible, onClose}) => {
+const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
+  episodes,
+  visible,
+  onClose,
+  onPlayPress,
+}) => {
   const {mediaData} = useMediaPlayer();
-  const {playArticle} = useArticlePlayer();
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Podcast'>>();
 
@@ -32,7 +36,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({episodes, vis
         <View style={styles.item_root}>
           <PlayButton
             style={mediaData?.title == item.title ? undefined : {backgroundColor: colors.greyBackground}}
-            onPress={() => playArticle(item.id)}
+            onPress={() => onPlayPress(item)}
           />
           <TouchableDebounce
             style={styles.item_text_container}

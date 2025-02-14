@@ -5,6 +5,10 @@ import {isMediaArticle} from '../../../../../api/Types';
 import {fetchArticle} from '../../../../../api';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../../../util/ImageUtil';
 
+/**
+ * @deprecated
+ * useArticlePlayer is deprecated. Use useMediaPlayer hook instead.
+ */
 export const useArticlePlayer = () => {
   const {setMediaData} = useMediaPlayer();
 

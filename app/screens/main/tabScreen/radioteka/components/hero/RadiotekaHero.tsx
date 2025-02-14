@@ -8,9 +8,10 @@ import {RadiotekaTopArticlesBlock} from '../../../../../../api/Types';
 import FastImage from 'react-native-fast-image';
 import {buildImageUri, IMG_SIZE_M, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
 import LinearGradient from 'react-native-linear-gradient';
-import {useArticlePlayer} from '../../hooks/useArticlePlayer';
 import {Article} from '../../../../../../../Types';
 import PlayButton from '../play_button/play_button';
+import {useMediaPlayer} from '../../../../../../components/videoComponent/context/useMediaPlayer';
+import ArticlePlaylist from '../../../../../../components/videoComponent/context/ArticlePlaylist';
 
 const {height} = Dimensions.get('window');
 const width = Math.min(Dimensions.get('window').width * 0.32, 150);
@@ -27,7 +28,19 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   const articles = data.articles_list;
 
   const scaleValues = articles?.map(() => useSharedValue(1));
-  const {playArticle} = useArticlePlayer();
+  const {setPlaylist} = useMediaPlayer();
+
+  const playItem = useCallback(
+    (index: number) => {
+      setPlaylist(
+        new ArticlePlaylist(
+          articles.map((item) => item.id),
+          index,
+        ),
+      );
+    },
+    [articles],
+  );
 
   useEffect(() => {
     // Reset all scales to 1
@@ -93,7 +106,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
             </Text>
             <Text style={styles.subtitle}>{articles[selectedIndex].title}</Text>
             <View style={styles.buttonContainer}>
-              <PlayButton onPress={() => playArticle(articles[selectedIndex].id)} />
+              <PlayButton onPress={() => playItem(selectedIndex)} />
               <TouchableDebounce
                 style={styles.moreButton}
                 onPress={() => {

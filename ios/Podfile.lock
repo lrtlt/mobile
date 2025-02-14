@@ -2441,7 +2441,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.14.1):
     - React-Core
-  - react-native-theoplayer (8.13.0):
+  - react-native-theoplayer (8.15.0):
     - React-Core
     - THEOplayer-Connector-SideloadedSubtitle (~> 8.6)
     - THEOplayer-Integration-GoogleCast (~> 8.6)
@@ -3318,7 +3318,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: 1d19e26c6abc96672bd27ae5b41f44c569709b20
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
-  react-native-theoplayer: a2a565a2e24c12343f79377be56359088e8ee191
+  react-native-theoplayer: 9f4698b1b6bd4a396d6dc2d8554511dbde7d03eb
   react-native-unistyles: 14ada3d7f8d34adf5feaf6b61611c9a368a6434d
   react-native-webview: ff5bc3a981754f60bbd22b6b7faec3a3d082e90e
   React-nativeconfig: bf6ea7351e761f3ab837b9fc406576c56492f57a

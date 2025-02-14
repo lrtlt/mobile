@@ -1,5 +1,6 @@
 import React from 'react';
 import {VideoTextTrack} from '../../../api/Types';
+import ArticlePlaylist from './ArticlePlaylist';
 
 export enum MediaType {
   AUDIO,
@@ -19,6 +20,7 @@ export type MediaBaseData = {
 export type PlayerContextType = {
   mediaData?: MediaBaseData;
   setMediaData: (data: MediaBaseData) => void;
+  setPlaylist: (playlist: ArticlePlaylist) => void;
   close: () => void;
 };
 
@@ -26,5 +28,6 @@ const _noOp = () => {};
 
 export const PlayerContext = React.createContext<PlayerContextType>({
   setMediaData: _noOp,
+  setPlaylist: _noOp,
   close: _noOp,
 });

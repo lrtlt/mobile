@@ -18,7 +18,7 @@ const useEpisodes = (categoryId?: number) => {
   }, [categoryId]);
 
   return {
-    items,
+    episodes: items,
   };
 };
 

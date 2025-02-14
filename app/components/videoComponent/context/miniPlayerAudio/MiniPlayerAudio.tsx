@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import {PlayerEventType, THEOplayer} from 'react-native-theoplayer';
+import {PlayerEventType, PresentationMode, THEOplayer} from 'react-native-theoplayer';
 import {useTheme} from '../../../../Theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, View} from 'react-native';
@@ -16,12 +16,20 @@ import {
 } from '../../../svg';
 import {useMediaPlayer} from '../useMediaPlayer';
 import PlayerSekBar from '../../PlayerSeekBar';
+import {MediaType} from '../PlayerContext';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const PLAYER_HEIGHT = 80;
 const PADDING = 8;
 const BORDER_RADIUS = 8;
 
-const MiniPlayerAudio: React.FC<React.PropsWithChildren<{}>> = (props) => {
+interface Props {
+  onEnded: () => void;
+  onNext?: () => void;
+  onPrevious?: () => void;
+}
+
+const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onNext, onPrevious}) => {
   const [player, setPlayer] = useState<THEOplayer>();
   const [isPlaying, setPlaying] = useState(false);
 
@@ -68,6 +76,12 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<{}>> = (props) => {
     [player],
   );
 
+  const handleFullScreen = useCallback(() => {
+    if (player) {
+      player.presentationMode = PresentationMode.fullscreen;
+    }
+  }, [player]);
+
   if (!mediaData) {
     return null;
   }
@@ -88,7 +102,14 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<{}>> = (props) => {
           gap: PADDING,
           borderColor: colors.border,
         }}>
-        <View style={styles.videoContainer} pointerEvents="none">
+        <TouchableWithoutFeedback
+          style={[
+            styles.videoContainer,
+            {
+              aspectRatio: mediaData.mediaType === MediaType.AUDIO ? 1 : 16 / 9,
+            },
+          ]}
+          onPress={handleFullScreen}>
           <TheoMediaPlayer
             key={mediaData.uri}
             isLiveStream={!!mediaData.isLiveStream}
@@ -100,12 +121,12 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<{}>> = (props) => {
             tracks={mediaData.tracks}
             autoStart={true}
             isMini={true}
-            aspectRatio={1}
+            aspectRatio={mediaData.mediaType === MediaType.AUDIO ? 1 : 16 / 9}
             controls={false}
-            onEnded={close}
+            onEnded={onEnded}
             onPlayerReadyCallback={setPlayer}
           />
-        </View>
+        </TouchableWithoutFeedback>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingHorizontal: PADDING}}>
           <View style={{flex: 1, maxWidth: 340}}>
             <View
@@ -115,7 +136,9 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<{}>> = (props) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}>
-              <IconPlayerPrevious size={22} color={colors.darkIcon + '33'} />
+              <TouchableDebounce onPress={onPrevious} hitSlop={12}>
+                <IconPlayerPrevious size={22} color={colors.darkIcon + (onPrevious ? '' : '33')} />
+              </TouchableDebounce>
               <TouchableDebounce onPress={() => handleSeekBy(-10)} hitSlop={12}>
                 <IconPlayerRewind size={22} color={colors.darkIcon} />
               </TouchableDebounce>
@@ -129,7 +152,9 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<{}>> = (props) => {
               <TouchableDebounce onPress={() => handleSeekBy(10)} hitSlop={12}>
                 <IconPlayerForward size={22} color={colors.darkIcon} />
               </TouchableDebounce>
-              <IconPlayerNext size={22} color={colors.darkIcon + '33'} />
+              <TouchableDebounce onPress={onNext} hitSlop={12}>
+                <IconPlayerNext size={22} color={colors.darkIcon + (onNext ? '' : '33')} />
+              </TouchableDebounce>
             </View>
             {player ? <PlayerSekBar style={{width: '100%'}} player={player} /> : null}
           </View>

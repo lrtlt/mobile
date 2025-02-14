@@ -21,7 +21,8 @@ import {RadiotekaHeroCarousel} from './components/hero/RadiotekaHeroCarousel';
 import {useNavigation} from '@react-navigation/native';
 import {MainStackParamList} from '../../../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useArticlePlayer} from './hooks/useArticlePlayer';
+import {useMediaPlayer} from '../../../../components/videoComponent/context/useMediaPlayer';
+import ArticlePlaylist from '../../../../components/videoComponent/context/ArticlePlaylist';
 
 const WIDGET_ID_HERO = 21;
 
@@ -44,9 +45,8 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Home'>>();
 
+  const {setPlaylist} = useMediaPlayer();
   const {fetchRadioteka} = useArticleStore.getState();
-
-  const {playArticle} = useArticlePlayer();
 
   const state = useArticleStore(useShallow(selectRadiotekaScreenState));
   const {refreshing, lastFetchTime, data} = state;
@@ -132,7 +132,12 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 });
               }}
               onItemPlayPress={(index) => {
-                playArticle(item.data.articles_list[index].id);
+                setPlaylist(
+                  new ArticlePlaylist(
+                    item.data.articles_list.map((a) => a.id),
+                    index,
+                  ),
+                );
               }}
             />
           );
@@ -161,7 +166,12 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               });
             }}
             onItemPlayPress={(index) => {
-              playArticle(item.data.category_list[index].LATEST_ITEM.id);
+              setPlaylist(
+                new ArticlePlaylist(
+                  item.data.category_list.map((c) => c.LATEST_ITEM.id),
+                  index,
+                ),
+              );
             }}
             onKeywordPress={(keyword) => {
               navigation.navigate('Slug', {
@@ -183,7 +193,12 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 });
               }}
               onItemPlayPress={(index) => {
-                playArticle(item.data.articles_list[index].id);
+                setPlaylist(
+                  new ArticlePlaylist(
+                    item.data.articles_list.map((a) => a.id),
+                    index,
+                  ),
+                );
               }}
             />
           );
@@ -203,7 +218,12 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 });
               }}
               onItemPlayPress={(index) => {
-                playArticle(item.data.articles_list[index].id);
+                setPlaylist(
+                  new ArticlePlaylist(
+                    item.data.articles_list.map((a) => a.id),
+                    index,
+                  ),
+                );
               }}
             />
           );

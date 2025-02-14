@@ -9,7 +9,7 @@ import {AdultContentWarning, ScreenError, ScreenLoader} from '../../components';
 import useArticleScreenState from '../article/useArticleScreenState';
 import {useTheme} from '../../Theme';
 import PodcastAbout from './about/PodcastAbout';
-import {ArticleContentMedia} from '../../api/Types';
+import {ArticleContentMedia, isMediaArticle} from '../../api/Types';
 import {ScrollView} from 'react-native-gesture-handler';
 import FastImage from 'react-native-fast-image';
 import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
@@ -17,6 +17,9 @@ import PodcastEpisode from './episode/PodcastEpisode';
 import PodcastRecommendations from './recommendations/PodcastRecommendations';
 import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection';
 import useArticleAnalytics from '../article/useArticleAnalytics';
+import useEpisodes from './episodeSelection/useEpisodes';
+import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
+import ArticlePlaylist from '../../components/videoComponent/context/ArticlePlaylist';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Podcast'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Podcast'>;
@@ -30,6 +33,9 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   const {articleId} = route.params;
 
   const [{article, loadingState}, acceptAdultContent] = useArticleScreenState(articleId);
+  const {episodes} = useEpisodes(article?.category_id);
+  const {setPlaylist} = useMediaPlayer();
+
   const {strings, colors} = useTheme();
 
   useArticleAnalytics({article});
@@ -39,6 +45,18 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
       headerTitle: article?.category_title ?? '',
     });
   }, [article, navigation]);
+
+  const play = useCallback(
+    (id: number) => {
+      setPlaylist(
+        new ArticlePlaylist(
+          episodes.map((episode) => episode.id),
+          episodes.findIndex((episode) => episode.id == id),
+        ),
+      );
+    },
+    [episodes, setPlaylist, article],
+  );
 
   const {bottom} = useSafeAreaInsets();
 
@@ -85,8 +103,20 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
               style={[styles.screen, {backgroundColor: colors.greyBackground}]}
               edges={['left', 'right']}>
               <ScrollView contentContainerStyle={{paddingBottom: bottom + 80}}>
-                <PodcastEpisodeSelection category_id={article.category_id} />
-                <PodcastEpisode article={article as ArticleContentMedia} />
+                <PodcastEpisodeSelection
+                  episodes={episodes}
+                  onPlayEpisode={(episode) => {
+                    play(episode.id);
+                  }}
+                />
+                <PodcastEpisode
+                  article={article as ArticleContentMedia}
+                  onPlayPress={() => {
+                    if (isMediaArticle(article)) {
+                      play(article.id);
+                    }
+                  }}
+                />
                 <View style={styles.imageContainer}>
                   <FastImage
                     style={{
