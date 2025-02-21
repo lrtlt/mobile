@@ -1,20 +1,34 @@
-import {PropsWithChildren, useState} from 'react';
+import {PropsWithChildren, useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {IconCarretDown} from '../../../components/svg';
 import {useTheme} from '../../../Theme';
 import {Text, TouchableDebounce} from '../../../components';
 import PodcastEpisodesModal from './PodcastEpisodesModal';
-import {Article} from '../../../../Types';
+import {ArticleCategoryInfo, ArticleSeasonInfo} from '../../../api/Types';
 
 interface Props {
-  episodes: Article[];
-  onPlayEpisode: (episode: Article) => void;
+  currentSeason?: ArticleSeasonInfo;
+  categoryInfo?: ArticleCategoryInfo;
 }
 
-const PodcastEpisodeSelection: React.FC<PropsWithChildren<Props>> = ({episodes, onPlayEpisode}) => {
+const PodcastEpisodeSelection: React.FC<PropsWithChildren<Props>> = ({categoryInfo, currentSeason}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const {colors} = useTheme();
+
+  const seasons = useMemo(
+    () =>
+      categoryInfo?.season_info.sort((a, b) => {
+        if (a.lrt_season_count > b.lrt_season_count) {
+          return -1;
+        }
+        if (a.lrt_season_count < b.lrt_season_count) {
+          return 1;
+        }
+        return 0;
+      }),
+    [categoryInfo],
+  );
 
   return (
     <TouchableDebounce
@@ -35,12 +49,14 @@ const PodcastEpisodeSelection: React.FC<PropsWithChildren<Props>> = ({episodes, 
       ) : (
         <IconCarretDown size={16} color={colors.primary} />
       )}
-      <PodcastEpisodesModal
-        episodes={episodes}
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onPlayPress={onPlayEpisode}
-      />
+      {seasons && (
+        <PodcastEpisodesModal
+          seasons={seasons}
+          currentSeason={currentSeason}
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+        />
+      )}
     </TouchableDebounce>
   );
 };

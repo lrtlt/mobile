@@ -15,6 +15,7 @@ import {
   channelGet,
   forecastGet,
   getDailyQuestion,
+  getRadiotekaArticlesBySeason,
   homeGet,
   liveFeedGet,
   mediatekaGet,
@@ -133,3 +134,6 @@ export const fetchCategoryPlaylist = (id: string | number) =>
   get<CarPlayCategoryResponse>(carPlaylistCategoryGet(id));
 
 export const fetchCarLivePlaylist = () => get<TVProgramResponse>(carPlaylistLiveGet());
+
+export const fetchRadiotekaSeasonPlaylist = (seasonUrl: string) =>
+  get<SearchResponse>(getRadiotekaArticlesBySeason(seasonUrl));

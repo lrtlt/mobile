@@ -17,9 +17,9 @@ import PodcastEpisode from './episode/PodcastEpisode';
 import PodcastRecommendations from './recommendations/PodcastRecommendations';
 import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection';
 import useArticleAnalytics from '../article/useArticleAnalytics';
-import useEpisodes from './episodeSelection/useEpisodes';
 import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
 import ArticlePlaylist from '../../components/videoComponent/context/ArticlePlaylist';
+import useSeason from './episodeSelection/useSeason';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Podcast'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Podcast'>;
@@ -32,8 +32,13 @@ type Props = {
 const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const {articleId} = route.params;
 
-  const [{article, loadingState}, acceptAdultContent] = useArticleScreenState(articleId);
-  const {episodes} = useEpisodes(article?.category_id);
+  const [{article, category_info, loadingState}, acceptAdultContent] = useArticleScreenState(articleId);
+
+  const currentSeason = category_info?.season_info.find(
+    (season) => season.lrt_season_id === (article as ArticleContentMedia).lrt_season_id,
+  );
+
+  const {episodes} = useSeason(currentSeason?.season_url);
   const {setPlaylist} = useMediaPlayer();
 
   const {strings, colors} = useTheme();
@@ -103,12 +108,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
               style={[styles.screen, {backgroundColor: colors.greyBackground}]}
               edges={['left', 'right']}>
               <ScrollView contentContainerStyle={{paddingBottom: bottom + 80}}>
-                <PodcastEpisodeSelection
-                  episodes={episodes}
-                  onPlayEpisode={(episode) => {
-                    play(episode.id);
-                  }}
-                />
+                <PodcastEpisodeSelection currentSeason={currentSeason} categoryInfo={category_info} />
                 <PodcastEpisode
                   article={article as ArticleContentMedia}
                   onPlayPress={() => {
@@ -121,7 +121,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                   <FastImage
                     style={{
                       flex: 1,
-                      aspectRatio: article.main_photo.w_h,
+                      aspectRatio: article.main_photo?.w_h,
                       borderRadius: 8,
                       borderWidth: 2,
                       borderColor: '#fff',

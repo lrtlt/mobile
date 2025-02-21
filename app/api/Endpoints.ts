@@ -180,7 +180,7 @@ export const articleRecommendations = (articleId: number | string) => {
 };
 
 export const articlesByIds = (ids: string[]) => {
-  return `https://www.lrt.lt/api/json/search?ids=${ids.join(',')}`;
+  return `${BASE_URL}search?ids=${ids.join(',')}`;
 };
 
 export const carPlaylistNewestGet = () => 'https://www.lrt.lt/static/carplay/naujausi.json';
@@ -190,9 +190,11 @@ export const carPlaylistPopularGet = () => 'https://www.lrt.lt/static/carplay/po
 export const carPlaylistRecommendedGet = () => 'https://www.lrt.lt/static/carplay/rekomenduoja.json';
 
 export const carPlaylistPodcastsGet = (count: number) =>
-  `https://www.lrt.lt/api/json/search/categories?type=audio&count=${count}`;
+  `${BASE_URL}search/categories?type=audio&count=${count}`;
 
-export const carPlaylistCategoryGet = (id: number | string) =>
-  `https://www.lrt.lt/api/json/category?id=${id}`;
+export const carPlaylistCategoryGet = (id: number | string) => `${BASE_URL}category?id=${id}`;
 
 export const carPlaylistLiveGet = () => 'https://www.lrt.lt/static/tvprog/tvprog.json';
+
+export const getRadiotekaArticlesBySeason = (seasonUrl: string) =>
+  `https://www.lrt.lt/api/search?type=2&season_url=${seasonUrl}&order=desc`;

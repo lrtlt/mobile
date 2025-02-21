@@ -153,6 +153,7 @@ type ColorScheme = {
   headerTint: string;
   statusBar: string;
   greyBackground: string;
+  darkGreyBackground: string;
   playerBackground: string;
   articleHighlight: string;
   listSeparator: string;
@@ -170,6 +171,7 @@ type ColorScheme = {
   dailyQuestionProgress: string;
   epikaGreen: '#58EB52';
   playerIcons: 'rgb(217, 32, 83)';
+  radiotekaPlayButton: '#FFD600';
 };
 
 const colorsLight: ColorScheme = {
@@ -197,6 +199,8 @@ const colorsLight: ColorScheme = {
   tabLableSelected: 'primaryDark',
   headerTint: '#444444',
   greyBackground: '#F4F6F8',
+  darkGreyBackground: 'rgb(228, 228, 231)',
+  lightGreyBackground: '#F9F9F9',
   playerBackground: '#888',
   articleHighlight: '#F4F6F820',
   listSeparator: '#66666636',
@@ -210,10 +214,10 @@ const colorsLight: ColorScheme = {
   dailyQuestionProgress: '#dce3e9',
   facebook: '#3b5998',
   darkIcon: '#222222',
-  lightGreyBackground: '#F9F9F9',
   ripple: '#99999940',
   epikaGreen: '#58EB52',
   playerIcons: 'rgb(217, 32, 83)',
+  radiotekaPlayButton: '#FFD600',
 };
 
 const colorsDark: ColorScheme = {
@@ -241,6 +245,8 @@ const colorsDark: ColorScheme = {
   headerTint: '#DADADA',
   actionButton: '#333333',
   greyBackground: '#2B3640',
+  darkGreyBackground: 'rgb(228, 228, 231)',
+  lightGreyBackground: '#F9F9F9',
   articleHighlight: '#2B364060',
   photoBackground: '#373f4e',
   listSeparator: '#FFFFFF40',
@@ -253,11 +259,11 @@ const colorsDark: ColorScheme = {
   toggleButtonSelected: '#465363',
   facebook: '#BBBBBB',
   darkIcon: '#222222',
-  lightGreyBackground: '#F9F9F9',
   ripple: '#99999940',
   dailyQuestionProgress: '#36414f',
   epikaGreen: '#58EB52',
   playerIcons: 'rgb(217, 32, 83)',
+  radiotekaPlayButton: '#FFD600',
 };
 //#endregion
 

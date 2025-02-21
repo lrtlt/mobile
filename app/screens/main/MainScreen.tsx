@@ -197,7 +197,8 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
             routes: state.routes,
             index: selectedTabIndex,
           }}
-          swipeEnabled={state.routes[selectedTabIndex]?.type !== ROUTE_TYPE_AUDIOTEKA}
+          // swipeEnabled={state.routes[selectedTabIndex]?.type !== ROUTE_TYPE_AUDIOTEKA}
+          swipeEnabled={true}
           renderScene={renderScene}
           renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
           onIndexChange={setSelectedTabIndex}

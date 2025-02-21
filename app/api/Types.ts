@@ -432,6 +432,7 @@ export type RadiotekaCategory = {
       branch_title: string;
     };
   };
+  season_info: ArticleSeasonInfo[];
   lrt_show_id: number;
   title: string;
   LATEST_ITEM: ArticleContentMedia;
@@ -759,6 +760,7 @@ export type ArticleContentMedia = {
   is_audio?: 0 | 1;
   read_count?: number;
   media_duration: string;
+  lrt_season_id?: string;
 };
 
 export const isMediaArticle = (article?: ArticleContent): article is ArticleContentMedia => {
@@ -789,6 +791,33 @@ export type ArticleContent = ArticleContentDefault | ArticleContentMedia;
 
 export type ArticleContentResponse = {
   article: ArticleContent;
+  category_info?: ArticleCategoryInfo;
+};
+
+export type ArticleCategoryInfo = {
+  season_info: ArticleSeasonInfo[];
+  lrt_show_id: number;
+  category_id: number;
+  term: string;
+  branch_info?: {
+    branch_level2?: {
+      branch_term: string;
+      branch_id: number;
+      branch_title: string;
+    };
+    branch_level1?: {
+      branch_term: string;
+      branch_id: number;
+      branch_title: string;
+    };
+  };
+};
+
+export type ArticleSeasonInfo = {
+  lrt_season_id: string;
+  season_title: string;
+  season_url: string;
+  lrt_season_count: string;
 };
 
 export type ProgramItemType = {

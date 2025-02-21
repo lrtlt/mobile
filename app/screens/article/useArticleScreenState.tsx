@@ -1,12 +1,13 @@
 import {useNavigation} from '@react-navigation/core';
 import {useCallback, useEffect, useState} from 'react';
 import {fetchArticle} from '../../api';
-import {ArticleContent} from '../../api/Types';
+import {ArticleCategoryInfo, ArticleContent} from '../../api/Types';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {useArticleStorageStore} from '../../state/article_storage_store';
 
 type ScreenState = {
   article?: ArticleContent;
+  category_info?: ArticleCategoryInfo;
   loadingState:
     | typeof STATE_LOADING
     | typeof STATE_ERROR
@@ -36,6 +37,7 @@ const useArticleScreenState = (
   useEffect(() => {
     setState({
       article: undefined,
+      category_info: undefined,
       loadingState: STATE_LOADING,
     });
 
@@ -50,6 +52,7 @@ const useArticleScreenState = (
 
         setState({
           article,
+          category_info: response.category_info,
           loadingState: loadingState,
         });
         articleStorage.addArticleToHistory(article);
@@ -58,6 +61,7 @@ const useArticleScreenState = (
         console.log(e);
         setState({
           article: undefined,
+          category_info: undefined,
           loadingState: STATE_ERROR,
         });
       });

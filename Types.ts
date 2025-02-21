@@ -63,4 +63,7 @@ export type Article = {
     author: string;
     img_path_postfix: string;
   };
+  season_url?: string;
+  lrt_season_id?: string;
+  lrt_season_title?: string;
 };

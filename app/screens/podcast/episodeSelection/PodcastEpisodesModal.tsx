@@ -1,5 +1,5 @@
-import {PropsWithChildren, useCallback} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {PropsWithChildren, useCallback, useState} from 'react';
+import {StyleSheet, View, ScrollView} from 'react-native';
 import PlayButton from '../../main/tabScreen/radioteka/components/play_button/play_button';
 import {MoreArticlesButton, Text, TouchableDebounce} from '../../../components';
 import Modal from 'react-native-modal';
@@ -10,25 +10,46 @@ import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
+import {ArticleSeasonInfo} from '../../../api/Types';
+import useSeason from './useSeason';
+import ArticlePlaylist from '../../../components/videoComponent/context/ArticlePlaylist';
 
 interface Props {
-  episodes: Article[];
+  seasons: ArticleSeasonInfo[];
+  currentSeason?: ArticleSeasonInfo;
   visible: boolean;
   onClose: () => void;
-  onPlayPress: (article: Article) => void;
 }
 
 const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
-  episodes,
+  seasons,
+  currentSeason,
   visible,
   onClose,
-  onPlayPress,
 }) => {
+  const [selectedSeasonUrl, setSelectedSeasonUrl] = useState<string>(
+    currentSeason?.season_url ?? seasons[0].season_url,
+  );
+
   const {mediaData} = useMediaPlayer();
+  const {episodes} = useSeason(selectedSeasonUrl);
+  const {setPlaylist} = useMediaPlayer();
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Podcast'>>();
 
   const {colors, strings} = useTheme();
+
+  const play = useCallback(
+    (id: number) => {
+      setPlaylist(
+        new ArticlePlaylist(
+          episodes.map((episode) => episode.id),
+          episodes.findIndex((episode) => episode.id == id),
+        ),
+      );
+    },
+    [episodes, setPlaylist],
+  );
 
   const renderItem = useCallback(
     ({item}: ListRenderItemInfo<Article>) => {
@@ -36,7 +57,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
         <View style={styles.item_root}>
           <PlayButton
             style={mediaData?.title == item.title ? undefined : {backgroundColor: colors.greyBackground}}
-            onPress={() => onPlayPress(item)}
+            onPress={() => play(item.id)}
           />
           <TouchableDebounce
             style={styles.item_text_container}
@@ -62,7 +83,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
         </View>
       );
     },
-    [mediaData],
+    [mediaData, play],
   );
 
   return (
@@ -80,6 +101,32 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
         <FlashList
           data={episodes}
           extraData={mediaData}
+          ListHeaderComponent={
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View style={styles.seasons_container}>
+                {seasons.map((s) => {
+                  return (
+                    <TouchableDebounce
+                      key={s.season_url}
+                      style={[
+                        styles.season_button,
+                        {
+                          backgroundColor:
+                            selectedSeasonUrl === s.season_url
+                              ? colors.radiotekaPlayButton
+                              : colors.darkGreyBackground,
+                        },
+                      ]}
+                      onPress={() => {
+                        setSelectedSeasonUrl(s.season_url);
+                      }}>
+                      <Text style={styles.season_button_text}>{s.season_title}</Text>
+                    </TouchableDebounce>
+                  );
+                })}
+              </View>
+            </ScrollView>
+          }
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           estimatedItemSize={200}
@@ -116,5 +163,18 @@ const styles = StyleSheet.create({
   },
   item_caption: {
     fontSize: 13,
+  },
+  seasons_container: {
+    flexDirection: 'row',
+    padding: 12,
+    gap: 16,
+  },
+  season_button: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 3,
+  },
+  season_button_text: {
+    fontSize: 14,
   },
 });
