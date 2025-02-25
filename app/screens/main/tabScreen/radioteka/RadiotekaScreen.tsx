@@ -59,8 +59,9 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
 
   useNavigationAnalytics({
     viewId: 'https://www.lrt.lt/radioteka',
-    title: 'Radioteka - LRT',
-    sections: ['Radioteka_home'],
+    title: 'Radioteka - LRT - Radioteka - LRT',
+    authors: ['Lrt.lt'],
+    sections: ['Radioteka'],
   });
 
   useEffect(() => {

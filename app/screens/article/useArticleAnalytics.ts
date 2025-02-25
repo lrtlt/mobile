@@ -20,15 +20,26 @@ const articleToTrackingParams = (article?: ArticleContent): TrackingParams | und
       viewId: `https://www.lrt.lt${article.article_url}`,
       title: `${article.article_title} - LRT`,
       authors: article.article_authors?.map((author) => author.name) ?? undefined,
-      sections: !!article.category_title ? [article.category_title] : undefined,
+      sections: !!article.category_title ? ['Naujienos', article.category_title] : ['Naujienos'],
     };
   } else {
-    return {
-      viewId: `https://www.lrt.lt${article.url}`,
-      title: `${article.title} - LRT`,
-      authors: article.authors?.map((author) => author.name) ?? undefined,
-      sections: !!article.category_title ? [article.category_title] : undefined,
-    };
+    if (article.is_audio === 1) {
+      // Radioteka
+      return {
+        viewId: `https://www.lrt.lt${article.url}`,
+        title: `${article.title} - Radioteka - LRT`,
+        authors: article.authors?.map((author) => author.name) ?? undefined,
+        sections: !!article.category_title ? ['Radioteka', article.category_title] : ['Radioteka'],
+      };
+    } else {
+      // Mediateka
+      return {
+        viewId: `https://www.lrt.lt${article.url}`,
+        title: `${article.title} - Mediateka - LRT`,
+        authors: article.authors?.map((author) => author.name) ?? undefined,
+        sections: !!article.category_title ? ['Mediateka', article.category_title] : ['Mediateka'],
+      };
+    }
   }
 };
 

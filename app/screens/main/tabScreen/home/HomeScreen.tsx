@@ -72,7 +72,7 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
       type === ROUTE_TYPE_MEDIA
         ? 'Mediateka - LRT'
         : 'Lietuvos nacionalinis radijas ir televizija. Naujienos, įrašai ir transliacijos. - LRT',
-    sections: type == ROUTE_TYPE_MEDIA ? ['mediateka_home'] : ['/lrt'],
+    sections: type == ROUTE_TYPE_MEDIA ? ['Mediateka_home'] : ['/Lrt'],
   });
 
   useEffect(() => {
