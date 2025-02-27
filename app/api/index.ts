@@ -1,20 +1,23 @@
 import {
+  artcilesByCategory,
   articleGet,
   articleRecommendations,
+  articlesByGenre,
   articlesByIds,
   articlesGetByTag,
   audiotekaGet,
   carPlaylistCategoryGet,
   carPlaylistLiveGet,
   carPlaylistNewestGet,
-  carPlaylistPodcastsGet,
   carPlaylistPopularGet,
   carPlaylistRecommendedGet,
   categoryGet,
   categoryHomeGet,
   channelGet,
   forecastGet,
+  genreGet,
   getDailyQuestion,
+  getRadiotekaArticleByUrl,
   getRadiotekaArticlesBySeason,
   homeGet,
   liveFeedGet,
@@ -33,16 +36,16 @@ import {get, put} from './HttpClient';
 import {
   ArticleContentResponse,
   ArticleRecommendationsResponse,
-  ArticlesByIdsResponse,
+  ArticleSearchResponse,
   AudiotekaResponse,
   CarPlayCategoryResponse,
-  CarPlayPodcastsResponse,
   CarPlaylistItem,
   CategoryArticlesResponse,
   ChannelResponse,
   DailyQuestionResponse,
   ForecastLocation,
   ForecastResponse,
+  GenreResponse,
   HomeDataResponse,
   LiveFeedResponse,
   MediatekaDataResponse,
@@ -51,6 +54,7 @@ import {
   OpusPlaylistResponse,
   PopularArticlesResponse,
   ProgramResponse,
+  RadiotekaArticle,
   RadiotekaResponse,
   SearchFilter,
   SearchResponse,
@@ -74,6 +78,9 @@ export const fetchArticlesByTag = (tag: string, count: number) =>
 
 export const fetchArticleSearch = (q: string, filter: SearchFilter) =>
   get<SearchResponse>(searchArticles(q, filter));
+
+export const fetchArticlesByGenre = (genreId: number | string, count: number) =>
+  get<ArticleSearchResponse>(articlesByGenre(genreId, count));
 
 export const fetchVideoData = (streamUrl: string) => get<VideoDataLiveStream | VideoDataDefault>(streamUrl);
 
@@ -113,7 +120,7 @@ export const fetchLiveFeed = (id: string | number, count: number, order: 'asc' |
 export const fetchArticleRecommendations = (articleId: number | string) =>
   get<ArticleRecommendationsResponse>(articleRecommendations(articleId));
 
-export const fetchArticlesByIds = (ids: string[]) => get<ArticlesByIdsResponse>(articlesByIds(ids));
+export const fetchArticlesByIds = (ids: string[]) => get<ArticleSearchResponse>(articlesByIds(ids));
 
 export const setDailyQuestionVote = (questionId: number | string, choiceId: number | string) =>
   put<any>(putDailyQuestionVote(questionId, choiceId));
@@ -127,8 +134,8 @@ export const fetchCarPopularPlaylist = () => get<CarPlaylistItem[]>(carPlaylistP
 
 export const fetchCarRecommendedPlaylist = () => get<CarPlaylistItem[]>(carPlaylistRecommendedGet());
 
-export const fetchCarPodcasts = (count: number) =>
-  get<CarPlayPodcastsResponse>(carPlaylistPodcastsGet(count));
+export const fetchartcilesByCategory = (categoryId: string | number, count: number) =>
+  get<SearchResponse>(artcilesByCategory(categoryId, count));
 
 export const fetchCategoryPlaylist = (id: string | number) =>
   get<CarPlayCategoryResponse>(carPlaylistCategoryGet(id));
@@ -137,3 +144,8 @@ export const fetchCarLivePlaylist = () => get<TVProgramResponse>(carPlaylistLive
 
 export const fetchRadiotekaSeasonPlaylist = (seasonUrl: string) =>
   get<SearchResponse>(getRadiotekaArticlesBySeason(seasonUrl));
+
+export const fetchRadiotekaArticleByUrl = (url: string) =>
+  get<RadiotekaArticle>(getRadiotekaArticleByUrl(url));
+
+export const fetchGenre = (genreId: number | string) => get<GenreResponse>(genreGet(genreId));

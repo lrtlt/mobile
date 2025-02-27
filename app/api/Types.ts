@@ -319,7 +319,8 @@ export type RadiotekaTemplate =
   | RadiotekaTopArticlesBlock
   | RadiotekaSlugArticlesBlock
   | RadiotekaCategoryCollectionBlock
-  | RadiotekaCategoryBlock;
+  | RadiotekaCategoryBlock
+  | RadiotekaGenresBlock;
 
 export type RadiotekaTopArticlesBlock = {
   widget_id: 21;
@@ -353,6 +354,24 @@ export type RadiotekaSlugArticlesBlock = {
   };
 };
 
+export type RadiotekaGenresBlock = {
+  type: 'audio_genre_collection';
+  template_id: 51;
+  data: {
+    genre_list: Genre[];
+    genres_collection_description: {
+      article_id: number;
+      article_type: number;
+      article_title: string;
+      category_id: number;
+      category_url: string;
+      category_title: string;
+      article_authors: Author[];
+      paragraphs: {p: string}[];
+    };
+  };
+};
+
 export type RadiotekaCategoryCollectionBlock = {
   type: 'audio_category_collection';
   template_id: 44 | 45 | 46;
@@ -362,14 +381,30 @@ export type RadiotekaCategoryCollectionBlock = {
   };
 };
 
+export type Genre = {
+  genre_id: number;
+  genre_url: string;
+  genre_title: string;
+  genre_slug?: string;
+  slug?: string;
+};
+
+export type Author = {
+  author_id: number;
+  name: string;
+  slug: string;
+  author_photo: {
+    title: string;
+    w_h: string;
+    path: string;
+  };
+};
+
 export type RadiotekaCategoryDescription = {
   article_is_photogallery: 1 | 0 | null;
   badge_id: any;
   category_title: string;
-  article_authors: {
-    name: string;
-    slug: string;
-  }[];
+  article_authors: Author[];
   article_date: string;
   article_url: string;
   article_summary: string;
@@ -710,10 +745,7 @@ export type ArticleContentDefault = {
   article_summary: string;
   article_photos: ArticlePhotoType[];
   main_photo: ArticlePhotoType;
-  article_authors: {
-    name: string;
-    slug: string;
-  }[];
+  article_authors: Author[];
   article_keywords: Keyword[];
   category_id?: number;
   category_url?: string;
@@ -748,10 +780,7 @@ export type ArticleContentMedia = {
   stream_url: string;
   age_restriction: string;
   url?: string;
-  authors: {
-    name: string;
-    slug: string;
-  }[];
+  authors: Author[];
   keywords: Keyword[];
   content: string;
   main_photo: ArticlePhotoType;
@@ -796,6 +825,7 @@ export type ArticleContentResponse = {
 
 export type ArticleCategoryInfo = {
   season_info: ArticleSeasonInfo[];
+  genre_info?: Genre[];
   lrt_show_id: number;
   category_id: number;
   term: string;
@@ -988,6 +1018,66 @@ export type ArticleSearchItem = {
   url: string;
 };
 
-export type ArticlesByIdsResponse = {
+export type ArticleSearchResponse = {
   items: ArticleSearchItem[];
+};
+
+export type GenreResponse = {
+  id: number;
+  title: string;
+  url: string;
+  shows: GenreArticle[];
+  related: {
+    id: number;
+    title: string;
+    url: string;
+  }[];
+};
+
+export type GenreArticle = {
+  id: number;
+  title: string;
+  description: string | null;
+  url: string;
+  image: {
+    prefix: string;
+    postfix: string;
+    title: string;
+  };
+  category: {
+    title: string;
+    url: string;
+    id: number;
+  };
+};
+
+export type RadiotekaArticle = {
+  id: number;
+  title: string;
+  type: number;
+  content: string;
+  category_id: number;
+  heritage: null;
+  date: string;
+  offset: number;
+  tags: any[];
+  url: string;
+  full_url: string;
+  playlist_item: {
+    file: string;
+    title: string;
+    category: string;
+    category_term?: string;
+    image: string;
+    mediaid: number;
+    main_id: number;
+    tracks?: [
+      {
+        src: string;
+        kind: string;
+        label: string;
+        default: true;
+      },
+    ];
+  };
 };

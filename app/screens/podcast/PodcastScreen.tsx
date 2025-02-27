@@ -18,8 +18,9 @@ import PodcastRecommendations from './recommendations/PodcastRecommendations';
 import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection';
 import useArticleAnalytics from '../article/useArticleAnalytics';
 import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
-import ArticlePlaylist from '../../components/videoComponent/context/ArticlePlaylist';
+import ArticlePlaylist from '../../components/videoComponent/context/playlist/ArticlePlaylist';
 import useSeason from './episodeSelection/useSeason';
+import RadiotekaGenres from '../main/tabScreen/radioteka/components/genres/RadiotekaGenres';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Podcast'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Podcast'>;
@@ -107,7 +108,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
             <SafeAreaView
               style={[styles.screen, {backgroundColor: colors.greyBackground}]}
               edges={['left', 'right']}>
-              <ScrollView contentContainerStyle={{paddingBottom: bottom + 80}}>
+              <ScrollView contentContainerStyle={{paddingBottom: bottom + 32}}>
                 <PodcastEpisodeSelection currentSeason={currentSeason} categoryInfo={category_info} />
                 <PodcastEpisode
                   article={article as ArticleContentMedia}
@@ -133,6 +134,9 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                 </View>
                 <PodcastAbout article={article as ArticleContentMedia} />
                 <PodcastRecommendations articleId={articleId} />
+                {category_info?.genre_info && (
+                  <RadiotekaGenres data={category_info?.genre_info} title={strings.related_genres} />
+                )}
               </ScrollView>
             </SafeAreaView>
           )}

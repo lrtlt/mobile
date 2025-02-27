@@ -1,4 +1,4 @@
-import {SearchFilter} from './Types';
+import {SEARCH_TYPE_AUDIO, SearchFilter} from './Types';
 
 const BASE_URL = 'https://www.lrt.lt/api/json/';
 
@@ -167,30 +167,31 @@ export const getDailyQuestion = (questionId: number | string) => {
 /**
  * Returns forecast for selected city
  */
-export const forecastGet = (cityCode: string) => {
-  return `https://www.lrt.lt/servisai/orai/?code=${cityCode}`;
-};
+export const forecastGet = (cityCode: string) => `https://www.lrt.lt/servisai/orai/?code=${cityCode}`;
 
-export const liveFeedGet = (id: string | number, count: number, order: 'desc' | 'asc') => {
-  return `${BASE_URL}get-feed-items/${id}?count=${count}&order=${order}`;
-};
+export const liveFeedGet = (id: string | number, count: number, order: 'desc' | 'asc') =>
+  `${BASE_URL}get-feed-items/${id}?count=${count}&order=${order}`;
 
-export const articleRecommendations = (articleId: number | string) => {
-  return `https://peach.ebu.io/api/v1/ltlrt/similar?article_id=${articleId}`;
-};
+export const articleRecommendations = (articleId: number | string) =>
+  `https://peach.ebu.io/api/v1/ltlrt/similar?article_id=${articleId}`;
 
-export const articlesByIds = (ids: string[]) => {
-  return `${BASE_URL}search?ids=${ids.join(',')}`;
-};
+export const articlesByIds = (ids: string[]) => `${BASE_URL}search?ids=${ids.join(',')}`;
+
+export const articlesByGenre = (genreId: number | string, count: number) =>
+  `${BASE_URL}search?genre_ids=${genreId}&type=${SEARCH_TYPE_AUDIO}&count=${count}`;
+
+export const artcilesByCategory = (category_id: number | string, count: number) =>
+  `${BASE_URL}search?type=2&category_id=${category_id}&count=${count}`;
+
+export const getRadiotekaArticleByUrl = (url: string) => `https://www.lrt.lt/radioteka/api/media?url=${url}`;
+
+export const genreGet = (genreId: number | string) => `https://www.lrt.lt/radioteka/api/genres/${genreId}`;
 
 export const carPlaylistNewestGet = () => 'https://www.lrt.lt/static/carplay/naujausi.json';
 
 export const carPlaylistPopularGet = () => 'https://www.lrt.lt/static/carplay/pop.json';
 
 export const carPlaylistRecommendedGet = () => 'https://www.lrt.lt/static/carplay/rekomenduoja.json';
-
-export const carPlaylistPodcastsGet = (count: number) =>
-  `${BASE_URL}search/categories?type=audio&count=${count}`;
 
 export const carPlaylistCategoryGet = (id: number | string) => `${BASE_URL}category?id=${id}`;
 

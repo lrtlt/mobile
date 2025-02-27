@@ -11,7 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {Article} from '../../../../../../../Types';
 import PlayButton from '../play_button/play_button';
 import {useMediaPlayer} from '../../../../../../components/videoComponent/context/useMediaPlayer';
-import ArticlePlaylist from '../../../../../../components/videoComponent/context/ArticlePlaylist';
+import ArticlePlaylist from '../../../../../../components/videoComponent/context/playlist/ArticlePlaylist';
 
 const {height} = Dimensions.get('window');
 const width = Math.min(Dimensions.get('window').width * 0.32, 150);

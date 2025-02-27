@@ -8,7 +8,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import {useCallback, useMemo} from 'react';
 import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
-import ArticlePlaylist from '../../../components/videoComponent/context/ArticlePlaylist';
+import ArticlePlaylist from '../../../components/videoComponent/context/playlist/ArticlePlaylist';
 
 interface Props {
   articleId: number;
@@ -66,7 +66,6 @@ export default PodcastRecommendations;
 const styles = StyleSheet.create({
   root: {
     paddingTop: 24,
-    paddingBottom: 100,
     gap: 12,
   },
   title: {

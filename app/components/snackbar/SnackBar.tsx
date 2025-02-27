@@ -7,6 +7,7 @@ type Props = {
   message: string;
   actionText?: string;
   onActionPress?: () => void;
+  onDismiss?: () => void;
   duration?: number;
   position?: 'top' | 'bottom';
   containerStyle?: ViewStyle;
@@ -20,6 +21,7 @@ const Snackbar: React.FC<Props> = ({
   message,
   actionText,
   onActionPress,
+  onDismiss,
   duration = 3000, // Default duration in milliseconds
   position = 'bottom', // Default position
   containerStyle,
@@ -35,6 +37,7 @@ const Snackbar: React.FC<Props> = ({
     if (isVisible) {
       const timeout = setTimeout(() => {
         setIsVisible(false);
+        onDismiss && onDismiss();
       }, duration);
 
       return () => clearTimeout(timeout);

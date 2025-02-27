@@ -18,11 +18,12 @@ import RadiotekaHero from './components/hero/RadiotekaHero';
 import RadiotekaHorizontalCategoryList from './components/horizontal_list/RadiotekaHorizontalCategoryList';
 import {buildImageUri, IMG_SIZE_L} from '../../../../util/ImageUtil';
 import {RadiotekaHeroCarousel} from './components/hero/RadiotekaHeroCarousel';
+import RadiotekaGenres from './components/genres/RadiotekaGenres';
 import {useNavigation} from '@react-navigation/native';
 import {MainStackParamList} from '../../../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useMediaPlayer} from '../../../../components/videoComponent/context/useMediaPlayer';
-import ArticlePlaylist from '../../../../components/videoComponent/context/ArticlePlaylist';
+import ArticlePlaylist from '../../../../components/videoComponent/context/playlist/ArticlePlaylist';
 
 const WIDGET_ID_HERO = 21;
 
@@ -231,6 +232,14 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
         }
         break;
       }
+      case 'audio_genre_collection': {
+        return (
+          <RadiotekaGenres
+            data={item.data.genre_list}
+            title={item.data.genres_collection_description.article_title}
+          />
+        );
+      }
       default: {
         console.warn('Unknown list item: ', JSON.stringify(item, null, 4));
         return <View />;
@@ -253,7 +262,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
         translucent={false}
         backgroundColor={colors.statusBar}
       />
-      <View style={styles.container}>
+      <View style={[styles.container, {backgroundColor: colors.radiotekaBackground}]}>
         <FlashList
           showsVerticalScrollIndicator={false}
           ref={listRef}

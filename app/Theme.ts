@@ -51,10 +51,12 @@ interface Dictionary {
   previous_songs: string;
   error_no_connection: string;
   error_no_search_query: string;
+  error_common: string;
   daily_question_vote: string;
   close: string;
   stream_blocked_warning: string;
   remove_from_bookmarks: string;
+  related_genres: string;
 }
 
 export const strings: Dictionary = {
@@ -92,10 +94,12 @@ export const strings: Dictionary = {
   no_search_results: 'Deja, rezultatų pagal šią užklausą rasti nepavyko.',
   error_no_connection: 'Tinklo sutrikimas',
   error_no_search_query: 'Įveskite paieškos tekstą',
+  error_common: 'Įvyko klaida',
   daily_question_vote: 'BALSUOTI',
   close: 'Uždaryti',
   stream_blocked_warning: 'Transliacija internetu negalima dėl autorių teisių apribojimų.',
   remove_from_bookmarks: 'Pašalinti iš išsaugotų',
+  related_genres: 'Susiję žanrai',
 };
 //#endregion
 
@@ -172,6 +176,7 @@ type ColorScheme = {
   epikaGreen: '#58EB52';
   playerIcons: 'rgb(217, 32, 83)';
   radiotekaPlayButton: '#FFD600';
+  radiotekaBackground: string;
 };
 
 const colorsLight: ColorScheme = {
@@ -183,7 +188,6 @@ const colorsLight: ColorScheme = {
   border: '#AAAAAA',
   notification: '#C00',
   //#endregion
-
   tertiary: '#007AFF',
   statusBar: '#F9F9F9',
   primaryLight: '#bbbdd7',
@@ -218,18 +222,18 @@ const colorsLight: ColorScheme = {
   epikaGreen: '#58EB52',
   playerIcons: 'rgb(217, 32, 83)',
   radiotekaPlayButton: '#FFD600',
+  radiotekaBackground: '#EEEFF4',
 };
 
 const colorsDark: ColorScheme = {
   //#region React-Navigation colors
   primary: '#AAAAAA',
-  background: '#1C242D',
+  background: '#141a21',
   card: '#242D36',
   text: '#F9F9F9',
   border: '#111111',
   notification: '#C00',
   //#endregion
-
   tertiary: '#FFFFFF',
   statusBar: '#242D36',
   primaryLight: '#333333',
@@ -264,6 +268,7 @@ const colorsDark: ColorScheme = {
   epikaGreen: '#58EB52',
   playerIcons: 'rgb(217, 32, 83)',
   radiotekaPlayButton: '#FFD600',
+  radiotekaBackground: '#11161c',
 };
 //#endregion
 

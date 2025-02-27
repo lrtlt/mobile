@@ -12,7 +12,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import {ArticleSeasonInfo} from '../../../api/Types';
 import useSeason from './useSeason';
-import ArticlePlaylist from '../../../components/videoComponent/context/ArticlePlaylist';
+import ArticlePlaylist from '../../../components/videoComponent/context/playlist/ArticlePlaylist';
 
 interface Props {
   seasons: ArticleSeasonInfo[];

@@ -3,11 +3,11 @@ import {MediaBaseData, PlayerContext, PlayerContextType} from './PlayerContext';
 import {useTheme} from '../../../Theme';
 import MiniPlayerAudio from './miniPlayerAudio/MiniPlayerAudio';
 import {View} from 'react-native';
-import ArticlePlaylist from './ArticlePlaylist';
+import {Playlist} from './playlist/Playlist';
 
 const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
   const [currentMedia, setCurrentMedia] = useState<MediaBaseData>();
-  const [playlist, setPlaylist] = useState<ArticlePlaylist>();
+  const [playlist, setPlaylist] = useState<Playlist>();
 
   const {colors} = useTheme();
 
@@ -77,7 +77,7 @@ const PlayerProvider: React.FC<React.PropsWithChildren<{}>> = (props) => {
         setPlaylist(undefined);
         setCurrentMedia(data);
       },
-      setPlaylist: (playlist: ArticlePlaylist) => {
+      setPlaylist: (playlist: Playlist) => {
         console.log('setPlaylist', playlist);
         setPlaylist(playlist);
         playlist.load().then((data) => {

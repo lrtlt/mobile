@@ -1,34 +1,29 @@
-import {fetchArticle} from '../../../api';
-import {ArticleContent, ArticleContentMedia, isMediaArticle} from '../../../api/Types';
-import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
-import {MediaBaseData, MediaType} from './PlayerContext';
+import {fetchRadiotekaArticleByUrl} from '../../../../api';
+import {RadiotekaArticle} from '../../../../api/Types';
+import {MediaBaseData, MediaType} from '../PlayerContext';
+import {Playlist, PlaylistItem} from './Playlist';
 
-type PlaylistItem = {
-  articleId: number;
-  data?: ArticleContent;
-};
-
-const articleToMediaData = (article: ArticleContentMedia): MediaBaseData => ({
-  uri: article.stream_url,
+const articleToMediaData = (article: RadiotekaArticle): MediaBaseData => ({
+  uri: article.playlist_item.file,
   title: article.title,
-  poster: buildArticleImageUri(IMG_SIZE_M, article.main_photo.path),
-  mediaType: article.is_video ? MediaType.VIDEO : MediaType.AUDIO,
+  poster: 'https://lrt.lt' + article.playlist_item.image,
+  mediaType: MediaType.AUDIO,
   isLiveStream: false,
 });
 
-class ArticlePlaylist {
+class GenrePlaylist implements Playlist {
   private items: PlaylistItem[] = [];
   private currentIndex: number = -1;
 
-  constructor(articleIds: number[], currentIndex?: number) {
-    this.items = articleIds.map((id) => ({
-      articleId: id,
+  constructor(articleUrls: string[], currentIndex?: number) {
+    this.items = articleUrls.map((id) => ({
+      id: id,
     }));
 
     if (currentIndex && currentIndex != -1) {
       this.currentIndex = currentIndex;
     } else {
-      this.currentIndex = articleIds.length > 0 ? 0 : -1;
+      this.currentIndex = articleUrls.length > 0 ? 0 : -1;
     }
   }
 
@@ -43,16 +38,14 @@ class ArticlePlaylist {
     }
 
     if (current.data) {
-      return articleToMediaData(current.data as ArticleContentMedia);
+      return current.data;
     }
 
     try {
-      const response = await fetchArticle(this.items[this.currentIndex].articleId);
-      const article = response.article;
-      if (isMediaArticle(article)) {
-        this.items[this.currentIndex].data = article;
-        return articleToMediaData(article);
-      }
+      const response = await fetchRadiotekaArticleByUrl(this.items[this.currentIndex].id as string);
+      const mediaData = articleToMediaData(response);
+      this.items[this.currentIndex].data = mediaData;
+      return mediaData;
     } catch (e) {
       console.log('Error fetching article', e);
     }
@@ -90,4 +83,4 @@ class ArticlePlaylist {
   }
 }
 
-export default ArticlePlaylist;
+export default GenrePlaylist;

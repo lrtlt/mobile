@@ -11,6 +11,7 @@ interface RadiotekaHorizontalCategoryListProps {
   keywords?: Keyword[];
   variation?: 'full' | 'minimal';
   items: RadiotekaListItem[];
+  separatorTop?: boolean;
   onItemPress?: (index: number) => void;
   onItemPlayPress?: (index: number) => void;
   onKeywordPress?: (keyword: Keyword) => void;
@@ -24,11 +25,14 @@ const RadiotekaHorizontalCategoryList: React.FC<RadiotekaHorizontalCategoryListP
   onItemPlayPress,
   onKeywordPress,
   variation,
+  separatorTop = true,
 }) => {
   const {colors} = useTheme();
   return (
     <View style={styles.container}>
-      <View style={{height: StyleSheet.hairlineWidth, backgroundColor: colors.listSeparator}} />
+      {separatorTop && (
+        <View style={{height: StyleSheet.hairlineWidth, backgroundColor: colors.listSeparator}} />
+      )}
       <View style={styles.header}>
         <Text type="primary" fontFamily="SourceSansPro-SemiBold" style={styles.title}>
           {categoryTitle}
