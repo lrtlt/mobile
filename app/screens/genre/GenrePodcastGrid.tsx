@@ -2,7 +2,7 @@ import React, {PropsWithChildren} from 'react';
 import {GenreArticle} from '../../api/Types';
 import FastImage from 'react-native-fast-image';
 import {TouchableDebounce} from '../../components';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, useWindowDimensions, View} from 'react-native';
 import {buildImageUri, IMG_SIZE_M} from '../../util/ImageUtil';
 
 interface Props {
@@ -11,13 +11,17 @@ interface Props {
 }
 
 const GenrePodcastGrid: React.FC<PropsWithChildren<Props>> = ({shows, onItemPress}) => {
+  const width = useWindowDimensions().width;
+  const columnCount = width > 600 ? 4 : 3;
+  const gridItemWidth = (width - 12 - columnCount * 12) / columnCount;
+
   return (
     <View style={styles.container}>
       <View style={styles.gridContainer}>
         {shows.map((item, index) => {
           const imageUrl = buildImageUri(IMG_SIZE_M, item.image.prefix, item.image.postfix);
           return (
-            <View key={item.id.toString()} style={styles.gridItem}>
+            <View key={item.id.toString()} style={{width: gridItemWidth}}>
               <GridImage image={imageUrl} onPress={() => onItemPress?.(index)} />
             </View>
           );
@@ -52,11 +56,8 @@ const styles = StyleSheet.create({
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    gap: 12,
     justifyContent: 'space-between',
-  },
-  gridItem: {
-    width: '31%',
-    marginBottom: 12,
   },
   card: {
     borderRadius: 8,

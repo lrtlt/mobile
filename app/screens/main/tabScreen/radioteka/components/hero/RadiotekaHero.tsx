@@ -27,7 +27,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   const {data} = block;
   const articles = data.articles_list;
 
-  const scaleValues = articles?.map(() => useSharedValue(1));
+  const scaleValues = articles.map(() => useSharedValue(1));
   const {setPlaylist} = useMediaPlayer();
 
   const playItem = useCallback(
