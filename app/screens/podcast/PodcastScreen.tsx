@@ -35,7 +35,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
 
   const [{article, category_info, loadingState}, acceptAdultContent] = useArticleScreenState(articleId);
 
-  const currentSeason = category_info?.season_info.find(
+  const currentSeason = category_info?.season_info?.find(
     (season) => season.lrt_season_id === (article as ArticleContentMedia).lrt_season_id,
   );
 

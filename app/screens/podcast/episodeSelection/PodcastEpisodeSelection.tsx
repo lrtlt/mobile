@@ -18,7 +18,7 @@ const PodcastEpisodeSelection: React.FC<PropsWithChildren<Props>> = ({categoryIn
 
   const seasons = useMemo(
     () =>
-      categoryInfo?.season_info.sort((a, b) => {
+      categoryInfo?.season_info?.sort((a, b) => {
         if (a.lrt_season_count > b.lrt_season_count) {
           return -1;
         }

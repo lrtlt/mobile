@@ -3,7 +3,7 @@ import {StyleSheet, View, ScrollView} from 'react-native';
 import PlayButton from '../../main/tabScreen/radioteka/components/play_button/play_button';
 import {MoreArticlesButton, Text, TouchableDebounce} from '../../../components';
 import Modal from 'react-native-modal';
-import {useTheme} from '../../../Theme';
+import {themeLight, useTheme} from '../../../Theme';
 import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
 import {Article} from '../../../../Types';
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
@@ -120,7 +120,9 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
                       onPress={() => {
                         setSelectedSeasonUrl(s.season_url);
                       }}>
-                      <Text style={styles.season_button_text}>{s.season_title}</Text>
+                      <Text style={(styles.season_button_text, {color: themeLight.colors.text})}>
+                        {s.season_title}
+                      </Text>
                     </TouchableDebounce>
                   );
                 })}
