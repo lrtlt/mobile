@@ -1,31 +1,19 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Genre} from '../../../../../../api/Types';
 import Text from '../../../../../../components/text/Text';
 import {useTheme} from '../../../../../../Theme';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {MainStackParamList} from '../../../../../../navigation/MainStack';
+
 import {TouchableDebounce} from '../../../../../../components';
 
 interface Props {
   data: Genre[];
   title?: string;
+  onPress: (genreId: number, genreTitle: string) => void;
 }
 
-const RadiotekaGenres: React.FC<React.PropsWithChildren<Props>> = ({data, title}) => {
+const RadiotekaGenres: React.FC<React.PropsWithChildren<Props>> = ({data, title, onPress}) => {
   const {colors} = useTheme();
-  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-
-  const handleGenrePress = useCallback(
-    (genreTitle: string, genreId: number) => {
-      navigation.push('Genre', {
-        genreId,
-        title: genreTitle,
-      });
-    },
-    [navigation],
-  );
 
   return (
     <View style={styles.container}>
@@ -43,7 +31,7 @@ const RadiotekaGenres: React.FC<React.PropsWithChildren<Props>> = ({data, title}
                 backgroundColor: colors.background,
               },
             ]}
-            onPress={() => handleGenrePress(genre.genre_title, genre.genre_id)}>
+            onPress={() => onPress(genre.genre_id, genre.genre_title)}>
             <Text style={styles.genreText} fontFamily="SourceSansPro-SemiBold">
               {genre.genre_title}
             </Text>

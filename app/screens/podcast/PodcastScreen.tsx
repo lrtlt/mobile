@@ -44,6 +44,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
 
   const {strings, colors} = useTheme();
 
+  //TODO: add gemius
   useArticleAnalytics({article});
 
   useEffect(() => {
@@ -135,7 +136,16 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                 <PodcastAbout article={article as ArticleContentMedia} />
                 <PodcastRecommendations articleId={articleId} />
                 {category_info?.genre_info && (
-                  <RadiotekaGenres data={category_info?.genre_info} title={strings.related_genres} />
+                  <RadiotekaGenres
+                    data={category_info?.genre_info}
+                    title={strings.related_genres}
+                    onPress={(genreId: number, genreTitle: string) => {
+                      navigation.push('Genre', {
+                        genreId,
+                        title: genreTitle,
+                      });
+                    }}
+                  />
                 )}
               </ScrollView>
             </SafeAreaView>

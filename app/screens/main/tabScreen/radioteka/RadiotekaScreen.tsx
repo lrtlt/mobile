@@ -54,7 +54,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
-      page: 'audioteka',
+      page: 'radioteka',
     });
   }, []);
 
@@ -237,6 +237,12 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
           <RadiotekaGenres
             data={item.data.genre_list}
             title={item.data.genres_collection_description.article_title}
+            onPress={(genreId: number, genreTitle: string) => {
+              navigation.push('Genre', {
+                genreId,
+                title: genreTitle,
+              });
+            }}
           />
         );
       }

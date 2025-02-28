@@ -1,9 +1,11 @@
 package lt.mediapark.lrt.auto
 
+import android.util.Log
 import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.LibraryResult
+import androidx.media3.session.MediaConstants
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaLibraryService.LibraryParams
 import androidx.media3.session.MediaSession
@@ -18,6 +20,7 @@ import lt.mediapark.lrt.auto.data.LRTAutoRepository
 import lt.mediapark.lrt.auto.data.LRTAutoService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.math.log
 
 class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback  {
 
@@ -33,15 +36,30 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         MediaItemTree.initialize()
     }
 
+    private fun isAutomotive(packageName: String): Boolean {
+        return packageName.contains("android.car") ||
+                packageName.contains("androidauto") ||
+                packageName.contains("com.google.android.projection.gearhead")
+    }
+
+    private fun logAnalyticsEvent(packageName: String, event: String) {
+        if (!isAutomotive(packageName)) {
+            return
+        }
+
+        try{
+            Log.d(TAG, "logAnalyticsEvent: $event")
+            Firebase.analytics.logEvent(event, null)
+        }catch (e: Exception){
+            //
+        }
+    }
+
     override fun onConnect(
         mediaSession: MediaSession,
         controller: MediaSession.ControllerInfo
     ): MediaSession.ConnectionResult {
-        try{
-            Firebase.analytics.logEvent("android_auto_connected", null)
-        }catch (e: Exception){
-            //
-        }
+        logAnalyticsEvent(controller.packageName, "android_auto_connected")
         return super.onConnect(mediaSession, controller)
     }
 
@@ -72,12 +90,9 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         pageSize: Int,
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+
         if (parentId == MediaItemTree.RECOMMENDED) {
-            try{
-                Firebase.analytics.logEvent("android_auto_recommended_open", null)
-            }catch (e: Exception){
-                //
-            }
+            logAnalyticsEvent(browser.packageName, "android_auto_recommended_open")
             runBlocking {
                 val recommendedItems = repository.getRecommended()
                 MediaItemTree.setRecommendedItems(recommendedItems)
@@ -85,11 +100,7 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         }
 
         if (parentId == MediaItemTree.NEWEST) {
-            try{
-                Firebase.analytics.logEvent("android_auto_newest_open", null)
-            }catch (e: Exception){
-                //
-            }
+            logAnalyticsEvent(browser.packageName, "android_auto_newest_open")
             runBlocking {
                 val newestItems = repository.getNewest()
                 MediaItemTree.setNewestItems(newestItems)
@@ -97,11 +108,7 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         }
 
         if (parentId == MediaItemTree.LIVE) {
-            try{
-                Firebase.analytics.logEvent("android_auto_live_open", null)
-            }catch (e: Exception){
-                //
-            }
+            logAnalyticsEvent(browser.packageName, "android_auto_live_open")
             runBlocking {
                 val liveItems = repository.getLive()
                 MediaItemTree.setLiveItems(liveItems)
@@ -109,11 +116,7 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         }
 
         if(parentId == MediaItemTree.PODCAST_CATEGORIES) {
-            try{
-                Firebase.analytics.logEvent("android_auto_podcasts_open", null)
-            }catch (e: Exception){
-                //
-            }
+            logAnalyticsEvent(browser.packageName, "android_auto_podcasts_open")
             runBlocking {
                 val podcastCategories = repository.getPodcastCategories()
                 MediaItemTree.setPodcastCategories(podcastCategories)

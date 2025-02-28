@@ -34,6 +34,7 @@ const GenreScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigatio
   const {genre, isLoading: isGenreLoading, error: genreError} = useGenre(genreId);
   const {shows, isLoading: isShowsLoading, error: showsError} = useGenreLatest(genreId);
 
+  //TODO: add gemius if params change
   useNavigationAnalytics(
     useMemo(() => {
       if (genre) {
@@ -96,6 +97,16 @@ const GenreScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigatio
       }
     },
     [shows, navigation],
+  );
+
+  const handleGenrePress = useCallback(
+    (genreId: number, genreTitle: string) => {
+      navigation.push('Genre', {
+        genreId,
+        title: genreTitle,
+      });
+    },
+    [navigation],
   );
 
   const latestEpisodes = useMemo((): RadiotekaListItem[] => {
@@ -167,6 +178,7 @@ const GenreScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigatio
                 genre_url: g.url,
                 genre_slug: '',
               }))}
+              onPress={handleGenrePress}
             />
           )}
         </>

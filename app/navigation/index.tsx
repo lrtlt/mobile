@@ -14,6 +14,7 @@ import {useTheme} from '../Theme';
 import {useArticleStore} from '../state/article_store';
 import {useShallow} from 'zustand/shallow';
 import Config from 'react-native-config';
+import {checkEqual} from '../util/LodashEqualityCheck';
 
 const linking: LinkingOptions<MainStackParamList> = {
   prefixes: [DEEP_LINKING_URL_PREFIX, 'https://www.lrt.lt'],
@@ -40,33 +41,37 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const [isNavigatorReady, setNavigatorReady] = useState(false);
   const isAppReady = useArticleStore(useShallow((state) => state.home.items.length > 0));
   const routeNameRef = useRef<string>();
+  const routeParamsRef = useRef<any>();
   const navRef = useRef<NavigationContainerRef<MainStackParamList>>(null);
 
   const theme = useTheme();
 
   useFirebaseMessaging(isNavigatorReady);
 
-  const onNavigationReady = useCallback(() => {
-    routeNameRef.current = navRef.current?.getCurrentRoute()?.name;
-    setNavigatorReady(true);
-  }, []);
-
-  const onNavigationStateChange = useCallback(() => {
+  const trackRoute = useCallback(() => {
     const currentRoute = navRef.current?.getCurrentRoute();
     const currentRouteName = currentRoute?.name;
 
-    if (currentRouteName && routeNameRef.current !== currentRouteName) {
+    if (currentRouteName) {
       const currentScreen = currentRouteName.toLowerCase();
       const params: GemiusParams = {
         screen: currentScreen,
         params: currentRoute?.params && JSON.stringify(currentRoute.params),
       };
 
-      console.log('Current route:', currentRoute);
-      crashlytics().log(`Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
-      Gemius.sendPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, params);
+      if (!checkEqual(routeParamsRef.current, params)) {
+        console.log('Current route:', currentRoute);
+        crashlytics().log(`Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
+        Gemius.sendPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, params);
+        routeParamsRef.current = params;
+      }
     }
     routeNameRef.current = currentRouteName;
+  }, []);
+
+  const onNavigationReady = useCallback(() => {
+    trackRoute();
+    setNavigatorReady(true);
   }, []);
 
   if (!isAppReady) {
@@ -86,7 +91,7 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
         linking={linking}
         fallback={<SplashViewComponent />}
         onReady={onNavigationReady}
-        onStateChange={onNavigationStateChange}>
+        onStateChange={trackRoute}>
         <MainStack />
       </NavigationContainer>
     </>
