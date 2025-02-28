@@ -16,6 +16,7 @@ import RadiotekaGenres from '../main/tabScreen/radioteka/components/genres/Radio
 import GenrePodcastGrid from './GenrePodcastGrid';
 import {fetchartcilesByCategory} from '../../api';
 import Snackbar from '../../components/snackbar/SnackBar';
+import useNavigationAnalytics, {TrackingParams} from '../../util/useNavigationAnalytics';
 
 interface Props {
   route: RouteProp<MainStackParamList, 'Genre'>;
@@ -32,6 +33,20 @@ const GenreScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigatio
 
   const {genre, isLoading: isGenreLoading, error: genreError} = useGenre(genreId);
   const {shows, isLoading: isShowsLoading, error: showsError} = useGenreLatest(genreId);
+
+  useNavigationAnalytics(
+    useMemo(() => {
+      if (genre) {
+        const params: TrackingParams = {
+          viewId: `https://www.lrt.lt${genre.url}`,
+          title: `${genre.title} - Radioteka - LRT`,
+          sections: ['Radioteka'],
+          authors: ['lrt.lt'],
+        };
+        return params;
+      }
+    }, [genre]),
+  );
 
   useEffect(() => {
     navigation.setOptions({
