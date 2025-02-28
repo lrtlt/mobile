@@ -1204,7 +1204,7 @@ PODS:
     - FirebaseCore (~> 11.7.0)
     - GoogleUtilities/Environment (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
-  - FirebaseAppCheckInterop (11.7.0)
+  - FirebaseAppCheckInterop (11.9.0)
   - FirebaseCore (11.7.0):
     - FirebaseCoreInternal (~> 11.7.0)
     - GoogleUtilities/Environment (~> 8.0)
@@ -1256,7 +1256,7 @@ PODS:
     - GoogleUtilities/Reachability (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - nanopb (~> 3.30910.0)
-  - FirebaseRemoteConfigInterop (11.7.0)
+  - FirebaseRemoteConfigInterop (11.9.0)
   - FirebaseSessions (11.7.0):
     - FirebaseCore (~> 11.7.0)
     - FirebaseCoreExtension (~> 11.7.0)
@@ -1266,7 +1266,7 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 8.0)
     - nanopb (~> 3.30910.0)
     - PromisesSwift (~> 2.1)
-  - FirebaseSharedSwift (11.7.0)
+  - FirebaseSharedSwift (11.9.0)
   - fmt (9.1.0)
   - glog (0.3.5)
   - google-cast-sdk-dynamic-xcframework (4.8.0)
@@ -1427,21 +1427,21 @@ PODS:
     - hermes-engine/Pre-built (= 0.74.6)
   - hermes-engine/Pre-built (0.74.6)
   - leveldb-library (1.22.6)
-  - libwebp (1.3.2):
-    - libwebp/demux (= 1.3.2)
-    - libwebp/mux (= 1.3.2)
-    - libwebp/sharpyuv (= 1.3.2)
-    - libwebp/webp (= 1.3.2)
-  - libwebp/demux (1.3.2):
+  - libwebp (1.5.0):
+    - libwebp/demux (= 1.5.0)
+    - libwebp/mux (= 1.5.0)
+    - libwebp/sharpyuv (= 1.5.0)
+    - libwebp/webp (= 1.5.0)
+  - libwebp/demux (1.5.0):
     - libwebp/webp
-  - libwebp/mux (1.3.2):
+  - libwebp/mux (1.5.0):
     - libwebp/demux
-  - libwebp/sharpyuv (1.3.2)
-  - libwebp/webp (1.3.2):
+  - libwebp/sharpyuv (1.5.0)
+  - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
-  - MMKV (2.0.2):
-    - MMKVCore (~> 2.0.2)
-  - MMKVCore (2.0.2)
+  - MMKV (2.1.0):
+    - MMKVCore (~> 2.1.0)
+  - MMKVCore (2.1.1)
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
     - nanopb/encode (= 3.30910.0)
@@ -2441,12 +2441,12 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.14.1):
     - React-Core
-  - react-native-theoplayer (8.15.0):
+  - react-native-theoplayer (8.16.0):
     - React-Core
-    - THEOplayer-Connector-SideloadedSubtitle (~> 8.6)
-    - THEOplayer-Integration-GoogleCast (~> 8.6)
-    - THEOplayer-Integration-THEOlive (>= 8.6.3, ~> 8.6)
-    - THEOplayerSDK-core (~> 8.6)
+    - THEOplayer-Connector-SideloadedSubtitle (~> 8.11)
+    - THEOplayer-Integration-GoogleCast (~> 8.11)
+    - THEOplayer-Integration-THEOlive (~> 8.11)
+    - THEOplayerSDK-core (~> 8.11)
   - react-native-unistyles (2.20.0):
     - DoubleConversion
     - glog
@@ -2922,24 +2922,24 @@ PODS:
   - SwiftSubtitles (0.9.1):
     - DSFRegex (~> 3.3.1)
     - TinyCSV (~> 0.6.1)
-  - THEOliveSDK (3.18.6)
-  - THEOplayer-Connector-SideloadedSubtitle (8.9.0):
+  - THEOliveSDK (3.18.10)
+  - THEOplayer-Connector-SideloadedSubtitle (8.12.0):
     - Swifter (= 1.5.0)
     - SwiftSubtitles (= 0.9.1)
     - THEOplayerSDK-core (~> 8)
-  - THEOplayer-Integration-GoogleCast (8.9.0):
-    - THEOplayer-Integration-GoogleCast/Base (= 8.9.0)
-    - THEOplayer-Integration-GoogleCast/Dependencies (= 8.9.0)
-  - THEOplayer-Integration-GoogleCast/Base (8.9.0)
-  - THEOplayer-Integration-GoogleCast/Dependencies (8.9.0):
+  - THEOplayer-Integration-GoogleCast (8.12.0):
+    - THEOplayer-Integration-GoogleCast/Base (= 8.12.0)
+    - THEOplayer-Integration-GoogleCast/Dependencies (= 8.12.0)
+  - THEOplayer-Integration-GoogleCast/Base (8.12.0)
+  - THEOplayer-Integration-GoogleCast/Dependencies (8.12.0):
     - google-cast-sdk-dynamic-xcframework (~> 4.8)
-  - THEOplayer-Integration-THEOlive (8.9.0):
-    - THEOplayer-Integration-THEOlive/Base (= 8.9.0)
-    - THEOplayer-Integration-THEOlive/Dependencies (= 8.9.0)
-  - THEOplayer-Integration-THEOlive/Base (8.9.0)
-  - THEOplayer-Integration-THEOlive/Dependencies (8.9.0):
-    - THEOliveSDK (= 3.18.6)
-  - THEOplayerSDK-core (8.9.0)
+  - THEOplayer-Integration-THEOlive (8.12.0):
+    - THEOplayer-Integration-THEOlive/Base (= 8.12.0)
+    - THEOplayer-Integration-THEOlive/Dependencies (= 8.12.0)
+  - THEOplayer-Integration-THEOlive/Base (8.12.0)
+  - THEOplayer-Integration-THEOlive/Dependencies (8.12.0):
+    - THEOliveSDK (= 3.18.10)
+  - THEOplayerSDK-core (8.12.0)
   - TinyCSV (0.6.1)
   - Yoga (0.0.0)
 
@@ -3259,7 +3259,7 @@ SPEC CHECKSUMS:
   Firebase: a64bf6a8546e6eab54f1c715cd6151f39d2329f4
   FirebaseAnalytics: bc9e565af9044ba8d6c6e4157e4edca8e5fdf7ec
   FirebaseAppCheck: 2bd832b48faa38f7d86f902c57f78af93eae4cdc
-  FirebaseAppCheckInterop: 2376d3ec5cb4267facad4fe754ab4f301a5a519b
+  FirebaseAppCheckInterop: 9226f7217b43e99dfa0bc9f674ad8108cef89feb
   FirebaseCore: 3227e35f4197a924206fbcdc0349325baf4f5de4
   FirebaseCoreExtension: 206c1b399f0d103055207c16f299b28e3dbd1949
   FirebaseCoreInternal: d6c17dafc8dc33614733a8b52df78fcb4394c881
@@ -3268,9 +3268,9 @@ SPEC CHECKSUMS:
   FirebaseFirestoreInternal: 953e31e70db09d928b927b65761171c680d2ea9b
   FirebaseInstallations: 9347e719c3d52d8d7b9074b2c32407dd027305e9
   FirebaseMessaging: 00ece041b71ddb52a2862ffdee73fb6e9824bd0c
-  FirebaseRemoteConfigInterop: ca12abf9da0003efd3a476b2dff4f7a04fd31b4f
+  FirebaseRemoteConfigInterop: 710954a00e956c5fe5144a8e46164f0361389203
   FirebaseSessions: 32ed7a9387ae71efe3a35a7f20f3a7292950957b
-  FirebaseSharedSwift: a45efd84d60ebbfdcdbaebc66948af3630459e62
+  FirebaseSharedSwift: 574e6a5602afe4397a55c8d4f767382d620285de
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   google-cast-sdk-dynamic-xcframework: d1323732742c979b2d7e5b061cbe665915981f3d
@@ -3281,9 +3281,9 @@ SPEC CHECKSUMS:
   gRPC-Core: a27c294d6149e1c39a7d173527119cfbc3375ce4
   hermes-engine: 2102c92e54a031a270fd1fe84169ec8a0901b7bd
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
-  libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
-  MMKV: 3eacda84cd1c4fc95cf848d3ecb69d85ed56006c
-  MMKVCore: 508b4d3a8ce031f1b5c8bd235f0517fb3f4c73a9
+  libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
+  MMKV: ce484c1ac40bf76d5f09a0195d2ec5b3d3840d55
+  MMKVCore: 1eb661c6c498ab88e3df9ce5d8ff94d05fcc0567
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
@@ -3318,7 +3318,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: 1d19e26c6abc96672bd27ae5b41f44c569709b20
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
-  react-native-theoplayer: 9f4698b1b6bd4a396d6dc2d8554511dbde7d03eb
+  react-native-theoplayer: 04e97e6484bdedc488bc2640a600782278b87384
   react-native-unistyles: 14ada3d7f8d34adf5feaf6b61611c9a368a6434d
   react-native-webview: ff5bc3a981754f60bbd22b6b7faec3a3d082e90e
   React-nativeconfig: bf6ea7351e761f3ab837b9fc406576c56492f57a
@@ -3365,11 +3365,11 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   SwiftSubtitles: c659af19d710a2946779015464c0577d07fe4666
-  THEOliveSDK: 109b31511177686012f5e475c32edc40e2e52e9f
-  THEOplayer-Connector-SideloadedSubtitle: e6fe6620bf220080104fee3cc99a7def4ebc92d6
-  THEOplayer-Integration-GoogleCast: 3893454369cb7a05d2b4af8381949f92858c0ac0
-  THEOplayer-Integration-THEOlive: 123e35dfb5993605a740556bdc62282c44ee98b4
-  THEOplayerSDK-core: 14c23ba4368524dc019d114001c9da0a853902ef
+  THEOliveSDK: 61479e7ad8164340a8aaccc211493e2606d4381d
+  THEOplayer-Connector-SideloadedSubtitle: 5c05cb2629e62d59c740e04645005507c4ab557e
+  THEOplayer-Integration-GoogleCast: 36e5453692708431454e1e0a0716a4b2c22d50a1
+  THEOplayer-Integration-THEOlive: de905c896255872da9e5171f245e73229b1c5c56
+  THEOplayerSDK-core: dccbcb96da4ad44fd2febc9dccc39500512622bc
   TinyCSV: fd6228edbcf1c07466ac34b76dac5e052143eaba
   Yoga: dbb1bd5faecc60d38ed0a2f2a75db536c759b334
 
