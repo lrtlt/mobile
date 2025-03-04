@@ -70,8 +70,8 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   }, []);
 
   const onNavigationReady = useCallback(() => {
-    trackRoute();
     setNavigatorReady(true);
+    trackRoute();
   }, []);
 
   if (!isAppReady) {

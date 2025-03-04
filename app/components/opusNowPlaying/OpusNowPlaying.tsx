@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {IconNote} from '../svg';
-import firestore from '@react-native-firebase/firestore';
+import {collection, getFirestore} from '@react-native-firebase/firestore';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 import Text from '../text/Text';
@@ -16,13 +16,12 @@ const OpusNowComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const {colors, strings} = useTheme();
 
   useEffect(() => {
-    const unsubscribe = firestore()
-      .collection<any>('rds')
+    const unsubscribe = collection(getFirestore(), 'rds')
       .doc('opus')
       .onSnapshot((documentSnapshot) => {
         if (documentSnapshot) {
           try {
-            const {info} = documentSnapshot.data();
+            const {info} = documentSnapshot.data() as any;
             setCurrentSong(info);
           } catch (e) {
             console.log(e);

@@ -1,5 +1,16 @@
 import {useEffect} from 'react';
-import messaging from '@react-native-firebase/messaging';
+import {
+  getInitialNotification,
+  setBackgroundMessageHandler,
+  getMessaging,
+  getAPNSToken,
+  getToken,
+  isDeviceRegisteredForRemoteMessages,
+  registerDeviceForRemoteMessages,
+  onMessage,
+  onNotificationOpenedApp,
+  experimentalSetDeliveryMetricsExportedToBigQueryEnabled,
+} from '@react-native-firebase/messaging';
 import {Linking} from 'react-native';
 import useFirebaseTopicSubscription from './useFirebaseTopicSubscription';
 import notifee, {
@@ -26,6 +37,7 @@ const storage = new MMKV({
 
 const _handleNotificationOpen = async (data: NotificationData | undefined, isInitial: boolean) => {
   const url = data?.launchUrl;
+  console.log(`_handleNotificationOpen: isInitial:${isInitial} data:${JSON.stringify(data)}`);
   crashlytics().log(`_handleNotificationOpen: isInitial:${isInitial} data:${JSON.stringify(data)}`);
   if (url) {
     if (isInitial) {
@@ -44,7 +56,7 @@ const _handleNotificationOpen = async (data: NotificationData | undefined, isIni
 };
 
 const _handleInitialNotification = async () => {
-  const firebaseNotification = await messaging().getInitialNotification();
+  const firebaseNotification = await getInitialNotification(getMessaging());
   if (firebaseNotification) {
     await _handleNotificationOpen(firebaseNotification.data as NotificationData, true);
   } else {
@@ -66,7 +78,7 @@ notifee.onBackgroundEvent(_onNotificationEvent);
 
 // Subscribe to background events from firebase-messaging
 // This is required to avoid warning from firebase-messaging
-messaging().setBackgroundMessageHandler(async (_) => {});
+setBackgroundMessageHandler(getMessaging(), async (_) => {});
 
 const useFirebaseMessaging = (isNavigationReady: boolean) => {
   useFirebaseTopicSubscription();
@@ -74,12 +86,12 @@ const useFirebaseMessaging = (isNavigationReady: boolean) => {
   //Setup firebase messaging && notification channels
   useEffect(() => {
     const init = async () => {
-      if (!messaging().isDeviceRegisteredForRemoteMessages) {
-        await messaging().registerDeviceForRemoteMessages();
+      if (!isDeviceRegisteredForRemoteMessages(getMessaging())) {
+        await registerDeviceForRemoteMessages(getMessaging());
       }
 
-      const apnsToken = await messaging().getAPNSToken();
-      const token = await messaging().getToken();
+      const apnsToken = await getAPNSToken(getMessaging());
+      const token = await getToken(getMessaging());
 
       console.log('APNS-token', apnsToken);
       console.log('FCM-token', token);
@@ -91,18 +103,18 @@ const useFirebaseMessaging = (isNavigationReady: boolean) => {
           name: 'Foreground notifications',
         });
       }
-      await messaging().setDeliveryMetricsExportToBigQuery(true);
+      await experimentalSetDeliveryMetricsExportedToBigQueryEnabled(getMessaging(), true);
     };
     init();
   }, []);
 
   // Handle notification event subscriptions
   useEffect(() => {
-    const unsubscribeNotificationOpen = messaging().onNotificationOpenedApp((remoteMessage) => {
+    const unsubscribeNotificationOpen = onNotificationOpenedApp(getMessaging(), (remoteMessage) => {
       _handleNotificationOpen(remoteMessage.data as NotificationData, false);
     });
 
-    const unsubscribeOnMessage = messaging().onMessage(async (remoteMessage) => {
+    const unsubscribeOnMessage = onMessage(getMessaging(), async (remoteMessage) => {
       if (remoteMessage.notification) {
         const iosFCMOptions: any = remoteMessage.data?.fcm_options;
 

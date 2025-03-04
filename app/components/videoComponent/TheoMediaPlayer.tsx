@@ -29,7 +29,7 @@ import FastImage from 'react-native-fast-image';
 import {VideoTextTrack} from '../../api/Types';
 import usePlayerSubtitles from './usePlayerSubtitles';
 import {useSettingsStore} from '../../state/settings_store';
-import crashlytics from '@react-native-firebase/crashlytics';
+import {log, getCrashlytics} from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
 
 interface Props {
@@ -136,7 +136,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   //Close isMini player before loading new one
   useEffect(() => {
     if (!isMini) {
-      crashlytics().log('TheoMediaPlayer: Close mini player, because new player is loading');
+      log(getCrashlytics(), 'TheoMediaPlayer: Close mini player, because new player is loading');
       close();
     }
   }, []);
@@ -157,7 +157,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
         const isCasting = !!client;
 
         if (isContinuousPlayEnabled && !isCasting && isPlaying && !isMini && minifyEnabled) {
-          crashlytics().log('TheoMediaPlayer: Saving media data for continuous play');
+          log(getCrashlytics(), 'TheoMediaPlayer: Saving media data for continuous play');
           setMediaData({
             mediaType: mediaType,
             poster: poster,
@@ -270,12 +270,12 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   }, []);
 
   const onPresentationChangeHandler = useCallback((e: PresentationModeChangeEvent) => {
-    crashlytics().log('TheoMediaPlayer: Presentation mode changed to ' + e.presentationMode);
+    log(getCrashlytics(), 'TheoMediaPlayer: Presentation mode changed to ' + e.presentationMode);
   }, []);
 
   const onErrorHandler = useCallback(
     (e: ErrorEvent) => {
-      crashlytics().log('TheoMediaPlayer: Player error: ' + JSON.stringify(e));
+      log(getCrashlytics(), 'TheoMediaPlayer: Player error: ' + JSON.stringify(e));
       console.log('Player error:', e);
       if (onError) {
         onError();
@@ -285,7 +285,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   );
 
   const onPlayerReady = (player: THEOplayer) => {
-    crashlytics().log('TheoMediaPlayer: Player ready');
+    log(getCrashlytics(), 'TheoMediaPlayer: Player ready');
     Gemius.setProgramData(streamUri, title ?? '', 0, mediaType === MediaType.VIDEO);
     setPlayer(player);
     // player.addEventListener(PlayerEventType.SOURCE_CHANGE, console.log);
