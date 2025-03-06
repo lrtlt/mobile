@@ -257,7 +257,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
   const {bottom} = useSafeAreaInsets();
   const extraData = useMemo(() => ({lastFetchTime: lastFetchTime}), [lastFetchTime]);
 
-  if (data.length === 0) {
+  if (!data?.length) {
     return <ScreenLoader />;
   }
 

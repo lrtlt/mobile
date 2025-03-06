@@ -199,3 +199,5 @@ export const carPlaylistLiveGet = () => 'https://www.lrt.lt/static/tvprog/tvprog
 
 export const getRadiotekaArticlesBySeason = (seasonUrl: string) =>
   `https://www.lrt.lt/api/search?type=2&season_url=${seasonUrl}&order=desc`;
+
+export const counter = (id: string | number) => `https://www.lrt.lt/api/counter?id=${id}`;

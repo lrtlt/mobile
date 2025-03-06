@@ -14,6 +14,7 @@ import {
   categoryGet,
   categoryHomeGet,
   channelGet,
+  counter,
   forecastGet,
   genreGet,
   getDailyQuestion,
@@ -149,3 +150,5 @@ export const fetchRadiotekaArticleByUrl = (url: string) =>
   get<RadiotekaArticle>(getRadiotekaArticleByUrl(url));
 
 export const fetchGenre = (genreId: number | string) => get<GenreResponse>(genreGet(genreId));
+
+export const fetchCounter = (id: number | string) => get<any>(counter(id));

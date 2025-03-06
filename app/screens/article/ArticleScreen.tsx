@@ -10,6 +10,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import useArticleScreenState from './useArticleScreenState';
 import useArticleAnalytics from './useArticleAnalytics';
 import {useArticleStorageStore} from '../../state/article_storage_store';
+import useCounter from '../../util/useCounter';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Article'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Article'>;
@@ -42,6 +43,7 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   }, [acceptAdultContent]);
 
   useArticleAnalytics({article});
+  useCounter(articleId);
 
   const articleItemPressHandler = useCallback(
     (item: ArticleSelectableItem) => {

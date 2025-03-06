@@ -21,6 +21,7 @@ import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPl
 import ArticlePlaylist from '../../components/videoComponent/context/playlist/ArticlePlaylist';
 import useSeason from './episodeSelection/useSeason';
 import RadiotekaGenres from '../main/tabScreen/radioteka/components/genres/RadiotekaGenres';
+import useCounter from '../../util/useCounter';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Podcast'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Podcast'>;
@@ -44,8 +45,8 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
 
   const {strings, colors} = useTheme();
 
-  //TODO: add gemius
   useArticleAnalytics({article});
+  useCounter(articleId);
 
   useEffect(() => {
     navigation.setOptions({

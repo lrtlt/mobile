@@ -7,7 +7,7 @@ import {HomeBlockTopFeedBlock} from '../../../../../../api/Types';
 import {CoverImage, MyScrollView, Text, TouchableDebounce} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import {useTheme} from '../../../../../../Theme';
-import {buildArticleImageUri, buildImageUri, getImageSizeForWidth} from '../../../../../../util/ImageUtil';
+import {buildArticleImageUri, buildImageUri, IMG_SIZE_S} from '../../../../../../util/ImageUtil';
 
 interface TopFeedBlockProps {
   block: HomeBlockTopFeedBlock;
@@ -33,12 +33,12 @@ const TopFeedBlock: React.FC<TopFeedBlockProps> = ({block}) => {
 
   const articleList = useMemo(
     () =>
-      articles.map((article, index) => {
+      articles?.map((article, index) => {
         let imgUri;
         if (article.img_path_prefix && article.img_path_postfix) {
-          imgUri = buildImageUri(getImageSizeForWidth(80), article.img_path_prefix, article.img_path_postfix);
+          imgUri = buildImageUri(IMG_SIZE_S, article.img_path_prefix, article.img_path_postfix);
         } else if (article.photo) {
-          imgUri = buildArticleImageUri(getImageSizeForWidth(80), article.photo);
+          imgUri = buildArticleImageUri(IMG_SIZE_S, article.photo);
         }
 
         const isLast = index === articles.length - 1;
