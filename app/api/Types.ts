@@ -320,7 +320,8 @@ export type RadiotekaTemplate =
   | RadiotekaSlugArticlesBlock
   | RadiotekaCategoryCollectionBlock
   | RadiotekaCategoryBlock
-  | RadiotekaGenresBlock;
+  | RadiotekaGenresBlock
+  | RadiotekaPlaylistBlock;
 
 export type RadiotekaTopArticlesBlock = {
   widget_id: 21;
@@ -351,6 +352,17 @@ export type RadiotekaSlugArticlesBlock = {
     slug_url: string;
     articles_list: FeedArticle[];
     slug_title: string;
+  };
+};
+
+export type RadiotekaPlaylistBlock = {
+  type: 'audio_playlist';
+  template_id: 38;
+  data: {
+    is_audio_playlist: 1;
+    playlist_template_id: 38;
+    playlist_items: FeedArticle[];
+    playlist_article: RadiotekaCategoryDescription;
   };
 };
 

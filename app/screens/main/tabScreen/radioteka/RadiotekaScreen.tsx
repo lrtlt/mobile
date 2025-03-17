@@ -26,6 +26,8 @@ import {useMediaPlayer} from '../../../../components/videoComponent/context/useM
 import ArticlePlaylist from '../../../../components/videoComponent/context/playlist/ArticlePlaylist';
 
 const WIDGET_ID_HERO = 21;
+const WIDGET_ID_LATEST = 12;
+const WIDGET_ID_POPULAR = 11;
 
 interface Props {
   isCurrent: boolean;
@@ -112,6 +114,34 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 navigation.push('Podcast', {
                   articleId: article.id,
                 });
+              }}
+            />
+          );
+        }
+
+        if (item.widget_id === WIDGET_ID_LATEST || item.widget_id === WIDGET_ID_POPULAR) {
+          return (
+            <RadiotekaHorizontalCategoryList
+              categoryTitle={
+                item.widget_id === WIDGET_ID_LATEST ? 'Naujausi epizodai' : 'Populiariausi epizodai'
+              }
+              items={item.data.articles_list.map((a) => ({
+                title: a.title,
+                category: a.channel_title,
+                imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
+              }))}
+              onItemPress={(index) => {
+                navigation.push('Podcast', {
+                  articleId: item.data.articles_list[index].id,
+                });
+              }}
+              onItemPlayPress={(index) => {
+                setPlaylist(
+                  new ArticlePlaylist(
+                    item.data.articles_list.map((a) => a.id),
+                    index,
+                  ),
+                );
               }}
             />
           );
@@ -242,6 +272,32 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 genreId,
                 title: genreTitle,
               });
+            }}
+          />
+        );
+      }
+      case 'audio_playlist': {
+        return (
+          <RadiotekaHorizontalCategoryList
+            categoryTitle={item.data.playlist_article.article_title}
+            items={item.data.playlist_items.map((a) => ({
+              title: a.category_title,
+              subtitle: a.title,
+              category: a.branch1_title,
+              imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
+            }))}
+            onItemPress={(index) => {
+              navigation.push('Podcast', {
+                articleId: item.data.playlist_items[index].id,
+              });
+            }}
+            onItemPlayPress={(index) => {
+              setPlaylist(
+                new ArticlePlaylist(
+                  item.data.playlist_items.map((a) => a.id),
+                  index,
+                ),
+              );
             }}
           />
         );
