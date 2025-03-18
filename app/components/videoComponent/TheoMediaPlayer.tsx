@@ -31,6 +31,7 @@ import usePlayerSubtitles from './usePlayerSubtitles';
 import {useSettingsStore} from '../../state/settings_store';
 import {log, getCrashlytics} from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
+import usePlayerOrientationChange from './usePlayerOrientationChange';
 
 interface Props {
   mediaType: MediaType;
@@ -140,6 +141,8 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
       close();
     }
   }, []);
+
+  usePlayerOrientationChange(player);
 
   const {client, mediaStatus} = useChromecast({
     player: player,
