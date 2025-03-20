@@ -81,7 +81,7 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
   }, []);
 
   useCategoryScreenAnalytics({
-    categoryUrl: `/naujienos/${url}`,
+    categoryUrl: url,
     categoryTitle: title,
   });
 
