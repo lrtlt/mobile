@@ -111,15 +111,24 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
               style={[styles.screen, {backgroundColor: colors.greyBackground}]}
               edges={['left', 'right']}>
               <ScrollView contentContainerStyle={{paddingBottom: bottom + 32}}>
-                <PodcastEpisodeSelection currentSeason={currentSeason} categoryInfo={category_info} />
+                <PodcastEpisodeSelection
+                  currentSeason={currentSeason}
+                  categoryInfo={category_info}
+                  onEpisodePress={(episode) => {
+                    navigation.setParams({articleId: episode.id});
+                  }}
+                />
                 <PodcastEpisode
-                  article={article as ArticleContentMedia}
+                  title={(article as ArticleContentMedia).title}
+                  categoryTitle={(article as ArticleContentMedia).category_title}
+                  date={(article as ArticleContentMedia).date}
                   onPlayPress={() => {
                     if (isMediaArticle(article)) {
                       play(article.id);
                     }
                   }}
                 />
+                <PodcastAbout article={article as ArticleContentMedia} />
                 <View style={styles.imageContainer}>
                   <FastImage
                     style={{
@@ -134,7 +143,6 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                     }}
                   />
                 </View>
-                <PodcastAbout article={article as ArticleContentMedia} />
                 <PodcastRecommendations articleId={articleId} />
                 {category_info?.genre_info && (
                   <RadiotekaGenres

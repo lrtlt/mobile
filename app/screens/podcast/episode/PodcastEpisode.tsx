@@ -1,5 +1,4 @@
 import {PropsWithChildren} from 'react';
-import {ArticleContentMedia} from '../../../api/Types';
 import {StyleSheet, View} from 'react-native';
 import {Text} from '../../../components';
 
@@ -7,11 +6,13 @@ import {useTheme} from '../../../Theme';
 import PlayButton from '../../main/tabScreen/radioteka/components/play_button/play_button';
 
 interface Props {
-  article: ArticleContentMedia;
+  title: string;
+  categoryTitle?: string;
+  date?: string;
   onPlayPress: () => void;
 }
 
-const PodcastEpisode: React.FC<PropsWithChildren<Props>> = ({article, onPlayPress}) => {
+const PodcastEpisode: React.FC<PropsWithChildren<Props>> = ({title, categoryTitle, date, onPlayPress}) => {
   const {colors} = useTheme();
 
   return (
@@ -19,10 +20,10 @@ const PodcastEpisode: React.FC<PropsWithChildren<Props>> = ({article, onPlayPres
       <PlayButton onPress={onPlayPress} />
       <View style={{flex: 1, gap: 6}}>
         <View style={{flexDirection: 'row', gap: 8}}>
-          <Text style={styles.caption}>{article.category_title}</Text>
-          <Text style={styles.caption}>{article.date}</Text>
+          <Text style={styles.caption}>{categoryTitle}</Text>
+          <Text style={styles.caption}>{date}</Text>
         </View>
-        <Text style={styles.title}>{article.title}</Text>
+        <Text style={styles.title}>{title}</Text>
       </View>
     </View>
   );

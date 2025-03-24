@@ -2,8 +2,8 @@ import {useEffect, useState} from 'react';
 import {fetchRadiotekaSeasonPlaylist} from '../../../api';
 import {Article} from '../../../../Types';
 
-const useSeason = (seasonUrl?: string) => {
-  const [items, setItems] = useState<Article[]>([]);
+const useSeason = (seasonUrl?: string, preloaded?: Article[]) => {
+  const [items, setItems] = useState<Article[]>(preloaded ? preloaded : []);
 
   useEffect(() => {
     if (!seasonUrl) {

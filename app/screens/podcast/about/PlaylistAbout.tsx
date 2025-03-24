@@ -1,34 +1,30 @@
 import React, {PropsWithChildren, useCallback, useState} from 'react';
-import {ArticleContentMedia} from '../../../api/Types';
+import {ArticlePhotoType, Keyword} from '../../../api/Types';
 import {StyleSheet, View} from 'react-native';
 import {useTheme} from '../../../Theme';
 import TextComponent from '../../../components/text/Text';
 import Divider from '../../../components/divider/Divider';
-import {IconAudioReadCount} from '../../../components/svg';
 import {TouchableDebounce} from '../../../components';
 import FastImage from 'react-native-fast-image';
-import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
 import ArticleParagraph from '../../../components/articleParagraphs/paragraph/ArticleParagraph';
 import ArticleKeywords from '../../article/keywords/ArticleKeywords';
+import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
 
 interface Props {
-  article: ArticleContentMedia;
+  episodeInfo: string;
+  playlistInfo: string;
+  playlistImage?: ArticlePhotoType;
+  keywords: Keyword[];
 }
 
-const getMediaDurationMinutes = (mediaDuration?: string) => {
-  if (!mediaDuration) {
-    return '0';
-  }
-  const splits = mediaDuration.split(':');
-  if (splits.length > 1) {
-    return splits[1];
-  }
-  return '0';
-};
+type ContentType = 'episode' | 'playlist';
 
-type ContentType = 'episode' | 'show';
-
-const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article}) => {
+const PlaylistAbout: React.FC<PropsWithChildren<Props>> = ({
+  episodeInfo,
+  playlistInfo,
+  playlistImage,
+  keywords,
+}) => {
   const [selectedContent, setSelectedContent] = useState<ContentType>('episode');
 
   const {strings, colors} = useTheme();
@@ -38,7 +34,7 @@ const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article}) => {
   }, []);
 
   const onShowPressHandler = useCallback(() => {
-    setSelectedContent('show');
+    setSelectedContent('playlist');
   }, []);
 
   const Tab = useCallback(
@@ -53,47 +49,30 @@ const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article}) => {
   const EpisodeInfo = useCallback(() => {
     return (
       <>
-        <View style={[styles.row, {gap: 4, marginVertical: 12, paddingTop: 12, paddingBottom: 8}]}>
-          <IconAudioReadCount size={16} color={colors.text} />
-          <TextComponent style={[styles.caption, {color: colors.text}]} fontFamily="SourceSansPro-SemiBold">
-            {article.read_count}
-          </TextComponent>
-          <View
-            style={{
-              height: '100%',
-              width: 1,
-              marginHorizontal: 8,
-              backgroundColor: colors.text,
-            }}
-          />
-          <TextComponent style={[styles.caption, {color: colors.text}]} fontFamily="SourceSansPro-SemiBold">
-            {getMediaDurationMinutes(article.media_duration)} min.
-          </TextComponent>
-        </View>
         <View pointerEvents="none">
-          <ArticleParagraph htmlText={article.content} textSize={16} />
+          <ArticleParagraph htmlText={episodeInfo} textSize={16} />
         </View>
       </>
     );
-  }, [article]);
+  }, [episodeInfo]);
 
   const ShowInfo = useCallback(() => {
     return (
       <>
         <View style={[styles.row, {gap: 8, marginVertical: 8, alignItems: 'flex-start'}]}>
           <FastImage
-            style={styles.podcastDetailsImage}
+            style={{...styles.podcastDetailsImage, aspectRatio: playlistImage?.w_h}}
             source={{
-              uri: buildArticleImageUri(IMG_SIZE_M, article.category_img_info?.path),
+              uri: buildArticleImageUri(IMG_SIZE_M, playlistImage?.path),
             }}
           />
           <View style={{flex: 1}}>
-            <ArticleParagraph htmlText={article.category_decription} textSize={16} />
+            <ArticleParagraph htmlText={playlistInfo} textSize={16} />
           </View>
         </View>
       </>
     );
-  }, [article]);
+  }, [playlistInfo]);
 
   return (
     <View style={styles.root}>
@@ -102,17 +81,17 @@ const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article}) => {
           <Tab label={strings.about_episode} selected={selectedContent == 'episode'} />
         </TouchableDebounce>
         <TouchableDebounce onPress={onShowPressHandler}>
-          <Tab label={strings.about_show} selected={selectedContent == 'show'} />
+          <Tab label={strings.about_playlist} selected={selectedContent == 'playlist'} />
         </TouchableDebounce>
       </View>
       <Divider />
-      {selectedContent === 'episode' ? <EpisodeInfo /> : <ShowInfo />}
-      <ArticleKeywords keywords={article.keywords} />
+      <View style={{paddingTop: 12}}>{selectedContent === 'episode' ? <EpisodeInfo /> : <ShowInfo />}</View>
+      <ArticleKeywords keywords={keywords} />
     </View>
   );
 };
 
-export default PodcastAbout;
+export default PlaylistAbout;
 
 const styles = StyleSheet.create({
   root: {

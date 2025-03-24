@@ -428,12 +428,13 @@ export type RadiotekaCategoryDescription = {
   badge_class: any;
   article_title: string;
   badges_html: any;
-  paragraphs: any;
+  paragraphs: {p: string}[];
   article_keywords: Keyword[];
   read_count: any;
   article_id: number;
   badge_title: any;
   category_url: string;
+  main_photo: ArticlePhotoType;
   text2speech_file_url?: null | string;
 };
 

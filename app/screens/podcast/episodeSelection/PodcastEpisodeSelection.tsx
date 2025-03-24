@@ -5,13 +5,21 @@ import {useTheme} from '../../../Theme';
 import {Text, TouchableDebounce} from '../../../components';
 import PodcastEpisodesModal from './PodcastEpisodesModal';
 import {ArticleCategoryInfo, ArticleSeasonInfo} from '../../../api/Types';
+import {Article} from '../../../../Types';
 
 interface Props {
   currentSeason?: ArticleSeasonInfo;
   categoryInfo?: ArticleCategoryInfo;
+  preloadedEpisodes?: Article[];
+  onEpisodePress: (episode: Article) => void;
 }
 
-const PodcastEpisodeSelection: React.FC<PropsWithChildren<Props>> = ({categoryInfo, currentSeason}) => {
+const PodcastEpisodeSelection: React.FC<PropsWithChildren<Props>> = ({
+  categoryInfo,
+  currentSeason,
+  preloadedEpisodes,
+  onEpisodePress,
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const {colors} = useTheme();
@@ -49,12 +57,14 @@ const PodcastEpisodeSelection: React.FC<PropsWithChildren<Props>> = ({categoryIn
       ) : (
         <IconCarretDown size={16} color={colors.primary} />
       )}
-      {seasons && (
+      {(seasons || preloadedEpisodes) && (
         <PodcastEpisodesModal
           seasons={seasons}
           currentSeason={currentSeason}
           visible={modalVisible}
+          preloadedEpisodes={preloadedEpisodes}
           onClose={() => setModalVisible(false)}
+          onEpisodePress={onEpisodePress}
         />
       )}
     </TouchableDebounce>

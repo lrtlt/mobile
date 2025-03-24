@@ -25,6 +25,7 @@ export {default as IconSearch} from './ic_search';
 export {default as IconBookmark} from './ic_bookmark';
 export {default as IconBookmarkFilled} from './ic_bookmark_filled';
 export {default as IconTelevision} from './ic_tv';
+export {default as IconChevronLeft} from './ic_chevron_left';
 export {default as IconClock} from './ic_clock';
 export {default as IconFacebook} from './ic_facebook';
 export {default as IconClose} from './ic_close';

@@ -244,6 +244,11 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 category: a.channel_title,
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
               }))}
+              onTitlePress={() => {
+                navigation.push('Podcast', {
+                  articleId: item.data.articles_list[0].id,
+                });
+              }}
               onItemPress={(index) => {
                 navigation.push('Podcast', {
                   articleId: item.data.articles_list[index].id,
@@ -279,6 +284,11 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
       case 'audio_playlist': {
         return (
           <RadiotekaHorizontalCategoryList
+            onTitlePress={() => {
+              navigation.push('Playlist', {
+                data: item,
+              });
+            }}
             categoryTitle={item.data.playlist_article.article_title}
             items={item.data.playlist_items.map((a) => ({
               title: a.category_title,

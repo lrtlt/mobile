@@ -2,13 +2,13 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {ArticleContentDefault} from '../../../api/Types';
+import {Keyword} from '../../../api/Types';
 import {Text, TouchableDebounce} from '../../../components';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import {useTheme} from '../../../Theme';
 
 interface Props {
-  keywords?: ArticleContentDefault['article_keywords'];
+  keywords?: Keyword[];
 }
 
 const ArticleKeywords: React.FC<React.PropsWithChildren<Props>> = ({keywords}) => {

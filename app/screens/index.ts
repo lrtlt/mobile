@@ -17,4 +17,5 @@ export {default as WeatherScreen} from './weather/WeatherScreen';
 export {default as CategoryScreen} from './category/CategoryScreen';
 export {default as VerticalVideosScreen} from './verticalVideos/VerticalVideosScreen';
 export {default as PodcastScreen} from './podcast/PodcastScreen';
+export {default as PlaylistScreen} from './podcast/PlaylistScreen';
 export {default as GenreScreen} from './genre/GenreScreen';

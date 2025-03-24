@@ -5,6 +5,7 @@ import RadiotekaHorizontalList, {RadiotekaListItem} from './RadiotekaHorizontalL
 import {Keyword} from '../../../../../../api/Types';
 import {TouchableDebounce} from '../../../../../../components';
 import {useTheme} from '../../../../../../Theme';
+import {IconChevronLeft} from '../../../../../../components/svg';
 
 interface RadiotekaHorizontalCategoryListProps {
   categoryTitle: string;
@@ -15,6 +16,7 @@ interface RadiotekaHorizontalCategoryListProps {
   onItemPress?: (index: number) => void;
   onItemPlayPress?: (index: number) => void;
   onKeywordPress?: (keyword: Keyword) => void;
+  onTitlePress?: () => void;
 }
 
 const RadiotekaHorizontalCategoryList: React.FC<RadiotekaHorizontalCategoryListProps> = ({
@@ -24,6 +26,7 @@ const RadiotekaHorizontalCategoryList: React.FC<RadiotekaHorizontalCategoryListP
   onItemPress,
   onItemPlayPress,
   onKeywordPress,
+  onTitlePress,
   variation,
   separatorTop = true,
 }) => {
@@ -34,9 +37,20 @@ const RadiotekaHorizontalCategoryList: React.FC<RadiotekaHorizontalCategoryListP
         <View style={{height: StyleSheet.hairlineWidth, backgroundColor: colors.listSeparator}} />
       )}
       <View style={styles.header}>
-        <Text type="primary" fontFamily="SourceSansPro-SemiBold" style={styles.title}>
-          {categoryTitle}
-        </Text>
+        <TouchableDebounce
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 8,
+            alignSelf: 'flex-start',
+          }}
+          activeOpacity={onTitlePress ? 0.8 : 1}
+          onPress={onTitlePress}>
+          <Text type="primary" fontFamily="SourceSansPro-SemiBold" style={styles.title}>
+            {categoryTitle}
+          </Text>
+          {onTitlePress && <IconChevronLeft size={14} color={colors.text} />}
+        </TouchableDebounce>
         {keywords && (
           <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 10}}>
             {keywords.map((k) => (
@@ -67,10 +81,10 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 16,
     paddingTop: 12,
+    gap: 8,
   },
   title: {
     fontSize: 20,
-    marginBottom: 8,
     textTransform: 'uppercase',
   },
   subtitle: {

@@ -7,35 +7,34 @@ import {themeLight, useTheme} from '../../../Theme';
 import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
 import {Article} from '../../../../Types';
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {MainStackParamList} from '../../../navigation/MainStack';
 import {ArticleSeasonInfo} from '../../../api/Types';
 import useSeason from './useSeason';
 import ArticlePlaylist from '../../../components/videoComponent/context/playlist/ArticlePlaylist';
 
 interface Props {
-  seasons: ArticleSeasonInfo[];
+  seasons?: ArticleSeasonInfo[];
   currentSeason?: ArticleSeasonInfo;
+  preloadedEpisodes?: Article[];
   visible: boolean;
   onClose: () => void;
+  onEpisodePress: (episode: Article) => void;
 }
 
 const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
   seasons,
   currentSeason,
+  preloadedEpisodes,
   visible,
   onClose,
+  onEpisodePress,
 }) => {
-  const [selectedSeasonUrl, setSelectedSeasonUrl] = useState<string>(
-    currentSeason?.season_url ?? seasons[0].season_url,
+  const [selectedSeasonUrl, setSelectedSeasonUrl] = useState<string | undefined>(
+    currentSeason?.season_url ?? (seasons && seasons.length > 0) ? seasons![0].season_url : undefined,
   );
 
   const {mediaData} = useMediaPlayer();
-  const {episodes} = useSeason(selectedSeasonUrl);
+  const {episodes} = useSeason(selectedSeasonUrl, preloadedEpisodes);
   const {setPlaylist} = useMediaPlayer();
-
-  const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Podcast'>>();
 
   const {colors, strings} = useTheme();
 
@@ -64,7 +63,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
             onPress={() => {
               onClose();
               setTimeout(() => {
-                navigation.setParams({articleId: item.id});
+                onEpisodePress(item);
               }, 200);
             }}>
             <View style={styles.item_text_container}>
@@ -102,32 +101,34 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
           data={episodes}
           extraData={mediaData}
           ListHeaderComponent={
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View style={styles.seasons_container}>
-                {seasons.map((s) => {
-                  return (
-                    <TouchableDebounce
-                      key={s.season_url}
-                      style={[
-                        styles.season_button,
-                        {
-                          backgroundColor:
-                            selectedSeasonUrl === s.season_url
-                              ? colors.radiotekaPlayButton
-                              : colors.darkGreyBackground,
-                        },
-                      ]}
-                      onPress={() => {
-                        setSelectedSeasonUrl(s.season_url);
-                      }}>
-                      <Text style={(styles.season_button_text, {color: themeLight.colors.text})}>
-                        {s.season_title}
-                      </Text>
-                    </TouchableDebounce>
-                  );
-                })}
-              </View>
-            </ScrollView>
+            seasons && seasons.length ? (
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.seasons_container}>
+                  {seasons?.map((s) => {
+                    return (
+                      <TouchableDebounce
+                        key={s.season_url}
+                        style={[
+                          styles.season_button,
+                          {
+                            backgroundColor:
+                              selectedSeasonUrl === s.season_url
+                                ? colors.radiotekaPlayButton
+                                : colors.darkGreyBackground,
+                          },
+                        ]}
+                        onPress={() => {
+                          setSelectedSeasonUrl(s.season_url);
+                        }}>
+                        <Text style={(styles.season_button_text, {color: themeLight.colors.text})}>
+                          {s.season_title}
+                        </Text>
+                      </TouchableDebounce>
+                    );
+                  })}
+                </View>
+              </ScrollView>
+            ) : null
           }
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}

@@ -1,4 +1,5 @@
-import {fetchArticle} from '../../../../api';
+import {Platform} from 'react-native';
+import {fetchArticle, fetchCounter} from '../../../../api';
 import {ArticleContentMedia, isMediaArticle} from '../../../../api/Types';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../../util/ImageUtil';
 import {MediaBaseData, MediaType} from '../PlayerContext';
@@ -39,6 +40,7 @@ class ArticlePlaylist implements Playlist {
     }
 
     if (current.data) {
+      fetchCounter(current.id, Platform.OS);
       return current.data;
     }
 
@@ -48,6 +50,7 @@ class ArticlePlaylist implements Playlist {
       if (isMediaArticle(article)) {
         const mediaData = articleToMediaData(article);
         this.items[this.currentIndex].data = mediaData;
+        fetchCounter(current.id, Platform.OS);
         return mediaData;
       }
     } catch (e) {

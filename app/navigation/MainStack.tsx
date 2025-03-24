@@ -5,7 +5,7 @@ import {createDrawerNavigator, DrawerNavigationProp} from '@react-navigation/dra
 import * as Screens from '../screens';
 import {Drawer, SearchFilterDrawer} from '../components';
 import {themeDark, themeLight} from '../Theme';
-import {ArticlePhotoType, MenuItemPage, SearchFilter} from '../api/Types';
+import {ArticlePhotoType, MenuItemPage, RadiotekaPlaylistBlock, SearchFilter} from '../api/Types';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import SearchContextProvider from '../screens/search/context/SearchContextProvider';
 import ChannelContextProvider from '../screens/channel/context/ChannelContextProvider';
@@ -60,6 +60,9 @@ export type MainStackParamList = {
   };
   Podcast: {
     articleId: number;
+  };
+  Playlist: {
+    data: RadiotekaPlaylistBlock;
   };
   Genre: {
     genreId: number;
@@ -202,6 +205,7 @@ export default () => {
       <Stack.Screen name="Weather" component={Screens.WeatherScreen} />
       <Stack.Screen name="Category" component={Screens.CategoryScreen} />
       <Stack.Screen name="Podcast" component={Screens.PodcastScreen} />
+      <Stack.Screen name="Playlist" component={Screens.PlaylistScreen} />
       <Stack.Screen name="Genre" component={Screens.GenreScreen} />
       <Stack.Screen
         name="VideoList"
