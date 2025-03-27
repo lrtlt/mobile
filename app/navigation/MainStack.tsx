@@ -204,7 +204,11 @@ export default () => {
       <Stack.Screen name="WebPage" component={Screens.WebPageScreen} />
       <Stack.Screen name="Weather" component={Screens.WeatherScreen} />
       <Stack.Screen name="Category" component={Screens.CategoryScreen} />
-      <Stack.Screen name="Podcast" component={Screens.PodcastScreen} />
+      <Stack.Screen
+        name="Podcast"
+        component={Screens.PodcastScreen}
+        options={{headerShown: false}} //We use custom header in the screen
+      />
       <Stack.Screen name="Playlist" component={Screens.PlaylistScreen} />
       <Stack.Screen name="Genre" component={Screens.GenreScreen} />
       <Stack.Screen

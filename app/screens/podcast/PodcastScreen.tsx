@@ -22,6 +22,8 @@ import ArticlePlaylist from '../../components/videoComponent/context/playlist/Ar
 import useSeason from './episodeSelection/useSeason';
 import RadiotekaGenres from '../main/tabScreen/radioteka/components/genres/RadiotekaGenres';
 import useCounter from '../../util/useCounter';
+import useArticleHeader from '../article/useArticleHeader_v2';
+import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Podcast'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Podcast'>;
@@ -39,6 +41,8 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   const currentSeason = category_info?.season_info?.find(
     (season) => season.lrt_season_id === (article as ArticleContentMedia).lrt_season_id,
   );
+
+  const {appBar, snackbar, onScroll: _} = useArticleHeader(article);
 
   const {episodes} = useSeason(currentSeason?.season_url);
   const {setPlaylist} = useMediaPlayer();
@@ -67,6 +71,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   );
 
   const {bottom} = useSafeAreaInsets();
+  const appBarHeight = useAppBarHeight();
 
   const adultContentAcceptHandler = useCallback(() => {
     acceptAdultContent(true);
@@ -106,11 +111,13 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
     case 'ready': {
       return (
         <>
+          {appBar}
           {article && (
             <SafeAreaView
               style={[styles.screen, {backgroundColor: colors.greyBackground}]}
               edges={['left', 'right']}>
-              <ScrollView contentContainerStyle={{paddingBottom: bottom + 32}}>
+              <ScrollView
+                contentContainerStyle={{paddingBottom: bottom + 32, paddingTop: appBarHeight.fullHeight}}>
                 <PodcastEpisodeSelection
                   currentSeason={currentSeason}
                   categoryInfo={category_info}
@@ -159,6 +166,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
               </ScrollView>
             </SafeAreaView>
           )}
+          {snackbar}
         </>
       );
     }
