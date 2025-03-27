@@ -127,7 +127,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               }
               items={item.data.articles_list.map((a) => ({
                 title: a.title,
-                category: a.channel_title,
+                // category: a.channel_title,
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
               }))}
               onItemPress={(index) => {
@@ -155,7 +155,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               categoryTitle={item.data.slug_title}
               items={item.data.articles_list.map((a) => ({
                 title: a.title,
-                category: a.channel_title,
+                // category: a.channel_title,
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
               }))}
               onItemPress={(index) => {
@@ -183,9 +183,9 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             keywords={item.data.description.article_keywords}
             categoryTitle={item.data.description.article_title}
             items={item.data.category_list.map((c) => ({
-              title: c.title,
-              category:
-                c.branch_info?.branch_level2?.branch_title ?? c.branch_info?.branch_level1?.branch_title,
+              // title: c.title,
+              // category:
+              //   c.branch_info?.branch_level2?.branch_title ?? c.branch_info?.branch_level1?.branch_title,
               imageUrl: buildImageUri(
                 IMG_SIZE_L,
                 c.category_images.img1.img_path_prefix,
@@ -241,7 +241,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               categoryTitle={item.data.category_title}
               items={item.data.articles_list.map((a) => ({
                 title: a.title,
-                category: a.channel_title,
+                // category: a.channel_title,
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
               }))}
               onTitlePress={() => {
@@ -291,9 +291,9 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             }}
             categoryTitle={item.data.playlist_article.article_title}
             items={item.data.playlist_items.map((a) => ({
-              title: a.category_title,
-              subtitle: a.title,
-              category: a.branch1_title,
+              title: a.title,
+              // subtitle: a.title,
+              // category: a.branch1_title,
               imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
             }))}
             onItemPress={(index) => {

@@ -51,7 +51,7 @@ const RadiotekaHorizontalCategoryList: React.FC<RadiotekaHorizontalCategoryListP
           </Text>
           {onTitlePress && <IconChevronLeft size={14} color={colors.text} />}
         </TouchableDebounce>
-        {keywords && (
+        {/* {keywords && (
           <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 10}}>
             {keywords.map((k) => (
               <TouchableDebounce key={k.slug} onPress={() => onKeywordPress?.(k)}>
@@ -61,7 +61,7 @@ const RadiotekaHorizontalCategoryList: React.FC<RadiotekaHorizontalCategoryListP
               </TouchableDebounce>
             ))}
           </View>
-        )}
+        )} */}
       </View>
       <RadiotekaHorizontalList
         items={items}

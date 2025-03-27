@@ -10,7 +10,7 @@ const CARD_WIDTH_MINIMAL = Math.min(Dimensions.get('window').width * 0.33, 150);
 
 export type RadiotekaListItem = {
   category?: string;
-  title: string;
+  title?: string;
   subtitle?: string;
   imageUrl: string;
 };
@@ -46,12 +46,20 @@ const RadiotekaHorizontalList: React.FC<RadiotekaHorizontalListProps> = ({
       </View>
       {variation === 'full' && (
         <View style={styles.contentContainer}>
-          <Text type="secondary" fontFamily="SourceSansPro-Regular" style={styles.category} numberOfLines={1}>
-            {item.category}
-          </Text>
-          <Text type="primary" fontFamily="PlayfairDisplay-Regular" style={styles.title} numberOfLines={2}>
-            {item.title}
-          </Text>
+          {item.category && (
+            <Text
+              type="secondary"
+              fontFamily="SourceSansPro-Regular"
+              style={styles.category}
+              numberOfLines={1}>
+              {item.category}
+            </Text>
+          )}
+          {item.title && (
+            <Text type="primary" fontFamily="PlayfairDisplay-Regular" style={styles.title} numberOfLines={4}>
+              {item.title}
+            </Text>
+          )}
           {item.subtitle && (
             <Text
               type="secondary"
@@ -136,7 +144,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   title: {
-    fontSize: 19,
+    fontSize: 18,
     marginBottom: 6,
   },
   minimalCard: {
