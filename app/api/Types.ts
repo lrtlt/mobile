@@ -453,14 +453,14 @@ export type RadiotekaCategory = {
   lrt_description: string;
   lrt_season_id: any;
   lrt_code: string;
-  category_images: {
-    img1: {
+  category_images?: {
+    img1?: {
       img_path_postfix: string;
       img_path: string;
       img_path_prefix: string;
       w_h: string;
     };
-    img2: {
+    img2?: {
       img_path_postfix: string;
       img_path: string;
       img_path_prefix: string;

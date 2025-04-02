@@ -46,7 +46,7 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
   const style = getArticleStyle(styleType);
 
   const onPressHandler = useCallback(() => {
-    onPress(article);
+    onPress && onPress(article);
   }, [onPress, article]);
 
   const date = Boolean(article.item_date) && Boolean(dateEnabled) && (

@@ -22,7 +22,6 @@ const getArticleStyleType = (articleCount: number): ArticleStyleType => {
 interface Props {
   articleStyle?: ViewStyle;
   data: (Article | SavedArticle)[];
-  backgroundColor?: string;
   onArticlePress: (article: Article) => void;
 }
 

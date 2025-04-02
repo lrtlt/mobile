@@ -188,8 +188,8 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               //   c.branch_info?.branch_level2?.branch_title ?? c.branch_info?.branch_level1?.branch_title,
               imageUrl: buildImageUri(
                 IMG_SIZE_L,
-                c.category_images.img1.img_path_prefix,
-                c.category_images.img1.img_path_postfix,
+                c.category_images?.img1?.img_path_prefix,
+                c.category_images?.img1?.img_path_postfix,
               ),
             }))}
             onItemPress={(index) => {
