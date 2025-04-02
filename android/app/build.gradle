@@ -5,9 +5,10 @@ buildscript {
 }
 
 apply plugin: "com.android.application"
+apply plugin: "com.google.firebase.firebase-perf"
 apply plugin: "org.jetbrains.kotlin.android"
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: "com.google.gms.google-services"
+apply plugin: "com.google.firebase.crashlytics"
 apply plugin: "com.facebook.react"
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
@@ -89,8 +90,8 @@ android {
         applicationId "lt.mediapark.lrt"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 205407
-        versionName "2.54.7"
+        versionCode 205500
+        versionName "2.55.0"
         multiDexEnabled true
         resValue "string", "build_config_package", "lt.mediapark.lrt"
     }
