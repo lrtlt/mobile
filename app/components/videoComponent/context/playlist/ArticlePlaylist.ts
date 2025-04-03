@@ -8,7 +8,9 @@ import {Playlist, PlaylistItem} from './Playlist';
 const articleToMediaData = (article: ArticleContentMedia): MediaBaseData => ({
   uri: article.stream_url,
   title: article.title,
-  poster: buildArticleImageUri(IMG_SIZE_M, article.main_photo.path),
+  poster:
+    buildArticleImageUri(IMG_SIZE_M, article.main_photo?.path) ??
+    buildArticleImageUri(IMG_SIZE_M, article.category_img_info?.path),
   mediaType: article.is_video ? MediaType.VIDEO : MediaType.AUDIO,
   isLiveStream: false,
 });
