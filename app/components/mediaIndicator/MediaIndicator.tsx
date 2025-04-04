@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   container: {
     opacity: 0.9,
     paddingStart: 4,
-    backgroundColor: '#FFFFFFCC',
+    backgroundColor: '#FFFFFFDD',
     alignItems: 'center',
     justifyContent: 'center',
   },

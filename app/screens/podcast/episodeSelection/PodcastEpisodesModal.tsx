@@ -10,6 +10,7 @@ import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {ArticleSeasonInfo} from '../../../api/Types';
 import useSeason from './useSeason';
 import ArticlePlaylist from '../../../components/videoComponent/context/playlist/ArticlePlaylist';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface Props {
   seasons?: ArticleSeasonInfo[];
@@ -85,11 +86,15 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
     [mediaData, play],
   );
 
+  const {top, bottom} = useSafeAreaInsets();
+
   return (
     <Modal
       accessible={false}
       style={{
         flex: 1,
+        paddingTop: top,
+        paddingBottom: bottom,
       }}
       isVisible={visible}
       useNativeDriver={true}

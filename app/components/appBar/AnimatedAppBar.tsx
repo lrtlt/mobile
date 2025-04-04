@@ -35,13 +35,6 @@ const AnimatedAppBar: React.FC<Props> = ({translateY, onBackPress, actions, subH
               },
             ],
         zIndex: 1,
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: StyleSheet.hairlineWidth,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 0.1,
         elevation: 2,
       }}>
       <View

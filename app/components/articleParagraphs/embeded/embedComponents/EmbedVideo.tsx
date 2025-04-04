@@ -36,9 +36,9 @@ export default EmbedVideo;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000000',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 12,
   },
   player: {
     width: '100%',

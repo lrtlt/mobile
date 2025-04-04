@@ -23,7 +23,7 @@ const VideoCover: React.FC<VideoCoverType> = (props) => {
           source={{uri}}
           thumbnailSource={{uri: thumbUri}}
         />
-        <MediaIndicator style={styles.mediaIndicator} size="big" />
+        <MediaIndicator style={styles.mediaIndicator} size="small" />
       </View>
     );
   }, []);

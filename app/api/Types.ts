@@ -771,6 +771,7 @@ export type ArticleContentDefault = {
     embed?: ArticleEmbedType[];
   }[];
   'n-18'?: 0 | 1;
+  age_restriction?: string | null;
   is_video?: 0 | 1;
   read_count?: number;
 };
@@ -791,7 +792,7 @@ export type ArticleContentMedia = {
   get_playlist_url: string;
   //Stream url for audio
   stream_url: string;
-  age_restriction: string;
+  age_restriction?: string | null;
   url?: string;
   authors: Author[];
   keywords: Keyword[];
