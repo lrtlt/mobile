@@ -47,8 +47,8 @@ const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardR
       if (height > screenHeight && !animationDisabled.current) {
         console.log('Disabling animation because of webView height:', height);
         navigation.setOptions({
-          animationEnabled: false,
-          // animation: 'none',
+          // animationEnabled: false,
+          animation: 'none',
         });
         animationDisabled.current = true;
       }

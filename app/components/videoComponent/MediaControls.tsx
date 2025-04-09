@@ -64,7 +64,7 @@ interface Props {
   seekerEnd: number;
   isBuffering?: boolean;
   isMini?: boolean;
-  extraControls?: JSX.Element[];
+  extraControls?: React.JSX.Element[];
   aspectRatio?: number;
 
   isPaused: boolean;
@@ -106,7 +106,7 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   const [scrubbing, setScrubbing] = useState(false);
   const [seekerPosition, setSeekerPosition] = useState(0);
 
-  const seekPanResponder = useRef<PanResponderInstance>();
+  const seekPanResponder = useRef<PanResponderInstance>(undefined);
   const seekerWidth = useRef(0);
   const offset = useRef(0);
 

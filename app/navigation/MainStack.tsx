@@ -141,7 +141,7 @@ export default () => {
       screenOptions={{
         presentation: 'card',
         headerBackButtonDisplayMode: 'minimal',
-        headerBackTitleVisible: false,
+        // headerBackTitleVisible: false,
         // headerRightContainerStyle: {paddingEnd: 4},
         headerTitle: '',
         headerTitleStyle: {

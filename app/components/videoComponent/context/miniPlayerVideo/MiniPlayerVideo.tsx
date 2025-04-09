@@ -9,7 +9,7 @@ import {IconClose} from '../../../svg';
 import {useMediaPlayer} from '../useMediaPlayer';
 
 const MiniPlayerVideo: React.FC<React.PropsWithChildren<{}>> = (props) => {
-  const playerRef = useRef<THEOplayer>();
+  const playerRef = useRef<THEOplayer>(undefined);
 
   const {mediaData, close} = useMediaPlayer();
   const {colors} = useTheme();

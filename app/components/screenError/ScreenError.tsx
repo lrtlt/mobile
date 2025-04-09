@@ -8,7 +8,7 @@ import TextComponent from '../text/Text';
 interface Props {
   style?: ViewStyle;
   text: string;
-  actions?: JSX.Element;
+  actions?: React.JSX.Element;
 }
 
 const ScreenError: React.FC<React.PropsWithChildren<Props>> = (props) => {

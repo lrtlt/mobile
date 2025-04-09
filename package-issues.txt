@@ -1,6 +1,9 @@
-"react-native-gesture-handler": "2.12.1", 
-https://github.com/software-mansion/react-native-gesture-handler/issues/2603
 
+
+
+Not sure if there are needed since rn 79
+"@typescript-eslint/eslint-plugin": "^4.26.0",
+"@typescript-eslint/parser": "^4.26.0",
 
 
 

@@ -42,7 +42,7 @@ const PlayerSekBar: React.FC<React.PropsWithChildren<Props>> = ({style, player})
 
   const {colors} = useTheme();
 
-  const seekPanResponder = useRef<PanResponderInstance>();
+  const seekPanResponder = useRef<PanResponderInstance>(undefined);
 
   const offset = useRef(0);
   const seekerWidth = useRef(0);

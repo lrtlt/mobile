@@ -70,7 +70,8 @@ const AnimatedAppBar: React.FC<Props> = ({translateY, onBackPress, actions, subH
               tintColor={colors.headerTint}
               onPress={onBackPress}
               displayMode="minimal"
-              labelVisible={false}
+              label=""
+              // labelVisible={false}
             />
           </View>
           <View

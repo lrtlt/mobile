@@ -40,8 +40,8 @@ const linking: LinkingOptions<MainStackParamList> = {
 const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const [isNavigatorReady, setNavigatorReady] = useState(false);
   const isAppReady = useArticleStore(useShallow((state) => state.home.items.length > 0));
-  const routeNameRef = useRef<string>();
-  const routeParamsRef = useRef<any>();
+  const routeNameRef = useRef<string | undefined>(undefined);
+  const routeParamsRef = useRef<any>({});
   const navRef = useRef<NavigationContainerRef<MainStackParamList>>(null);
 
   const theme = useTheme();
