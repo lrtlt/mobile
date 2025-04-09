@@ -13,6 +13,9 @@ node_require('react-native/scripts/react_native_pods.rb')
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+# Disable New Architecture
+ENV['RCT_NEW_ARCH_ENABLED'] = '0'
+
 # ⬇️ uncomment wanted permissions
 setup_permissions([
   'AppTrackingTransparency',

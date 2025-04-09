@@ -48,12 +48,17 @@ const TabsScreen: React.FC<React.PropsWithChildren<Props>> = ({program}) => {
 
   const renderTabBar = useCallback(
     (tabBarProps: any) => {
+      const {key, ...rest} = tabBarProps;
       return (
         <TabBar
-          {...tabBarProps}
+          key={key}
+          {...rest}
           scrollEnabled={true}
           pressColor={colors.androidTouchFeedback}
-          renderTabBarItem={(props) => <TabBarItem {...props} label={renderTabLabel as any} />}
+          renderTabBarItem={(props) => {
+            const {key, ...rest} = props;
+            return <TabBarItem key={key} {...rest} label={renderTabLabel as any} />;
+          }}
           indicatorStyle={{backgroundColor: colors.primary}}
           style={{backgroundColor: colors.background}}
           tabStyle={styles.tab}

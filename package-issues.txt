@@ -2,3 +2,9 @@
 https://github.com/software-mansion/react-native-gesture-handler/issues/2603
 
 
+
+
+2025-04-09
+Should remove android.enableJetifier=true from gradle.properties since react-native v0.75+
+This can be done only after our app does not have dependencies on android.support.* packages
+But we still use react-native-google-cast dependency which has internal dependency on android.support.* packages.

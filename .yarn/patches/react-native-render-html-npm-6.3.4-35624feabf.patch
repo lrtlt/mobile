@@ -1,0 +1,229 @@
+diff --git a/src/TChildrenRenderer.tsx b/src/TChildrenRenderer.tsx
+index 618a5926884faa389fa8004ef87cb0d597260f6a..8a10df292e5f9ed9bfe97a79f226a9941c2be579 100644
+--- a/src/TChildrenRenderer.tsx
++++ b/src/TChildrenRenderer.tsx
+@@ -9,16 +9,4 @@ import renderChildren from './renderChildren';
+ const TChildrenRenderer: FunctionComponent<TChildrenRendererProps> =
+   renderChildren.bind(null);
+ 
+-export const tchildrenRendererDefaultProps: Pick<
+-  TChildrenRendererProps,
+-  'propsForChildren'
+-> = {
+-  propsForChildren: {}
+-};
+-
+-/**
+- * @ignore
+- */
+-TChildrenRenderer.defaultProps = tchildrenRendererDefaultProps;
+-
+ export default TChildrenRenderer;
+\ No newline at end of file
+diff --git a/src/TNodeChildrenRenderer.tsx b/src/TNodeChildrenRenderer.tsx
+index bf5aef648c4b722d380c7c556f49f72675080b47..cbdab4b810e50dc235ca0fa60ec983a7fb6822d7 100644
+--- a/src/TNodeChildrenRenderer.tsx
++++ b/src/TNodeChildrenRenderer.tsx
+@@ -1,7 +1,6 @@
+ import { ReactElement } from 'react';
+ import { TNode } from '@native-html/transient-render-engine';
+ import { useSharedProps } from './context/SharedPropsProvider';
+-import { tchildrenRendererDefaultProps } from './TChildrenRenderer';
+ import {
+   TChildrenRendererProps,
+   TNodeChildrenRendererProps
+@@ -73,9 +72,4 @@ function TNodeChildrenRenderer(
+   return renderChildren(useTNodeChildrenProps(props));
+ }
+ 
+-/**
+- * @ignore
+- */
+-TNodeChildrenRenderer.defaultProps = tchildrenRendererDefaultProps;
+-
+ export default TNodeChildrenRenderer;
+\ No newline at end of file
+diff --git a/src/TNodeRenderer.tsx b/src/TNodeRenderer.tsx
+index d32140ff348765d7ef96b7c9c729111b3685dc41..7ef47592acf6ea383b0aa7204d5ed5e6cfe94089 100644
+--- a/src/TNodeRenderer.tsx
++++ b/src/TNodeRenderer.tsx
+@@ -44,7 +44,7 @@ function isGhostTNode(tnode: TNode) {
+ const TNodeRenderer = memo(function MemoizedTNodeRenderer(
+   props: TNodeRendererProps<any>
+ ): ReactElement | null {
+-  const { tnode } = props;
++  const { tnode } = {...props, ...defaultProps};
+   const sharedProps = useSharedProps();
+   const renderRegistry = useRendererRegistry();
+   const TNodeChildrenRenderer = useTNodeChildrenRenderer();
+@@ -127,9 +127,6 @@ const defaultProps: Required<Pick<TNodeRendererProps<any>, 'propsFromParent'>> =
+     }
+   };
+ 
+-// @ts-expect-error default props must be defined
+-TNodeRenderer.defaultProps = defaultProps;
+-
+ export {
+   TDefaultBlockRenderer,
+   TDefaultPhrasingRenderer,
+diff --git a/src/TRenderEngineProvider.tsx b/src/TRenderEngineProvider.tsx
+index 95b60df6295dd7779aaf6dd16741e0dd631b9bb4..753591e31d875c06c58ea7a3114a7ca1ba054a15 100644
+--- a/src/TRenderEngineProvider.tsx
++++ b/src/TRenderEngineProvider.tsx
+@@ -1,73 +1,13 @@
+ import TRenderEngine from '@native-html/transient-render-engine';
+ import React, { PropsWithChildren, ReactElement } from 'react';
+-import { Platform } from 'react-native';
+-import PropTypes from 'prop-types';
+ import useTRenderEngine from './hooks/useTRenderEngine';
+ import { TRenderEngineConfig } from './shared-types';
+-import defaultSystemFonts from './defaultSystemFonts';
+ 
+ const defaultTRenderEngine = {} as any;
+ 
+ const TRenderEngineContext =
+   React.createContext<TRenderEngine>(defaultTRenderEngine);
+ 
+-export const tRenderEngineProviderPropTypes: Record<
+-  keyof TRenderEngineConfig,
+-  any
+-> = {
+-  customHTMLElementModels: PropTypes.object.isRequired,
+-  enableCSSInlineProcessing: PropTypes.bool,
+-  enableUserAgentStyles: PropTypes.bool,
+-  idsStyles: PropTypes.object,
+-  ignoredDomTags: PropTypes.array,
+-  ignoreDomNode: PropTypes.func,
+-  domVisitors: PropTypes.object,
+-  ignoredStyles: PropTypes.array.isRequired,
+-  allowedStyles: PropTypes.array,
+-  htmlParserOptions: PropTypes.object,
+-  tagsStyles: PropTypes.object,
+-  classesStyles: PropTypes.object,
+-  emSize: PropTypes.number.isRequired,
+-  baseStyle: PropTypes.object,
+-  systemFonts: PropTypes.arrayOf(PropTypes.string),
+-  fallbackFonts: PropTypes.shape({
+-    serif: PropTypes.string,
+-    'sans-serif': PropTypes.string,
+-    monospace: PropTypes.string
+-  }),
+-  setMarkersForTNode: PropTypes.func,
+-  dangerouslyDisableHoisting: PropTypes.bool,
+-  dangerouslyDisableWhitespaceCollapsing: PropTypes.bool,
+-  selectDomRoot: PropTypes.func
+-};
+-
+-/**
+- * Default fallback font for special keys such as 'sans-serif', 'monospace',
+- * 'serif', based on current platform.
+- */
+-export const defaultFallbackFonts = {
+-  'sans-serif': Platform.select({ ios: 'system', default: 'sans-serif' }),
+-  monospace: Platform.select({ ios: 'Menlo', default: 'monospace' }),
+-  serif: Platform.select({ ios: 'Times New Roman', default: 'serif' })
+-};
+-
+-export const defaultTRenderEngineProviderProps: TRenderEngineConfig = {
+-  htmlParserOptions: {
+-    decodeEntities: true
+-  },
+-  emSize: 14,
+-  ignoredDomTags: [],
+-  ignoredStyles: [],
+-  baseStyle: { fontSize: 14 },
+-  tagsStyles: {},
+-  classesStyles: {},
+-  enableUserAgentStyles: true,
+-  enableCSSInlineProcessing: true,
+-  customHTMLElementModels: {},
+-  fallbackFonts: defaultFallbackFonts,
+-  systemFonts: defaultSystemFonts
+-};
+-
+ /**
+  * Use the ambient transient render engine.
+  *
+@@ -106,13 +46,3 @@ export default function TRenderEngineProvider({
+     </TRenderEngineContext.Provider>
+   );
+ }
+\ No newline at end of file
+-
+-/**
+- * @ignore
+- */
+-TRenderEngineProvider.defaultProps = defaultTRenderEngineProviderProps;
+-
+-/**
+- * @ignore
+- */
+-TRenderEngineProvider.propTypes = tRenderEngineProviderPropTypes;
+diff --git a/src/elements/IMGElement.tsx b/src/elements/IMGElement.tsx
+index 573e7c15b63d7ab0294a8a96ba06cbbf0fbd139a..8413ee180a6de9ca2dbeddbcadb391dd33a78e8f 100644
+--- a/src/elements/IMGElement.tsx
++++ b/src/elements/IMGElement.tsx
+@@ -1,19 +1,13 @@
+ import React, { ReactElement, ReactNode } from 'react';
+-import PropTypes from 'prop-types';
+ import useIMGElementState from './useIMGElementState';
+ import IMGElementContentSuccess from './IMGElementContentSuccess';
+ import IMGElementContainer from './IMGElementContainer';
+ import IMGElementContentLoading from './IMGElementContentLoading';
+ import IMGElementContentError from './IMGElementContentError';
+ import type { IMGElementProps } from './img-types';
+-import defaultImageInitialDimensions from './defaultInitialImageDimensions';
+ 
+ export type { IMGElementProps } from './img-types';
+ 
+-function identity(arg: any) {
+-  return arg;
+-}
+-
+ /**
+  * A component to render images based on an internal loading state.
+  *
+@@ -44,42 +38,4 @@ function IMGElement(props: IMGElementProps): ReactElement {
+   );
+ }
+ 
+-const imgDimensionsType = PropTypes.shape({
+-  width: PropTypes.number,
+-  height: PropTypes.number
+-});
+-
+-const propTypes: Record<keyof IMGElementProps, any> = {
+-  source: PropTypes.object.isRequired,
+-  alt: PropTypes.string,
+-  altColor: PropTypes.string,
+-  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+-  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+-  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+-  computeMaxWidth: PropTypes.func.isRequired,
+-  contentWidth: PropTypes.number,
+-  enableExperimentalPercentWidth: PropTypes.bool,
+-  initialDimensions: imgDimensionsType,
+-  onPress: PropTypes.func,
+-  testID: PropTypes.string,
+-  objectFit: PropTypes.string,
+-  cachedNaturalDimensions: imgDimensionsType,
+-  containerProps: PropTypes.object
+-};
+-
+-/**
+- * @ignore
+- */
+-IMGElement.propTypes = propTypes;
+-
+-/**
+- * @ignore
+- */
+-IMGElement.defaultProps = {
+-  enableExperimentalPercentWidth: false,
+-  computeMaxWidth: identity,
+-  imagesInitialDimensions: defaultImageInitialDimensions,
+-  style: {}
+-};
+-
+ export default IMGElement;
+\ No newline at end of file

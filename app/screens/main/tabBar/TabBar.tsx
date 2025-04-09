@@ -19,7 +19,10 @@ const TabBarComponent: React.FC<TabBarComponentProps> = (props) => {
       scrollEnabled={true}
       pressOpacity={0.6}
       pressColor={colors.androidTouchFeedback}
-      renderTabBarItem={(props) => <TabBarItem {...props} label={renderLabel} />}
+      renderTabBarItem={(props) => {
+        const {key, ...rest} = props;
+        return <TabBarItem key={key} {...rest} label={renderLabel} />;
+      }}
       indicatorStyle={{backgroundColor: colors.primaryDark}}
       style={{backgroundColor: colors.background}}
       tabStyle={styles.tab}
