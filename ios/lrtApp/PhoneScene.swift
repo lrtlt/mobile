@@ -9,7 +9,6 @@ class PhoneSceneDelegate: UIResponder, UIWindowSceneDelegate {
     _ scene: UIScene, willConnectTo session: UISceneSession,
     options connectionOptions: UIScene.ConnectionOptions
   ) {
-
     if session.role != .windowApplication {
       return
     }
@@ -17,15 +16,9 @@ class PhoneSceneDelegate: UIResponder, UIWindowSceneDelegate {
     guard let appDelegate = (UIApplication.shared.delegate as? AppDelegate) else { return }
     guard let windowScene = (scene as? UIWindowScene) else { return }
 
-    appDelegate.initAppFromScene(connectionOptions: connectionOptions)
+    window = UIWindow(windowScene: windowScene)
+    appDelegate.initAppFromScene(connectionOptions: connectionOptions, window: window!)
 
-    let rootViewController = UIViewController()
-    rootViewController.view = appDelegate.rootView
-
-    let window = UIWindow(windowScene: windowScene)
-    window.rootViewController = rootViewController
-    self.window = window
-    window.makeKeyAndVisible()
   }
 
   //Called when deep link is opened from push notifications

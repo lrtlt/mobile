@@ -2839,7 +2839,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-pager-view (6.6.1):
+  - react-native-pager-view (6.7.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2865,7 +2865,7 @@ PODS:
     - Yoga
   - react-native-render-html (6.3.4):
     - React-Core
-  - react-native-safe-area-context (4.14.1):
+  - react-native-safe-area-context (5.3.0):
     - React-Core
   - react-native-theoplayer (8.18.0):
     - React-Core
@@ -3302,7 +3302,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNGestureHandler (2.21.2):
+  - RNGestureHandler (2.25.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3432,7 +3432,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.4.0):
+  - RNScreens (4.10.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3459,7 +3459,7 @@ PODS:
     - Yoga
   - RNShare (10.2.1):
     - React-Core
-  - RNSVG (15.11.1):
+  - RNSVG (15.11.2):
     - React-Core
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
@@ -3930,9 +3930,9 @@ SPEC CHECKSUMS:
   react-native-gemius-plugin: 705cc53f6b7d882ad6bcc8f7ff484042bdd2842e
   react-native-google-cast: 872b05bf12f7db32c2f66818fdd5406474af25f1
   react-native-mmkv: e9cd6d0593cd140507aba1c941dbfcd74a6d1faf
-  react-native-pager-view: 43e5c20afed5f6dfd5d349a73b79860c8fbef784
+  react-native-pager-view: 946af8f108455347e133ac82f84cd8afbf4d6d25
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
-  react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
+  react-native-safe-area-context: fdb0a66feac038cb6eb1edafcf2ccee2b5cf0284
   react-native-theoplayer: aadd2cbb4a7748f1567c96483ccec84a1070d68c
   react-native-unistyles: 9050e764a8f0d5f40cbebed83eb78900ff3da774
   react-native-webview: 5adf9651c678f00ee1b2c3f4f74565c9a9236cab
@@ -3977,13 +3977,13 @@ SPEC CHECKSUMS:
   RNFBMessaging: 65b436add429c5fd8fed20643c3a92916d275444
   RNFBPerf: beb76c1bf03b88bb5d370fa3abcf530c9e4d243d
   RNFlashList: 25f6007a7a336debd62f53d1e8bb0f8d1eb13147
-  RNGestureHandler: cca44c7ccd57985bd061e3dbf5a16dfea53aac8b
+  RNGestureHandler: dc0c4a1ff0cd2fbf5b593675484541b9a67557d1
   RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
   RNPermissions: b6f31d0082d40b8b89ee2f66aa307aba331c2c93
   RNReanimated: 6241269985425e229d0277e3c6a32696a6c8cef6
-  RNScreens: 7e3175dd0f425e4fd5aa2279e2f7a3a94600b282
+  RNScreens: a2cce6c154d013ca803235e9d4cd91b1f89e1719
   RNShare: 694e19d7f74ac4c04de3a8af0649e9ccc03bd8b1
-  RNSVG: 64c9d8b163e56424e5c7558ee5f643dcf3f4862f
+  RNSVG: ab84f2de7dd4f2c86d01825b8a65e0ef712fc36b
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
@@ -3997,6 +3997,6 @@ SPEC CHECKSUMS:
   TinyCSV: fd6228edbcf1c07466ac34b76dac5e052143eaba
   Yoga: df4e6df930f6d93d6647c10c61d4d6fe5a694805
 
-PODFILE CHECKSUM: c3916feadb57777434d6d84d1b62d01e346496f9
+PODFILE CHECKSUM: a62deb1e051825bfdb731609d521c5f2200d6a34
 
 COCOAPODS: 1.16.2
