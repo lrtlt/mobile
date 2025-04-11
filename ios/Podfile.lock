@@ -2798,9 +2798,9 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-config (1.5.3):
-    - react-native-config/App (= 1.5.3)
-  - react-native-config/App (1.5.3):
+  - react-native-config (1.5.5):
+    - react-native-config/App (= 1.5.5)
+  - react-native-config/App (1.5.5):
     - React-Core
   - react-native-gemius-plugin (1.7.0):
     - React
@@ -2873,7 +2873,7 @@ PODS:
     - THEOplayer-Integration-GoogleCast (~> 8.13)
     - THEOplayer-Integration-THEOlive (~> 8.13)
     - THEOplayerSDK-core (~> 8.13)
-  - react-native-unistyles (2.20.0):
+  - react-native-unistyles (2.31.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3243,7 +3243,7 @@ PODS:
     - React-logger (= 0.79.0)
     - React-perflogger (= 0.79.0)
     - React-utils (= 0.79.0)
-  - RNCAsyncStorage (1.24.0):
+  - RNCAsyncStorage (2.1.2):
     - React-Core
   - RNFastImage (8.6.3):
     - React-Core
@@ -3331,9 +3331,9 @@ PODS:
     - RNNotifee/NotifeeCore (= 9.1.8)
   - RNNotifee/NotifeeCore (9.1.8):
     - React-Core
-  - RNPermissions (3.10.1):
+  - RNPermissions (5.3.0):
     - React-Core
-  - RNReanimated (3.16.7):
+  - RNReanimated (3.17.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3356,10 +3356,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.16.7)
-    - RNReanimated/worklets (= 3.16.7)
+    - RNReanimated/reanimated (= 3.17.3)
+    - RNReanimated/worklets (= 3.17.3)
     - Yoga
-  - RNReanimated/reanimated (3.16.7):
+  - RNReanimated/reanimated (3.17.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3382,9 +3382,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated/apple (= 3.16.7)
+    - RNReanimated/reanimated/apple (= 3.17.3)
     - Yoga
-  - RNReanimated/reanimated/apple (3.16.7):
+  - RNReanimated/reanimated/apple (3.17.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3408,7 +3408,32 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated/worklets (3.16.7):
+  - RNReanimated/worklets (3.17.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - RNReanimated/worklets/apple (= 3.17.3)
+    - Yoga
+  - RNReanimated/worklets/apple (3.17.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3457,8 +3482,30 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNShare (10.2.1):
+  - RNShare (12.0.9):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNSVG (15.11.2):
     - React-Core
   - SDWebImage (5.11.1):
@@ -3926,7 +3973,7 @@ SPEC CHECKSUMS:
   React-logger: a5edba66e28edd1ef973971a2ec5d531eb8621ea
   React-Mapbuffer: 1b42bfae5831d01bcea685f95621b00ce6fdbeb3
   React-microtasksnativemodule: 16daaf4d4722c200c8c16947b35a56a983093c9b
-  react-native-config: ea75335a7cca1d3326de1da384227e580a7c082e
+  react-native-config: 644074ab88db883fcfaa584f03520ec29589d7df
   react-native-gemius-plugin: 705cc53f6b7d882ad6bcc8f7ff484042bdd2842e
   react-native-google-cast: 872b05bf12f7db32c2f66818fdd5406474af25f1
   react-native-mmkv: e9cd6d0593cd140507aba1c941dbfcd74a6d1faf
@@ -3934,7 +3981,7 @@ SPEC CHECKSUMS:
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: fdb0a66feac038cb6eb1edafcf2ccee2b5cf0284
   react-native-theoplayer: aadd2cbb4a7748f1567c96483ccec84a1070d68c
-  react-native-unistyles: 9050e764a8f0d5f40cbebed83eb78900ff3da774
+  react-native-unistyles: 85648eb6994146b93f28525348eb2b4331535288
   react-native-webview: 5adf9651c678f00ee1b2c3f4f74565c9a9236cab
   React-NativeModulesApple: 8ecbbc15f14a567821682d37b4b18896b1cc213b
   React-oscompat: faff1df234d57a7368b56e9642222dde9eb9f422
@@ -3967,7 +4014,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 7f5052913dd72a0e84ca95973f9f8bc97f2c5b95
   ReactCodegen: 432ab44c696f7dc8ef0641281012ad3c191e3f89
   ReactCommon: 4f0e046f6c9abecc017956dbfdbaddd331afa0ea
-  RNCAsyncStorage: b6410dead2732b5c72a7fdb1ecb5651bbcf4674b
+  RNCAsyncStorage: b9f5f78da5d16a853fe3dc22e8268d932fc45a83
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
   RNFBAnalytics: 4c4ea0ee9c20fd7ac5412581c3c9da8e950899ed
   RNFBApp: 3ecdb44edd5cce785ea9b796682766889962a5fd
@@ -3979,10 +4026,10 @@ SPEC CHECKSUMS:
   RNFlashList: 25f6007a7a336debd62f53d1e8bb0f8d1eb13147
   RNGestureHandler: dc0c4a1ff0cd2fbf5b593675484541b9a67557d1
   RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
-  RNPermissions: b6f31d0082d40b8b89ee2f66aa307aba331c2c93
-  RNReanimated: 6241269985425e229d0277e3c6a32696a6c8cef6
+  RNPermissions: 7667a486cd17c8c02e1214f9bc7dab7d2384a8ae
+  RNReanimated: 25ec1156843446797c2018205e9074fe8c049515
   RNScreens: a2cce6c154d013ca803235e9d4cd91b1f89e1719
-  RNShare: 694e19d7f74ac4c04de3a8af0649e9ccc03bd8b1
+  RNShare: 082a222215e9fd50994d5f0d9c34982050c5480d
   RNSVG: ab84f2de7dd4f2c86d01825b8a65e0ef712fc36b
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
@@ -3999,4 +4046,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a62deb1e051825bfdb731609d521c5f2200d6a34
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2
