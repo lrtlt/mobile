@@ -3333,7 +3333,7 @@ PODS:
     - React-Core
   - RNPermissions (5.3.0):
     - React-Core
-  - RNReanimated (3.17.3):
+  - RNReanimated (3.17.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3356,10 +3356,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.17.3)
-    - RNReanimated/worklets (= 3.17.3)
+    - RNReanimated/reanimated (= 3.17.4)
+    - RNReanimated/worklets (= 3.17.4)
     - Yoga
-  - RNReanimated/reanimated (3.17.3):
+  - RNReanimated/reanimated (3.17.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3382,9 +3382,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated/apple (= 3.17.3)
+    - RNReanimated/reanimated/apple (= 3.17.4)
     - Yoga
-  - RNReanimated/reanimated/apple (3.17.3):
+  - RNReanimated/reanimated/apple (3.17.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3408,7 +3408,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated/worklets (3.17.3):
+  - RNReanimated/worklets (3.17.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3431,9 +3431,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/worklets/apple (= 3.17.3)
+    - RNReanimated/worklets/apple (= 3.17.4)
     - Yoga
-  - RNReanimated/worklets/apple (3.17.3):
+  - RNReanimated/worklets/apple (3.17.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -4027,7 +4027,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: dc0c4a1ff0cd2fbf5b593675484541b9a67557d1
   RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
   RNPermissions: 7667a486cd17c8c02e1214f9bc7dab7d2384a8ae
-  RNReanimated: 25ec1156843446797c2018205e9074fe8c049515
+  RNReanimated: 3dac43d7108727660a514c487684097f3242365d
   RNScreens: a2cce6c154d013ca803235e9d4cd91b1f89e1719
   RNShare: 082a222215e9fd50994d5f0d9c34982050c5480d
   RNSVG: ab84f2de7dd4f2c86d01825b8a65e0ef712fc36b
@@ -4046,4 +4046,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a62deb1e051825bfdb731609d521c5f2200d6a34
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

@@ -5,6 +5,7 @@ import {
   Insets,
   PanResponder,
   PanResponderInstance,
+  Platform,
   Pressable,
   StyleSheet,
   TouchableOpacity,
@@ -374,15 +375,22 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   return shouldBeVisible ? (
     <Animated.View
       style={[styles.flex, styles.center, {aspectRatio}]}
-      entering={FadeIn.duration(400)}
-      exiting={FadeOut.duration(400)}>
+      //Wait for fix on android
+      entering={Platform.OS === 'android' ? undefined : FadeIn.duration(400)}
+      exiting={Platform.OS === 'android' ? undefined : FadeOut.duration(400)}
+      // entering={FadeIn.duration(400)}
+      // exiting={FadeOut.duration(400)}
+    >
       <LinearGradient
         style={StyleSheet.absoluteFillObject}
         colors={['#000000FF', '#00000088', '#00000066', '#22222233']}
         useAngle={true}
         angle={0}
       />
-      <Pressable style={{...StyleSheet.absoluteFillObject, bottom: ICON_SIZE}} onPress={handleHideControls} />
+      <Pressable
+        style={{...StyleSheet.absoluteFillObject, bottom: ICON_SIZE}}
+        onPressIn={handleHideControls}
+      />
       <Title />
       {CenterControls}
 
@@ -419,7 +427,15 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
       </View>
     </Animated.View>
   ) : (
-    <Pressable style={{...styles.flex, aspectRatio}} onPress={handleShowControls} />
+    <Pressable
+      collapsable={false}
+      style={{
+        ...styles.flex,
+        aspectRatio,
+      }}
+      onPressIn={handleShowControls}
+      // onPress={handleShowControls}
+    />
   );
 };
 

@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {View, StyleSheet, Dimensions, ScrollView} from 'react-native';
-import Animated, {useAnimatedStyle, withSpring, useSharedValue} from 'react-native-reanimated';
+import Animated, {useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated';
 import {Text, TouchableDebounce} from '../../../../../../components';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
 import {themeLight} from '../../../../../../Theme';
@@ -45,7 +45,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   useEffect(() => {
     // Reset all scales to 1
     scaleValues.forEach((scale, index) => {
-      scale.value = withSpring(index === selectedIndex ? 1.1 : 1);
+      scale.value = withTiming(index === selectedIndex ? 1.1 : 1, {duration: 200});
     });
   }, [selectedIndex]);
 

@@ -53,7 +53,7 @@
     "react-native-modal": "^13.0.2",
     "react-native-pager-view": "6.7.0",
     "react-native-permissions": "^5.3.0",
-    "react-native-reanimated": "^3.17.3",
+    "react-native-reanimated": "^3.17.4",
     "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "4.10.0",
