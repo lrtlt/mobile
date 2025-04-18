@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
-import FastImage, {Source} from 'react-native-fast-image';
+import FastImage, {Source} from '@d11/react-native-fast-image';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 
 interface Props {

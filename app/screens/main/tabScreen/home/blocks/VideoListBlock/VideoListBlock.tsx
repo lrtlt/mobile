@@ -10,7 +10,7 @@ import {themeDark, themeLight, useTheme} from '../../../../../../Theme';
 import LinearGradient from 'react-native-linear-gradient';
 import {IconPlay} from '../../../../../../components/svg';
 import ViewCount from '../../../../../../components/article/article/ViewCount';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';

@@ -2,10 +2,6 @@ Not sure if there are needed since rn 79
 "@typescript-eslint/eslint-plugin": "^4.26.0",
 "@typescript-eslint/parser": "^4.26.0",
 
-
-
-Update fast-image to fork @d11/react-native-fast-image
-
 2025-04-09
 Should remove android.enableJetifier=true from gradle.properties since react-native v0.75+
 This can be done only after our app does not have dependencies on android.support.* packages

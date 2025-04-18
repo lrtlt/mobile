@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {View, StyleSheet, Animated, Image, ImageStyle} from 'react-native';
-import FastImage, {ImageStyle as FastImageStyle} from 'react-native-fast-image';
+import FastImage, {ImageStyle as FastImageStyle} from '@d11/react-native-fast-image';
 
 interface Props {
   style?: ImageStyle & FastImageStyle;

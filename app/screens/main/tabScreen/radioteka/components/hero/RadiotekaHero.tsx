@@ -5,7 +5,7 @@ import {Text, TouchableDebounce} from '../../../../../../components';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
 import {themeLight} from '../../../../../../Theme';
 import {RadiotekaTopArticlesBlock} from '../../../../../../api/Types';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import {buildImageUri, IMG_SIZE_M, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
 import LinearGradient from 'react-native-linear-gradient';
 import {Article} from '../../../../../../../Types';

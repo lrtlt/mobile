@@ -25,7 +25,7 @@ import useChromecast from './useChromecast';
 import {MediaPlayerState} from 'react-native-google-cast';
 import {useTheme} from '../../Theme';
 import usePlayerLanguage from './usePlayerLanguage';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import {VideoTextTrack} from '../../api/Types';
 import usePlayerSubtitles from './usePlayerSubtitles';
 import {useSettingsStore} from '../../state/settings_store';

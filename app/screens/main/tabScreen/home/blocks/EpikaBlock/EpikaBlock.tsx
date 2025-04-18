@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
 import {Linking, StyleSheet, View} from 'react-native';
 import {HomeBlockEpikaBlock} from '../../../../../../api/Types';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import {MediaIndicator, Text, TouchableDebounce} from '../../../../../../components';
 import {themeLight, useTheme} from '../../../../../../Theme';
 import {IconLRTEpika} from '../../../../../../components/svg';

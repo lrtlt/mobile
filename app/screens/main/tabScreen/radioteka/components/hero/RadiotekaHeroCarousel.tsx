@@ -1,7 +1,7 @@
 import React, {useState, useRef} from 'react';
 import {View, StyleSheet, FlatList, Image, ViewToken, useWindowDimensions} from 'react-native';
 import Text from '../../../../../../components/text/Text';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import ListenCount from '../../../../../../components/article/article/ListenCount';
 import {TouchableDebounce} from '../../../../../../components';
 import {Article} from '../../../../../../../Types';

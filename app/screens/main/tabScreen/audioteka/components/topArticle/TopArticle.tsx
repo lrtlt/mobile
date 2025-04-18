@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {Article} from '../../../../../../../Types';
 import TopArticleBackground from './TopArticleBackground';
 import TopArticleChannelBadge from './TopArticleChannelBadge';
-import Image from 'react-native-fast-image';
+import Image from '@d11/react-native-fast-image';
 import {buildImageUri, IMG_SIZE_M} from '../../../../../../util/ImageUtil';
 import MediaIndicator from '../../../../../../components/mediaIndicator/MediaIndicator';
 import TextComponent from '../../../../../../components/text/Text';

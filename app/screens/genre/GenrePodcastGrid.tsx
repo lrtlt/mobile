@@ -1,6 +1,6 @@
 import React, {PropsWithChildren} from 'react';
 import {GenreArticle} from '../../api/Types';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import {TouchableDebounce} from '../../components';
 import {StyleSheet, useWindowDimensions, View} from 'react-native';
 import {buildImageUri, IMG_SIZE_M} from '../../util/ImageUtil';

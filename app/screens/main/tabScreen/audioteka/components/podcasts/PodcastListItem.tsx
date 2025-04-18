@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
 import {Podcast} from '../../../../../../api/Types';
-import Image from 'react-native-fast-image';
+import Image from '@d11/react-native-fast-image';
 import {Text, TouchableDebounce} from '../../../../../../components';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/core';

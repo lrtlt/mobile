@@ -10,7 +10,7 @@ import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import {themeDark, themeLight, useTheme} from '../../../../../../Theme';
 import {formatArticles} from '../../../../../../util/articleFormatters';
 import {buildArticleImageUri, IMG_SIZE_L} from '../../../../../../util/ImageUtil';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
 
 interface SlugArticlesBlockProps {

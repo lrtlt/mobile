@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import Image from 'react-native-fast-image';
+import Image from '@d11/react-native-fast-image';
 import {useTheme} from '../../../Theme';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
 import {Text} from '../../../components';

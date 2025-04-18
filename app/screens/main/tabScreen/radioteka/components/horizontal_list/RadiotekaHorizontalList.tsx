@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {View, StyleSheet, FlatList, Dimensions} from 'react-native';
 import Text from '../../../../../../components/text/Text';
 import {TouchableDebounce} from '../../../../../../components';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import PlayButton from '../play_button/play_button';
 
 const CARD_WIDTH_FULL = Math.min(Dimensions.get('window').width * 0.5, 300);

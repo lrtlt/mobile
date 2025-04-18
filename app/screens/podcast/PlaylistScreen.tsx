@@ -7,7 +7,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../../Theme';
 import {ScrollView} from 'react-native-gesture-handler';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import {buildImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
 import PodcastEpisode from './episode/PodcastEpisode';
 import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';

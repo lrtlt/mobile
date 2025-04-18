@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import {Text, TouchableDebounce} from '../../..';
 import {ArticleEmbedPhotoalbumType, ArticlePhotoType} from '../../../../api/Types';
 import {MainStackParamList} from '../../../../navigation/MainStack';

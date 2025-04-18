@@ -5,7 +5,7 @@ import {useTheme} from '../../../Theme';
 import TextComponent from '../../../components/text/Text';
 import Divider from '../../../components/divider/Divider';
 import {TouchableDebounce} from '../../../components';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import ArticleParagraph from '../../../components/articleParagraphs/paragraph/ArticleParagraph';
 import ArticleKeywords from '../../article/keywords/ArticleKeywords';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';

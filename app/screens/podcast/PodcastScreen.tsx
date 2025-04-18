@@ -11,7 +11,7 @@ import {useTheme} from '../../Theme';
 import PodcastAbout from './about/PodcastAbout';
 import {ArticleContentMedia, isMediaArticle} from '../../api/Types';
 import {ScrollView} from 'react-native-gesture-handler';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
 import PodcastEpisode from './episode/PodcastEpisode';
 import PodcastRecommendations from './recommendations/PodcastRecommendations';
