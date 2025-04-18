@@ -34,7 +34,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
   );
 
   const {mediaData} = useMediaPlayer();
-  const {episodes} = useSeason(selectedSeasonUrl, preloadedEpisodes);
+  const {episodes, hasMore, loadMoreEpisodes} = useSeason(selectedSeasonUrl, preloadedEpisodes);
   const {setPlaylist} = useMediaPlayer();
 
   const {colors, strings} = useTheme();
@@ -135,8 +135,19 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
               </ScrollView>
             ) : null
           }
+          ListFooterComponent={
+            episodes.length && hasMore ? (
+              <View style={{marginHorizontal: 12}}>
+                <MoreArticlesButton
+                  onPress={loadMoreEpisodes}
+                  backgroundColor={colors.radiotekaPlayButton}
+                  customText={'Daugiau įrašų'}
+                />
+              </View>
+            ) : null
+          }
           renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, i) => `${item.id}-${i}`}
           estimatedItemSize={200}
         />
         <View style={{padding: 12}}>

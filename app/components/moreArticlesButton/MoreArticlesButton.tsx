@@ -17,16 +17,16 @@ const MoreArticlesButton: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const {colors, strings} = useTheme();
 
-  const extraPadding = backgroundColor ? 8 : 0;
-
   return (
-    <View style={{backgroundColor: backgroundColor}}>
-      <TouchableDebounce debounceTime={500} onPress={onPress}>
-        <View style={{...styles.container, padding: extraPadding, backgroundColor: colors.greyBackground}}>
-          <TextComponent style={styles.title}>{customText ?? strings.moreButtonText}</TextComponent>
-        </View>
-      </TouchableDebounce>
-    </View>
+    <TouchableDebounce debounceTime={500} onPress={onPress}>
+      <View
+        style={{
+          ...styles.container,
+          backgroundColor: backgroundColor ?? colors.greyBackground,
+        }}>
+        <TextComponent style={styles.title}>{customText ?? strings.moreButtonText}</TextComponent>
+      </View>
+    </TouchableDebounce>
   );
 };
 

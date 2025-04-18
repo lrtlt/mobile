@@ -143,8 +143,8 @@ export const fetchCategoryPlaylist = (id: string | number) =>
 
 export const fetchCarLivePlaylist = () => get<TVProgramResponse>(carPlaylistLiveGet());
 
-export const fetchRadiotekaSeasonPlaylist = (seasonUrl: string) =>
-  get<SearchResponse>(getRadiotekaArticlesBySeason(seasonUrl));
+export const fetchRadiotekaSeasonPlaylist = (seasonUrl: string, page: number, count: number) =>
+  get<SearchResponse>(getRadiotekaArticlesBySeason(seasonUrl, page, count));
 
 export const fetchRadiotekaArticleByUrl = (url: string) =>
   get<RadiotekaArticle>(getRadiotekaArticleByUrl(url));
