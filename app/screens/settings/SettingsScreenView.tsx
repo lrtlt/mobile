@@ -119,6 +119,9 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
           <Text style={styles.label} type="secondary" fontFamily="SourceSansPro-SemiBold">
             {'Pranešimai'}
           </Text>
+          <Text style={styles.caption} type="secondary" fontFamily="SourceSansPro-Regular">
+            {'Galite prenumeruoti į telefoną siunčiamus pranešimus (push notifications).'}
+          </Text>
           <View style={{...styles.card, backgroundColor: colors.background}}>
             <SettingsNotifications />
           </View>
@@ -166,6 +169,11 @@ const styles = StyleSheet.create({
     padding: 12,
     paddingTop: 24,
     textTransform: 'uppercase',
+  },
+  caption: {
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
   },
   space: {
     width: 6,

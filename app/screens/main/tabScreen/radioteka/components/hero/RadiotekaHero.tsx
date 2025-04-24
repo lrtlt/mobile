@@ -100,11 +100,13 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
 
         <View style={styles.mainContent}>
           <View style={styles.mainContentText}>
-            <Text style={styles.duration}>{durationMinutes}min.</Text>
-            <Text style={styles.title} fontFamily="PlayfairDisplay-Regular">
-              {articles[selectedIndex].category_title}
+            <Text style={styles.duration} fontFamily="SourceSansPro-SemiBold">
+              {durationMinutes}min.
             </Text>
-            <Text style={styles.subtitle}>{articles[selectedIndex].title}</Text>
+            <Text style={styles.title} fontFamily="PlayfairDisplay-Regular">
+              {articles[selectedIndex].title}
+            </Text>
+            <Text style={styles.subtitle}>{articles[selectedIndex].category_title} </Text>
             <View style={styles.buttonContainer}>
               <PlayButton onPress={() => playItem(selectedIndex)} />
               <TouchableDebounce
@@ -176,24 +178,24 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     alignSelf: 'flex-start',
     borderRadius: 3,
-    backgroundColor: '#000000A0',
+    backgroundColor: '#000000C0',
     paddingVertical: 3,
     paddingHorizontal: 8,
   },
   title: {
     color: '#FFFFFF',
-    fontSize: 34,
+    fontSize: 32,
     marginVertical: 10,
   },
   subtitle: {
     color: '#FFFFFF',
     fontSize: 17,
-    marginBottom: 30,
+    marginBottom: 16,
     paddingVertical: 12,
   },
   buttonContainer: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 16,
   },
 
   moreButton: {
