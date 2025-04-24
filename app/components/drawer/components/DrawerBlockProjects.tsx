@@ -1,6 +1,6 @@
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import React from 'react';
-import {View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {MenuItemProjects} from '../../../api/Types';
 import {useTheme} from '../../../Theme';
 import {checkEqual} from '../../../util/LodashEqualityCheck';
@@ -40,10 +40,7 @@ const DrawerBlockProjects: React.FC<React.PropsWithChildren<Props>> = ({projectB
                   text={project.name}
                   onPress={() => {
                     navigation.closeDrawer();
-                    navigation.navigate('WebPage', {
-                      url: project.url,
-                      title: project.name,
-                    });
+                    Linking.openURL(project.url);
                   }}
                 />
               ))}
