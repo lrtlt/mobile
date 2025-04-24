@@ -114,6 +114,7 @@ const GenreScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigatio
       shows?.map((a) => ({
         title: a.title,
         category: a.category_title,
+        ageRestricted: !!a.age_restriction,
         imageUrl: buildArticleImageUri(IMG_SIZE_L, a.photo) ?? '',
       })) ?? []
     );

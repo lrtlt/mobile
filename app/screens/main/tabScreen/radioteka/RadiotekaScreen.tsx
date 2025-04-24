@@ -129,6 +129,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 title: a.title,
                 // category: a.channel_title,
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
+                ageRestricted: !!a.age_restriction,
               }))}
               onItemPress={(index) => {
                 navigation.push('Podcast', {
@@ -156,6 +157,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               items={item.data.articles_list.map((a) => ({
                 title: a.title,
                 // category: a.channel_title,
+                ageRestricted: !!a.age_restriction,
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
               }))}
               onItemPress={(index) => {
@@ -242,6 +244,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               items={item.data.articles_list.map((a) => ({
                 title: a.title,
                 // category: a.channel_title,
+                ageRestricted: !!a.age_restriction,
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
               }))}
               onTitlePress={() => {
@@ -294,6 +297,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               title: a.title,
               // subtitle: a.title,
               // category: a.branch1_title,
+              ageRestricted: !!a.age_restriction,
               imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
             }))}
             onItemPress={(index) => {

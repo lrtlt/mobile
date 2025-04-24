@@ -13,6 +13,7 @@ export type RadiotekaListItem = {
   title?: string;
   subtitle?: string;
   imageUrl: string;
+  ageRestricted?: boolean;
 };
 
 interface RadiotekaHorizontalListProps {
@@ -42,6 +43,11 @@ const RadiotekaHorizontalList: React.FC<RadiotekaHorizontalListProps> = ({
             style={styles.image}
           />
           {variation === 'full' && <PlayButton onPress={() => onItemPlayPress?.(index)} />}
+          {item.ageRestricted && (
+            <View style={styles.ageRestrictionBadgeContainer}>
+              <Text style={{color: '#FFF', fontSize: 16}}>S</Text>
+            </View>
+          )}
         </View>
       </View>
       {variation === 'full' && (
@@ -152,6 +158,17 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: 8,
     overflow: 'hidden',
+  },
+  ageRestrictionBadgeContainer: {
+    width: 28,
+    height: 28,
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    backgroundColor: 'rgb(239, 68, 68)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
   },
 });
 
