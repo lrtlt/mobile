@@ -272,6 +272,8 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const onPresentationChangeHandler = useCallback((e: PresentationModeChangeEvent) => {
     log(getCrashlytics(), 'TheoMediaPlayer: Presentation mode changed to ' + e.presentationMode);
+    //Ensure re-render to trigger show controls if player is not playing
+    setCurrentTimeInternal(player?.currentTime ?? 0);
   }, []);
 
   const onErrorHandler = useCallback(

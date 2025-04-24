@@ -18,6 +18,7 @@ import {useMediaPlayer} from '../useMediaPlayer';
 import PlayerSekBar from '../../PlayerSeekBar';
 import {MediaType} from '../PlayerContext';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import PlayerPlaybackRatio from '../../PlayerPlaybackRatio';
 
 const PLAYER_HEIGHT = 80;
 const PADDING = 8;
@@ -156,7 +157,18 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
                 <IconPlayerNext size={22} color={colors.darkIcon + (onNext ? '' : '33')} />
               </TouchableDebounce>
             </View>
-            {player ? <PlayerSekBar style={{width: '100%'}} player={player} /> : null}
+            {player ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 4,
+                }}>
+                <PlayerSekBar style={{width: '100%'}} player={player} />
+                {mediaData?.isLiveStream ? null : <PlayerPlaybackRatio player={player} />}
+              </View>
+            ) : null}
           </View>
         </View>
       </View>
