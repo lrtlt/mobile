@@ -55,8 +55,6 @@ interface Props {
 
 const config: PlayerConfiguration = {
   license: Config.THEO_PLAYER_LICENCE,
-  chromeless: true,
-  useMedia3: true,
 };
 
 const makeSource = (

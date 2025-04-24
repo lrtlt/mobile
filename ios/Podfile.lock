@@ -1447,9 +1447,9 @@ PODS:
     - gRPC-Core/Privacy (= 1.65.5)
   - gRPC-Core/Interface (1.65.5)
   - gRPC-Core/Privacy (1.65.5)
-  - hermes-engine (0.79.0):
-    - hermes-engine/Pre-built (= 0.79.0)
-  - hermes-engine/Pre-built (0.79.0)
+  - hermes-engine (0.79.1):
+    - hermes-engine/Pre-built (= 0.79.1)
+  - hermes-engine/Pre-built (0.79.1)
   - leveldb-library (1.22.6)
   - libavif/core (0.11.1)
   - libavif/libdav1d (0.11.1):
@@ -2872,13 +2872,13 @@ PODS:
     - React-Core
   - react-native-safe-area-context (5.4.0):
     - React-Core
-  - react-native-theoplayer (8.18.0):
+  - react-native-theoplayer (9.1.0):
     - React-Core
-    - THEOplayer-Connector-SideloadedSubtitle (~> 8.13)
-    - THEOplayer-Integration-GoogleCast (~> 8.13)
-    - THEOplayer-Integration-THEOlive (~> 8.13)
-    - THEOplayerSDK-core (~> 8.13)
-  - react-native-unistyles (2.31.0):
+    - THEOplayer-Connector-SideloadedSubtitle (~> 9.0)
+    - THEOplayer-Integration-GoogleCast (~> 9.0)
+    - THEOplayer-Integration-THEOlive (~> 9.0)
+    - THEOplayerSDK-core (~> 9.0)
+  - react-native-unistyles (2.32.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3531,23 +3531,23 @@ PODS:
     - DSFRegex (~> 3.3.1)
     - TinyCSV (~> 0.6.1)
   - THEOliveSDK (3.18.10)
-  - THEOplayer-Connector-SideloadedSubtitle (8.14.0):
+  - THEOplayer-Connector-SideloadedSubtitle (9.1.0):
     - Swifter (= 1.5.0)
     - SwiftSubtitles (= 0.9.1)
-    - THEOplayerSDK-core (~> 8)
-  - THEOplayer-Integration-GoogleCast (8.14.0):
-    - THEOplayer-Integration-GoogleCast/Base (= 8.14.0)
-    - THEOplayer-Integration-GoogleCast/Dependencies (= 8.14.0)
-  - THEOplayer-Integration-GoogleCast/Base (8.14.0)
-  - THEOplayer-Integration-GoogleCast/Dependencies (8.14.0):
+    - THEOplayerSDK-core (~> 9)
+  - THEOplayer-Integration-GoogleCast (9.1.0):
+    - THEOplayer-Integration-GoogleCast/Base (= 9.1.0)
+    - THEOplayer-Integration-GoogleCast/Dependencies (= 9.1.0)
+  - THEOplayer-Integration-GoogleCast/Base (9.1.0)
+  - THEOplayer-Integration-GoogleCast/Dependencies (9.1.0):
     - google-cast-sdk-dynamic-xcframework (~> 4.8)
-  - THEOplayer-Integration-THEOlive (8.14.0):
-    - THEOplayer-Integration-THEOlive/Base (= 8.14.0)
-    - THEOplayer-Integration-THEOlive/Dependencies (= 8.14.0)
-  - THEOplayer-Integration-THEOlive/Base (8.14.0)
-  - THEOplayer-Integration-THEOlive/Dependencies (8.14.0):
+  - THEOplayer-Integration-THEOlive (9.1.0):
+    - THEOplayer-Integration-THEOlive/Base (= 9.1.0)
+    - THEOplayer-Integration-THEOlive/Dependencies (= 9.1.0)
+  - THEOplayer-Integration-THEOlive/Base (9.1.0)
+  - THEOplayer-Integration-THEOlive/Dependencies (9.1.0):
     - THEOliveSDK (= 3.18.10)
-  - THEOplayerSDK-core (8.14.0)
+  - THEOplayerSDK-core (9.1.0)
   - TinyCSV (0.6.1)
   - Yoga (0.0.0)
 
@@ -3915,10 +3915,10 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
-  boost: 1dca942403ed9342f98334bf4c3621f011aa7946
+  boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   BoringSSL-GRPC: ca6a8e5d04812fce8ffd6437810c2d46f925eaeb
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
-  DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
+  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   DSFRegex: 8493187c71ac199695245eb9ec98bad4f87a2f0b
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: abbac80c6f89e71a8c55c7e92ec015c8a9496753
@@ -3940,15 +3940,15 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfigInterop: 85bdce8babed7814816496bb6f082bc05b0a45e1
   FirebaseSessions: c4d40a97f88f9eaff2834d61b4fea0a522d62123
   FirebaseSharedSwift: b1d32c3b29a911dc174bcf363f2f70bda9509d2f
-  fmt: 01b82d4ca6470831d1cc0852a1af644be019e8f6
-  glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
+  fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
+  glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   google-cast-sdk-dynamic-xcframework: d4dd8d548462f2a4874515fee68c17805d44be42
   GoogleAppMeasurement: fc0817122bd4d4189164f85374e06773b9561896
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   "gRPC-C++": 2fa52b3141e7789a28a737f251e0c45b4cb20a87
   gRPC-Core: a27c294d6149e1c39a7d173527119cfbc3375ce4
-  hermes-engine: cd4bd90f051e3658c83cc00e87c603dfe1b75947
+  hermes-engine: c32f2e405098bc1ebe30630a051ddce6f21d3c2e
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
   libavif: 84bbb62fb232c3018d6f1bab79beea87e35de7b7
   libdav1d: 23581a4d8ec811ff171ed5e2e05cd27bad64c39f
@@ -3996,8 +3996,8 @@ SPEC CHECKSUMS:
   react-native-pager-view: 946af8f108455347e133ac82f84cd8afbf4d6d25
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 9d72abf6d8473da73033b597090a80b709c0b2f1
-  react-native-theoplayer: aadd2cbb4a7748f1567c96483ccec84a1070d68c
-  react-native-unistyles: 85648eb6994146b93f28525348eb2b4331535288
+  react-native-theoplayer: d383d383abc1ad99f009855c7ea0cd3f1c240215
+  react-native-unistyles: 5d8bcc8545cf31905a9e80216cd886aa3e4633e2
   react-native-webview: 5adf9651c678f00ee1b2c3f4f74565c9a9236cab
   React-NativeModulesApple: e8e6b7992257fe68f77d5ce39f34384cd6226edf
   React-oscompat: 74eb4badd12e93899f37a5dbb03d8a638011a292
@@ -4054,10 +4054,10 @@ SPEC CHECKSUMS:
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   SwiftSubtitles: c659af19d710a2946779015464c0577d07fe4666
   THEOliveSDK: 61479e7ad8164340a8aaccc211493e2606d4381d
-  THEOplayer-Connector-SideloadedSubtitle: 2a01c719e466c3fdc20184c3e40f8eaaf301d26e
-  THEOplayer-Integration-GoogleCast: f7fb4c8b3971ed90a48b03a750b3eb044018c385
-  THEOplayer-Integration-THEOlive: ca48c878071a8ff8aaa8ddeb19f86daf53ba6458
-  THEOplayerSDK-core: 80ae1fdad332f4a411f00f75b11f3a4bdb0a6b85
+  THEOplayer-Connector-SideloadedSubtitle: 2b47c3ed0d84b242a2124999d4d7287c18492678
+  THEOplayer-Integration-GoogleCast: 565feac375220ca819a19b1f336e3cd0c1448a17
+  THEOplayer-Integration-THEOlive: adb3e6fa5105bdad6b31bd2fbe165d21abf61dea
+  THEOplayerSDK-core: 6f3ff35e3261b5014dd250723d3bf35466c0fdf3
   TinyCSV: fd6228edbcf1c07466ac34b76dac5e052143eaba
   Yoga: 0f6757ba6d7d652f42bba3423f925dbf23d51aab
 
