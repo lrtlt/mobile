@@ -6,13 +6,14 @@ import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 
 import {buildImageUri, buildArticleImageUri, IMG_SIZE_M, IMG_SIZE_S} from '../../../util/ImageUtil';
-import {themeLight, useTheme} from '../../../Theme';
+import {themeLight} from '../../../Theme';
 import TextComponent from '../../text/Text';
 import {Article} from '../../../../Types';
 import ArticleBadges from './ArticleBadges';
 import ListenCount from './ListenCount';
 import Badge from '../../badge/Badge';
 import MediaIcon from '../../mediaIcon/MediaIcon';
+import {Icon404} from '../../svg';
 
 const getArticleStyle = (type: ArticleStyleType) => {
   switch (type) {
@@ -42,7 +43,6 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
   dateEnabled = true,
   onPress,
 }) => {
-  const {colors} = useTheme();
   const style = getArticleStyle(styleType);
 
   const onPressHandler = useCallback(() => {
@@ -104,15 +104,21 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
             // eslint-disable-next-line react-native/no-inline-styles
             style={{
               ...style.imageContainer,
-              backgroundColor: colors.greyBackground,
+              backgroundColor: '#00000033',
               borderRadius: article.is_audio ? 8 : 0,
             }}>
-            <CoverImage
-              style={style.image}
-              source={{
-                uri: imgUri,
-              }}
-            />
+            {imgUri ? (
+              <CoverImage
+                style={style.image}
+                source={{
+                  uri: imgUri,
+                }}
+              />
+            ) : (
+              <View style={style.mediaIndicator}>
+                <Icon404 size={60} />
+              </View>
+            )}
             {mediaIndicator}
 
             {mediaDuration}

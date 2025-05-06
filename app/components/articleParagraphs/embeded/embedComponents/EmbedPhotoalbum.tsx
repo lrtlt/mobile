@@ -57,6 +57,11 @@ const EmbedPhotoalbum: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
           setDimensions(event.nativeEvent.layout);
         }}>
         {visibleImages.map((image, index) => {
+          if (!image) {
+            console.warn('No image data to render EmbedPhotoalbum');
+            return null;
+          }
+
           const imgUri = buildArticleImageUri(IMG_SIZE_M, image.path);
           return (
             <TouchableDebounce

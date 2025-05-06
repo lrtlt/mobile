@@ -100,7 +100,7 @@ const getHeaderData = (article: ArticleContent): ArticleContentItemType => {
       title: isDefaultArticle(article) ? article.article_title : article.title,
       subtitle: isDefaultArticle(article) ? article.article_subtitle : article.subtitle,
       facebookReactions: isDefaultArticle(article) ? article.reactions_count : undefined,
-      image: buildArticleImageUri(IMG_SIZE_S, article.main_photo.path),
+      image: buildArticleImageUri(IMG_SIZE_S, article?.main_photo?.path),
       author: author,
       text2SpeechUrl: isDefaultArticle(article) ? article.text2speech_file_url : undefined,
     },

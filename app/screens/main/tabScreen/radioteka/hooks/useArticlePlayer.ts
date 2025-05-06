@@ -25,7 +25,7 @@ export const useArticlePlayer = () => {
         setMediaData({
           uri: article.stream_url,
           title: article.title,
-          poster: buildArticleImageUri(IMG_SIZE_M, article.main_photo.path),
+          poster: buildArticleImageUri(IMG_SIZE_M, article.main_photo?.path),
           mediaType: article.is_video ? MediaType.VIDEO : MediaType.AUDIO,
           isLiveStream: false,
         });

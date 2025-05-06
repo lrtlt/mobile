@@ -100,7 +100,7 @@ const ArticlePhoto: React.FC<React.PropsWithChildren<Props>> = ({
 
   const aspectRatio = imageAspectRatio ?? parseFloat(photo.w_h);
 
-  let image: React.ReactNode;
+  let image: React.ReactNode | Promise<React.ReactNode>;
   if (aspectRatio < 1) {
     image = VerticalImageComponent({
       photo,
@@ -119,7 +119,7 @@ const ArticlePhoto: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <View style={style}>
-      {image}
+      {image as React.ReactNode}
       <TextComponent style={styles.bottomText} type="secondary">
         {photo.title} / {photo.author}
       </TextComponent>
@@ -129,7 +129,7 @@ const ArticlePhoto: React.FC<React.PropsWithChildren<Props>> = ({
 
 export default React.memo(ArticlePhoto, (prevProps, nextProps) => {
   return (
-    prevProps.expectedWidth === nextProps.expectedWidth && prevProps.photo?.path === nextProps.photo?.path
+    prevProps?.expectedWidth === nextProps?.expectedWidth && prevProps?.photo?.path === nextProps?.photo?.path
   );
 });
 
@@ -154,7 +154,8 @@ const styles = StyleSheet.create({
   },
   errorContainer: {
     flex: 1,
-    height: 80,
+    aspectRatio: 1.5,
+    backgroundColor: '#00000033',
     alignItems: 'center',
     justifyContent: 'center',
   },
