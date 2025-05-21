@@ -151,9 +151,9 @@ export const fetchRadiotekaArticleByUrl = (url: string) =>
 
 export const fetchGenre = (genreId: number | string) => get<GenreResponse>(genreGet(genreId));
 
-export const fetchCounter = (id: number | string, os: string) =>
+export const fetchCounter = (id: number | string, url: string = 'https://www.lrt.lt', os: string) =>
   get<any>(counter(id, os), {
     headers: {
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      Referer: url ?? 'https://www.lrt.lt/',
     },
   });

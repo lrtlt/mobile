@@ -10,6 +10,7 @@ export enum MediaType {
 export type MediaBaseData = {
   uri: string;
   title?: string;
+  articleUrl?: string;
   poster?: string;
   mediaType: MediaType;
   isLiveStream: boolean;

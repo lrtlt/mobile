@@ -7,6 +7,7 @@ import {Playlist, PlaylistItem} from './Playlist';
 
 const articleToMediaData = (article: ArticleContentMedia): MediaBaseData => ({
   uri: article.stream_url,
+  articleUrl: article.url,
   title: article.title,
   poster:
     buildArticleImageUri(IMG_SIZE_M, article.main_photo?.path) ??
@@ -42,7 +43,7 @@ class ArticlePlaylist implements Playlist {
     }
 
     if (current.data) {
-      fetchCounter(current.id, Platform.OS);
+      fetchCounter(current.id, current.data?.articleUrl, Platform.OS);
       return current.data;
     }
 
@@ -52,7 +53,7 @@ class ArticlePlaylist implements Playlist {
       if (isMediaArticle(article)) {
         const mediaData = articleToMediaData(article);
         this.items[this.currentIndex].data = mediaData;
-        fetchCounter(current.id, Platform.OS);
+        fetchCounter(current.id, article.url, Platform.OS);
         return mediaData;
       }
     } catch (e) {
