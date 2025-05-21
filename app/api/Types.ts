@@ -240,6 +240,75 @@ export type HomeDataResponse = {
 
 export type MediatekaDataResponse = HomeBlockType[];
 
+export type MediatekaBlockWidget = {
+  widget_name: string;
+
+  tmpl_id: 7;
+  //24 - hero widget,
+  //25 - horizontal list newest,
+  //26 - horizontal list popular,
+  widget_id: 24 | 25 | 26;
+  'widget-data': {
+    articles_list: FeedArticle[];
+  };
+};
+
+export const isMediatekaBlockWidget = (data?: MediatekaBlockType): data is MediatekaBlockWidget => {
+  const a = data as MediatekaBlockWidget | undefined;
+  return a?.tmpl_id === 7;
+};
+
+export type MediatekaBlockBanner = {
+  template_id: 6;
+  html_embed_mobile: HomeBlockEpikaBlock;
+};
+
+export const isMediatekaBlockBanner = (data?: MediatekaBlockType): data is MediatekaBlockBanner => {
+  const a = data as MediatekaBlockBanner | undefined;
+  return a?.template_id === 6;
+};
+
+export type MediatekaBlockSlug = {
+  is_slug_block: 1;
+  slug_url: string;
+  template_id: 53;
+  slug_title: string;
+  articles_list: FeedArticle[];
+  select_opts: {
+    slug: string;
+    slug_id: number;
+  };
+};
+
+export const isMediatekaBlockSlug = (data?: MediatekaBlockType): data is MediatekaBlockSlug => {
+  const a = data as MediatekaBlockSlug | undefined;
+  return a?.template_id === 53;
+};
+
+export type MediatekaBlockCategory = {
+  // 22 - vertical short videos, 52 - horizontal list
+  template_id: 52 | 22;
+  category_id: number;
+  category_url: string;
+  category_title: string;
+  articles_list: FeedArticle[];
+};
+
+export const isMediatekaBlockCategory = (data?: MediatekaBlockType): data is MediatekaBlockCategory => {
+  const a = data as MediatekaBlockCategory | undefined;
+  return a?.template_id === 52 || a?.template_id === 22;
+};
+
+export type MediatekaBlockType =
+  | MediatekaBlockWidget
+  | MediatekaBlockBanner
+  | MediatekaBlockSlug
+  | MediatekaBlockCategory;
+
+export type MediatekaV2DataResponse = {
+  homeblocks: MediatekaBlockType[];
+};
+
 export type SearchFilterTypes =
   | typeof SEARCH_TYPE_ALL
   | typeof SEARCH_TYPE_NEWS

@@ -182,7 +182,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
         return (
           <RadiotekaHorizontalCategoryList
             variation={item.template_id === 46 ? 'minimal' : 'full'}
-            keywords={item.data.description.article_keywords}
+            // keywords={item.data.description.article_keywords}
             categoryTitle={item.data.description.article_title}
             items={item.data.category_list.map((c) => ({
               // title: c.title,

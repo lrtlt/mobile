@@ -1,51 +1,40 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {View, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import Animated, {useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated';
-import {Text, TouchableDebounce} from '../../../../../../components';
-import ThemeProvider from '../../../../../../theme/ThemeProvider';
-import {themeLight} from '../../../../../../Theme';
-import {RadiotekaTopArticlesBlock} from '../../../../../../api/Types';
+
 import FastImage from '@d11/react-native-fast-image';
-import {buildImageUri, IMG_SIZE_M, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
+
 import LinearGradient from 'react-native-linear-gradient';
+
+import {MediatekaBlockWidget} from '../../../../../../api/Types';
 import {Article} from '../../../../../../../Types';
-import PlayButton from '../play_button/play_button';
-import {useMediaPlayer} from '../../../../../../components/videoComponent/context/useMediaPlayer';
-import ArticlePlaylist from '../../../../../../components/videoComponent/context/playlist/ArticlePlaylist';
+import {buildImageUri, IMG_SIZE_M, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
+import ThemeProvider from '../../../../../../theme/ThemeProvider';
+import {themeLight, useTheme} from '../../../../../../Theme';
+import {Text, TouchableDebounce} from '../../../../../../components';
+import {IconPlay} from '../../../../../../components/svg';
 
 const {height} = Dimensions.get('window');
-const width = Math.min(Dimensions.get('window').width * 0.32, 150);
+const width = Math.min(Dimensions.get('window').width * 0.65, 300);
 
 interface Props {
-  block: RadiotekaTopArticlesBlock;
+  block: MediatekaBlockWidget;
   onArticlePress: (article: Article) => void;
 }
 
-const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArticlePress}) => {
+const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArticlePress}) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const {data} = block;
-  const articles = data.articles_list;
+  const articles = block['widget-data']?.articles_list ?? [];
+
+  const {colors} = useTheme();
 
   const scaleValues = articles.map(() => useSharedValue(1));
-  const {setPlaylist} = useMediaPlayer();
-
-  const playItem = useCallback(
-    (index: number) => {
-      setPlaylist(
-        new ArticlePlaylist(
-          articles.map((item) => item.id),
-          index,
-        ),
-      );
-    },
-    [articles],
-  );
 
   useEffect(() => {
     // Reset all scales to 1
     scaleValues.forEach((scale, index) => {
-      scale.value = withTiming(index === selectedIndex ? 1.1 : 1, {duration: 200});
+      scale.value = withTiming(index === selectedIndex ? 1.05 : 1, {duration: 200});
     });
   }, [selectedIndex]);
 
@@ -94,7 +83,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
         />
         <View style={styles.header}>
           <Text style={styles.headerText} fontFamily="SourceSansPro-SemiBold" numberOfLines={1}>
-            Radioteka rekomenduoja
+            Mediateka rekomenduoja
           </Text>
         </View>
 
@@ -108,13 +97,13 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
             </Text>
             <Text style={styles.subtitle}>{articles[selectedIndex].category_title} </Text>
             <View style={styles.buttonContainer}>
-              <PlayButton onPress={() => playItem(selectedIndex)} />
               <TouchableDebounce
-                style={styles.moreButton}
+                style={{...styles.moreButton, backgroundColor: colors.mediatekaPlayButton}}
                 onPress={() => {
                   onArticlePress?.(articles[selectedIndex]);
                 }}>
-                <Text style={styles.moreButtonText}>Daugiau</Text>
+                <IconPlay size={12} color={'white'} />
+                <Text style={styles.moreButtonText}>Žiurėti</Text>
               </TouchableDebounce>
             </View>
           </View>
@@ -130,8 +119,8 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
                     source={{
                       uri: buildImageUri(
                         IMG_SIZE_M,
-                        item.category_img_path_prefix,
-                        item.category_img_path_postfix,
+                        item.category_img_path_prefix ?? item.img_path_prefix,
+                        item.category_img_path_postfix ?? item.img_path_postfix,
                       ),
                     }}
                     style={styles.thumbnail}
@@ -197,36 +186,36 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 16,
   },
-
   moreButton: {
-    backgroundColor: '#FFFFFF',
+    gap: 12,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     borderRadius: 8,
   },
   moreButtonText: {
-    color: '#000000',
-    fontSize: 15,
+    color: '#FFFFFF',
+    fontSize: 14.5,
   },
   bottomScrollView: {},
   bottomList: {
     flexDirection: 'row',
     paddingVertical: 32,
     paddingHorizontal: 18,
-    gap: 16,
+    gap: 12,
   },
   thumbnailContainer: {
     width: width,
-    aspectRatio: 1,
+    aspectRatio: 1.8,
     borderRadius: 10,
     overflow: 'hidden',
   },
   thumbnail: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
+    borderRadius: 8,
   },
 });
 
-export default RadiotekaHero;
+export default MediatekaHero;

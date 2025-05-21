@@ -23,6 +23,7 @@ import {
   homeGet,
   liveFeedGet,
   mediatekaGet,
+  mediatekaGetV2,
   menuGet,
   newestArticlesGet,
   opusPlaylistGet,
@@ -50,6 +51,7 @@ import {
   HomeDataResponse,
   LiveFeedResponse,
   MediatekaDataResponse,
+  MediatekaV2DataResponse,
   MenuResponse,
   NewestArticlesResponse,
   OpusPlaylistResponse,
@@ -70,6 +72,8 @@ export const fetchMenuItemsApi = () => get<MenuResponse>(menuGet());
 export const fetchHomeApi = () => get<HomeDataResponse>(homeGet());
 
 export const fetchMediatekaApi = () => get<MediatekaDataResponse>(mediatekaGet());
+
+export const fetchMediatekaApiV2 = () => get<MediatekaV2DataResponse>(mediatekaGetV2());
 
 export const fetchArticle = (articleId: number | string, isMedia?: boolean) =>
   get<ArticleContentResponse>(articleGet(articleId, isMedia));

@@ -125,6 +125,10 @@ export const mediatekaGet = () => {
   return `${BASE_URL}mediateka-home/v2`;
 };
 
+export const mediatekaGetV2 = () => {
+  return `${BASE_URL}category-home?id=672`;
+};
+
 /**
  * Returns Audioteka screen's data.
  */

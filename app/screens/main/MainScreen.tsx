@@ -29,6 +29,7 @@ import useOnboardingLogic from './useOnboardingLogic';
 import {useNavigationStore} from '../../state/navigation_store';
 import CategoryHomeScreen from './tabScreen/category/CategoryHomeScreen';
 import RadiotekaScreen from './tabScreen/radioteka/RadiotekaScreen';
+import MediatekaScreen from './tabScreen/mediateka/MediatekaScreen';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -145,7 +146,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
         case ROUTE_TYPE_HOME:
           return <HomeScreen type={ROUTE_TYPE_HOME} isCurrent={current} />;
         case ROUTE_TYPE_MEDIA:
-          return <HomeScreen type={ROUTE_TYPE_MEDIA} isCurrent={current} />;
+          return <MediatekaScreen isCurrent={current} />;
         case ROUTE_TYPE_AUDIOTEKA:
           return <RadiotekaScreen isCurrent={current} />;
         case ROUTE_TYPE_CATEGORY:

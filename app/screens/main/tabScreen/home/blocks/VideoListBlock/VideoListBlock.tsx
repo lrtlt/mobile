@@ -84,7 +84,7 @@ const VerticalVideoComponent: React.FC<{article: Article}> = ({article}) => {
     <View
       style={{
         borderRadius: 4,
-        backgroundColor: themeLight.colors.primary,
+        backgroundColor: themeLight.colors.mediatekaPlayButton,
         width: 32,
         height: 32,
         justifyContent: 'center',

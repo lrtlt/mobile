@@ -179,6 +179,7 @@ type ColorScheme = {
   playerIcons: 'rgb(217, 32, 83)';
   radiotekaPlayButton: '#FFD600';
   radiotekaBackground: string;
+  mediatekaPlayButton: string;
 };
 
 const colorsLight: ColorScheme = {
@@ -225,6 +226,7 @@ const colorsLight: ColorScheme = {
   playerIcons: 'rgb(217, 32, 83)',
   radiotekaPlayButton: '#FFD600',
   radiotekaBackground: '#EEEFF4',
+  mediatekaPlayButton: '#4258FF',
 };
 
 const colorsDark: ColorScheme = {
@@ -271,6 +273,7 @@ const colorsDark: ColorScheme = {
   playerIcons: 'rgb(217, 32, 83)',
   radiotekaPlayButton: '#FFD600',
   radiotekaBackground: '#11161c',
+  mediatekaPlayButton: '#4258FF',
 };
 //#endregion
 

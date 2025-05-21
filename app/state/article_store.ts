@@ -6,6 +6,7 @@ import {
   HomeBlockChannels,
   HomeBlockType,
   LiveChannel,
+  MediatekaBlockType,
   RadiotekaResponse,
   TVChannel,
 } from '../api/Types';
@@ -15,6 +16,7 @@ import {
   fetchCategoryHome,
   fetchHomeApi,
   fetchMediatekaApi,
+  fetchMediatekaApiV2,
   fetchNewestApi,
   fetchPopularApi,
   fetchRadiotekaApi,
@@ -31,6 +33,10 @@ type BaseBlockState = {
 
 type HomeState = {
   items: HomeBlockType[];
+} & BaseBlockState;
+
+type MediatekaState = {
+  items: MediatekaBlockType[];
 } & BaseBlockState;
 
 type CategoryHomeState = {
@@ -74,6 +80,7 @@ type ChannelState = {
 export type ArticleState = {
   home: HomeState;
   mediateka: HomeState;
+  mediatekaV2: MediatekaState;
   audioteka: AudiotekaState;
   radioteka: RadiotekaState;
   advancedCategories: {[key: number]: CategoryHomeState};
@@ -87,6 +94,7 @@ export type ArticleState = {
 type ArticleActions = {
   fetchHome: () => void;
   fetchMediateka: () => void;
+  fetchMediatekaV2: () => void;
   fetchAudioteka: () => void;
   fetchRadioteka: () => void;
   fetchPopular: (page: number, count: number, withOverride?: boolean) => void;
@@ -118,6 +126,12 @@ const initialState: ArticleState = {
     items: [],
   },
   mediateka: {
+    isFetching: false,
+    isError: false,
+    lastFetchTime: 0,
+    items: [],
+  },
+  mediatekaV2: {
     isFetching: false,
     isError: false,
     lastFetchTime: 0,
@@ -229,6 +243,33 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
         produce((state: ArticleState) => {
           state.mediateka.isFetching = false;
           state.mediateka.isError = true;
+        }),
+      );
+    }
+  },
+  fetchMediatekaV2: async () => {
+    set(
+      produce((state: ArticleState) => {
+        state.mediatekaV2.isFetching = true;
+        state.mediatekaV2.isError = false;
+      }),
+    );
+    try {
+      const data = await fetchMediatekaApiV2();
+      set({
+        mediatekaV2: {
+          items: data.homeblocks,
+          isFetching: false,
+          isError: false,
+          lastFetchTime: Date.now(),
+        },
+      });
+    } catch (e) {
+      console.log('Fetch mediateka error', e);
+      set(
+        produce((state: ArticleState) => {
+          state.mediatekaV2.isFetching = false;
+          state.mediatekaV2.isError = true;
         }),
       );
     }
