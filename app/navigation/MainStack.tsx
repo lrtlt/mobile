@@ -61,6 +61,9 @@ export type MainStackParamList = {
   Podcast: {
     articleId: number;
   };
+  Vodcast: {
+    articleId: number;
+  };
   Playlist: {
     data: RadiotekaPlaylistBlock;
   };
@@ -207,6 +210,11 @@ export default () => {
       <Stack.Screen
         name="Podcast"
         component={Screens.PodcastScreen}
+        options={{headerShown: false}} //We use custom header in the screen
+      />
+      <Stack.Screen
+        name="Vodcast"
+        component={Screens.VodcastScreen}
         options={{headerShown: false}} //We use custom header in the screen
       />
       <Stack.Screen name="Playlist" component={Screens.PlaylistScreen} />

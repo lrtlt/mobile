@@ -116,8 +116,7 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             <MediatekaHero
               block={item}
               onArticlePress={(article) => {
-                //TODO: create new screen for mediateka article
-                navigation.push('Article', {
+                navigation.push('Vodcast', {
                   articleId: article.id,
                 });
               }}
@@ -136,13 +135,12 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 ageRestricted: !!a.age_restriction,
               }))}
               onItemPress={(index) => {
-                navigation.push('Article', {
+                navigation.push('Vodcast', {
                   articleId: item['widget-data'].articles_list[index].id,
                 });
               }}
               onItemPlayPress={(index) => {
-                //TODO: change later if needed?
-                navigation.push('Article', {
+                navigation.push('Vodcast', {
                   articleId: item['widget-data'].articles_list[index].id,
                 });
               }}
@@ -172,18 +170,18 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
             }))}
             onItemPress={(index) => {
-              navigation.push('Article', {
+              navigation.push('Vodcast', {
                 articleId: item.articles_list[index].id,
               });
             }}
             onItemPlayPress={(index) => {
               //TODO: maybe change later if needed?
-              navigation.push('Article', {
+              navigation.push('Vodcast', {
                 articleId: item.articles_list[index].id,
               });
             }}
             onTitlePress={() => {
-              navigation.push('Article', {
+              navigation.push('Vodcast', {
                 articleId: item.articles_list[0].id,
               });
             }}
@@ -232,13 +230,13 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
           }))}
           onItemPress={(index) => {
-            navigation.push('Article', {
+            navigation.push('Vodcast', {
               articleId: item.articles_list[index].id,
             });
           }}
           onItemPlayPress={(index) => {
             //TODO: maybe change later if needed?
-            navigation.push('Article', {
+            navigation.push('Vodcast', {
               articleId: item.articles_list[index].id,
             });
           }}

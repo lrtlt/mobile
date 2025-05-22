@@ -12,6 +12,7 @@ import ArticleParagraph from '../../../components/articleParagraphs/paragraph/Ar
 import ArticleKeywords from '../../article/keywords/ArticleKeywords';
 
 interface Props {
+  showTitle?: boolean;
   article: ArticleContentMedia;
 }
 
@@ -28,7 +29,7 @@ const getMediaDurationMinutes = (mediaDuration?: string) => {
 
 type ContentType = 'episode' | 'show';
 
-const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article}) => {
+const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article, showTitle = false}) => {
   const [selectedContent, setSelectedContent] = useState<ContentType>('episode');
 
   const {strings, colors} = useTheme();
@@ -71,6 +72,9 @@ const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article}) => {
           </TextComponent>
         </View>
         <View pointerEvents="none">
+          <TextComponent style={styles.title} fontFamily="PlayfairDisplay-Regular">
+            {article.title}
+          </TextComponent>
           <ArticleParagraph htmlText={article.content} textSize={16} />
         </View>
       </>
@@ -128,6 +132,9 @@ const styles = StyleSheet.create({
   },
   tabLabel: {
     fontSize: 13,
+  },
+  title: {
+    fontSize: 20,
   },
   caption: {
     fontSize: 12,

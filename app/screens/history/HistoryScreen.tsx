@@ -45,6 +45,8 @@ const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
         onArticlePress={(article) => {
           if (article.is_audio) {
             navigation.push('Podcast', {articleId: article.id});
+          } else if (article.is_video) {
+            navigation.push('Vodcast', {articleId: article.id});
           } else {
             navigation.push('Article', {articleId: article.id});
           }

@@ -63,9 +63,23 @@ const GenreScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigatio
             if (response.items.length === 0) {
               setErrorVisible(true);
             } else {
+              //TODO: refactor later to check if article is audio or video
               navigation.push('Podcast', {
                 articleId: response.items[0].id,
               });
+              // if (response.items[0].is_audio) {
+              //   navigation.push('Podcast', {
+              //     articleId: response.items[0].id,
+              //   });
+              // } else if (response.items[0].is_video) {
+              //   navigation.push('Vodcast', {
+              //     articleId: response.items[0].id,
+              //   });
+              // } else {
+              //   navigation.push('Article', {
+              //     articleId: response.items[0].id,
+              //   });
+              // }
             }
           })
           .catch(() => setErrorVisible(true));

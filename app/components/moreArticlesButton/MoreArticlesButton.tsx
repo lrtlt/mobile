@@ -6,12 +6,14 @@ import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 
 interface Props {
   backgroundColor?: ColorValue;
+  foregroundColor?: ColorValue;
   customText?: string;
   onPress: () => void;
 }
 
 const MoreArticlesButton: React.FC<React.PropsWithChildren<Props>> = ({
   backgroundColor,
+  foregroundColor,
   customText,
   onPress,
 }) => {
@@ -24,7 +26,9 @@ const MoreArticlesButton: React.FC<React.PropsWithChildren<Props>> = ({
           ...styles.container,
           backgroundColor: backgroundColor ?? colors.greyBackground,
         }}>
-        <TextComponent style={styles.title}>{customText ?? strings.moreButtonText}</TextComponent>
+        <TextComponent style={{...styles.title, color: foregroundColor}}>
+          {customText ?? strings.moreButtonText}
+        </TextComponent>
       </View>
     </TouchableDebounce>
   );

@@ -18,6 +18,7 @@ import {
   forecastGet,
   genreGet,
   getDailyQuestion,
+  getMediatekaArticlesBySeason,
   getRadiotekaArticleByUrl,
   getRadiotekaArticlesBySeason,
   homeGet,
@@ -149,6 +150,9 @@ export const fetchCarLivePlaylist = () => get<TVProgramResponse>(carPlaylistLive
 
 export const fetchRadiotekaSeasonPlaylist = (seasonUrl: string, page: number, count: number) =>
   get<SearchResponse>(getRadiotekaArticlesBySeason(seasonUrl, page, count));
+
+export const fetchMediatekaSeasonPlaylist = (seasonUrl: string, page: number, count: number) =>
+  get<SearchResponse>(getMediatekaArticlesBySeason(seasonUrl, page, count));
 
 export const fetchRadiotekaArticleByUrl = (url: string) =>
   get<RadiotekaArticle>(getRadiotekaArticleByUrl(url));

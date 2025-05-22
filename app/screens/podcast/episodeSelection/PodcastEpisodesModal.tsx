@@ -16,6 +16,7 @@ interface Props {
   seasons?: ArticleSeasonInfo[];
   currentSeason?: ArticleSeasonInfo;
   preloadedEpisodes?: Article[];
+  isVodcast?: boolean;
   visible: boolean;
   onClose: () => void;
   onEpisodePress: (episode: Article) => void;
@@ -25,6 +26,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
   seasons,
   currentSeason,
   preloadedEpisodes,
+  isVodcast,
   visible,
   onClose,
   onEpisodePress,
@@ -34,7 +36,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
   );
 
   const {mediaData} = useMediaPlayer();
-  const {episodes, hasMore, loadMoreEpisodes} = useSeason(selectedSeasonUrl, preloadedEpisodes);
+  const {episodes, hasMore, loadMoreEpisodes} = useSeason(selectedSeasonUrl, preloadedEpisodes, isVodcast);
   const {setPlaylist} = useMediaPlayer();
 
   const {colors, strings} = useTheme();
@@ -51,22 +53,27 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
     [episodes, setPlaylist],
   );
 
+  const handleEpisodePress = useCallback(
+    (item: Article) => {
+      onClose();
+      setTimeout(() => {
+        onEpisodePress(item);
+      }, 200);
+    },
+    [isVodcast, onEpisodePress, play],
+  );
+
   const renderItem = useCallback(
     ({item}: ListRenderItemInfo<Article>) => {
       return (
         <View style={styles.item_root}>
           <PlayButton
             style={mediaData?.title == item.title ? undefined : {backgroundColor: colors.greyBackground}}
-            onPress={() => play(item.id)}
-          />
-          <TouchableDebounce
-            style={styles.item_text_container}
             onPress={() => {
-              onClose();
-              setTimeout(() => {
-                onEpisodePress(item);
-              }, 200);
-            }}>
+              isVodcast ? handleEpisodePress(item) : play(item.id);
+            }}
+          />
+          <TouchableDebounce style={styles.item_text_container} onPress={() => handleEpisodePress(item)}>
             <View style={styles.item_text_container}>
               <Text style={styles.item_title} fontFamily="PlayfairDisplay-Regular">
                 {item.title}
@@ -118,14 +125,27 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
                           {
                             backgroundColor:
                               selectedSeasonUrl === s.season_url
-                                ? colors.radiotekaPlayButton
+                                ? isVodcast
+                                  ? colors.mediatekaPlayButton
+                                  : colors.radiotekaPlayButton
                                 : colors.darkGreyBackground,
                           },
                         ]}
                         onPress={() => {
                           setSelectedSeasonUrl(s.season_url);
                         }}>
-                        <Text style={(styles.season_button_text, {color: themeLight.colors.text})}>
+                        <Text
+                          style={
+                            (styles.season_button_text,
+                            {
+                              color:
+                                selectedSeasonUrl === s.season_url
+                                  ? isVodcast
+                                    ? themeLight.colors.onPrimary
+                                    : themeLight.colors.text
+                                  : themeLight.colors.text,
+                            })
+                          }>
                           {s.season_title}
                         </Text>
                       </TouchableDebounce>
@@ -140,7 +160,8 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
               <View style={{marginHorizontal: 12}}>
                 <MoreArticlesButton
                   onPress={loadMoreEpisodes}
-                  backgroundColor={colors.radiotekaPlayButton}
+                  backgroundColor={isVodcast ? colors.mediatekaPlayButton : colors.radiotekaPlayButton}
+                  foregroundColor={isVodcast ? colors.onPrimary : colors.text}
                   customText={'Daugiau įrašų'}
                 />
               </View>

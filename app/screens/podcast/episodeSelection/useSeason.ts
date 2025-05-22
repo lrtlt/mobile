@@ -1,10 +1,10 @@
 import {useCallback, useEffect, useState} from 'react';
-import {fetchRadiotekaSeasonPlaylist} from '../../../api';
+import {fetchMediatekaSeasonPlaylist, fetchRadiotekaSeasonPlaylist} from '../../../api';
 import {Article} from '../../../../Types';
 
 const ITEMS_PER_PAGE = 20;
 
-const useSeason = (seasonUrl?: string, preloaded?: Article[]) => {
+const useSeason = (seasonUrl?: string, preloaded?: Article[], isVodcast?: boolean) => {
   const [items, setItems] = useState<Article[]>(preloaded ? preloaded : []);
   const [hasMoreEpisodes, setHasMoreEpisodes] = useState(!!seasonUrl);
   const [page, setPage] = useState(1);
@@ -23,7 +23,9 @@ const useSeason = (seasonUrl?: string, preloaded?: Article[]) => {
         return;
       }
 
-      fetchRadiotekaSeasonPlaylist(seasonUrl, pageNumber, ITEMS_PER_PAGE).then((response) => {
+      const api = isVodcast ? fetchMediatekaSeasonPlaylist : fetchRadiotekaSeasonPlaylist;
+
+      api(seasonUrl, pageNumber, ITEMS_PER_PAGE).then((response) => {
         if (response.items) {
           setPage(response.page);
 

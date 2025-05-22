@@ -177,7 +177,7 @@ type ColorScheme = {
   dailyQuestionProgress: string;
   epikaGreen: '#58EB52';
   playerIcons: 'rgb(217, 32, 83)';
-  radiotekaPlayButton: '#FFD600';
+  radiotekaPlayButton: string;
   radiotekaBackground: string;
   mediatekaPlayButton: string;
 };
