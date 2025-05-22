@@ -599,7 +599,6 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-lrtApp/Pods-lrtApp-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/THEOliveSDK/THEOliveSDK.framework/THEOliveSDK",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/THEOplayer-Integration-GoogleCast/Base/THEOplayerGoogleCastIntegration.framework/THEOplayerGoogleCastIntegration",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/THEOplayer-Integration-THEOlive/Base/THEOplayerTHEOliveIntegration.framework/THEOplayerTHEOliveIntegration",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/THEOplayerSDK-core/THEOplayerSDK.framework/THEOplayerSDK",
@@ -608,7 +607,6 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/THEOliveSDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/THEOplayerGoogleCastIntegration.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/THEOplayerTHEOliveIntegration.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/THEOplayerSDK.framework",
