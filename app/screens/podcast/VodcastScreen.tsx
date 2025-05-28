@@ -11,8 +11,6 @@ import {useTheme} from '../../Theme';
 import PodcastAbout from './about/PodcastAbout';
 import {ArticleContentMedia} from '../../api/Types';
 import {ScrollView} from 'react-native-gesture-handler';
-import FastImage from '@d11/react-native-fast-image';
-import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
 import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection';
 import useArticleAnalytics from '../article/useArticleAnalytics';
 import RadiotekaGenres from '../main/tabScreen/radioteka/components/genres/RadiotekaGenres';
@@ -108,29 +106,16 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                     navigation.setParams({articleId: episode.id});
                   }}
                 />
-                <VideoComponent
-                  style={styles.videoContainer}
-                  streamUrl={(article as ArticleContentMedia).get_playlist_url}
-                  title={(article as ArticleContentMedia).title}
-                  cover={article.main_photo}
-                  autoPlay={false}
-                  aspectRatio={16 / 9}
-                />
-                <PodcastAbout article={article as ArticleContentMedia} />
-                <View style={styles.imageContainer}>
-                  <FastImage
-                    style={{
-                      flex: 1,
-                      aspectRatio: article.main_photo?.w_h,
-                      borderRadius: 8,
-                      borderWidth: 2,
-                      borderColor: '#fff',
-                    }}
-                    source={{
-                      uri: buildArticleImageUri(IMG_SIZE_XXL, article.main_photo?.path),
-                    }}
+                <View style={{padding: 12}}>
+                  <VideoComponent
+                    style={styles.videoContainer}
+                    streamUrl={(article as ArticleContentMedia).get_playlist_url}
+                    title={(article as ArticleContentMedia).title}
+                    cover={article.main_photo}
+                    autoPlay={true}
                   />
                 </View>
+                <PodcastAbout article={article as ArticleContentMedia} />
                 <VodcastRecommendations articleId={articleId} />
                 {category_info?.genre_info && (
                   <RadiotekaGenres
@@ -174,11 +159,7 @@ const styles = StyleSheet.create({
   },
   videoContainer: {
     flex: 1,
-    margin: 12,
     borderRadius: 6,
     overflow: 'hidden',
-  },
-  imageContainer: {
-    padding: 10,
   },
 });

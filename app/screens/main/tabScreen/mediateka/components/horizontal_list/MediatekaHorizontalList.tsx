@@ -12,6 +12,7 @@ export type MediatekaListItem = {
   title?: string;
   subtitle?: string;
   imageUrl: string;
+  imageAspectRatio?: string;
   ageRestricted?: boolean;
 };
 
@@ -34,7 +35,7 @@ const MediatekaHorizontalList: React.FC<MediatekaHorizontalListProps> = ({
             source={{
               uri: item.imageUrl,
             }}
-            resizeMode="contain"
+            resizeMode={Number(item.imageAspectRatio) < 1 ? 'contain' : 'cover'}
             style={styles.image}
           />
           <PlayButton onPress={() => onItemPlayPress?.(index)} />

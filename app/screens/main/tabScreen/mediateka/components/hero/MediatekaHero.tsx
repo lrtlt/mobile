@@ -31,17 +31,27 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
 
   const scaleValues = articles.map(() => useSharedValue(1));
 
+  // Early return if no articles
+  if (!articles || articles.length === 0) {
+    return null;
+  }
+
+  const selectedArticle = articles[selectedIndex];
+  if (!selectedArticle) {
+    return null;
+  }
+
   useEffect(() => {
     // Reset all scales to 1
     scaleValues.forEach((scale, index) => {
       scale.value = withTiming(index === selectedIndex ? 1.05 : 1, {duration: 200});
     });
-  }, [selectedIndex]);
+  }, [selectedIndex, scaleValues]);
 
   const getAnimatedStyle = (index: number) => {
     return useAnimatedStyle(() => {
       return {
-        transform: [{scale: scaleValues[index].value}],
+        transform: [{scale: scaleValues[index]?.value ?? 1}],
         borderWidth: 2,
         borderColor: index === selectedIndex ? '#FFFFFF' : 'transparent',
       };
@@ -54,11 +64,11 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
 
   const imgUrl = buildImageUri(
     IMG_SIZE_XXL,
-    articles[selectedIndex].hero_photo?.img_path_prefix ?? articles[selectedIndex].img_path_prefix,
-    articles[selectedIndex].hero_photo?.img_path_postfix ?? articles[selectedIndex].img_path_postfix,
+    selectedArticle.hero_photo?.img_path_prefix ?? selectedArticle.img_path_prefix,
+    selectedArticle.hero_photo?.img_path_postfix ?? selectedArticle.img_path_postfix,
   );
 
-  const durationMinutes = Math.floor((articles[selectedIndex].media_duration_sec ?? 0) / 60);
+  const durationMinutes = Math.floor((selectedArticle.media_duration_sec ?? 0) / 60);
   return (
     <ThemeProvider forceTheme={themeLight}>
       <View style={styles.container}>
@@ -93,14 +103,14 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
               {durationMinutes}min.
             </Text>
             <Text style={styles.title} fontFamily="PlayfairDisplay-Regular">
-              {articles[selectedIndex].title}
+              {selectedArticle.title}
             </Text>
-            <Text style={styles.subtitle}>{articles[selectedIndex].category_title} </Text>
+            <Text style={styles.subtitle}>{selectedArticle.category_title} </Text>
             <View style={styles.buttonContainer}>
               <TouchableDebounce
                 style={{...styles.moreButton, backgroundColor: colors.mediatekaPlayButton}}
                 onPress={() => {
-                  onArticlePress?.(articles[selectedIndex]);
+                  onArticlePress?.(selectedArticle);
                 }}>
                 <IconPlay size={12} color={'white'} />
                 <Text style={styles.moreButtonText}>Žiurėti</Text>

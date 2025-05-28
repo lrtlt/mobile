@@ -25,7 +25,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const {data} = block;
-  const articles = data.articles_list;
+  const articles = data?.articles_list || [];
 
   const scaleValues = articles.map(() => useSharedValue(1));
   const {setPlaylist} = useMediaPlayer();
@@ -70,6 +70,11 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   );
 
   const durationMinutes = Math.floor((articles[selectedIndex].media_duration_sec ?? 0) / 60);
+
+  if (articles.length === 0) {
+    return null;
+  }
+
   return (
     <ThemeProvider forceTheme={themeLight}>
       <View style={styles.container}>

@@ -26,6 +26,7 @@ const VodcastRecommendations: React.FC<React.PropsWithChildren<Props>> = ({artic
       title: item.title,
       category: item.category_title,
       imageUrl: buildArticleImageUri(IMG_SIZE_M, item.photo)!,
+      imageAspectRatio: item.img_w_h,
       ageRestricted: !!item.age_restriction,
     }));
   }, [recommendations.items]);

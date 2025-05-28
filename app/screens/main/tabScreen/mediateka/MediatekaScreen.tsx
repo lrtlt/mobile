@@ -132,6 +132,7 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 category: a.branch1_title ?? a.branch0_title,
                 subtitle: a.category_title,
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
+                imageAspectRatio: a.photo_aspectratio,
                 ageRestricted: !!a.age_restriction,
               }))}
               onItemPress={(index) => {
@@ -168,6 +169,7 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               subtitle: a.category_title,
               ageRestricted: !!a.age_restriction,
               imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
+              imageAspectRatio: a.photo_aspectratio,
             }))}
             onItemPress={(index) => {
               navigation.push('Vodcast', {
@@ -228,6 +230,7 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             subtitle: a.category_title,
             ageRestricted: !!a.age_restriction,
             imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
+            imageAspectRatio: a.photo_aspectratio,
           }))}
           onItemPress={(index) => {
             navigation.push('Vodcast', {
