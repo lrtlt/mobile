@@ -45,17 +45,24 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const style = getArticleStyle(styleType);
 
+  // Safety check for article object
+  if (!article) {
+    return null;
+  }
+
   const onPressHandler = useCallback(() => {
-    onPress && onPress(article);
+    if (typeof onPress === 'function' && article) {
+      onPress(article);
+    }
   }, [onPress, article]);
 
-  const date = Boolean(article.item_date) && Boolean(dateEnabled) && (
+  const date = Boolean(article?.item_date) && Boolean(dateEnabled) && (
     <TextComponent style={style.categoryTitle} type="secondary" importantForAccessibility="no">
       {article.item_date}
     </TextComponent>
   );
 
-  const mediaIndicator = (Boolean(article.is_video) || Boolean(article.is_audio)) && (
+  const mediaIndicator = (Boolean(article?.is_video) || Boolean(article?.is_audio)) && (
     <MediaIndicator style={style.mediaIndicator} size={styleType === 'single' ? 'big' : 'small'} />
   );
 
@@ -63,13 +70,13 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
     <MediaIcon
       style={styles.mediaIcon}
       size={18}
-      is_video={article.is_video}
-      is_audio={article.is_audio}
-      channel_id={article.channel_id}
+      is_video={article?.is_video}
+      is_audio={article?.is_audio}
+      channel_id={article?.channel_id}
     />
   );
 
-  const mediaDuration = Boolean(article.media_duration) && (
+  const mediaDuration = Boolean(article?.media_duration) && (
     <TextComponent
       style={{...style.mediaDurationText, color: themeLight.colors.text}}
       importantForAccessibility="no">
@@ -77,19 +84,24 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
     </TextComponent>
   );
 
-  const badge = Boolean(article.badge_title) && (
-    <Badge style={style.badge} label={article.badge_title!!} type={article.badge_class} />
+  const badge = Boolean(article?.badge_title) && (
+    <Badge style={style.badge} label={article.badge_title!} type={article?.badge_class} />
   );
 
   let imgUri;
-  if (article.img_path_prefix && article.img_path_postfix) {
-    imgUri = buildImageUri(
-      styleType === 'single' ? IMG_SIZE_M : IMG_SIZE_S,
-      article.img_path_prefix,
-      article.img_path_postfix,
-    );
-  } else if (article.photo) {
-    imgUri = buildArticleImageUri(styleType === 'single' ? IMG_SIZE_M : IMG_SIZE_S, article.photo);
+  try {
+    if (article?.img_path_prefix && article?.img_path_postfix) {
+      imgUri = buildImageUri(
+        styleType === 'single' ? IMG_SIZE_M : IMG_SIZE_S,
+        article.img_path_prefix,
+        article.img_path_postfix,
+      );
+    } else if (article?.photo) {
+      imgUri = buildArticleImageUri(styleType === 'single' ? IMG_SIZE_M : IMG_SIZE_S, article.photo);
+    }
+  } catch (error) {
+    // Fail silently if image URI building fails
+    imgUri = undefined;
   }
 
   return (
@@ -105,7 +117,7 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
             style={{
               ...style.imageContainer,
               backgroundColor: '#00000033',
-              borderRadius: article.is_audio ? 8 : 0,
+              borderRadius: article?.is_audio ? 8 : 0,
             }}>
             {imgUri ? (
               <CoverImage
@@ -126,20 +138,20 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
           </View>
           <View style={style.categoryTitleContainer}>
             {mediaIcon}
-            <TextComponent style={style.categoryTitle}>{article.category_title}</TextComponent>
+            <TextComponent style={style.categoryTitle}>{article?.category_title || ''}</TextComponent>
             {date}
           </View>
           {badge}
 
           <TextComponent style={style.title} fontFamily="PlayfairDisplay-Regular">
-            {article.title}
+            {article?.title || ''}
           </TextComponent>
-          {Boolean(article.summary) && (
+          {Boolean(article?.summary) && (
             <TextComponent style={style.subtitle} type="secondary" numberOfLines={3}>
               {article.summary}
             </TextComponent>
           )}
-          {Boolean(article.subtitle) && (
+          {Boolean(article?.subtitle) && (
             <TextComponent style={style.subtitle} type="error">
               {article.subtitle}
             </TextComponent>
@@ -155,8 +167,10 @@ export default React.memo(ArticleComponent, (prevProps, nextProps) => {
   return (
     prevProps.style === nextProps.style &&
     prevProps.styleType === nextProps.styleType &&
-    prevProps.article.title === nextProps.article.title &&
-    prevProps.article.subtitle === nextProps.article.subtitle
+    prevProps.article?.title === nextProps.article?.title &&
+    prevProps.article?.subtitle === nextProps.article?.subtitle &&
+    prevProps.dateEnabled === nextProps.dateEnabled &&
+    prevProps.onPress === nextProps.onPress
   );
 });
 
@@ -229,9 +243,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const stylesScroll = {
+const stylesScroll = StyleSheet.create({
   ...styles,
-
   container: {
     ...styles.container,
     width: 280,
@@ -241,12 +254,12 @@ const stylesScroll = {
     ...styles.title,
     fontSize: 17,
   },
-};
+});
 
-const stylesMulti = {
+const stylesMulti = StyleSheet.create({
   ...styles,
   title: {
     ...styles.title,
     fontSize: 16,
   },
-};
+});

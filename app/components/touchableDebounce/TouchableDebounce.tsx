@@ -17,14 +17,13 @@ const TouchableDebounce: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   ...rest
 }) => {
-  const debouncedOnPress = useMemo(
-    () =>
-      debounce(onPress ?? noOp, debounceTime, {
-        leading: true,
-        trailing: false,
-      }),
-    [debounceTime, onPress],
-  );
+  const debouncedOnPress = useMemo(() => {
+    const handler = typeof onPress === 'function' ? onPress : noOp;
+    return debounce(handler, debounceTime, {
+      leading: true,
+      trailing: false,
+    });
+  }, [debounceTime, onPress]);
 
   return (
     <TouchableOpacity {...rest} onPress={debouncedOnPress} activeOpacity={activeOpacity}>
