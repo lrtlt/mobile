@@ -12,7 +12,6 @@ import {buildImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
 import PodcastEpisode from './episode/PodcastEpisode';
 import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
 import ArticlePlaylist from '../../components/videoComponent/context/playlist/ArticlePlaylist';
-import {useCounter} from '../../util/useCounter';
 import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection';
 import PlaylistAbout from './about/PlaylistAbout';
 
@@ -34,9 +33,7 @@ const PlaylistScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, r
 
   const {colors} = useTheme();
 
-  //TODO: update
-  //useArticleAnalytics({article});
-  useCounter(article.id, article.url);
+  // useCounter(article.id, article.url);
 
   useEffect(() => {
     navigation.setOptions({

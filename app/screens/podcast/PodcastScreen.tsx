@@ -21,7 +21,6 @@ import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPl
 import ArticlePlaylist from '../../components/videoComponent/context/playlist/ArticlePlaylist';
 import useSeason from './episodeSelection/useSeason';
 import RadiotekaGenres from '../main/tabScreen/radioteka/components/genres/RadiotekaGenres';
-import {useCounterForArticle} from '../../util/useCounter';
 import useArticleHeader from '../article/useArticleHeader_v2';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 
@@ -50,7 +49,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   const {strings, colors} = useTheme();
 
   useArticleAnalytics({article});
-  useCounterForArticle(article);
+  // useCounterForArticle(article);
 
   useEffect(() => {
     navigation.setOptions({

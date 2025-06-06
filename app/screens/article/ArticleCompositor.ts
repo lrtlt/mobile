@@ -84,9 +84,9 @@ const getHeaderData = (article: ArticleContent): ArticleContentItemType => {
   let author = null;
   try {
     if (isDefaultArticle(article)) {
-      author = article.article_authors.map((a) => a.name).join(', ');
+      author = article.article_authors?.map((a) => a.name).join(', ');
     } else {
-      author = article.authors.map((a) => a.name).join(', ');
+      author = article.authors?.map((a) => a.name).join(', ');
     }
   } catch (e) {
     console.log(e);
@@ -153,7 +153,7 @@ const getKeywords = (article: ArticleContentDefault | ArticleContentMedia): Arti
 };
 
 const getParagraphs = (article: ArticleContentDefault): ArticleContentItemType[] => {
-  return article.paragraphs.map((p) => {
+  return article.paragraphs?.map((p) => {
     return {
       type: TYPE_PARAGRAPH,
       data: p,

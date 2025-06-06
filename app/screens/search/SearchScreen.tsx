@@ -79,6 +79,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
 
   const articlePressHandler = useCallback(
     (article: Article) => {
+      console.log('Article pressed:', article);
       if (article.is_audio) {
         navigation.navigate('Podcast', {articleId: article.id});
       } else {
