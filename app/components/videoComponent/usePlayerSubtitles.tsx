@@ -18,7 +18,6 @@ const usePlayerSubtitles = ({player}: Options) => {
   useEffect(() => {
     if (!!player) {
       player.addEventListener(PlayerEventType.TEXT_TRACK_LIST, (_) => {
-        console.log('TEXT_TRACK_LIST', player.textTracks);
         setTextTracks(
           player.textTracks.filter(
             (track) => track.kind === 'subtitles' && track.mode != TextTrackMode.disabled,

@@ -13,6 +13,7 @@ export type Article = {
   age_restriction?: string;
   article_type?: ArticleType;
   photo_aspectratio?: string;
+  img_w_h?: string;
   channel_id?: number;
   channel_logo?: string;
   channel_url?: string;

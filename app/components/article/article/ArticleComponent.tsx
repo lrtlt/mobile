@@ -14,6 +14,7 @@ import ListenCount from './ListenCount';
 import Badge from '../../badge/Badge';
 import MediaIcon from '../../mediaIcon/MediaIcon';
 import {Icon404} from '../../svg';
+import FastImage from '@d11/react-native-fast-image';
 
 const getArticleStyle = (type: ArticleStyleType) => {
   switch (type) {
@@ -104,6 +105,8 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
     imgUri = undefined;
   }
 
+  const isVerticalPhoto = article?.img_w_h && Number(article.img_w_h) < 1;
+
   return (
     <View style={[style.container, styleProp]}>
       <TouchableDebounce
@@ -125,6 +128,7 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
                 source={{
                   uri: imgUri,
                 }}
+                resizeMode={isVerticalPhoto ? FastImage.resizeMode.contain : FastImage.resizeMode.cover}
               />
             ) : (
               <View style={style.mediaIndicator}>

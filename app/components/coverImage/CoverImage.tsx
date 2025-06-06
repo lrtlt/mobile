@@ -1,17 +1,20 @@
 import React from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
-import FastImage, {Source} from '@d11/react-native-fast-image';
+import FastImage, {ResizeMode, Source} from '@d11/react-native-fast-image';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 
 interface Props {
   style?: ViewStyle;
+  resizeMode?: ResizeMode;
   source: Source;
 }
 
-const CoverImage: React.FC<React.PropsWithChildren<Props>> = ({style, source}) => {
+const CoverImage: React.FC<React.PropsWithChildren<Props>> = ({style, resizeMode, source}) => {
   return (
     <View style={style}>
-      {source.uri && <FastImage style={styles.img} source={source} resizeMode={FastImage.resizeMode.cover} />}
+      {source.uri && (
+        <FastImage style={styles.img} source={source} resizeMode={resizeMode ?? FastImage.resizeMode.cover} />
+      )}
     </View>
   );
 };
