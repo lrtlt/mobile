@@ -22,6 +22,7 @@ interface Props {
   minifyEnabled?: boolean;
   aspectRatio?: number;
   backgroundAudioEnabled?: boolean;
+  onEnded?: () => void;
 }
 
 const MAX_ERROR_COUNT = 3;
@@ -40,6 +41,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
   minifyEnabled = true,
   backgroundAudioEnabled = true,
   aspectRatio,
+  onEnded,
 }) => {
   const {colors, strings} = useTheme();
   const {isLoading, data, load} = useStreamData(streamData);
@@ -135,6 +137,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
             : MediaType.VIDEO
         }
         onError={onPlayerError}
+        onEnded={onEnded}
       />
     </View>
   );

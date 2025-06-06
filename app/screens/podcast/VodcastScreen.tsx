@@ -18,6 +18,7 @@ import {useCounterForArticle} from '../../util/useCounter';
 import useArticleHeader from '../article/useArticleHeader_v2';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import VodcastRecommendations from './recommendations/VodcastRecommendations';
+import useNextEpisode from './episodeSelection/useNextEpisode';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Vodcast'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Vodcast'>;
@@ -52,6 +53,14 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
 
   const {bottom} = useSafeAreaInsets();
   const appBarHeight = useAppBarHeight();
+
+  const nextEpisode = useNextEpisode(articleId, currentSeason?.season_url);
+
+  const playNextEpisode = useCallback(() => {
+    if (nextEpisode) {
+      navigation.setParams({articleId: nextEpisode.id});
+    }
+  }, [navigation, nextEpisode]);
 
   const adultContentAcceptHandler = useCallback(() => {
     acceptAdultContent(true);
@@ -101,6 +110,7 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                 <PodcastEpisodeSelection
                   currentSeason={currentSeason}
                   categoryInfo={category_info}
+                  currentArticleId={articleId}
                   isVodcast={true}
                   onEpisodePress={(episode) => {
                     navigation.setParams({articleId: episode.id});
@@ -113,6 +123,7 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                     title={(article as ArticleContentMedia).title}
                     cover={article.main_photo}
                     autoPlay={true}
+                    onEnded={playNextEpisode}
                   />
                 </View>
                 <PodcastAbout article={article as ArticleContentMedia} />

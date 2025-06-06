@@ -1,6 +1,7 @@
 import {PropsWithChildren, useCallback, useState} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
-import PlayButton from '../../main/tabScreen/radioteka/components/play_button/play_button';
+import {default as PlayButtonRadioteka} from '../../main/tabScreen/radioteka/components/play_button/play_button';
+import {default as PlayButtonMediateka} from '../../main/tabScreen/mediateka/components/play_button/play_button';
 import {MoreArticlesButton, Text, TouchableDebounce} from '../../../components';
 import Modal from 'react-native-modal';
 import {themeLight, useTheme} from '../../../Theme';
@@ -16,6 +17,7 @@ interface Props {
   seasons?: ArticleSeasonInfo[];
   currentSeason?: ArticleSeasonInfo;
   preloadedEpisodes?: Article[];
+  currentArticleId?: number;
   isVodcast?: boolean;
   visible: boolean;
   onClose: () => void;
@@ -26,6 +28,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
   seasons,
   currentSeason,
   preloadedEpisodes,
+  currentArticleId,
   isVodcast,
   visible,
   onClose,
@@ -36,6 +39,8 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
   );
 
   const {mediaData} = useMediaPlayer();
+  console.log('mediaData', mediaData);
+
   const {episodes, hasMore, loadMoreEpisodes} = useSeason(selectedSeasonUrl, preloadedEpisodes, isVodcast);
   const {setPlaylist} = useMediaPlayer();
 
@@ -65,14 +70,20 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
 
   const renderItem = useCallback(
     ({item}: ListRenderItemInfo<Article>) => {
+      const isCurrent = currentArticleId == item.id || mediaData?.articleUrl == item.url;
       return (
         <View style={styles.item_root}>
-          <PlayButton
-            style={mediaData?.title == item.title ? undefined : {backgroundColor: colors.greyBackground}}
-            onPress={() => {
-              isVodcast ? handleEpisodePress(item) : play(item.id);
-            }}
-          />
+          {isVodcast ? (
+            <PlayButtonMediateka
+              style={isCurrent ? undefined : {backgroundColor: 'black'}}
+              onPress={() => handleEpisodePress(item)}
+            />
+          ) : (
+            <PlayButtonRadioteka
+              style={isCurrent ? undefined : {backgroundColor: colors.greyBackground}}
+              onPress={() => play(item.id)}
+            />
+          )}
           <TouchableDebounce style={styles.item_text_container} onPress={() => handleEpisodePress(item)}>
             <View style={styles.item_text_container}>
               <Text style={styles.item_title} fontFamily="PlayfairDisplay-Regular">

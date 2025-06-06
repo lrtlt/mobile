@@ -129,8 +129,8 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
                     source={{
                       uri: buildImageUri(
                         IMG_SIZE_M,
-                        item.category_img_path_prefix ?? item.img_path_prefix,
-                        item.category_img_path_postfix ?? item.img_path_postfix,
+                        item.img_path_prefix ?? item.category_img_path_prefix,
+                        item.img_path_postfix ?? item.category_img_path_postfix,
                       ),
                     }}
                     style={styles.thumbnail}

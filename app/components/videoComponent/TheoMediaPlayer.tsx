@@ -244,6 +244,10 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
         setTimeout(() => {
           player.play();
         }, 600);
+      } else {
+        if (player.presentationMode === PresentationMode.fullscreen) {
+          player.presentationMode = PresentationMode.inline;
+        }
       }
 
       if (onEnded) {

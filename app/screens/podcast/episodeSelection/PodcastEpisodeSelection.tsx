@@ -11,6 +11,7 @@ interface Props {
   currentSeason?: ArticleSeasonInfo;
   categoryInfo?: ArticleCategoryInfo;
   preloadedEpisodes?: Article[];
+  currentArticleId?: number;
   isVodcast?: boolean;
   onEpisodePress: (episode: Article) => void;
 }
@@ -37,6 +38,7 @@ const PodcastEpisodeSelection: React.FC<PropsWithChildren<Props>> = ({
   categoryInfo,
   currentSeason,
   preloadedEpisodes,
+  currentArticleId,
   isVodcast,
   onEpisodePress,
 }) => {
@@ -69,6 +71,7 @@ const PodcastEpisodeSelection: React.FC<PropsWithChildren<Props>> = ({
           seasons={seasons}
           currentSeason={currentSeason}
           visible={modalVisible}
+          currentArticleId={currentArticleId}
           isVodcast={isVodcast}
           preloadedEpisodes={preloadedEpisodes}
           onClose={() => setModalVisible(false)}
