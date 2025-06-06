@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {PlayerEventType, TextTrack, THEOplayer} from 'react-native-theoplayer';
+import {PlayerEventType, TextTrack, TextTrackMode, THEOplayer} from 'react-native-theoplayer';
 import {IconSubtitles} from '../svg';
 import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from './MediaControls';
 
@@ -18,7 +18,12 @@ const usePlayerSubtitles = ({player}: Options) => {
   useEffect(() => {
     if (!!player) {
       player.addEventListener(PlayerEventType.TEXT_TRACK_LIST, (_) => {
-        setTextTracks(player.textTracks.filter((track) => track.kind === 'subtitles'));
+        console.log('TEXT_TRACK_LIST', player.textTracks);
+        setTextTracks(
+          player.textTracks.filter(
+            (track) => track.kind === 'subtitles' && track.mode != TextTrackMode.disabled,
+          ),
+        );
         if (!initialSubtitleDisabled.current && !player?.selectedTextTrack) {
           initialSubtitleDisabled.current = true;
           player.selectedTextTrack = undefined;

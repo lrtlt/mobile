@@ -39,7 +39,6 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
   );
 
   const {mediaData} = useMediaPlayer();
-  console.log('mediaData', mediaData);
 
   const {episodes, hasMore, loadMoreEpisodes} = useSeason(selectedSeasonUrl, preloadedEpisodes, isVodcast);
   const {setPlaylist} = useMediaPlayer();
