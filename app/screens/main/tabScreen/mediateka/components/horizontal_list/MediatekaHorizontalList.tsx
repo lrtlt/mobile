@@ -13,7 +13,9 @@ export type MediatekaListItem = {
   subtitle?: string;
   imageUrl: string;
   imageAspectRatio?: string;
-  ageRestricted?: boolean;
+  isAgeRestricted?: boolean;
+  isNew?: boolean;
+  isPopular?: boolean;
 };
 
 interface MediatekaHorizontalListProps {
@@ -39,11 +41,24 @@ const MediatekaHorizontalList: React.FC<MediatekaHorizontalListProps> = ({
             style={styles.image}
           />
           <PlayButton onPress={() => onItemPlayPress?.(index)} />
-          {item.ageRestricted && (
-            <View style={styles.ageRestrictionBadgeContainer}>
-              <Text style={{color: '#FFF', fontSize: 16}}>S</Text>
-            </View>
-          )}
+          <View style={styles.bagesContainer}>
+            {item.isAgeRestricted && (
+              <View style={styles.ageRestrictionBadgeContainer}>
+                <Text style={{color: '#FFF', fontSize: 13}}>S</Text>
+              </View>
+            )}
+
+            {item.isNew && (
+              <View style={styles.newBadgeContainer}>
+                <Text style={{color: '#FFF', fontSize: 13}}>Nauja</Text>
+              </View>
+            )}
+            {item.isPopular && (
+              <View style={styles.popularBadgeContainer}>
+                <Text style={{color: '#FFF', fontSize: 13}}>Populiaru</Text>
+              </View>
+            )}
+          </View>
         </View>
       </View>
       <View style={styles.contentContainer}>
@@ -135,16 +150,35 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 6,
   },
-
-  ageRestrictionBadgeContainer: {
-    width: 28,
-    height: 28,
+  bagesContainer: {
+    flexDirection: 'row',
+    gap: 8,
     position: 'absolute',
     top: 8,
     left: 8,
+  },
+  ageRestrictionBadgeContainer: {
+    aspectRatio: 1,
     backgroundColor: 'rgb(239, 68, 68)',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 4,
+    paddingHorizontal: 8,
+  },
+  newBadgeContainer: {
+    backgroundColor: 'rgb(0, 120, 214)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 9,
+    paddingVertical: 3,
+    borderRadius: 4,
+  },
+  popularBadgeContainer: {
+    backgroundColor: 'rgb(47, 53, 125)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 9,
+    paddingVertical: 3,
     borderRadius: 4,
   },
 });

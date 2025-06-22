@@ -6,6 +6,8 @@ import {EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {useTheme} from '../../../../Theme';
+import moment from 'moment';
+
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
@@ -45,6 +47,17 @@ const selectMediatekaScreenState = (state: ArticleState) => {
     lastFetchTime: block.lastFetchTime,
     data: block.items,
   };
+};
+
+const isArticleNew = (itemDate?: string): boolean => {
+  if (!itemDate) return false;
+  const date = moment(itemDate, 'YYYY.MM.DD HH:mm');
+  return Date.now() - date.toDate().getTime() < 3 * 60 * 60 * 1000; // New if within last 3 hours
+};
+
+const isArticlePopular = (readCount?: number): boolean => {
+  if (!readCount) return false;
+  return readCount > 5000;
 };
 
 const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
@@ -133,7 +146,9 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 subtitle: a.category_title,
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
                 imageAspectRatio: a.photo_aspectratio,
-                ageRestricted: !!a.age_restriction,
+                isAgeRestricted: !!a.age_restriction,
+                isNew: isArticleNew(a.item_date),
+                isPopular: isArticlePopular(a.read_count),
               }))}
               onItemPress={(index) => {
                 navigation.push('Vodcast', {
@@ -167,7 +182,9 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               title: a.title,
               category: a.branch1_title ?? a.branch0_title,
               subtitle: a.category_title,
-              ageRestricted: !!a.age_restriction,
+              isAgeRestricted: !!a.age_restriction,
+              isNew: isArticleNew(a.item_date),
+              isPopular: isArticlePopular(a.read_count),
               imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
               imageAspectRatio: a.photo_aspectratio,
             }))}
@@ -228,7 +245,9 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             title: a.title,
             category: a.branch1_title ?? a.branch0_title,
             subtitle: a.category_title,
-            ageRestricted: !!a.age_restriction,
+            isAgeRestricted: !!a.age_restriction,
+            isNew: isArticleNew(a.item_date),
+            isPopular: isArticlePopular(a.read_count),
             imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
             imageAspectRatio: a.photo_aspectratio,
           }))}
