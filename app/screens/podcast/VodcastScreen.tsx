@@ -126,7 +126,7 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                     onEnded={playNextEpisode}
                   />
                 </View>
-                <PodcastAbout article={article as ArticleContentMedia} />
+                <PodcastAbout article={article as ArticleContentMedia} isVodcast={true} />
                 <VodcastRecommendations articleId={articleId} />
                 {category_info?.genre_info && (
                   <RadiotekaGenres

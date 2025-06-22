@@ -12,8 +12,8 @@ import ArticleParagraph from '../../../components/articleParagraphs/paragraph/Ar
 import ArticleKeywords from '../../article/keywords/ArticleKeywords';
 
 interface Props {
-  showTitle?: boolean;
   article: ArticleContentMedia;
+  isVodcast?: boolean;
 }
 
 const getMediaDurationMinutes = (mediaDuration?: string) => {
@@ -29,7 +29,7 @@ const getMediaDurationMinutes = (mediaDuration?: string) => {
 
 type ContentType = 'episode' | 'show';
 
-const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article, showTitle = false}) => {
+const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article, isVodcast = false}) => {
   const [selectedContent, setSelectedContent] = useState<ContentType>('episode');
 
   const {strings, colors} = useTheme();
@@ -81,16 +81,43 @@ const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article, showTitle = 
     );
   }, [article]);
 
-  const ShowInfo = useCallback(() => {
+  const ShowInfoPodcast = useCallback(() => {
+    const aspectRatio = (article.category_img_info?.w_h && Number(article.category_img_info?.w_h)) ?? 1;
     return (
       <>
         <View style={[styles.row, {gap: 8, marginVertical: 8, alignItems: 'flex-start'}]}>
           <FastImage
-            style={styles.podcastDetailsImage}
+            style={{...styles.podcastDetailsImage, aspectRatio: aspectRatio}}
             source={{
               uri: buildArticleImageUri(IMG_SIZE_M, article.category_img_info?.path),
             }}
           />
+          <View style={{flex: 1}}>
+            <ArticleParagraph htmlText={article.category_decription} textSize={16} />
+          </View>
+        </View>
+      </>
+    );
+  }, [article]);
+
+  const ShowInfoVodcast = useCallback(() => {
+    const aspectRatio = (article.category_img_info?.w_h && Number(article.category_img_info?.w_h)) ?? 1;
+    return (
+      <>
+        <View style={[{gap: 8, marginVertical: 8, alignItems: 'flex-start'}]}>
+          {article.category_img_info && (
+            <FastImage
+              style={{...styles.podcastDetailsImage, aspectRatio: aspectRatio}}
+              source={{
+                uri: buildArticleImageUri(IMG_SIZE_M, article.category_img_info?.path),
+              }}
+            />
+          )}
+          <View>
+            <TextComponent style={styles.title} fontFamily="PlayfairDisplay-Regular">
+              {article.category_title}
+            </TextComponent>
+          </View>
           <View style={{flex: 1}}>
             <ArticleParagraph htmlText={article.category_decription} textSize={16} />
           </View>
@@ -110,7 +137,13 @@ const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article, showTitle = 
         </TouchableDebounce>
       </View>
       <Divider />
-      {selectedContent === 'episode' ? <EpisodeInfo /> : <ShowInfo />}
+      {selectedContent === 'episode' ? (
+        <EpisodeInfo />
+      ) : isVodcast ? (
+        <ShowInfoVodcast />
+      ) : (
+        <ShowInfoPodcast />
+      )}
       <ArticleKeywords keywords={article.keywords} />
     </View>
   );
@@ -141,7 +174,6 @@ const styles = StyleSheet.create({
   },
   podcastDetailsImage: {
     width: 100,
-    height: 100,
     marginTop: 12,
     borderRadius: 4,
     borderColor: '#FFF',
