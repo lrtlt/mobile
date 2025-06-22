@@ -54,6 +54,6 @@ export const fetchStreamData = ({
       }
     })
     .then((data) => {
-      console.log('fetchStreamData', data);
+      console.log('fetchStreamData', JSON.stringify(data, null, 2));
       return data;
     });
