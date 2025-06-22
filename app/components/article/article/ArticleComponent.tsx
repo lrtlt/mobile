@@ -37,6 +37,10 @@ interface Props {
   onPress: (article: Article) => void;
 }
 
+const getArticleAspectRatio = (article: Article): number | undefined => {
+  return Number(article?.img_w_h || article?.photo_aspectratio);
+};
+
 const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
   style: styleProp,
   article,
@@ -105,7 +109,8 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
     imgUri = undefined;
   }
 
-  const isVerticalPhoto = article?.img_w_h && Number(article.img_w_h) < 1;
+  const aspectRatio = getArticleAspectRatio(article);
+  const isVerticalPhoto = aspectRatio && Number(aspectRatio) < 1;
 
   return (
     <View style={[style.container, styleProp]}>
