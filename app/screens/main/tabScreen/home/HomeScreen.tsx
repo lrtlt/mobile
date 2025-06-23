@@ -33,6 +33,7 @@ import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import {HomePageType} from '../../../../../Types';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Config from 'react-native-config';
+import {useArticleStorageStore} from '../../../../state/article_storage_store';
 
 const selectHomeScreenState = (type: HomePageType) => (state: ArticleState) => {
   const block = type === ROUTE_TYPE_MEDIA ? state.mediateka : state.home;
@@ -54,6 +55,11 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
 
   const {fetchHome, fetchMediateka} = useArticleStore.getState();
   const state = useArticleStore(useShallow(selectHomeScreenState(type)));
+
+  const {syncSavedArticles} = useArticleStorageStore.getState();
+  useEffect(() => {
+    syncSavedArticles();
+  }, []);
 
   const {colors, dark} = useTheme();
 
@@ -133,9 +139,11 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
               data={[block.article]}
               onArticlePress={(article) => {
                 if (article.is_audio) {
-                  navigation.navigate('Podcast', {articleId: article.id});
+                  navigation.push('Podcast', {articleId: article.id});
+                } else if (article.is_video) {
+                  navigation.push('Vodcast', {articleId: article.id});
                 } else {
-                  navigation.navigate('Article', {articleId: article.id});
+                  navigation.push('Article', {articleId: article.id});
                 }
               }}
             />

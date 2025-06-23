@@ -7,7 +7,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {formatArticles} from '../../util/articleFormatters';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
-import {SavedArticle, useArticleStorageStore} from '../../state/article_storage_store';
+import {mapArticleStorageData, SavedArticle, useArticleStorageStore} from '../../state/article_storage_store';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Bookmarks'>;
@@ -19,7 +19,9 @@ type Props = {
 };
 
 const BookmarksScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
-  const bookmarkedArticles = useArticleStorageStore((state) => state.savedArticles);
+  const bookmarkedArticles = useArticleStorageStore((state) => state.savedArticles).map((article) =>
+    mapArticleStorageData(article),
+  );
 
   const articles = useMemo(() => formatArticles(-1, bookmarkedArticles, false), [bookmarkedArticles]);
 

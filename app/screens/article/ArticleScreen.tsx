@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import ArticleContentComponent, {ArticleSelectableItem} from './ArticleContentComponent';
 import {ScreenLoader, ScreenError, AdultContentWarning, Text, TouchableDebounce} from '../../components';
 import {useTheme} from '../../Theme';
-import {isDefaultArticle} from '../../api/Types';
+import {isDefaultArticle, isMediaArticle} from '../../api/Types';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
@@ -29,7 +29,11 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   const articleStorage = useArticleStorageStore.getState();
 
   const isBookmarked = useArticleStorageStore((state) =>
-    state.savedArticles.some((a) => a.id === route.params.articleId),
+    state.savedArticles.some(
+      (a) =>
+        (isMediaArticle(a) && a.id === route.params.articleId) ||
+        (isDefaultArticle(a) && a.article_id === route.params.articleId),
+    ),
   );
 
   const [{article, loadingState}, acceptAdultContent] = useArticleScreenState(articleId, isMedia);

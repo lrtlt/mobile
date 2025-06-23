@@ -34,7 +34,7 @@ const useArticleHeader = (article?: ArticleContent) => {
   const articleStorage = useArticleStorageStore.getState();
 
   const isBookmarked = useArticleStorageStore((state) =>
-    state.savedArticles.some((a) => a.id === getArticleId(article)),
+    state.savedArticles.some((a) => getArticleId(a) === getArticleId(article)),
   );
 
   const {fullHeight: appBarHeight} = useAppBarHeight();

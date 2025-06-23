@@ -23,9 +23,11 @@ const TopFeedBlock: React.FC<TopFeedBlockProps> = ({block}) => {
   const articlePressHandler = useCallback(
     (article: Article) => {
       if (article.is_audio) {
-        navigation.navigate('Podcast', {articleId: article.id});
+        navigation.push('Podcast', {articleId: article.id});
+      } else if (article.is_video) {
+        navigation.push('Vodcast', {articleId: article.id});
       } else {
-        navigation.navigate('Article', {articleId: article.id});
+        navigation.push('Article', {articleId: article.id});
       }
     },
     [navigation],

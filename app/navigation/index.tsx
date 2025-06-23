@@ -15,6 +15,7 @@ import {useArticleStore} from '../state/article_store';
 import {useShallow} from 'zustand/shallow';
 import Config from 'react-native-config';
 import {checkEqual} from '../util/LodashEqualityCheck';
+import {useNavigationStore} from '../state/navigation_store';
 
 const linking: LinkingOptions<MainStackParamList> = {
   prefixes: [DEEP_LINKING_URL_PREFIX, 'https://www.lrt.lt'],
@@ -40,6 +41,7 @@ const linking: LinkingOptions<MainStackParamList> = {
 const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const [isNavigatorReady, setNavigatorReady] = useState(false);
   const isAppReady = useArticleStore(useShallow((state) => state.home.items.length > 0));
+  const isOfflineMode = useNavigationStore((state) => state.isOfflineMode);
   const routeNameRef = useRef<string | undefined>(undefined);
   const routeParamsRef = useRef<any>({});
   const navRef = useRef<NavigationContainerRef<MainStackParamList>>(null);
@@ -74,7 +76,7 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
     trackRoute();
   }, []);
 
-  if (!isAppReady) {
+  if (!isAppReady && !isOfflineMode) {
     return <SplashScreen />;
   }
 

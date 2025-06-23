@@ -5,22 +5,33 @@ import {createDrawerNavigator, DrawerNavigationProp} from '@react-navigation/dra
 import * as Screens from '../screens';
 import {Drawer, SearchFilterDrawer} from '../components';
 import {themeDark, themeLight} from '../Theme';
-import {ArticlePhotoType, MenuItemPage, RadiotekaPlaylistBlock, SearchFilter} from '../api/Types';
+import {
+  ArticleContent,
+  ArticlePhotoType,
+  MenuItemPage,
+  RadiotekaPlaylistBlock,
+  SearchFilter,
+} from '../api/Types';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import SearchContextProvider from '../screens/search/context/SearchContextProvider';
 import ChannelContextProvider from '../screens/channel/context/ChannelContextProvider';
 import {Article} from '../../Types';
 import {useSettingsStore} from '../state/settings_store';
 import {Platform} from 'react-native';
+import {useNavigationStore} from '../state/navigation_store';
 
 export type MainStackParamList = {
   Home: undefined;
+  Offline: undefined;
   Settings: undefined;
   Article: {
     articleId: number;
     isMedia?: boolean;
   };
   ArticleDeepLinkProxy: MainStackParamList['Article'];
+  CachedArticle: {
+    article: ArticleContent;
+  };
   MediaArticleDeepLinkProxy: MainStackParamList['Article'];
   Comments: {
     url: string;
@@ -136,11 +147,13 @@ const SearchDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
 };
 
 export default () => {
+  const isOfflineMode = useNavigationStore((state) => state.isOfflineMode);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? themeDark : themeLight;
 
   return (
     <Stack.Navigator
+      initialRouteName={isOfflineMode ? 'Offline' : 'Home'}
       screenOptions={{
         presentation: 'card',
         headerBackButtonDisplayMode: 'minimal',
@@ -164,10 +177,16 @@ export default () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen name="Offline" component={Screens.OfflineScreen} />
       <Stack.Screen name="Settings" component={Screens.SettingsScreen} />
       <Stack.Screen
         name="Article"
         component={Screens.ArticleScreen}
+        options={{headerShown: false}} //We use custom header in the screen
+      />
+      <Stack.Screen
+        name="CachedArticle"
+        component={Screens.CachedArticleScreen as any}
         options={{headerShown: false}} //We use custom header in the screen
       />
       <Stack.Screen
