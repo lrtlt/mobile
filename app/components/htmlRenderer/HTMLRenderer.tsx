@@ -96,7 +96,7 @@ const useRendererProps = (): Partial<RenderersProps> => {
           paddingTop: LI_TAG_VERTICAL_MARGIN,
         },
         markerTextStyle: {
-          color: colors.primary,
+          color: colors.tertiary,
           padding: 4,
         },
       },
@@ -105,7 +105,7 @@ const useRendererProps = (): Partial<RenderersProps> => {
           paddingTop: LI_TAG_VERTICAL_MARGIN,
         },
         markerTextStyle: {
-          color: colors.primary,
+          color: colors.tertiary,
           padding: 4,
         },
       },
@@ -144,6 +144,14 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
       li: {
         paddingVertical: LI_TAG_VERTICAL_MARGIN,
       },
+      h4: {
+        fontSize: DEFAULT_FONT_SIZE + 2,
+        paddingTop: 8,
+        paddingBottom: 20,
+        borderBottomColor: colors.listSeparator,
+        borderBottomWidth: 1,
+        textTransform: 'uppercase',
+      },
     }),
     [colors.primary],
   );
@@ -179,6 +187,16 @@ const HTMLRenderer: React.FC<React.PropsWithChildren<Props>> = ({html, textSize}
       systemFonts={fonts}
       tagsStyles={useTagStyles()}
       renderers={renderers}
+      classesStyles={{
+        'article-details-block': {
+          backgroundColor: colors.slugBackground,
+          borderRadius: 4,
+          padding: 12,
+          borderWidth: 1,
+          borderColor: colors.listSeparator,
+          marginVertical: 32,
+        },
+      }}
       renderersProps={useRendererProps()}
       customHTMLElementModels={{
         table: tableModel,
