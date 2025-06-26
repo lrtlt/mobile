@@ -7,12 +7,6 @@ const {wrapWithReanimatedMetroConfig} = require('react-native-reanimated/metro-c
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {
-  resolver: {
-    // This is needed for axios to work while building android release bundle
-    unstable_enablePackageExports: false,
-    unstable_conditionNames: ['require', 'react-native', 'default'],
-  },
-};
+const config = {};
 
 module.exports = wrapWithReanimatedMetroConfig(mergeConfig(getDefaultConfig(__dirname), config));
