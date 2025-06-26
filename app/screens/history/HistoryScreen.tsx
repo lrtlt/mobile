@@ -7,7 +7,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {formatArticles} from '../../util/articleFormatters';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
-import {SavedArticle, useArticleStorageStore} from '../../state/article_storage_store';
+import {mapArticleStorageData, SavedArticle, useArticleStorageStore} from '../../state/article_storage_store';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'History'>;
@@ -21,7 +21,7 @@ type Props = {
 const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const {strings} = useTheme();
 
-  const historyArticles = useArticleStorageStore((state) => state.history);
+  const historyArticles = useArticleStorageStore((state) => state.history).map(mapArticleStorageData);
   const articles = useMemo(() => formatArticles(-1, historyArticles, false), [historyArticles]);
 
   useEffect(() => {

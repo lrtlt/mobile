@@ -21,14 +21,14 @@ const verify = async () => {
     const {token} = await firebase.appCheck().getToken(true);
     if (token.length > 0) {
       console.log('AppCheck verification passed');
-      logEvent(getAnalytics(), 'app_check_verification_passed');
+      logEvent(getAnalytics(), 'app_lrt_lt_check_verification_passed');
     } else {
       console.warn('AppCheck verification warning');
-      logEvent(getAnalytics(), 'app_check_verification_empty_token');
+      logEvent(getAnalytics(), 'app_lrt_lt_check_verification_empty_token');
     }
   } catch (error) {
     console.warn('AppCheck verification failed');
-    logEvent(getAnalytics(), 'app_check_verification_failed', {
+    logEvent(getAnalytics(), 'app_lrt_lt_check_verification_failed', {
       error: JSON.stringify(error),
     });
   }
@@ -40,7 +40,7 @@ const useAppCheckSetup = () => {
       .then(verify)
       .catch((e) => {
         console.warn('AppCheck initialization failed', e);
-        logEvent(getAnalytics(), 'app_check_initialization_error');
+        logEvent(getAnalytics(), 'app_lrt_lt_check_initialization_error');
       });
   }, []);
 };

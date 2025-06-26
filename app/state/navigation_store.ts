@@ -28,12 +28,14 @@ export type NavigationState = {
   isLoading: boolean;
   isReady: boolean;
   isError: boolean;
+  isOfflineMode: boolean;
 };
 
 type NavigationActions = {
   fetchMenuItems: () => void;
   openCategoryById: (id: number, title?: string) => void;
   openCategoryByName: (name: string) => void;
+  setOfflineMode: (offline: boolean) => void;
 };
 
 type NavigationStore = NavigationState & NavigationActions;
@@ -45,6 +47,7 @@ const initialState: NavigationState = {
   isLoading: false,
   isReady: false,
   isError: false,
+  isOfflineMode: false,
 };
 
 export const useNavigationStore = create<NavigationStore>((set) => ({
@@ -87,6 +90,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
       console.log('Index not found for category: ' + JSON.stringify({id, title}));
       EventRegister.emit(EVENT_OPEN_CATEGORY, {id, title});
     }
+  },
+  setOfflineMode: (offline) => {
+    set({isOfflineMode: offline});
   },
 }));
 

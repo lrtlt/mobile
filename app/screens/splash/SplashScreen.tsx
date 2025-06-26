@@ -1,15 +1,18 @@
 import React from 'react';
-import {View, ActivityIndicator, Button, StyleSheet, StatusBar} from 'react-native';
-import {Logo, Text} from '../../components';
+import {View, ActivityIndicator, StyleSheet, StatusBar} from 'react-native';
+import {Logo, Text, TouchableDebounce} from '../../components';
 import {strings, themeDark, themeLight} from '../../Theme';
 import useSplashScreenState from './useSplashScreenState';
 import {useSettingsStore} from '../../state/settings_store';
+import {useNavigationStore} from '../../state/navigation_store';
 
 const SplashScreen: React.FC<React.PropsWithChildren<{}>> = () => {
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const {colors} = isDarkMode ? themeDark : themeLight;
 
   const state = useSplashScreenState();
+
+  const {setOfflineMode} = useNavigationStore.getState();
 
   return (
     <>
@@ -30,7 +33,16 @@ const SplashScreen: React.FC<React.PropsWithChildren<{}>> = () => {
             <Text style={styles.errorText} type="error">
               {strings.error_no_connection}
             </Text>
-            <Button title={strings.tryAgain} color={colors.primary} onPress={() => state.load(true)} />
+            <TouchableDebounce onPress={() => state.load(true)}>
+              <View style={{backgroundColor: colors.primary, ...styles.myButton}}>
+                <Text style={{color: colors.onPrimary}}>{strings.tryAgain}</Text>
+              </View>
+            </TouchableDebounce>
+            <TouchableDebounce onPress={() => setOfflineMode(true)}>
+              <View style={{backgroundColor: colors.lightGreyBackground, ...styles.myButton}}>
+                <Text style={{color: themeLight.colors.text}}>Išsaugoti strapsniai</Text>
+              </View>
+            </TouchableDebounce>
           </View>
         )}
       </View>
@@ -48,10 +60,12 @@ const styles = StyleSheet.create({
   },
 
   errorContainer: {
-    alignItems: 'center',
+    alignItems: 'stretch',
     justifyContent: 'center',
     position: 'absolute',
     bottom: '20%',
+    minWidth: 240,
+    gap: 12,
   },
   loader: {
     position: 'absolute',
@@ -59,7 +73,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     marginTop: 40,
-
+    textAlign: 'center',
     marginBottom: 20,
     fontSize: 18,
   },
@@ -67,4 +81,5 @@ const styles = StyleSheet.create({
     marginTop: 24,
     width: '50%',
   },
+  myButton: {padding: 12, borderRadius: 6, alignItems: 'center'},
 });
