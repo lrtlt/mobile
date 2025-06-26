@@ -7,6 +7,7 @@ import {ARTICLE_HISTORY_COUNT, ARTICLE_SAVED_MAX_COUNT} from '../constants';
 import {fetchArticle} from '../api';
 import FastImage from '@d11/react-native-fast-image';
 import {buildArticleImageUri, IMG_SIZE_M} from '../util/ImageUtil';
+import {logEvent, getAnalytics} from '@react-native-firebase/analytics';
 
 //TODO: 2024-10-01 remove migration after a while.
 export const runArticleStorageMigration = async () => {
@@ -72,12 +73,18 @@ export const useArticleStorageStore = create<ArticleStorageStore>()(
         }
         _cacheImages([article]);
         set({savedArticles});
+        logEvent(getAnalytics(), 'app_lrt_lt_article_saved', {
+          article_id: _articleId(article),
+        });
       },
       removeArticle: (articleId) => {
         set((state) => {
           return {
             savedArticles: state.savedArticles.filter((a) => _articleId(a) !== articleId),
           };
+        });
+        logEvent(getAnalytics(), 'app_lrt_lt_article_removed', {
+          article_id: articleId,
         });
       },
       syncSavedArticles: async () => {

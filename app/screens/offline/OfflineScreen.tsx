@@ -4,13 +4,14 @@ import {View, Dimensions, StyleSheet} from 'react-native';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useNavigationStore} from '../../state/navigation_store';
 import {useTheme} from '../../Theme';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import TabBar from '../main/tabBar/TabBar';
 import {TabView, TabViewProps} from 'react-native-tab-view';
 import CachedArticlesScreen from './CachedArticlesScreen';
 import {HeaderBackButton} from '@react-navigation/elements';
 import {ActionButton} from '../../components';
 import {IconSettings} from '../../components/svg';
+import {logEvent, getAnalytics} from '@react-native-firebase/analytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Offline'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Offline'>;
@@ -37,7 +38,11 @@ const OfflineScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
 
   const {setOfflineMode} = useNavigationStore();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    logEvent(getAnalytics(), 'app_lrt_lt_offline_mode_entered');
+  }, []);
+
+  useEffect(() => {
     navigation.setOptions({
       headerLeft: () => <HeaderBackButton onPress={onSetOnlinePress} tintColor={colors.headerTint} />,
       headerRight: () => (
