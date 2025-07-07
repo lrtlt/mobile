@@ -3,7 +3,7 @@ import {View, StyleSheet, FlatList, Dimensions} from 'react-native';
 import Text from '../../../../../../components/text/Text';
 import {TouchableDebounce} from '../../../../../../components';
 import FastImage from '@d11/react-native-fast-image';
-import PlayButton from '../play_button/play_button';
+// import PlayButton from '../play_button/play_button';
 
 const CARD_WIDTH_FULL = Math.min(Dimensions.get('window').width * 0.5, 300);
 const CARD_WIDTH_MINIMAL = Math.min(Dimensions.get('window').width * 0.33, 150);
@@ -42,7 +42,8 @@ const RadiotekaHorizontalList: React.FC<RadiotekaHorizontalListProps> = ({
             }}
             style={styles.image}
           />
-          {variation === 'full' && <PlayButton onPress={() => onItemPlayPress?.(index)} />}
+          {/* NOTE: Uncomment if you want to add a play button */}
+          {/* {variation === 'full' && <PlayButton onPress={() => onItemPlayPress?.(index)} />} */}
           {item.ageRestricted && (
             <View style={styles.ageRestrictionBadgeContainer}>
               <Text style={{color: '#FFF', fontSize: 16}}>S</Text>
