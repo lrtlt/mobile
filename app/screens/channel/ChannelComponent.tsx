@@ -2,9 +2,8 @@ import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ChannelResponse} from '../../api/Types';
-import {OpusNowPlaying, ProgramItem, Text, VideoComponent} from '../../components';
+import {OpusNowPlaying, ProgramItem, Text, TouchableDebounce, VideoComponent} from '../../components';
 import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
@@ -12,7 +11,7 @@ import {getSmallestDim} from '../../util/UI';
 import {StreamData} from '../../components/videoComponent/useStreamData';
 import TextComponent from '../../components/text/Text';
 
-import {CameraIcon, IconNote} from '../../components/svg';
+import {CameraIcon, IconAudioReadCount} from '../../components/svg';
 import DailyQuestionWrapper from '../../components/dailyQuestion/DailyQuestionWrapper';
 
 /** Count of visible program items below player */
@@ -45,35 +44,47 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
   }, [channel_info]);
 
   const streamSelectionComponent = audioStreamData ? (
-    <View style={styles.streamSelectionContainer}>
-      <TouchableOpacity onPress={() => setSelectedStream(streamData)}>
+    <View style={{...styles.streamSelectionContainer, borderColor: colors.primaryLight}}>
+      <TouchableDebounce onPress={() => setSelectedStream(streamData)}>
         <View
           style={{
             ...styles.streamSelectionButton,
-            backgroundColor: selectedStream === streamData ? colors.primaryLight : undefined,
-            borderColor: colors.primaryLight,
+            backgroundColor:
+              selectedStream === streamData ? colors.mediatekaPlayButton : colors.slugBackground,
           }}>
           <CameraIcon
             size={16}
-            colorBase={selectedStream === streamData ? colors.primary : colors.textSecondary}
-            colorAccent={selectedStream === streamData ? colors.primary : colors.textDisbled}
+            colorBase={selectedStream === streamData ? colors.onPrimary : colors.textSecondary}
+            colorAccent={selectedStream === streamData ? colors.onPrimary : colors.textDisbled}
           />
-          <TextComponent style={styles.streamSelectionText}>Su vaizdu</TextComponent>
+          <TextComponent
+            style={{
+              ...styles.streamSelectionText,
+              color: selectedStream === streamData ? colors.onPrimary : colors.text,
+            }}>
+            Su vaizdu
+          </TextComponent>
         </View>
-      </TouchableOpacity>
-      <TouchableOpacity
+      </TouchableDebounce>
+      <TouchableDebounce
         style={{
           ...styles.streamSelectionButton,
-          backgroundColor: selectedStream === audioStreamData ? colors.primaryLight : undefined,
-          borderColor: colors.primaryLight,
+          backgroundColor:
+            selectedStream === audioStreamData ? colors.mediatekaPlayButton : colors.slugBackground,
         }}
         onPress={() => setSelectedStream(audioStreamData)}>
-        <IconNote
+        <IconAudioReadCount
           size={16}
-          color={selectedStream === audioStreamData ? colors.primary : colors.textSecondary}
+          color={selectedStream === audioStreamData ? colors.onPrimary : colors.textSecondary}
         />
-        <TextComponent style={styles.streamSelectionText}>Tik garsas</TextComponent>
-      </TouchableOpacity>
+        <TextComponent
+          style={{
+            ...styles.streamSelectionText,
+            color: selectedStream === audioStreamData ? colors.onPrimary : colors.text,
+          }}>
+          Tik garsas
+        </TextComponent>
+      </TouchableDebounce>
     </View>
   ) : undefined;
 
@@ -123,10 +134,14 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
       )}
       <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>
         {streamSelectionComponent}
-
+        {channel_info.channel_id === 1 ? (
+          <Text style={{color: colors.textSecondary, fontSize: 14, marginBottom: 12}}>
+            Šie subtitrai sugeneruoti <Text style={{fontWeight: 'bold'}}>DI</Text> pagalba.
+          </Text>
+        ) : null}
         {programComponent}
 
-        <TouchableOpacity onPress={onProgramPressHandler}>
+        <TouchableDebounce onPress={onProgramPressHandler}>
           <Text
             // eslint-disable-next-line react-native/no-inline-styles
             style={{
@@ -136,7 +151,7 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
             }}>
             {strings.tvProgramButtonText}
           </Text>
-        </TouchableOpacity>
+        </TouchableDebounce>
       </View>
     </View>
   );
@@ -178,18 +193,20 @@ const styles = StyleSheet.create({
     // minWidth: '100%',
     marginBottom: 8,
     flexDirection: 'row',
-    gap: 12,
+    gap: 0,
+    borderWidth: StyleSheet.hairlineWidth,
+    overflow: 'hidden',
+    borderRadius: 8,
   },
   streamSelectionButton: {
     paddingVertical: 8,
-    paddingHorizontal: 24,
+    paddingHorizontal: 12,
     flexDirection: 'row',
-    gap: 8,
+    gap: 12,
+    overflow: 'hidden',
     alignItems: 'center',
-    borderWidth: StyleSheet.hairlineWidth * 2,
-    borderRadius: 6,
   },
   streamSelectionText: {
-    fontSize: 16,
+    fontSize: 15,
   },
 });
