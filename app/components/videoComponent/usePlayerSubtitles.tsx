@@ -1,9 +1,10 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {PlayerEventType, TextTrack, TextTrackKind, TextTrackType, THEOplayer} from 'react-native-theoplayer';
+import {PlayerEventType, TextTrack, TextTrackKind, THEOplayer} from 'react-native-theoplayer';
 import {IconSubtitles} from '../svg';
 import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from './MediaControls';
+import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
+import {ScrollView} from 'react-native-gesture-handler';
 
 type Options = {
   player?: THEOplayer;
@@ -18,11 +19,7 @@ const usePlayerSubtitles = ({player}: Options) => {
   useEffect(() => {
     if (!!player) {
       player.addEventListener(PlayerEventType.TEXT_TRACK_LIST, (_) => {
-        setTextTracks(
-          player.textTracks.filter(
-            (track) => track.kind === TextTrackKind.subtitles && track.type === TextTrackType.webvtt,
-          ),
-        );
+        setTextTracks(player.textTracks.filter((track) => track.kind === TextTrackKind.subtitles));
         if (!initialSubtitleDisabled.current && !player?.selectedTextTrack) {
           initialSubtitleDisabled.current = true;
           player.selectedTextTrack = undefined;
@@ -48,13 +45,13 @@ const usePlayerSubtitles = ({player}: Options) => {
   const renderTextTrackItem = useCallback(
     ({item}: {item: TextTrack}) => {
       return (
-        <TouchableOpacity
+        <TouchableDebounce
           key={item.uid}
-          style={{...styles.center, backgroundColor: '#a8d2ff', padding: 12, margin: 4}}
+          style={{...styles.center, ...styles.rounded, backgroundColor: '#FFFFFFEE', padding: 8}}
           activeOpacity={0.9}
           onPress={() => selectTextTrack(item)}>
           <Text>{item.label}</Text>
-        </TouchableOpacity>
+        </TouchableDebounce>
       );
     },
     [selectTextTrack],
@@ -62,9 +59,9 @@ const usePlayerSubtitles = ({player}: Options) => {
 
   const renderBackButton = useCallback(() => {
     return (
-      <TouchableOpacity
+      <TouchableDebounce
         key={'close'}
-        style={{...styles.center, backgroundColor: '#F4F6F8', padding: 12, margin: 4}}
+        style={{...styles.center, ...styles.rounded, backgroundColor: '#FFFFFF99', padding: 8}}
         activeOpacity={0.9}
         onPress={() => {
           if (!!player) {
@@ -73,7 +70,7 @@ const usePlayerSubtitles = ({player}: Options) => {
           setShowMenu(false);
         }}>
         <Text>Išjungti</Text>
-      </TouchableOpacity>
+      </TouchableDebounce>
     );
   }, [player]);
 
@@ -82,9 +79,13 @@ const usePlayerSubtitles = ({player}: Options) => {
       <SubtitlesButton key={'btn-subtitles'} textTracks={textTracks} onPress={handleSubtitlesButtonPress} />
     ),
     SubtitlesMenu: showMenu ? (
-      <View key={'menu-subtitles'} style={{...styles.menuContainer, backgroundColor: '#222222'}}>
-        {textTracks.map((track) => renderTextTrackItem({item: track}))}
-        {renderBackButton()}
+      <View key={'menu-subtitles'} style={{...styles.menuContainer}}>
+        <ScrollView style={{flex: 1}} contentContainerStyle={{gap: 8, flexGrow: 1, justifyContent: 'center'}}>
+          <>
+            {textTracks.map((track) => renderTextTrackItem({item: track}))}
+            {renderBackButton()}
+          </>
+        </ScrollView>
       </View>
     ) : null,
   };
@@ -102,13 +103,13 @@ const SubtitlesButton: React.FC<React.PropsWithChildren<Props>> = ({textTracks, 
     return null;
   } else {
     return (
-      <TouchableOpacity
+      <TouchableDebounce
         style={[styles.center]}
         onPress={() => onPress()}
         hitSlop={HIT_SLOP}
         activeOpacity={0.6}>
         <IconSubtitles size={ICON_SIZE + 6} color={ICON_COLOR} />
-      </TouchableOpacity>
+      </TouchableDebounce>
     );
   }
 };
@@ -118,11 +119,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  rounded: {
+    borderRadius: 4,
+  },
   menuContainer: {
-    backgroundColor: 'white',
+    backgroundColor: '#222222CC',
     justifyContent: 'center',
     alignItems: 'stretch',
-    padding: 64,
+    padding: 32,
     ...StyleSheet.absoluteFillObject,
   },
 });

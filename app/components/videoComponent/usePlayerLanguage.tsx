@@ -1,12 +1,24 @@
 import {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {MediaTrack, PlayerEventType, THEOplayer} from 'react-native-theoplayer';
 import {IconLanguage} from '../svg';
 import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from './MediaControls';
+import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 
 type Options = {
   player?: THEOplayer;
+};
+
+const getLanguageName = (language: string) => {
+  switch (language.toLowerCase()) {
+    case 'lt':
+    case 'lit':
+      return 'Lietuvių';
+    case 'org':
+      return 'Originalo';
+    default:
+      return language;
+  }
 };
 
 const usePlayerLanguage = ({player}: Options) => {
@@ -42,13 +54,13 @@ const usePlayerLanguage = ({player}: Options) => {
   const renderAudioTrackItem = useCallback(
     ({item}: {item: MediaTrack}) => {
       return (
-        <TouchableOpacity
+        <TouchableDebounce
           key={item.uid}
-          style={{...styles.center, backgroundColor: '#a8d2ff', padding: 12, margin: 4}}
+          style={{...styles.center, ...styles.rounded, backgroundColor: '#FFFFFFEE', padding: 8}}
           activeOpacity={0.9}
           onPress={() => selectAudioTrack(item)}>
-          <Text>{item.language}</Text>
-        </TouchableOpacity>
+          <Text>{getLanguageName(item.language)}</Text>
+        </TouchableDebounce>
       );
     },
     [selectAudioTrack],
@@ -56,13 +68,13 @@ const usePlayerLanguage = ({player}: Options) => {
 
   const renderBackButton = useCallback(() => {
     return (
-      <TouchableOpacity
+      <TouchableDebounce
         key={'close'}
-        style={{...styles.center, backgroundColor: '#F4F6F8', padding: 12, margin: 4}}
+        style={{...styles.center, ...styles.rounded, backgroundColor: '#FFFFFF99', padding: 8}}
         activeOpacity={0.9}
         onPress={() => handleModalClose()}>
         <Text>Uždaryti</Text>
-      </TouchableOpacity>
+      </TouchableDebounce>
     );
   }, []);
 
@@ -71,7 +83,7 @@ const usePlayerLanguage = ({player}: Options) => {
       <LanguageButton key={'btn-language'} audioTracks={audioTracks} onPress={handleLanguageButtonPress} />
     ),
     LanguageMenu: showMenu ? (
-      <View key={'menu-language'} style={{...styles.menuContainer, backgroundColor: '#222222'}}>
+      <View key={'menu-language'} style={{...styles.menuContainer}}>
         {audioTracks.map((track) => renderAudioTrackItem({item: track}))}
         {renderBackButton()}
       </View>
@@ -91,13 +103,13 @@ const LanguageButton: React.FC<React.PropsWithChildren<Props>> = ({audioTracks, 
     return null;
   } else {
     return (
-      <TouchableOpacity
+      <TouchableDebounce
         style={[styles.center]}
         onPress={() => onPress()}
         hitSlop={HIT_SLOP}
         activeOpacity={0.6}>
         <IconLanguage size={ICON_SIZE - 2} color={ICON_COLOR} />
-      </TouchableOpacity>
+      </TouchableDebounce>
     );
   }
 };
@@ -107,11 +119,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  rounded: {
+    borderRadius: 4,
+  },
   menuContainer: {
-    backgroundColor: 'white',
+    gap: 8,
+    backgroundColor: '#222222CC',
     justifyContent: 'center',
     alignItems: 'stretch',
-    padding: 64,
+    padding: 32,
     ...StyleSheet.absoluteFillObject,
   },
 });

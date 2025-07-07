@@ -1205,7 +1205,7 @@ PODS:
     - FirebaseCore (~> 11.8.0)
     - GoogleUtilities/Environment (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
-  - FirebaseAppCheckInterop (11.13.0)
+  - FirebaseAppCheckInterop (11.15.0)
   - FirebaseCore (11.8.1):
     - FirebaseCoreInternal (~> 11.8.0)
     - GoogleUtilities/Environment (~> 8.0)
@@ -1257,7 +1257,7 @@ PODS:
     - GoogleUtilities/Reachability (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - nanopb (~> 3.30910.0)
-  - FirebaseRemoteConfigInterop (11.13.0)
+  - FirebaseRemoteConfigInterop (11.15.0)
   - FirebaseSessions (11.8.0):
     - FirebaseCore (~> 11.8.0)
     - FirebaseCoreExtension (~> 11.8.0)
@@ -1267,7 +1267,7 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 8.0)
     - nanopb (~> 3.30910.0)
     - PromisesSwift (~> 2.1)
-  - FirebaseSharedSwift (11.13.0)
+  - FirebaseSharedSwift (11.15.0)
   - fmt (11.0.2)
   - glog (0.3.5)
   - google-cast-sdk-dynamic-xcframework (4.8.3)
@@ -2849,12 +2849,12 @@ PODS:
     - React-Core
   - react-native-safe-area-context (5.4.0):
     - React-Core
-  - react-native-theoplayer (9.2.0):
+  - react-native-theoplayer (9.7.1):
     - React-Core
-    - THEOplayer-Connector-SideloadedSubtitle (~> 9.3)
-    - THEOplayer-Integration-GoogleCast (~> 9.3)
-    - THEOplayer-Integration-THEOlive (~> 9.3)
-    - THEOplayerSDK-core (~> 9.3)
+    - THEOplayer-Connector-SideloadedSubtitle (~> 9.6)
+    - THEOplayer-Integration-GoogleCast (~> 9.6)
+    - THEOplayer-Integration-THEOlive (~> 9.6)
+    - THEOplayerSDK-core (~> 9.6)
   - react-native-unistyles (2.32.0):
     - DoubleConversion
     - glog
@@ -3489,9 +3489,9 @@ PODS:
     - Yoga
   - RNSVG (15.11.2):
     - React-Core
-  - SDWebImage (5.21.0):
-    - SDWebImage/Core (= 5.21.0)
-  - SDWebImage/Core (5.21.0)
+  - SDWebImage (5.21.1):
+    - SDWebImage/Core (= 5.21.1)
+  - SDWebImage/Core (5.21.1)
   - SDWebImageAVIFCoder (0.11.0):
     - libavif/core (>= 0.11.0)
     - SDWebImage (~> 5.10)
@@ -3503,20 +3503,20 @@ PODS:
   - SwiftSubtitles (0.9.1):
     - DSFRegex (~> 3.3.1)
     - TinyCSV (~> 0.6.1)
-  - THEOplayer-Connector-SideloadedSubtitle (9.4.0):
+  - THEOplayer-Connector-SideloadedSubtitle (9.7.0):
     - Swifter (= 1.5.0)
     - SwiftSubtitles (= 0.9.1)
     - THEOplayerSDK-core (~> 9)
-  - THEOplayer-Integration-GoogleCast (9.4.0):
-    - THEOplayer-Integration-GoogleCast/Base (= 9.4.0)
-    - THEOplayer-Integration-GoogleCast/Dependencies (= 9.4.0)
-  - THEOplayer-Integration-GoogleCast/Base (9.4.0)
-  - THEOplayer-Integration-GoogleCast/Dependencies (9.4.0):
+  - THEOplayer-Integration-GoogleCast (9.7.0):
+    - THEOplayer-Integration-GoogleCast/Base (= 9.7.0)
+    - THEOplayer-Integration-GoogleCast/Dependencies (= 9.7.0)
+  - THEOplayer-Integration-GoogleCast/Base (9.7.0)
+  - THEOplayer-Integration-GoogleCast/Dependencies (9.7.0):
     - google-cast-sdk-dynamic-xcframework (~> 4.8)
-  - THEOplayer-Integration-THEOlive (9.4.0):
-    - THEOplayer-Integration-THEOlive/Base (= 9.4.0)
-  - THEOplayer-Integration-THEOlive/Base (9.4.0)
-  - THEOplayerSDK-core (9.4.0)
+  - THEOplayer-Integration-THEOlive (9.7.0):
+    - THEOplayer-Integration-THEOlive/Base (= 9.7.0)
+  - THEOplayer-Integration-THEOlive/Base (9.7.0)
+  - THEOplayerSDK-core (9.7.0)
   - TinyCSV (0.6.1)
   - Yoga (0.0.0)
 
@@ -3887,7 +3887,7 @@ SPEC CHECKSUMS:
   Firebase: d80354ed7f6df5f9aca55e9eb47cc4b634735eaf
   FirebaseAnalytics: 4fd42def128146e24e480e89f310e3d8534ea42b
   FirebaseAppCheck: f6648d6d2b321ecf94cf72f6737fc68d4fddc010
-  FirebaseAppCheckInterop: 72066489c209823649a997132bcd9269bc33a4bb
+  FirebaseAppCheckInterop: 06fe5a3799278ae4667e6c432edd86b1030fa3df
   FirebaseCore: 99fe0c4b44a39f37d99e6404e02009d2db5d718d
   FirebaseCoreExtension: 3d3f2017a00d06e09ab4ebe065391b0bb642565e
   FirebaseCoreInternal: df24ce5af28864660ecbd13596fc8dd3a8c34629
@@ -3896,9 +3896,9 @@ SPEC CHECKSUMS:
   FirebaseFirestoreInternal: 8c5921c360a70e447bfeefb245f450e8b50e750b
   FirebaseInstallations: 6c963bd2a86aca0481eef4f48f5a4df783ae5917
   FirebaseMessaging: 487b634ccdf6f7b7ff180fdcb2a9935490f764e8
-  FirebaseRemoteConfigInterop: 7915cec47731a806cda541f90898ad0fab8f9f86
+  FirebaseRemoteConfigInterop: 1c6135e8a094cc6368949f5faeeca7ee8948b8aa
   FirebaseSessions: c4d40a97f88f9eaff2834d61b4fea0a522d62123
-  FirebaseSharedSwift: aca73668bc95e8efccb618e0167eab05d19d3a75
+  FirebaseSharedSwift: e17c654ef1f1a616b0b33054e663ad1035c8fd40
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   google-cast-sdk-dynamic-xcframework: d4dd8d548462f2a4874515fee68c17805d44be42
@@ -3955,7 +3955,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: 946af8f108455347e133ac82f84cd8afbf4d6d25
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 9d72abf6d8473da73033b597090a80b709c0b2f1
-  react-native-theoplayer: c59fc143145aecba0251bbd15eb921df011ad96f
+  react-native-theoplayer: 42e0a4fb8d1b637e25982426a952bb31e7a97cb2
   react-native-unistyles: 5d8bcc8545cf31905a9e80216cd886aa3e4633e2
   react-native-webview: 5adf9651c678f00ee1b2c3f4f74565c9a9236cab
   React-NativeModulesApple: 5b234860053d0dd11f3442f38b99688ff1c9733b
@@ -4005,19 +4005,19 @@ SPEC CHECKSUMS:
   RNScreens: a2cce6c154d013ca803235e9d4cd91b1f89e1719
   RNShare: 082a222215e9fd50994d5f0d9c34982050c5480d
   RNSVG: ab84f2de7dd4f2c86d01825b8a65e0ef712fc36b
-  SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
+  SDWebImage: f29024626962457f3470184232766516dee8dfea
   SDWebImageAVIFCoder: 00310d246aab3232ce77f1d8f0076f8c4b021d90
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   SwiftSubtitles: c659af19d710a2946779015464c0577d07fe4666
-  THEOplayer-Connector-SideloadedSubtitle: 187010fa7b121faf51dcb9d986b918efc1a15211
-  THEOplayer-Integration-GoogleCast: 66d5ae0d3dd27c11da692450544e83f8ab453bec
-  THEOplayer-Integration-THEOlive: 301acce4f3f38d5a43a37345be419d2934fbbf9b
-  THEOplayerSDK-core: c783f4f834996ee0f4b982b59da01a025c52ff47
+  THEOplayer-Connector-SideloadedSubtitle: 43f0a339c854fafab0a831ecd0e84602d1d70b0c
+  THEOplayer-Integration-GoogleCast: 3362672aa4ac90e85448382be3a99544395569a0
+  THEOplayer-Integration-THEOlive: 86bf41247b7f7de9aa5fa2de830cfc3c57d36ccd
+  THEOplayerSDK-core: 02651e70a7352d2f72db27aeec7eee18c612ef99
   TinyCSV: fd6228edbcf1c07466ac34b76dac5e052143eaba
   Yoga: 2a3a4c38a8441b6359d5e5914d35db7b2b67aebd
 
 PODFILE CHECKSUM: a62deb1e051825bfdb731609d521c5f2200d6a34
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2

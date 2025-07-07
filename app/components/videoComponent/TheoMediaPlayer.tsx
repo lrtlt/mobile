@@ -444,11 +444,10 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
               />
             </View>
           ) : null}
+          {SubtitlesMenu}
+          {LanguageMenu}
         </>
       </THEOplayerView>
-
-      {LanguageMenu}
-      {SubtitlesMenu}
     </View>
   );
 };
