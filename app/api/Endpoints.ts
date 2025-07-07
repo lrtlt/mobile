@@ -189,7 +189,7 @@ export const artcilesByCategory = (category_id: number | string, count: number) 
 
 export const getRadiotekaArticleByUrl = (url: string) => `https://www.lrt.lt/radioteka/api/media?url=${url}`;
 
-export const genreGet = (genreId: number | string) => `https://www.lrt.lt/radioteka/api/genres/${genreId}`;
+export const genreGet = (genreId: number | string) => `https://www.lrt.lt/rest-api/genres/${genreId}`;
 
 export const carPlaylistNewestGet = () => 'https://www.lrt.lt/static/carplay/naujausi.json';
 
