@@ -4,9 +4,8 @@ import CoverImage from '../coverImage/CoverImage';
 import ProgressiveImage from '../progressiveImage/ProgressiveImage';
 import {IMG_SIZE_XS, buildArticleImageUri, getImageSizeForWidth, ImageSize} from '../../util/ImageUtil';
 import TextComponent from '../text/Text';
-import {useTheme} from '../../Theme';
-import {Icon404} from '../svg';
 import {ArticlePhotoType} from '../../api/Types';
+import {DEFAULT_ARTICLE_IMAGE} from '../../constants';
 
 interface ImageWrapperProps {
   progressive?: boolean;
@@ -86,14 +85,14 @@ const ArticlePhoto: React.FC<React.PropsWithChildren<Props>> = ({
   imageAspectRatio,
   ...props
 }) => {
-  const {colors} = useTheme();
-
   if (!photo) {
     return (
       <View style={style}>
-        <View style={styles.errorContainer}>
-          <Icon404 size={60} color={colors.buttonContent} />
-        </View>
+        <CoverImage
+          style={{...styles.image, aspectRatio: 1.5}}
+          source={{uri: DEFAULT_ARTICLE_IMAGE}}
+          resizeMode="contain"
+        />
       </View>
     );
   }

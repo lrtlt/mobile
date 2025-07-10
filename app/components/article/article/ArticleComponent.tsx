@@ -13,8 +13,9 @@ import ArticleBadges from './ArticleBadges';
 import ListenCount from './ListenCount';
 import Badge from '../../badge/Badge';
 import MediaIcon from '../../mediaIcon/MediaIcon';
-import {Icon404} from '../../svg';
+
 import FastImage from '@d11/react-native-fast-image';
+import {DEFAULT_ARTICLE_IMAGE} from '../../../constants';
 
 const getArticleStyle = (type: ArticleStyleType) => {
   switch (type) {
@@ -102,7 +103,11 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
         article.img_path_postfix,
       );
     } else if (article?.photo) {
-      imgUri = buildArticleImageUri(styleType === 'single' ? IMG_SIZE_M : IMG_SIZE_S, article.photo);
+      if (article?.photo?.indexOf('{WxH}') !== -1) {
+        imgUri = buildArticleImageUri(styleType === 'single' ? IMG_SIZE_M : IMG_SIZE_S, article.photo);
+      } else {
+        imgUri = article.photo;
+      }
     }
   } catch (error) {
     // Fail silently if image URI building fails
@@ -127,19 +132,13 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
               backgroundColor: '#00000033',
               borderRadius: article?.is_audio ? 8 : 0,
             }}>
-            {imgUri ? (
-              <CoverImage
-                style={style.image}
-                source={{
-                  uri: imgUri,
-                }}
-                resizeMode={isVerticalPhoto ? FastImage.resizeMode.contain : FastImage.resizeMode.cover}
-              />
-            ) : (
-              <View style={style.mediaIndicator}>
-                <Icon404 size={60} />
-              </View>
-            )}
+            <CoverImage
+              style={style.image}
+              source={{
+                uri: imgUri ?? DEFAULT_ARTICLE_IMAGE,
+              }}
+              resizeMode={isVerticalPhoto ? FastImage.resizeMode.contain : FastImage.resizeMode.cover}
+            />
             {mediaIndicator}
 
             {mediaDuration}

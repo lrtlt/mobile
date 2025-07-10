@@ -30,6 +30,9 @@ export const DEFAULT_FORECAST_LOCATION = 'vilnius';
 export const VIDEO_ASPECT_RATIO = 16 / 9;
 export const VIDEO_DEFAULT_BACKGROUND_IMAGE = 'https://www.lrt.lt/media/logo/LTV1.jpg?v=20245121947';
 
+//Default article image
+export const DEFAULT_ARTICLE_IMAGE = 'https://www.lrt.lt/images/no-image.png';
+
 //Article types
 export const ARTICLE_TYPE_TEXT = 1;
 export const ARTICLE_TYPE_VIDEO = 6;
