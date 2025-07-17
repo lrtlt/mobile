@@ -23,7 +23,8 @@ const STATE_READY = 'ready';
 
 const useArticleScreenState = (
   articleId: number,
-  isMedia?: boolean,
+  // isMedia is used to determine if the article is a media type (audio/video)
+  isMedia: boolean = articleId > 1000000000,
 ): [ScreenState, (accept: boolean) => void] => {
   const [state, setState] = useState<ScreenState>({
     article: undefined,

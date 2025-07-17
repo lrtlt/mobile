@@ -1164,3 +1164,73 @@ export type RadiotekaArticle = {
     ];
   };
 };
+
+export type AISearchResponse = {
+  nextPageToken?: string;
+  totalSize: number;
+  results: AISearchResultItem[];
+  summary: {
+    summarySkippedReasons: any[];
+    summaryText: string;
+    safetyAttributes: any;
+    summaryWithMetadata: any;
+  };
+  queryExpansionInfo: {
+    expandedQuery: boolean;
+    pinnedResultCount: string;
+  };
+};
+
+export type VertexAIMediaType =
+  | 'movie'
+  | 'show'
+  | 'concert'
+  | 'event'
+  | 'live-event'
+  | 'broadcast'
+  | 'tv-series'
+  | 'episode'
+  | 'video-game'
+  | 'clip'
+  | 'vlog'
+  | 'audio'
+  | 'audio-book'
+  | 'music'
+  | 'album'
+  | 'articles'
+  | 'news'
+  | 'radio'
+  | 'podcast'
+  | 'book'
+  | 'sports-game';
+
+export type AISearchResultItem = {
+  id: string;
+  document: {
+    id: string;
+    name: string;
+    uri: string;
+    structData: {
+      title: string;
+      description: string;
+      uri: string;
+      content_rating: string[];
+      in_languages: string[];
+      categories: string[];
+      country_of_origin: string;
+      available_time: string;
+      media_type: VertexAIMediaType;
+      images: {
+        name: string;
+        uri: string;
+        author: string;
+      }[];
+      persons: {
+        role: string;
+        name: string;
+        uri: string;
+        rank: number;
+      }[];
+    };
+  };
+};

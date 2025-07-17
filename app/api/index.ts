@@ -17,6 +17,7 @@ import {
   counter,
   forecastGet,
   genreGet,
+  getAISearchResults,
   getDailyQuestion,
   getMediatekaArticlesBySeason,
   getRadiotekaArticleByUrl,
@@ -37,6 +38,7 @@ import {
 } from './Endpoints';
 import {get, put} from './HttpClient';
 import {
+  AISearchResponse,
   ArticleContentResponse,
   ArticleRecommendationsResponse,
   ArticleSearchResponse,
@@ -165,3 +167,6 @@ export const fetchCounter = (id: number | string, url: string = 'https://www.lrt
       Referer: url ?? 'https://www.lrt.lt/',
     },
   });
+
+export const fetchAISearchResults = (query: string, pageSize: number, pageToken?: string) =>
+  get<AISearchResponse>(getAISearchResults(query, pageSize, pageToken));

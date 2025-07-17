@@ -209,3 +209,9 @@ export const getMediatekaArticlesBySeason = (seasonUrl: string, page: number, co
 
 export const counter = (id: string | number, os: string) =>
   `https://www.lrt.lt/api/counter?id=${id}&app=${os}`;
+
+export const getAISearchResults = (query: string, pageSize: number, pageToken?: string) => {
+  return `https://ai-search.lrt.lt/v1/lt/search?query=${encodeURIComponent(query)}&pageSize=${pageSize}${
+    pageToken ? `&pageToken=${pageToken}` : ''
+  }`;
+};

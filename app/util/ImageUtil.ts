@@ -1,3 +1,6 @@
+import {Article} from '../../Types';
+import {DEFAULT_ARTICLE_IMAGE} from '../constants';
+
 export const BASE_IMG_URL = 'https://www.lrt.lt';
 
 export type ImageSize = {
@@ -36,4 +39,24 @@ export const buildArticleImageUri = (size: ImageSize, url?: string) => {
   } else {
     return undefined;
   }
+};
+
+export const getArticleImageUri = (article: Article, size: ImageSize): string | undefined => {
+  let imgUri;
+  try {
+    if (article?.img_path_prefix && article?.img_path_postfix) {
+      imgUri = buildImageUri(size, article.img_path_prefix, article.img_path_postfix);
+    } else if (article?.photo) {
+      if (article?.photo?.indexOf('{WxH}') !== -1) {
+        imgUri = buildArticleImageUri(size, article.photo) ?? DEFAULT_ARTICLE_IMAGE;
+      } else {
+        imgUri = article.photo ?? DEFAULT_ARTICLE_IMAGE;
+      }
+    }
+  } catch (error) {
+    // Fail silently if image URI building fails
+    imgUri = DEFAULT_ARTICLE_IMAGE;
+  }
+  console.log('getArticleImageUri', imgUri, size);
+  return imgUri;
 };

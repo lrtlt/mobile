@@ -3,10 +3,11 @@ import {View, StyleSheet} from 'react-native';
 import {Article} from '../../../../Types';
 import TextComponent from '../../text/Text';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
-import {buildArticleImageUri, buildImageUri, IMG_SIZE_S} from '../../../util/ImageUtil';
+import {getArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
 import CoverImage from '../../coverImage/CoverImage';
 import ArticleBadges from '../article/ArticleBadges';
 import Badge from '../../badge/Badge';
+import MediaIcon from '../../mediaIcon/MediaIcon';
 
 interface Props {
   article: Article;
@@ -20,12 +21,7 @@ const ArticleFeedItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
     onPress(article);
   }, [article, onPress]);
 
-  let imgUri;
-  if (article.img_path_prefix && article.img_path_postfix) {
-    imgUri = buildImageUri(IMG_SIZE_S, article.img_path_prefix, article.img_path_postfix);
-  } else if (article.photo) {
-    imgUri = buildArticleImageUri(IMG_SIZE_S, article.photo);
-  }
+  const imgUri = getArticleImageUri(article, IMG_SIZE_M);
 
   const date = Boolean(article.item_date) ? (
     <TextComponent style={styles.categoryTitle} type="secondary">
@@ -37,20 +33,34 @@ const ArticleFeedItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
     <Badge style={{marginTop: 2}} label={article.badge_title!!} type={article.badge_class} size="small" />
   );
 
+  const mediaIcon =
+    article?.is_video || article?.is_audio ? (
+      <View style={{paddingRight: 8}}>
+        <MediaIcon
+          size={13}
+          is_video={article?.is_video}
+          is_audio={article?.is_audio}
+          channel_id={article?.channel_id}
+        />
+      </View>
+    ) : undefined;
+
   return (
     <TouchableDebounce onPress={onPressHandler} debounceTime={500} activeOpacity={0.4}>
       <View style={{flexDirection: 'row'}}>
-        <CoverImage
-          style={{...styles.image, aspectRatio: article.photo_aspectratio}}
-          source={{uri: imgUri}}
-        />
+        <CoverImage style={{...styles.image}} source={{uri: imgUri}} />
         <View style={{...styles.container}}>
-          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-            <TextComponent style={styles.categoryTitle}>{article.category_title}</TextComponent>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
             {date ? <View style={styles.dateContainer}>{date}</View> : null}
           </View>
           {badge}
-          <TextComponent style={styles.title} fontFamily="PlayfairDisplay-Regular">
+          <TextComponent style={styles.title} numberOfLines={3} fontFamily="PlayfairDisplay-Regular">
+            {mediaIcon ? mediaIcon : ''}
             {article.title}
           </TextComponent>
           {Boolean(article.subtitle) && (
@@ -59,33 +69,31 @@ const ArticleFeedItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
             </TextComponent>
           )}
           <ArticleBadges style={{paddingTop: 4}} article={article} />
+
+          <TextComponent style={styles.categoryTitle}>{article.category_title}</TextComponent>
         </View>
       </View>
     </TouchableDebounce>
   );
 };
 
-export default React.memo(ArticleFeedItem, (prevProps, nextProps) => {
-  return prevProps.article.title === nextProps.article.title;
-});
+export default ArticleFeedItem;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingLeft: 12,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    gap: 4,
+    gap: 2,
   },
   title: {
     fontSize: 15,
   },
   timeText: {
-    marginTop: 4,
     fontSize: 13,
   },
   image: {
-    width: 110,
+    width: 90,
+    aspectRatio: 1,
   },
   categoryTitle: {
     fontSize: 12,

@@ -9,8 +9,8 @@ import {
   ScrollViewProps,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {ArticleComponent, ActionButton, Text, ScreenLoader, AnimatedAppBar} from '../../components';
-import {IconFilter, IconSearch} from '../../components/svg';
+import {Text, ScreenLoader, AnimatedAppBar, ArticleFeedItem} from '../../components';
+import {IconSearch} from '../../components/svg';
 import {useTheme} from '../../Theme';
 import {BorderlessButton, FlatList} from 'react-native-gesture-handler';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
@@ -18,13 +18,13 @@ import {MainStackParamList, SearchDrawerParamList} from '../../navigation/MainSt
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Article} from '../../../Types';
 import useSearch from './context/useSearch';
-import useSearchApi from './useSearchApi';
 import SearchSuggestions from './SearchSuggestions';
 import {defaultSearchFilter} from './context/SearchContext';
 import {SearchCategorySuggestion} from '../../api/Types';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import useAISearchApi from './useAISearchApi';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -40,7 +40,7 @@ type Props = {
 
 const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const {query, setQuery, filter, setFilter} = useSearch();
-  const {loadingState, searchResults, searchSuggestions, callSearchApi} = useSearchApi();
+  const {loadingState, searchResults, searchSuggestions, callSearchApi} = useAISearchApi();
   const {colors, strings, dim} = useTheme();
 
   useEffect(() => {
@@ -106,15 +106,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
 
   const renderItem = useCallback(
     (item: ListRenderItemInfo<Article>) => {
-      return (
-        <ArticleComponent
-          style={styles.article}
-          article={item.item}
-          dateEnabled={true}
-          onPress={articlePressHandler}
-          styleType={'multi'}
-        />
-      );
+      return <ArticleFeedItem article={item.item} onPress={articlePressHandler} />;
     },
     [articlePressHandler],
   );
@@ -163,10 +155,9 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
     content = (
       <FlatList
         onScroll={onScroll}
-        contentContainerStyle={{paddingTop: fullHeight + subHeaderHeight}}
+        contentContainerStyle={{padding: 12, paddingTop: fullHeight + subHeaderHeight - 12, gap: 24}}
         showsVerticalScrollIndicator={false}
         data={searchResults}
-        windowSize={4}
         ListHeaderComponent={
           <SearchSuggestions
             suggestions={searchSuggestions}
@@ -180,7 +171,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
             </Text>
           </View>
         }
-        numColumns={2}
+        numColumns={1}
         renderItem={renderItem}
         keyExtractor={(item, index) => String(index) + String(item)}
       />
@@ -194,11 +185,12 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
           navigation.goBack();
         }}
         translateY={translateY}
-        actions={
-          <ActionButton onPress={() => navigation.toggleDrawer()} accessibilityLabel={'šoninis meniu'}>
-            <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
-          </ActionButton>
-        }
+        // TODO: uncomment when new filters are implemented
+        // actions={
+        //   <ActionButton onPress={() => navigation.toggleDrawer()} accessibilityLabel={'šoninis meniu'}>
+        //     <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
+        //   </ActionButton>
+        // }
         subHeader={renderSearchBar()}
       />
       <SafeAreaView edges={['bottom']}>{content}</SafeAreaView>

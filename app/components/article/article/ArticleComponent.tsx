@@ -5,7 +5,7 @@ import CoverImage from '../../coverImage/CoverImage';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 
-import {buildImageUri, buildArticleImageUri, IMG_SIZE_M, IMG_SIZE_S} from '../../../util/ImageUtil';
+import {IMG_SIZE_M, IMG_SIZE_S, getArticleImageUri} from '../../../util/ImageUtil';
 import {themeLight} from '../../../Theme';
 import TextComponent from '../../text/Text';
 import {Article} from '../../../../Types';
@@ -94,25 +94,7 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
     <Badge style={style.badge} label={article.badge_title!} type={article?.badge_class} />
   );
 
-  let imgUri;
-  try {
-    if (article?.img_path_prefix && article?.img_path_postfix) {
-      imgUri = buildImageUri(
-        styleType === 'single' ? IMG_SIZE_M : IMG_SIZE_S,
-        article.img_path_prefix,
-        article.img_path_postfix,
-      );
-    } else if (article?.photo) {
-      if (article?.photo?.indexOf('{WxH}') !== -1) {
-        imgUri = buildArticleImageUri(styleType === 'single' ? IMG_SIZE_M : IMG_SIZE_S, article.photo);
-      } else {
-        imgUri = article.photo;
-      }
-    }
-  } catch (error) {
-    // Fail silently if image URI building fails
-    imgUri = undefined;
-  }
+  let imgUri = getArticleImageUri(article, styleType == 'single' ? IMG_SIZE_M : IMG_SIZE_S);
 
   const aspectRatio = getArticleAspectRatio(article);
   const isVerticalPhoto = aspectRatio && Number(aspectRatio) < 1;
