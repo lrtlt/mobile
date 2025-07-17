@@ -11,6 +11,7 @@ import {
   SEARCH_TYPE_NEWS,
   SEARCH_TYPE_VIDEO,
   SEARCH_TYPE_VIDEO_SUBTITLES,
+  SearchOrderBy,
 } from '../../api/Types';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CheckBox from '../checkBox/CheckBox';
@@ -21,7 +22,7 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
   const {colors} = useTheme();
 
   const {filter, setFilter} = useSearch();
-  const {days, section, type} = filter;
+  const {days, section, type, orderBy} = filter;
 
   const selectType = useCallback(
     (selectedType: SearchFilterTypes) => {
@@ -33,6 +34,13 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
   const selectSection = useCallback(
     (selectedSection: string) => {
       setFilter({...filter, section: selectedSection});
+    },
+    [filter, setFilter],
+  );
+
+  const selectOrderBy = useCallback(
+    (orderBy: SearchOrderBy) => {
+      setFilter({...filter, orderBy});
     },
     [filter, setFilter],
   );
@@ -104,6 +112,26 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
     );
   }, [selectType, type]);
 
+  const orderBySelection = useMemo(() => {
+    return (
+      <View>
+        <TextComponent style={styles.titleText} fontFamily="SourceSansPro-SemiBold">
+          Rušiavimas
+        </TextComponent>
+        <SelectableItem
+          selected={orderBy === 'NEW_FIRST'}
+          text={'Naujausi viršuje'}
+          onPress={() => selectOrderBy('NEW_FIRST')}
+        />
+        <SelectableItem
+          selected={orderBy === 'OLD_FIRST'}
+          text={'Seniausi viršuje'}
+          onPress={() => selectOrderBy('OLD_FIRST')}
+        />
+      </View>
+    );
+  }, [orderBy, selectOrderBy]);
+
   const sectionSelection = useMemo(() => {
     return (
       <View>
@@ -168,12 +196,13 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
     <View style={{...styles.root, backgroundColor: colors.background}}>
       <MyScrollView>
         <SafeAreaView edges={['top', 'bottom']}>
-          {checkBoxes}
-          {typeSelection}
-          <Divider style={styles.divider} />
+          {/* {checkBoxes} */}
+          {orderBySelection}
+          {/* {typeSelection} */}
+          {/* <Divider style={styles.divider} />
           {sectionSelection}
           <Divider style={styles.divider} />
-          {dateSelection}
+          {dateSelection} */}
         </SafeAreaView>
       </MyScrollView>
     </View>

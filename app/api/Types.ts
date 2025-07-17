@@ -316,9 +316,12 @@ export type SearchFilterTypes =
   | typeof SEARCH_TYPE_VIDEO
   | typeof SEARCH_TYPE_VIDEO_SUBTITLES;
 
+export type SearchOrderBy = 'NEW_FIRST' | 'OLD_FIRST';
+
 export type SearchFilter = {
   type: SearchFilterTypes;
   section: string;
+  orderBy: SearchOrderBy;
   days: '' | '1' | '7' | '30';
   searchExactPhrase: boolean;
   searchOnlyHeritage: boolean;

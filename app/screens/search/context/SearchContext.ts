@@ -11,6 +11,7 @@ export type SearchContextType = {
 export const defaultSearchFilter: SearchFilter = {
   searchExactPhrase: true,
   searchOnlyHeritage: false,
+  orderBy: 'NEW_FIRST',
   type: SEARCH_TYPE_ALL,
   section: '',
   days: '',

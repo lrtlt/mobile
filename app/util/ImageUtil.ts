@@ -57,6 +57,5 @@ export const getArticleImageUri = (article: Article, size: ImageSize): string | 
     // Fail silently if image URI building fails
     imgUri = DEFAULT_ARTICLE_IMAGE;
   }
-  console.log('getArticleImageUri', imgUri, size);
   return imgUri;
 };

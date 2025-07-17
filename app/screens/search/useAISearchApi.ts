@@ -16,6 +16,10 @@ type ReturnType = {
   };
 };
 
+const trimCategoryTitle = (title: string): string => {
+  return title.replace(/^Naujienos\s*>\s*/, '').trim();
+};
+
 const isAudioMediaType = (type: VertexAIMediaType): boolean => {
   switch (type) {
     case 'album':
@@ -58,9 +62,14 @@ const useAISearchApi = (): ReturnType => {
 
   const callSearchApi = useCallback(
     (q: string, filter: SearchFilter) => {
-      if (!q) return;
       setLoadingState({idle: false, isFetching: true, isError: false});
-      cancellablePromise(fetchAISearchResults(q, 100))
+      cancellablePromise(
+        fetchAISearchResults(
+          q,
+          100,
+          filter.orderBy === 'OLD_FIRST' ? 'available_time' : 'available_time desc',
+        ),
+      )
         .then((response) => {
           setLoadingState({
             idle: false,
@@ -73,7 +82,7 @@ const useAISearchApi = (): ReturnType => {
               const article: Article = {
                 id: Number(item.id),
                 badge_class: null,
-                category_title: item.document.structData.categories.join(', '),
+                category_title: item.document.structData.categories.map(trimCategoryTitle).join(', '),
                 title: item.document.structData.title,
                 url: item.document.structData.uri,
                 photo: item.document.structData.images?.[0]?.uri,

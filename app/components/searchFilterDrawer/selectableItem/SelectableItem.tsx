@@ -14,10 +14,10 @@ const SelectableItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
 
   return (
     <View style={{backgroundColor: props.selected ? colors.slugBackground : undefined}}>
-      <TouchableHighlight onPress={props.onPress} underlayColor={colors.greyBackground}>
+      <TouchableHighlight onPress={props.onPress} underlayColor={colors.darkGreyBackground}>
         <View style={styles.container}>
           <TextComponent
-            style={{...styles.text, color: props.selected ? colors.primary : undefined}}
+            style={{...styles.text, color: props.selected ? colors.tertiary : undefined}}
             type="secondary">
             {props.text}
           </TextComponent>
@@ -32,7 +32,6 @@ export default SelectableItem;
 const styles = StyleSheet.create({
   text: {
     fontSize: 15,
-    textTransform: 'uppercase',
   },
   container: {
     flexDirection: 'row',

@@ -9,8 +9,8 @@ import {
   ScrollViewProps,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Text, ScreenLoader, AnimatedAppBar, ArticleFeedItem} from '../../components';
-import {IconSearch} from '../../components/svg';
+import {Text, ScreenLoader, AnimatedAppBar, ArticleFeedItem, ActionButton} from '../../components';
+import {IconFilter, IconSearch} from '../../components/svg';
 import {useTheme} from '../../Theme';
 import {BorderlessButton, FlatList} from 'react-native-gesture-handler';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
@@ -185,12 +185,11 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
           navigation.goBack();
         }}
         translateY={translateY}
-        // TODO: uncomment when new filters are implemented
-        // actions={
-        //   <ActionButton onPress={() => navigation.toggleDrawer()} accessibilityLabel={'šoninis meniu'}>
-        //     <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
-        //   </ActionButton>
-        // }
+        actions={
+          <ActionButton onPress={() => navigation.toggleDrawer()} accessibilityLabel={'šoninis meniu'}>
+            <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
+          </ActionButton>
+        }
         subHeader={renderSearchBar()}
       />
       <SafeAreaView edges={['bottom']}>{content}</SafeAreaView>

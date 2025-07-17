@@ -168,5 +168,5 @@ export const fetchCounter = (id: number | string, url: string = 'https://www.lrt
     },
   });
 
-export const fetchAISearchResults = (query: string, pageSize: number, pageToken?: string) =>
-  get<AISearchResponse>(getAISearchResults(query, pageSize, pageToken));
+export const fetchAISearchResults = (query: string, pageSize: number, orderBy?: string, pageToken?: string) =>
+  get<AISearchResponse>(getAISearchResults(query, pageSize, orderBy, pageToken));

@@ -20,6 +20,7 @@ export default ScreenLoader;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    minHeight: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
