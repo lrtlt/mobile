@@ -65,7 +65,7 @@ const useAISearchApi = (): ReturnType => {
       setLoadingState({idle: false, isFetching: true, isError: false});
       cancellablePromise(
         fetchAISearchResults(
-          q,
+          q ? q.trim() : ' ',
           100,
           filter.orderBy === 'OLD_FIRST' ? 'available_time' : 'available_time desc',
         ),

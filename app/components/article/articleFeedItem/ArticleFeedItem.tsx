@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   title: {
-    fontSize: 15,
+    fontSize: 17,
   },
   timeText: {
     fontSize: 13,

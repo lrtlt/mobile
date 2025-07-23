@@ -17,8 +17,8 @@ const channelToTrackingParams = (channel_response?: ChannelResponse): TrackingPa
   const channelTitle = channel_response.channel_info.title;
   return {
     viewId: channel_response.channel_info.channel_url,
-    title: `${channelTitle} - LRT Gyvai - LRT`,
-    sections: ['Gyvai', toTitleCase(channelTitle)],
+    title: `${channelTitle} - Tiesiogiai - LRT`,
+    sections: ['Tiesiogiai', 'lrt.lt', toTitleCase(channelTitle)],
   };
 };
 
