@@ -27,12 +27,15 @@ class CarPlayUIManager {
     tabBarTemplate.delegate = delegate
 
     interfaceController?.setRootTemplate(tabBarTemplate, animated: true) { success, error in
-      if let initialTemplate = initialTemplate {
-        if #available(iOS 17.0, *) {
-          if let templateIndex = tabBarTemplate.templates.firstIndex(where: {
-            ($0 as? CPListTemplate)?.title == initialTemplate
-          }) {
-            tabBarTemplate.selectTemplate(at: templateIndex)
+      let seconds = 1.0
+      DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+        if let initialTemplate = initialTemplate {
+          if #available(iOS 17.0, *) {
+            if let templateIndex = tabBarTemplate.templates.firstIndex(where: {
+              ($0 as? CPListTemplate)?.title == initialTemplate
+            }) {
+              tabBarTemplate.selectTemplate(at: templateIndex)
+            }
           }
         }
       }
