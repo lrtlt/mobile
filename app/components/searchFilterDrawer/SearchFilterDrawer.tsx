@@ -39,7 +39,7 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
   );
 
   const selectOrderBy = useCallback(
-    (orderBy: SearchOrderBy) => {
+    (orderBy: SearchOrderBy | undefined) => {
       setFilter({...filter, orderBy});
     },
     [filter, setFilter],
@@ -118,6 +118,11 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
         <TextComponent style={styles.titleText} fontFamily="SourceSansPro-SemiBold">
           Rušiavimas
         </TextComponent>
+        <SelectableItem
+          selected={orderBy === undefined}
+          text={'Aktualiausi viršuje'}
+          onPress={() => selectOrderBy(undefined)}
+        />
         <SelectableItem
           selected={orderBy === 'NEW_FIRST'}
           text={'Naujausi viršuje'}

@@ -57,6 +57,7 @@ const useAISearchApi = (): ReturnType => {
   });
 
   const [searchResults, setSearchResults] = useState<Article[]>([]);
+  const [pageToken, setPageToken] = useState<string | undefined>(undefined);
 
   const cancellablePromise = useCancellablePromise();
 
@@ -66,8 +67,13 @@ const useAISearchApi = (): ReturnType => {
       cancellablePromise(
         fetchAISearchResults(
           q ? q.trim() : ' ',
-          100,
-          filter.orderBy === 'OLD_FIRST' ? 'available_time' : 'available_time desc',
+          60,
+          filter.orderBy
+            ? filter.orderBy === 'OLD_FIRST'
+              ? 'available_time'
+              : 'available_time desc'
+            : undefined,
+          undefined,
         ),
       )
         .then((response) => {
@@ -77,6 +83,7 @@ const useAISearchApi = (): ReturnType => {
             isError: false,
           });
           console.log('Search results:', response);
+          setPageToken(response.nextPageToken);
           setSearchResults(
             response.results.map((item) => {
               const article: Article = {

@@ -321,7 +321,7 @@ export type SearchOrderBy = 'NEW_FIRST' | 'OLD_FIRST';
 export type SearchFilter = {
   type: SearchFilterTypes;
   section: string;
-  orderBy: SearchOrderBy;
+  orderBy?: SearchOrderBy;
   days: '' | '1' | '7' | '30';
   searchExactPhrase: boolean;
   searchOnlyHeritage: boolean;
