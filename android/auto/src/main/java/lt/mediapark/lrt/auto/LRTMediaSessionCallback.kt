@@ -5,7 +5,6 @@ import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.LibraryResult
-import androidx.media3.session.MediaConstants
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaLibraryService.LibraryParams
 import androidx.media3.session.MediaSession
@@ -15,12 +14,13 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
 import kotlinx.coroutines.runBlocking
 import lt.mediapark.lrt.auto.data.LRTAutoRepository
 import lt.mediapark.lrt.auto.data.LRTAutoService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.math.log
 
 class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback  {
 
@@ -82,6 +82,12 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         return Futures.immediateFuture(LibraryResult.ofError(SessionError.ERROR_BAD_VALUE))
     }
 
+    private fun <T> submitBlocking(task: suspend () -> T): ListenableFuture<T> {
+        return Futures.submit(Callable {
+            runBlocking { task() }
+        }, Executors.newSingleThreadExecutor())
+    }
+
     @OptIn(UnstableApi::class) override fun onGetChildren(
         session: MediaLibraryService.MediaLibrarySession,
         browser: MediaSession.ControllerInfo,
@@ -93,41 +99,46 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
 
         if (parentId == MediaItemTree.RECOMMENDED) {
             logAnalyticsEvent(browser.packageName, "android_auto_recommended_open")
-            runBlocking {
+            return submitBlocking {
                 val recommendedItems = repository.getRecommended()
                 MediaItemTree.setRecommendedItems(recommendedItems)
+                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
 
         if (parentId == MediaItemTree.NEWEST) {
             logAnalyticsEvent(browser.packageName, "android_auto_newest_open")
-            runBlocking {
+            return submitBlocking {
                 val newestItems = repository.getNewest()
                 MediaItemTree.setNewestItems(newestItems)
+                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
 
         if (parentId == MediaItemTree.LIVE) {
             logAnalyticsEvent(browser.packageName, "android_auto_live_open")
-            runBlocking {
+            return submitBlocking {
                 val liveItems = repository.getLive()
                 MediaItemTree.setLiveItems(liveItems)
+                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
 
         if(parentId == MediaItemTree.PODCAST_CATEGORIES) {
             logAnalyticsEvent(browser.packageName, "android_auto_podcasts_open")
-            runBlocking {
+            return submitBlocking {
                 val podcastCategories = repository.getPodcastCategories()
                 MediaItemTree.setPodcastCategories(podcastCategories)
+                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
 
         MediaItemTree.getPodcastCategoryId(parentId).let {
             if(it > 0) {
-                runBlocking {
+                return submitBlocking {
                     val podcastItems = repository.getPodcastEpisodes(it)
                     MediaItemTree.setPodcastEpisodes(it, podcastItems)
+                    LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
                 }
             }
         }
@@ -160,21 +171,26 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
 
             MediaItemTree.getPodcastEpisodeId(item.mediaId).let {
                 if(it > 0) {
-                    val podcastEpisodeInfo = runBlocking {
-                         repository.getPodcastEpisodeInfo(it)
-                    }
-                    if(podcastEpisodeInfo?.streamUrl != null) {
-                        val episodeMediaItem = MediaItemTree.buildPodcastEpisodeItem(
-                            item.mediaId,
-                            podcastEpisodeInfo.streamUrl
-                        )
-                        return Futures.immediateFuture(
-                            MediaSession.MediaItemsWithStartPosition(
-                                listOf(episodeMediaItem),
-                                startIndex,
-                                startPositionMs
-                            )
-                        )
+                    return submitBlocking {
+                            val podcastEpisodeInfo = repository.getPodcastEpisodeInfo(it)
+                            if(podcastEpisodeInfo?.streamUrl != null) {
+                                val episodeMediaItem = MediaItemTree.buildPodcastEpisodeItem(
+                                    item.mediaId,
+                                    podcastEpisodeInfo.streamUrl
+                                )
+                                MediaSession.MediaItemsWithStartPosition(
+                                    listOf(episodeMediaItem),
+                                    startIndex,
+                                    startPositionMs
+                                )
+                            } else {
+                                MediaSession.MediaItemsWithStartPosition(
+                                    resolveMediaItems(mediaItems),
+                                    startIndex,
+                                    startPositionMs
+                                )
+                            }
+
                     }
                 }
             }
