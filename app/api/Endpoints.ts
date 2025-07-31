@@ -210,13 +210,21 @@ export const getMediatekaArticlesBySeason = (seasonUrl: string, page: number, co
 export const counter = (id: string | number, os: string) =>
   `https://www.lrt.lt/api/counter?id=${id}&app=${os}`;
 
-export const getAISearchResults = (query: string, pageSize: number, orderBy?: string, pageToken?: string) => {
+export const getAISearchResults = (
+  query: string,
+  pageSize: number,
+  orderBy?: string,
+  pageToken?: string,
+  includeAISummary?: boolean,
+) => {
   return (
     `https://ai-search.lrt.lt/v1/lt/search?` +
     `query=${query}` +
     `${pageSize ? `&pageSize=${pageSize}` : ''}` +
     `${orderBy ? `&orderBy=${orderBy}` : ''}` +
-    `${pageToken ? `&pageToken=${pageToken}` : ''}`
+    `${pageToken ? `&pageToken=${pageToken}` : ''}` +
+    `${includeAISummary ? `&includeSummary=${includeAISummary}` : ''}` +
+    `${includeAISummary ? `&includeCitations=false` : ''}`
   );
 };
 

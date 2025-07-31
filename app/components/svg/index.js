@@ -30,6 +30,7 @@ export {default as IconClock} from './ic_clock';
 export {default as IconFacebook} from './ic_facebook';
 export {default as IconClose} from './ic_close';
 export {default as IconDrawerMenu} from './ic_drawer_menu';
+export {default as IconGeminy} from './ic_geminy';
 export {default as Icon404} from './ic_404';
 export {default as IconPlay} from './ic_play';
 export {default as IconSubtitles} from './ic_subtitles';

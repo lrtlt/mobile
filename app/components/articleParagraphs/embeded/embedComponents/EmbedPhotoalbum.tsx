@@ -65,6 +65,7 @@ const EmbedPhotoalbum: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
           const imgUri = buildArticleImageUri(IMG_SIZE_M, image.path);
           return (
             <TouchableDebounce
+              key={image.path}
               onPress={() => {
                 openGalleryHandler(image);
               }}>

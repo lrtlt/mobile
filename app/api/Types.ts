@@ -1182,6 +1182,12 @@ export type AISearchResponse = {
     expandedQuery: boolean;
     pinnedResultCount: string;
   };
+  aiSummary: {
+    text: string;
+    citations: any[];
+    state: string;
+    answerQueryToken: string;
+  };
 };
 
 export type VertexAIMediaType =

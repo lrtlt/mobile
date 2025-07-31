@@ -8,6 +8,7 @@ import CoverImage from '../../coverImage/CoverImage';
 import ArticleBadges from '../article/ArticleBadges';
 import Badge from '../../badge/Badge';
 import MediaIcon from '../../mediaIcon/MediaIcon';
+import {DEFAULT_ARTICLE_IMAGE} from '../../../constants';
 
 interface Props {
   article: Article;
@@ -48,7 +49,7 @@ const ArticleFeedItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
   return (
     <TouchableDebounce onPress={onPressHandler} debounceTime={500} activeOpacity={0.4}>
       <View style={{flexDirection: 'row'}}>
-        <CoverImage style={{...styles.image}} source={{uri: imgUri}} />
+        <CoverImage style={{...styles.image}} source={{uri: imgUri ?? DEFAULT_ARTICLE_IMAGE}} />
         <View style={{...styles.container}}>
           <View
             style={{
@@ -86,13 +87,13 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   title: {
-    fontSize: 17,
+    fontSize: 17.5,
   },
   timeText: {
     fontSize: 13,
   },
   image: {
-    width: 90,
+    width: 110,
     aspectRatio: 1,
   },
   categoryTitle: {

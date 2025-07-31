@@ -171,8 +171,22 @@ export const fetchCounter = (id: number | string, url: string = 'https://www.lrt
     },
   });
 
-export const fetchAISearchResults = (query: string, pageSize: number, orderBy?: string, pageToken?: string) =>
-  get<AISearchResponse>(getAISearchResults(query, pageSize, orderBy, pageToken));
+export const fetchAISearchResults = (options: {
+  query: string;
+  pageSize: number;
+  orderBy?: string;
+  pageToken?: string;
+  includeAISummary?: boolean;
+}) =>
+  get<AISearchResponse>(
+    getAISearchResults(
+      options.query,
+      options.pageSize,
+      options.orderBy,
+      options.pageToken,
+      options.includeAISummary,
+    ),
+  );
 
 export const sendSearchUserEvent = (event: AIUserEvent) =>
   post<AIUserEventResponse>(postSearchUserEvent(event), event.data);

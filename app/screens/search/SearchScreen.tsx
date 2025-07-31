@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Text, ScreenLoader, AnimatedAppBar, ArticleFeedItem, ActionButton} from '../../components';
-import {IconFilter, IconSearch} from '../../components/svg';
+import {IconFilter, IconGeminy, IconSearch} from '../../components/svg';
 import {useTheme} from '../../Theme';
 import {BorderlessButton, FlatList} from 'react-native-gesture-handler';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
@@ -25,6 +25,14 @@ import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useAISearchApi from './useAISearchApi';
+import Reanimated, {
+  FadeInDown,
+  FadeInLeft,
+  FadeInUp,
+  FadeOutDown,
+  FadeOutLeft,
+  FadeOutUp,
+} from 'react-native-reanimated';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -40,7 +48,7 @@ type Props = {
 
 const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const {query, setQuery, filter, setFilter} = useSearch();
-  const {loadingState, searchResults, searchSuggestions, callSearchApi} = useAISearchApi();
+  const {loadingState, searchResults, aiSummary, searchSuggestions, callSearchApi} = useAISearchApi();
   const {colors, strings, dim} = useTheme();
 
   useEffect(() => {
@@ -159,10 +167,41 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
         showsVerticalScrollIndicator={false}
         data={searchResults}
         ListHeaderComponent={
-          <SearchSuggestions
-            suggestions={searchSuggestions}
-            onSearchSuggestionClick={searchSuggestionPressHandler}
-          />
+          <View>
+            <SearchSuggestions
+              suggestions={searchSuggestions}
+              onSearchSuggestionClick={searchSuggestionPressHandler}
+            />
+            {aiSummary && (
+              <Reanimated.View entering={FadeInLeft.duration(300)} exiting={FadeOutLeft.duration(200)}>
+                <View
+                  style={{
+                    paddingVertical: 12,
+                    paddingHorizontal: 0,
+                  }}>
+                  <View
+                    style={{
+                      gap: 8,
+                      backgroundColor: colors.slugBackground,
+                      borderRadius: 8,
+                      padding: 12,
+                      borderColor: colors.border,
+                      borderWidth: StyleSheet.hairlineWidth,
+                    }}>
+                    <View style={{...styles.row, gap: 8, alignItems: 'center'}}>
+                      <IconGeminy size={dim.appBarIconSize} color={colors.tertiary} />
+                      <Text
+                        style={{color: colors.primaryDark, fontSize: 20}}
+                        fontFamily="SourceSansPro-SemiBold">
+                        AI Santrauka
+                      </Text>
+                    </View>
+                    <Text style={{flex: 1, fontSize: 19, lineHeight: 26}}>{aiSummary}</Text>
+                  </View>
+                </View>
+              </Reanimated.View>
+            )}
+          </View>
         }
         ListEmptyComponent={
           <View style={styles.noResultsContainer}>

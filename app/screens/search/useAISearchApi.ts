@@ -7,6 +7,7 @@ import moment from 'moment';
 
 type ReturnType = {
   searchResults: Article[];
+  aiSummary?: string;
   searchSuggestions: SearchCategorySuggestion[];
   callSearchApi: (q: string, filter: SearchFilter) => void;
   loadingState: {
@@ -57,6 +58,8 @@ const useAISearchApi = (): ReturnType => {
   });
 
   const [searchResults, setSearchResults] = useState<Article[]>([]);
+  const [aiSummary, setAiSummary] = useState<string | undefined>(undefined);
+
   const [pageToken, setPageToken] = useState<string | undefined>(undefined);
 
   const cancellablePromise = useCancellablePromise();
@@ -65,16 +68,17 @@ const useAISearchApi = (): ReturnType => {
     (q: string, filter: SearchFilter) => {
       setLoadingState({idle: false, isFetching: true, isError: false});
       cancellablePromise(
-        fetchAISearchResults(
-          q ? q.trim() : ' ',
-          60,
-          filter.orderBy
+        fetchAISearchResults({
+          query: q ? q.trim() : ' ',
+          pageSize: 80,
+          orderBy: filter.orderBy
             ? filter.orderBy === 'OLD_FIRST'
               ? 'available_time'
               : 'available_time desc'
             : undefined,
-          undefined,
-        ),
+          pageToken: undefined,
+          includeAISummary: true,
+        }),
       )
         .then((response) => {
           setLoadingState({
@@ -84,6 +88,7 @@ const useAISearchApi = (): ReturnType => {
           });
           console.log('Search results:', response);
           setPageToken(response.nextPageToken);
+          setAiSummary(response.aiSummary?.text);
           setSearchResults(
             response.results.map((item) => {
               const article: Article = {
@@ -108,6 +113,7 @@ const useAISearchApi = (): ReturnType => {
               return article;
             }),
           );
+
           // setSearchSuggestions(response.similar_categories);
         })
         .catch(() => {
@@ -124,6 +130,7 @@ const useAISearchApi = (): ReturnType => {
   return {
     loadingState,
     searchResults,
+    aiSummary,
     searchSuggestions: [],
     callSearchApi,
   };
