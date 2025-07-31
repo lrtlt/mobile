@@ -1,8 +1,8 @@
 import Axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import * as AxiosLogger from 'axios-logger';
 
-const LOGGING_ENABLED = true;
-const LOGGING_DATA = false;
+const LOGGING_ENABLED = __DEV__;
+const LOGGING_DATA = __DEV__;
 
 const LrtClient = Axios.create({
   timeout: 1000 * 10,
@@ -57,4 +57,12 @@ export const put = async <T>(
   config?: AxiosRequestConfig,
 ): Promise<AxiosResponse<T>> => {
   return LrtClient.put<T>(url, data, config);
+};
+
+export const post = async <T>(
+  url: string,
+  data?: any,
+  config?: AxiosRequestConfig,
+): Promise<AxiosResponse<T>> => {
+  return LrtClient.post<T>(url, data, config);
 };

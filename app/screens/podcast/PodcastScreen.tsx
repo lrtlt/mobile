@@ -23,6 +23,7 @@ import useSeason from './episodeSelection/useSeason';
 import RadiotekaGenres from '../main/tabScreen/radioteka/components/genres/RadiotekaGenres';
 import useArticleHeader from '../article/useArticleHeader_v2';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
+import useMediaUserEvents from '../../components/videoComponent/useUserMediaEvents';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Podcast'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Podcast'>;
@@ -35,6 +36,7 @@ type Props = {
 const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const {articleId} = route.params;
 
+  const {sendMediaPlayEvent} = useMediaUserEvents(articleId?.toString());
   const [{article, category_info, loadingState}, acceptAdultContent] = useArticleScreenState(articleId);
 
   const currentSeason = category_info?.season_info?.find(
@@ -65,6 +67,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
           episodes.findIndex((episode) => episode.id == id),
         ),
       );
+      sendMediaPlayEvent();
     },
     [episodes, setPlaylist, article],
   );

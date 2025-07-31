@@ -8,12 +8,14 @@ import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
 import TheoMediaPlayer from './TheoMediaPlayer';
 import {MediaType} from './context/PlayerContext';
+import useUserMediaEvents from './useUserMediaEvents';
 
 interface Props {
   style?: ViewStyle;
   cover?: VideoCoverType;
   backgroundImage?: string;
   streamUrl: string;
+  mediaId?: string;
   title: string;
   autoPlay: boolean;
   loop?: boolean;
@@ -33,6 +35,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
   cover,
   backgroundImage,
   streamUrl,
+  mediaId,
   title,
   autoPlay = true,
   loop = false,
@@ -45,19 +48,20 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
 }) => {
   const {colors, strings} = useTheme();
   const {isLoading, data, load} = useStreamData(streamData);
+  const {sendMediaPlayEvent} = useUserMediaEvents(mediaId);
 
   const errorCountRef = useRef(0);
 
-  useEffect(() => {
-    if (autoPlay && !data) {
-      load(streamUrl, title);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const onPlayPress = useCallback(() => {
     load(streamUrl, title);
-  }, [load, streamUrl, title]);
+    sendMediaPlayEvent();
+  }, [load, streamUrl, title, mediaId]);
+
+  useEffect(() => {
+    if (autoPlay && !data) {
+      onPlayPress();
+    }
+  }, []);
 
   const onPlayerError = useCallback(
     (e: any) => {

@@ -34,6 +34,7 @@ import {HomePageType} from '../../../../../Types';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Config from 'react-native-config';
 import {useArticleStorageStore} from '../../../../state/article_storage_store';
+import {sendSearchUserEvent} from '../../../../api';
 
 const selectHomeScreenState = (type: HomePageType) => (state: ArticleState) => {
   const block = type === ROUTE_TYPE_MEDIA ? state.mediateka : state.home;
@@ -68,6 +69,14 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
       page: type,
+    });
+    sendSearchUserEvent({
+      type: 'view-home-page',
+      data: {
+        attributes: {
+          source: 'mobile_app',
+        },
+      },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

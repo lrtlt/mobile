@@ -65,6 +65,7 @@ const VerticalVideoWrapper: React.FC<{id: number | string; isActive: boolean}> =
             autoPlay={true}
             loop={true}
             streamUrl={article.get_playlist_url}
+            mediaId={article.id.toString()}
             title={article.title}
             minifyEnabled={false}
             backgroundImage=""

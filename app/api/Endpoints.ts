@@ -1,4 +1,4 @@
-import {SEARCH_TYPE_AUDIO, SearchFilter} from './Types';
+import {AIUserEvent, SEARCH_TYPE_AUDIO, SearchFilter} from './Types';
 
 const BASE_URL = 'https://www.lrt.lt/api/json/';
 
@@ -218,4 +218,17 @@ export const getAISearchResults = (query: string, pageSize: number, orderBy?: st
     `${orderBy ? `&orderBy=${orderBy}` : ''}` +
     `${pageToken ? `&pageToken=${pageToken}` : ''}`
   );
+};
+
+export const postSearchUserEvent = (event: AIUserEvent): string => {
+  switch (event.type) {
+    case 'view-item':
+      return `https://ai-search.lrt.lt/v1/user-events/view-item`;
+    case 'view-home-page':
+      return `https://ai-search.lrt.lt/v1/user-events/view-home-page`;
+    case 'media-play':
+      return `https://ai-search.lrt.lt/v1/user-events/media-play`;
+    case 'media-complete':
+      return `https://ai-search.lrt.lt/v1/user-events/media-complete`;
+  }
 };

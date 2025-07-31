@@ -187,6 +187,7 @@ const getVideo = (article: ArticleContentMedia): ArticleContentItemType => {
     data: {
       cover: article.main_photo,
       streamUrl: article.get_playlist_url,
+      mediaId: String(article.id),
     },
   };
 };

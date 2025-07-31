@@ -30,15 +30,18 @@ import {
   newestArticlesGet,
   opusPlaylistGet,
   popularArticlesGet,
+  postSearchUserEvent,
   programGet,
   putDailyQuestionVote,
   radiotekaGet,
   searchArticles,
   weatherLocationsGet,
 } from './Endpoints';
-import {get, put} from './HttpClient';
+import {get, post, put} from './HttpClient';
 import {
   AISearchResponse,
+  AIUserEvent,
+  AIUserEventResponse,
   ArticleContentResponse,
   ArticleRecommendationsResponse,
   ArticleSearchResponse,
@@ -170,3 +173,6 @@ export const fetchCounter = (id: number | string, url: string = 'https://www.lrt
 
 export const fetchAISearchResults = (query: string, pageSize: number, orderBy?: string, pageToken?: string) =>
   get<AISearchResponse>(getAISearchResults(query, pageSize, orderBy, pageToken));
+
+export const sendSearchUserEvent = (event: AIUserEvent) =>
+  post<AIUserEventResponse>(postSearchUserEvent(event), event.data);
