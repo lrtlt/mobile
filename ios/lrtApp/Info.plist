@@ -74,6 +74,8 @@
 		<key>NSMicrophoneUsageDescription</key>
 		<string>${PRODUCT_NAME} uses microphone access to listen for ultrasonic tokens when pairing
 			with nearby Cast devices.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>${PRODUCT_NAME} uses photo library access to select images for sharing.</string>
 		<key>NSUserTrackingUsageDescription</key>
 		<string>Nuasmeninti duomenys bus naudojami statistikai ir paslaugų kokybei užtikrinti.</string>
 		<key>UIAppFonts</key>
