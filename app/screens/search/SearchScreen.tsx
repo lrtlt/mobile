@@ -25,14 +25,7 @@ import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useAISearchApi from './useAISearchApi';
-import Reanimated, {
-  FadeInDown,
-  FadeInLeft,
-  FadeInUp,
-  FadeOutDown,
-  FadeOutLeft,
-  FadeOutUp,
-} from 'react-native-reanimated';
+import Reanimated, {FadeInLeft, FadeOutLeft} from 'react-native-reanimated';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
