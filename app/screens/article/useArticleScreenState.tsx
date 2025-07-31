@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/core';
 import {useCallback, useEffect, useState} from 'react';
 import {fetchArticle} from '../../api';
-import {ArticleCategoryInfo, ArticleContent} from '../../api/Types';
+import {ArticleCategoryInfo, ArticleContent, ArticleContentResponse} from '../../api/Types';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {useArticleStorageStore} from '../../state/article_storage_store';
 import {useUserStore} from '../../state/user_store';
@@ -44,31 +44,42 @@ const useArticleScreenState = (
       loadingState: STATE_LOADING,
     });
 
+    const onResponse = (response: ArticleContentResponse) => {
+      const article = response.article;
+
+      var articleHasAgeRestriction =
+        article && (article['n-18'] || article.age_restriction?.toLowerCase() === 'n-18');
+      if (articleHasAgeRestriction) {
+        const last16Hours = Date.now() - 1000 * 60 * 60 * 16;
+        if (userStore.lastAdultContentAcceptedTime > last16Hours) {
+          articleHasAgeRestriction = false;
+        }
+      }
+
+      const loadingState = !article
+        ? STATE_ERROR
+        : articleHasAgeRestriction
+        ? STATE_ADULT_CONTENT_WARNING
+        : STATE_READY;
+
+      setState({
+        article,
+        category_info: response.category_info,
+        loadingState: loadingState,
+      });
+      articleStorage.addArticleToHistory(article);
+    };
+
     cancellablePromise(fetchArticle(articleId, isMedia))
       .then((response) => {
-        const article = response.article;
-
-        var articleHasAgeRestriction = article['n-18'] || article.age_restriction?.toLowerCase() === 'n-18';
-        if (articleHasAgeRestriction) {
-          const last16Hours = Date.now() - 1000 * 60 * 60 * 16;
-          if (userStore.lastAdultContentAcceptedTime > last16Hours) {
-            articleHasAgeRestriction = false;
-          }
+        if (response.article) {
+          return response;
+        } else {
+          //If article is not found, we will try invert isMedia flag
+          return cancellablePromise(fetchArticle(articleId, !isMedia));
         }
-
-        const loadingState = !article
-          ? STATE_ERROR
-          : articleHasAgeRestriction
-          ? STATE_ADULT_CONTENT_WARNING
-          : STATE_READY;
-
-        setState({
-          article,
-          category_info: response.category_info,
-          loadingState: loadingState,
-        });
-        articleStorage.addArticleToHistory(article);
       })
+      .then(onResponse)
       .catch((e) => {
         console.log(e);
         setState({

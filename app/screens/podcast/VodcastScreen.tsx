@@ -120,7 +120,7 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                   <VideoComponent
                     style={styles.videoContainer}
                     streamUrl={(article as ArticleContentMedia).get_playlist_url}
-                    mediaId={(article as ArticleContentMedia).id.toString()}
+                    mediaId={articleId?.toString()}
                     title={(article as ArticleContentMedia).title}
                     cover={article.main_photo}
                     autoPlay={true}
