@@ -14,8 +14,8 @@ node_require('react-native/scripts/react_native_pods.rb')
 platform :ios, 15.6
 prepare_react_native_project!
 
-# Disable New Architecture
-ENV['RCT_NEW_ARCH_ENABLED'] = '0'
+# Enable New Architecture
+ENV['RCT_NEW_ARCH_ENABLED'] = '1'
 
 # ⬇️ uncomment wanted permissions
 setup_permissions([
@@ -52,7 +52,7 @@ target 'lrtApp' do
 
   pod 'react-native-google-cast', :git => 'https://github.com/Danesz/react-native-google-cast.git', branch: 'feature/guestmode_apple_silicon'
   #THIS IS A WORKAROUND FOR ARCHIVE BUILD BECAUSE OF FCMImageNotification
-  pod 'GoogleUtilities', '~> 8.0.2'
+  pod 'GoogleUtilities', '~> 8.1.0'
 
   use_react_native!(
     :path => config[:reactNativePath],
@@ -79,8 +79,8 @@ end
 
 target 'FCMImageNotification' do
   use_frameworks! :linkage => :static
-  pod 'Firebase/Messaging', '~> 11.8.0'
+  pod 'Firebase/Messaging', '~> 11.15.0'
   #This was added manually
   #Change version if needed, just copy from Podfile.lock
-  pod 'GoogleUtilities', '~> 8.0.2'
+  pod 'GoogleUtilities', '~> 8.1.0'
 end
