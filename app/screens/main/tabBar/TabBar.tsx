@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import {NavigationState, Route, SceneRendererProps, TabBar, TabBarItem} from 'react-native-tab-view';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {useTheme} from '../../../Theme';
 import TabLabel from '../tabLabel/TabLabel';
 
@@ -20,6 +20,11 @@ const TabBarComponent: React.FC<TabBarComponentProps> = (props) => {
       pressOpacity={0.6}
       pressColor={colors.androidTouchFeedback}
       renderTabBarItem={(props) => {
+        if (!props) {
+          // If props are not provided, return an empty view
+          // We received crash reports from Android phones with this issue
+          return <View />;
+        }
         const {key, ...rest} = props;
         return <TabBarItem key={key} {...rest} label={renderLabel} />;
       }}

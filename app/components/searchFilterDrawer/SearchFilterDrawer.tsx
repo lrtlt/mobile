@@ -3,7 +3,8 @@ import {View, StyleSheet} from 'react-native';
 import SelectableItem from './selectableItem/SelectableItem';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
-import Divider from '../divider/Divider';
+// import Divider from '../divider/Divider';
+
 import {
   SearchFilterTypes,
   SEARCH_TYPE_ALL,
