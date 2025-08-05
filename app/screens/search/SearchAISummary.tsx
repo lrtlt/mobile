@@ -81,7 +81,7 @@ const SearchAISummary: React.FC<PropsWithChildren<Props>> = ({isLoading, summary
       <Text style={{...styles.summaryText}}>{summary}</Text>
       <Divider />
       <Text type="secondary" style={{fontSize: 15}}>
-        Dirbtinio intelekto sukurti rezultatai gali būti netikslūs. Visada patikrinkite svarbią informaciją.
+        Dirbtinio intelekto pateikti rezultatai gali būti netikslūs. Visada patikrinkite svarbią informaciją.
       </Text>
     </Reanimated.View>
   );

@@ -31,7 +31,6 @@ const SearchAutocomplete: React.FC<React.PropsWithChildren<Props>> = ({query, on
   useEffect(() => {
     if (query && query.length > 1) {
       debounceAPICall(() => {
-        console.log('Calling autocomplete API with query:', query);
         callAutocompleteApi(query);
       });
     }
