@@ -142,7 +142,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
         scrollEventThrottle={1}
         data={searchResults}
         ListHeaderComponent={
-          <View>
+          <View style={{paddingTop: 12}}>
             <SearchAISummary isLoading={summaryLoadingState.isFetching} summary={aiSummary} />
           </View>
         }
