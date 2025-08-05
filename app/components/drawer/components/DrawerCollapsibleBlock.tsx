@@ -39,7 +39,7 @@ const DrawerCollapsibleBlock: React.FC<React.PropsWithChildren<Props>> = ({title
           {collapsed && <IconCarretDown size={20} color={colors.textSecondary} />}
         </View>
       </TouchableDebounce>
-      <Collapsible collapsed={collapsed} duration={200}>
+      <Collapsible collapsed={collapsed} duration={100}>
         {children}
       </Collapsible>
     </View>

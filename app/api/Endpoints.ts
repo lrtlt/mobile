@@ -240,3 +240,5 @@ export const postSearchUserEvent = (event: AIUserEvent): string => {
       return `https://ai-search.lrt.lt/v1/user-events/media-complete`;
   }
 };
+
+export const getAISummary = (query: string) => `https://ai-search.lrt.lt/v1/lt/ai-overview?query=${query}`;

@@ -1,6 +1,5 @@
-import React, {useEffect} from 'react';
-import {useRef} from 'react';
-import {LayoutAnimation, Platform, UIManager} from 'react-native';
+import React from 'react';
+import Animated, {SlideInLeft, SlideOutLeft} from 'react-native-reanimated';
 
 interface Props {
   collapsed: boolean;
@@ -8,26 +7,13 @@ interface Props {
 }
 
 const Collapsible: React.FC<React.PropsWithChildren<Props>> = ({children, collapsed, duration}) => {
-  const isCollapsed = useRef(collapsed);
-
-  useEffect(() => {
-    if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }, []);
-
-  if (isCollapsed.current !== collapsed) {
-    LayoutAnimation.configureNext(
-      LayoutAnimation.create(
-        duration,
-        LayoutAnimation.Types.easeInEaseOut,
-        LayoutAnimation.Properties.opacity,
-      ),
-    );
-    isCollapsed.current = collapsed;
-  }
-
-  return collapsed ? null : <>{children}</>;
+  return collapsed ? null : (
+    <>
+      <Animated.View entering={SlideInLeft.duration(duration)} exiting={SlideOutLeft.duration(duration / 2)}>
+        {children}
+      </Animated.View>
+    </>
+  );
 };
 
 export default Collapsible;

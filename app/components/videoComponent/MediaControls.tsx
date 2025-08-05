@@ -372,8 +372,11 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   const isEnding = !isLiveStream && seekerEnd - currentTime <= 1;
   const shouldBeVisible = enabled && (isOnStart || isEnding || visible);
 
+  //Wait for fix on android
+  const ParentComponent = Platform.OS === 'android' ? View : Animated.View;
+
   return shouldBeVisible ? (
-    <Animated.View
+    <ParentComponent
       style={[styles.flex, styles.center, {aspectRatio}]}
       //Wait for fix on android
       entering={Platform.OS === 'android' ? undefined : FadeIn.duration(400)}
@@ -425,7 +428,7 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
           {enableFullScreen ? FullScreenControl : null}
         </View>
       </View>
-    </Animated.View>
+    </ParentComponent>
   ) : (
     <Pressable
       collapsable={false}

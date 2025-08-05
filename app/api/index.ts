@@ -18,6 +18,7 @@ import {
   forecastGet,
   genreGet,
   getAISearchResults,
+  getAISummary,
   getDailyQuestion,
   getMediatekaArticlesBySeason,
   getRadiotekaArticleByUrl,
@@ -40,6 +41,7 @@ import {
 import {get, post, put} from './HttpClient';
 import {
   AISearchResponse,
+  AISummaryResponse,
   AIUserEvent,
   AIUserEventResponse,
   ArticleContentResponse,
@@ -190,3 +192,5 @@ export const fetchAISearchResults = (options: {
 
 export const sendSearchUserEvent = (event: AIUserEvent) =>
   post<AIUserEventResponse>(postSearchUserEvent(event), event.data);
+
+export const fetchAISummary = (query: string) => get<AISummaryResponse>(getAISummary(query));

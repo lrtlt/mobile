@@ -36,11 +36,6 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
     return null;
   }
 
-  const selectedArticle = articles[selectedIndex];
-  if (!selectedArticle) {
-    return null;
-  }
-
   useEffect(() => {
     // Reset all scales to 1
     scaleValues.forEach((scale, index) => {
@@ -57,6 +52,11 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
       };
     });
   };
+
+  const selectedArticle = articles[selectedIndex];
+  if (!selectedArticle) {
+    return null;
+  }
 
   const handleItemPress = useCallback((index: number) => {
     setSelectedIndex(index);

@@ -1244,6 +1244,14 @@ export type AISearchResultItem = {
   };
 };
 
+export type AISummaryResponse = {
+  query: string;
+  overview: {
+    summary: string;
+    generatedAt: string;
+  };
+};
+
 export type AIUserEventType = 'view-item' | 'view-home-page' | 'media-play' | 'media-complete';
 
 type ViewItemData = {

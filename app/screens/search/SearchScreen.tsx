@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Text, ScreenLoader, AnimatedAppBar, ArticleFeedItem, ActionButton} from '../../components';
-import {IconFilter, IconGeminy, IconSearch} from '../../components/svg';
+import {IconFilter, IconSearch} from '../../components/svg';
 import {useTheme} from '../../Theme';
 import {BorderlessButton, FlatList} from 'react-native-gesture-handler';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
@@ -25,7 +25,8 @@ import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useAISearchApi from './useAISearchApi';
-import Reanimated, {FadeInLeft, FadeOutLeft} from 'react-native-reanimated';
+import useAISummaryApi from './useAISumaryApi';
+import SearchAISummary from './SearchAISummary';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -41,7 +42,8 @@ type Props = {
 
 const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const {query, setQuery, filter, setFilter} = useSearch();
-  const {loadingState, searchResults, aiSummary, searchSuggestions, callSearchApi} = useAISearchApi();
+  const {loadingState, searchResults, searchSuggestions, callSearchApi} = useAISearchApi();
+  const {loadingState: summaryLoadingState, aiSummary, callAISummaryApi} = useAISummaryApi();
   const {colors, strings, dim} = useTheme();
 
   useEffect(() => {
@@ -52,7 +54,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
     setFilter(initialFilter);
 
     callSearchApi(initialQuery, initialFilter);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    callAISummaryApi(initialQuery);
   }, []);
 
   useEffect(() => {
@@ -112,7 +114,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
     [articlePressHandler],
   );
 
-  const renderSearchBar = useCallback(() => {
+  const renderSearchBar = () => {
     return (
       <View style={{...styles.searchBar, backgroundColor: colors.card}}>
         <View style={{...styles.searchInputHolder, backgroundColor: colors.background}}>
@@ -122,19 +124,27 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
             placeholder={'Paieška'}
             numberOfLines={1}
             autoCorrect={false}
-            onSubmitEditing={() => callSearchApi(query, filter)}
+            onSubmitEditing={() => {
+              callSearchApi(query, filter);
+              callAISummaryApi(query);
+            }}
             returnKeyType="search"
             placeholderTextColor={colors.textDisbled}
             onChangeText={setQuery}
             value={query}
           />
-          <BorderlessButton style={styles.searchButton} onPress={() => callSearchApi(query, filter)}>
+          <BorderlessButton
+            style={styles.searchButton}
+            onPress={() => {
+              callSearchApi(query, filter);
+              callAISummaryApi(query);
+            }}>
             <IconSearch size={dim.appBarIconSize} color={colors.headerTint} />
           </BorderlessButton>
         </View>
       </View>
     );
-  }, [setQuery, query, callSearchApi, filter]);
+  };
 
   let content;
   if (loadingState.isError) {
@@ -146,7 +156,10 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
         <Button
           title={strings.tryAgain}
           color={colors.primary}
-          onPress={() => callSearchApi(query, filter)}
+          onPress={() => {
+            callSearchApi(query, filter);
+            callAISummaryApi(query);
+          }}
         />
       </View>
     );
@@ -165,35 +178,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
               suggestions={searchSuggestions}
               onSearchSuggestionClick={searchSuggestionPressHandler}
             />
-            {aiSummary && (
-              <Reanimated.View entering={FadeInLeft.duration(300)} exiting={FadeOutLeft.duration(200)}>
-                <View
-                  style={{
-                    paddingVertical: 12,
-                    paddingHorizontal: 0,
-                  }}>
-                  <View
-                    style={{
-                      gap: 8,
-                      backgroundColor: colors.slugBackground,
-                      borderRadius: 8,
-                      padding: 12,
-                      borderColor: colors.border,
-                      borderWidth: StyleSheet.hairlineWidth,
-                    }}>
-                    <View style={{...styles.row, gap: 8, alignItems: 'center'}}>
-                      <IconGeminy size={dim.appBarIconSize} color={colors.tertiary} />
-                      <Text
-                        style={{color: colors.primaryDark, fontSize: 20}}
-                        fontFamily="SourceSansPro-SemiBold">
-                        AI Santrauka
-                      </Text>
-                    </View>
-                    <Text style={{flex: 1, fontSize: 19, lineHeight: 26}}>{aiSummary}</Text>
-                  </View>
-                </View>
-              </Reanimated.View>
-            )}
+            <SearchAISummary isLoading={summaryLoadingState.isFetching} summary={aiSummary} />
           </View>
         }
         ListEmptyComponent={
