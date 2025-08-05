@@ -1252,6 +1252,14 @@ export type AISummaryResponse = {
   };
 };
 
+export type AIAutomcompleteResponse = {
+  originalQuery: string;
+  totalSuggestions: number;
+  querySuggestions: {
+    suggestion: string;
+  }[];
+};
+
 export type AIUserEventType = 'view-item' | 'view-home-page' | 'media-play' | 'media-complete';
 
 type ViewItemData = {

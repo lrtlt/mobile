@@ -1,14 +1,13 @@
 import {useCallback, useState} from 'react';
 import {Article} from '../../../Types';
 import {fetchAISearchResults} from '../../api';
-import {SearchCategorySuggestion, SearchFilter, VertexAIMediaType} from '../../api/Types';
+import {SearchFilter, VertexAIMediaType} from '../../api/Types';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
 import moment from 'moment';
 
 type ReturnType = {
   searchResults: Article[];
   aiSummary?: string;
-  searchSuggestions: SearchCategorySuggestion[];
   callSearchApi: (q: string, filter: SearchFilter) => void;
   loadingState: {
     idle: boolean;
@@ -131,7 +130,6 @@ const useAISearchApi = (): ReturnType => {
     loadingState,
     searchResults,
     aiSummary,
-    searchSuggestions: [],
     callSearchApi,
   };
 };

@@ -15,6 +15,7 @@ import {
   categoryHomeGet,
   channelGet,
   counter,
+  fetchAIAutocomplete,
   forecastGet,
   genreGet,
   getAISearchResults,
@@ -40,6 +41,7 @@ import {
 } from './Endpoints';
 import {get, post, put} from './HttpClient';
 import {
+  AIAutomcompleteResponse,
   AISearchResponse,
   AISummaryResponse,
   AIUserEvent,
@@ -194,3 +196,5 @@ export const sendSearchUserEvent = (event: AIUserEvent) =>
   post<AIUserEventResponse>(postSearchUserEvent(event), event.data);
 
 export const fetchAISummary = (query: string) => get<AISummaryResponse>(getAISummary(query));
+
+export const fetchAutocomplete = (query: string) => get<AIAutomcompleteResponse>(fetchAIAutocomplete(query));

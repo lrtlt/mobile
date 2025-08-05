@@ -242,3 +242,6 @@ export const postSearchUserEvent = (event: AIUserEvent): string => {
 };
 
 export const getAISummary = (query: string) => `https://ai-search.lrt.lt/v1/lt/ai-overview?query=${query}`;
+
+export const fetchAIAutocomplete = (query: string) =>
+  `https://ai-search.lrt.lt/v1/lt/search/autocomplete?query=${query}&maxSuggestions=6&minQueryLength=1`;

@@ -23,7 +23,7 @@ const SearchAISummary: React.FC<PropsWithChildren<Props>> = ({isLoading, summary
     return Array.from({length: componentCount}, (_, index) => {
       const randomWidth = shimmerWidths[Math.floor(Math.random() * shimmerWidths.length)];
       return (
-        <Reanimated.View entering={FadeIn.duration(300).delay(index * 40)}>
+        <Reanimated.View key={`shimmer-${index}`} entering={FadeIn.duration(300).delay(index * 40)}>
           <GradientShimmer
             key={index}
             LinearGradientComponent={LinearGradient}

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Button,
@@ -18,15 +18,14 @@ import {MainStackParamList, SearchDrawerParamList} from '../../navigation/MainSt
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Article} from '../../../Types';
 import useSearch from './context/useSearch';
-import SearchSuggestions from './SearchSuggestions';
 import {defaultSearchFilter} from './context/SearchContext';
-import {SearchCategorySuggestion} from '../../api/Types';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useAISearchApi from './useAISearchApi';
 import useAISummaryApi from './useAISumaryApi';
 import SearchAISummary from './SearchAISummary';
+import SearchAutocomplete from './SearchAutocomplete';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -41,8 +40,10 @@ type Props = {
 };
 
 const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
+  const [autocompleteEnabled, setAutocompleteEnabled] = useState<boolean>(false);
+
   const {query, setQuery, filter, setFilter} = useSearch();
-  const {loadingState, searchResults, searchSuggestions, callSearchApi} = useAISearchApi();
+  const {loadingState, searchResults, callSearchApi} = useAISearchApi();
   const {loadingState: summaryLoadingState, aiSummary, callAISummaryApi} = useAISummaryApi();
   const {colors, strings, dim} = useTheme();
 
@@ -76,6 +77,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
   });
 
   const onScroll: ScrollViewProps['onScroll'] = (e) => {
+    setAutocompleteEnabled(false);
     const y = e.nativeEvent.contentOffset.y;
     if (y > 0) scrollY.setValue(e.nativeEvent.contentOffset.y);
   };
@@ -94,17 +96,14 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
     [navigation],
   );
 
-  const searchSuggestionPressHandler = useCallback(
-    (suggestion: SearchCategorySuggestion) => {
-      if (suggestion.category_id) {
-        navigation.navigate('Category', {
-          id: suggestion.category_id,
-          name: suggestion.category_title,
-          url: 'missing category url on suggestion',
-        });
-      }
+  const autocompletePressHandler = useCallback(
+    (suggestion: string) => {
+      setAutocompleteEnabled(false);
+      setQuery(suggestion);
+      callSearchApi(suggestion, filter);
+      callAISummaryApi(suggestion);
     },
-    [navigation],
+    [setQuery, callSearchApi, callAISummaryApi, filter],
   );
 
   const renderItem = useCallback(
@@ -113,38 +112,6 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
     },
     [articlePressHandler],
   );
-
-  const renderSearchBar = () => {
-    return (
-      <View style={{...styles.searchBar, backgroundColor: colors.card}}>
-        <View style={{...styles.searchInputHolder, backgroundColor: colors.background}}>
-          <TextInput
-            style={{...styles.searchInput, color: colors.text}}
-            multiline={false}
-            placeholder={'Paieška'}
-            numberOfLines={1}
-            autoCorrect={false}
-            onSubmitEditing={() => {
-              callSearchApi(query, filter);
-              callAISummaryApi(query);
-            }}
-            returnKeyType="search"
-            placeholderTextColor={colors.textDisbled}
-            onChangeText={setQuery}
-            value={query}
-          />
-          <BorderlessButton
-            style={styles.searchButton}
-            onPress={() => {
-              callSearchApi(query, filter);
-              callAISummaryApi(query);
-            }}>
-            <IconSearch size={dim.appBarIconSize} color={colors.headerTint} />
-          </BorderlessButton>
-        </View>
-      </View>
-    );
-  };
 
   let content;
   if (loadingState.isError) {
@@ -157,6 +124,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
           title={strings.tryAgain}
           color={colors.primary}
           onPress={() => {
+            setAutocompleteEnabled(false);
             callSearchApi(query, filter);
             callAISummaryApi(query);
           }}
@@ -171,13 +139,10 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
         onScroll={onScroll}
         contentContainerStyle={{padding: 12, paddingTop: fullHeight + subHeaderHeight - 12, gap: 24}}
         showsVerticalScrollIndicator={false}
+        scrollEventThrottle={1}
         data={searchResults}
         ListHeaderComponent={
           <View>
-            <SearchSuggestions
-              suggestions={searchSuggestions}
-              onSearchSuggestionClick={searchSuggestionPressHandler}
-            />
             <SearchAISummary isLoading={summaryLoadingState.isFetching} summary={aiSummary} />
           </View>
         }
@@ -207,7 +172,49 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
             <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
         }
-        subHeader={renderSearchBar()}
+        subHeader={
+          <View style={{...styles.searchBar, backgroundColor: colors.card}}>
+            <View style={{...styles.searchInputHolder, backgroundColor: colors.background}}>
+              <TextInput
+                style={{...styles.searchInput, color: colors.text}}
+                multiline={false}
+                placeholder={'Paieška'}
+                numberOfLines={1}
+                onEndEditing={() => {
+                  setAutocompleteEnabled(false);
+                }}
+                autoCorrect={false}
+                onSubmitEditing={() => {
+                  setAutocompleteEnabled(false);
+                  callSearchApi(query, filter);
+                  callAISummaryApi(query);
+                }}
+                returnKeyType="search"
+                placeholderTextColor={colors.textDisbled}
+                onChangeText={(text) => {
+                  setQuery(text);
+                  setAutocompleteEnabled(true);
+                }}
+                value={query}
+              />
+              <BorderlessButton
+                style={styles.searchButton}
+                onPress={() => {
+                  callSearchApi(query, filter);
+                  setAutocompleteEnabled(false);
+                  callAISummaryApi(query);
+                }}>
+                <IconSearch size={dim.appBarIconSize} color={colors.headerTint} />
+              </BorderlessButton>
+            </View>
+
+            {autocompleteEnabled && (
+              <View style={{position: 'absolute', top: subHeaderHeight, left: 0, right: 0}}>
+                <SearchAutocomplete query={query} onItemPress={autocompletePressHandler} />
+              </View>
+            )}
+          </View>
+        }
       />
       <SafeAreaView edges={['bottom']}>{content}</SafeAreaView>
     </View>
@@ -228,8 +235,6 @@ const styles = StyleSheet.create({
   },
 
   searchBar: {
-    alignItems: 'center',
-    justifyContent: 'center',
     padding: 8,
     paddingVertical: 8,
     shadowColor: '#000',
