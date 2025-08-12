@@ -9,7 +9,14 @@ import {
   ScrollViewProps,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Text, ScreenLoader, AnimatedAppBar, ArticleFeedItem, ActionButton} from '../../components';
+import {
+  Text,
+  ScreenLoader,
+  AnimatedAppBar,
+  ArticleFeedItem,
+  ActionButton,
+  MoreArticlesButton,
+} from '../../components';
 import {IconFilter, IconSearch} from '../../components/svg';
 import {useTheme} from '../../Theme';
 import {BorderlessButton, FlatList} from 'react-native-gesture-handler';
@@ -43,7 +50,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
   const [autocompleteEnabled, setAutocompleteEnabled] = useState<boolean>(false);
 
   const {query, setQuery, filter, setFilter} = useSearch();
-  const {loadingState, searchResults, callSearchApi} = useAISearchApi();
+  const {loadingState, searchResults, search, loadMore, hasMore} = useAISearchApi();
   const {loadingState: summaryLoadingState, aiSummary, callAISummaryApi} = useAISummaryApi();
   const {colors, strings, dim} = useTheme();
 
@@ -54,12 +61,12 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
     setQuery(initialQuery);
     setFilter(initialFilter);
 
-    callSearchApi(initialQuery, initialFilter);
+    search(initialQuery, initialFilter);
     callAISummaryApi(initialQuery);
   }, []);
 
   useEffect(() => {
-    callSearchApi(query, filter);
+    search(query, filter);
   }, [filter]);
 
   useNavigationAnalytics({
@@ -100,10 +107,10 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
     (suggestion: string) => {
       setAutocompleteEnabled(false);
       setQuery(suggestion);
-      callSearchApi(suggestion, filter);
+      search(suggestion, filter);
       callAISummaryApi(suggestion);
     },
-    [setQuery, callSearchApi, callAISummaryApi, filter],
+    [setQuery, search, callAISummaryApi, filter],
   );
 
   const renderItem = useCallback(
@@ -125,13 +132,13 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
           color={colors.primary}
           onPress={() => {
             setAutocompleteEnabled(false);
-            callSearchApi(query, filter);
+            search(query, filter);
             callAISummaryApi(query);
           }}
         />
       </View>
     );
-  } else if (loadingState.isFetching || loadingState.idle) {
+  } else if (loadingState.idle || (loadingState.isFetching && searchResults.length === 0)) {
     content = <ScreenLoader />;
   } else {
     content = (
@@ -145,6 +152,16 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
           <View style={{paddingTop: 12}}>
             <SearchAISummary isLoading={summaryLoadingState.isFetching} summary={aiSummary} />
           </View>
+        }
+        ListFooterComponent={
+          hasMore ? (
+            <View>
+              {loadingState.isFetching && <ScreenLoader />}
+              {!loadingState.isFetching && !loadingState.isError && (
+                <MoreArticlesButton onPress={loadMore} customText="Daugiau rezultatų" />
+              )}
+            </View>
+          ) : null
         }
         ListEmptyComponent={
           <View style={styles.noResultsContainer}>
@@ -186,7 +203,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
                 autoCorrect={false}
                 onSubmitEditing={() => {
                   setAutocompleteEnabled(false);
-                  callSearchApi(query, filter);
+                  search(query, filter);
                   callAISummaryApi(query);
                 }}
                 returnKeyType="search"
@@ -200,7 +217,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
               <BorderlessButton
                 style={styles.searchButton}
                 onPress={() => {
-                  callSearchApi(query, filter);
+                  search(query, filter);
                   setAutocompleteEnabled(false);
                   callAISummaryApi(query);
                 }}>
