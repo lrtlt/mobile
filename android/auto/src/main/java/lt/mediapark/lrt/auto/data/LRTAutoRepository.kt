@@ -58,7 +58,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                         title = if (streamInfo?.restriction.isNullOrEmpty()) programItems[index].channelTitle else BLOCKED_STREAM_MESSAGE,
                         content = programItems[index].title,
                         cover = getCoverByChannelId(programItems[index]),
-                        streamUrl = streamInfo?.audio ?: streamInfo?.content ?: ""
+                        streamUrl = if (streamInfo?.restriction.isNullOrEmpty()) streamInfo?.audio ?: streamInfo?.content ?: "" else BLOCKED_STREAM_URL, 
                     )
                     }
                     .sortedBy { item ->
@@ -129,6 +129,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
 
     companion object {
         private const val BLOCKED_STREAM_MESSAGE = "Transliacija internetu negalima"
+        private const val BLOCKED_STREAM_URL = "https://stream-vod3.lrt.lt/AUDIO/Block/tikLT.m4a/playlist.m3u8"
         private const val CACHE_DURATION = 5 * 60 * 1000L // 5 minutes
         private const val PODCAST_CACHE_DURATION = 4 * 60 * 60 * 1000L // 4 hours
     }

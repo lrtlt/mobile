@@ -3,6 +3,8 @@ import {isVideoLiveStream} from '../../api/Types';
 import {BASE_IMG_URL} from '../../util/ImageUtil';
 import {StreamData} from './useStreamData';
 
+const BLOCKED_STREAM_URL = 'https://stream-vod3.lrt.lt/AUDIO/Block/tikLT.m4a/playlist.m3u8';
+
 export const fetchStreamData = ({
   url,
   title,
@@ -18,10 +20,13 @@ export const fetchStreamData = ({
     .then((response) => {
       if (isVideoLiveStream(response)) {
         const {data} = response.response;
+        const isBlocked = !!data.restriction;
         const streamData: StreamData = {
           channelTitle: title,
           isLiveStream: true,
-          streamUri: prioritizeAudio
+          streamUri: isBlocked
+            ? BLOCKED_STREAM_URL
+            : prioritizeAudio
             ? data.audio
               ? data.audio.trim()
               : data.content.trim()
@@ -30,7 +35,7 @@ export const fetchStreamData = ({
           poster: poster,
           mediaId: data.content,
           offset: undefined,
-          isBlocked: !!data.restriction,
+          isBlocked: isBlocked,
         };
         return streamData;
       } else {

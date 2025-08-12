@@ -7,6 +7,8 @@ class CarPlayNetwork {
   private let newestUrl = URL(string: "https://www.lrt.lt/static/carplay/naujausi.json")!
   private let liveUrl = URL(string: "https://www.lrt.lt/static/tvprog/tvprog.json")!
   private let podcastsUrl = URL(string: "https://www.lrt.lt/api/json/search/categories?type=audio")!
+  private let restrictedStreamUrl = URL(
+    string: "https://stream-vod3.lrt.lt/AUDIO/Block/tikLT.m4a/playlist.m3u8")!
 
   private init() {}
 
@@ -28,9 +30,10 @@ class CarPlayNetwork {
     let (data, _) = try await URLSession.shared.data(from: liveUrl)
     let response = try JSONDecoder().decode(LiveProgramResponse.self, from: data)
     let program = response.tvprog
-    
+
     let channelIdOrder = [4, 5, 6, 1, 2, 3]
-    let sortedProgramItems = program.items.sorted { (item1: LiveProgramItem, item2: LiveProgramItem) -> Bool in
+    let sortedProgramItems = program.items.sorted {
+      (item1: LiveProgramItem, item2: LiveProgramItem) -> Bool in
       let index1 = channelIdOrder.firstIndex(of: item1.channel_id) ?? Int.max
       let index2 = channelIdOrder.firstIndex(of: item2.channel_id) ?? Int.max
       if index1 != index2 {
@@ -42,19 +45,23 @@ class CarPlayNetwork {
 
     // Map program items to CarPlayItems with stream info
     var items: [CarPlayItem] = []
-    
+
     for item in sortedProgramItems {
       if let streamUrl = item.stream_url {
         let streamInfo = try await fetchStreamInfo(streamUrl: streamUrl)
         let audioUrl = streamInfo.audio ?? streamInfo.content ?? ""
 
+        let isRestricted = streamInfo.restriction?.isEmpty == false
+
         items.append(
           CarPlayItem(
-            title: streamInfo.restriction?.isEmpty == true
-              ? item.channel_title : "Transliacija internetu negalima",
+            title: isRestricted
+              ? "Transliacija internetu negalima" : item.channel_title,
             content: item.title,
             cover: CarPlayUtils.getCoverByChannelId(channelId: item.channel_id),
-            streamUrl: audioUrl.trimmingCharacters(in: .whitespacesAndNewlines),
+            streamUrl: isRestricted
+              ? restrictedStreamUrl.absoluteString
+              : audioUrl.trimmingCharacters(in: .whitespacesAndNewlines),
             isLive: true
           ))
       }
