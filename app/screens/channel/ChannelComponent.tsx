@@ -135,8 +135,16 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
       <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>
         {streamSelectionComponent}
         {channel_info.channel_id === 1 ? (
-          <Text style={{color: colors.textSecondary, fontSize: 14, marginBottom: 12}}>
-            Šie subtitrai sugeneruoti <Text style={{fontWeight: 'bold'}}>DI</Text> pagalba.
+          <Text
+            style={{
+              color: colors.textSecondary,
+              fontSize: 14,
+              marginBottom: 12,
+              textAlign: 'center',
+              paddingVertical: 8,
+            }}>
+            Transliaciją galima žiūrėti ir su <Text style={{fontWeight: 'bold'}}>DI</Text> pagalba
+            generuojamais subtitrais lietuvių, anglų, lenkų, ukrainiečių ir rusų kalba.
           </Text>
         ) : null}
         {programComponent}
