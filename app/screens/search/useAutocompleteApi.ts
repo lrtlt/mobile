@@ -33,7 +33,7 @@ const useAutocompleteApi = (): ReturnType => {
             isFetching: false,
             isError: false,
           });
-          setSuggestions(response.querySuggestions?.map((s) => s.suggestion).slice(0, 6) ?? []);
+          setSuggestions(response.querySuggestions?.map((s) => s.suggestion).slice(0, 7) ?? []);
         })
         .catch(() => {
           setLoadingState({
