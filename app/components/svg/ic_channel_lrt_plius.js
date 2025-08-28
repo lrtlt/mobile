@@ -7,7 +7,7 @@ const SvgComponent = (props) => {
   return (
     <Svg
       width={props.height ? (props.height * 96) / 32 : 96}
-      height={props.size || 32}
+      height={props.height || 32}
       fill="none"
       viewBox="0 0 96 32"
       {...props}>

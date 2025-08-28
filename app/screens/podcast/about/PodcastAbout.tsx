@@ -10,6 +10,7 @@ import FastImage from '@d11/react-native-fast-image';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
 import ArticleParagraph from '../../../components/articleParagraphs/paragraph/ArticleParagraph';
 import ArticleKeywords from '../../article/keywords/ArticleKeywords';
+import LRTArchivesBadge from '../../../components/lrtArchivesBadge/LRTArchivesBadge';
 
 interface Props {
   article: ArticleContentMedia;
@@ -137,6 +138,7 @@ const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article, isVodcast = 
         </TouchableDebounce>
       </View>
       <Divider />
+      {article.article_is_heritage === 1 && <LRTArchivesBadge />}
       {selectedContent === 'episode' ? (
         <EpisodeInfo />
       ) : isVodcast ? (

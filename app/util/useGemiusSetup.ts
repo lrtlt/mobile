@@ -2,9 +2,10 @@ import {Platform} from 'react-native';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_HIT_COLLECTOR_HOST} from '../constants';
 import Config from 'react-native-config';
+import {getAppVersion} from './useAppVersion';
 
 export const setupGemius = () => {
-  const appVersion = require('../../package.json').version;
+  const appVersion = getAppVersion();
 
   Gemius.setAppInfo(
     Config.GEMIUS_APP_NAME,

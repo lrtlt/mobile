@@ -18,6 +18,8 @@ import MyScrollView from '../MyScrollView/MyScrollView';
 import {useNavigationStore} from '../../state/navigation_store';
 import {useShallow} from 'zustand/shallow';
 import {MainStackParamList} from '../../navigation/MainStack';
+import {Text} from '..';
+import {getAppVersion} from '../../util/useAppVersion';
 
 type Props = {
   navigation: DrawerNavigationProp<MainStackParamList>;
@@ -83,6 +85,9 @@ const DrawerComponent: React.FC<React.PropsWithChildren<Props>> = ({navigation})
         <DrawerBlockPages key="pages" navigation={navigation} pages={data.pages} />
         <Line />
         <DrawerBlockFooter />
+        <Text type="secondary" style={{paddingLeft: 24, paddingTop: 12}}>
+          {getAppVersion()}
+        </Text>
       </MyScrollView>
     </View>
   );

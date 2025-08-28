@@ -852,6 +852,7 @@ export type ArticleContentMedia = {
   id: number;
   title: string;
   subtitle?: string;
+  article_is_heritage?: 0 | 1;
   date: string;
   category_id: number;
   category_title: string;
