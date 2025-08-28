@@ -2951,7 +2951,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-theoplayer (9.9.1):
+  - react-native-theoplayer (9.10.0):
     - React-Core
     - THEOplayer-Connector-SideloadedSubtitle (~> 9.9)
     - THEOplayer-Integration-GoogleCast (~> 9.9)
@@ -3406,30 +3406,6 @@ PODS:
     - FirebaseCoreExtension
     - React-Core
     - RNFBApp
-  - RNFlashList (1.8.3):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.11.18.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-hermes
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - RNGestureHandler (2.27.2):
     - DoubleConversion
     - glog
@@ -3561,7 +3537,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - RNWorklets
     - Yoga
-  - RNScreens (4.12.0):
+  - RNScreens (4.15.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3585,9 +3561,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.12.0)
+    - RNScreens/common (= 4.15.4)
     - Yoga
-  - RNScreens/common (4.12.0):
+  - RNScreens/common (4.15.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3685,7 +3661,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNWorklets (0.4.1):
+  - RNWorklets (0.4.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3708,9 +3684,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNWorklets/worklets (= 0.4.1)
+    - RNWorklets/worklets (= 0.4.2)
     - Yoga
-  - RNWorklets/worklets (0.4.1):
+  - RNWorklets/worklets (0.4.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3733,9 +3709,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNWorklets/worklets/apple (= 0.4.1)
+    - RNWorklets/worklets/apple (= 0.4.2)
     - Yoga
-  - RNWorklets/worklets/apple (0.4.1):
+  - RNWorklets/worklets/apple (0.4.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3883,7 +3859,6 @@ DEPENDENCIES:
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
-  - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
@@ -4119,8 +4094,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/firestore"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
-  RNFlashList:
-    :path: "../node_modules/@shopify/flash-list"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNNotifee:
@@ -4224,7 +4197,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: af0a410629d77bcfeec1383d9109a2c5264b8a49
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 5e61d0541825a113f60c01e061974355fec8d7c1
-  react-native-theoplayer: 47908d4e4a5ab096fd0c78e5d5f4ba128cf52b7a
+  react-native-theoplayer: 8d4f793c98d73efa73855c8afacfac734a3eff68
   react-native-unistyles: 4e742a427a9df2894e6dd9c5921733ae927d3f94
   react-native-webview: 69c118d283fccfbc4fca0cd680e036ff3bf188fa
   React-NativeModulesApple: 5b234860053d0dd11f3442f38b99688ff1c9733b
@@ -4256,7 +4229,7 @@ SPEC CHECKSUMS:
   React-timing: 2d07431f1c1203c5b0aaa6dc7b5f503704519218
   React-utils: 67cf7dcfc18aa4c56bec19e11886033bb057d9fa
   ReactAppDependencyProvider: bf62814e0fde923f73fc64b7e82d76c63c284da9
-  ReactCodegen: c51a63d05629675dd61caf58d1a093c4457972c0
+  ReactCodegen: cd5d60194684124cc88ee770ad91c09aa01cbb7c
   ReactCommon: 177fca841e97b2c0e288e86097b8be04c6e7ae36
   RNCAsyncStorage: c1dca434eda758348a549efb46822b4091d76804
   RNFastImage: 476859bbb60c2b1b4b96253e040800d67fdf3358
@@ -4266,15 +4239,14 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: f9c67f58b800bbb713a14286243cd8fa3a3c43f8
   RNFBFirestore: d5d885bf213d69b6c61ab6855b1fdfe0d4caf69b
   RNFBMessaging: 37dd861b8600ec2ae9a06ba42ae4285cb707a731
-  RNFlashList: 9a636f9c1d8473a9ebba4d089dbb90c99278dc11
   RNGestureHandler: 4fbe7fbce86b6b546f75c9db974974262f75ef5d
   RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
   RNPermissions: 81cc91a991c682af75f289599545ef8082ca5060
   RNReanimated: 24b8a5b54c499ac783c2c299aad4712002c03bb1
-  RNScreens: 9e354ab6550e1a2388b52cb6f6ef5a074f004da6
+  RNScreens: a2b5206aa1b8b161b1e5319f3abd312c616fffcf
   RNShare: 79dc78cb008db3789b854b7defe44ceda0163ae0
   RNSVG: 45e3c3210465e75ab6374c9f746179e75d76ce48
-  RNWorklets: 32e63979c33291a69d4d8541d4425ab91763320e
+  RNWorklets: fbc45399ffcf580ef29df019bf42c3e1382f9036
   SDWebImage: f29024626962457f3470184232766516dee8dfea
   SDWebImageAVIFCoder: 00310d246aab3232ce77f1d8f0076f8c4b021d90
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
