@@ -85,9 +85,6 @@ const DrawerComponent: React.FC<React.PropsWithChildren<Props>> = ({navigation})
         <DrawerBlockPages key="pages" navigation={navigation} pages={data.pages} />
         <Line />
         <DrawerBlockFooter />
-        <Text type="secondary" style={{paddingLeft: 24, paddingTop: 12}}>
-          {getAppVersion()}
-        </Text>
       </MyScrollView>
     </View>
   );

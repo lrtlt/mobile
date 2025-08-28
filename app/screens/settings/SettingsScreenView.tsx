@@ -8,6 +8,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import SettingsSwitch from './SettingsSwitch';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSettingsStore} from '../../state/settings_store';
+import {getAppVersion} from '../../util/useAppVersion';
 
 const TEXT_SIZE_NORMAL = 0;
 const TEXT_SIZE_LARGE = 2;
@@ -116,14 +117,30 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
               cellStyle={{borderBottomWidth: StyleSheet.hairlineWidth}}
             />
           </View>
+
           <Text style={styles.label} type="secondary" fontFamily="SourceSansPro-SemiBold">
             {'Pranešimai'}
           </Text>
           <Text style={styles.caption} type="secondary" fontFamily="SourceSansPro-Regular">
             {'Galite prenumeruoti į telefoną siunčiamus pranešimus (push notifications).'}
           </Text>
+
           <View style={{...styles.card, backgroundColor: colors.background}}>
             <SettingsNotifications />
+          </View>
+          <View style={{...styles.card, backgroundColor: colors.background}}>
+            <View
+              style={{
+                ...styles.cell,
+                borderColor: colors.border,
+                alignItems: 'center',
+                paddingVertical: 24,
+              }}>
+              <Text type="secondary">{'Aplikacijos versija'}</Text>
+              <Text type="secondary" fontFamily="SourceSansPro-SemiBold">
+                {getAppVersion()}
+              </Text>
+            </View>
           </View>
         </View>
       </ScrollView>
