@@ -179,6 +179,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
           }
           renderItem={renderItem}
           keyExtractor={(item, i) => `${item.id}-${i}`}
+          estimatedItemSize={200}
         />
         <View style={{padding: 12}}>
           <MoreArticlesButton onPress={onClose} customText={strings.close} />

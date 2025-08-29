@@ -3,7 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useRef} from 'react';
 import {View, StyleSheet, Button, RefreshControl} from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
-import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
+import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {Article} from '../../../../../Types';
 import {
   ArticleRow,
@@ -39,7 +39,7 @@ const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
   const {colors, strings} = useTheme();
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const listRef = useRef<FlashListRef<any>>(null);
+  const listRef = useRef<FlashList<any>>(null);
 
   const insets = useSafeAreaInsets();
 
@@ -123,6 +123,8 @@ const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
         data={articles}
         contentContainerStyle={{paddingBottom: insets.bottom}}
         ListHeaderComponent={showTitle ? renderTitle() : null}
+        //windowSize={4}
+        estimatedItemSize={320}
         onEndReachedThreshold={0.3}
         ListFooterComponent={isFetching ? <ListLoader /> : null}
         onEndReached={onListEndReached}

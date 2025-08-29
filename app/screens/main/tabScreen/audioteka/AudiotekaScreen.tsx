@@ -5,7 +5,7 @@ import {EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {useTheme} from '../../../../Theme';
-import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
+import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {AudiotekaTemplate} from '../../../../api/Types';
 import TopArticle from './components/topArticle/TopArticle';
 import PodcastsBlock from './components/podcasts/PodcastsBlock';
@@ -37,7 +37,7 @@ const selectAudiotekaScreenState = (state: ArticleState) => {
 };
 
 const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
-  const listRef = useRef<FlashListRef<any>>(null);
+  const listRef = useRef<FlashList<any>>(null);
   const {colors, dark} = useTheme();
 
   const {fetchAudioteka} = useArticleStore.getState();
@@ -161,6 +161,12 @@ const AudiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => fetchAudioteka()} />}
           data={data}
           removeClippedSubviews={false}
+          estimatedFirstItemOffset={800}
+          estimatedItemSize={400}
+          // windowSize={4}
+          // updateCellsBatchingPeriod={20}
+          // maxToRenderPerBatch={2}
+          // initialNumToRender={6}
           ListFooterComponent={<SafeAreaView edges={['bottom']} />}
           keyExtractor={(item, index) => String(index) + String(item)}
         />
