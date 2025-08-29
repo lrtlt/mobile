@@ -79,7 +79,7 @@
 	<key>NSUserTrackingUsageDescription</key>
 	<string>Nuasmeninti duomenys bus naudojami statistikai ir paslaugų kokybei užtikrinti.</string>
 	<key>RCTNewArchEnabled</key>
-	<true/>
+	<false/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>PlayfairDisplay-Regular.ttf</string>
