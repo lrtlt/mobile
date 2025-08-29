@@ -63,6 +63,42 @@ const BlockquoteRenderer: CustomBlockRenderer = (props) => {
   );
 };
 
+const ULRenderer: CustomBlockRenderer = (props) => {
+  const {colors} = useTheme();
+
+  const {TDefaultRenderer, tnode} = props;
+
+  return (
+    <TDefaultRenderer {...props} style={{flexDirection: 'row'}}>
+      <View style={styles.flex}>
+        <TNodeChildrenRenderer
+          tnode={tnode}
+          renderChild={(p) => {
+            return (
+              <View
+                key={p.key}
+                style={{
+                  ...styles.liContainer,
+                  borderColor: colors.tertiary,
+                  borderTopWidth: p.index === 0 ? 2 : 0,
+                  paddingTop: p.index === 0 ? LI_TAG_VERTICAL_MARGIN + 12 : LI_TAG_VERTICAL_MARGIN,
+                }}>
+                <View
+                  style={{
+                    ...styles.bubble,
+                    borderColor: colors.text,
+                  }}
+                />
+                <TChildrenRenderer tchildren={[p.childTnode]} />
+              </View>
+            );
+          }}
+        />
+      </View>
+    </TDefaultRenderer>
+  );
+};
+
 const renderers: CustomTagRendererRecord = {
   table: TableRenderer,
   blockquote: BlockquoteRenderer,
@@ -73,6 +109,7 @@ const renderers: CustomTagRendererRecord = {
   h3: MyTextualRenderer,
   h2: MyTextualRenderer,
   h1: MyTextualRenderer,
+  ul: ULRenderer,
 };
 
 const fonts: string[] = [
@@ -141,14 +178,21 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
       a: {
         color: colors.primary,
       },
+      em: {
+        fontFamily: 'SourceSansPro-LightItalic',
+      },
       li: {
-        paddingVertical: LI_TAG_VERTICAL_MARGIN,
+        // paddingVertical: LI_TAG_VERTICAL_MARGIN,
+        flex: 1,
+        fontSize: 16,
+        lineHeight: 26,
       },
       h4: {
-        fontSize: DEFAULT_FONT_SIZE + 2,
+        fontSize: DEFAULT_FONT_SIZE,
         paddingTop: 8,
         paddingBottom: 20,
         borderBottomColor: colors.listSeparator,
+        fontFamily: 'SourceSansPro-SemiBold',
         borderBottomWidth: 1,
         textTransform: 'uppercase',
       },
@@ -190,10 +234,8 @@ const HTMLRenderer: React.FC<React.PropsWithChildren<Props>> = ({html, textSize}
       classesStyles={{
         'article-details-block': {
           backgroundColor: colors.slugBackground,
-          borderRadius: 4,
+          borderRadius: 8,
           padding: 12,
-          borderWidth: 1,
-          borderColor: colors.listSeparator,
           marginVertical: 32,
         },
       }}
@@ -217,5 +259,18 @@ const styles = StyleSheet.create({
   },
   quoteText: {
     margin: 8,
+  },
+  bubble: {
+    width: 6,
+    height: 6,
+    borderWidth: 1,
+    borderRadius: 6,
+    marginTop: LI_TAG_VERTICAL_MARGIN + 2,
+  },
+  liContainer: {
+    paddingVertical: LI_TAG_VERTICAL_MARGIN + 4,
+    flexDirection: 'row',
+    gap: 8,
+    padding: 6,
   },
 });

@@ -243,7 +243,7 @@ export default () => {
         component={Screens.VerticalVideosScreen}
         options={{
           animation: 'slide_from_bottom',
-          animationDuration: 250,
+          animationDuration: 200,
           presentation: Platform.select({
             android: 'transparentModal',
             ios: 'card',
