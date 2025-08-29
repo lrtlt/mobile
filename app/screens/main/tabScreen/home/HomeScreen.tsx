@@ -8,7 +8,7 @@ import {
   TouchableDebounce,
   BannerComponent,
 } from '../../../../components';
-import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
+import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
 import {ARTICLE_EXPIRE_DURATION, EVENT_LOGO_PRESS} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
@@ -50,7 +50,7 @@ interface Props {
 
 const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const listRef = useRef<FlashList<any>>(null);
+  const listRef = useRef<FlashListRef<any>>(null);
 
   const {fetchHome} = useArticleStore.getState();
   const state = useArticleStore(useShallow(selectHomeScreenState()));
@@ -231,7 +231,6 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
           ListHeaderComponent={renderForecast()}
           data={items}
           removeClippedSubviews={false}
-          estimatedItemSize={400}
           keyExtractor={keyExtractor}
         />
       </View>

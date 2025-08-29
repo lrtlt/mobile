@@ -3,8 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {ProgramItemType} from '../../../api/Types';
 import {ProgramItem} from '../../../components';
 import Divider from '../../../components/divider/Divider';
-import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
-import {PROGRAM_ITEM_HEIGHT} from '../../../components/programItem/ProgramItem';
+import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface Props {
@@ -14,7 +13,7 @@ interface Props {
 }
 
 const ProgramList: React.FC<React.PropsWithChildren<Props>> = ({items, scrollToIndex, channel_id}) => {
-  const ref = useRef<FlashList<any>>(null);
+  const ref = useRef<FlashListRef<any>>(null);
 
   useEffect(() => {
     ref.current?.scrollToIndex({
@@ -55,7 +54,6 @@ const ProgramList: React.FC<React.PropsWithChildren<Props>> = ({items, scrollToI
         data={items}
         renderItem={renderProgramItem}
         initialScrollIndex={scrollToIndex}
-        estimatedItemSize={PROGRAM_ITEM_HEIGHT}
         keyExtractor={keyExtractor}
       />
     </View>
