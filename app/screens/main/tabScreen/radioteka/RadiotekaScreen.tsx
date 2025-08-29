@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View, RefreshControl, StyleSheet, StatusBar} from 'react-native';
-import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
+import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
 import {ScreenLoader} from '../../../../components';
 import {EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
@@ -43,7 +43,7 @@ const selectRadiotekaScreenState = (state: ArticleState) => {
 };
 
 const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
-  const listRef = useRef<FlashList<any>>(null);
+  const listRef = useRef<FlashListRef<any>>(null);
   const {colors, dark} = useTheme();
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Home'>>();
@@ -348,8 +348,6 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => fetchRadioteka()} />}
           data={data}
           removeClippedSubviews={false}
-          estimatedFirstItemOffset={500}
-          estimatedItemSize={300}
           keyExtractor={(item, index) => String(index) + String(item)}
         />
       </View>
