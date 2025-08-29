@@ -49,15 +49,18 @@ const SimpleArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({
 
   const {state, loadNextPage, refresh} = provider(categoryId, categoryTitle);
 
-  useSimpleArticleScreenAnalytics({type, categoryTitle, categoryUrl});
+  useSimpleArticleScreenAnalytics({
+    type,
+    categoryTitle,
+    categoryUrl: categoryUrl ?? `/${categoryTitle?.toLocaleLowerCase()}`,
+  });
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
       page: type,
       categoryId: categoryId?.toString(),
     });
-
-    if (!!state.lastFetchTime && Date.now() - state.lastFetchTime > TWO_MINUTES) {
+    if (!state.lastFetchTime || Date.now() - state.lastFetchTime > TWO_MINUTES) {
       refresh();
     }
   }, [categoryId, type]);

@@ -372,15 +372,16 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   const isEnding = !isLiveStream && seekerEnd - currentTime <= 1;
   const shouldBeVisible = enabled && (isOnStart || isEnding || visible);
 
-  //Wait for fix on android
-  const ParentComponent = Platform.OS === 'android' ? View : Animated.View;
+  //Wait for fix on reanimated package
+  // const ParentComponent = Platform.OS === 'android' ? View : Animated.View;
+  const ParentComponent = View;
 
   return shouldBeVisible ? (
     <ParentComponent
       style={[styles.flex, styles.center, {aspectRatio}]}
-      //Wait for fix on android
-      entering={Platform.OS === 'android' ? undefined : FadeIn.duration(400)}
-      exiting={Platform.OS === 'android' ? undefined : FadeOut.duration(400)}
+      //Wait for fix on reanimated package
+      // entering={Platform.OS === 'android' ? undefined : FadeIn.duration(400)}
+      // exiting={Platform.OS === 'android' ? undefined : FadeOut.duration(400)}
       // entering={FadeIn.duration(400)}
       // exiting={FadeOut.duration(400)}
     >

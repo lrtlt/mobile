@@ -3,7 +3,7 @@ import {View, Dimensions, StyleSheet} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
 import {ActionButton, Logo} from '../../components';
 import {IconDrawerMenu, IconSettings} from '../../components/svg';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {Pressable} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
 import HomeScreen from './tabScreen/home/HomeScreen';
 import TestScreen from '../testScreen/TestScreen';
@@ -115,7 +115,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
       ),
 
       headerTitle: () => (
-        <TouchableWithoutFeedback
+        <Pressable
           onPress={() => {
             EventRegister.emit(EVENT_LOGO_PRESS, null);
           }}
@@ -124,9 +124,9 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           accessibilityRole="button"
           accessibilityLanguage="lt">
           <View style={styles.logoContainer}>
-            <Logo height={dim.appBarIconSize + 6} />
+            <Logo />
           </View>
-        </TouchableWithoutFeedback>
+        </Pressable>
       ),
     });
   }, [colors.headerTint, dim.appBarIconSize, navigation]);
