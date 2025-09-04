@@ -20,7 +20,7 @@ const usePlayerSubtitles = ({player}: Options) => {
     if (!!player) {
       player.addEventListener(PlayerEventType.TEXT_TRACK_LIST, (_) => {
         setTextTracks(player.textTracks.filter((track) => track.kind === TextTrackKind.subtitles));
-        if (!initialSubtitleDisabled.current && !player?.selectedTextTrack) {
+        if (!initialSubtitleDisabled.current && !!player?.selectedTextTrack) {
           initialSubtitleDisabled.current = true;
           player.selectedTextTrack = undefined;
         }

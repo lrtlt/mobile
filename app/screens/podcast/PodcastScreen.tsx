@@ -45,7 +45,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
 
   const {appBar, snackbar, onScroll: _} = useArticleHeader(article);
 
-  const {episodes} = useSeason(currentSeason?.season_url);
+  const {episodes} = useSeason(currentSeason?.season_url, undefined, false, 100);
   const {setPlaylist} = useMediaPlayer();
 
   const {strings, colors} = useTheme();

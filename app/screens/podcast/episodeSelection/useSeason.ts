@@ -4,7 +4,12 @@ import {Article} from '../../../../Types';
 
 const ITEMS_PER_PAGE = 20;
 
-const useSeason = (seasonUrl?: string, preloaded?: Article[], isVodcast?: boolean) => {
+const useSeason = (
+  seasonUrl?: string,
+  preloaded?: Article[],
+  isVodcast?: boolean,
+  pageSize = ITEMS_PER_PAGE,
+) => {
   const [items, setItems] = useState<Article[]>(preloaded ? preloaded : []);
   const [hasMoreEpisodes, setHasMoreEpisodes] = useState(!!seasonUrl);
   const [page, setPage] = useState(1);
@@ -25,7 +30,7 @@ const useSeason = (seasonUrl?: string, preloaded?: Article[], isVodcast?: boolea
 
       const api = isVodcast ? fetchMediatekaSeasonPlaylist : fetchRadiotekaSeasonPlaylist;
 
-      api(seasonUrl, pageNumber, ITEMS_PER_PAGE).then((response) => {
+      api(seasonUrl, pageNumber, pageSize).then((response) => {
         if (response.items) {
           setPage(response.page);
 
@@ -34,7 +39,7 @@ const useSeason = (seasonUrl?: string, preloaded?: Article[], isVodcast?: boolea
             newItems = items.concat(response.items);
           }
           setItems(newItems);
-          setHasMoreEpisodes(response.items.length >= ITEMS_PER_PAGE);
+          setHasMoreEpisodes(response.items.length >= pageSize);
           console.log(`Season page ${response.page}:', items: ${response.items.length}`);
           console.log('Total items:', newItems.length);
         }

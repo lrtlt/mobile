@@ -71,7 +71,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
 
   const durationMinutes = Math.floor((articles[selectedIndex].media_duration_sec ?? 0) / 60);
 
-  if (articles.length === 0) {
+  if (articles?.length === 0) {
     return null;
   }
 
