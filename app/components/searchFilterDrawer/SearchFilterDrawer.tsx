@@ -117,7 +117,7 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
     return (
       <View>
         <TextComponent style={styles.titleText} fontFamily="SourceSansPro-SemiBold">
-          Rušiavimas
+          Rūšiavimas
         </TextComponent>
         <SelectableItem
           selected={orderBy === undefined}
