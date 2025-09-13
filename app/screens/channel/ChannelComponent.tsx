@@ -109,6 +109,8 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
               startTime={item.time_start}
               percent={item.proc}
               description={item.description}
+              channelId={channel_info.channel_id}
+              record_article_id={item.record_article_id}
             />
             {opusNowPlayingComponent}
           </View>

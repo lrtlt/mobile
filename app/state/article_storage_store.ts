@@ -61,6 +61,10 @@ const _articleId = (article: ArticleContent): number => {
   return isMediaArticle(article) ? article.id : article.article_id;
 };
 
+const _articleUrl = (article: ArticleContent): string | undefined => {
+  return isMediaArticle(article) ? article.url : article.article_url;
+};
+
 export const useArticleStorageStore = create<ArticleStorageStore>()(
   persist(
     (set, get) => ({
@@ -75,6 +79,7 @@ export const useArticleStorageStore = create<ArticleStorageStore>()(
         set({savedArticles});
         logEvent(getAnalytics(), 'app_lrt_lt_article_saved', {
           article_id: _articleId(article),
+          article_url: _articleUrl(article),
         });
       },
       removeArticle: (articleId) => {

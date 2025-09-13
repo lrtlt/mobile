@@ -233,7 +233,7 @@ const HTMLRenderer: React.FC<React.PropsWithChildren<Props>> = ({html, textSize}
       renderers={renderers}
       classesStyles={{
         'article-details-block': {
-          backgroundColor: colors.slugBackground,
+          backgroundColor: colors.articleSummaryBackground,
           borderRadius: 8,
           padding: 12,
           marginVertical: 32,

@@ -5,6 +5,8 @@ import {IconSubtitles} from '../svg';
 import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from './MediaControls';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import {ScrollView} from 'react-native-gesture-handler';
+import {getLanguageName} from './usePlayerLanguage';
+import {getAnalytics, logEvent} from '@react-native-firebase/analytics';
 
 type Options = {
   player?: THEOplayer;
@@ -19,7 +21,9 @@ const usePlayerSubtitles = ({player}: Options) => {
   useEffect(() => {
     if (!!player) {
       player.addEventListener(PlayerEventType.TEXT_TRACK_LIST, (_) => {
-        setTextTracks(player.textTracks.filter((track) => track.kind === TextTrackKind.subtitles));
+        setTextTracks(
+          player.textTracks.filter((track) => track.kind === TextTrackKind.subtitles && !!track.language),
+        );
         if (!initialSubtitleDisabled.current && !!player?.selectedTextTrack) {
           initialSubtitleDisabled.current = true;
           player.selectedTextTrack = undefined;
@@ -47,10 +51,21 @@ const usePlayerSubtitles = ({player}: Options) => {
       return (
         <TouchableDebounce
           key={item.uid}
-          style={{...styles.center, ...styles.rounded, backgroundColor: '#FFFFFFEE', padding: 8}}
+          style={{
+            ...styles.center,
+            ...styles.rounded,
+            backgroundColor: '#FFFFFFEE',
+            padding: 8,
+            flexDirection: 'row',
+          }}
           activeOpacity={0.9}
-          onPress={() => selectTextTrack(item)}>
-          <Text>{item.label}</Text>
+          onPress={() => {
+            selectTextTrack(item);
+            logEvent(getAnalytics(), 'app_lrt_lt_subtitles_selected', {
+              language: item.language,
+            });
+          }}>
+          <Text style={{flex: 1, textAlign: 'center'}}>{getLanguageName(item.language)}</Text>
         </TouchableDebounce>
       );
     },

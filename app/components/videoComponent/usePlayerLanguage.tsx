@@ -9,13 +9,24 @@ type Options = {
   player?: THEOplayer;
 };
 
-const getLanguageName = (language: string) => {
+export const getLanguageName = (language: string) => {
   switch (language.toLowerCase()) {
     case 'lt':
     case 'lit':
       return 'Lietuvių';
     case 'org':
       return 'Originalo';
+    case 'ru':
+    case 'rus':
+      return 'Rusų';
+    case 'en':
+    case 'eng':
+      return 'Anglų';
+    case 'pl':
+    case 'pol':
+      return 'Lenkų';
+    case 'uk':
+      return 'Ukrainiečių';
     default:
       return language;
   }

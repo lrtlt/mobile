@@ -152,6 +152,7 @@ type ColorScheme = {
   textDisbled: string;
   textError: string;
   slugBackground: string;
+  articleSummaryBackground: string;
   actionButtonBorder: string;
   photoBackground: string;
   tabBarBackground: string;
@@ -200,6 +201,7 @@ const colorsLight: ColorScheme = {
   textSecondary: '#666666',
   textDisbled: '#55555570',
   slugBackground: '#F5F6F7',
+  articleSummaryBackground: '#F3F6F9',
   actionButtonBorder: '#FFFFFF',
   photoBackground: '#e0e3e9',
   tabBarBackground: '#FFFFFF',
@@ -247,6 +249,7 @@ const colorsDark: ColorScheme = {
   textSecondary: '#B0B0B0',
   textDisbled: '#A0A0A070',
   slugBackground: '#222b36',
+  articleSummaryBackground: '#1C242D',
   actionButtonBorder: 'white',
   tabBarBackground: '#242D36',
   tabLableSelected: 'primaryDark',
