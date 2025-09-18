@@ -113,7 +113,7 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
                   onArticlePress?.(selectedArticle);
                 }}>
                 <IconPlay size={12} color={'white'} />
-                <Text style={styles.moreButtonText}>Žiurėti</Text>
+                <Text style={styles.moreButtonText}>Žiūrėti</Text>
               </TouchableDebounce>
             </View>
           </View>
