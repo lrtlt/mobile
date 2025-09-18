@@ -26,7 +26,9 @@ const usePlayerSubtitles = ({player}: Options) => {
         );
         if (!initialSubtitleDisabled.current && !!player?.selectedTextTrack) {
           initialSubtitleDisabled.current = true;
-          player.selectedTextTrack = undefined;
+          setTimeout(() => {
+            player.selectedTextTrack = undefined;
+          }, 300);
         }
       });
     }
