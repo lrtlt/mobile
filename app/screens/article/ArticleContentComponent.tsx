@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo} from 'react';
-import {View, Animated, StyleSheet, ListRenderItemInfo, useWindowDimensions} from 'react-native';
+import {View, StyleSheet, useWindowDimensions} from 'react-native';
 import Header from './header/Header';
 import {getSmallestDim} from '../../util/UI';
 import {ArticleGallery, VideoComponent, AudioComponent, Text, ArticleContentItem} from '../../components';
@@ -23,6 +23,7 @@ import ArticleMainPhoto from './mainPhoto/ArticleMainPhoto';
 import ArticleKeywords from './keywords/ArticleKeywords';
 import useArticleHeader from './useArticleHeader_v2';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
+import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 
 export type ArticleSelectableItem = {
   type: 'photo' | 'article';
@@ -106,12 +107,13 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
     <>
       {appBar}
       <View style={styles.container}>
-        <Animated.FlatList
+        <FlashList
           onScroll={onScroll}
           contentContainerStyle={{paddingTop: appBarHeight.fullHeight, paddingBottom: 24}}
           data={articleData}
-          windowSize={6}
           showsVerticalScrollIndicator={false}
+          estimatedFirstItemOffset={600}
+          estimatedItemSize={400}
           renderItem={renderItem}
           removeClippedSubviews={false}
           keyExtractor={useCallback((item: ArticleContentItemType, index: number) => {
