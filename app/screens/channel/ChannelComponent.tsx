@@ -127,6 +127,7 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
           autoPlay={true}
           backgroundImage={selectedStream.poster}
           title={channel_info.title}
+          showTitle={false}
           streamUrl={selectedStream.streamUri}
           streamData={selectedStream}
         />

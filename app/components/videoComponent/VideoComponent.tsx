@@ -19,6 +19,7 @@ interface Props {
   title: string;
   autoPlay: boolean;
   loop?: boolean;
+  showTitle?: boolean;
   startTime?: number;
   streamData?: StreamData;
   minifyEnabled?: boolean;
@@ -39,6 +40,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
   title,
   autoPlay = true,
   loop = false,
+  showTitle = true,
   startTime,
   streamData,
   minifyEnabled = true,
@@ -123,7 +125,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
     <View key={data.streamUri} style={style}>
       <TheoMediaPlayer
         streamUri={data.streamUri}
-        title={data.title}
+        title={showTitle ? data.title : undefined}
         autoStart={true}
         loop={loop}
         isLiveStream={data.isLiveStream}
