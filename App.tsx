@@ -38,7 +38,7 @@ const App: React.FC = () => {
 
 export default () => (
   <GestureHandlerRootView style={styles.flex}>
-    <Auth0Provider domain={'dev-lrt.eu.auth0.com'} clientId={'uHv95muRXcS6e8RbQfovKf3D5wxO6ARQ'}>
+    <Auth0Provider domain={'dev-lrt.eu.auth0.com'} clientId={'rhwPI1fTnayadAII1lKBM7pZVCRLwTbE'}>
       <App />
     </Auth0Provider>
   </GestureHandlerRootView>

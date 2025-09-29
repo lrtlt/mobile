@@ -29,10 +29,14 @@ const DrawerBlockTop: React.FC<React.PropsWithChildren<Props>> = ({navigation}) 
   const handleProgramClick = useCallback(() => navigation.navigate('Program'), [navigation]);
 
   useEffect(() => {
-    getCredentials().then((credentials) => {
-      console.log('user', user);
-      console.log('getCredentials', credentials);
-    });
+    getCredentials()
+      .then((credentials) => {
+        console.log('user', user);
+        console.log('getCredentials', credentials);
+      })
+      .catch((error) => {
+        console.warn('getCredentials error', error);
+      });
   }, [user]);
 
   return (
