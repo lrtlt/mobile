@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, Platform} from 'react-native';
 import {PlayerEventType, TextTrack, TextTrackKind, THEOplayer} from 'react-native-theoplayer';
 import {IconSubtitles} from '../svg';
 import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from './MediaControls';
@@ -24,11 +24,11 @@ const usePlayerSubtitles = ({player}: Options) => {
         setTextTracks(
           player.textTracks.filter((track) => track.kind === TextTrackKind.subtitles && !!track.language),
         );
-        if (!initialSubtitleDisabled.current && !!player?.selectedTextTrack) {
+        if (!initialSubtitleDisabled.current) {
           initialSubtitleDisabled.current = true;
           setTimeout(() => {
             player.selectedTextTrack = undefined;
-          }, 300);
+          }, Platform.select({ios: 300}) || 0);
         }
       });
     }
