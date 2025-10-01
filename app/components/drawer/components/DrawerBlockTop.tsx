@@ -7,6 +7,7 @@ import DrawerItem from '../../drawerItem/DrawerItem';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import {IconBookmark, IconClock, IconSearch, IconTelevision, IconUser} from '../../svg';
 import {useAuth0} from 'react-native-auth0';
+import * as HttpClient from '../../../api/HttpClient';
 
 interface Props {
   navigation: DrawerNavigationProp<MainStackParamList>;
@@ -33,6 +34,18 @@ const DrawerBlockTop: React.FC<React.PropsWithChildren<Props>> = ({navigation}) 
       .then((credentials) => {
         console.log('user', user);
         console.log('getCredentials', credentials);
+        if (credentials?.accessToken)
+          HttpClient.get('https://www.lrt.lt/servisai/authrz', {
+            headers: {
+              Authorization: `Bearer ${credentials?.idToken}`,
+            },
+          })
+            .then((response) => {
+              console.log('authrz response', response);
+            })
+            .catch((error) => {
+              console.warn('authrz error', JSON.stringify(error));
+            });
       })
       .catch((error) => {
         console.warn('getCredentials error', error);
