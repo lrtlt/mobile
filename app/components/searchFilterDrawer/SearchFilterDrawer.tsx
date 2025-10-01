@@ -18,8 +18,9 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CheckBox from '../checkBox/CheckBox';
 import useSearch from '../../screens/search/context/useSearch';
 import MyScrollView from '../MyScrollView/MyScrollView';
+import {DrawerContentComponentProps} from '@react-navigation/drawer';
 
-const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
+const SearchFilterDrawer: React.FC<React.PropsWithChildren<DrawerContentComponentProps>> = ({navigation}) => {
   const {colors} = useTheme();
 
   const {filter, setFilter} = useSearch();
@@ -41,6 +42,7 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
 
   const selectOrderBy = useCallback(
     (orderBy: SearchOrderBy | undefined) => {
+      navigation.closeDrawer();
       setFilter({...filter, orderBy});
     },
     [filter, setFilter],
