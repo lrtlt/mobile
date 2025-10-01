@@ -1,8 +1,6 @@
 import {useEffect, useState} from 'react';
 import CastContext, {
   CastState,
-  MediaHlsSegmentFormat,
-  MediaHlsVideoSegmentFormat,
   MediaInfo,
   MediaStatus,
   MediaStreamType,
@@ -42,32 +40,18 @@ const useChromecast = ({player, mediaType, isLiveStream, poster, streamUri, titl
         CastContext.sessionManager.getCurrentCastSession().then((session) => {
           const client = session?.client;
           const isAudio = mediaType === MediaType.AUDIO;
-          const isLRT1 = streamUri.includes('lrt-portal-prod-01');
-
-          console.log('streamUri', streamUri);
-          console.log('isAudio', isAudio);
-          console.log('isLRT1', isLRT1);
-
           setClient(client);
           player.pause();
 
           const startTime = player.currentTime / 1000;
           const mediaInfo: MediaInfo = {
-            hlsSegmentFormat: isLRT1
-              ? MediaHlsSegmentFormat.AAC
-              : isLiveStream
-              ? isAudio
-                ? MediaHlsSegmentFormat.TS_AAC
-                : MediaHlsSegmentFormat.TS
-              : MediaHlsSegmentFormat.AAC,
-            hlsVideoSegmentFormat: MediaHlsVideoSegmentFormat.MPEG2_TS,
             contentId: streamUri,
             contentUrl: streamUri,
             streamType: isLiveStream ? MediaStreamType.LIVE : MediaStreamType.BUFFERED,
             contentType: 'application/vnd.apple.mpegurl',
             metadata: {
               type: isAudio ? 'musicTrack' : 'generic',
-              title: title,
+              title: title ?? 'LRT',
               images: [
                 {
                   url: poster,

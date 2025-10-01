@@ -55,6 +55,11 @@ interface Props {
 
 const config: PlayerConfiguration = {
   license: Config.THEO_PLAYER_LICENCE,
+  cast: {
+    chromecast: {
+      appID: '87169DE4',
+    },
+  },
 };
 
 const makeSource = (

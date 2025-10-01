@@ -30,6 +30,10 @@
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="com.reactnative.googlecast.GoogleCastOptionsProvider" />
 
+        <meta-data
+            android:name="com.reactnative.googlecast.RECEIVER_APPLICATION_ID"
+            android:value="87169DE4" />
+
         <meta-data android:name="firebase_messaging_notification_delegation_enabled"
             android:value="false" />
 

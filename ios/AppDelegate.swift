@@ -24,7 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     RNFBAppCheckModule.sharedInstance()
     FirebaseApp.configure()
 
-    let kReceiverAppID = kGCKDefaultMediaReceiverApplicationID
+    // let kReceiverAppID = kGCKDefaultMediaReceiverApplicationID
+    let kReceiverAppID = "87169DE4"
     let criteria = GCKDiscoveryCriteria(applicationID: kReceiverAppID)
     let options = GCKCastOptions(discoveryCriteria: criteria)
     GCKCastContext.setSharedInstanceWith(options)
