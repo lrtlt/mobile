@@ -25,8 +25,11 @@ const linking: LinkingOptions<MainStackParamList> = {
       ArticleDeepLinkProxy: {
         path: '/naujienos/:category/*/:articleId/:title',
       },
-      MediaArticleDeepLinkProxy: {
+      Vodcast: {
         path: '/mediateka/irasas/:articleId/:title',
+      },
+      Podcast: {
+        path: '/radioteka/irasas/:articleId/:title',
       },
       Article: {
         path: 'article/:articleId',

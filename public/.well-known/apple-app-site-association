@@ -12,12 +12,18 @@
             "comment": "Matches any URL with a fragment that equals no_universal_links and instructs the system not to open it as a universal link."
           },
           {
-            "/": "/naujienos/*",
-            "comment": "Matches any URL with a path that starts with '/naujienos/'"
+            "/": "/naujienos/*"
           },
           {
-            "/": "/mediateka/irasas/*",
-            "comment": "Matches any URL with a path that starts with '/mediateka/irasas/'"
+            "/": "/naujienos/lrt-paprastai/*",
+            "comment": "lrt-paprastai is excluded from universal links",
+            "exclude": true
+          },
+          {
+            "/": "/mediateka/irasas/*"
+          },
+          {
+            "/": "/radioteka/irasas/*"
           }
         ]
       }

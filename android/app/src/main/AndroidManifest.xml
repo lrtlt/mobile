@@ -59,6 +59,7 @@
                 <data android:host="www.lrt.lt" />
                 <data android:pathPattern="/naujienos/.*/.*/.*/.*" />
                 <data android:pathPattern="/mediateka/irasas/.*/.*" />
+                <data android:pathPattern="/radioteka/irasas/.*/.*" />
             </intent-filter>
 
             <intent-filter>
