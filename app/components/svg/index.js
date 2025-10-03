@@ -75,3 +75,8 @@ export {default as IconNumber2} from './ic_number_2';
 export {default as IconNumber3} from './ic_number_3';
 export {default as IconNumber4} from './ic_number_4';
 export {default as IconNumber5} from './ic_number_5';
+export {default as IconWeather} from './ic_weather';
+export {default as IconNewsletter} from './ic_newsletter';
+export {default as IconShop} from './ic_shop';
+export {default as IconContacts} from './ic_contacts';
+export {default as IconAbout} from './ic_about';

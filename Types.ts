@@ -1,7 +1,4 @@
-import {ROUTE_TYPE_HOME, ROUTE_TYPE_MEDIA} from './app/api/Types';
 import {ARTICLE_TYPE_AUDIO, ARTICLE_TYPE_TEXT, ARTICLE_TYPE_VIDEO} from './app/constants';
-
-export type HomePageType = typeof ROUTE_TYPE_HOME | typeof ROUTE_TYPE_MEDIA;
 
 export type ArticleType = typeof ARTICLE_TYPE_TEXT | typeof ARTICLE_TYPE_AUDIO | typeof ARTICLE_TYPE_VIDEO;
 

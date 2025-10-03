@@ -1,8 +1,8 @@
-import {ROUTE_TYPE_CATEGORY, ROUTE_TYPE_NEWEST, ROUTE_TYPE_POPULAR} from '../../../../api/Types';
+import {MENU_TYPE_CATEGORY, MENU_TYPE_NEWEST, MENU_TYPE_POPULAR} from '../../../../api/Types';
 import useNavigationAnalytics, {TrackingParams} from '../../../../util/useNavigationAnalytics';
 
 type Params = {
-  type: typeof ROUTE_TYPE_CATEGORY | typeof ROUTE_TYPE_NEWEST | typeof ROUTE_TYPE_POPULAR;
+  type: typeof MENU_TYPE_CATEGORY | typeof MENU_TYPE_NEWEST | typeof MENU_TYPE_POPULAR;
   categoryTitle?: string;
   categoryUrl?: string;
 };
@@ -20,14 +20,14 @@ const toTrackingParams = ({type, categoryTitle, categoryUrl}: Params): TrackingP
   let viewId;
 
   switch (type) {
-    case ROUTE_TYPE_CATEGORY:
+    case MENU_TYPE_CATEGORY:
       title = `${categoryTitle} - LRT`;
       viewId = `https://www.lrt.lt${categoryUrl}`;
       break;
-    case ROUTE_TYPE_NEWEST:
+    case MENU_TYPE_NEWEST:
       title = 'Naujausi - LRT';
       break;
-    case ROUTE_TYPE_POPULAR:
+    case MENU_TYPE_POPULAR:
       title = 'Populiariausi - LRT';
       break;
   }

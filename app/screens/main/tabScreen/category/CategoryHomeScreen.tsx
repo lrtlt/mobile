@@ -13,7 +13,7 @@ import {ARTICLE_EXPIRE_DURATION, EVENT_LOGO_PRESS, EVENT_SELECT_CATEGORY_INDEX} 
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {useNavigation} from '@react-navigation/native';
-import {HomeBlockType, ROUTE_TYPE_CATEGORY} from '../../../../api/Types';
+import {HomeBlockType, MENU_TYPE_CATEGORY} from '../../../../api/Types';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../navigation/MainStack';
 import DailyQuestionComponent from '../../../../components/dailyQuestion/DailyQuestionComponent';
@@ -74,7 +74,7 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
-      page: ROUTE_TYPE_CATEGORY,
+      page: MENU_TYPE_CATEGORY,
       categoryId: id.toString(),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

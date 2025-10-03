@@ -4,17 +4,21 @@ import Svg, {Path} from 'react-native-svg';
 function SvgComponent(props) {
   return (
     <Svg
-      className="svg-icon svg-icon--search"
+      xmlns="http://www.w3.org/2000/svg"
       width={props.size}
       height={props.size}
-      viewBox="0 0 20 20"
+      viewBox="0 0 16 16"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
       {...props}>
       <Path
-        d="M9.219 14.688a5.469 5.469 0 100-10.938 5.469 5.469 0 000 10.938zM13.087 13.086l3.164 3.164"
+        d="M12.5 14h-9a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5h6L13 5.5v8a.5.5 0 01-.5.5z"
         stroke={props.color}
-        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Path
+        d="M9.5 2v3.5H13M6.25 9.25L8 7.5l1.75 1.75M8 11.5v-4"
+        stroke={props.color}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

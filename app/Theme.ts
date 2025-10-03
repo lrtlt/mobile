@@ -42,7 +42,6 @@ interface Dictionary {
   search: string;
   audiotekaSearchPlaceholder: string;
   upload: string;
-  about: string;
   contacts: string;
   feeback: string;
   about_episode: string;
@@ -58,6 +57,11 @@ interface Dictionary {
   stream_blocked_warning: string;
   remove_from_bookmarks: string;
   related_genres: string;
+  menu_weather: string;
+  menu_shop: string;
+  menu_newsletter: string;
+  menu_contacts: string;
+  menu_about: string;
 }
 
 export const strings: Dictionary = {
@@ -86,7 +90,7 @@ export const strings: Dictionary = {
   search: 'PAIEŠKA',
   audiotekaSearchPlaceholder: 'Ieškoti įrašų',
   upload: 'Įkelk',
-  about: 'Apie LRT',
+
   contacts: 'Kontaktai',
   feeback: 'Pranešk apie klaidą',
   about_episode: 'Apie epizodą',
@@ -102,6 +106,11 @@ export const strings: Dictionary = {
   stream_blocked_warning: 'Transliacija internetu negalima dėl autorių teisių apribojimų.',
   remove_from_bookmarks: 'Pašalinti iš išsaugotų',
   related_genres: 'Susiję žanrai',
+  menu_weather: 'Orai',
+  menu_newsletter: 'Naujienlaiškis',
+  menu_shop: 'LRT parduotuvė',
+  menu_contacts: 'Susisiekite',
+  menu_about: 'Apie LRT',
 };
 //#endregion
 

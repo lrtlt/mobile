@@ -15,7 +15,7 @@ import {Text, TouchableDebounce} from '../../../../../../components';
 import {IconPlay} from '../../../../../../components/svg';
 
 const {height} = Dimensions.get('window');
-const width = Math.min(Dimensions.get('window').width * 0.65, 300);
+const width = Math.min(Dimensions.get('window').width * 0.4, 300);
 
 interface Props {
   block: MediatekaBlockWidget;

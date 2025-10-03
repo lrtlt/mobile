@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator, DrawerNavigationProp} from '@react-navigation/drawer';
 
 import * as Screens from '../screens';
-import {Drawer, SearchFilterDrawer} from '../components';
+import {SearchFilterDrawer} from '../components';
 import {themeDark, themeLight} from '../Theme';
 import {
   ArticleContent,
@@ -19,6 +19,7 @@ import {Article} from '../../Types';
 import {useSettingsStore} from '../state/settings_store';
 import {Platform} from 'react-native';
 import {useNavigationStore} from '../state/navigation_store';
+import Drawer2Component from '../components/drawer2/Drawer2';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -99,7 +100,9 @@ const MainDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
         freezeOnBlur: true,
       }}
       drawerContent={(props) => (
-        <Drawer navigation={props.navigation as unknown as DrawerNavigationProp<MainStackParamList>} />
+        <Drawer2Component
+          navigation={props.navigation as unknown as DrawerNavigationProp<MainStackParamList>}
+        />
       )}>
       <MainDrawer.Screen
         name="Main"

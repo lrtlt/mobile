@@ -11,14 +11,7 @@ import {EventRegister} from 'react-native-event-listeners';
 import {EVENT_LOGO_PRESS, EVENT_OPEN_CATEGORY, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {
-  ROUTE_TYPE_HOME,
-  ROUTE_TYPE_AUDIOTEKA,
-  ROUTE_TYPE_CATEGORY,
-  ROUTE_TYPE_MEDIA,
-  ROUTE_TYPE_NEWEST,
-  ROUTE_TYPE_POPULAR,
-} from '../../api/Types';
+
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {MainDrawerParamList, MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -30,6 +23,14 @@ import {useNavigationStore} from '../../state/navigation_store';
 import CategoryHomeScreen from './tabScreen/category/CategoryHomeScreen';
 import RadiotekaScreen from './tabScreen/radioteka/RadiotekaScreen';
 import MediatekaScreen from './tabScreen/mediateka/MediatekaScreen';
+import {
+  MENU_TYPE_CATEGORY,
+  MENU_TYPE_HOME,
+  MENU_TYPE_MEDIATEKA,
+  MENU_TYPE_NEWEST,
+  MENU_TYPE_POPULAR,
+  MENU_TYPE_RADIOTEKA,
+} from '../../api/Types';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -49,21 +50,21 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
 
   const {isVisible, onClose} = useOnboardingLogic();
 
-  const routes = useNavigationStore((state) => state.routes);
+  const routes = useNavigationStore((state) => state.routesV2);
   const state = useMemo(() => {
     return {
       routes: routes.map((r) => {
-        if (r.type === ROUTE_TYPE_CATEGORY) {
+        if (r.type === MENU_TYPE_CATEGORY) {
           return {
             type: r.type,
-            key: r.name,
-            title: r.name,
-            categoryId: r.id,
+            key: r.url,
+            title: r.title,
+            categoryId: r.category_id,
             categoryUrl: r.url,
-            hasHome: r.has_home_blocks,
+            hasHome: r.hasHome,
           };
         } else {
-          return {type: r.type, key: r.name, title: r.name};
+          return {type: r.type, key: r.title, title: r.title};
         }
       }),
     };
@@ -143,13 +144,13 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
       const current = routeIndex === selectedTabIndex;
 
       switch (route.type) {
-        case ROUTE_TYPE_HOME:
-          return <HomeScreen type={ROUTE_TYPE_HOME} isCurrent={current} />;
-        case ROUTE_TYPE_MEDIA:
+        case MENU_TYPE_HOME:
+          return <HomeScreen isCurrent={current} />;
+        case MENU_TYPE_MEDIATEKA:
           return <MediatekaScreen isCurrent={current} />;
-        case ROUTE_TYPE_AUDIOTEKA:
+        case MENU_TYPE_RADIOTEKA:
           return <RadiotekaScreen isCurrent={current} />;
-        case ROUTE_TYPE_CATEGORY:
+        case MENU_TYPE_CATEGORY:
           return route.hasHome ? (
             <CategoryHomeScreen
               id={route.categoryId}
@@ -159,7 +160,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
             />
           ) : (
             <SimpleArticleScreen
-              type={ROUTE_TYPE_CATEGORY}
+              type={MENU_TYPE_CATEGORY}
               isCurrent={current}
               showTitle
               showBackToHome
@@ -168,13 +169,11 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
               categoryUrl={route.categoryUrl}
             />
           );
-        case ROUTE_TYPE_NEWEST:
+        case MENU_TYPE_NEWEST:
+          return <SimpleArticleScreen type={MENU_TYPE_NEWEST} isCurrent={current} showTitle showBackToHome />;
+        case MENU_TYPE_POPULAR:
           return (
-            <SimpleArticleScreen type={ROUTE_TYPE_NEWEST} isCurrent={current} showTitle showBackToHome />
-          );
-        case ROUTE_TYPE_POPULAR:
-          return (
-            <SimpleArticleScreen type={ROUTE_TYPE_POPULAR} isCurrent={current} showTitle showBackToHome />
+            <SimpleArticleScreen type={MENU_TYPE_POPULAR} isCurrent={current} showTitle showBackToHome />
           );
         default:
           return <TestScreen text={'Unkown type: ' + JSON.stringify(route)} />;
@@ -198,7 +197,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
             routes: state.routes,
             index: selectedTabIndex,
           }}
-          // swipeEnabled={state.routes[selectedTabIndex]?.type !== ROUTE_TYPE_AUDIOTEKA}
+          // swipeEnabled={state.routes[selectedTabIndex]?.type !== MENU_TYPE_AUDIOTEKA}
           swipeEnabled={true}
           renderScene={renderScene}
           renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}

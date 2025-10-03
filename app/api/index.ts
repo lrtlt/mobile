@@ -7,7 +7,7 @@ import {
   articlesGetByTag,
   audiotekaGet,
   carPlaylistCategoryGet,
-  carPlaylistLiveGet,
+  tvProgramsGet,
   carPlaylistNewestGet,
   carPlaylistPopularGet,
   carPlaylistRecommendedGet,
@@ -62,6 +62,7 @@ import {
   LiveFeedResponse,
   MediatekaDataResponse,
   MediatekaV2DataResponse,
+  Menu2Response,
   MenuResponse,
   NewestArticlesResponse,
   OpusPlaylistResponse,
@@ -76,6 +77,8 @@ import {
   VideoDataDefault,
   VideoDataLiveStream,
 } from './Types';
+
+import {getFirestore} from '@react-native-firebase/firestore';
 
 export const fetchMenuItemsApi = () => get<MenuResponse>(menuGet());
 
@@ -155,7 +158,7 @@ export const fetchartcilesByCategory = (categoryId: string | number, count: numb
 export const fetchCategoryPlaylist = (id: string | number) =>
   get<CarPlayCategoryResponse>(carPlaylistCategoryGet(id));
 
-export const fetchCarLivePlaylist = () => get<TVProgramResponse>(carPlaylistLiveGet());
+export const fetchLiveTvPrograms = () => get<TVProgramResponse>(tvProgramsGet());
 
 export const fetchRadiotekaSeasonPlaylist = (seasonUrl: string, page: number, count: number) =>
   get<SearchResponse>(getRadiotekaArticlesBySeason(seasonUrl, page, count));
@@ -198,3 +201,12 @@ export const sendSearchUserEvent = (event: AIUserEvent) =>
 export const fetchAISummary = (query: string) => get<AISummaryResponse>(getAISummary(query));
 
 export const fetchAutocomplete = (query: string) => get<AIAutomcompleteResponse>(fetchAIAutocomplete(query));
+
+export const fetchMenuItemsV2 = async (): Promise<Menu2Response> => {
+  const snapshot = await getFirestore().collection('internal').doc('app-menu').get();
+  if (snapshot.exists()) {
+    return snapshot.data() as Menu2Response;
+  } else {
+    throw new Error('Menu document not found');
+  }
+};

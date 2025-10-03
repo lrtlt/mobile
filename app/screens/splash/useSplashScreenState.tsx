@@ -4,15 +4,14 @@ import {useShallow} from 'zustand/shallow';
 import {useArticleStore} from '../../state/article_store';
 
 const useSplashScreenState = () => {
-  const {fetchMenuItems} = useNavigationStore.getState();
+  const {fetchMenuItemsV2} = useNavigationStore.getState();
   const {fetchHome} = useArticleStore.getState();
 
   const state = useNavigationStore(
     useShallow((state) => ({
-      routes: state.routes,
       isError: state.isError,
       isLoading: state.isLoading,
-      isReady: state.routes.length > 0,
+      isReady: state.routesV2.length > 0,
     })),
   );
 
@@ -32,7 +31,7 @@ const useSplashScreenState = () => {
         return;
       }
       if (state.isLoading !== true) {
-        fetchMenuItems();
+        fetchMenuItemsV2();
       }
     },
     [state],

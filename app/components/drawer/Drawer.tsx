@@ -18,8 +18,6 @@ import MyScrollView from '../MyScrollView/MyScrollView';
 import {useNavigationStore} from '../../state/navigation_store';
 import {useShallow} from 'zustand/shallow';
 import {MainStackParamList} from '../../navigation/MainStack';
-import {Text} from '..';
-import {getAppVersion} from '../../util/useAppVersion';
 
 type Props = {
   navigation: DrawerNavigationProp<MainStackParamList>;

@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo} from 'react';
 
 import Gemius from 'react-native-gemius-plugin';
-import {ROUTE_TYPE_CATEGORY, ROUTE_TYPE_NEWEST, ROUTE_TYPE_POPULAR} from '../../../../api/Types';
 import {EVENT_LOGO_PRESS} from '../../../../constants';
 import useNewestArticlesProvider from './articleProviders/useNewestArticlesProvider';
 import usePopularArticlesProvider from './articleProviders/usePopularArticlesProvider';
@@ -11,10 +10,11 @@ import useCategoryArticlesProvider from './articleProviders/useCategoryArticlesP
 import {EventRegister} from 'react-native-event-listeners';
 import useSimpleArticleScreenAnalytics from './useSimpleArticleScreenAnalytics';
 import Config from 'react-native-config';
+import {MENU_TYPE_CATEGORY, MENU_TYPE_NEWEST, MENU_TYPE_POPULAR} from '../../../../api/Types';
 
 interface Props {
   isCurrent: boolean;
-  type: typeof ROUTE_TYPE_CATEGORY | typeof ROUTE_TYPE_NEWEST | typeof ROUTE_TYPE_POPULAR;
+  type: typeof MENU_TYPE_CATEGORY | typeof MENU_TYPE_NEWEST | typeof MENU_TYPE_POPULAR;
   showTitle: boolean;
   showBackToHome?: boolean;
   categoryId?: number;

@@ -199,7 +199,7 @@ export const carPlaylistRecommendedGet = () => 'https://www.lrt.lt/static/carpla
 
 export const carPlaylistCategoryGet = (id: number | string) => `${BASE_URL}category?id=${id}`;
 
-export const carPlaylistLiveGet = () => 'https://www.lrt.lt/static/tvprog/tvprog.json';
+export const tvProgramsGet = () => 'https://www.lrt.lt/static/tvprog/tvprog.json';
 
 export const getRadiotekaArticlesBySeason = (seasonUrl: string, page: number, count: number) =>
   `https://www.lrt.lt/api/search?type=2&season_url=${seasonUrl}&order=desc&page=${page}&count=${count}`;

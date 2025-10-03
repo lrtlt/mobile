@@ -1,15 +1,24 @@
 import {Article as FeedArticle} from '../../Types';
 
-//Route types from menu api
-export const ROUTE_TYPE_HOME = 'home';
-export const ROUTE_TYPE_CATEGORY = 'category';
-export const ROUTE_TYPE_NEWEST = 'newest';
-export const ROUTE_TYPE_POPULAR = 'popular';
-export const ROUTE_TYPE_MEDIA = 'mediateka';
-export const ROUTE_TYPE_AUDIOTEKA = 'audioteka';
-export const ROUTE_TYPE_PAGE = 'page';
-export const ROUTE_TYPE_CHANNELS = 'channels';
-export const ROUTE_TYPE_WEBPAGES = 'webpages';
+export const MENU_TYPE_HOME = 'home';
+export const MENU_TYPE_SEARCH = 'search';
+export const MENU_TYPE_BOOKMARKS = 'bookmarks';
+export const MENU_TYPE_HISTORY = 'history';
+export const MENU_TYPE_MEDIATEKA = 'mediateka';
+export const MENU_TYPE_RADIOTEKA = 'radioteka';
+export const MENU_TYPE_PROGRAM = 'program';
+export const MENU_TYPE_WEATHER = 'weather';
+export const MENU_TYPE_CHANNELS = 'channels';
+export const MENU_TYPE_CATEGORY = 'category';
+export const MENU_TYPE_SLUG = 'slug';
+export const MENU_TYPE_PAGE = 'page';
+export const MENU_TYPE_WEBPAGE = 'webpage';
+export const MENU_TYPE_EXPANDABLE = 'expandable';
+export const MENU_TYPE_GROUP = 'group';
+
+// Extra menu types, that are not included in menu API
+export const MENU_TYPE_NEWEST = 'newest';
+export const MENU_TYPE_POPULAR = 'popular';
 
 export const SEARCH_TYPE_ALL = 0;
 export const SEARCH_TYPE_NEWS = 1;
@@ -17,18 +26,143 @@ export const SEARCH_TYPE_AUDIO = 2;
 export const SEARCH_TYPE_VIDEO = 3;
 export const SEARCH_TYPE_VIDEO_SUBTITLES = 4;
 
+export type Menu2Response = {items: Menu2Item[]};
+
+export type Menu2Item =
+  | Menu2ItemHome
+  | Menu2ItemSearch
+  | Menu2ItemBookmarks
+  | Menu2ItemHistory
+  | Menu2ItemChannels
+  | Menu2ItemMediateka
+  | Menu2ItemRadioteka
+  | Menu2ItemProgram
+  | Menu2ItemWeather
+  | Menu2ItemWebpage
+  | Menu2ItemCategory
+  | Menu2ItemSlug
+  | Menu2ItemPage
+  | Menu2ItemNewest
+  | Menu2ItemPopular
+  | Menu2ItemExpandable
+  | Menu2ItemGroup;
+
+export type Menu2ItemHome = {
+  type: typeof MENU_TYPE_HOME;
+  title: string;
+  url: string;
+};
+
+export type Menu2ItemSearch = {
+  type: typeof MENU_TYPE_SEARCH;
+  title: string;
+  url: string;
+};
+
+export type Menu2ItemChannels = {
+  type: typeof MENU_TYPE_CHANNELS;
+  title: string;
+};
+
+export type Menu2ItemBookmarks = {
+  type: typeof MENU_TYPE_BOOKMARKS;
+  title: string;
+};
+
+export type Menu2ItemPopular = {
+  type: typeof MENU_TYPE_POPULAR;
+  title: string;
+};
+
+export type Menu2ItemNewest = {
+  type: typeof MENU_TYPE_NEWEST;
+  title: string;
+};
+
+export type Menu2ItemHistory = {
+  type: typeof MENU_TYPE_HISTORY;
+  title: string;
+};
+
+export type Menu2ItemMediateka = {
+  type: typeof MENU_TYPE_MEDIATEKA;
+  title: string;
+  url: string;
+};
+
+export type Menu2ItemRadioteka = {
+  type: typeof MENU_TYPE_RADIOTEKA;
+  title: string;
+  url: string;
+};
+
+export type Menu2ItemProgram = {
+  type: typeof MENU_TYPE_PROGRAM;
+  title: string;
+  url: string;
+};
+
+export type Menu2ItemWeather = {
+  type: typeof MENU_TYPE_WEATHER;
+  title: string;
+  url: string;
+};
+
+export type Menu2ItemWebpage = {
+  type: typeof MENU_TYPE_WEBPAGE;
+  title: string;
+  url: string;
+};
+
+export type Menu2ItemCategory = {
+  type: typeof MENU_TYPE_CATEGORY;
+  title: string;
+  url: string;
+  category_id: number;
+  hasHome?: boolean;
+};
+
+export type Menu2ItemSlug = {
+  type: typeof MENU_TYPE_SLUG;
+  title: string;
+  url: string;
+  slug: string;
+};
+
+export type Menu2ItemPage = {
+  type: typeof MENU_TYPE_PAGE;
+  title: string;
+  url: string;
+  categories: {
+    id: number;
+    name: string;
+  }[];
+};
+
+export type Menu2ItemExpandable = {
+  type: typeof MENU_TYPE_EXPANDABLE;
+  title: string;
+  items: Menu2Item[];
+};
+
+export type Menu2ItemGroup = {
+  type: typeof MENU_TYPE_GROUP;
+  title: string;
+  items: Menu2Item[];
+};
+
 export type MenuItem = {
   type:
-    | typeof ROUTE_TYPE_HOME
-    | typeof ROUTE_TYPE_NEWEST
-    | typeof ROUTE_TYPE_POPULAR
-    | typeof ROUTE_TYPE_MEDIA
-    | typeof ROUTE_TYPE_AUDIOTEKA;
+    | typeof MENU_TYPE_HOME
+    | typeof MENU_TYPE_NEWEST
+    | typeof MENU_TYPE_POPULAR
+    | typeof MENU_TYPE_MEDIATEKA
+    | typeof MENU_TYPE_RADIOTEKA;
   name: string;
 };
 
 export type MenuItemCategory = {
-  type: typeof ROUTE_TYPE_CATEGORY;
+  type: typeof MENU_TYPE_CATEGORY;
   name: string;
   id: number;
   url: string;
@@ -36,7 +170,7 @@ export type MenuItemCategory = {
 };
 
 export type MenuItemProjects = {
-  type: typeof ROUTE_TYPE_WEBPAGES;
+  type: typeof MENU_TYPE_WEBPAGE;
   name: string;
   categories: {
     name: string;
@@ -45,7 +179,7 @@ export type MenuItemProjects = {
 };
 
 export type MenuItemPage = {
-  type: typeof ROUTE_TYPE_PAGE;
+  type: typeof MENU_TYPE_PAGE;
   name: string;
   categories: {
     name: string;
@@ -54,7 +188,7 @@ export type MenuItemPage = {
 };
 
 export type MenuItemChannels = {
-  type: typeof ROUTE_TYPE_CHANNELS;
+  type: typeof MENU_TYPE_CHANNELS;
   name: string;
   items: {
     channel_id: number;
@@ -104,6 +238,7 @@ export type TVChannel = {
 export type LiveChannel = {
   channel_id: number;
   channel: string;
+  channel_title?: string;
   title: string;
   get_streams_url: string;
   proc: string;
@@ -887,10 +1022,6 @@ export const isMediaArticle = (article?: ArticleContent): article is ArticleCont
 export const isDefaultArticle = (article?: ArticleContent): article is ArticleContentDefault => {
   const a = article as ArticleContentDefault | undefined;
   return Boolean(a?.article_id);
-};
-
-export const isCatageoryMenuItem = (item?: MenuItem | MenuItemCategory): item is MenuItemCategory => {
-  return Boolean((item as MenuItemCategory)?.type === ROUTE_TYPE_CATEGORY);
 };
 
 export const isVideoLiveStream = (

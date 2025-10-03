@@ -14,7 +14,7 @@ import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../../../Theme';
-import {HomeBlockType, ROUTE_TYPE_HOME, ROUTE_TYPE_MEDIA} from '../../../../api/Types';
+import {HomeBlockType} from '../../../../api/Types';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../navigation/MainStack';
 import TopArticlesBlock from './blocks/TopArticlesBlock/TopArticlesBlock';
@@ -30,14 +30,13 @@ import EpikaBlock from './blocks/EpikaBlock/EpikaBlock';
 import VideoListBlock from './blocks/VideoListBlock/VideoListBlock';
 import {useShallow} from 'zustand/shallow';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
-import {HomePageType} from '../../../../../Types';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Config from 'react-native-config';
 import {useArticleStorageStore} from '../../../../state/article_storage_store';
 import {sendSearchUserEvent} from '../../../../api';
 
-const selectHomeScreenState = (type: HomePageType) => (state: ArticleState) => {
-  const block = type === ROUTE_TYPE_MEDIA ? state.mediateka : state.home;
+const selectHomeScreenState = () => (state: ArticleState) => {
+  const block = state.home;
   return {
     refreshing: block.isFetching && block.items.length > 0,
     lastFetchTime: block.lastFetchTime,
@@ -47,15 +46,14 @@ const selectHomeScreenState = (type: HomePageType) => (state: ArticleState) => {
 
 interface Props {
   isCurrent: boolean;
-  type: typeof ROUTE_TYPE_HOME | typeof ROUTE_TYPE_MEDIA;
 }
 
-const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type}) => {
+const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const listRef = useRef<FlashList<any>>(null);
 
-  const {fetchHome, fetchMediateka} = useArticleStore.getState();
-  const state = useArticleStore(useShallow(selectHomeScreenState(type)));
+  const {fetchHome} = useArticleStore.getState();
+  const state = useArticleStore(useShallow(selectHomeScreenState()));
 
   const {syncSavedArticles} = useArticleStorageStore.getState();
   useEffect(() => {
@@ -68,7 +66,7 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
 
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
-      page: type,
+      page: 'home',
     });
     sendSearchUserEvent({
       type: 'view-home-page',
@@ -82,12 +80,9 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
   }, []);
 
   useNavigationAnalytics({
-    viewId: type === ROUTE_TYPE_MEDIA ? 'https://www.lrt.lt/mediateka' : 'https://www.lrt.lt/',
-    title:
-      type === ROUTE_TYPE_MEDIA
-        ? 'Mediateka - LRT'
-        : 'Lietuvos nacionalinis radijas ir televizija. Naujienos, įrašai ir transliacijos. - LRT',
-    sections: type == ROUTE_TYPE_MEDIA ? ['Mediateka_home'] : ['/Lrt'],
+    viewId: 'https://www.lrt.lt/',
+    title: 'Lietuvos nacionalinis radijas ir televizija. Naujienos, įrašai ir transliacijos. - LRT',
+    sections: ['/Lrt'],
   });
 
   useEffect(() => {
@@ -108,7 +103,7 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
 
   const refresh = useCallback(() => {
     if (!refreshing && Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
-      console.log(`${type} data expired!`);
+      console.log(`Home data expired!`);
       callApi();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,12 +122,8 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
   );
 
   const callApi = useCallback(() => {
-    if (type === ROUTE_TYPE_MEDIA) {
-      fetchMediateka();
-    } else {
-      fetchHome();
-    }
-  }, [type]);
+    fetchHome();
+  }, []);
 
   const onForecastPressHandler = useCallback(() => {
     navigation.navigate('Weather');
@@ -207,16 +198,12 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, type})
   );
 
   const renderForecast = useCallback(() => {
-    if (type === ROUTE_TYPE_MEDIA) {
-      return null;
-    } else {
-      return (
-        <TouchableDebounce debounceTime={500} onPress={onForecastPressHandler}>
-          <Forecast style={styles.forecast} />
-        </TouchableDebounce>
-      );
-    }
-  }, [onForecastPressHandler, type]);
+    return (
+      <TouchableDebounce debounceTime={500} onPress={onForecastPressHandler}>
+        <Forecast style={styles.forecast} />
+      </TouchableDebounce>
+    );
+  }, [onForecastPressHandler]);
 
   const insets = useSafeAreaInsets();
   const keyExtractor = useCallback((item: HomeBlockType, index: number) => `${index}-${item.type}`, []);

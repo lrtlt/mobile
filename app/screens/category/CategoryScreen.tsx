@@ -6,7 +6,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SimpleArticleScreen from '../main/tabScreen/simple/SimpleArticleScreen';
-import {ROUTE_TYPE_CATEGORY} from '../../api/Types';
+import {MENU_TYPE_CATEGORY} from '../../api/Types';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Category'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Category'>;
@@ -30,7 +30,7 @@ const CategoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, r
   return (
     <SafeAreaView style={styles.screen} edges={['left', 'right']}>
       <SimpleArticleScreen
-        type={ROUTE_TYPE_CATEGORY}
+        type={MENU_TYPE_CATEGORY}
         isCurrent={false}
         showTitle={false}
         categoryId={id}

@@ -6,8 +6,8 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import SimpleArticleScreen from '../main/tabScreen/simple/SimpleArticleScreen';
-import {ROUTE_TYPE_CATEGORY} from '../../api/Types';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import {MENU_TYPE_CATEGORY} from '../../api/Types';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Page'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Page'>;
@@ -61,7 +61,7 @@ const CustomPageScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation,
             const {route: sceneRounte} = sceneProps;
             return (
               <SimpleArticleScreen
-                type={ROUTE_TYPE_CATEGORY}
+                type={MENU_TYPE_CATEGORY}
                 showTitle
                 isCurrent={false}
                 categoryId={sceneRounte.categoryId}
