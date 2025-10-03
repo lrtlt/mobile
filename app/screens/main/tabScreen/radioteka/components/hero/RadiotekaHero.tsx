@@ -69,6 +69,8 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
     articles[selectedIndex].hero_photo?.img_path_postfix ?? articles[selectedIndex].img_path_postfix,
   );
 
+  const aspectRatio = articles[selectedIndex].hero_photo?.w_h ?? articles[selectedIndex].img_w_h ?? 1.77;
+
   const durationMinutes = Math.floor((articles[selectedIndex].media_duration_sec ?? 0) / 60);
 
   if (articles?.length === 0) {
@@ -78,30 +80,27 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   return (
     <ThemeProvider forceTheme={themeLight}>
       <View style={styles.container}>
-        <FastImage
-          style={{
-            ...StyleSheet.absoluteFillObject,
-          }}
-          source={{uri: imgUrl}}
-          resizeMode="cover"
-        />
-        <LinearGradient
-          style={StyleSheet.absoluteFillObject}
-          colors={['#000000', '#00000033', '#00000000']}
-          useAngle={true}
-          angle={0}
-        />
-        <LinearGradient
-          style={StyleSheet.absoluteFillObject}
-          colors={['#00000066', '#00000000']}
-          useAngle={true}
-          angle={90}
-        />
-        <View style={styles.header}>
+        <View>
+          <FastImage
+            style={{
+              width: '100%',
+              aspectRatio: aspectRatio,
+            }}
+            source={{uri: imgUrl}}
+            resizeMode="cover"
+          />
+          <LinearGradient
+            style={{position: 'absolute', bottom: 0, width: '100%', height: '50%'}}
+            colors={['#181927', '#18192700']}
+            useAngle={true}
+            angle={0}
+          />
+        </View>
+        {/* <View style={styles.header}>
           <Text style={styles.headerText} fontFamily="SourceSansPro-SemiBold" numberOfLines={1}>
             Radioteka rekomenduoja
           </Text>
-        </View>
+        </View> */}
 
         <View style={styles.mainContent}>
           <View style={styles.mainContentText}>
@@ -154,11 +153,11 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: height - 100,
+    height: height - 132,
     justifyContent: 'space-between',
-    paddingTop: 32,
     paddingBottom: 40,
     marginBottom: 64,
+    backgroundColor: '#181927',
   },
   header: {
     paddingHorizontal: 12,
