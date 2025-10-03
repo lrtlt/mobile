@@ -7,7 +7,6 @@ import {
   Menu2Response,
   MENU_TYPE_CATEGORY,
   MENU_TYPE_EXPANDABLE,
-  MENU_TYPE_GROUP,
   MENU_TYPE_HOME,
   MENU_TYPE_MEDIATEKA,
   MENU_TYPE_NEWEST,
@@ -173,7 +172,7 @@ const parseRoutes = (apiResponse: MenuResponse): (MenuItem | MenuItemCategory)[]
 
 const parseRoutesV2 = (apiResponse: Menu2Response): Menu2Item[] => {
   const flat = apiResponse.items.flatMap((item) => {
-    if (item.type === MENU_TYPE_GROUP || (item.type === MENU_TYPE_EXPANDABLE && item.items)) {
+    if (item.type === MENU_TYPE_EXPANDABLE && item.items) {
       return item.items;
     }
     return item;

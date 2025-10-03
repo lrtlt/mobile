@@ -67,7 +67,7 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
         navigation.navigate('Program');
         break;
       case 'category':
-        openCategoryById(item.category_id);
+        openCategoryById(item.category_id, item.title);
         navigation.closeDrawer();
         break;
       case 'search':
