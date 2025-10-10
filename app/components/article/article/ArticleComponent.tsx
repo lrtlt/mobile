@@ -6,7 +6,7 @@ import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import MediaIndicator from '../../mediaIndicator/MediaIndicator';
 
 import {IMG_SIZE_M, IMG_SIZE_S, getArticleImageUri} from '../../../util/ImageUtil';
-import {themeLight} from '../../../Theme';
+import {themeLight, useTheme} from '../../../Theme';
 import TextComponent from '../../text/Text';
 import {Article} from '../../../../Types';
 import ArticleBadges from './ArticleBadges';
@@ -16,6 +16,7 @@ import MediaIcon from '../../mediaIcon/MediaIcon';
 
 import FastImage from '@d11/react-native-fast-image';
 import {DEFAULT_ARTICLE_IMAGE} from '../../../constants';
+import {IconSimple} from '../../svg';
 
 const getArticleStyle = (type: ArticleStyleType) => {
   switch (type) {
@@ -50,6 +51,7 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
   onPress,
 }) => {
   const style = getArticleStyle(styleType);
+  const {colors, simplyfied} = useTheme();
 
   // Safety check for article object
   if (!article) {
@@ -90,6 +92,18 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
     </TextComponent>
   );
 
+  const simpleIcon = simplyfied && (
+    <View
+      style={{
+        backgroundColor: colors.primary,
+        padding: 2,
+        marginRight: 8,
+        borderRadius: 2,
+      }}>
+      <IconSimple width={16} height={16} color={colors.onPrimary} />
+    </View>
+  );
+
   const badge = Boolean(article?.badge_title) && (
     <Badge style={style.badge} label={article.badge_title!} type={article?.badge_class} />
   );
@@ -100,7 +114,14 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
   const isVerticalPhoto = aspectRatio && Number(aspectRatio) < 1;
 
   return (
-    <View style={[style.container, styleProp]}>
+    <View
+      style={[
+        style.container,
+        styleProp,
+        {
+          marginVertical: simplyfied ? 16 : 0,
+        },
+      ]}>
       <TouchableDebounce
         debounceTime={500}
         onPress={onPressHandler}
@@ -126,14 +147,21 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
             {mediaDuration}
             <ListenCount style={style.listenCount} article={article} visible={styleType === 'single'} />
           </View>
-          <View style={style.categoryTitleContainer}>
-            {mediaIcon}
-            <TextComponent style={style.categoryTitle}>{article?.category_title || ''}</TextComponent>
-            {date}
-          </View>
-          {badge}
-
-          <TextComponent style={style.title} fontFamily="PlayfairDisplay-Regular">
+          {!simplyfied && (
+            <>
+              <View style={style.categoryTitleContainer}>
+                {mediaIcon}
+                <TextComponent style={style.categoryTitle}>{article?.category_title || ''}</TextComponent>
+                {date}
+              </View>
+              {badge}
+            </>
+          )}
+          {simplyfied && <View style={{height: 16}} />}
+          <TextComponent
+            style={{...style.title, fontSize: simplyfied ? 18 : style.title.fontSize}}
+            fontFamily="PlayfairDisplay-Regular">
+            {simplyfied && simpleIcon}
             {article?.title || ''}
           </TextComponent>
           {Boolean(article?.summary) && (
@@ -146,7 +174,7 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
               {article.subtitle}
             </TextComponent>
           )}
-          <ArticleBadges style={style.badges} article={article} />
+          {!simplyfied && <ArticleBadges style={style.badges} article={article} />}
         </View>
       </TouchableDebounce>
     </View>

@@ -16,6 +16,7 @@ export const TYPE_PARAGRAPH = 'content_paragraph';
 export const TYPE_VIDEO = 'content_video';
 export const TYPE_AUDIO = 'content_audio';
 export const TYPE_AUDIO_CONTENT = 'content_audio_content';
+export const TYPE_SIMPLE_FOOTER = 'content_simple_footer';
 
 export type ArticleContentItemType = {
   type:
@@ -27,19 +28,20 @@ export type ArticleContentItemType = {
     | typeof TYPE_PARAGRAPH
     | typeof TYPE_VIDEO
     | typeof TYPE_AUDIO
-    | typeof TYPE_AUDIO_CONTENT;
+    | typeof TYPE_AUDIO_CONTENT
+    | typeof TYPE_SIMPLE_FOOTER;
   data: any;
 };
 
-export const compose = (article: ArticleContent) => {
+export const compose = (article: ArticleContent, simplified: boolean) => {
   if (isMediaArticle(article)) {
     return composeMedia(article);
   } else {
-    return composeDefault(article);
+    return composeDefault(article, simplified);
   }
 };
 
-const composeDefault = (article: ArticleContentDefault) => {
+const composeDefault = (article: ArticleContentDefault, simplified: boolean) => {
   const data = [];
   data.push(getHeaderData(article));
   data.push(getMainPhoto(article));
@@ -50,6 +52,13 @@ const composeDefault = (article: ArticleContentDefault) => {
   if (article.paragraphs) {
     data.push(...getParagraphs(article));
   }
+
+  if (simplified) {
+    data.push(getSimpleFooter());
+    ///Simplified style does not have gallery and keywords at the end
+    return data;
+  }
+
   if (article.article_photos) {
     data.push(getGallery(article));
   }
@@ -131,6 +140,13 @@ const getGallery = (article: ArticleContentDefault): ArticleContentItemType => {
     data: {
       photos: article.article_photos,
     },
+  };
+};
+
+const getSimpleFooter = (): ArticleContentItemType => {
+  return {
+    type: TYPE_SIMPLE_FOOTER,
+    data: {},
   };
 };
 

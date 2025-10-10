@@ -4,6 +4,7 @@ import {ArticleSelectableItem} from '../../screens/article/ArticleContentCompone
 import {checkEqual} from '../../util/LodashEqualityCheck';
 import ArticleEmbed from './embeded/ArticleEmbed';
 import ArticleParagraph from './paragraph/ArticleParagraph';
+import {useTheme} from '../../Theme';
 
 interface Props {
   data: {
@@ -14,12 +15,19 @@ interface Props {
 }
 
 const ArticleContentItem: React.FC<React.PropsWithChildren<Props>> = ({data, itemPressHandler}) => {
+  const {simplyfied} = useTheme();
   const {p, embed} = data;
 
   return (
     <>
-      {Boolean(p) && <ArticleParagraph htmlText={p} />}
-      {embed && <ArticleEmbed embedArray={embed} itemPressHandler={itemPressHandler} />}
+      {!!p && (
+        <ArticleParagraph
+          htmlText={p}
+          textSize={simplyfied ? 20 : undefined}
+          lineHeight={simplyfied ? 40 : undefined}
+        />
+      )}
+      {embed && !simplyfied && <ArticleEmbed embedArray={embed} itemPressHandler={itemPressHandler} />}
     </>
   );
 };

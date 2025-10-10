@@ -7,6 +7,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SimpleArticleScreen from '../main/tabScreen/simple/SimpleArticleScreen';
 import {MENU_TYPE_CATEGORY} from '../../api/Types';
+import {SIMPLIFIED_CATEGORY_ID} from '../../constants';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Category'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Category'>;
@@ -24,6 +25,12 @@ const CategoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, r
       headerTitle: name,
     });
   }, [name, navigation]);
+
+  useEffect(() => {
+    if (id === SIMPLIFIED_CATEGORY_ID) {
+      navigation.replace('Simple');
+    }
+  }, [navigation]);
 
   //Not using navigation analytics here because it's already used in ArticleTabScreen
 

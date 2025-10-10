@@ -43,6 +43,15 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
     }, []),
   );
 
+  const openUrl = useCallback((url: string) => {
+    //TODO: this is a workaround before the migration
+    if (url.includes('lrt.lt/naujienos/lrt-paprastai')) {
+      navigation.navigate('Simple');
+      return;
+    }
+    Linking.openURL(url);
+  }, []);
+
   const handleItemPress = useCallback((item: Menu2Item) => {
     switch (item.type) {
       case 'home':
@@ -91,8 +100,19 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
           },
         });
         break;
+      case 'simple':
+        navigation.navigate('Simple');
+        break;
       case 'webpage':
-        Linking.openURL(item.url);
+        openUrl(item.url);
+        break;
+      default:
+        console.warn('Unknown menu item type', item);
+        const url = (item as any).url;
+        if (url) {
+          console.log('Opening url', url);
+          openUrl(url);
+        }
         break;
     }
   }, []);

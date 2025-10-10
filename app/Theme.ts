@@ -4,6 +4,7 @@ import {useContext} from 'react';
 
 export interface AppTheme extends Theme {
   dark: boolean;
+  simplyfied: boolean;
   colors: ColorScheme;
   strings: Dictionary;
   dim: Dimensions;
@@ -194,7 +195,8 @@ type ColorScheme = {
 
 const colorsLight: ColorScheme = {
   //#region React-Navigation colors
-  primary: '#2F357D',
+  // primary: '#2F357D',
+  primary: '#333399',
   background: '#FFFFFF',
   card: '#F9F9F9',
   text: '#2E2E2F',
@@ -316,6 +318,7 @@ const fonts: Theme['fonts'] = {
 
 export const themeLight: AppTheme = {
   dark: false,
+  simplyfied: false,
   colors: colorsLight,
   strings,
   dim: dimensions,
@@ -324,6 +327,7 @@ export const themeLight: AppTheme = {
 
 export const themeDark: AppTheme = {
   dark: true,
+  simplyfied: false,
   colors: colorsDark,
   strings,
   dim: dimensions,

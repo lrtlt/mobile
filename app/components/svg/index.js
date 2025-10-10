@@ -80,3 +80,4 @@ export {default as IconNewsletter} from './ic_newsletter';
 export {default as IconShop} from './ic_shop';
 export {default as IconContacts} from './ic_contacts';
 export {default as IconAbout} from './ic_about';
+export {default as IconSimple} from './ic_simple';

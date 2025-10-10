@@ -11,6 +11,8 @@ import useArticleScreenState from './useArticleScreenState';
 import useArticleAnalytics from './useArticleAnalytics';
 import {useArticleStorageStore} from '../../state/article_storage_store';
 import {useCounterForArticle} from '../../util/useCounter';
+import ThemeProvider from '../../theme/ThemeProvider';
+import {SIMPLIFIED_CATEGORY_ID} from '../../constants';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Article'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Article'>;
@@ -24,7 +26,8 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   const {articleId, isMedia} = route.params;
   console.log(`articleId: ${articleId}, isMedia: ${isMedia}`);
 
-  const {colors, strings} = useTheme();
+  const theme = useTheme();
+  const {colors, strings} = theme;
 
   const articleStorage = useArticleStorageStore.getState();
 
@@ -122,7 +125,10 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
       return (
         <>
           {article && (
-            <ArticleContentComponent article={article} itemPressHandler={articleItemPressHandler} />
+            <ThemeProvider
+              forceTheme={{...theme, simplyfied: article.category_id === SIMPLIFIED_CATEGORY_ID}}>
+              <ArticleContentComponent article={article} itemPressHandler={articleItemPressHandler} />
+            </ThemeProvider>
           )}
         </>
       );

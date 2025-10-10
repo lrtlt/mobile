@@ -13,6 +13,7 @@ export const MENU_TYPE_CATEGORY = 'category';
 export const MENU_TYPE_SLUG = 'slug';
 export const MENU_TYPE_PAGE = 'page';
 export const MENU_TYPE_WEBPAGE = 'webpage';
+export const MENU_TYPE_SIMPLE = 'simple';
 export const MENU_TYPE_EXPANDABLE = 'expandable';
 export const MENU_TYPE_GROUP = 'group';
 
@@ -45,6 +46,7 @@ export type Menu2Item =
   | Menu2ItemNewest
   | Menu2ItemPopular
   | Menu2ItemExpandable
+  | Menu2ItemSimple
   | Menu2ItemGroup;
 
 export type Menu2ItemHome = {
@@ -110,6 +112,12 @@ export type Menu2ItemWeather = {
 
 export type Menu2ItemWebpage = {
   type: typeof MENU_TYPE_WEBPAGE;
+  title: string;
+  url: string;
+};
+
+export type Menu2ItemSimple = {
+  type: typeof MENU_TYPE_SIMPLE;
   title: string;
   url: string;
 };

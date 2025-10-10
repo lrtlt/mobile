@@ -6,6 +6,7 @@ import {IMG_SIZE_XS, buildArticleImageUri, getImageSizeForWidth, ImageSize} from
 import TextComponent from '../text/Text';
 import {ArticlePhotoType} from '../../api/Types';
 import {DEFAULT_ARTICLE_IMAGE} from '../../constants';
+import {useTheme} from '../../Theme';
 
 interface ImageWrapperProps {
   progressive?: boolean;
@@ -85,6 +86,8 @@ const ArticlePhoto: React.FC<React.PropsWithChildren<Props>> = ({
   imageAspectRatio,
   ...props
 }) => {
+  const {simplyfied} = useTheme();
+
   if (!photo) {
     return (
       <View style={style}>
@@ -119,7 +122,9 @@ const ArticlePhoto: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <View style={style}>
       {image as React.ReactNode}
-      <TextComponent style={styles.bottomText} type="secondary">
+      <TextComponent
+        style={{...styles.bottomText, paddingVertical: simplyfied ? 4 : 0}}
+        type={simplyfied ? 'primary' : 'secondary'}>
         {photo.title} / {photo.author}
       </TextComponent>
     </View>
@@ -160,6 +165,6 @@ const styles = StyleSheet.create({
   },
   bottomText: {
     fontSize: 13,
-    marginTop: 4,
+    marginTop: 6,
   },
 });

@@ -15,6 +15,7 @@ import {
   ArticleContentItemType,
   TYPE_AUDIO_CONTENT,
   TYPE_KEYWORDS,
+  TYPE_SIMPLE_FOOTER,
 } from './ArticleCompositor';
 import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {ArticleContent} from '../../api/Types';
@@ -24,6 +25,8 @@ import ArticleKeywords from './keywords/ArticleKeywords';
 import useArticleHeader from './useArticleHeader_v2';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
+import {useTheme} from '../../Theme';
+import SimpleFooter from './simpleFooter/SimpleFooter';
 
 export type ArticleSelectableItem = {
   type: 'photo' | 'article';
@@ -39,7 +42,8 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
   const {width: screenWidth} = useWindowDimensions();
   const contentWidth = screenWidth - 12 * 2;
 
-  const articleData = useMemo(() => compose(article), [article]);
+  const {simplyfied} = useTheme();
+  const articleData = useMemo(() => compose(article, simplyfied), [article]);
 
   const {appBar, snackbar, onScroll} = useArticleHeader(article);
 
@@ -92,6 +96,9 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
         }
         case TYPE_KEYWORDS: {
           return <ArticleKeywords keywords={data.keywords} />;
+        }
+        case TYPE_SIMPLE_FOOTER: {
+          return <SimpleFooter />;
         }
         default: {
           return null;

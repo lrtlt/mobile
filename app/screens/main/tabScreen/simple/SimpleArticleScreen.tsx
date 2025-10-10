@@ -20,6 +20,7 @@ interface Props {
   categoryId?: number;
   categoryTitle?: string;
   categoryUrl?: string;
+  headerComponent?: React.ReactElement;
 }
 
 const TWO_MINUTES = 1000 * 60 * 2;
@@ -32,6 +33,7 @@ const SimpleArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({
   categoryId,
   categoryTitle,
   categoryUrl,
+  headerComponent,
 }) => {
   const provider: ArticleScreenAdapter = useMemo(() => {
     switch (type) {
@@ -86,6 +88,7 @@ const SimpleArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({
       requestRefresh={refresh}
       showTitle={showTitle}
       showBackToHome={showBackToHome}
+      headerComponent={headerComponent}
     />
   );
 };

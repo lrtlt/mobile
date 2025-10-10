@@ -27,6 +27,7 @@ const LI_TAG_VERTICAL_MARGIN = 8;
 interface Props {
   html: string;
   textSize?: number;
+  lineHeight?: number;
 }
 
 const MyTextualRenderer: CustomTextualRenderer = (props) => {
@@ -64,7 +65,7 @@ const BlockquoteRenderer: CustomBlockRenderer = (props) => {
 };
 
 const ULRenderer: CustomBlockRenderer = (props) => {
-  const {colors} = useTheme();
+  const {colors, simplyfied} = useTheme();
 
   const {TDefaultRenderer, tnode} = props;
 
@@ -80,16 +81,20 @@ const ULRenderer: CustomBlockRenderer = (props) => {
                 style={{
                   ...styles.liContainer,
                   borderColor: colors.tertiary,
-                  borderTopWidth: p.index === 0 ? 2 : 0,
-                  paddingTop: p.index === 0 ? LI_TAG_VERTICAL_MARGIN + 12 : LI_TAG_VERTICAL_MARGIN,
+                  borderTopWidth: !simplyfied && p.index === 0 ? 2 : 0,
+                  gap: simplyfied ? 24 : 0,
+                  paddingTop:
+                    !simplyfied && p.index === 0 ? LI_TAG_VERTICAL_MARGIN + 12 : LI_TAG_VERTICAL_MARGIN,
                 }}>
                 <View
                   style={{
                     ...styles.bubble,
                     borderColor: colors.text,
+                    backgroundColor: simplyfied ? colors.text : undefined,
+                    marginTop: simplyfied ? 16 : undefined,
                   }}
                 />
-                <TChildrenRenderer tchildren={[p.childTnode]} />
+                <TNodeChildrenRenderer tnode={p.childTnode} />
               </View>
             );
           }}
@@ -184,8 +189,6 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
       li: {
         // paddingVertical: LI_TAG_VERTICAL_MARGIN,
         flex: 1,
-        fontSize: 16,
-        lineHeight: 26,
       },
       h4: {
         fontSize: DEFAULT_FONT_SIZE,
@@ -201,9 +204,9 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
   );
 };
 
-const HTMLRenderer: React.FC<React.PropsWithChildren<Props>> = ({html, textSize}) => {
+const HTMLRenderer: React.FC<React.PropsWithChildren<Props>> = ({html, textSize, lineHeight}) => {
   const {width} = useWindowDimensions();
-  const {colors} = useTheme();
+  const {colors, simplyfied} = useTheme();
 
   const textStyle = useTextStyle({
     type: 'primary',
@@ -211,9 +214,9 @@ const HTMLRenderer: React.FC<React.PropsWithChildren<Props>> = ({html, textSize}
     fontFamily: 'SourceSansPro-Regular',
     style: {
       fontSize: textSize ?? DEFAULT_FONT_SIZE,
-      lineHeight: (textSize ?? DEFAULT_FONT_SIZE) + EXTRA_LINE_SPACING,
+      lineHeight: lineHeight ?? (textSize ?? DEFAULT_FONT_SIZE) + EXTRA_LINE_SPACING,
       textDecorationColor: colors.primary,
-      marginVertical: 8,
+      marginVertical: simplyfied ? 12 : 8,
     },
   });
 
@@ -232,12 +235,14 @@ const HTMLRenderer: React.FC<React.PropsWithChildren<Props>> = ({html, textSize}
       tagsStyles={useTagStyles()}
       renderers={renderers}
       classesStyles={{
-        'article-details-block': {
-          backgroundColor: colors.articleSummaryBackground,
-          borderRadius: 8,
-          padding: 12,
-          marginVertical: 32,
-        },
+        'article-details-block': simplyfied
+          ? {}
+          : {
+              backgroundColor: colors.articleSummaryBackground,
+              borderRadius: 8,
+              padding: 12,
+              marginVertical: 32,
+            },
       }}
       renderersProps={useRendererProps()}
       customHTMLElementModels={{

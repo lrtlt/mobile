@@ -9,6 +9,8 @@ export const ARTICLES_PER_PAGE_COUNT = 15;
 
 export const ARTICLE_EXPIRE_DURATION = 1000 * 60 * 4; //4 minutes
 
+export const SIMPLIFIED_CATEGORY_ID = 69;
+
 //Channel types:
 export const CHANNEL_TYPE_LIVE = 'live';
 export const CHANNEL_TYPE_DEFAULT = 'channel';

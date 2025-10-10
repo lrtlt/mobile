@@ -31,11 +31,7 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
 
   const scaleValues = articles.map(() => useSharedValue(1));
 
-  // Early return if no articles
-  if (!articles || articles.length === 0) {
-    return null;
-  }
-
+ 
   useEffect(() => {
     // Reset all scales to 1
     scaleValues.forEach((scale, index) => {
@@ -61,6 +57,12 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   const handleItemPress = useCallback((index: number) => {
     setSelectedIndex(index);
   }, []);
+
+   // Early return if no articles
+  if (!articles || articles.length === 0) {
+    return null;
+  }
+
 
   const imgUrl = buildImageUri(
     IMG_SIZE_XXL,

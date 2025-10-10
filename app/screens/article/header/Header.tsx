@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {FacebookReactions, Text, TouchableDebounce} from '../../../components';
 import {useTheme} from '../../../Theme';
-import {IconVolume} from '../../../components/svg';
+import {IconSimple, IconVolume} from '../../../components/svg';
 import {checkEqual} from '../../../util/LodashEqualityCheck';
 import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
 import {MediaType} from '../../../components/videoComponent/context/PlayerContext';
@@ -28,7 +28,7 @@ const ArticleHeader: React.FC<React.PropsWithChildren<Props>> = ({
   subtitle,
   text2SpeechUrl,
 }) => {
-  const {colors} = useTheme();
+  const {dark, colors, simplyfied} = useTheme();
 
   const {setMediaData, mediaData, close} = useMediaPlayer();
   const isText2SpeechPlaying = mediaData?.uri === text2SpeechUrl;
@@ -46,6 +46,14 @@ const ArticleHeader: React.FC<React.PropsWithChildren<Props>> = ({
       });
     }
   }, [isText2SpeechPlaying]);
+
+  const SimpleTag = () => (
+    <View
+      style={{...styles.simpleTagContainer, backgroundColor: dark ? colors.greyBackground : colors.primary}}>
+      <IconSimple width={36} height={38} color={colors.onPrimary} />
+      <Text style={{color: colors.onPrimary, fontSize: 18}}>Lengvai suprantama kalba</Text>
+    </View>
+  );
 
   const text2SpeechComponent = Boolean(text2SpeechUrl) ? (
     <TouchableDebounce
@@ -70,18 +78,27 @@ const ArticleHeader: React.FC<React.PropsWithChildren<Props>> = ({
     </Text>
   ) : null;
 
-  const facebookReactionsComponent = facebookReactions ? (
-    <FacebookReactions style={styles.facebookReactions} count={facebookReactions} />
-  ) : null;
+  const facebookReactionsComponent =
+    facebookReactions && !simplyfied ? (
+      <FacebookReactions style={styles.facebookReactions} count={facebookReactions} />
+    ) : null;
 
   return (
     <View style={styles.root}>
+      {simplyfied && <SimpleTag />}
       <View style={styles.categoryContainer}>
         <Text style={styles.smallText}>{category}</Text>
-        <View style={{...styles.greyDot, backgroundColor: colors.buttonContent}} />
-        <Text style={styles.smallText}>{date}</Text>
+        {!simplyfied && (
+          <>
+            <View style={{...styles.greyDot, backgroundColor: colors.buttonContent}} />
+            <Text style={styles.smallText}>{date}</Text>
+          </>
+        )}
       </View>
-      <Text style={styles.titleText} selectable={true} fontFamily="PlayfairDisplay-Regular">
+      <Text
+        style={{...styles.titleText, fontSize: simplyfied ? 32 : 25, paddingBottom: simplyfied ? 12 : 0}}
+        selectable={true}
+        fontFamily="PlayfairDisplay-Regular">
         {title}
       </Text>
       {subtitleComponent}
@@ -92,6 +109,11 @@ const ArticleHeader: React.FC<React.PropsWithChildren<Props>> = ({
           <Text style={styles.smallTextBold} fontFamily="SourceSansPro-SemiBold">
             {author}
           </Text>
+          {simplyfied && (
+            <>
+              <Text style={styles.smallText}>{date}</Text>
+            </>
+          )}
         </View>
         {text2SpeechComponent}
       </View>
@@ -119,6 +141,7 @@ const styles = StyleSheet.create({
   },
   smallTextBold: {
     fontSize: 14,
+    fontWeight: '600',
   },
   authorShareContainer: {
     flex: 1,
@@ -130,6 +153,7 @@ const styles = StyleSheet.create({
   authorContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    gap: 8,
   },
   greyDot: {
     width: 4,
@@ -156,5 +180,14 @@ const styles = StyleSheet.create({
   },
   text2SpeechContainer: {
     alignSelf: 'flex-end',
+  },
+  simpleTagContainer: {
+    marginTop: 32,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
+    paddingVertical: 20,
+    borderRadius: 6,
   },
 });

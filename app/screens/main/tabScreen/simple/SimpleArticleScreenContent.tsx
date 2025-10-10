@@ -24,6 +24,7 @@ interface Props {
   data: PagingState;
   showTitle: boolean;
   showBackToHome?: boolean;
+  headerComponent?: React.ReactElement;
   requestNextPage: () => void;
   requestRefresh: () => void;
 }
@@ -32,6 +33,7 @@ const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
   data,
   showTitle,
   showBackToHome,
+  headerComponent,
   requestNextPage,
   requestRefresh,
 }) => {
@@ -122,7 +124,7 @@ const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
         //style={styles.container}
         data={articles}
         contentContainerStyle={{paddingBottom: insets.bottom}}
-        ListHeaderComponent={showTitle ? renderTitle() : null}
+        ListHeaderComponent={headerComponent ? headerComponent : showTitle ? renderTitle() : null}
         //windowSize={4}
         estimatedItemSize={320}
         onEndReachedThreshold={0.3}
