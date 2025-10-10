@@ -1,6 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
 import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MMKV} from 'react-native-mmkv';
 import {InteractionManager} from 'react-native';
 
@@ -9,16 +8,6 @@ const TOPICS_STORAGE_KEY = 'initialTopicSubscription';
 const storage = new MMKV({
   id: 'topics-storage',
 });
-
-export const runFirebaseTopicSubsriptionMigration = async () => {
-  if (storage.getBoolean('hasMigratedFromAsyncStorage')) return;
-  const topicsJson = await AsyncStorage.getItem(TOPICS_STORAGE_KEY);
-  if (topicsJson) {
-    storage.set(TOPICS_STORAGE_KEY, topicsJson);
-    await AsyncStorage.removeItem(TOPICS_STORAGE_KEY);
-  }
-  storage.set('hasMigratedFromAsyncStorage', true);
-};
 
 const useFirebaseTopicSubscription = () => {
   const [topics, setTopics] = useState<FirebaseTopicsResponse>([]);

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Navigation from './app/navigation';
 
 import AppBackground from './app/components/appBackground/AppBackground';
@@ -13,21 +13,10 @@ import ThemeProvider from './app/theme/ThemeProvider';
 import useAppCheckSetup from './app/util/useAppCheckSetup';
 
 import {enableFreeze} from 'react-native-screens';
-import {runArticleStorageMigration} from './app/state/article_storage_store';
-import {runOnboardingStorageMigration} from './app/screens/main/useOnboardingLogic';
-import {runFirebaseTopicSubsriptionMigration} from './app/util/useFirebaseTopicSubscription';
-import {runSettingsStorageMigration} from './app/state/settings_store';
 
 enableFreeze(true);
 
 const App: React.FC = () => {
-  useEffect(() => {
-    runFirebaseTopicSubsriptionMigration();
-    runOnboardingStorageMigration();
-    runArticleStorageMigration();
-    runSettingsStorageMigration();
-  }, []);
-
   useAppCheckSetup();
   useNotificationsPermission();
   useAppTrackingPermission();

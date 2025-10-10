@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useState} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MMKV} from 'react-native-mmkv';
 
 const LOCAL_STORAGE_KEY = 'OnboardingModalShown';
@@ -7,17 +6,6 @@ const LOCAL_STORAGE_KEY = 'OnboardingModalShown';
 const storage = new MMKV({
   id: 'onboarding-storage',
 });
-
-//TODO: 2024-10-01 remove migration after a while.
-export const runOnboardingStorageMigration = async () => {
-  if (storage.getBoolean('hasMigratedFromAsyncStorage')) return;
-  const value = await AsyncStorage.getItem(LOCAL_STORAGE_KEY);
-  if (value) {
-    storage.set(LOCAL_STORAGE_KEY, value);
-    await AsyncStorage.removeItem(LOCAL_STORAGE_KEY);
-  }
-  storage.set('hasMigratedFromAsyncStorage', true);
-};
 
 const useOnboardingLogic = () => {
   const [showNotificationModal, setShowNotificationModal] = useState(true);

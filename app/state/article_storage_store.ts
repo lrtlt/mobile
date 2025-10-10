@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {create} from 'zustand';
 import {createJSONStorage, persist} from 'zustand/middleware';
 import {zustandStorage} from './mmkv';
@@ -8,22 +7,6 @@ import {fetchArticle} from '../api';
 import FastImage from '@d11/react-native-fast-image';
 import {buildArticleImageUri, IMG_SIZE_M} from '../util/ImageUtil';
 import {logEvent, getAnalytics} from '@react-native-firebase/analytics';
-
-//TODO: 2024-10-01 remove migration after a while.
-export const runArticleStorageMigration = async () => {
-  if (zustandStorage.getItem('article-storage-migrated')) return;
-
-  const rootJson = await AsyncStorage.getItem('persist:root');
-  if (rootJson) {
-    console.log('## Migrating article storage');
-    const root = JSON.parse(rootJson);
-    const articleStorage = JSON.parse(root['articleStorage']);
-    if (articleStorage) {
-      useArticleStorageStore.setState(articleStorage);
-      zustandStorage.setItem('article-storage-migrated', 'true');
-    }
-  }
-};
 
 export type SavedArticle = {
   id: number;
