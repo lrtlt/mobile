@@ -92,8 +92,8 @@ android {
         applicationId "lt.mediapark.lrt"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 206100
-        versionName "2.61.0"
+        versionCode 206101
+        versionName "2.61.1"
         multiDexEnabled true
         resValue "string", "build_config_package", "lt.mediapark.lrt"
     }
