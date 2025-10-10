@@ -3208,7 +3208,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (5.5.2):
     - React-Core
-  - react-native-theoplayer (10.0.0):
+  - react-native-theoplayer (10.1.0):
     - React-Core
     - THEOplayer-Connector-SideloadedSubtitle (~> 10.0)
     - THEOplayer-Integration-GoogleCast (~> 10.0)
@@ -3746,8 +3746,6 @@ PODS:
     - React-perflogger (= 0.80.2)
     - React-utils (= 0.80.2)
     - SocketRocket
-  - RNCAsyncStorage (2.2.0):
-    - React-Core
   - RNFastImage (8.11.1):
     - libavif/core (~> 0.11.1)
     - libavif/libdav1d (~> 0.11.1)
@@ -4173,7 +4171,6 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNFastImage (from `../node_modules/@d11/react-native-fast-image`)"
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
@@ -4407,8 +4404,6 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  RNCAsyncStorage:
-    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNFastImage:
     :path: "../node_modules/@d11/react-native-fast-image"
   RNFBAnalytics:
@@ -4530,7 +4525,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: 59148c05d22f1622562e025aebfe16a39f875174
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 0f7bf11598f9a61b7ceac8dc3f59ef98697e99e1
-  react-native-theoplayer: 108afb8f612a0c4b902fa12890ffaa82ae2e64f8
+  react-native-theoplayer: d7f44d09c9505df9279c5c9602f0eac91c99de1a
   react-native-unistyles: 5e4bca17e639b4ec4dc932951c98e544bb53fddc
   react-native-webview: 79d6a7753f67d1ef539c8aeee7ec76935ef2597a
   React-NativeModulesApple: 342e280bb9fc2aa5f61f6c257b309a86b995e12d
@@ -4564,7 +4559,6 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 8df342c127fd0c1e30e8b9f71ff814c22414a7c0
   ReactCodegen: 4928682e20747464165effacc170019a18da953c
   ReactCommon: ec1cdf708729338070f8c4ad746768a782fd9eb1
-  RNCAsyncStorage: b44e8a4e798c3e1f56bffccd0f591f674fb9198f
   RNFastImage: 642053def5aa66879887efc4be80315677cd4f26
   RNFBAnalytics: c8310fe67b6750e0b6362d4049773db272475ab2
   RNFBApp: 90cf0209fb8f0460ab069a7de857d7ec851c8476
