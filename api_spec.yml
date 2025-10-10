@@ -32,36 +32,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserDto' # Reference the User schema
 
-  /users:
+  /user/set-onboarding-completed:
     post:
-      summary: Create User
-      description: Create a new user
-      security:
-        - BearerAuth: [serverToken]
-      tags: [Users]
-
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserDto' # Reference the User schema
-
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDto' # Reference the User schema
-
-  /users/{id}/articles:
-    post:
-      summary: Save User Article
-      description: Save an article for a user
+      summary: Set Onboarding Completed
+      description: Mark the user's onboarding as completed
       security:
         - BearerAuth: [accessToken]
-      tags: [Articles]
+      tags: [Users]
 
       parameters:
         - in: path
@@ -71,6 +48,22 @@ paths:
             type: integer
             format: int64
           description: ID of the user
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto' # Reference the User schema\
+
+  /user/articles:
+    post:
+      summary: Save User Article
+      description: Save an article for a user
+      security:
+        - BearerAuth: [accessToken]
+      tags: [Articles]
 
       requestBody:
         required: true
@@ -93,15 +86,6 @@ paths:
         - BearerAuth: [accessToken]
       tags: [Articles]
 
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-            format: int64
-          description: ID of the user
-
       responses:
         '200':
           description: OK
@@ -119,15 +103,6 @@ paths:
         - BearerAuth: [accessToken]
       tags: [Articles]
 
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-            format: int64
-          description: ID of the user
-
       requestBody:
         required: true
         content:
@@ -139,22 +114,13 @@ paths:
         '204':
           description: No Content
 
-  /users/{id}/article-history:
+  /user/history:
     post:
       summary: Save User Article History
       description: Save the history of an article for a user
       security:
         - BearerAuth: [accessToken]
       tags: [ArticleHistory]
-
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-            format: int64
-          description: ID of the user
 
       requestBody:
         required: true
@@ -177,15 +143,6 @@ paths:
       security:
         - BearerAuth: []
       tags: [ArticleHistory]
-
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-            format: int64
-          description: ID of the user
 
       responses:
         '200':
@@ -215,6 +172,10 @@ components:
         createdAt:
           type: string
           readOnly: true
+        onboardingCompleted:
+          type: boolean
+          default: false
+          readOnly: true
     UserSavedArticle:
       type: object
       properties:
@@ -223,6 +184,7 @@ components:
           readOnly: true
         userId:
           type: integer
+          readOnly: true
         articleId:
           type: integer
         createdAt:
