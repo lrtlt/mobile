@@ -40,15 +40,6 @@ paths:
         - BearerAuth: [accessToken]
       tags: [Users]
 
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-            format: int64
-          description: ID of the user
-
       responses:
         '200':
           description: OK
