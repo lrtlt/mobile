@@ -3142,7 +3142,7 @@ PODS:
   - react-native-google-cast/RNGoogleCast (4.6.2):
     - PromisesObjC
     - React
-  - react-native-mmkv (3.3.0):
+  - react-native-mmkv (3.3.3):
     - boost
     - DoubleConversion
     - fast_float
@@ -3292,12 +3292,12 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-theoplayer (10.0.0):
+  - react-native-theoplayer (10.2.1):
     - React-Core
-    - THEOplayer-Connector-SideloadedSubtitle (~> 10.0)
-    - THEOplayer-Integration-GoogleCast (~> 10.0)
-    - THEOplayer-Integration-THEOlive (~> 10.0)
-    - THEOplayerSDK-core (~> 10.0)
+    - THEOplayer-Connector-SideloadedSubtitle (~> 10.2)
+    - THEOplayer-Integration-GoogleCast (~> 10.2)
+    - THEOplayer-Integration-THEOlive (~> 10.2)
+    - THEOplayerSDK-core (~> 10.2)
   - react-native-unistyles (2.43.0):
     - boost
     - DoubleConversion
@@ -3983,7 +3983,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNReanimated (4.1.0):
+  - RNReanimated (4.1.3):
     - boost
     - DoubleConversion
     - fast_float
@@ -4010,11 +4010,11 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 4.1.0)
+    - RNReanimated/reanimated (= 4.1.3)
     - RNWorklets
     - SocketRocket
     - Yoga
-  - RNReanimated/reanimated (4.1.0):
+  - RNReanimated/reanimated (4.1.3):
     - boost
     - DoubleConversion
     - fast_float
@@ -4041,11 +4041,11 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated/apple (= 4.1.0)
+    - RNReanimated/reanimated/apple (= 4.1.3)
     - RNWorklets
     - SocketRocket
     - Yoga
-  - RNReanimated/reanimated/apple (4.1.0):
+  - RNReanimated/reanimated/apple (4.1.3):
     - boost
     - DoubleConversion
     - fast_float
@@ -4313,9 +4313,9 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - SDWebImage (5.21.2):
-    - SDWebImage/Core (= 5.21.2)
-  - SDWebImage/Core (5.21.2)
+  - SDWebImage (5.21.3):
+    - SDWebImage/Core (= 5.21.3)
+  - SDWebImage/Core (5.21.3)
   - SDWebImageAVIFCoder (0.11.1):
     - libavif/core (>= 0.11.0)
     - SDWebImage (~> 5.10)
@@ -4327,20 +4327,20 @@ PODS:
   - SwiftSubtitles (0.9.1):
     - DSFRegex (~> 3.3.1)
     - TinyCSV (~> 0.6.1)
-  - THEOplayer-Connector-SideloadedSubtitle (10.0.1):
+  - THEOplayer-Connector-SideloadedSubtitle (10.2.2):
     - Swifter (= 1.5.0)
     - SwiftSubtitles (= 0.9.1)
     - THEOplayerSDK-core (~> 10)
-  - THEOplayer-Integration-GoogleCast (10.0.1):
-    - THEOplayer-Integration-GoogleCast/Base (= 10.0.1)
-    - THEOplayer-Integration-GoogleCast/Dependencies (= 10.0.1)
-  - THEOplayer-Integration-GoogleCast/Base (10.0.1)
-  - THEOplayer-Integration-GoogleCast/Dependencies (10.0.1):
+  - THEOplayer-Integration-GoogleCast (10.2.2):
+    - THEOplayer-Integration-GoogleCast/Base (= 10.2.2)
+    - THEOplayer-Integration-GoogleCast/Dependencies (= 10.2.2)
+  - THEOplayer-Integration-GoogleCast/Base (10.2.2)
+  - THEOplayer-Integration-GoogleCast/Dependencies (10.2.2):
     - google-cast-sdk-dynamic-xcframework (~> 4.8)
-  - THEOplayer-Integration-THEOlive (10.0.1):
-    - THEOplayer-Integration-THEOlive/Base (= 10.0.1)
-  - THEOplayer-Integration-THEOlive/Base (10.0.1)
-  - THEOplayerSDK-core (10.0.1)
+  - THEOplayer-Integration-THEOlive (10.2.2):
+    - THEOplayer-Integration-THEOlive/Base (= 10.2.2)
+  - THEOplayer-Integration-THEOlive/Base (10.2.2)
+  - THEOplayerSDK-core (10.2.2)
   - TinyCSV (0.6.1)
   - Yoga (0.0.0)
 
@@ -4779,11 +4779,11 @@ SPEC CHECKSUMS:
   react-native-config: 644074ab88db883fcfaa584f03520ec29589d7df
   react-native-gemius-plugin: 705cc53f6b7d882ad6bcc8f7ff484042bdd2842e
   react-native-google-cast: 872b05bf12f7db32c2f66818fdd5406474af25f1
-  react-native-mmkv: 8ad8a687599e26ac8724733fa6b5db256736244d
+  react-native-mmkv: d374d305a8143e2983fb7b57cebb7992ae899004
   react-native-pager-view: c4eb191519def25f8983e636c1d387a7e33a21c4
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 1253cc163c459494057aaae3e8c02fcdad674f0d
-  react-native-theoplayer: 108afb8f612a0c4b902fa12890ffaa82ae2e64f8
+  react-native-theoplayer: fec1f93b37b28aa9abe060789f881089549cc8ba
   react-native-unistyles: 270cbbdb241ca17b7cae58f02703b97dceeaf55a
   react-native-webview: 6a11548e3714dbf97a93003f5c95dd6fcc10234b
   React-NativeModulesApple: 342e280bb9fc2aa5f61f6c257b309a86b995e12d
@@ -4828,21 +4828,21 @@ SPEC CHECKSUMS:
   RNGestureHandler: a52292df4f8fc7daab354ad2c37be401d4c3bed8
   RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
   RNPermissions: 915a98ee35bcc90165f1c7d93167fd32f02cea14
-  RNReanimated: 1a1e0e5c7ba035d91ee0c83c3f2213907c788391
+  RNReanimated: 41edc68a22b9d652a0666a9c0c8e135e7794fe99
   RNScreens: 8132b09d1edf29ba411894b19bb05f25277b2c64
   RNShare: 8b1dafb3427856c1faaf6ea9b4b3c367d83a9ffe
   RNSVG: bc7ccfe884848ac924d2279d9025d41b5f05cb0c
   RNWorklets: 6f677514fddcf3e4aaf0b4761db543e5e32d75e1
-  SDWebImage: 9f177d83116802728e122410fb25ad88f5c7608a
+  SDWebImage: 16309af6d214ba3f77a7c6f6fdda888cb313a50a
   SDWebImageAVIFCoder: afe194a084e851f70228e4be35ef651df0fc5c57
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   SwiftSubtitles: c659af19d710a2946779015464c0577d07fe4666
-  THEOplayer-Connector-SideloadedSubtitle: 2441226878867d1ddd9850b1aed7cf74480374eb
-  THEOplayer-Integration-GoogleCast: f9d60eb115e3feb1ebe69250df7a737dafe9c449
-  THEOplayer-Integration-THEOlive: d73dfe57d757f7e281c4e14fd6d031689045c1c3
-  THEOplayerSDK-core: 2e620c845abd222266a81f73fc8d31f7c4d306ba
+  THEOplayer-Connector-SideloadedSubtitle: e783c36e62fb2da1b42bb00874b85308f49ec041
+  THEOplayer-Integration-GoogleCast: e70fcdc3ac659f70277af26ec330e9eaa4c4acfc
+  THEOplayer-Integration-THEOlive: 7e2969aeaba071c1d84468c61bd20bfdb71b0ce9
+  THEOplayerSDK-core: 6dfdf5558cb535f4717e62a76549623f727dde64
   TinyCSV: fd6228edbcf1c07466ac34b76dac5e052143eaba
   Yoga: ce248fb32065c9b00451491b06607f1c25b2f1ed
 
