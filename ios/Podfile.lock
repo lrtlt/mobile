@@ -3746,6 +3746,8 @@ PODS:
     - React-perflogger (= 0.80.2)
     - React-utils (= 0.80.2)
     - SocketRocket
+  - RNCAsyncStorage (2.2.0):
+    - React-Core
   - RNFastImage (8.11.1):
     - libavif/core (~> 0.11.1)
     - libavif/libdav1d (~> 0.11.1)
@@ -4171,6 +4173,7 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNFastImage (from `../node_modules/@d11/react-native-fast-image`)"
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
@@ -4404,6 +4407,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNFastImage:
     :path: "../node_modules/@d11/react-native-fast-image"
   RNFBAnalytics:
@@ -4559,6 +4564,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 8df342c127fd0c1e30e8b9f71ff814c22414a7c0
   ReactCodegen: 4928682e20747464165effacc170019a18da953c
   ReactCommon: ec1cdf708729338070f8c4ad746768a782fd9eb1
+  RNCAsyncStorage: b44e8a4e798c3e1f56bffccd0f591f674fb9198f
   RNFastImage: 642053def5aa66879887efc4be80315677cd4f26
   RNFBAnalytics: c8310fe67b6750e0b6362d4049773db272475ab2
   RNFBApp: 90cf0209fb8f0460ab069a7de857d7ec851c8476
