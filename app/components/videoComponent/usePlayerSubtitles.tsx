@@ -63,8 +63,9 @@ const usePlayerSubtitles = ({player}: Options) => {
           activeOpacity={0.9}
           onPress={() => {
             selectTextTrack(item);
-            logEvent(getAnalytics(), 'app_lrt_lt_subtitles_selected', {
+            logEvent(getAnalytics(), 'lrt_lt_subtitles_selected', {
               language: item.language,
+              source: 'app',
             });
           }}>
           <Text style={{flex: 1, textAlign: 'center'}}>{getLanguageName(item.language)}</Text>
