@@ -3,7 +3,7 @@ import {createJSONStorage, persist} from 'zustand/middleware';
 import {zustandStorage} from './mmkv';
 import {ArticleContent, isMediaArticle} from '../api/Types';
 import {ARTICLE_HISTORY_COUNT, ARTICLE_SAVED_MAX_COUNT} from '../constants';
-import {fetchArticle} from '../api';
+import {articleHistoryPut, fetchArticle} from '../api';
 import FastImage from '@d11/react-native-fast-image';
 import {buildArticleImageUri, IMG_SIZE_M} from '../util/ImageUtil';
 import {logEvent, getAnalytics} from '@react-native-firebase/analytics';
@@ -108,13 +108,14 @@ export const useArticleStorageStore = create<ArticleStorageStore>()(
         _cacheImages(nonNullArticles);
         set({savedArticles: nonNullArticles, lastSyncTime: Date.now()});
       },
-      addArticleToHistory: (article) => {
+      addArticleToHistory: async (article) => {
         let history = get().history;
         history = history.filter((a) => _articleId(a) !== _articleId(article));
         history.unshift(article);
         if (history.length > ARTICLE_HISTORY_COUNT) {
           history.pop();
         }
+        await articleHistoryPut(_articleId(article));
         _cacheImages([article]);
         set({history});
       },

@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
 import {ActionButton, Logo} from '../../components';
-import {IconDrawerMenu, IconSettings} from '../../components/svg';
+import {IconDrawerMenu, IconUserNew} from '../../components/svg';
 import {Pressable} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
 import HomeScreen from './tabScreen/home/HomeScreen';
@@ -31,6 +31,8 @@ import {
   MENU_TYPE_POPULAR,
   MENU_TYPE_RADIOTEKA,
 } from '../../api/Types';
+import {useAuth0} from 'react-native-auth0';
+import Snackbar from '../../components/snackbar/SnackBar';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -46,6 +48,9 @@ type Props = {
 
 const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [snackbar, setSnackbar] = React.useState<React.ReactElement>();
+
+  const {authorize, user} = useAuth0();
   const {colors, dim} = useTheme();
 
   const {isVisible, onClose} = useOnboardingLogic();
@@ -69,6 +74,18 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
       }),
     };
   }, [routes]);
+
+  useEffect(() => {
+    if (user != null) {
+      setSnackbar(
+        <Snackbar
+          message={`Sveiki, ${user.name}`}
+          backgroundColor={colors.primary}
+          onDismiss={() => setSnackbar(undefined)}
+        />,
+      );
+    }
+  }, [user]);
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_SELECT_CATEGORY_INDEX, (data) => {
@@ -108,10 +125,16 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
       ),
       headerRight: () => (
         <ActionButton
-          onPress={() => navigation.navigate('Settings')}
+          onPress={async () => {
+            if (user) {
+              navigation.navigate('User');
+            } else {
+              await authorize();
+            }
+          }}
           accessibilityLabel="Nustatymai"
           accessibilityHint="Atidaryti nustatymų ekraną">
-          <IconSettings name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
+          <IconUserNew name="user" size={dim.appBarIconSize + 2} color={colors.headerTint} />
         </ActionButton>
       ),
 
@@ -130,7 +153,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
         </Pressable>
       ),
     });
-  }, [colors.headerTint, dim.appBarIconSize, navigation]);
+  }, [colors.headerTint, dim.appBarIconSize, navigation, user]);
 
   const renderScene = useCallback(
     (sceneProps: SceneRendererProps & {route: (typeof state.routes)[0]}) => {
@@ -207,6 +230,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           initialLayout={{height: 0, width: Dimensions.get('screen').width}}
         />
         <NotificationsModal visible={isVisible} onClose={onClose} />
+        {snackbar}
       </>
     </SafeAreaView>
   );

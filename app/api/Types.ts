@@ -2,6 +2,7 @@ import {Article as FeedArticle} from '../../Types';
 
 export const MENU_TYPE_HOME = 'home';
 export const MENU_TYPE_SEARCH = 'search';
+export const MENU_TYPE_SETTINGS = 'settings';
 export const MENU_TYPE_BOOKMARKS = 'bookmarks';
 export const MENU_TYPE_HISTORY = 'history';
 export const MENU_TYPE_MEDIATEKA = 'mediateka';
@@ -32,6 +33,7 @@ export type Menu2Response = {items: Menu2Item[]};
 export type Menu2Item =
   | Menu2ItemHome
   | Menu2ItemSearch
+  | Menu2ItemSettings
   | Menu2ItemBookmarks
   | Menu2ItemHistory
   | Menu2ItemChannels
@@ -59,6 +61,11 @@ export type Menu2ItemSearch = {
   type: typeof MENU_TYPE_SEARCH;
   title: string;
   url: string;
+};
+
+export type Menu2ItemSettings = {
+  type: typeof MENU_TYPE_SETTINGS;
+  title: string;
 };
 
 export type Menu2ItemChannels = {

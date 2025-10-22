@@ -23,3 +23,4 @@ export {default as VodcastScreen} from './podcast/VodcastScreen';
 export {default as PlaylistScreen} from './podcast/PlaylistScreen';
 export {default as GenreScreen} from './genre/GenreScreen';
 export {default as SimpleScreen} from './simple/SimpleScreen';
+export {default as UserScreen} from './user/UserScreen';

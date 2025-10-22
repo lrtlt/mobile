@@ -82,3 +82,4 @@ export {default as IconContacts} from './ic_contacts';
 export {default as IconAbout} from './ic_about';
 export {default as IconSimple} from './ic_simple';
 export {default as IconUser} from './ic_user';
+export {default as IconUserNew} from './ic_user_new';

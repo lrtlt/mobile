@@ -10,6 +10,10 @@ export const MENU_DATA = [
     url: 'https://www.lrt.lt/paieska',
   },
   {
+    type: 'settings',
+    title: 'NUSTATYMAI',
+  },
+  {
     type: 'channels',
     title: 'TIESIOGIAI',
   },

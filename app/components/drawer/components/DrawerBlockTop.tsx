@@ -1,13 +1,11 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useCallback} from 'react';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {View} from 'react-native';
 import {useTheme} from '../../../Theme';
 import DrawerItem from '../../drawerItem/DrawerItem';
 import {MainStackParamList} from '../../../navigation/MainStack';
-import {IconBookmark, IconClock, IconSearch, IconTelevision, IconUser} from '../../svg';
-import {useAuth0} from 'react-native-auth0';
-import * as HttpClient from '../../../api/HttpClient';
+import {IconBookmark, IconClock, IconSearch, IconTelevision} from '../../svg';
 
 interface Props {
   navigation: DrawerNavigationProp<MainStackParamList>;
@@ -15,7 +13,6 @@ interface Props {
 
 const DrawerBlockTop: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const {colors, strings, dim} = useTheme();
-  const {authorize, clearSession, user, getCredentials} = useAuth0();
 
   const handleSearchClick = useCallback(
     () =>
@@ -29,43 +26,8 @@ const DrawerBlockTop: React.FC<React.PropsWithChildren<Props>> = ({navigation}) 
   const handleBookmarksClick = useCallback(() => navigation.navigate('Bookmarks'), [navigation]);
   const handleProgramClick = useCallback(() => navigation.navigate('Program'), [navigation]);
 
-  useEffect(() => {
-    getCredentials()
-      .then((credentials) => {
-        console.log('user', user);
-        console.log('getCredentials', credentials);
-        if (credentials?.accessToken)
-          HttpClient.get('https://www.lrt.lt/servisai/authrz', {
-            headers: {
-              Authorization: `Bearer ${credentials?.idToken}`,
-            },
-          })
-            .then((response) => {
-              console.log('authrz response', response);
-            })
-            .catch((error) => {
-              console.warn('authrz error', JSON.stringify(error));
-            });
-      })
-      .catch((error) => {
-        console.warn('getCredentials error', error);
-      });
-  }, [user]);
-
   return (
     <View style={{paddingVertical: dim.drawerPadding}}>
-      <DrawerItem
-        key={user ? strings.logout : strings.login}
-        text={user ? strings.logout : strings.login}
-        iconComponent={<IconUser size={dim.drawerIconSize} color={colors.textSecondary} />}
-        onPress={async () => {
-          if (user) {
-            await clearSession();
-          } else {
-            await authorize();
-          }
-        }}
-      />
       <DrawerItem
         key={strings.search}
         text={strings.search}

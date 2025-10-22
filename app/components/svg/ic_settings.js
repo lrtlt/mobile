@@ -3,7 +3,7 @@ import Svg, {Path} from 'react-native-svg';
 
 function SvgComponent(props) {
   return (
-    <Svg viewBox="0 0 512 512" width={props.size} height={props.size} {...props}>
+    <Svg viewBox="-10 -10 532 532" width={props.size} height={props.size} {...props}>
       <Path
         fill={props.color}
         stroke={props.color}

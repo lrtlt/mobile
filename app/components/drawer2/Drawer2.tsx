@@ -17,7 +17,7 @@ import {Menu2Item} from '../../api/Types';
 import DrawerExpandableItem from './components/DrawerExpandableItem';
 import DrawerChannelsItem from './components/DrawerChannelsItem';
 import DrawerFooter from './components/DrawerFooter';
-import {IconSearch} from '../svg';
+import {IconSearch, IconSettings} from '../svg';
 
 type Props = {
   navigation: DrawerNavigationProp<MainStackParamList>;
@@ -74,6 +74,9 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
         break;
       case 'program':
         navigation.navigate('Program');
+        break;
+      case 'settings':
+        navigation.navigate('Settings');
         break;
       case 'category':
         openCategoryById(item.category_id, item.title);
@@ -151,6 +154,15 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
                     item={item}
                     onPress={handleItemPress}
                     icon={<IconSearch size={dim.drawerIconSize} color={colors.text} />}
+                  />
+                );
+              case 'settings':
+                return (
+                  <DrawerBasicItem
+                    key={item.title}
+                    item={item}
+                    onPress={handleItemPress}
+                    icon={<IconSettings size={dim.drawerIconSize} color={colors.text} />}
                   />
                 );
               case 'channels':

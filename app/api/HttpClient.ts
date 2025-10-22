@@ -1,5 +1,6 @@
 import Axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import * as AxiosLogger from 'axios-logger';
+import AuthInterceptor from './AuthInterceptor';
 
 const LOGGING_ENABLED = __DEV__;
 const LOGGING_DATA = __DEV__;
@@ -15,7 +16,7 @@ if (__DEV__) {
     prefixText: 'API',
   });
 
-  //Request logging
+  // Request logging
   // LrtClient.interceptors.request.use((request) => {
   //   if (LOGGING_ENABLED) {
   //     return AxiosLogger.requestLogger(request);
@@ -46,6 +47,10 @@ if (__DEV__) {
   });
 }
 
+//Auth interceptor
+export const authInterceptor = new AuthInterceptor();
+LrtClient.interceptors.request.use(authInterceptor.intercept);
+
 export const get = async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
   const response = await LrtClient.get<T>(encodeURI(url), config);
   return response.data;
@@ -65,4 +70,8 @@ export const post = async <T>(
   config?: AxiosRequestConfig,
 ): Promise<AxiosResponse<T>> => {
   return LrtClient.post<T>(url, data, config);
+};
+
+export const del = async <T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
+  return LrtClient.delete<T>(url, config);
 };

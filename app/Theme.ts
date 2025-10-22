@@ -34,6 +34,7 @@ interface Dictionary {
   tryAgain: string;
   nightModeTitle: string;
   settings: string;
+  user: string;
   textSizeTitle: string;
   videoNotAvailable: string;
   embedArticleHeader: string;
@@ -84,6 +85,7 @@ export const strings: Dictionary = {
   tryAgain: 'Bandykite dar kartą',
   nightModeTitle: 'Nakties režimas',
   settings: 'NUSTATYMAI',
+  user: 'VARTOTOJAS',
   textSizeTitle: 'Šrifto dydis',
   videoNotAvailable: 'Vaizdo įrašas nepasiekiamas jūsų šalyje',
   embedArticleHeader: 'TAIP PAT SKAITYKITE',

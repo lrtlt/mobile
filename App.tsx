@@ -14,6 +14,7 @@ import useAppCheckSetup from './app/util/useAppCheckSetup';
 import {Auth0Provider} from 'react-native-auth0';
 
 import {enableFreeze} from 'react-native-screens';
+import useAuthInterceptor from './app/util/useAuthInterceptor';
 
 enableFreeze(true);
 
@@ -22,6 +23,7 @@ const App: React.FC = () => {
   useNotificationsPermission();
   useAppTrackingPermission();
   useGoogleAnalyticsSetup();
+  useAuthInterceptor();
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>

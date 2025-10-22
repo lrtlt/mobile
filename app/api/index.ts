@@ -38,6 +38,13 @@ import {
   radiotekaGet,
   searchArticles,
   weatherLocationsGet,
+  putArticleToHistory,
+  getArticleHistory,
+  putArticleToFavorite,
+  deleteArticleFromFavorite,
+  getArticleFavorites,
+  getUserData,
+  putUserOnboardingCompleted,
 } from './Endpoints';
 import {get, post, put} from './HttpClient';
 import {
@@ -203,10 +210,45 @@ export const fetchAISummary = (query: string) => get<AISummaryResponse>(getAISum
 export const fetchAutocomplete = (query: string) => get<AIAutomcompleteResponse>(fetchAIAutocomplete(query));
 
 export const fetchMenuItemsV2 = async (): Promise<Menu2Response> => {
-  const snapshot = await getFirestore().collection('internal').doc('app-menu').get();
+  const snapshot = await getFirestore().collection('internal').doc('app-menu-v2').get();
   if (snapshot.exists()) {
     return snapshot.data() as Menu2Response;
   } else {
     throw new Error('Menu document not found');
   }
 };
+
+export const getCurrentUserData = () => get<any>(getUserData());
+
+export const setUserOnboardingCompleted = (completed: boolean, idToken: string) =>
+  put<any>(putUserOnboardingCompleted(completed), undefined, {
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+    },
+  });
+
+export const articleHistoryPut = (articleId: number | string) =>
+  put<any>(putArticleToHistory(articleId), undefined);
+
+export const articleHistoryGet = (page: number) => get<any>(getArticleHistory(page));
+
+export const articleFavoritePut = (articleId: number | string, idToken: string) =>
+  put<any>(putArticleToFavorite(articleId), undefined, {
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+    },
+  });
+
+export const articleFavoriteDelete = (articleId: number | string, idToken: string) =>
+  put<any>(deleteArticleFromFavorite(articleId), undefined, {
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+    },
+  });
+
+export const articleFavoriteGet = (idToken: string) =>
+  get<any>(getArticleFavorites(), {
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+    },
+  });
