@@ -82,7 +82,7 @@ const ULRenderer: CustomBlockRenderer = (props) => {
                   ...styles.liContainer,
                   borderColor: colors.tertiary,
                   borderTopWidth: !simplyfied && p.index === 0 ? 2 : 0,
-                  gap: simplyfied ? 24 : 0,
+                  gap: simplyfied ? 24 : 8,
                   paddingTop:
                     !simplyfied && p.index === 0 ? LI_TAG_VERTICAL_MARGIN + 12 : LI_TAG_VERTICAL_MARGIN,
                 }}>
@@ -91,7 +91,7 @@ const ULRenderer: CustomBlockRenderer = (props) => {
                     ...styles.bubble,
                     borderColor: colors.text,
                     backgroundColor: simplyfied ? colors.text : undefined,
-                    marginTop: simplyfied ? 16 : undefined,
+                    marginTop: simplyfied ? 16 : 12,
                   }}
                 />
                 <TNodeChildrenRenderer tnode={p.childTnode} />

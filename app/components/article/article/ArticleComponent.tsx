@@ -97,10 +97,9 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
       style={{
         backgroundColor: colors.primary,
         padding: 2,
-        marginRight: 8,
         borderRadius: 2,
       }}>
-      <IconSimple width={16} height={16} color={colors.onPrimary} />
+      <IconSimple width={14} height={14} color={colors.onPrimary} />
     </View>
   );
 
@@ -159,9 +158,13 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
           )}
           {simplyfied && <View style={{height: 16}} />}
           <TextComponent
-            style={{...style.title, fontSize: simplyfied ? 18 : style.title.fontSize}}
+            style={{
+              ...style.title,
+              fontSize: simplyfied ? 18 : style.title.fontSize,
+            }}
             fontFamily="PlayfairDisplay-Regular">
             {simplyfied && simpleIcon}
+            {simplyfied && ' '}
             {article?.title || ''}
           </TextComponent>
           {Boolean(article?.summary) && (
