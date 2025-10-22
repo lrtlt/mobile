@@ -33,6 +33,7 @@ import {
 } from '../../api/Types';
 import {useAuth0} from 'react-native-auth0';
 import Snackbar from '../../components/snackbar/SnackBar';
+import UserAvatar from '../user/components/UserAvatar';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
 
@@ -134,7 +135,11 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           }}
           accessibilityLabel="Nustatymai"
           accessibilityHint="Atidaryti nustatymų ekraną">
-          <IconUserNew name="user" size={dim.appBarIconSize + 2} color={colors.headerTint} />
+          {user ? (
+            <UserAvatar size={dim.appBarIconSize + 4} />
+          ) : (
+            <IconUserNew name="user" size={dim.appBarIconSize + 2} color={colors.headerTint} />
+          )}
         </ActionButton>
       ),
 
