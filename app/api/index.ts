@@ -81,6 +81,7 @@ import {
   SearchResponse,
   SlugArticlesResponse,
   TVProgramResponse,
+  UserArticleHistoryResponse,
   VideoDataDefault,
   VideoDataLiveStream,
 } from './Types';
@@ -230,7 +231,7 @@ export const setUserOnboardingCompleted = (completed: boolean, idToken: string) 
 export const articleHistoryPut = (articleId: number | string) =>
   put<any>(putArticleToHistory(articleId), undefined);
 
-export const articleHistoryGet = (page: number) => get<any>(getArticleHistory(page));
+export const articleHistoryGet = (page: number) => get<UserArticleHistoryResponse>(getArticleHistory(page));
 
 export const articleFavoritePut = (articleId: number | string, idToken: string) =>
   put<any>(putArticleToFavorite(articleId), undefined, {

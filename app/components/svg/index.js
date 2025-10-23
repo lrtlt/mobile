@@ -89,3 +89,5 @@ export {default as IconProfileSettings} from './ic_profile_settings';
 export {default as IconApplicationSettings} from './ic_application_settings';
 export {default as IcLogout} from './ic_logout';
 export {default as IcDelete} from './ic_delete';
+export {default as IconHistory} from './ic_history';
+export {default as IconHeartFilled} from './ic_heart_filled';

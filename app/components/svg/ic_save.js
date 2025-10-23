@@ -1,12 +1,13 @@
 import React from 'react';
 import IconBookmark from './ic_bookmark';
 import IconBookmarkFilled from './ic_bookmark_filled';
+import {IconHeart, IconHeartFilled} from '.';
 
 const SvgComponent = (props) => {
   if (props.filled) {
-    return <IconBookmarkFilled size={props.size} color={props.color} />;
+    return <IconHeartFilled size={props.size} color={props.color} />;
   } else {
-    return <IconBookmark size={props.size} color={props.color} />;
+    return <IconHeart size={props.size} color={props.color} />;
   }
 };
 

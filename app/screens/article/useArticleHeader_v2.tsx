@@ -89,7 +89,7 @@ const useArticleHeader = (article?: ArticleContent) => {
     setActions(
       <View style={styles.row}>
         <ActionButton onPress={() => _saveArticlePress()} accessibilityLabel="Išsaugoti straipsnį">
-          <SaveIcon size={dim.appBarIconSize} color={colors.headerTint} filled={isBookmarked} />
+          <SaveIcon size={dim.appBarIconSize + 4} color={colors.headerTint} filled={isBookmarked} />
         </ActionButton>
         <ActionButton onPress={() => _handleSharePress()} accessibilityLabel="Dalintis straipsniu">
           <ShareIcon size={dim.appBarIconSize} color={colors.headerTint} />

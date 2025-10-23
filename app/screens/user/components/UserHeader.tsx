@@ -6,7 +6,7 @@ import UserAvatar from './UserAvatar';
 
 const UserHeader: React.FC = () => {
   const {user} = useAuth0();
-  const userEmail = user?.email || 'Not logged in';
+  const userEmail = user?.email || '-';
 
   return (
     <View style={styles.container}>
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    height: 73,
     gap: 16,
   },
   emailText: {

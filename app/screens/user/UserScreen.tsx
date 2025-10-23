@@ -7,6 +7,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import UserActions from './components/UserActions';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler';
+import UserHistory from './components/UserHistory';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
@@ -26,6 +27,7 @@ const UserScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
       <ScrollView contentContainerStyle={styles.container}>
         <>
           <UserHeader />
+          <UserHistory />
           <UserActions />
         </>
       </ScrollView>
@@ -42,6 +44,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 12,
     paddingVertical: 12,
-    gap: 12,
+    gap: 8,
   },
 });

@@ -1235,6 +1235,8 @@ export type ArticleSearchItem = {
   year_interval: number;
   is_epika: 0 | 1;
   is_series: 0 | 1;
+  is_video: 0 | 1;
+  is_audio: 0 | 1;
   badges_html?: string;
   subtitle?: string;
   id: number;
@@ -1470,4 +1472,11 @@ export type AIUserEventResponse = {
     searchQuery: string;
     orderIds: string[];
   };
+};
+
+export type UserArticleHistoryResponse = {
+  articles: {
+    articleId: number;
+    added_at: string;
+  }[];
 };

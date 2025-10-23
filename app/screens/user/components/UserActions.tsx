@@ -15,7 +15,6 @@ import {
   IconProfileSettings,
   IconStarList,
 } from '../../../components/svg';
-// No direct icon for delete, will use placeholder
 
 interface UserActionItemProps {
   icon: React.ReactNode;
