@@ -5,6 +5,7 @@ import {ArticleCategoryInfo, ArticleContent, ArticleContentResponse} from '../..
 import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {useArticleStorageStore} from '../../state/article_storage_store';
 import {useUserStore} from '../../state/user_store';
+import {useAddHistoryUserArticle} from '../../api/hooks/useHistoryArticles';
 
 type ScreenState = {
   article?: ArticleContent;
@@ -34,8 +35,13 @@ const useArticleScreenState = (
   const userStore = useUserStore();
   const articleStorage = useArticleStorageStore.getState();
   const navigation = useNavigation();
+  const addHistoryUserArticleMutation = useAddHistoryUserArticle();
 
   const cancellablePromise = useCancellablePromise();
+
+  useEffect(() => {
+    addHistoryUserArticleMutation.mutate(articleId);
+  }, [articleId]);
 
   useEffect(() => {
     setState({
@@ -67,6 +73,7 @@ const useArticleScreenState = (
         category_info: response.category_info,
         loadingState: loadingState,
       });
+
       articleStorage.addArticleToHistory(article);
     };
 

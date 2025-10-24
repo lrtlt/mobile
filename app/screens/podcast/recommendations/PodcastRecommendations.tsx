@@ -9,7 +9,7 @@ import {MainStackParamList} from '../../../navigation/MainStack';
 import {useCallback, useMemo} from 'react';
 import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
 import ArticlePlaylist from '../../../components/videoComponent/context/playlist/ArticlePlaylist';
-import {navigateArticle, pushArticle} from '../../../util/NavigationUtils';
+import {navigateArticle} from '../../../util/NavigationUtils';
 
 interface Props {
   articleId: number;

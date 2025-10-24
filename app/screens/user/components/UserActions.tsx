@@ -47,7 +47,7 @@ const UserActions: React.FC = () => {
   const {colors} = useTheme();
 
   const handleSave = () => {
-    navigation.navigate('Bookmarks');
+    navigation.navigate('Favorites');
   };
 
   const handleFollowedTopics = () => {

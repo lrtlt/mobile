@@ -38,11 +38,6 @@ import {
   radiotekaGet,
   searchArticles,
   weatherLocationsGet,
-  putArticleToHistory,
-  getArticleHistory,
-  putArticleToFavorite,
-  deleteArticleFromFavorite,
-  getArticleFavorites,
   getUserData,
   putUserOnboardingCompleted,
 } from './Endpoints';
@@ -81,7 +76,6 @@ import {
   SearchResponse,
   SlugArticlesResponse,
   TVProgramResponse,
-  UserArticleHistoryResponse,
   VideoDataDefault,
   VideoDataLiveStream,
 } from './Types';
@@ -223,32 +217,6 @@ export const getCurrentUserData = () => get<any>(getUserData());
 
 export const setUserOnboardingCompleted = (completed: boolean, idToken: string) =>
   put<any>(putUserOnboardingCompleted(completed), undefined, {
-    headers: {
-      Authorization: `Bearer ${idToken}`,
-    },
-  });
-
-export const articleHistoryPut = (articleId: number | string) =>
-  put<any>(putArticleToHistory(articleId), undefined);
-
-export const articleHistoryGet = (page: number) => get<UserArticleHistoryResponse>(getArticleHistory(page));
-
-export const articleFavoritePut = (articleId: number | string, idToken: string) =>
-  put<any>(putArticleToFavorite(articleId), undefined, {
-    headers: {
-      Authorization: `Bearer ${idToken}`,
-    },
-  });
-
-export const articleFavoriteDelete = (articleId: number | string, idToken: string) =>
-  put<any>(deleteArticleFromFavorite(articleId), undefined, {
-    headers: {
-      Authorization: `Bearer ${idToken}`,
-    },
-  });
-
-export const articleFavoriteGet = (idToken: string) =>
-  get<any>(getArticleFavorites(), {
     headers: {
       Authorization: `Bearer ${idToken}`,
     },

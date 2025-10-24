@@ -11,6 +11,7 @@ import {themeLight, useTheme} from '../../Theme';
 import Snackbar from '../../components/snackbar/SnackBar';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {useArticleStorageStore} from '../../state/article_storage_store';
+import {useAddFavoriteUserArticle, useDeleteFavoriteUserArticle} from '../../api/hooks/useFavoriteArticles';
 
 const getArticleId = (article?: ArticleContent) => {
   if (!article) {
@@ -32,6 +33,9 @@ const useArticleHeader = (article?: ArticleContent) => {
   const {colors, dim, strings} = useTheme();
 
   const articleStorage = useArticleStorageStore.getState();
+
+  const addFavoriteArticleMutation = useAddFavoriteUserArticle();
+  const deleteFavoriteArticleMutation = useDeleteFavoriteUserArticle();
 
   const isBookmarked = useArticleStorageStore((state) =>
     state.savedArticles.some((a) => getArticleId(a) === getArticleId(article)),
@@ -58,9 +62,11 @@ const useArticleHeader = (article?: ArticleContent) => {
     const _saveArticlePress = () => {
       if (isBookmarked) {
         articleStorage.removeArticle(getArticleId(article));
+        deleteFavoriteArticleMutation.mutate(getArticleId(article));
         setSnackbar(undefined);
       } else {
         articleStorage.saveArticle(article);
+        addFavoriteArticleMutation.mutate(getArticleId(article));
         setSnackbar(
           <Snackbar message={strings.articleHasBeenSaved} backgroundColor={themeLight.colors.primaryDark} />,
         );

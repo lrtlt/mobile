@@ -3,18 +3,18 @@ import {ListRenderItemInfo, StyleSheet, View} from 'react-native';
 import {ArticleRow, MyFlatList, ScreenError, ScreenLoader} from '../../components';
 import {useTheme} from '../../Theme';
 import {RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {formatArticles} from '../../util/articleFormatters';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import {SavedArticle} from '../../state/article_storage_store';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {pushArticle} from '../../util/NavigationUtils';
-import {useHistoryUserArticles} from '../../api/hooks/useHistoryArticles';
+import {useFavoriteUserArticles} from '../../api/hooks/useFavoriteArticles';
 import {ArticleSearchItem} from '../../api/Types';
 
-type ScreenRouteProp = RouteProp<MainStackParamList, 'History'>;
-type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'History'>;
+type ScreenRouteProp = RouteProp<MainStackParamList, 'Favorites'>;
+type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Favorites'>;
 
 type Props = {
   route: ScreenRouteProp;
@@ -33,10 +33,9 @@ const mapFavoriteArticles = (article: ArticleSearchItem): SavedArticle => ({
   is_audio: article.is_audio,
 });
 
-const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
-  const {strings} = useTheme();
+const FavoritesScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
+  const {data, error, isLoading} = useFavoriteUserArticles();
 
-  const {data, isLoading, error} = useHistoryUserArticles(1);
   const responseArticles = data?.items ?? [];
 
   const articles = useMemo(
@@ -44,30 +43,31 @@ const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
     [responseArticles],
   );
 
+  const {strings} = useTheme();
+
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: strings.history,
+      headerTitle: strings.favorites,
     });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useNavigationAnalytics({
-    viewId: 'Lrt app - History',
-    title: 'Lrt app -  Istorija / Peržiūrėti straipsniai',
-    sections: ['Bendra'],
-  });
-
-  const renderItem = (val: ListRenderItemInfo<SavedArticle[]>) => {
+  const renderItem = (item: ListRenderItemInfo<SavedArticle[]>) => {
     return (
       <ArticleRow
-        data={val.item}
+        data={item.item}
         onArticlePress={(article) => {
           pushArticle(navigation, article);
         }}
       />
     );
   };
+
+  useNavigationAnalytics({
+    viewId: 'Lrt app - Favorites',
+    title: 'Lrt app - Išsaugoti straipsniai',
+    sections: ['Bendra'],
+  });
 
   const {bottom} = useSafeAreaInsets();
 
@@ -87,13 +87,13 @@ const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
         windowSize={4}
         renderItem={renderItem}
         removeClippedSubviews={false}
-        keyExtractor={(item, index) => `${index}-${item.map((i) => i.id)}`}
+        keyExtractor={(item, index) => String(index) + String(item)}
       />
     </View>
   );
 };
 
-export default HistoryScreen;
+export default FavoritesScreen;
 
 const styles = StyleSheet.create({
   container: {

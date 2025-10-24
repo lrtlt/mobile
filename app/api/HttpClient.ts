@@ -75,3 +75,5 @@ export const post = async <T>(
 export const del = async <T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
   return LrtClient.delete<T>(url, config);
 };
+
+export const isAuthenticated = () => !!authInterceptor.getToken;

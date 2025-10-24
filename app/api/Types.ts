@@ -1472,10 +1472,3 @@ export type AIUserEventResponse = {
     orderIds: string[];
   };
 };
-
-export type UserArticleHistoryResponse = {
-  articles: {
-    articleId: number;
-    added_at: string;
-  }[];
-};

@@ -15,10 +15,14 @@ import {Auth0Provider} from 'react-native-auth0';
 
 import {enableFreeze} from 'react-native-screens';
 import useAuthInterceptor from './app/util/useAuthInterceptor';
+import queryClient from './AppQueryClient';
+import {QueryClientProvider} from '@tanstack/react-query';
+import useQueryAppStateSync from './app/util/useNetworkStatus';
 
 enableFreeze(true);
 
 const App: React.FC = () => {
+  useQueryAppStateSync();
   useAppCheckSetup();
   useNotificationsPermission();
   useAppTrackingPermission();
@@ -40,9 +44,11 @@ const App: React.FC = () => {
 
 export default () => (
   <GestureHandlerRootView style={styles.flex}>
-    <Auth0Provider domain={'dev-lrt.eu.auth0.com'} clientId={'rhwPI1fTnayadAII1lKBM7pZVCRLwTbE'}>
-      <App />
-    </Auth0Provider>
+    <QueryClientProvider client={queryClient}>
+      <Auth0Provider domain={'dev-lrt.eu.auth0.com'} clientId={'rhwPI1fTnayadAII1lKBM7pZVCRLwTbE'}>
+        <App />
+      </Auth0Provider>
+    </QueryClientProvider>
   </GestureHandlerRootView>
 );
 

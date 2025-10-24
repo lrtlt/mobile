@@ -26,6 +26,7 @@ export type MainStackParamList = {
   Offline: undefined;
   Settings: undefined;
   User: undefined;
+  Favorites: undefined;
   Article: {
     articleId: number;
     isMedia?: boolean;
@@ -216,6 +217,7 @@ export default () => {
       <Stack.Screen name="Search" component={SearchDrawerNavigator} options={{headerShown: false}} />
       <Stack.Screen name="Bookmarks" component={Screens.BookmarksScreen} />
       <Stack.Screen name="User" component={Screens.UserScreen} />
+      <Stack.Screen name="Favorites" component={Screens.FavoritesScreen} />
       <Stack.Screen name="History" component={Screens.HistoryScreen} />
       <Stack.Screen name="Program" component={Screens.ProgramScreen} />
       <Stack.Screen name="Slug" component={Screens.SlugScreen} />

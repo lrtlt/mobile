@@ -1,27 +1,34 @@
-import {PropsWithChildren, useCallback, useMemo} from 'react';
+import {PropsWithChildren, useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {useTheme} from '../../../Theme';
 import {IconHistory} from '../../../components/svg';
-import {ArticleRow, Text, TouchableDebounce} from '../../../components';
+import {ScreenError, ScreenLoader, Text, TouchableDebounce} from '../../../components';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
-import useUserArticleHistory from './useUserArticleHistory';
 import HistoryArticleList from './HistoryArticleList';
+import {useHistoryUserArticles} from '../../../api/hooks/useHistoryArticles';
 
 interface Props {}
 
 const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
-  const {articles} = useUserArticleHistory();
+  const {data, error, isLoading} = useHistoryUserArticles(1);
 
   const {colors} = useTheme();
 
   const onMorePress = useCallback(() => {
     navigation.navigate('History');
   }, [navigation]);
+
+  if (error) {
+    return <ScreenError text={error.message} />;
+  }
+
+  if (isLoading && !data) {
+    return <ScreenLoader />;
+  }
 
   return (
     <View style={[styles.container, {borderColor: colors.border}]}>
@@ -32,7 +39,7 @@ const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
           <Text style={[styles.moreText, {color: colors.tertiary}]}>Daugiau</Text>
         </TouchableDebounce>
       </View>
-      <HistoryArticleList articles={articles} />
+      <HistoryArticleList articles={data?.items ?? []} />
     </View>
   );
 };

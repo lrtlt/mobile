@@ -26,6 +26,7 @@ interface Dictionary {
   tvProgramButtonText: string;
   history: string;
   bookmarks: string;
+  favorites: string;
   liveChannelTitle: string;
   channelScreenTitle: string;
   weatherScreenTitle: string;
@@ -77,6 +78,7 @@ export const strings: Dictionary = {
   tvProgramButtonText: 'VISA PROGRAMA',
   history: 'ISTORIJA',
   bookmarks: 'IŠSAUGOTI',
+  favorites: 'MĖGSTAMIAUSI',
   liveChannelTitle: 'Gyvai',
   channelScreenTitle: 'LRT GYVAI',
   weatherScreenTitle: 'ORAI',
