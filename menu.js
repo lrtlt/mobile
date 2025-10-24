@@ -14,6 +14,11 @@ export const MENU_DATA = [
     title: 'TIESIOGIAI',
   },
   {
+    type: 'program',
+    title: 'PROGRAMA',
+    url: 'https://www.lrt.lt/programa',
+  },
+  {
     type: 'expandable',
     title: 'AKTUALIJOS',
     items: [
@@ -224,11 +229,11 @@ export const MENU_DATA = [
         title: 'Filmai',
         url: 'https://epika.lrt.lt/vaikams?_gl=1*1ogseq9*_gcl_au*MTM5MDA2ODE3My4xNzU1NzYxNjA2',
       },
-      {
-        type: 'webpage',
-        title: 'Vakaro pasaka',
-        url: 'https://www.lrt.lt/tema/vakaro-pasaka',
-      },
+      // {
+      //   type: 'webpage',
+      //   title: 'Vakaro pasaka',
+      //   url: 'https://www.lrt.lt/tema/vakaro-pasaka',
+      // },
       {
         type: 'webpage',
         title: 'Žaidimai',
@@ -294,10 +299,15 @@ export const MENU_DATA = [
         title: 'Parašyk man dainą',
         url: 'https://www.lrt.lt/projektai/parasyk-man-daina',
       },
+      // {
+      //   type: 'webpage',
+      //   title: '„Sirenų“ Lietuvos teatro programos žiūroviškiausio spektaklio rinkimai',
+      //   url: 'https://www.lrt.lt/projektai/sirenu-rinkimai',
+      // },
       {
         type: 'webpage',
-        title: '„Sirenų“ Lietuvos teatro programos žiūroviškiausio spektaklio rinkimai',
-        url: 'https://www.lrt.lt/projektai/sirenu-rinkimai',
+        title: 'Ministerija Futura',
+        url: 'https://www.lrt.lt/projektai/ministerijafutura',
       },
     ],
   },
