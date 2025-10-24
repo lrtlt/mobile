@@ -1,9 +1,34 @@
 PODS:
-  - A0Auth0 (4.6.0):
-    - Auth0 (= 2.10)
-    - JWTDecode (= 3.2.0)
+  - A0Auth0 (5.0.1):
+    - Auth0 (= 2.13)
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
-    - SimpleKeychain (= 1.2.0)
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - abseil/algorithm (1.20240722.0):
     - abseil/algorithm/algorithm (= 1.20240722.0)
     - abseil/algorithm/container (= 1.20240722.0)
@@ -1197,9 +1222,9 @@ PODS:
     - GoogleUtilities/Environment (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - PromisesObjC (~> 2.4)
-  - Auth0 (2.10.0):
-    - JWTDecode (= 3.2.0)
-    - SimpleKeychain (= 1.2.0)
+  - Auth0 (2.13.0):
+    - JWTDecode (= 3.3.0)
+    - SimpleKeychain (= 1.3.0)
   - boost (1.84.0)
   - BoringSSL-GRPC (0.0.37):
     - BoringSSL-GRPC/Implementation (= 0.0.37)
@@ -1468,7 +1493,7 @@ PODS:
   - hermes-engine (0.80.2):
     - hermes-engine/Pre-built (= 0.80.2)
   - hermes-engine/Pre-built (0.80.2)
-  - JWTDecode (3.2.0)
+  - JWTDecode (3.3.0)
   - leveldb-library (1.22.6)
   - libavif/core (0.11.1)
   - libavif/libdav1d (0.11.1):
@@ -3180,6 +3205,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - react-native-netinfo (11.4.1):
+    - React-Core
   - react-native-pager-view (6.9.1):
     - boost
     - DoubleConversion
@@ -3301,7 +3328,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-theoplayer (10.2.1):
+  - react-native-theoplayer (10.2.2):
     - React-Core
     - THEOplayer-Connector-SideloadedSubtitle (~> 10.2)
     - THEOplayer-Integration-GoogleCast (~> 10.2)
@@ -4331,26 +4358,26 @@ PODS:
   - SDWebImageWebPCoder (0.14.6):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
-  - SimpleKeychain (1.2.0)
+  - SimpleKeychain (1.3.0)
   - SocketRocket (0.7.1)
   - Swifter (1.5.0)
   - SwiftSubtitles (0.9.1):
     - DSFRegex (~> 3.3.1)
     - TinyCSV (~> 0.6.1)
-  - THEOplayer-Connector-SideloadedSubtitle (10.2.2):
+  - THEOplayer-Connector-SideloadedSubtitle (10.3.0):
     - Swifter (= 1.5.0)
     - SwiftSubtitles (= 0.9.1)
     - THEOplayerSDK-core (~> 10)
-  - THEOplayer-Integration-GoogleCast (10.2.2):
-    - THEOplayer-Integration-GoogleCast/Base (= 10.2.2)
-    - THEOplayer-Integration-GoogleCast/Dependencies (= 10.2.2)
-  - THEOplayer-Integration-GoogleCast/Base (10.2.2)
-  - THEOplayer-Integration-GoogleCast/Dependencies (10.2.2):
+  - THEOplayer-Integration-GoogleCast (10.3.0):
+    - THEOplayer-Integration-GoogleCast/Base (= 10.3.0)
+    - THEOplayer-Integration-GoogleCast/Dependencies (= 10.3.0)
+  - THEOplayer-Integration-GoogleCast/Base (10.3.0)
+  - THEOplayer-Integration-GoogleCast/Dependencies (10.3.0):
     - google-cast-sdk-dynamic-xcframework (~> 4.8)
-  - THEOplayer-Integration-THEOlive (10.2.2):
-    - THEOplayer-Integration-THEOlive/Base (= 10.2.2)
-  - THEOplayer-Integration-THEOlive/Base (10.2.2)
-  - THEOplayerSDK-core (10.2.2)
+  - THEOplayer-Integration-THEOlive (10.3.0):
+    - THEOplayer-Integration-THEOlive/Base (= 10.3.0)
+  - THEOplayer-Integration-THEOlive/Base (10.3.0)
+  - THEOplayerSDK-core (10.3.0)
   - TinyCSV (0.6.1)
   - Yoga (0.0.0)
 
@@ -4404,6 +4431,7 @@ DEPENDENCIES:
   - react-native-gemius-plugin (from `../node_modules/react-native-gemius-plugin`)
   - react-native-google-cast (from `https://github.com/Danesz/react-native-google-cast.git`, branch `feature/guestmode_apple_silicon`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -4604,6 +4632,8 @@ EXTERNAL SOURCES:
     :git: https://github.com/Danesz/react-native-google-cast.git
   react-native-mmkv:
     :path: "../node_modules/react-native-mmkv"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-render-html:
@@ -4719,10 +4749,10 @@ CHECKOUT OPTIONS:
     :git: https://github.com/Danesz/react-native-google-cast.git
 
 SPEC CHECKSUMS:
-  A0Auth0: 03f8957c3991644e0ad550a304a9d99a4b589c91
+  A0Auth0: 783c5966e8ece12b99c51f9655e4b6b11fa800b8
   abseil: a05cc83bf02079535e17169a73c5be5ba47f714b
   AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
-  Auth0: 2876d0c36857422eda9cb580a6cc896c7d14cb36
+  Auth0: 8deb8df56dd91516403ec474d968fb9f79189b93
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   BoringSSL-GRPC: dded2a44897e45f28f08ae87a55ee4bcd19bc508
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
@@ -4754,7 +4784,7 @@ SPEC CHECKSUMS:
   "gRPC-C++": cc207623316fb041a7a3e774c252cf68a058b9e8
   gRPC-Core: 860978b7db482de8b4f5e10677216309b5ff6330
   hermes-engine: bbc1152da7d2d40f9e59c28acc6576fcf5d28e2a
-  JWTDecode: 7dae24cb9bf9b608eae61e5081029ec169bb5527
+  JWTDecode: 1ca6f765844457d0dd8690436860fecee788f631
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
   libavif: 84bbb62fb232c3018d6f1bab79beea87e35de7b7
   libdav1d: 23581a4d8ec811ff171ed5e2e05cd27bad64c39f
@@ -4799,10 +4829,11 @@ SPEC CHECKSUMS:
   react-native-gemius-plugin: 705cc53f6b7d882ad6bcc8f7ff484042bdd2842e
   react-native-google-cast: 872b05bf12f7db32c2f66818fdd5406474af25f1
   react-native-mmkv: d374d305a8143e2983fb7b57cebb7992ae899004
+  react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-pager-view: c4eb191519def25f8983e636c1d387a7e33a21c4
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 1253cc163c459494057aaae3e8c02fcdad674f0d
-  react-native-theoplayer: fec1f93b37b28aa9abe060789f881089549cc8ba
+  react-native-theoplayer: a46f8203a33c93c37a06d6f238accb1f42c7c21b
   react-native-unistyles: 270cbbdb241ca17b7cae58f02703b97dceeaf55a
   react-native-webview: 6a11548e3714dbf97a93003f5c95dd6fcc10234b
   React-NativeModulesApple: 342e280bb9fc2aa5f61f6c257b309a86b995e12d
@@ -4855,17 +4886,17 @@ SPEC CHECKSUMS:
   SDWebImage: 16309af6d214ba3f77a7c6f6fdda888cb313a50a
   SDWebImageAVIFCoder: afe194a084e851f70228e4be35ef651df0fc5c57
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
-  SimpleKeychain: 768cf43ae778b1c21816e94dddf01bb8ee96a075
+  SimpleKeychain: 9c0f3ca8458fed74e01db864d181c5cbe278603e
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   SwiftSubtitles: c659af19d710a2946779015464c0577d07fe4666
-  THEOplayer-Connector-SideloadedSubtitle: e783c36e62fb2da1b42bb00874b85308f49ec041
-  THEOplayer-Integration-GoogleCast: e70fcdc3ac659f70277af26ec330e9eaa4c4acfc
-  THEOplayer-Integration-THEOlive: 7e2969aeaba071c1d84468c61bd20bfdb71b0ce9
-  THEOplayerSDK-core: 6dfdf5558cb535f4717e62a76549623f727dde64
+  THEOplayer-Connector-SideloadedSubtitle: 68d594bb56cf9399e6e7c7dcf4bcb7429afeebd5
+  THEOplayer-Integration-GoogleCast: 6958414ca1fba7c0563a66becef08ecdc671d53f
+  THEOplayer-Integration-THEOlive: 641f460f20a7647acc8a847eb363e9268c0b3acd
+  THEOplayerSDK-core: 016b6d611def0728abe37156e755af8441fb796b
   TinyCSV: fd6228edbcf1c07466ac34b76dac5e052143eaba
   Yoga: ce248fb32065c9b00451491b06607f1c25b2f1ed
 
-PODFILE CHECKSUM: 16b8ffeb9fab8cc369390d58e687df51be5342d0
+PODFILE CHECKSUM: 6c4993a01ad85f1767f633eeecce9b68788c9e85
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2
