@@ -7,6 +7,7 @@ import {AudiotekaNewestCategory} from '../../../../../../api/Types';
 import {ArticleRow} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import {formatArticles} from '../../../../../../util/articleFormatters';
+import {navigateArticle} from '../../../../../../util/NavigationUtils';
 
 interface Props {
   data: AudiotekaNewestCategory;
@@ -17,7 +18,7 @@ const NewestBlockCategory: React.FC<React.PropsWithChildren<Props>> = ({data}) =
 
   const onArticlePressHandler = useCallback(
     (article: Article) => {
-      navigation.navigate('Podcast', {articleId: article.id});
+      navigateArticle(navigation, article);
     },
     [navigation],
   );

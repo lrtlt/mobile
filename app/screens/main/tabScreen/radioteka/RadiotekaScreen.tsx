@@ -24,6 +24,7 @@ import {MainStackParamList} from '../../../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useMediaPlayer} from '../../../../components/videoComponent/context/useMediaPlayer';
 import ArticlePlaylist from '../../../../components/videoComponent/context/playlist/ArticlePlaylist';
+import {pushArticle} from '../../../../util/NavigationUtils';
 
 const WIDGET_ID_HERO = 21;
 const WIDGET_ID_LATEST = 12;
@@ -111,9 +112,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             <RadiotekaHero
               block={item}
               onArticlePress={(article) => {
-                navigation.push('Podcast', {
-                  articleId: article.id,
-                });
+                pushArticle(navigation, article);
               }}
             />
           );
@@ -132,9 +131,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 ageRestricted: !!a.age_restriction,
               }))}
               onItemPress={(index) => {
-                navigation.push('Podcast', {
-                  articleId: item.data.articles_list[index].id,
-                });
+                pushArticle(navigation, item.data.articles_list[index]);
               }}
               onItemPlayPress={(index) => {
                 setPlaylist(
@@ -161,9 +158,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
               }))}
               onItemPress={(index) => {
-                navigation.push('Podcast', {
-                  articleId: item.data.articles_list[index].id,
-                });
+                pushArticle(navigation, item.data.articles_list[index]);
               }}
               onItemPlayPress={(index) => {
                 setPlaylist(
@@ -195,9 +190,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               ),
             }))}
             onItemPress={(index) => {
-              navigation.push('Podcast', {
-                articleId: item.data.category_list[index].LATEST_ITEM.id,
-              });
+              pushArticle(navigation, item.data.category_list[index].LATEST_ITEM);
             }}
             onItemPlayPress={(index) => {
               setPlaylist(
@@ -222,9 +215,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             <RadiotekaHeroCarousel
               items={item.data.articles_list}
               onItemPress={(index) => {
-                navigation.push('Podcast', {
-                  articleId: item.data.articles_list[index].id,
-                });
+                pushArticle(navigation, item.data.articles_list[index]);
               }}
               onItemPlayPress={(index) => {
                 setPlaylist(
@@ -248,14 +239,10 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
               }))}
               onTitlePress={() => {
-                navigation.push('Podcast', {
-                  articleId: item.data.articles_list[0].id,
-                });
+                pushArticle(navigation, item.data.articles_list[0]);
               }}
               onItemPress={(index) => {
-                navigation.push('Podcast', {
-                  articleId: item.data.articles_list[index].id,
-                });
+                pushArticle(navigation, item.data.articles_list[index]);
               }}
               onItemPlayPress={(index) => {
                 setPlaylist(
@@ -301,9 +288,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               imageUrl: buildImageUri(IMG_SIZE_L, a.img_path_prefix, a.img_path_postfix),
             }))}
             onItemPress={(index) => {
-              navigation.push('Podcast', {
-                articleId: item.data.playlist_items[index].id,
-              });
+              pushArticle(navigation, item.data.playlist_items[index]);
             }}
             onItemPlayPress={(index) => {
               setPlaylist(

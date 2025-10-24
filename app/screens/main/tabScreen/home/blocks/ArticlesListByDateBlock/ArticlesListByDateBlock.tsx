@@ -7,6 +7,7 @@ import {HomeBlockArticlesByDate} from '../../../../../../api/Types';
 import {ArticleRow, MoreArticlesButton, SectionHeader} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import {formatArticles} from '../../../../../../util/articleFormatters';
+import {pushArticle} from '../../../../../../util/NavigationUtils';
 
 interface ArticlesListByDateBlockProps {
   block: HomeBlockArticlesByDate;
@@ -32,13 +33,7 @@ const ArticlesListByDateBlock: React.FC<ArticlesListByDateBlockProps> = ({
 
   const articlePressHandler = useCallback(
     (article: Article) => {
-      if (article.is_audio) {
-        navigation.push('Podcast', {articleId: article.id});
-      } else if (article.is_video) {
-        navigation.push('Vodcast', {articleId: article.id});
-      } else {
-        navigation.push('Article', {articleId: article.id});
-      }
+      pushArticle(navigation, article);
     },
     [navigation],
   );

@@ -13,6 +13,7 @@ import {
 } from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import BlockTitle from '../BlockTitle';
+import {navigateArticle} from '../../../../../../util/NavigationUtils';
 
 interface Props {
   data: AudiotekaCategory | AudiotekaSlug;
@@ -24,7 +25,7 @@ const CategoryBlock: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
 
   const onArticlePressHandler = useCallback(
     (article: Article) => {
-      navigation.navigate('Podcast', {articleId: article.id});
+      navigateArticle(navigation, article);
     },
     [navigation],
   );

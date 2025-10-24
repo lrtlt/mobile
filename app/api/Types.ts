@@ -1206,7 +1206,6 @@ export interface LiveFeedArticle {
   id: number;
   subtitle: string;
   badge_text?: string;
-
   category_url: string;
   category_title: string;
   item_date: string;

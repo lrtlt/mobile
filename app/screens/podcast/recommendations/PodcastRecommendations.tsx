@@ -9,6 +9,7 @@ import {MainStackParamList} from '../../../navigation/MainStack';
 import {useCallback, useMemo} from 'react';
 import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
 import ArticlePlaylist from '../../../components/videoComponent/context/playlist/ArticlePlaylist';
+import {navigateArticle, pushArticle} from '../../../util/NavigationUtils';
 
 interface Props {
   articleId: number;
@@ -55,7 +56,7 @@ const PodcastRecommendations: React.FC<React.PropsWithChildren<Props>> = ({artic
         items={items}
         onItemPlayPress={playItem}
         onItemPress={(index) => {
-          navigation.navigate('Podcast', {articleId: recommendations.items[index].id});
+          navigateArticle(navigation, recommendations.items[index]);
         }}
       />
     </View>

@@ -31,6 +31,7 @@ import EpikaBlock from '../home/blocks/EpikaBlock/EpikaBlock';
 import MediatekaHero from './components/hero/MediatekaHero';
 import MediatekaHorizontalCategoryList from './components/horizontal_list/MediatekaHorizontalCategoryList';
 import VideoListBlock from '../home/blocks/VideoListBlock/VideoListBlock';
+import {pushArticle} from '../../../../util/NavigationUtils';
 
 const WIDGET_ID_HERO = 24;
 const WIDGET_ID_LATEST = 25;
@@ -129,9 +130,7 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             <MediatekaHero
               block={item}
               onArticlePress={(article) => {
-                navigation.push('Vodcast', {
-                  articleId: article.id,
-                });
+                pushArticle(navigation, article);
               }}
             />
           );
@@ -151,14 +150,10 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
                 isPopular: isArticlePopular(a.read_count),
               }))}
               onItemPress={(index) => {
-                navigation.push('Vodcast', {
-                  articleId: item['widget-data'].articles_list[index].id,
-                });
+                pushArticle(navigation, item['widget-data'].articles_list[index]);
               }}
               onItemPlayPress={(index) => {
-                navigation.push('Vodcast', {
-                  articleId: item['widget-data'].articles_list[index].id,
-                });
+                pushArticle(navigation, item['widget-data'].articles_list[index]);
               }}
             />
           );
@@ -189,20 +184,13 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
               imageAspectRatio: a.photo_aspectratio,
             }))}
             onItemPress={(index) => {
-              navigation.push('Vodcast', {
-                articleId: item.articles_list[index].id,
-              });
+              pushArticle(navigation, item.articles_list[index]);
             }}
             onItemPlayPress={(index) => {
-              //TODO: maybe change later if needed?
-              navigation.push('Vodcast', {
-                articleId: item.articles_list[index].id,
-              });
+              pushArticle(navigation, item.articles_list[index]);
             }}
             onTitlePress={() => {
-              navigation.push('Vodcast', {
-                articleId: item.articles_list[0].id,
-              });
+              pushArticle(navigation, item.articles_list[0]);
             }}
           />
         );
@@ -252,15 +240,10 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
             imageAspectRatio: a.photo_aspectratio,
           }))}
           onItemPress={(index) => {
-            navigation.push('Vodcast', {
-              articleId: item.articles_list[index].id,
-            });
+            pushArticle(navigation, item.articles_list[index]);
           }}
           onItemPlayPress={(index) => {
-            //TODO: maybe change later if needed?
-            navigation.push('Vodcast', {
-              articleId: item.articles_list[index].id,
-            });
+            pushArticle(navigation, item.articles_list[index]);
           }}
           onKeywordPress={(keyword) => {
             navigation.navigate('Slug', {

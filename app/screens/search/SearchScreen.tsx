@@ -33,6 +33,7 @@ import useAISearchApi from './useAISearchApi';
 import useAISummaryApi from './useAISumaryApi';
 import SearchAISummary from './SearchAISummary';
 import SearchAutocomplete from './SearchAutocomplete';
+import {pushArticle} from '../../util/NavigationUtils';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -91,14 +92,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
 
   const articlePressHandler = useCallback(
     (article: Article) => {
-      console.log('Article pressed:', article);
-      if (article.is_audio) {
-        navigation.push('Podcast', {articleId: article.id});
-      } else if (article.is_video) {
-        navigation.push('Vodcast', {articleId: article.id});
-      } else {
-        navigation.push('Article', {articleId: article.id});
-      }
+      pushArticle(navigation, article);
     },
     [navigation],
   );

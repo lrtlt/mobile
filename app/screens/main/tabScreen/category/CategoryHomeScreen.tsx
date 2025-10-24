@@ -35,6 +35,7 @@ import TopUrlInlineBlock from '../home/blocks/TopUrlInlineBlock/TopUrlInlineBloc
 import {IconArrowLeft} from '../../../../components/svg';
 import {useTheme} from '../../../../Theme';
 import Config from 'react-native-config';
+import {pushArticle} from '../../../../util/NavigationUtils';
 
 const emptyArray: HomeBlockType[] = [];
 
@@ -130,13 +131,7 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
             <ArticleRow
               data={[block.article]}
               onArticlePress={(article) => {
-                if (article.is_audio) {
-                  navigation.push('Podcast', {articleId: article.id});
-                } else if (article.is_video) {
-                  navigation.push('Vodcast', {articleId: article.id});
-                } else {
-                  navigation.push('Article', {articleId: article.id});
-                }
+                pushArticle(navigation, article);
               }}
             />
           );

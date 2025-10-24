@@ -8,6 +8,7 @@ import {ArticleRow, MoreArticlesButton, SectionHeader} from '../../../../../../c
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import {formatArticles} from '../../../../../../util/articleFormatters';
 import {useNavigationStore} from '../../../../../../state/navigation_store';
+import {pushArticle} from '../../../../../../util/NavigationUtils';
 
 interface CategoryArticlesBlockProps {
   block: HomeBlockCategory;
@@ -26,13 +27,7 @@ const CategoryArticlesBlock: React.FC<CategoryArticlesBlockProps> = ({block}) =>
 
   const articlePressHandler = useCallback(
     (article: Article) => {
-      if (article.is_audio) {
-        navigation.push('Podcast', {articleId: article.id});
-      } else if (article.is_video) {
-        navigation.push('Vodcast', {articleId: article.id});
-      } else {
-        navigation.push('Article', {articleId: article.id});
-      }
+      pushArticle(navigation, article);
     },
     [navigation],
   );

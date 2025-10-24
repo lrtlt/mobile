@@ -13,6 +13,7 @@ import {useTheme} from '../../../Theme';
 import {useNavigation} from '@react-navigation/native';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {pushArticle} from '../../../util/NavigationUtils';
 
 interface Props {
   articles: ArticleSearchItem[];
@@ -36,7 +37,7 @@ const HistoryArticleList: React.FC<React.PropsWithChildren<Props>> = ({articles}
             <Item
               article={article}
               onPress={(article) => {
-                navigation.push('Article', {articleId: article.id});
+                pushArticle(navigation, article);
               }}
             />
           </View>

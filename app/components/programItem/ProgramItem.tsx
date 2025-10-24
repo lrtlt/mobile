@@ -7,6 +7,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
 import {CameraIcon, IconPlay} from '../svg';
 import TextComponent from '../text/Text';
+import {navigateArticle} from '../../util/NavigationUtils';
 
 export const PROGRAM_ITEM_HEIGHT = 64;
 
@@ -48,12 +49,11 @@ const ProgramItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
 
   const onPressHandler = useCallback(() => {
     try {
-      console.log('test', isNowPlaying, props.channelId, props.record_article_id);
       if (isNowPlaying && props.channelId) {
         navigation.navigate('Channel', {channelId: props.channelId});
       } else {
         const articleId = Number(props.record_article_id);
-        navigation.navigate('Article', {articleId});
+        navigateArticle(navigation, {id: articleId});
       }
     } catch (e) {
       console.log(e);

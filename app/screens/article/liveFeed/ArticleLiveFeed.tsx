@@ -13,6 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import LiveFeedCountdown from './LiveFeedCountdown';
+import {pushArticle} from '../../../util/NavigationUtils';
 
 interface Props {
   id: string;
@@ -85,7 +86,7 @@ const ArticleLiveFeed: React.FC<React.PropsWithChildren<Props>> = ({id}) => {
             {item.articles?.map((article) => (
               <TouchableDebounce
                 onPress={() => {
-                  navigation.push('Article', {articleId: article.id});
+                  pushArticle(navigation, article);
                 }}>
                 <LiveFeedArticleItem article={article} />
               </TouchableDebounce>

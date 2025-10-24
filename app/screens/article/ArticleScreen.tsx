@@ -13,6 +13,7 @@ import {useArticleStorageStore} from '../../state/article_storage_store';
 import {useCounterForArticle} from '../../util/useCounter';
 import ThemeProvider from '../../theme/ThemeProvider';
 import {SIMPLIFIED_CATEGORY_ID} from '../../constants';
+import {pushArticle} from '../../util/NavigationUtils';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Article'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Article'>;
@@ -66,7 +67,7 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
           break;
         }
         case 'article': {
-          navigation.push('Article', {articleId: item.item.id});
+          pushArticle(navigation, item.item);
           break;
         }
         default: {

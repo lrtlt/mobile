@@ -19,6 +19,7 @@ import {MainStackParamList} from '../../../../navigation/MainStack';
 import {useTheme} from '../../../../Theme';
 import {PagingState} from '../../../../state/article_store';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {pushArticle} from '../../../../util/NavigationUtils';
 
 interface Props {
   data: PagingState;
@@ -54,13 +55,7 @@ const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
 
   const openArticleHandler = useCallback(
     (article: Article) => {
-      if (article.is_audio) {
-        navigation.push('Podcast', {articleId: article.id});
-      } else if (article.is_video) {
-        navigation.push('Vodcast', {articleId: article.id});
-      } else {
-        navigation.push('Article', {articleId: article.id});
-      }
+      pushArticle(navigation, article);
     },
     [navigation],
   );

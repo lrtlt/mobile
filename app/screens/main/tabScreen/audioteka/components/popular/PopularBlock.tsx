@@ -7,6 +7,7 @@ import {AudiotekaPopular} from '../../../../../../api/Types';
 import {ArticleRow} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import BlockTitle from '../BlockTitle';
+import {navigateArticle} from '../../../../../../util/NavigationUtils';
 
 interface Props {
   data: AudiotekaPopular;
@@ -20,7 +21,7 @@ const PopularBlock: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
       <ArticleRow
         data={data.articles}
         onArticlePress={(article) => {
-          navigation.navigate('Podcast', {articleId: article.id});
+          navigateArticle(navigation, article);
         }}
       />
     </View>

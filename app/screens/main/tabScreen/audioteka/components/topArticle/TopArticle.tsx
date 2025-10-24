@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import ListenCount from '../../../../../../components/article/article/ListenCount';
+import {navigateArticle} from '../../../../../../util/NavigationUtils';
 
 interface TopArticleProps {
   article: Article;
@@ -21,7 +22,7 @@ const TopArticle: React.FC<TopArticleProps> = ({article}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const onPressHandler = useCallback(() => {
-    navigation.navigate('Podcast', {articleId: article.id});
+    navigateArticle(navigation, article);
   }, [article.id, navigation]);
 
   return (

@@ -11,6 +11,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {Article} from '../../../Types';
 import useCancellablePromise from '../../hooks/useCancellablePromise';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import {pushArticle} from '../../util/NavigationUtils';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Slug'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Slug'>;
@@ -130,13 +131,7 @@ const SlugScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route
             <ArticleRow
               data={item.item}
               onArticlePress={(article) => {
-                if (article.is_audio) {
-                  navigation.push('Podcast', {articleId: article.id});
-                } else if (article.is_video) {
-                  navigation.push('Vodcast', {articleId: article.id});
-                } else {
-                  navigation.push('Article', {articleId: article.id});
-                }
+                pushArticle(navigation, article);
               }}
             />
           );

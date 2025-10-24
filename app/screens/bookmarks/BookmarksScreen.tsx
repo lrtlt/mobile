@@ -9,6 +9,7 @@ import {formatArticles} from '../../util/articleFormatters';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import {mapArticleStorageData, SavedArticle, useArticleStorageStore} from '../../state/article_storage_store';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {pushArticle} from '../../util/NavigationUtils';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Bookmarks'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Bookmarks'>;
@@ -39,13 +40,7 @@ const BookmarksScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation})
       <ArticleRow
         data={item.item}
         onArticlePress={(article) => {
-          if (article.is_audio) {
-            navigation.push('Podcast', {articleId: article.id});
-          } else if (article.is_video) {
-            navigation.push('Vodcast', {articleId: article.id});
-          } else {
-            navigation.push('Article', {articleId: article.id});
-          }
+          pushArticle(navigation, article);
         }}
       />
     );

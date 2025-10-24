@@ -17,6 +17,7 @@ import GenrePodcastGrid from './GenrePodcastGrid';
 import {fetchartcilesByCategory} from '../../api';
 import Snackbar from '../../components/snackbar/SnackBar';
 import useNavigationAnalytics, {TrackingParams} from '../../util/useNavigationAnalytics';
+import {pushArticle} from '../../util/NavigationUtils';
 
 interface Props {
   route: RouteProp<MainStackParamList, 'Genre'>;
@@ -63,23 +64,7 @@ const GenreScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigatio
             if (response.items.length === 0) {
               setErrorVisible(true);
             } else {
-              //TODO: refactor later to check if article is audio or video
-              navigation.push('Podcast', {
-                articleId: response.items[0].id,
-              });
-              // if (response.items[0].is_audio) {
-              //   navigation.push('Podcast', {
-              //     articleId: response.items[0].id,
-              //   });
-              // } else if (response.items[0].is_video) {
-              //   navigation.push('Vodcast', {
-              //     articleId: response.items[0].id,
-              //   });
-              // } else {
-              //   navigation.push('Article', {
-              //     articleId: response.items[0].id,
-              //   });
-              // }
+              pushArticle(navigation, response.items[0]);
             }
           })
           .catch(() => setErrorVisible(true));
@@ -105,9 +90,7 @@ const GenreScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigatio
   const handleLatestPress = useCallback(
     (index: number) => {
       if (shows && shows[index]) {
-        navigation.navigate('Podcast', {
-          articleId: shows[index].id,
-        });
+        pushArticle(navigation, shows[index]);
       }
     },
     [shows, navigation],

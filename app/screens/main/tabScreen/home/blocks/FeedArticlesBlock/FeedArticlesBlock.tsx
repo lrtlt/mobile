@@ -8,6 +8,7 @@ import {ArticleComponent, ArticleFeedItem, Text} from '../../../../../../compone
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import ArticleTextOnlyItem from '../../../../../../components/article/articleTextOnlyItem/ArticleTextOnlyItem';
 import {ScrollView} from 'react-native-gesture-handler';
+import {pushArticle} from '../../../../../../util/NavigationUtils';
 
 interface FeedArticlesBlockProps {
   block: HomeBlockArticlesBlock;
@@ -21,13 +22,7 @@ const FeedArticlesBlock: React.FC<FeedArticlesBlockProps> = ({block}) => {
 
   const articlePressHandler = useCallback(
     (article: Article) => {
-      if (article.is_audio) {
-        navigation.push('Podcast', {articleId: article.id});
-      } else if (article.is_video) {
-        navigation.push('Vodcast', {articleId: article.id});
-      } else {
-        navigation.push('Article', {articleId: article.id});
-      }
+      pushArticle(navigation, article);
     },
     [navigation],
   );
