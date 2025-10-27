@@ -27,7 +27,7 @@ type ArticleStorageState = {
 
 type ArticleStorageActions = {
   saveArticle: (article: ArticleContent) => void;
-  removeArticle: (articleId: number) => void;
+  removeArticle: (articleId: number, noAnalytics?: boolean) => void;
   addArticleToHistory: (article: ArticleContent) => void;
 };
 
@@ -63,15 +63,17 @@ export const useArticleStorageStore = create<ArticleStorageStore>()(
           article_url: _articleUrl(article),
         });
       },
-      removeArticle: (articleId) => {
+      removeArticle: (articleId, noAnalytics) => {
         set((state) => {
           return {
             savedArticles: state.savedArticles.filter((a) => _articleId(a) !== articleId),
           };
         });
-        logEvent(getAnalytics(), 'app_lrt_lt_article_removed', {
-          article_id: articleId,
-        });
+        if (!noAnalytics) {
+          logEvent(getAnalytics(), 'app_lrt_lt_article_removed', {
+            article_id: articleId,
+          });
+        }
       },
       addArticleToHistory: async (article) => {
         let history = get().history;

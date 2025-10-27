@@ -11,7 +11,11 @@ import {themeLight, useTheme} from '../../Theme';
 import Snackbar from '../../components/snackbar/SnackBar';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {useArticleStorageStore} from '../../state/article_storage_store';
-import {useAddFavoriteUserArticle, useDeleteFavoriteUserArticle} from '../../api/hooks/useFavoriteArticles';
+import {
+  useAddFavoriteUserArticle,
+  useDeleteFavoriteUserArticle,
+  useIsFavoriteUserArticle,
+} from '../../api/hooks/useFavoriteArticles';
 
 const getArticleId = (article?: ArticleContent) => {
   if (!article) {
@@ -34,12 +38,9 @@ const useArticleHeader = (article?: ArticleContent) => {
 
   const articleStorage = useArticleStorageStore.getState();
 
-  const addFavoriteArticleMutation = useAddFavoriteUserArticle();
-  const deleteFavoriteArticleMutation = useDeleteFavoriteUserArticle();
-
-  const isBookmarked = useArticleStorageStore((state) =>
-    state.savedArticles.some((a) => getArticleId(a) === getArticleId(article)),
-  );
+  const {mutate: addFavoriteArticle} = useAddFavoriteUserArticle();
+  const {mutate: deleteFavoriteArticle} = useDeleteFavoriteUserArticle();
+  const {data: isFavorite} = useIsFavoriteUserArticle(getArticleId(article));
 
   const {fullHeight: appBarHeight} = useAppBarHeight();
   const scrollY = new Animated.Value(0);
@@ -60,13 +61,13 @@ const useArticleHeader = (article?: ArticleContent) => {
     }
 
     const _saveArticlePress = () => {
-      if (isBookmarked) {
+      if (isFavorite) {
         articleStorage.removeArticle(getArticleId(article));
-        deleteFavoriteArticleMutation.mutate(getArticleId(article));
+        deleteFavoriteArticle(getArticleId(article));
         setSnackbar(undefined);
       } else {
         articleStorage.saveArticle(article);
-        addFavoriteArticleMutation.mutate(getArticleId(article));
+        addFavoriteArticle(getArticleId(article));
         setSnackbar(
           <Snackbar message={strings.articleHasBeenSaved} backgroundColor={themeLight.colors.primaryDark} />,
         );
@@ -95,7 +96,7 @@ const useArticleHeader = (article?: ArticleContent) => {
     setActions(
       <View style={styles.row}>
         <ActionButton onPress={() => _saveArticlePress()} accessibilityLabel="Išsaugoti straipsnį">
-          <SaveIcon size={dim.appBarIconSize + 4} color={colors.headerTint} filled={isBookmarked} />
+          <SaveIcon size={dim.appBarIconSize + 4} color={colors.headerTint} filled={isFavorite} />
         </ActionButton>
         <ActionButton onPress={() => _handleSharePress()} accessibilityLabel="Dalintis straipsniu">
           <ShareIcon size={dim.appBarIconSize} color={colors.headerTint} />
@@ -103,7 +104,7 @@ const useArticleHeader = (article?: ArticleContent) => {
       </View>,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [article, isBookmarked]);
+  }, [article, isFavorite]);
 
   const appBar = (
     <AnimatedAppBar translateY={translateY} onBackPress={() => navigation.goBack()} actions={actions} />
