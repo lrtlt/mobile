@@ -1,36 +1,47 @@
-import {fetchVideoData} from '../../api';
-import {isVideoLiveStream} from '../../api/Types';
+import {useQuery} from '@tanstack/react-query';
+import {isVideoLiveStream, VideoDataDefault, VideoDataLiveStream, VideoTextTrack} from '../Types';
+import {get} from '../HttpClient';
+import {MediaType} from '../../components/videoComponent/context/PlayerContext';
+import {BLOCKED_STREAM_URL} from '../../constants';
 import {BASE_IMG_URL} from '../../util/ImageUtil';
-import {StreamData} from './useStreamData';
 
-const BLOCKED_STREAM_URL = 'https://stream-vod3.lrt.lt/AUDIO/Block/tikLT.m4a/playlist.m3u8';
+export type StreamData = {
+  channelTitle?: string;
+  isLiveStream: boolean;
+  streamUri: string;
+  mediaId: string;
+  title: string;
+  offset?: number;
+  poster?: string;
+  mediaType?: MediaType;
+  tracks?: VideoTextTrack[];
+  isBlocked?: boolean;
+};
 
-export const fetchStreamData = ({
-  url,
-  title,
-  poster,
-  prioritizeAudio,
-}: {
-  url: string;
+type Props = {
+  streamUrl?: string;
   title?: string;
   poster?: string;
-  prioritizeAudio?: boolean;
-}): Promise<StreamData> =>
-  fetchVideoData(url)
-    .then((response) => {
+  initialData?: StreamData;
+};
+
+export const useStreamInfo = (props: Props) => {
+  const {streamUrl, title, poster, initialData} = props;
+
+  return useQuery({
+    queryKey: ['streamInfo', streamUrl, title, poster, initialData],
+    queryFn: async ({signal}) => {
+      const response = await get<VideoDataLiveStream | VideoDataDefault>(streamUrl!, {
+        signal,
+      });
+
       if (isVideoLiveStream(response)) {
         const {data} = response.response;
         const isBlocked = !!data.restriction;
         const streamData: StreamData = {
           channelTitle: title,
           isLiveStream: true,
-          streamUri: isBlocked
-            ? BLOCKED_STREAM_URL
-            : prioritizeAudio
-            ? data.audio
-              ? data.audio.trim()
-              : data.content.trim()
-            : data.content.trim(),
+          streamUri: isBlocked ? BLOCKED_STREAM_URL : data.content.trim(),
           title: title ?? 'untitled-live-stream',
           poster: poster,
           mediaId: data.content,
@@ -57,8 +68,9 @@ export const fetchStreamData = ({
         };
         return streamData;
       }
-    })
-    .then((data) => {
-      console.log('fetchStreamData', JSON.stringify(data, null, 2));
-      return data;
-    });
+    },
+    retry: 2,
+    initialData: initialData,
+    enabled: !!streamUrl,
+  });
+};

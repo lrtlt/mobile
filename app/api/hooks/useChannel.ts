@@ -1,9 +1,17 @@
 import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import {get} from '../HttpClient';
 import {ChannelResponse, isVideoLiveStream, VideoDataDefault, VideoDataLiveStream} from '../Types';
-import {StreamData} from '../../components/videoComponent/useStreamData';
 import {MediaType} from '../../components/videoComponent/context/PlayerContext';
-import {LRT_KLASIKA, LRT_LITHUANICA, LRT_OPUS, LRT_PLUS, LRT_RADIJAS, LRT_TV} from '../../constants';
+import {
+  BLOCKED_STREAM_URL,
+  LRT_KLASIKA,
+  LRT_LITHUANICA,
+  LRT_OPUS,
+  LRT_PLUS,
+  LRT_RADIJAS,
+  LRT_TV,
+} from '../../constants';
+import {StreamData} from './useStream';
 
 export const useChannelById = (id: number | string) => {
   return useQuery({
@@ -33,10 +41,11 @@ export const useChannelStreamInfo = (channelId: number | string) => {
 
       if (isVideoLiveStream(response)) {
         const {data} = response.response;
+        const isBlocked = !!data.restriction;
         const streamData: StreamData = {
           channelTitle: channelResponse?.channel_info.channel,
           isLiveStream: true,
-          streamUri: data.content.trim(),
+          streamUri: isBlocked ? BLOCKED_STREAM_URL : data.content.trim(),
           title: channelResponse?.channel_info?.title ?? 'untitled-live-stream',
           mediaId: data.content,
           mediaType: MediaType.VIDEO,
@@ -47,7 +56,7 @@ export const useChannelStreamInfo = (channelId: number | string) => {
         if (data.audio) {
           audioStreamData = {
             ...streamData,
-            streamUri: data.audio.trim(),
+            streamUri: isBlocked ? BLOCKED_STREAM_URL : data.audio.trim(),
             mediaType: MediaType.AUDIO,
             poster: getPosterByChannelId(String(channelId)),
           };

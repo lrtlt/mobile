@@ -31,6 +31,7 @@ export const DEFAULT_FORECAST_LOCATION = 'vilnius';
 
 export const VIDEO_ASPECT_RATIO = 16 / 9;
 export const VIDEO_DEFAULT_BACKGROUND_IMAGE = 'https://www.lrt.lt/media/logo/LTV1.jpg?v=20245121947';
+export const BLOCKED_STREAM_URL = 'https://stream-vod3.lrt.lt/AUDIO/Block/tikLT.m4a/playlist.m3u8';
 
 //Default article image
 export const DEFAULT_ARTICLE_IMAGE = 'https://www.lrt.lt/images/no-image.png';

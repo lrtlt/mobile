@@ -8,11 +8,11 @@ import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
 import {getSmallestDim} from '../../util/UI';
-import {StreamData} from '../../components/videoComponent/useStreamData';
 import TextComponent from '../../components/text/Text';
 
 import {CameraIcon, IconAudioReadCount} from '../../components/svg';
 import DailyQuestionWrapper from '../../components/dailyQuestion/DailyQuestionWrapper';
+import {StreamData} from '../../api/hooks/useStream';
 
 /** Count of visible program items below player */
 const PROGRAM_ITEMS_VISIBLE = 2;
@@ -43,24 +43,25 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
     setSelectedStream(streamData);
   }, [channel_info]);
 
+  const isAudio = audioStreamData?.streamUri === selectedStream.streamUri;
+
   const streamSelectionComponent = audioStreamData ? (
     <View style={{...styles.streamSelectionContainer, borderColor: colors.primaryLight}}>
       <TouchableDebounce onPress={() => setSelectedStream(streamData)}>
         <View
           style={{
             ...styles.streamSelectionButton,
-            backgroundColor:
-              selectedStream === streamData ? colors.mediatekaPlayButton : colors.slugBackground,
+            backgroundColor: !isAudio ? colors.mediatekaPlayButton : colors.slugBackground,
           }}>
           <CameraIcon
             size={16}
-            colorBase={selectedStream === streamData ? colors.onPrimary : colors.textSecondary}
-            colorAccent={selectedStream === streamData ? colors.onPrimary : colors.textDisbled}
+            colorBase={!isAudio ? colors.onPrimary : colors.textSecondary}
+            colorAccent={!isAudio ? colors.onPrimary : colors.textDisbled}
           />
           <TextComponent
             style={{
               ...styles.streamSelectionText,
-              color: selectedStream === streamData ? colors.onPrimary : colors.text,
+              color: !isAudio ? colors.onPrimary : colors.text,
             }}>
             Su vaizdu
           </TextComponent>
@@ -69,18 +70,14 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
       <TouchableDebounce
         style={{
           ...styles.streamSelectionButton,
-          backgroundColor:
-            selectedStream === audioStreamData ? colors.mediatekaPlayButton : colors.slugBackground,
+          backgroundColor: isAudio ? colors.mediatekaPlayButton : colors.slugBackground,
         }}
         onPress={() => setSelectedStream(audioStreamData)}>
-        <IconAudioReadCount
-          size={16}
-          color={selectedStream === audioStreamData ? colors.onPrimary : colors.textSecondary}
-        />
+        <IconAudioReadCount size={16} color={isAudio ? colors.onPrimary : colors.textSecondary} />
         <TextComponent
           style={{
             ...styles.streamSelectionText,
-            color: selectedStream === audioStreamData ? colors.onPrimary : colors.text,
+            color: isAudio ? colors.onPrimary : colors.text,
           }}>
           Tik garsas
         </TextComponent>
@@ -128,7 +125,7 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
           backgroundImage={selectedStream.poster}
           title={channel_info.title}
           showTitle={false}
-          streamUrl={selectedStream.streamUri}
+          streamUrl={channel_info.get_streams_url}
           streamData={selectedStream}
         />
       </View>

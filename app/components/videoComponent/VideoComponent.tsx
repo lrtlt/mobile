@@ -1,14 +1,14 @@
-import React, {useEffect, useCallback, useRef, PropsWithChildren} from 'react';
+import React, {useCallback, useRef, PropsWithChildren, useState} from 'react';
 import {View, ActivityIndicator, StyleSheet, ViewStyle} from 'react-native';
 import VideoCover, {VideoCoverType} from './VideoCover';
 import {useTheme} from '../../Theme';
-import useStreamData, {StreamData} from './useStreamData';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
 import TheoMediaPlayer from './TheoMediaPlayer';
 import {MediaType} from './context/PlayerContext';
 import useUserMediaEvents from './useUserMediaEvents';
+import {StreamData, useStreamInfo} from '../../api/hooks/useStream';
 
 interface Props {
   style?: ViewStyle;
@@ -28,7 +28,7 @@ interface Props {
   onEnded?: () => void;
 }
 
-const MAX_ERROR_COUNT = 3;
+const MAX_ERROR_COUNT = 2;
 const ERROR_DELAY = 1000;
 
 const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
@@ -48,22 +48,22 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
   aspectRatio,
   onEnded,
 }) => {
+  const [userPlayPressed, setUserPlayPressed] = useState(autoPlay);
   const {colors, strings} = useTheme();
-  const {isLoading, data, load} = useStreamData(streamData);
+
+  const {data, isLoading, isError, refetch} = useStreamInfo({
+    streamUrl: !streamData && userPlayPressed ? streamUrl : undefined,
+    title,
+    initialData: streamData,
+  });
   const {sendMediaPlayEvent} = useUserMediaEvents(mediaId);
 
   const errorCountRef = useRef(0);
 
   const onPlayPress = useCallback(() => {
-    load(streamUrl, title);
+    setUserPlayPressed(true);
     sendMediaPlayEvent();
-  }, [load, streamUrl, title, mediaId]);
-
-  useEffect(() => {
-    if (autoPlay && !data) {
-      onPlayPress();
-    }
-  }, []);
+  }, [streamUrl, title, mediaId]);
 
   const onPlayerError = useCallback(
     (e: any) => {
@@ -72,16 +72,16 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
         if (errorCountRef.current < MAX_ERROR_COUNT) {
           errorCountRef.current = errorCountRef.current + 1;
           console.log('Video error count:', errorCountRef.current);
-          load(streamUrl, title);
+          refetch();
         } else {
           console.log('Max error count reached!');
         }
       }, errorCountRef.current * ERROR_DELAY);
     },
-    [load, streamUrl, title],
+    [refetch, streamUrl, title],
   );
 
-  if (errorCountRef.current >= MAX_ERROR_COUNT) {
+  if (isError || errorCountRef.current >= MAX_ERROR_COUNT) {
     return (
       <View style={{...style}}>
         <View style={styles.loaderContainer}>
@@ -92,7 +92,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
             style={{...styles.button, borderColor: colors.textError}}
             onPress={() => {
               errorCountRef.current = 0;
-              load(streamUrl, title);
+              refetch();
             }}>
             <TextComponent style={{color: colors.onPrimary}}>{strings.tryAgain}</TextComponent>
           </RectButton>
