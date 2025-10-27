@@ -10,12 +10,12 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {RouteProp} from '@react-navigation/native';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {ChannelDataType} from '../../components/scrollingChannels/ScrollingChannels';
 import ChannelComponent from './ChannelComponent';
 import useAppStateCallback from '../../hooks/useAppStateCallback';
 import useChannelAnalytics from './useChannelAnalytics';
 import {useChannel} from './context/useChannel';
 import Config from 'react-native-config';
+import {TVProgramChannel} from '../../api/Types';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Channel'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Channel'>;
@@ -69,9 +69,8 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChannel]);
 
-  const onChannelPressHandler = useCallback((channel: ChannelDataType) => {
-    const {payload} = channel;
-    setSelectedChannel(payload.channel_id);
+  const onChannelPressHandler = useCallback((channel: TVProgramChannel) => {
+    setSelectedChannel(channel.channel_id);
   }, []);
 
   let content;

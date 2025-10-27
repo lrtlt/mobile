@@ -58,13 +58,6 @@ export const categoryTopsGet = (id: number | string, count: number) => {
 };
 
 /**
- * Returns array of articles for hashtag
- */
-export const articlesGetByTag = (tag: string, count: number) => {
-  return `${BASE_URL}articles/tag/${tag}?count=${count}`;
-};
-
-/**
  * Return array of articles by search filter
  */
 export const searchArticles = (query: string, filter: SearchFilter) => {
@@ -111,40 +104,12 @@ export const channelGet = (id: number | string) => {
   return `${BASE_URL}tv/channel/${id}`;
 };
 
-/**
- * Returns available locations for weather
- */
-export const weatherLocationsGet = () => {
-  return 'https://www.lrt.lt/static/data/weather/places.json?v=1';
-};
-
-/**
- * Returns Mediateka screen's data. Same as for Home page data.
- */
-export const mediatekaGet = () => {
-  return `${BASE_URL}mediateka-home/v2`;
-};
-
 export const mediatekaGetV2 = () => {
   return `${BASE_URL}category-home?id=672`;
 };
 
-/**
- * Returns Audioteka screen's data.
- */
-export const audiotekaGet = () => {
-  return `${BASE_URL}audioteka-home`;
-};
-
 export const radiotekaGet = () => {
   return `${BASE_URL}audioteka-home/v2`;
-};
-
-/**
- * Returns all channels TV program data for a week.
- */
-export const programGet = () => {
-  return `${BASE_URL}tvprog`;
 };
 
 /**
@@ -168,18 +133,8 @@ export const getDailyQuestion = (questionId: number | string) => {
   return `https://www.lrt.lt/api/v1/daily-question/${questionId}`;
 };
 
-/**
- * Returns forecast for selected city
- */
-export const forecastGet = (cityCode: string) => `https://www.lrt.lt/servisai/orai/?code=${cityCode}`;
-
 export const liveFeedGet = (id: string | number, count: number, order: 'desc' | 'asc') =>
   `${BASE_URL}get-feed-items/${id}?count=${count}&order=${order}`;
-
-export const articleRecommendations = (articleId: number | string) =>
-  `https://peach.ebu.io/api/v1/ltlrt/similar?article_id=${articleId}`;
-
-export const articlesByIds = (ids: string[]) => `${BASE_URL}search?ids=${ids.join(',')}`;
 
 export const articlesByGenre = (genreId: number | string, count: number) =>
   `${BASE_URL}search?genre_ids=${genreId}&type=${SEARCH_TYPE_AUDIO}&count=${count}`;
@@ -198,8 +153,6 @@ export const carPlaylistPopularGet = () => 'https://www.lrt.lt/static/carplay/po
 export const carPlaylistRecommendedGet = () => 'https://www.lrt.lt/static/carplay/rekomenduoja.json';
 
 export const carPlaylistCategoryGet = (id: number | string) => `${BASE_URL}category?id=${id}`;
-
-export const tvProgramsGet = () => 'https://www.lrt.lt/static/tvprog/tvprog.json';
 
 export const getRadiotekaArticlesBySeason = (seasonUrl: string, page: number, count: number) =>
   `https://www.lrt.lt/api/search?type=2&season_url=${seasonUrl}&order=desc&page=${page}&count=${count}`;

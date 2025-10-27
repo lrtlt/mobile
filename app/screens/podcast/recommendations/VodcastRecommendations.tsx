@@ -1,6 +1,5 @@
 import {StyleSheet, View} from 'react-native';
 import {Text} from '../../../components';
-import useRecomendations from './useRecommendations';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -9,13 +8,18 @@ import {useCallback, useMemo} from 'react';
 import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
 import ArticlePlaylist from '../../../components/videoComponent/context/playlist/ArticlePlaylist';
 import MediatekaHorizontalList from '../../main/tabScreen/mediateka/components/horizontal_list/MediatekaHorizontalList';
+import {useArticleRecommendations} from '../../../api/hooks/useArticlesRecommendations';
+import {ArticleSearchResponse} from '../../../api/Types';
 
 interface Props {
   articleId: number;
 }
 
+const EMPTY_RECOMMENDATIONS: ArticleSearchResponse = {items: []};
+
 const VodcastRecommendations: React.FC<React.PropsWithChildren<Props>> = ({articleId}) => {
-  const recommendations = useRecomendations(articleId);
+  const {data} = useArticleRecommendations(articleId);
+  const recommendations = data ?? EMPTY_RECOMMENDATIONS;
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Podcast'>>();
 

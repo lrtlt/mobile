@@ -1,53 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View, StyleSheet, ActivityIndicator, ViewStyle} from 'react-native';
-import {fetchForecast} from '../../api';
-import {Forecast, ForecastLocation} from '../../api/Types';
+import {ForecastLocation} from '../../api/Types';
 import {DEFAULT_FORECAST_LOCATION} from '../../constants';
-import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {useTheme} from '../../Theme';
 import {getIconForWeatherConditions} from '../../util/UI';
 import TextComponent from '../text/Text';
 import {useSettingsStore} from '../../state/settings_store';
+import {useWeatherForecast} from '../../api/hooks/useWeatherForecast';
 
 interface Props {
   style?: ViewStyle;
   location?: ForecastLocation;
 }
 
-const INTERVAL = 1000 * 8;
-
 const ForecastComponent: React.FC<React.PropsWithChildren<Props>> = (props) => {
-  const [forecast, setForecast] = useState<Forecast | undefined>();
   const {colors} = useTheme();
 
   const storedLocation = useSettingsStore((state) => state.forecastLocation);
   const location = props.location ? props.location : storedLocation;
+  const cityCode = location?.c ?? DEFAULT_FORECAST_LOCATION;
+  const {data: forecast} = useWeatherForecast(cityCode);
 
-  const cancellablePromise = useCancellablePromise();
-
-  useEffect(() => {
-    if (forecast) {
-      if (!location || location.c === forecast.location.code) {
-        return;
-      }
-    }
-
-    const callApi = async () => {
-      const cityCode = location?.c ? location.c : DEFAULT_FORECAST_LOCATION;
-      try {
-        const response = await cancellablePromise(fetchForecast(cityCode));
-        setForecast(response.current ?? response.default);
-      } catch (e) {
-        setForecast(undefined);
-      }
-    };
-    callApi();
-    const interval = setInterval(() => callApi(), INTERVAL);
-
-    return () => clearInterval(interval);
-  }, [cancellablePromise, forecast, location]);
-
-  const f = forecast?.forecast;
+  const f = forecast?.current?.forecast ?? forecast?.default.forecast;
 
   const getSunColor = (): string => {
     if (f?.localDateTime) {
@@ -66,7 +40,7 @@ const ForecastComponent: React.FC<React.PropsWithChildren<Props>> = (props) => {
   return (
     <View style={{...styles.container, backgroundColor: colors.slugBackground, ...props.style}}>
       <TextComponent style={styles.cityText}>
-        {forecast?.location.name ? forecast?.location.name : '-'}
+        {forecast?.current?.location?.name ?? forecast?.default?.location?.name ?? '-'}
       </TextComponent>
       <View style={{...styles.sun, borderColor: colors.background, backgroundColor: getSunColor()}} />
       <TextComponent style={styles.temperatureText} fontFamily="SourceSansPro-SemiBold">

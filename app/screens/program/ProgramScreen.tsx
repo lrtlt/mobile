@@ -1,18 +1,16 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ScreenLoader, ProgramDay, ActionButton} from '../../components';
+import {ScreenLoader, ProgramDay, ActionButton, ScreenError} from '../../components';
 import ProgramTabs from './tabs/ProgramTabsScreen';
-import {useTheme} from '../../Theme';
+import {strings, useTheme} from '../../Theme';
 import {IconCalendar} from '../../components/svg';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import ProgramDateModal from './ProgramDateModal';
-import useAppStateCallback from '../../hooks/useAppStateCallback';
-import {ARTICLE_EXPIRE_DURATION} from '../../constants';
 import {delay} from 'lodash';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
-import {useProgramStore} from '../../state/program_store';
+import {useWeeklyProgram} from '../../api/hooks/useProgram';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Program'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Program'>;
@@ -22,30 +20,16 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-const STATE_LOADING = 'loading';
-const STATE_ERROR = 'error';
-const STATE_READY = 'ready';
-
 const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoadingSelection, setIsLoadingSelection] = useState(false);
-
   const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined);
 
   const {colors, dim} = useTheme();
-  // const dispatch = useDispatch();
-  // const state = useSelector(selectProgramScreenState);
 
-  const programStore = useProgramStore((state) => state);
+  const {data, error, isLoading} = useWeeklyProgram();
 
-  const loadingState = programStore.isError
-    ? STATE_ERROR
-    : programStore.isFetching || !programStore.program
-    ? STATE_LOADING
-    : STATE_READY;
-
-  const program = programStore.program?.all_programs;
-  const lastFetchTime = programStore.lastFetchTime;
+  const program = data?.all_programs;
 
   useEffect(() => {
     if (program && !selectedDate) {
@@ -53,24 +37,11 @@ const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
     }
   }, [program, selectedDate]);
 
-  useEffect(() => {
-    programStore.fetchProgram();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   useNavigationAnalytics({
     viewId: 'https://www.lrt.lt/programa',
     title: 'TV / Radijo programa savaitei - LRT',
     sections: ['Bendra'],
   });
-
-  useAppStateCallback(
-    useCallback(() => {
-      if (Date.now() - lastFetchTime > ARTICLE_EXPIRE_DURATION) {
-        programStore.fetchProgram();
-      }
-    }, [lastFetchTime]),
-  );
 
   useEffect(() => {
     navigation.setOptions({
@@ -88,7 +59,7 @@ const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
 
   let content;
   switch (true) {
-    case loadingState === STATE_READY || programStore.lastFetchTime > 0: {
+    case !!program: {
       const selectedDay = selectedDate || program?.days[0];
       const selectedDayProgram = program![selectedDay];
 
@@ -117,12 +88,12 @@ const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
       }
       break;
     }
-    case loadingState === STATE_LOADING: {
+    case isLoading: {
       content = <ScreenLoader />;
       break;
     }
-    case loadingState === STATE_ERROR: {
-      content = <View style={styles.root} />;
+    case !!error: {
+      content = <ScreenError text={strings.error_common} />;
       break;
     }
   }

@@ -119,8 +119,8 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
           contentContainerStyle={{paddingTop: appBarHeight.fullHeight, paddingBottom: 24}}
           data={articleData}
           showsVerticalScrollIndicator={false}
-          estimatedFirstItemOffset={600}
-          estimatedItemSize={400}
+          // estimatedFirstItemOffset={600}
+          // estimatedItemSize={400}
           renderItem={renderItem}
           removeClippedSubviews={false}
           keyExtractor={useCallback((item: ArticleContentItemType, index: number) => {

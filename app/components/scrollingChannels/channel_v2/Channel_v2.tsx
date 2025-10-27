@@ -5,18 +5,17 @@ import {getIconForChannel, getColorsForChannel} from '../../../util/UI';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import TextComponent from '../../text/Text';
 import {useTheme} from '../../../Theme';
-import {isLiveChannel, LiveChannel, TVChannel} from '../../../api/Types';
+import {TVProgramChannel} from '../../../api/Types';
 import {Box} from '@grapp/stacks';
 
 interface Props {
-  data: TVChannel | LiveChannel;
-  onPress: (channel: TVChannel | LiveChannel) => void;
+  data: TVProgramChannel;
+  isLive: boolean;
+  onPress: (channel: TVProgramChannel) => void;
 }
 
-const ChannelV2: React.FC<React.PropsWithChildren<Props>> = ({data, onPress}) => {
+const ChannelV2: React.FC<React.PropsWithChildren<Props>> = ({data, isLive, onPress}) => {
   const {colors, dark} = useTheme();
-
-  const isLive = isLiveChannel(data);
 
   const colorsSet = getColorsForChannel(data.channel, {
     primary: colors.background,
@@ -50,7 +49,7 @@ const ChannelV2: React.FC<React.PropsWithChildren<Props>> = ({data, onPress}) =>
       <TouchableDebounce
         debounceTime={500}
         onPress={onPressHandler}
-        accessibilityLabel={`${(data as TVChannel).channel_title ?? ''} ${data.title}`}>
+        accessibilityLabel={`${data.channel_title ?? ''} ${data.title}`}>
         <View
           style={{
             height: '100%',

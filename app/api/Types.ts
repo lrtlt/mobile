@@ -282,6 +282,16 @@ export type HomeBlockTopArticles = {
   articles: FeedArticle[];
 };
 
+export type HomeBlockTopUrlList = {
+  template: 'url_list';
+  type: 'top_url_list';
+  url_list: {
+    id: number;
+    title: string;
+    items: (URLTypeCategory | URLTypeTag | URLTypeExternalURL)[];
+  };
+};
+
 export type HomeBlockVideoList = {
   type: 'vertical_video_list';
   template_id: number;
@@ -381,14 +391,12 @@ export type HomeBlockType =
   | HomeBlockTopFeedBlock
   | HomeBlockDailyQuestion
   | HomeBlockEpikaBlock
-  | AudiotekaTopUrlList
+  | HomeBlockTopUrlList
   | HomeBlockArticlesByDate;
 
 export type HomeDataResponse = {
   homepage_data: HomeBlockType[];
 };
-
-export type MediatekaDataResponse = HomeBlockType[];
 
 export type MediatekaBlockWidget = {
   widget_name: string;
@@ -706,88 +714,6 @@ export type RadiotekaCategory = {
   lrt_show_id: number;
   title: string;
   LATEST_ITEM: ArticleContentMedia;
-};
-
-export type AudiotekaResponse = AudiotekaTemplate[];
-
-export type AudiotekaTemplate =
-  | AudiotekaTopUrlList
-  | AudiotekaTopArticle
-  | AudiotekaNewest
-  | AudiotekaPopular
-  | AudiotekaPodcasts
-  | AudiotekaCategory
-  | HomeBlockTopFeedBlock
-  | AudiotekaSlug;
-
-export type AudiotekaTopUrlList = {
-  template: 'url_list';
-  type: 'top_url_list';
-  url_list: {
-    id: number;
-    title: string;
-    items: (URLTypeCategory | URLTypeTag | URLTypeExternalURL)[];
-  };
-};
-
-export type AudiotekaTopArticle = {
-  template: 'top';
-  article: FeedArticle;
-  backgroundImage?: string;
-  icon?: string;
-};
-
-export type AudiotekaNewestCategory = {
-  id: number;
-  title: string;
-  color: string;
-  'color-active': string;
-  'background-color-active': string;
-  'background-color': string;
-  articles: FeedArticle[];
-};
-
-export type AudiotekaNewest = {
-  template: 'newest';
-  title: string;
-  categories: AudiotekaNewestCategory[];
-};
-
-export type AudiotekaPopular = {
-  template: 'popular';
-  title: string;
-  articles: FeedArticle[];
-};
-
-export type Podcast = {
-  id: number;
-  title: string;
-  backgroundImage: string;
-  category_url: string;
-  category_id: number;
-};
-
-export type AudiotekaPodcasts = {
-  template: 'podcasts';
-  title: string;
-  podcasts: Podcast[];
-};
-
-export type AudiotekaCategory = {
-  template: 'category';
-  category_title: string;
-  category_url: string;
-  category_id: number;
-  template_id: number;
-  articles_list: FeedArticle[];
-};
-
-export type AudiotekaSlug = {
-  template: 'slug';
-  is_slug_block: 1;
-  articles_list: FeedArticle[];
-  slug_title: string;
-  slug_url: string;
 };
 
 export type ForecastLocation = {

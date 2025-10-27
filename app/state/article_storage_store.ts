@@ -3,7 +3,6 @@ import {createJSONStorage, persist} from 'zustand/middleware';
 import {zustandStorage} from './mmkv';
 import {ArticleContent, isMediaArticle} from '../api/Types';
 import {ARTICLE_HISTORY_COUNT, ARTICLE_SAVED_MAX_COUNT} from '../constants';
-import {fetchArticle} from '../api';
 import FastImage from '@d11/react-native-fast-image';
 import {buildArticleImageUri, IMG_SIZE_M} from '../util/ImageUtil';
 import {logEvent, getAnalytics} from '@react-native-firebase/analytics';
@@ -28,7 +27,6 @@ type ArticleStorageState = {
 
 type ArticleStorageActions = {
   saveArticle: (article: ArticleContent) => void;
-  syncSavedArticles: () => void;
   removeArticle: (articleId: number) => void;
   addArticleToHistory: (article: ArticleContent) => void;
 };
@@ -74,39 +72,6 @@ export const useArticleStorageStore = create<ArticleStorageStore>()(
         logEvent(getAnalytics(), 'app_lrt_lt_article_removed', {
           article_id: articleId,
         });
-      },
-      syncSavedArticles: async () => {
-        const {lastSyncTime} = get();
-        if (lastSyncTime && Date.now() - lastSyncTime < 4 * 60 * 60 * 1000) {
-          // If last sync was less than 4 hours ago, skip syncing
-          return;
-        }
-
-        const {savedArticles} = get();
-        for (const article of savedArticles) {
-          try {
-            const isMedia = isMediaArticle(article);
-            var response = await fetchArticle(_articleId(article), isMedia);
-
-            // TODO: remove after some time in future. Added at 2025-06-23
-            // This can happen when migrating from old storage
-            // When article is actualy not media but stored as media
-            if (!response.article) {
-              response = await fetchArticle(_articleId(article), !isMedia);
-            }
-
-            const index = savedArticles.indexOf(article);
-            if (index !== -1) {
-              savedArticles[index] = response.article;
-            }
-          } catch (e) {
-            console.error(`Error syncing article ${_articleId(article)}:`, e);
-          }
-        }
-
-        const nonNullArticles = savedArticles.filter((a) => !!a);
-        _cacheImages(nonNullArticles);
-        set({savedArticles: nonNullArticles, lastSyncTime: Date.now()});
       },
       addArticleToHistory: async (article) => {
         let history = get().history;

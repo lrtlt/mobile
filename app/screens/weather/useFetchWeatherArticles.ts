@@ -1,26 +1,10 @@
-import {useEffect, useState} from 'react';
-import {Article} from '../../../Types';
-import {fetchArticlesByTag} from '../../api';
-import useCancellablePromise from '../../hooks/useCancellablePromise';
+import {useArticlesByTag} from '../../api/hooks/useArticlesByTag';
 
 const TAG = 'orai';
 
 const useFetchWeatherArticles = () => {
-  const [articles, setArticles] = useState<Article[]>([]);
-
-  const cancellablePromise = useCancellablePromise();
-
-  useEffect(() => {
-    cancellablePromise(fetchArticlesByTag(TAG, 5))
-      .then((response) => {
-        setArticles(response.articles);
-      })
-      .catch((e) => {
-        console.log('Error:', e);
-      });
-  }, [cancellablePromise]);
-
-  return articles;
+  const {data} = useArticlesByTag(TAG, 5);
+  return data?.articles;
 };
 
 export default useFetchWeatherArticles;

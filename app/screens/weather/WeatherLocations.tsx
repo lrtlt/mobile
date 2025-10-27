@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
-import {fetchWeatherLocations} from '../../api';
 import {ForecastLocation} from '../../api/Types';
 import {TouchableDebounce} from '../../components';
 import TextComponent from '../../components/text/Text';
-import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {useTheme} from '../../Theme';
+import {useWeatherForecastLocations} from '../../api/hooks/useWeatherForecast';
 
 interface Props {
   style?: ViewStyle;
@@ -15,18 +14,12 @@ interface Props {
 
 const WeatherLocations: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const [inputValue, setInputValue] = useState('');
-  const [locations, setLocations] = useState<ForecastLocation[]>([]);
   const [searchResults, setSearchResults] = useState<ForecastLocation[]>([]);
 
+  const {data} = useWeatherForecastLocations();
+  const locations = data || [];
+
   const {colors, strings} = useTheme();
-
-  const cancellablePromise = useCancellablePromise();
-
-  useEffect(() => {
-    cancellablePromise(fetchWeatherLocations())
-      .then((response) => setLocations(response))
-      .catch((error) => console.log(error));
-  }, [cancellablePromise]);
 
   useEffect(() => {
     if (inputValue && inputValue.length > 2) {

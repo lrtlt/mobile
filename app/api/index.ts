@@ -1,13 +1,8 @@
 import {
   artcilesByCategory,
   articleGet,
-  articleRecommendations,
   articlesByGenre,
-  articlesByIds,
-  articlesGetByTag,
-  audiotekaGet,
   carPlaylistCategoryGet,
-  tvProgramsGet,
   carPlaylistNewestGet,
   carPlaylistPopularGet,
   carPlaylistRecommendedGet,
@@ -16,7 +11,6 @@ import {
   channelGet,
   counter,
   fetchAIAutocomplete,
-  forecastGet,
   genreGet,
   getAISearchResults,
   getAISummary,
@@ -26,18 +20,15 @@ import {
   getRadiotekaArticlesBySeason,
   homeGet,
   liveFeedGet,
-  mediatekaGet,
   mediatekaGetV2,
   menuGet,
   newestArticlesGet,
   opusPlaylistGet,
   popularArticlesGet,
   postSearchUserEvent,
-  programGet,
   putDailyQuestionVote,
   radiotekaGet,
   searchArticles,
-  weatherLocationsGet,
   getUserData,
   putUserOnboardingCompleted,
 } from './Endpoints';
@@ -49,33 +40,25 @@ import {
   AIUserEvent,
   AIUserEventResponse,
   ArticleContentResponse,
-  ArticleRecommendationsResponse,
   ArticleSearchResponse,
-  AudiotekaResponse,
   CarPlayCategoryResponse,
   CarPlaylistItem,
   CategoryArticlesResponse,
   ChannelResponse,
   DailyQuestionResponse,
-  ForecastLocation,
-  ForecastResponse,
   GenreResponse,
   HomeDataResponse,
   LiveFeedResponse,
-  MediatekaDataResponse,
   MediatekaV2DataResponse,
   Menu2Response,
   MenuResponse,
   NewestArticlesResponse,
   OpusPlaylistResponse,
   PopularArticlesResponse,
-  ProgramResponse,
   RadiotekaArticle,
   RadiotekaResponse,
   SearchFilter,
   SearchResponse,
-  SlugArticlesResponse,
-  TVProgramResponse,
   VideoDataDefault,
   VideoDataLiveStream,
 } from './Types';
@@ -86,15 +69,10 @@ export const fetchMenuItemsApi = () => get<MenuResponse>(menuGet());
 
 export const fetchHomeApi = () => get<HomeDataResponse>(homeGet());
 
-export const fetchMediatekaApi = () => get<MediatekaDataResponse>(mediatekaGet());
-
 export const fetchMediatekaApiV2 = () => get<MediatekaV2DataResponse>(mediatekaGetV2());
 
 export const fetchArticle = (articleId: number | string, isMedia?: boolean) =>
   get<ArticleContentResponse>(articleGet(articleId, isMedia));
-
-export const fetchArticlesByTag = (tag: string, count: number) =>
-  get<SlugArticlesResponse>(articlesGetByTag(tag, count));
 
 export const fetchArticleSearch = (q: string, filter: SearchFilter) =>
   get<SearchResponse>(searchArticles(q, filter));
@@ -105,10 +83,6 @@ export const fetchArticlesByGenre = (genreId: number | string, count: number) =>
 export const fetchVideoData = (streamUrl: string) => get<VideoDataLiveStream | VideoDataDefault>(streamUrl);
 
 export const fetchChannel = (channelId: number | string) => get<ChannelResponse>(channelGet(channelId));
-
-export const fetchProgramApi = () => get<ProgramResponse>(programGet());
-
-export const fetchAudiotekaApi = () => get<AudiotekaResponse>(audiotekaGet());
 
 export const fetchRadiotekaApi = () => get<RadiotekaResponse>(radiotekaGet());
 
@@ -128,19 +102,10 @@ export const fetchCategoryApi = (
 
 export const fetchCategoryHome = (id: number) => get<HomeDataResponse>(categoryHomeGet(id));
 
-export const fetchWeatherLocations = () => get<ForecastLocation[]>(weatherLocationsGet());
-
-export const fetchForecast = (cityCode: string) => get<ForecastResponse>(forecastGet(cityCode));
-
 export const fetchOpusPlaylist = () => get<OpusPlaylistResponse>(opusPlaylistGet());
 
 export const fetchLiveFeed = (id: string | number, count: number, order: 'asc' | 'desc') =>
   get<LiveFeedResponse>(liveFeedGet(id, count, order));
-
-export const fetchArticleRecommendations = (articleId: number | string) =>
-  get<ArticleRecommendationsResponse>(articleRecommendations(articleId));
-
-export const fetchArticlesByIds = (ids: string[]) => get<ArticleSearchResponse>(articlesByIds(ids));
 
 export const setDailyQuestionVote = (questionId: number | string, choiceId: number | string) =>
   put<any>(putDailyQuestionVote(questionId, choiceId));
@@ -159,8 +124,6 @@ export const fetchartcilesByCategory = (categoryId: string | number, count: numb
 
 export const fetchCategoryPlaylist = (id: string | number) =>
   get<CarPlayCategoryResponse>(carPlaylistCategoryGet(id));
-
-export const fetchLiveTvPrograms = () => get<TVProgramResponse>(tvProgramsGet());
 
 export const fetchRadiotekaSeasonPlaylist = (seasonUrl: string, page: number, count: number) =>
   get<SearchResponse>(getRadiotekaArticlesBySeason(seasonUrl, page, count));

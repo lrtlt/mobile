@@ -11,13 +11,14 @@ import ChannelList from '../../scrollingChannels/ChannelList';
 import {useNavigation} from '@react-navigation/native';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useCurrentProgram} from '../../../api/hooks/useProgram';
 
 interface Props {
   item: Menu2ItemChannels;
 }
 const DrawerChannelsItem: React.FC<Props> = ({item}) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
+  const {data} = useCurrentProgram();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   if (item.type !== 'channels') {
@@ -48,9 +49,8 @@ const DrawerChannelsItem: React.FC<Props> = ({item}) => {
       {isExpanded && (
         <View style={styles.channelsWrapper}>
           <ChannelList
-            onChannelPress={(channel) =>
-              navigation.navigate('Channel', {channelId: channel.payload.channel_id})
-            }
+            data={data}
+            onChannelPress={(channel) => navigation.navigate('Channel', {channelId: channel.channel_id})}
           />
         </View>
       )}

@@ -1,6 +1,5 @@
 import {Linking, StyleSheet, View} from 'react-native';
 import React, {useCallback, useMemo} from 'react';
-import {AudiotekaTopUrlList} from '../../../../../../api/Types';
 import {Text, TouchableDebounce} from '../../../../../../components';
 import {useTheme} from '../../../../../../Theme';
 import Divider from '../../../../../../components/divider/Divider';
@@ -8,9 +7,10 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import {useNavigationStore} from '../../../../../../state/navigation_store';
+import {HomeBlockTopUrlList} from '../../../../../../api/Types';
 
 type Props = {
-  block: AudiotekaTopUrlList;
+  block: HomeBlockTopUrlList;
 };
 
 const TopUrlBlock: React.FC<React.PropsWithChildren<Props>> = ({block}) => {

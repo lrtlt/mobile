@@ -1,6 +1,6 @@
 import {Linking, StyleSheet, View} from 'react-native';
 import React, {useCallback, useMemo} from 'react';
-import {AudiotekaTopUrlList} from '../../../../../../api/Types';
+import {HomeBlockTopUrlList} from '../../../../../../api/Types';
 import {Text, TouchableDebounce} from '../../../../../../components';
 import {useTheme} from '../../../../../../Theme';
 import Divider from '../../../../../../components/divider/Divider';
@@ -11,7 +11,7 @@ import {useNavigationStore} from '../../../../../../state/navigation_store';
 import {ScrollView} from 'react-native-gesture-handler';
 
 type Props = {
-  block: AudiotekaTopUrlList;
+  block: HomeBlockTopUrlList;
 };
 
 const TopUrlInlineBlock: React.FC<React.PropsWithChildren<Props>> = ({block}) => {

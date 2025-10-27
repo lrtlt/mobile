@@ -139,9 +139,7 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
         case 'channels': {
           return (
             <ScrollingChannels
-              onChannelPress={(channel) =>
-                navigation.navigate('Channel', {channelId: channel.payload.channel_id})
-              }
+              onChannelPress={(channel) => navigation.navigate('Channel', {channelId: channel.channel_id})}
             />
           );
         }

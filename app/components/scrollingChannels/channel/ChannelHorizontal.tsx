@@ -5,12 +5,12 @@ import {getColorsForChannel} from '../../../util/UI';
 import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import TextComponent from '../../text/Text';
 import {useTheme} from '../../../Theme';
-import {LiveChannel, TVChannel} from '../../../api/Types';
+import {TVProgramChannel} from '../../../api/Types';
 import {Text} from '../..';
 
 interface Props {
-  data: TVChannel | LiveChannel;
-  onPress: (channel: TVChannel | LiveChannel) => void;
+  data: TVProgramChannel;
+  onPress: (channel: TVProgramChannel) => void;
 }
 
 const ChannelHorizontal: React.FC<React.PropsWithChildren<Props>> = ({data, onPress}) => {

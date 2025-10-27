@@ -1,11 +1,10 @@
 import {useNavigation} from '@react-navigation/core';
 import {useCallback, useEffect, useState} from 'react';
-import {fetchArticle} from '../../api';
-import {ArticleCategoryInfo, ArticleContent, ArticleContentResponse} from '../../api/Types';
-import useCancellablePromise from '../../hooks/useCancellablePromise';
+import {ArticleCategoryInfo, ArticleContent} from '../../api/Types';
 import {useArticleStorageStore} from '../../state/article_storage_store';
 import {useUserStore} from '../../state/user_store';
 import {useAddHistoryUserArticle} from '../../api/hooks/useHistoryArticles';
+import {useArticle} from '../../api/hooks/useArticle';
 
 type ScreenState = {
   article?: ArticleContent;
@@ -27,85 +26,62 @@ const useArticleScreenState = (
   // isMedia is used to determine if the article is a media type (audio/video)
   isMedia: boolean = articleId > 1000000000,
 ): [ScreenState, (accept: boolean) => void] => {
-  const [state, setState] = useState<ScreenState>({
-    article: undefined,
+  const [screenState, setScreenState] = useState<ScreenState>({
     loadingState: STATE_LOADING,
   });
+
+  const {data, isLoading, isError} = useArticle(articleId, isMedia);
 
   const userStore = useUserStore();
   const articleStorage = useArticleStorageStore.getState();
   const navigation = useNavigation();
   const addHistoryUserArticleMutation = useAddHistoryUserArticle();
 
-  const cancellablePromise = useCancellablePromise();
-
   useEffect(() => {
     addHistoryUserArticleMutation.mutate(articleId);
   }, [articleId]);
 
   useEffect(() => {
-    setState({
-      article: undefined,
-      category_info: undefined,
-      loadingState: STATE_LOADING,
+    if (isLoading) {
+      setScreenState({loadingState: STATE_LOADING});
+      return;
+    }
+    if (isError || !data?.article) {
+      setScreenState({loadingState: STATE_ERROR});
+      return;
+    }
+
+    const article = data.article;
+
+    var articleHasAgeRestriction =
+      article && (article['n-18'] || article.age_restriction?.toLowerCase() === 'n-18');
+    if (articleHasAgeRestriction) {
+      const last16Hours = Date.now() - 1000 * 60 * 60 * 16;
+      if (userStore.lastAdultContentAcceptedTime > last16Hours) {
+        articleHasAgeRestriction = false;
+      }
+    }
+
+    const loadingState = articleHasAgeRestriction ? STATE_ADULT_CONTENT_WARNING : STATE_READY;
+
+    setScreenState({
+      article,
+      category_info: data.category_info,
+      loadingState: loadingState,
     });
 
-    const onResponse = (response: ArticleContentResponse) => {
-      const article = response.article;
-
-      var articleHasAgeRestriction =
-        article && (article['n-18'] || article.age_restriction?.toLowerCase() === 'n-18');
-      if (articleHasAgeRestriction) {
-        const last16Hours = Date.now() - 1000 * 60 * 60 * 16;
-        if (userStore.lastAdultContentAcceptedTime > last16Hours) {
-          articleHasAgeRestriction = false;
-        }
-      }
-
-      const loadingState = !article
-        ? STATE_ERROR
-        : articleHasAgeRestriction
-        ? STATE_ADULT_CONTENT_WARNING
-        : STATE_READY;
-
-      setState({
-        article,
-        category_info: response.category_info,
-        loadingState: loadingState,
-      });
-
-      articleStorage.addArticleToHistory(article);
-    };
-
-    cancellablePromise(fetchArticle(articleId, isMedia))
-      .then((response) => {
-        if (response.article) {
-          return response;
-        } else {
-          //If article is not found, we will try invert isMedia flag
-          return cancellablePromise(fetchArticle(articleId, !isMedia));
-        }
-      })
-      .then(onResponse)
-      .catch((e) => {
-        console.log(e);
-        setState({
-          article: undefined,
-          category_info: undefined,
-          loadingState: STATE_ERROR,
-        });
-      });
-  }, [articleId, cancellablePromise]);
+    articleStorage.addArticleToHistory(article);
+  }, [isLoading, isError, data]);
 
   const acceptAdultContent = useCallback(
     (accept: boolean) => {
-      if (state.loadingState !== STATE_ADULT_CONTENT_WARNING) {
-        console.warn(`Cannot accept adult content warning in state:"${state.loadingState}".`);
+      if (screenState.loadingState !== STATE_ADULT_CONTENT_WARNING) {
+        console.warn(`Cannot accept adult content warning in state:"${screenState.loadingState}".`);
       } else {
         if (accept) {
           userStore.setLastAdultContentAcceptedTime(Date.now());
-          setState({
-            ...state,
+          setScreenState({
+            ...screenState,
             loadingState: STATE_READY,
           });
         } else {
@@ -113,11 +89,10 @@ const useArticleScreenState = (
         }
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [state],
+    [navigation, screenState, userStore],
   );
 
-  return [state, acceptAdultContent];
+  return [screenState, acceptAdultContent];
 };
 
 export default useArticleScreenState;

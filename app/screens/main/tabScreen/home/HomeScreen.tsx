@@ -32,7 +32,6 @@ import {useShallow} from 'zustand/shallow';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Config from 'react-native-config';
-import {useArticleStorageStore} from '../../../../state/article_storage_store';
 import {sendSearchUserEvent} from '../../../../api';
 import {pushArticle} from '../../../../util/NavigationUtils';
 
@@ -55,11 +54,6 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
 
   const {fetchHome} = useArticleStore.getState();
   const state = useArticleStore(useShallow(selectHomeScreenState()));
-
-  const {syncSavedArticles} = useArticleStorageStore.getState();
-  useEffect(() => {
-    syncSavedArticles();
-  }, []);
 
   const {colors, dark} = useTheme();
 
@@ -147,9 +141,7 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
         case 'channels': {
           return (
             <ScrollingChannels
-              onChannelPress={(channel) =>
-                navigation.navigate('Channel', {channelId: channel.payload.channel_id})
-              }
+              onChannelPress={(channel) => navigation.navigate('Channel', {channelId: channel.channel_id})}
             />
           );
         }

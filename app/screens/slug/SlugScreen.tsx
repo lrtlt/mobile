@@ -1,17 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {View, Button, ActivityIndicator, StyleSheet} from 'react-native';
 import {ArticleRow, MyFlatList, Text} from '../../components';
-import {fetchArticlesByTag} from '../../api';
 import {formatArticles} from '../../util/articleFormatters';
 import {ARTICLES_PER_PAGE_COUNT} from '../../constants';
 import {useTheme} from '../../Theme';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Article} from '../../../Types';
-import useCancellablePromise from '../../hooks/useCancellablePromise';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import {pushArticle} from '../../util/NavigationUtils';
+import {useArticlesByTag} from '../../api/hooks/useArticlesByTag';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Slug'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Slug'>;
@@ -21,33 +19,24 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-type ScreenState = {
-  isFetching: boolean;
-  isError: boolean;
-  articles: Article[][];
-};
-
 const SlugScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
-  const {colors, strings} = useTheme();
-
-  const [state, setState] = useState<ScreenState>({
-    isFetching: false,
-    isError: false,
-    articles: [],
-  });
-
   const {name, slugUrl} = route.params;
-
-  const cancellablePromise = useCancellablePromise();
 
   useEffect(() => {
     navigation.setOptions({
       headerTitle: name,
     });
-
-    startLoading();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const {colors, strings} = useTheme();
+
+  const segments = slugUrl?.split('/');
+  const tag = segments ? segments[segments.length - 1] : '';
+  const {data, error, isLoading, refetch} = useArticlesByTag(tag, ARTICLES_PER_PAGE_COUNT * 6);
+
+  const formattedArticles = useMemo(() => {
+    return formatArticles(-1, data?.articles || [], false);
+  }, [data]);
 
   useNavigationAnalytics({
     viewId: `https://www.lrt.lt/${slugUrl}`,
@@ -55,49 +44,10 @@ const SlugScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route
     sections: ['slug'],
   });
 
-  const startLoading = () => {
-    setState({
-      isFetching: true,
-      isError: false,
-      articles: [],
-    });
-
-    const urlSegments = slugUrl?.split('/');
-
-    if (!urlSegments || urlSegments.length === 0) {
-      setState({
-        ...state,
-        isFetching: false,
-        isError: true,
-      });
-      return;
-    }
-
-    const tag = urlSegments[urlSegments.length - 1];
-
-    cancellablePromise(fetchArticlesByTag(tag, ARTICLES_PER_PAGE_COUNT * 6))
-      .then((response) => {
-        const formattedArticles = formatArticles(-1, response.articles, false);
-        setState({
-          isFetching: false,
-          isError: false,
-          articles: formattedArticles,
-        });
-      })
-      .catch((error) => {
-        console.log('Error:', error);
-        setState({
-          ...state,
-          isFetching: false,
-          isError: true,
-        });
-      });
-  };
-
   const renderLoading = () => {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size={'small'} animating={state.isFetching} />
+        <ActivityIndicator size={'small'} animating={isLoading} />
       </View>
     );
   };
@@ -108,23 +58,21 @@ const SlugScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route
         <Text style={styles.errorText} type="error">
           {strings.error_no_connection}
         </Text>
-        <Button title={strings.tryAgain} color={colors.primary} onPress={() => startLoading()} />
+        <Button title={strings.tryAgain} color={colors.primary} onPress={() => refetch()} />
       </View>
     );
   };
 
-  const {isFetching, isError, articles} = state;
-
   let content;
-  if (isError) {
+  if (error || !tag) {
     content = renderError();
-  } else if (isFetching) {
+  } else if (isLoading) {
     content = renderLoading();
   } else {
     content = (
       <MyFlatList
         showsVerticalScrollIndicator={false}
-        data={articles}
+        data={formattedArticles}
         windowSize={4}
         renderItem={(item) => {
           return (
