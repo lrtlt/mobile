@@ -14,7 +14,6 @@ import {
 } from '../api/Types';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import SearchContextProvider from '../screens/search/context/SearchContextProvider';
-import ChannelContextProvider from '../screens/channel/context/ChannelContextProvider';
 import {Article} from '../../Types';
 import {useSettingsStore} from '../state/settings_store';
 import {Platform} from 'react-native';
@@ -207,13 +206,7 @@ export default () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="Channel">
-        {(props) => (
-          <ChannelContextProvider>
-            <Screens.ChannelScreen {...props} />
-          </ChannelContextProvider>
-        )}
-      </Stack.Screen>
+      <Stack.Screen name="Channel" component={Screens.ChannelScreen} />
       <Stack.Screen name="Search" component={SearchDrawerNavigator} options={{headerShown: false}} />
       <Stack.Screen name="Bookmarks" component={Screens.BookmarksScreen} />
       <Stack.Screen name="User" component={Screens.UserScreen} />

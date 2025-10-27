@@ -97,13 +97,6 @@ export const popularArticlesGet = (count: number, page: number) => {
   return `${BASE_URL}articles/pop24?count=${count}&page=${page}`;
 };
 
-/**
- * Returns channel page data by it's id
- */
-export const channelGet = (id: number | string) => {
-  return `${BASE_URL}tv/channel/${id}`;
-};
-
 export const mediatekaGetV2 = () => {
   return `${BASE_URL}category-home?id=672`;
 };

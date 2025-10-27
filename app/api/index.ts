@@ -8,7 +8,6 @@ import {
   carPlaylistRecommendedGet,
   categoryGet,
   categoryHomeGet,
-  channelGet,
   counter,
   fetchAIAutocomplete,
   genreGet,
@@ -44,7 +43,6 @@ import {
   CarPlayCategoryResponse,
   CarPlaylistItem,
   CategoryArticlesResponse,
-  ChannelResponse,
   DailyQuestionResponse,
   GenreResponse,
   HomeDataResponse,
@@ -59,8 +57,6 @@ import {
   RadiotekaResponse,
   SearchFilter,
   SearchResponse,
-  VideoDataDefault,
-  VideoDataLiveStream,
 } from './Types';
 
 import {getFirestore} from '@react-native-firebase/firestore';
@@ -79,10 +75,6 @@ export const fetchArticleSearch = (q: string, filter: SearchFilter) =>
 
 export const fetchArticlesByGenre = (genreId: number | string, count: number) =>
   get<ArticleSearchResponse>(articlesByGenre(genreId, count));
-
-export const fetchVideoData = (streamUrl: string) => get<VideoDataLiveStream | VideoDataDefault>(streamUrl);
-
-export const fetchChannel = (channelId: number | string) => get<ChannelResponse>(channelGet(channelId));
 
 export const fetchRadiotekaApi = () => get<RadiotekaResponse>(radiotekaGet());
 

@@ -11,11 +11,10 @@ import {RouteProp} from '@react-navigation/native';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import ChannelComponent from './ChannelComponent';
-import useAppStateCallback from '../../hooks/useAppStateCallback';
 import useChannelAnalytics from './useChannelAnalytics';
-import {useChannel} from './context/useChannel';
 import Config from 'react-native-config';
 import {TVProgramChannel} from '../../api/Types';
+import {useChannelStreamInfo} from '../../api/hooks/useChannel';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Channel'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Channel'>;
@@ -25,8 +24,6 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
-export const PROGRAM_RELOAD_TIME = 1000 * 60 * 2; //2 minutes
-
 const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const [selectedChannel, setSelectedChannel] = useState(route.params.channelId);
 
@@ -34,8 +31,8 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
     setSelectedChannel(route.params.channelId);
   }, [route.params.channelId]);
 
-  const {channelData, streamData, audioStreamData, lastFetchTime, loadingState, loadChannel, reloadProgram} =
-    useChannel();
+  const {data, isLoading, error} = useChannelStreamInfo(selectedChannel);
+  const {channelData, streamData, audioStreamData} = data || {};
 
   const {strings} = useTheme();
 
@@ -52,20 +49,11 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
 
   useChannelAnalytics({channel_response: channelData});
 
-  useAppStateCallback(
-    useCallback(() => {
-      if (Date.now() - lastFetchTime > PROGRAM_RELOAD_TIME) {
-        reloadProgram();
-      }
-    }, [lastFetchTime]),
-  );
-
   useEffect(() => {
     Gemius.sendPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
       screen: 'channel',
       channelId: selectedChannel.toString(),
     });
-    loadChannel(selectedChannel);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChannel]);
 
@@ -75,8 +63,8 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
 
   let content;
 
-  switch (loadingState) {
-    case 'loading': {
+  switch (true) {
+    case isLoading: {
       content = (
         <View style={styles.player}>
           <ScreenLoader />
@@ -84,7 +72,7 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
       );
       break;
     }
-    case 'error': {
+    case !!error: {
       content = (
         <View style={styles.player}>
           <ScreenError text={strings.liveChanelError} />
@@ -92,7 +80,7 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
       );
       break;
     }
-    case 'ready': {
+    case !!data: {
       content = (
         <ChannelComponent
           channelData={channelData!}
@@ -104,7 +92,7 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
     }
   }
 
-  const shouldRenderTVBar = loadingState === 'ready' || loadingState === 'error';
+  const shouldRenderTVBar = !!data || !!error;
 
   return (
     <SafeAreaView style={styles.screen} edges={['left', 'right']}>
