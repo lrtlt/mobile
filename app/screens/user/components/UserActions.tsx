@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {useTheme} from '../../../Theme';
+import {strings, useTheme} from '../../../Theme';
 
 import {useAuth0} from 'react-native-auth0';
 import {useNavigation} from '@react-navigation/native';
@@ -13,13 +13,15 @@ import {
   IconApplicationSettings,
   IconHeart,
   IconProfileSettings,
-  IconStarList,
 } from '../../../components/svg';
+import {useDeleteCurrentUser} from '../../../api/hooks/useUser';
+import ConfirmModal from '../../weather/ConfirmModal';
+import queryClient from '../../../../AppQueryClient';
 
 interface UserActionItemProps {
   icon: React.ReactNode;
   label: string;
-  onPress: () => void;
+  onPress?: () => void;
   isDestructive?: boolean;
 }
 
@@ -29,7 +31,7 @@ const UserActionItem: React.FC<UserActionItemProps> = ({icon, label, onPress, is
     <TouchableDebounce
       style={[
         styles.actionItem,
-        {borderColor: colors.border},
+        {borderColor: colors.border, opacity: onPress ? 1 : 0.4},
         isDestructive && {borderColor: colors.textError, borderWidth: 1},
       ]}
       onPress={onPress}>
@@ -45,17 +47,15 @@ const UserActions: React.FC = () => {
   const {clearSession, user} = useAuth0();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const {colors} = useTheme();
+  const [deleteAccountConfirmVisible, setDeleteAccountConfirmVisible] = useState(false);
+  const {mutateAsync: deleteUser} = useDeleteCurrentUser();
 
-  const handleSave = () => {
+  const handleFavorites = () => {
     navigation.navigate('Favorites');
   };
 
-  const handleFollowedTopics = () => {
-    console.log('SEKAMOS TEMOS pressed');
-  };
-
   const handleProfileSettings = () => {
-    console.log('PROFILIO NUSTATYMAI pressed');
+    navigation.navigate('UserPersonalSettings');
   };
 
   const handleAppSettings = () => {
@@ -65,30 +65,38 @@ const UserActions: React.FC = () => {
   const handleLogout = async () => {
     if (user) {
       await clearSession();
-      navigation.pop();
+      queryClient.removeQueries();
+      queryClient.invalidateQueries();
     }
   };
 
-  const handleDeleteAccount = () => {
-    console.log('IŠTRINTI LRT PASKYRĄ pressed');
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteUser();
+      queryClient.removeQueries();
+      await clearSession();
+      navigation.pop();
+    } catch (error) {
+      console.error('Error deleting user account:', error);
+    }
   };
 
   return (
     <View style={styles.container}>
       <UserActionItem
         icon={<IconHeart size={32} color={colors.text} />}
-        label="IŠSAUGOTI"
-        onPress={handleSave}
+        label={strings.favorites}
+        onPress={user ? handleFavorites : undefined}
       />
-      <UserActionItem
+      {/* <UserActionItem
         icon={<IconStarList size={32} color={colors.text} />}
         label="SEKAMOS TEMOS"
         onPress={handleFollowedTopics}
-      />
+      /> */}
       <UserActionItem
         icon={<IconProfileSettings size={32} color={colors.text} />}
         label="PROFILIO NUSTATYMAI"
-        onPress={handleProfileSettings}
+        onPress={user ? handleProfileSettings : undefined}
       />
       <UserActionItem
         icon={<IconApplicationSettings size={32} color={colors.text} />}
@@ -98,12 +106,21 @@ const UserActions: React.FC = () => {
       <UserActionItem
         icon={<IcLogout size={32} color={colors.text} />}
         label="ATSIJUNGTI"
-        onPress={handleLogout}
+        onPress={user ? handleLogout : undefined}
       />
       <UserActionItem
         icon={<IcDelete size={32} color={colors.text} />}
         label="IŠTRINTI LRT PASKYRĄ"
-        onPress={handleDeleteAccount}
+        onPress={user ? () => setDeleteAccountConfirmVisible(true) : undefined}
+      />
+      <ConfirmModal
+        title="Ar tikrai norite ištrinti paskyrą?"
+        visible={deleteAccountConfirmVisible}
+        onCancel={() => setDeleteAccountConfirmVisible(false)}
+        onConfirm={() => {
+          handleDeleteAccount();
+          setDeleteAccountConfirmVisible(false);
+        }}
       />
     </View>
   );

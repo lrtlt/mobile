@@ -61,7 +61,7 @@ export const MENU_DATA = [
       },
       {
         type: 'category',
-        title: 'Nuomoės',
+        title: 'Nuomonės',
         category_id: 3,
         url: 'https://www.lrt.lt/naujienos/nuomones',
       },

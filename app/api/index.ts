@@ -28,8 +28,6 @@ import {
   putDailyQuestionVote,
   radiotekaGet,
   searchArticles,
-  getUserData,
-  putUserOnboardingCompleted,
 } from './Endpoints';
 import {get, post, put} from './HttpClient';
 import {
@@ -167,12 +165,3 @@ export const fetchMenuItemsV2 = async (): Promise<Menu2Response> => {
     throw new Error('Menu document not found');
   }
 };
-
-export const getCurrentUserData = () => get<any>(getUserData());
-
-export const setUserOnboardingCompleted = (completed: boolean, idToken: string) =>
-  put<any>(putUserOnboardingCompleted(completed), undefined, {
-    headers: {
-      Authorization: `Bearer ${idToken}`,
-    },
-  });

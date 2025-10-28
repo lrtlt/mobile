@@ -191,10 +191,3 @@ export const getAISummary = (query: string) => `https://ai-search.lrt.lt/v1/lt/a
 
 export const fetchAIAutocomplete = (query: string) =>
   `https://ai-search.lrt.lt/v1/lt/search/autocomplete?query=${query}&maxSuggestions=6&minQueryLength=1`;
-
-///Personl user endpoints
-
-export const getUserData = () => `https://www.lrt.lt/servisai/authrz/user/me`;
-
-export const putUserOnboardingCompleted = (completed: boolean) =>
-  `https://www.lrt.lt/servisai/authrz/user/set-onboarding-completed/${completed ? 1 : 0}`;

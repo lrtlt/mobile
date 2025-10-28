@@ -7,6 +7,7 @@ import {useTheme} from '../../Theme';
 import {TouchableDebounce} from '../../components';
 
 interface Props {
+  title: string;
   visible: boolean;
   onConfirm: () => void;
   onCancel: () => void;
@@ -27,15 +28,9 @@ const ConfirmModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
       onBackButtonPress={props.onCancel}>
       <View style={{...styles.modalContentContainer, backgroundColor: colors.background}}>
         <TextComponent style={styles.titleText} fontFamily="PlayfairDisplay-Regular">
-          Įsiminti?
+          {props.title}
         </TextComponent>
         <View style={styles.row}>
-          <TouchableDebounce
-            style={{...styles.button, borderColor: colors.buttonBorder}}
-            onPress={props.onCancel}>
-            <TextComponent style={styles.buttonText}>Ne</TextComponent>
-          </TouchableDebounce>
-          <View style={styles.buttonSparator} />
           <TouchableDebounce
             style={{
               ...styles.button,
@@ -44,6 +39,11 @@ const ConfirmModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
             }}
             onPress={props.onConfirm}>
             <TextComponent style={{...styles.buttonText, color: colors.onPrimary}}>Taip</TextComponent>
+          </TouchableDebounce>
+          <TouchableDebounce
+            style={{...styles.button, borderColor: colors.buttonBorder}}
+            onPress={props.onCancel}>
+            <TextComponent style={styles.buttonText}>Ne</TextComponent>
           </TouchableDebounce>
         </View>
       </View>
@@ -64,22 +64,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderRadius: 8,
-    backgroundColor: 'white',
   },
   row: {
     flexDirection: 'row',
     marginTop: 16,
+    gap: 16,
   },
   titleText: {
     fontSize: 19,
     width: '100%',
     textAlign: 'center',
   },
-  buttonSparator: {
-    width: 16,
-  },
+
   button: {
-    minWidth: 100,
+    flex: 1,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
@@ -87,6 +85,6 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
   },
   buttonText: {
-    fontSize: 15,
+    fontSize: 16,
   },
 });

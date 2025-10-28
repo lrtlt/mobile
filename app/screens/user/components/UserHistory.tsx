@@ -1,21 +1,24 @@
 import {PropsWithChildren, useCallback} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Dimensions, Easing, StyleSheet, View} from 'react-native';
 import {useTheme} from '../../../Theme';
 import {IconHistory} from '../../../components/svg';
-import {ScreenError, ScreenLoader, Text, TouchableDebounce} from '../../../components';
+import {Text, TouchableDebounce} from '../../../components';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import HistoryArticleList from './HistoryArticleList';
 import {useHistoryUserArticles} from '../../../api/hooks/useHistoryArticles';
+import GradientShimmer from 'react-native-gradient-shimmer';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface Props {}
+
+const {width} = Dimensions.get('window');
 
 const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const {data, error, isLoading} = useHistoryUserArticles(1);
-
   const {colors} = useTheme();
 
   const onMorePress = useCallback(() => {
@@ -23,11 +26,21 @@ const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
   }, [navigation]);
 
   if (error) {
-    return <ScreenError text={error.message} />;
+    return null;
   }
 
-  if (isLoading && !data) {
-    return <ScreenLoader />;
+  if (isLoading) {
+    return (
+      <GradientShimmer
+        style={styles.shimmerContainer}
+        LinearGradientComponent={LinearGradient}
+        width={width - 24}
+        height={176}
+        highlightWidth={400}
+        duration={1000}
+        easing={Easing.circle}
+      />
+    );
   }
 
   return (
@@ -47,11 +60,18 @@ const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
 export default UserHistory;
 
 const styles = StyleSheet.create({
+  shimmerContainer: {
+    flex: 1,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 8,
+  },
+
   container: {
     flex: 1,
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 8,
   },
+
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',

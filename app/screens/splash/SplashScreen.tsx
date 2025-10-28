@@ -21,7 +21,7 @@ const SplashScreen: React.FC<React.PropsWithChildren<{}>> = () => {
         backgroundColor={colors.background}
       />
       <View style={{...styles.container, backgroundColor: colors.background}}>
-        <Logo width={120} height={120} />
+        <Logo width={80} height={80} />
         <ActivityIndicator
           style={styles.loader}
           size="large"

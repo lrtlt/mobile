@@ -8,6 +8,7 @@ import UserActions from './components/UserActions';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler';
 import UserHistory from './components/UserHistory';
+import UserSettings from './components/UserSettings';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
@@ -27,6 +28,7 @@ const UserScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
       <ScrollView contentContainerStyle={styles.container}>
         <>
           <UserHeader />
+          <UserSettings />
           <UserHistory />
           <UserActions />
         </>

@@ -3,7 +3,6 @@ import {View, StyleSheet} from 'react-native';
 import {SettingsToggleButton, Text} from '../../components';
 import {SunIcon, MoonIcon} from '../../components/svg';
 import {useTheme} from '../../Theme';
-import SettingsNotifications from './SettingsNotifications';
 import {ScrollView} from 'react-native-gesture-handler';
 import SettingsSwitch from './SettingsSwitch';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -118,16 +117,6 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
             />
           </View>
 
-          <Text style={styles.label} type="secondary" fontFamily="SourceSansPro-SemiBold">
-            {'Pranešimai'}
-          </Text>
-          <Text style={styles.caption} type="secondary" fontFamily="SourceSansPro-Regular">
-            {'Galite prenumeruoti į telefoną siunčiamus pranešimus (push notifications).'}
-          </Text>
-
-          <View style={{...styles.card, backgroundColor: colors.background}}>
-            <SettingsNotifications />
-          </View>
           <View style={{...styles.card, backgroundColor: colors.background}}>
             <View
               style={{

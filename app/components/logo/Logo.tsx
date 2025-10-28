@@ -23,6 +23,7 @@ const LogoComponent: React.FC<React.PropsWithChildren<Props>> = ({
   const logo = useSettingsStore((state) => state.logo);
 
   if (logo?.svg && !useOnlyInternal) {
+    console.log('Rendering custom logo');
     //Replace svg fill colors for dark mode to "headerTint" color
     const formattedSvg = isDarkMode
       ? logo?.svg?.replace(/fill="#(?:[0-9a-fA-F]{3}){1,2}"/g, `fill="${themeDark.colors.headerTint}"`)

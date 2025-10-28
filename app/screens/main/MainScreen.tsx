@@ -32,7 +32,6 @@ import {
   MENU_TYPE_RADIOTEKA,
 } from '../../api/Types';
 import {useAuth0} from 'react-native-auth0';
-import Snackbar from '../../components/snackbar/SnackBar';
 import UserAvatar from '../user/components/UserAvatar';
 
 type ScreenRouteProp = RouteProp<MainDrawerParamList, 'Main'>;
@@ -49,9 +48,8 @@ type Props = {
 
 const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const [snackbar, setSnackbar] = React.useState<React.ReactElement>();
 
-  const {authorize, user} = useAuth0();
+  const {user} = useAuth0();
   const {colors, dim} = useTheme();
 
   const {isVisible, onClose} = useOnboardingLogic();
@@ -75,18 +73,6 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
       }),
     };
   }, [routes]);
-
-  useEffect(() => {
-    if (user != null) {
-      setSnackbar(
-        <Snackbar
-          message={`Sveiki, ${user.name}`}
-          backgroundColor={colors.primary}
-          onDismiss={() => setSnackbar(undefined)}
-        />,
-      );
-    }
-  }, [user]);
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_SELECT_CATEGORY_INDEX, (data) => {
@@ -127,11 +113,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
       headerRight: () => (
         <ActionButton
           onPress={async () => {
-            if (user) {
-              navigation.navigate('User');
-            } else {
-              await authorize();
-            }
+            navigation.navigate('User');
           }}
           accessibilityLabel="Nustatymai"
           accessibilityHint="Atidaryti nustatymų ekraną">
@@ -235,7 +217,6 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           initialLayout={{height: 0, width: Dimensions.get('screen').width}}
         />
         <NotificationsModal visible={isVisible} onClose={onClose} />
-        {snackbar}
       </>
     </SafeAreaView>
   );

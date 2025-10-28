@@ -85,6 +85,7 @@ const WeatherScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
         </View>
       </MyScrollView>
       <ConfirmModal
+        title="Įsiminti?"
         visible={confirmModalVisible}
         onCancel={() => setConfirmModalVisible(false)}
         onConfirm={() => {
