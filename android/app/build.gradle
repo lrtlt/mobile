@@ -92,8 +92,8 @@ android {
         applicationId "lt.mediapark.lrt"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 206200
-        versionName "2.62.0"
+        versionCode 206300
+        versionName "2.63.0"
         multiDexEnabled true
         resValue "string", "build_config_package", "lt.mediapark.lrt"
         manifestPlaceholders = [auth0Domain: "dev-lrt.eu.auth0.com", auth0Scheme: "${applicationId}.auth0"]

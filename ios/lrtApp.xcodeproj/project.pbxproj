@@ -882,14 +882,14 @@
 				CODE_SIGN_ENTITLEMENTS = lrtApp/lrtApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 206200;
+				CURRENT_PROJECT_VERSION = 206300;
 				DEVELOPMENT_TEAM = TGMUP98888;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				INFOPLIST_FILE = lrtApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.62.0;
+				MARKETING_VERSION = 2.63.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -917,12 +917,12 @@
 				CODE_SIGN_ENTITLEMENTS = lrtApp/lrtAppRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 206200;
+				CURRENT_PROJECT_VERSION = 206300;
 				DEVELOPMENT_TEAM = TGMUP98888;
 				INFOPLIST_FILE = lrtApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.62.0;
+				MARKETING_VERSION = 2.63.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
