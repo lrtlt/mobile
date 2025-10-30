@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 
 interface Props {
   onPress: () => void;
@@ -11,12 +11,12 @@ interface Props {
 const ActionButton: React.FC<React.PropsWithChildren<Props>> = (props) => {
   return (
     <View accessible={true} accessibilityRole="button" style={styles.root}>
-      <TouchableWithoutFeedback
+      <TouchableDebounce
         onPress={props.onPress}
         accessibilityLabel={props.accessibilityLabel}
         accessibilityHint={props.accessibilityHint}>
         <View style={styles.clickArea}>{props.children}</View>
-      </TouchableWithoutFeedback>
+      </TouchableDebounce>
     </View>
   );
 };

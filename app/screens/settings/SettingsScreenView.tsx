@@ -121,11 +121,11 @@ const SettingsScreenView: React.FC<React.PropsWithChildren<{}>> = () => {
             <View
               style={{
                 ...styles.cell,
-                borderColor: colors.border,
+                borderTopColor: 'transparent',
                 alignItems: 'center',
                 paddingVertical: 24,
               }}>
-              <Text type="secondary">{'Aplikacijos versija'}</Text>
+              <Text type="secondary">{'Programėlės versija:'}</Text>
               <Text type="secondary" fontFamily="SourceSansPro-SemiBold">
                 {getAppVersion()}
               </Text>

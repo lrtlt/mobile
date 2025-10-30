@@ -1,14 +1,13 @@
-import {useNavigation} from '@react-navigation/core';
+import {useFocusEffect, useIsFocused, useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
 import {Animated, ScrollViewProps, StyleSheet, View} from 'react-native';
 import Share from 'react-native-share';
 import {ArticleContent, isDefaultArticle} from '../../api/Types';
-import {ActionButton, AnimatedAppBar} from '../../components';
-import {SaveIcon, ShareIcon} from '../../components/svg';
+import {ActionButton, AnimatedAppBar, Text, TouchableDebounce} from '../../components';
+import {IconBookmarkNew, ShareIcon} from '../../components/svg';
 import {MainStackParamList} from '../../navigation/MainStack';
-import {themeLight, useTheme} from '../../Theme';
-import Snackbar from '../../components/snackbar/SnackBar';
+import {useTheme} from '../../Theme';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {useArticleStorageStore} from '../../state/article_storage_store';
 import {
@@ -16,6 +15,8 @@ import {
   useDeleteFavoriteUserArticle,
   useIsFavoriteUserArticle,
 } from '../../api/hooks/useFavoriteArticles';
+import {useAuth0} from 'react-native-auth0';
+import PleaseLoginModal from './PleaseLoginModal';
 
 const getArticleId = (article?: ArticleContent) => {
   if (!article) {
@@ -31,16 +32,17 @@ const getArticleId = (article?: ArticleContent) => {
 
 const useArticleHeader = (article?: ArticleContent) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Article'>>();
-  const [snackbar, setSnackbar] = React.useState<React.ReactElement>();
   const [actions, setActions] = React.useState<React.ReactElement>();
+  const [modalVisible, setModalVisible] = React.useState(false);
 
-  const {colors, dim, strings} = useTheme();
-
+  const {user} = useAuth0();
+  const {colors, dim} = useTheme();
   const articleStorage = useArticleStorageStore.getState();
+  const isFocused = useIsFocused();
 
   const {mutate: addFavoriteArticle} = useAddFavoriteUserArticle();
   const {mutate: deleteFavoriteArticle} = useDeleteFavoriteUserArticle();
-  const {data: isFavorite} = useIsFavoriteUserArticle(getArticleId(article));
+  const {data: isFavorite} = useIsFavoriteUserArticle(getArticleId(article), !!user && isFocused);
 
   const {fullHeight: appBarHeight} = useAppBarHeight();
   const scrollY = new Animated.Value(0);
@@ -61,16 +63,20 @@ const useArticleHeader = (article?: ArticleContent) => {
     }
 
     const _saveArticlePress = () => {
+      if (!user) {
+        console.log('User not logged in, showing login modal');
+        setModalVisible(true);
+        return;
+      }
+
       if (isFavorite) {
+        console.log('Removing article from favorites');
         articleStorage.removeArticle(getArticleId(article));
         deleteFavoriteArticle(getArticleId(article));
-        setSnackbar(undefined);
       } else {
+        console.log('Adding article to favorites');
         articleStorage.saveArticle(article);
         addFavoriteArticle(getArticleId(article));
-        setSnackbar(
-          <Snackbar message={strings.articleHasBeenSaved} backgroundColor={themeLight.colors.primaryDark} />,
-        );
       }
     };
 
@@ -94,17 +100,33 @@ const useArticleHeader = (article?: ArticleContent) => {
     };
 
     setActions(
-      <View style={styles.row}>
-        <ActionButton onPress={() => _saveArticlePress()} accessibilityLabel="Išsaugoti straipsnį">
-          <SaveIcon size={dim.appBarIconSize + 4} color={colors.headerTint} filled={isFavorite} />
-        </ActionButton>
-        <ActionButton onPress={() => _handleSharePress()} accessibilityLabel="Dalintis straipsniu">
+      <View style={[styles.row, {borderColor: colors.border}]}>
+        <TouchableDebounce style={{flexDirection: 'row', alignItems: 'center'}} onPress={_saveArticlePress}>
+          <ActionButton onPress={_saveArticlePress} accessibilityLabel="Išsaugoti straipsnį">
+            <IconBookmarkNew
+              size={dim.appBarIconSize}
+              color={isFavorite ? colors.iconActive : colors.headerTint}
+            />
+          </ActionButton>
+          <Text>{isFavorite ? 'Išsaugota' : 'Saugoti'}</Text>
+        </TouchableDebounce>
+        <View style={[styles.divider, {backgroundColor: colors.border}]} />
+        <ActionButton onPress={_handleSharePress} accessibilityLabel="Dalintis straipsniu">
           <ShareIcon size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
+        <PleaseLoginModal
+          visible={modalVisible}
+          title="Norėdami išsaugoti straipsnį, prisijunkite prie savo paskyros."
+          onConfirm={() => {
+            setModalVisible(false);
+            navigation.navigate('User');
+          }}
+          onCancel={() => setModalVisible(false)}
+        />
       </View>,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [article, isFavorite]);
+  }, [article, isFavorite, user, modalVisible]);
 
   const appBar = (
     <AnimatedAppBar translateY={translateY} onBackPress={() => navigation.goBack()} actions={actions} />
@@ -112,7 +134,6 @@ const useArticleHeader = (article?: ArticleContent) => {
 
   return {
     appBar,
-    snackbar,
     onScroll,
   };
 };
@@ -121,6 +142,16 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    height: 32,
+    borderRadius: 6,
+    gap: 8,
+    paddingHorizontal: 8,
+    marginHorizontal: 8,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  divider: {
+    height: '100%',
+    width: StyleSheet.hairlineWidth,
   },
 });
 

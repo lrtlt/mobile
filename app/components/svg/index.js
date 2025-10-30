@@ -91,3 +91,5 @@ export {default as IcLogout} from './ic_logout';
 export {default as IcDelete} from './ic_delete';
 export {default as IconHistory} from './ic_history';
 export {default as IconHeartFilled} from './ic_heart_filled';
+export {default as IconBookmarkNew} from './ic_bookmark_new';
+export {default as IconBell} from './ic_bell';

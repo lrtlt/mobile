@@ -4,6 +4,7 @@ import queryClient from '../../../AppQueryClient';
 import {useSearchArticlesByIds} from './useSearchArticles';
 import {useArticleStorageStore} from '../../state/article_storage_store';
 import {isMediaArticle} from '../Types';
+import {useAuth0} from 'react-native-auth0';
 
 const QUERY_KEY = 'historyUserArticles';
 const DEFAULT_STALE_TIME = 1000 * 60 * 5; // 5 minutes
@@ -16,6 +17,7 @@ type HistoryArticleResponse = {
 };
 
 export const useHistoryUserArticles = (page: number) => {
+  const {user} = useAuth0();
   const {history} = useArticleStorageStore();
   const localHistoryArticleIds = history.map((item) => (isMediaArticle(item) ? item.id : item.article_id));
 
@@ -32,6 +34,7 @@ export const useHistoryUserArticles = (page: number) => {
     },
     placeholderData: keepPreviousData,
     staleTime: DEFAULT_STALE_TIME,
+    enabled: !!user,
   });
 
   const articleIds = HttpClient.isAuthenticated() ? data ?? [] : localHistoryArticleIds;

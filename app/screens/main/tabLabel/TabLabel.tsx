@@ -16,7 +16,7 @@ const TabLabel: React.FC<TabLabelProps> = ({route, focused}) => {
     if (route.title === strings.mainWindow) {
       return (
         <View style={styles.homeContainer}>
-          <IconHome size={18} color={color} />
+          <IconHome size={19} color={color} />
         </View>
       );
     } else {

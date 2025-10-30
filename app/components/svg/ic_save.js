@@ -1,13 +1,16 @@
 import React from 'react';
 import IconBookmark from './ic_bookmark';
 import IconBookmarkFilled from './ic_bookmark_filled';
-import {IconHeart, IconHeartFilled} from '.';
+import {IconBookmarkNew, IconHeart, IconHeartFilled} from '.';
+import {useTheme} from '../../Theme';
 
 const SvgComponent = (props) => {
+  const {colors} = useTheme();
+
   if (props.filled) {
-    return <IconHeartFilled size={props.size} color={props.color} />;
+    return <IconBookmarkNew size={props.size} color={colors.iconActive} />;
   } else {
-    return <IconHeart size={props.size} color={props.color} />;
+    return <IconBookmarkNew size={props.size} color={colors.iconInactive} />;
   }
 };
 

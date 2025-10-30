@@ -26,3 +26,4 @@ export {default as SimpleScreen} from './simple/SimpleScreen';
 export {default as UserScreen} from './user/UserScreen';
 export {default as FavoritesScreen} from './favorites/FavoritesScreen';
 export {default as UserPersonalSettingsScreen} from './userPersonalSettings/UserPersonalSettingsScreen';
+export {default as NotificationsScreen} from './notifications/NotificationsScreen';

@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/react-query';
+import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import * as HttpClient from '../HttpClient';
 import {ArticleSearchResponse} from '../Types';
 
@@ -18,6 +18,7 @@ export const useSearchArticlesByIds = (ids: string[] | number[]) =>
       );
       return response;
     },
+    placeholderData: keepPreviousData,
     staleTime: DEFAULT_STALE_TIME,
     enabled: ids.length > 0,
   });

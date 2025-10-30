@@ -1,33 +1,72 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ScrollView} from 'react-native-gesture-handler';
-import SettingsNotifications from '../settings/SettingsNotifications';
-import {Text} from '../../components';
+import UserActionItem from '../user/components/UserActionItem';
+import {IcDelete, IcLogout} from '../../components/svg';
+import {useTheme} from '../../Theme';
+import {useAuth0} from 'react-native-auth0';
+import queryClient from '../../../AppQueryClient';
+import {useDeleteCurrentUser} from '../../api/hooks/useUser';
+import ConfirmModal from '../weather/ConfirmModal';
+import UserHeader from '../user/components/UserHeader';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
 };
 
 const UserPersonalSettingsScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
+  const {clearSession, user} = useAuth0();
+  const [deleteAccountConfirmVisible, setDeleteAccountConfirmVisible] = useState(false);
+  const {mutateAsync: deleteUser} = useDeleteCurrentUser();
+
+  const {colors} = useTheme();
+
+  const handleLogout = async () => {
+    if (user) {
+      await clearSession();
+      queryClient.removeQueries();
+      queryClient.invalidateQueries();
+      navigation.pop();
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteUser();
+      queryClient.removeQueries();
+      await clearSession();
+      navigation.popToTop();
+    } catch (error) {
+      console.error('Error deleting user account:', error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.root} edges={['bottom']}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <>
-          <Text style={styles.label} type="secondary" fontFamily="SourceSansPro-SemiBold">
-            {'Pranešimai'}
-          </Text>
-          <Text style={styles.caption} type="secondary" fontFamily="SourceSansPro-Regular">
-            {'Galite prenumeruoti į telefoną siunčiamus pranešimus (push notifications).'}
-          </Text>
-
-          <View style={{...styles.card}}>
-            <SettingsNotifications />
-          </View>
-        </>
-      </ScrollView>
+      <View style={styles.container}>
+        <UserHeader />
+        <UserActionItem
+          icon={<IcLogout size={32} color={colors.text} />}
+          label="ATSIJUNGTI"
+          onPress={user ? handleLogout : undefined}
+        />
+        <UserActionItem
+          icon={<IcDelete size={32} color={colors.text} />}
+          label="IŠTRINTI LRT PASKYRĄ"
+          onPress={user ? () => setDeleteAccountConfirmVisible(true) : undefined}
+        />
+        <ConfirmModal
+          title="Ar tikrai norite ištrinti paskyrą?"
+          visible={deleteAccountConfirmVisible}
+          onCancel={() => setDeleteAccountConfirmVisible(false)}
+          onConfirm={() => {
+            handleDeleteAccount();
+            setDeleteAccountConfirmVisible(false);
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -37,27 +76,10 @@ export default UserPersonalSettingsScreen;
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    padding: 12,
   },
   container: {
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    gap: 8,
-  },
-  card: {
-    borderRadius: 16,
-    margin: 12,
-    overflow: 'hidden',
-  },
-  label: {
-    fontSize: 14,
-    padding: 12,
-    paddingTop: 24,
-    paddingHorizontal: 12,
-    textTransform: 'uppercase',
-  },
-  caption: {
-    fontSize: 16,
-    paddingVertical: 4,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    gap: 12,
   },
 });

@@ -14,7 +14,7 @@ type FavoriteArticleResponse = {
   createdAt: string;
 }[];
 
-export const useFavoriteUserArticleIds = () => {
+export const useFavoriteUserArticleIds = (enabled = true) => {
   return useQuery({
     queryKey: [QUERY_KEY],
     queryFn: async ({signal}) => {
@@ -27,11 +27,13 @@ export const useFavoriteUserArticleIds = () => {
       return response.map((item) => item.articleId);
     },
     staleTime: DEFAULT_STALE_TIME,
+    retry: 2,
+    enabled: enabled,
   });
 };
 
-export const useIsFavoriteUserArticle = (articleId: number) => {
-  const {data, ...rest} = useFavoriteUserArticleIds();
+export const useIsFavoriteUserArticle = (articleId: number, enabled?: boolean) => {
+  const {data, ...rest} = useFavoriteUserArticleIds(enabled);
   return {
     data: (data?.findIndex((id) => id === articleId) ?? -1) !== -1,
     ...rest,
@@ -73,6 +75,7 @@ export const useDeleteFavoriteUserArticle = () =>
 export const useAddFavoriteUserArticle = () =>
   useMutation({
     mutationFn: async (articleId: number | string) => {
+      console.log('Adding article to favorites');
       const response = await HttpClient.put<{}>(
         `https://www.lrt.lt/servisai/authrz/user/articles/${articleId}`,
       );

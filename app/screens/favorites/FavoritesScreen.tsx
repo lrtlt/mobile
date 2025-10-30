@@ -47,7 +47,7 @@ const FavoritesScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation})
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: strings.favorites,
+      headerTitle: strings.bookmarks,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

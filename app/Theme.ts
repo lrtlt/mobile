@@ -199,6 +199,8 @@ type ColorScheme = {
   radiotekaPlayButton: string;
   radiotekaBackground: string;
   mediatekaPlayButton: string;
+  iconInactive: string;
+  iconActive: string;
 };
 
 const colorsLight: ColorScheme = {
@@ -207,7 +209,7 @@ const colorsLight: ColorScheme = {
   primary: '#333399',
   background: '#FFFFFF',
   card: '#F9F9F9',
-  text: '#2E2E2F',
+  text: '#02030D',
   border: '#AAAAAA',
   notification: '#C00',
   //#endregion
@@ -242,12 +244,15 @@ const colorsLight: ColorScheme = {
   dailyQuestionProgress: '#dce3e9',
   facebook: '#3b5998',
   darkIcon: '#222222',
+
   ripple: '#99999940',
   epikaGreen: '#58EB52',
   playerIcons: 'rgb(217, 32, 83)',
   radiotekaPlayButton: '#FFD600',
   radiotekaBackground: '#EEEFF4',
   mediatekaPlayButton: '#4258FF',
+  iconInactive: '#9A9A9E',
+  iconActive: '#0078D6',
 };
 
 const colorsDark: ColorScheme = {
@@ -256,7 +261,7 @@ const colorsDark: ColorScheme = {
   background: '#141a21',
   card: '#242D36',
   text: '#F9F9F9',
-  border: '#111111',
+  border: '#666',
   notification: '#C00',
   //#endregion
   tertiary: '#FFFFFF',
@@ -279,7 +284,7 @@ const colorsDark: ColorScheme = {
   lightGreyBackground: '#F9F9F9',
   articleHighlight: '#2B364060',
   photoBackground: '#373f4e',
-  listSeparator: '#FFFFFF40',
+  listSeparator: '#666666',
   buttonBorder: '#55555590',
   buttonContent: '#777777',
   playerBackground: '#444444',
@@ -296,6 +301,8 @@ const colorsDark: ColorScheme = {
   radiotekaPlayButton: '#FFD600',
   radiotekaBackground: '#11161c',
   mediatekaPlayButton: '#4258FF',
+  iconInactive: '#9A9A9E',
+  iconActive: '#0078D6',
 };
 //#endregion
 

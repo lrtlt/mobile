@@ -5,6 +5,7 @@ import {useArticleStorageStore} from '../../state/article_storage_store';
 import {useUserStore} from '../../state/user_store';
 import {useAddHistoryUserArticle} from '../../api/hooks/useHistoryArticles';
 import {useArticle} from '../../api/hooks/useArticle';
+import {useAuth0} from 'react-native-auth0';
 
 type ScreenState = {
   article?: ArticleContent;
@@ -30,6 +31,8 @@ const useArticleScreenState = (
     loadingState: STATE_LOADING,
   });
 
+  const {user} = useAuth0();
+
   const {data, isLoading, isError} = useArticle(articleId, isMedia);
 
   const userStore = useUserStore();
@@ -38,8 +41,10 @@ const useArticleScreenState = (
   const addHistoryUserArticleMutation = useAddHistoryUserArticle();
 
   useEffect(() => {
-    addHistoryUserArticleMutation.mutate(articleId);
-  }, [articleId]);
+    if (user) {
+      addHistoryUserArticleMutation.mutate(articleId);
+    }
+  }, [articleId, user]);
 
   useEffect(() => {
     if (isLoading) {

@@ -5,12 +5,20 @@ import {useAuth0} from 'react-native-auth0';
 import UserAvatar from './UserAvatar';
 import {IconUserNew} from '../../../components/svg';
 import {useTheme} from '../../../Theme';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MainStackParamList} from '../../../navigation/MainStack';
 
 const UserHeader: React.FC = () => {
   const {user, authorize} = useAuth0();
   const {colors} = useTheme();
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const userEmail = user?.email || '-';
+
+  const handleProfileSettings = () => {
+    navigation.navigate('UserPersonalSettings');
+  };
 
   if (!user) {
     return (
@@ -21,30 +29,32 @@ const UserHeader: React.FC = () => {
               width: 40,
               height: 40,
               borderRadius: 20,
-              backgroundColor: colors.buttonBorder,
+              backgroundColor: colors.primary,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <IconUserNew size={24} color={colors.text} />
+            <IconUserNew size={24} color={colors.onPrimary} />
           </View>
-          <Text style={{fontSize: 16, color: colors.tertiary}}>Prisijungti / Registruotis</Text>
+          <Text style={styles.headerText}>PRISIJUNGTI</Text>
         </View>
       </TouchableDebounce>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <UserAvatar size={60} />
-      <View>
-        <Text style={[styles.emailText, {}]} fontFamily="SourceSansPro-SemiBold">
-          {user?.name}
-        </Text>
-        <Text style={[styles.emailText]} type="secondary">
-          {userEmail}
-        </Text>
+    <TouchableDebounce onPress={handleProfileSettings}>
+      <View style={[styles.container, {borderColor: colors.border}]}>
+        <UserAvatar size={60} />
+        <View>
+          <Text style={[styles.emailText, {}]} fontFamily="SourceSansPro-SemiBold">
+            {user?.name}
+          </Text>
+          <Text style={[styles.emailText]} type="secondary">
+            {userEmail}
+          </Text>
+        </View>
       </View>
-    </View>
+    </TouchableDebounce>
   );
 };
 
@@ -56,8 +66,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 73,
     gap: 16,
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 16,
+    borderRadius: 8,
   },
   emailText: {
     fontSize: 16,
+  },
+  headerText: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

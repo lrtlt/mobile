@@ -18,7 +18,7 @@ const {width} = Dimensions.get('window');
 const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
-  const {data, error, isLoading} = useHistoryUserArticles(1);
+  const {data, error} = useHistoryUserArticles(1);
   const {colors} = useTheme();
 
   const onMorePress = useCallback(() => {
@@ -29,7 +29,7 @@ const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
     return null;
   }
 
-  if (isLoading) {
+  if (!data) {
     return (
       <GradientShimmer
         style={styles.shimmerContainer}
@@ -46,8 +46,8 @@ const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
   return (
     <View style={[styles.container, {borderColor: colors.border}]}>
       <View style={[styles.headerContainer, {borderColor: colors.border}]}>
-        <IconHistory size={32} color={colors.text} />
-        <Text style={styles.headerText}>Paskutiniai atidaryti</Text>
+        <IconHistory size={32} color={colors.iconInactive} />
+        <Text style={styles.headerText}>ISTORIJA</Text>
         <TouchableDebounce onPress={onMorePress}>
           <Text style={[styles.moreText, {color: colors.tertiary}]}>Daugiau</Text>
         </TouchableDebounce>

@@ -10,10 +10,6 @@ export const MENU_DATA = [
     url: 'https://www.lrt.lt/paieska',
   },
   {
-    type: 'settings',
-    title: 'NUSTATYMAI',
-  },
-  {
     type: 'channels',
     title: 'TIESIOGIAI',
   },
@@ -186,20 +182,20 @@ export const MENU_DATA = [
       },
     ],
   },
-  {
-    type: 'expandable',
-    title: 'MANO LRT',
-    items: [
-      {
-        type: 'bookmarks',
-        title: 'Išsaugoti straipsniai',
-      },
-      {
-        type: 'history',
-        title: 'Peržiūrėti straipsniai',
-      },
-    ],
-  },
+  // {
+  //   type: 'expandable',
+  //   title: 'MANO LRT',
+  //   items: [
+  //     {
+  //       type: 'bookmarks',
+  //       title: 'Išsaugoti straipsniai',
+  //     },
+  //     {
+  //       type: 'history',
+  //       title: 'Peržiūrėti straipsniai',
+  //     },
+  //   ],
+  // },
   {
     type: 'webpage',
     title: 'EPIKA',
