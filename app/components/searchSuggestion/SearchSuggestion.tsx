@@ -17,10 +17,10 @@ const SearchSuggestion: React.FC<React.PropsWithChildren<Props>> = ({style, sugg
 
   const renderIcon = useCallback(() => {
     if (suggestion.is_video === 1) {
-      return <CameraIcon style={styles.icon} size={16} colorBase="#B6BECB" colorAccent="#D5DAE2" />;
+      return <CameraIcon size={16} colorBase="#B6BECB" colorAccent="#D5DAE2" />;
     }
     if (suggestion.is_audio === 1) {
-      return <MicIcon style={styles.icon} size={16} colorBase="#B6BECB" colorAccent="#D5DAE2" />;
+      return <MicIcon size={16} colorBase="#B6BECB" colorAccent="#D5DAE2" />;
     }
     return null;
   }, [suggestion.is_audio, suggestion.is_video]);
@@ -40,7 +40,11 @@ const SearchSuggestion: React.FC<React.PropsWithChildren<Props>> = ({style, sugg
       ]}
       onPress={onPressHandler}>
       {renderIcon()}
-      <TextComponent type="secondary" fontFamily="SourceSansPro-Regular">
+      <TextComponent
+        style={{maxWidth: '92%'}}
+        type="secondary"
+        fontFamily="SourceSansPro-Regular"
+        numberOfLines={1}>
         {suggestion.category_title}
       </TextComponent>
     </TouchableDebounce>
@@ -56,8 +60,6 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 4,
     borderWidth: 1,
-  },
-  icon: {
-    marginRight: 8,
+    gap: 8,
   },
 });

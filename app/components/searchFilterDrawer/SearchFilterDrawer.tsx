@@ -3,28 +3,25 @@ import {View, StyleSheet} from 'react-native';
 import SelectableItem from './selectableItem/SelectableItem';
 import {useTheme} from '../../Theme';
 import TextComponent from '../text/Text';
-// import Divider from '../divider/Divider';
-
+import Divider from '../divider/Divider';
 import {
   SearchFilterTypes,
   SEARCH_TYPE_ALL,
   SEARCH_TYPE_AUDIO,
   SEARCH_TYPE_NEWS,
   SEARCH_TYPE_VIDEO,
-  SEARCH_TYPE_VIDEO_SUBTITLES,
-  SearchOrderBy,
+  // SEARCH_TYPE_VIDEO_SUBTITLES,
 } from '../../api/Types';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CheckBox from '../checkBox/CheckBox';
 import useSearch from '../../screens/search/context/useSearch';
 import MyScrollView from '../MyScrollView/MyScrollView';
-import {DrawerContentComponentProps} from '@react-navigation/drawer';
 
-const SearchFilterDrawer: React.FC<React.PropsWithChildren<DrawerContentComponentProps>> = ({navigation}) => {
+const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
   const {colors} = useTheme();
 
   const {filter, setFilter} = useSearch();
-  const {days, section, type, orderBy} = filter;
+  const {days, section, type} = filter;
 
   const selectType = useCallback(
     (selectedType: SearchFilterTypes) => {
@@ -36,14 +33,6 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<DrawerContentComponen
   const selectSection = useCallback(
     (selectedSection: string) => {
       setFilter({...filter, section: selectedSection});
-    },
-    [filter, setFilter],
-  );
-
-  const selectOrderBy = useCallback(
-    (orderBy: SearchOrderBy | undefined) => {
-      navigation.closeDrawer();
-      setFilter({...filter, orderBy});
     },
     [filter, setFilter],
   );
@@ -106,39 +95,14 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<DrawerContentComponen
         />
         <SelectableItem selected={type === 2} text={'Audio'} onPress={() => selectType(SEARCH_TYPE_AUDIO)} />
         <SelectableItem selected={type === 3} text={'Video'} onPress={() => selectType(SEARCH_TYPE_VIDEO)} />
-        <SelectableItem
+        {/* <SelectableItem
           selected={type === 4}
           text={'Video + titrai'}
           onPress={() => selectType(SEARCH_TYPE_VIDEO_SUBTITLES)}
-        />
+        /> */}
       </View>
     );
   }, [selectType, type]);
-
-  const orderBySelection = useMemo(() => {
-    return (
-      <View>
-        <TextComponent style={styles.titleText} fontFamily="SourceSansPro-SemiBold">
-          Rūšiavimas
-        </TextComponent>
-        <SelectableItem
-          selected={orderBy === undefined}
-          text={'Aktualiausi viršuje'}
-          onPress={() => selectOrderBy(undefined)}
-        />
-        <SelectableItem
-          selected={orderBy === 'NEW_FIRST'}
-          text={'Naujausi viršuje'}
-          onPress={() => selectOrderBy('NEW_FIRST')}
-        />
-        <SelectableItem
-          selected={orderBy === 'OLD_FIRST'}
-          text={'Seniausi viršuje'}
-          onPress={() => selectOrderBy('OLD_FIRST')}
-        />
-      </View>
-    );
-  }, [orderBy, selectOrderBy]);
 
   const sectionSelection = useMemo(() => {
     return (
@@ -204,13 +168,12 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<DrawerContentComponen
     <View style={{...styles.root, backgroundColor: colors.background}}>
       <MyScrollView>
         <SafeAreaView edges={['top', 'bottom']}>
-          {/* {checkBoxes} */}
-          {orderBySelection}
-          {/* {typeSelection} */}
-          {/* <Divider style={styles.divider} />
+          {checkBoxes}
+          {typeSelection}
+          <Divider style={styles.divider} />
           {sectionSelection}
           <Divider style={styles.divider} />
-          {dateSelection} */}
+          {dateSelection}
         </SafeAreaView>
       </MyScrollView>
     </View>
@@ -223,6 +186,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     minWidth: 200,
+    paddingVertical: 8,
   },
   checkBoxesContainer: {
     padding: 8,

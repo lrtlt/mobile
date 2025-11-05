@@ -1,25 +1,10 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {
-  View,
-  Button,
-  TextInput,
-  StyleSheet,
-  Animated,
-  ListRenderItemInfo,
-  ScrollViewProps,
-} from 'react-native';
+import React, {useCallback, useEffect} from 'react';
+import {View, Button, StyleSheet, Animated, ListRenderItemInfo, ScrollViewProps} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {
-  Text,
-  ScreenLoader,
-  AnimatedAppBar,
-  ArticleFeedItem,
-  ActionButton,
-  MoreArticlesButton,
-} from '../../components';
-import {IconFilter, IconSearch} from '../../components/svg';
+import {Text, ScreenLoader, AnimatedAppBar, ArticleFeedItem, ActionButton} from '../../components';
+import {IconFilter} from '../../components/svg';
 import {useTheme} from '../../Theme';
-import {BorderlessButton, FlatList} from 'react-native-gesture-handler';
+import {FlatList} from 'react-native-gesture-handler';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {MainStackParamList, SearchDrawerParamList} from '../../navigation/MainStack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
@@ -29,11 +14,13 @@ import {defaultSearchFilter} from './context/SearchContext';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import useAISearchApi from './useAISearchApi';
-import useAISummaryApi from './useAISumaryApi';
 import SearchAISummary from './SearchAISummary';
-import SearchAutocomplete from './SearchAutocomplete';
 import {pushArticle} from '../../util/NavigationUtils';
+import {useArticleSearch} from '../../api/hooks/useSearch';
+import SearchBar from './SearchBar';
+import {useAISummary} from '../../api/hooks/useAISummary';
+import {SearchCategorySuggestion} from '../../api/Types';
+import SearchSuggestions from './SearchSuggestions';
 
 type ScreenRouteProp = RouteProp<SearchDrawerParamList, 'SearchScreen'>;
 
@@ -48,27 +35,30 @@ type Props = {
 };
 
 const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
-  const [autocompleteEnabled, setAutocompleteEnabled] = useState<boolean>(false);
-
   const {query, setQuery, filter, setFilter} = useSearch();
-  const {loadingState, searchResults, search, loadMore, hasMore} = useAISearchApi();
-  const {loadingState: summaryLoadingState, aiSummary, callAISummaryApi} = useAISummaryApi();
+  const {
+    data: aiSummary,
+    isLoading: aiSummaryLoading,
+    isEnabled: aiSummaryEnabled,
+    refetch: retryAISummary,
+  } = useAISummary(query);
+  const {
+    data: searchResponse,
+    isLoading,
+    isFetched,
+    error,
+    refetch: retrySearch,
+  } = useArticleSearch(query, filter);
+  const {items: searchResults = [], similar_categories = []} = searchResponse ?? {};
+
   const {colors, strings, dim} = useTheme();
 
   useEffect(() => {
     const initialQuery = route?.params?.q ?? '';
     const initialFilter = route?.params?.filter ?? defaultSearchFilter;
-
     setQuery(initialQuery);
     setFilter(initialFilter);
-
-    search(initialQuery, initialFilter);
-    callAISummaryApi(initialQuery);
   }, []);
-
-  useEffect(() => {
-    search(query, filter);
-  }, [filter]);
 
   useNavigationAnalytics({
     viewId: 'https://www.lrt.lt/paieska',
@@ -85,7 +75,6 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
   });
 
   const onScroll: ScrollViewProps['onScroll'] = (e) => {
-    setAutocompleteEnabled(false);
     const y = e.nativeEvent.contentOffset.y;
     if (y > 0) scrollY.setValue(e.nativeEvent.contentOffset.y);
   };
@@ -97,16 +86,18 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
     [navigation],
   );
 
-  const autocompletePressHandler = useCallback(
-    (suggestion: string) => {
-      setAutocompleteEnabled(false);
-      setQuery(suggestion);
-      search(suggestion, filter);
-      callAISummaryApi(suggestion);
+  const searchSuggestionPressHandler = useCallback(
+    (suggestion: SearchCategorySuggestion) => {
+      if (suggestion.category_id) {
+        navigation.navigate('Category', {
+          id: suggestion.category_id,
+          name: suggestion.category_title,
+          url: 'missing category url on suggestion',
+        });
+      }
     },
-    [setQuery, search, callAISummaryApi, filter],
+    [navigation],
   );
-
   const renderItem = useCallback(
     (item: ListRenderItemInfo<Article>) => {
       return <ArticleFeedItem article={item.item} onPress={articlePressHandler} />;
@@ -115,7 +106,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
   );
 
   let content;
-  if (loadingState.isError) {
+  if (error) {
     content = (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText} type="error">
@@ -125,14 +116,13 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
           title={strings.tryAgain}
           color={colors.primary}
           onPress={() => {
-            setAutocompleteEnabled(false);
-            search(query, filter);
-            callAISummaryApi(query);
+            retrySearch();
+            retryAISummary();
           }}
         />
       </View>
     );
-  } else if (loadingState.idle || (loadingState.isFetching && searchResults.length === 0)) {
+  } else if (isLoading || (!isFetched && searchResults.length === 0)) {
     content = <ScreenLoader />;
   } else {
     content = (
@@ -142,21 +132,30 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={1}
         data={searchResults}
+        ListHeaderComponentStyle={{flex: 1}}
         ListHeaderComponent={
-          <View style={{paddingTop: 12}}>
-            <SearchAISummary isLoading={summaryLoadingState.isFetching} summary={aiSummary} />
+          <View style={{flex: 1}}>
+            {aiSummaryEnabled && (
+              <View style={{paddingTop: 12}}>
+                <SearchAISummary isLoading={aiSummaryLoading} summary={aiSummary} />
+              </View>
+            )}
+            <SearchSuggestions
+              suggestions={similar_categories}
+              onSearchSuggestionClick={searchSuggestionPressHandler}
+            />
           </View>
         }
-        ListFooterComponent={
-          hasMore ? (
-            <View>
-              {loadingState.isFetching && <ScreenLoader />}
-              {!loadingState.isFetching && !loadingState.isError && (
-                <MoreArticlesButton onPress={loadMore} customText="Daugiau rezultatų" />
-              )}
-            </View>
-          ) : null
-        }
+        // ListFooterComponent={
+        //   hasMore ? (
+        //     <View>
+        //       {loadingState.isFetching && <ScreenLoader />}
+        //       {!loadingState.isFetching && !loadingState.isError && (
+        //         <MoreArticlesButton onPress={loadMore} customText="Daugiau rezultatų" />
+        //       )}
+        //     </View>
+        //   ) : null
+        // }
         ListEmptyComponent={
           <View style={styles.noResultsContainer}>
             <Text style={styles.noResultsText} fontFamily="PlayfairDisplay-Regular">
@@ -183,49 +182,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
             <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
           </ActionButton>
         }
-        subHeader={
-          <View style={{...styles.searchBar, backgroundColor: colors.card}}>
-            <View style={{...styles.searchInputHolder, backgroundColor: colors.background}}>
-              <TextInput
-                style={{...styles.searchInput, color: colors.text}}
-                multiline={false}
-                placeholder={'Paieška'}
-                numberOfLines={1}
-                onEndEditing={() => {
-                  setAutocompleteEnabled(false);
-                }}
-                autoCorrect={false}
-                onSubmitEditing={() => {
-                  setAutocompleteEnabled(false);
-                  search(query, filter);
-                  callAISummaryApi(query);
-                }}
-                returnKeyType="search"
-                placeholderTextColor={colors.textDisbled}
-                onChangeText={(text) => {
-                  setQuery(text);
-                  setAutocompleteEnabled(true);
-                }}
-                value={query}
-              />
-              <BorderlessButton
-                style={styles.searchButton}
-                onPress={() => {
-                  search(query, filter);
-                  setAutocompleteEnabled(false);
-                  callAISummaryApi(query);
-                }}>
-                <IconSearch size={dim.appBarIconSize} color={colors.headerTint} />
-              </BorderlessButton>
-            </View>
-
-            {autocompleteEnabled && (
-              <View style={{position: 'absolute', top: subHeaderHeight, left: 0, right: 0}}>
-                <SearchAutocomplete query={query} onItemPress={autocompletePressHandler} />
-              </View>
-            )}
-          </View>
-        }
+        subHeader={<SearchBar onQueryChange={setQuery} subHeaderHeight={subHeaderHeight} />}
       />
       <SafeAreaView edges={['bottom']}>{content}</SafeAreaView>
     </View>
@@ -243,44 +200,6 @@ const styles = StyleSheet.create({
   },
   article: {
     padding: 8,
-  },
-
-  searchBar: {
-    padding: 8,
-    paddingVertical: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-  },
-  searchInputHolder: {
-    borderRadius: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 2,
-  },
-  searchInput: {
-    padding: 8,
-    fontSize: 17,
-    flex: 1,
-  },
-  searchButton: {
-    height: '100%',
-    aspectRatio: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   errorContainer: {
     flex: 1,

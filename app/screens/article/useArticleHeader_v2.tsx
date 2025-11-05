@@ -1,4 +1,4 @@
-import {useFocusEffect, useIsFocused, useNavigation} from '@react-navigation/core';
+import {useIsFocused, useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
 import {Animated, ScrollViewProps, StyleSheet, View} from 'react-native';

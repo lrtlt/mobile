@@ -54,7 +54,7 @@ export const useDeleteFavoriteUserArticle = () =>
       return response.data;
     },
     onMutate: async (articleId: number | string) => {
-      await queryClient.cancelQueries({queryKey: [QUERY_KEY]});
+      // await queryClient.cancelQueries({queryKey: [QUERY_KEY]});
       const previousIds = queryClient.getQueryData([QUERY_KEY]);
       queryClient.setQueryData([QUERY_KEY], (old: number[]) => old.filter((id) => id !== articleId));
       return {previousIds, articleId};
@@ -82,7 +82,7 @@ export const useAddFavoriteUserArticle = () =>
       return response.data;
     },
     onMutate: async (articleId: number | string) => {
-      await queryClient.cancelQueries({queryKey: [QUERY_KEY]});
+      // await queryClient.cancelQueries({queryKey: [QUERY_KEY]});
       const previousIds = queryClient.getQueryData([QUERY_KEY]);
       queryClient.setQueryData([QUERY_KEY], (old: number[]) => [...old, articleId]);
 

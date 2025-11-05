@@ -1,42 +1,23 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text, TouchableDebounce} from '../../components';
 import Divider from '../../components/divider/Divider';
-import useAutocompleteApi from './useAutocompleteApi';
-import {debounce} from 'lodash';
 import {useTheme} from '../../Theme';
 import Animated, {CurvedTransition} from 'react-native-reanimated';
 import {IconSearch} from '../../components/svg';
+import {useAutocomplete} from '../../api/hooks/useAutocomplete';
 
 interface Props {
   query?: string;
   onItemPress: (suggestion: string) => void;
 }
 
-const debounceAPICall = debounce(
-  (f: () => void) => {
-    return f();
-  },
-  300,
-  {
-    leading: true,
-    trailing: true,
-  },
-);
-
 const SearchAutocomplete: React.FC<React.PropsWithChildren<Props>> = ({query, onItemPress}) => {
-  const {suggestions, callAutocompleteApi} = useAutocompleteApi();
+  const {data: response, error} = useAutocomplete(query ?? '');
+  const suggestions = response?.querySuggestions?.map((s) => s.suggestion) ?? [];
   const {colors} = useTheme();
 
-  useEffect(() => {
-    if (query && query.length > 1) {
-      debounceAPICall(() => {
-        callAutocompleteApi(query);
-      });
-    }
-  }, [query]);
-
-  if (!suggestions || suggestions.length === 0 || !query || query.length < 2) {
+  if (suggestions.length === 0 || error || !query || query.length < 2) {
     return null;
   }
 

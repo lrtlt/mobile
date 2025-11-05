@@ -37,11 +37,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    margin: 4,
     marginTop: 8,
+    gap: 8,
   },
   suggestion: {
     overflow: 'hidden',
-    margin: 4,
+    maxWidth: '100%',
   },
 });

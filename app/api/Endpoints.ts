@@ -1,4 +1,4 @@
-import {AIUserEvent, SEARCH_TYPE_AUDIO, SearchFilter} from './Types';
+import {AIUserEvent, SEARCH_TYPE_AUDIO} from './Types';
 
 const BASE_URL = 'https://www.lrt.lt/api/json/';
 
@@ -55,22 +55,6 @@ export const categoryHomeGet = (id: number | string) => {
 
 export const categoryTopsGet = (id: number | string, count: number) => {
   return `${BASE_URL}category/top?id=${id}&count=${count}`;
-};
-
-/**
- * Return array of articles by search filter
- */
-export const searchArticles = (query: string, filter: SearchFilter) => {
-  let url = `${BASE_URL}search?q=${query}&type=${filter.type}&section=${filter.section}&days=${filter.days}&count=50`;
-
-  if (filter.searchExactPhrase) {
-    url += '&exact=1';
-  }
-  if (filter.searchOnlyHeritage) {
-    url += '&heritage=1';
-  }
-
-  return url;
 };
 
 /**
@@ -186,8 +170,3 @@ export const postSearchUserEvent = (event: AIUserEvent): string => {
       return `https://ai-search.lrt.lt/v1/user-events/media-complete`;
   }
 };
-
-export const getAISummary = (query: string) => `https://ai-search.lrt.lt/v1/lt/ai-overview?query=${query}`;
-
-export const fetchAIAutocomplete = (query: string) =>
-  `https://ai-search.lrt.lt/v1/lt/search/autocomplete?query=${query}&maxSuggestions=6&minQueryLength=1`;

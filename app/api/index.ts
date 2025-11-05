@@ -9,10 +9,8 @@ import {
   categoryGet,
   categoryHomeGet,
   counter,
-  fetchAIAutocomplete,
   genreGet,
   getAISearchResults,
-  getAISummary,
   getDailyQuestion,
   getMediatekaArticlesBySeason,
   getRadiotekaArticleByUrl,
@@ -27,13 +25,10 @@ import {
   postSearchUserEvent,
   putDailyQuestionVote,
   radiotekaGet,
-  searchArticles,
 } from './Endpoints';
 import {get, post, put} from './HttpClient';
 import {
-  AIAutomcompleteResponse,
   AISearchResponse,
-  AISummaryResponse,
   AIUserEvent,
   AIUserEventResponse,
   ArticleContentResponse,
@@ -53,7 +48,6 @@ import {
   PopularArticlesResponse,
   RadiotekaArticle,
   RadiotekaResponse,
-  SearchFilter,
   SearchResponse,
 } from './Types';
 
@@ -67,9 +61,6 @@ export const fetchMediatekaApiV2 = () => get<MediatekaV2DataResponse>(mediatekaG
 
 export const fetchArticle = (articleId: number | string, isMedia?: boolean) =>
   get<ArticleContentResponse>(articleGet(articleId, isMedia));
-
-export const fetchArticleSearch = (q: string, filter: SearchFilter) =>
-  get<SearchResponse>(searchArticles(q, filter));
 
 export const fetchArticlesByGenre = (genreId: number | string, count: number) =>
   get<ArticleSearchResponse>(articlesByGenre(genreId, count));
@@ -152,10 +143,6 @@ export const fetchAISearchResults = (options: {
 
 export const sendSearchUserEvent = (event: AIUserEvent) =>
   post<AIUserEventResponse>(postSearchUserEvent(event), event.data);
-
-export const fetchAISummary = (query: string) => get<AISummaryResponse>(getAISummary(query));
-
-export const fetchAutocomplete = (query: string) => get<AIAutomcompleteResponse>(fetchAIAutocomplete(query));
 
 export const fetchMenuItemsV2 = async (): Promise<Menu2Response> => {
   const snapshot = await getFirestore().collection('internal').doc('app-menu-v2').get();
