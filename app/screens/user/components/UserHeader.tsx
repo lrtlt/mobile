@@ -22,7 +22,14 @@ const UserHeader: React.FC = () => {
 
   if (!user) {
     return (
-      <TouchableDebounce onPress={authorize}>
+      <TouchableDebounce
+        onPress={() =>
+          authorize({
+            //"openid profile email" are default scopes
+            //"offline_access" is needed to get refresh token
+            scope: 'openid profile email offline_access',
+          }).then(console.log)
+        }>
         <View style={styles.container}>
           <View
             style={{
