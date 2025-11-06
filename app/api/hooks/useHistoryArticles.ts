@@ -16,13 +16,13 @@ type HistoryArticleResponse = {
   }[];
 };
 
-export const useHistoryUserArticles = (page: number) => {
+export const useHistoryUserArticles = (page: number, count?: number) => {
   const {user} = useAuth0();
   const {history} = useArticleStorageStore();
   const localHistoryArticleIds = history.map((item) => (isMediaArticle(item) ? item.id : item.article_id));
 
   const {data} = useQuery({
-    queryKey: [QUERY_KEY, page],
+    queryKey: [QUERY_KEY, page, count],
     queryFn: async ({signal}) => {
       const response = await HttpClient.get<HistoryArticleResponse>(
         `https://www.lrt.lt/servisai/authrz/user/history/${page}`,
@@ -30,7 +30,12 @@ export const useHistoryUserArticles = (page: number) => {
           signal,
         },
       );
-      return response.articles.map((item) => item.articleId);
+
+      if (count) {
+        return response.articles.splice(0, count).map((item) => item.articleId);
+      } else {
+        return response.articles.map((item) => item.articleId);
+      }
     },
     placeholderData: keepPreviousData,
     staleTime: DEFAULT_STALE_TIME,

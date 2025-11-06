@@ -18,7 +18,7 @@ const {width} = Dimensions.get('window');
 const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
-  const {data, error} = useHistoryUserArticles(1);
+  const {data, error} = useHistoryUserArticles(1, 6);
   const {colors} = useTheme();
 
   const onMorePress = useCallback(() => {

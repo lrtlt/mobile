@@ -19,8 +19,9 @@ const useAuthInterceptor = () => {
     }
 
     const idTokenProvider = async () => {
-      if (await hasValidCredentials()) {
-        const credentials = await getCredentials();
+      const minTtlSeconds = 60 * 30; // 30 minutes
+      if (await hasValidCredentials(minTtlSeconds)) {
+        const credentials = await getCredentials('openid profile email offline_access');
         return credentials!.idToken;
       } else {
         throw new Error('No valid credentials');
