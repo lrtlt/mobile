@@ -8,6 +8,9 @@ declare module 'react-native-config' {
     CHARTBEAT_ACCOUNT_ID: string;
     CHARTBEAT_DASHBOARD_ID: string;
     THEO_PLAYER_LICENCE: string;
+    AUTH0_DOMAIN: string;
+    AUTH0_CLIENT_ID: string;
+    AUTH0_AUDIENCE: string;
   }
 
   export const Config: NativeConfig;

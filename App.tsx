@@ -18,6 +18,7 @@ import useAuthInterceptor from './app/util/useAuthInterceptor';
 import queryClient from './AppQueryClient';
 import {QueryClientProvider} from '@tanstack/react-query';
 import useQueryAppStateSync from './app/util/useNetworkStatus';
+import Config from 'react-native-config';
 
 enableFreeze(true);
 
@@ -45,7 +46,7 @@ const App: React.FC = () => {
 export default () => (
   <GestureHandlerRootView style={styles.flex}>
     <QueryClientProvider client={queryClient}>
-      <Auth0Provider domain={'dev-lrt.eu.auth0.com'} clientId={'rhwPI1fTnayadAII1lKBM7pZVCRLwTbE'}>
+      <Auth0Provider domain={Config.AUTH0_DOMAIN} clientId={Config.AUTH0_CLIENT_ID}>
         <App />
       </Auth0Provider>
     </QueryClientProvider>

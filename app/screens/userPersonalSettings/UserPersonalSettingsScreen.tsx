@@ -11,6 +11,7 @@ import queryClient from '../../../AppQueryClient';
 import {useDeleteCurrentUser} from '../../api/hooks/useUser';
 import ConfirmModal from '../weather/ConfirmModal';
 import UserHeader from '../user/components/UserHeader';
+import {getAnalytics, logEvent} from '@react-native-firebase/analytics';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
@@ -26,6 +27,7 @@ const UserPersonalSettingsScreen: React.FC<React.PropsWithChildren<Props>> = ({n
   const handleLogout = async () => {
     if (user) {
       await clearSession();
+      logEvent(getAnalytics(), 'app_lrt_lt_user_signed_out');
       queryClient.removeQueries();
       queryClient.invalidateQueries();
       navigation.pop();
@@ -35,6 +37,7 @@ const UserPersonalSettingsScreen: React.FC<React.PropsWithChildren<Props>> = ({n
   const handleDeleteAccount = async () => {
     try {
       await deleteUser();
+      logEvent(getAnalytics(), 'app_lrt_lt_user_account_deleted');
       queryClient.removeQueries();
       await clearSession();
       navigation.popToTop();

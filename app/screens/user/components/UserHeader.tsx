@@ -8,9 +8,11 @@ import {useTheme} from '../../../Theme';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
+import Config from 'react-native-config';
+import {logEvent, getAnalytics} from '@react-native-firebase/analytics';
 
 const UserHeader: React.FC = () => {
-  const {user, authorize} = useAuth0();
+  const {user, authorize, saveCredentials} = useAuth0();
   const {colors} = useTheme();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
@@ -28,8 +30,10 @@ const UserHeader: React.FC = () => {
             //"openid profile email" are default scopes
             //"offline_access" is needed to get refresh token
             scope: 'openid profile email offline_access',
-            audience: 'https://www.lrt.lt/servisai/authrz',
-          }).then(console.log)
+            audience: Config.AUTH0_AUDIENCE,
+          })
+            .then(saveCredentials)
+            .then(() => logEvent(getAnalytics(), 'app_lrt_lt_user_signed_in'))
         }>
         <View style={styles.container}>
           <View
