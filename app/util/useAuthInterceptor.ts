@@ -22,7 +22,9 @@ const useAuthInterceptor = () => {
       const minTtlSeconds = 60 * 30; // 30 minutes
       if (await hasValidCredentials(minTtlSeconds)) {
         const credentials = await getCredentials('openid profile email offline_access');
-        return credentials!.idToken;
+        // console.log('credentials', credentials);
+        // console.log('expiresAt', new Date(credentials.expiresAt * 1000).toString());
+        return credentials!.accessToken;
       } else {
         throw new Error('No valid credentials');
       }

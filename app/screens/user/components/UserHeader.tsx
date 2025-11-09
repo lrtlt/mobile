@@ -28,6 +28,7 @@ const UserHeader: React.FC = () => {
             //"openid profile email" are default scopes
             //"offline_access" is needed to get refresh token
             scope: 'openid profile email offline_access',
+            audience: 'https://www.lrt.lt/servisai/authrz',
           }).then(console.log)
         }>
         <View style={styles.container}>
