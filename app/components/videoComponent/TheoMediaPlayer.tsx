@@ -81,6 +81,8 @@ const makeSource = (
   sources: [
     {
       src: uri,
+      // src: 'https://livesim.dashif.org/livesim/chunkdur_1/ato_7/testpic4_8s/Manifest.mpd',
+      // type: 'application/dash+xml',
       // src: 'https://cdn.theoplayer.com/video/elephants-dream/playlistCorrectionENG.m3u8',
       // type: 'application/x-mpegurl',
     },
