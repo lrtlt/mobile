@@ -42,7 +42,7 @@ export const useHistoryUserArticles = (page: number, count?: number) => {
     enabled: !!user,
   });
 
-  const articleIds = HttpClient.isAuthenticated() ? data ?? [] : localHistoryArticleIds;
+  const articleIds = HttpClient.isAuthenticated() ? data : localHistoryArticleIds;
   return useSearchArticlesByIds(articleIds);
 };
 

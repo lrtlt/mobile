@@ -18,7 +18,7 @@ const {width} = Dimensions.get('window');
 const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
-  const {data, error} = useHistoryUserArticles(1, 6);
+  const {data, error, isPending} = useHistoryUserArticles(1, 6);
   const {colors} = useTheme();
 
   const onMorePress = useCallback(() => {
@@ -29,7 +29,7 @@ const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
     return null;
   }
 
-  if (!data) {
+  if (!data || isPending) {
     return (
       <GradientShimmer
         style={styles.shimmerContainer}
@@ -48,7 +48,7 @@ const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
       <View style={[styles.headerContainer, {borderColor: colors.border}]}>
         <IconHistory size={32} color={colors.iconInactive} />
         <Text style={styles.headerText}>ISTORIJA</Text>
-        {data.items.length && (
+        {data.items.length > 0 && (
           <TouchableDebounce onPress={onMorePress}>
             <Text style={[styles.moreText, {color: colors.tertiary}]}>Daugiau</Text>
           </TouchableDebounce>

@@ -5,9 +5,9 @@ import {ArticleSearchResponse} from '../Types';
 const QUERY_KEY = 'searchArticles';
 const DEFAULT_STALE_TIME = 1000 * 60 * 5; // 5 minutes
 
-export const useSearchArticlesByIds = (ids: string[] | number[]) =>
+export const useSearchArticlesByIds = (ids?: string[] | number[]) =>
   useQuery({
-    queryKey: [QUERY_KEY, ...ids],
+    queryKey: [QUERY_KEY, ...(ids ?? [])],
     queryFn: async ({queryKey, signal}) => {
       const [_key, ...articleIds] = queryKey;
 
@@ -26,6 +26,7 @@ export const useSearchArticlesByIds = (ids: string[] | number[]) =>
       );
       return response;
     },
+    enabled: !!ids,
     placeholderData: keepPreviousData,
     staleTime: DEFAULT_STALE_TIME,
   });
