@@ -48,11 +48,17 @@ const UserHistory: React.FC<PropsWithChildren<Props>> = () => {
       <View style={[styles.headerContainer, {borderColor: colors.border}]}>
         <IconHistory size={32} color={colors.iconInactive} />
         <Text style={styles.headerText}>ISTORIJA</Text>
-        <TouchableDebounce onPress={onMorePress}>
-          <Text style={[styles.moreText, {color: colors.tertiary}]}>Daugiau</Text>
-        </TouchableDebounce>
+        {data.items.length && (
+          <TouchableDebounce onPress={onMorePress}>
+            <Text style={[styles.moreText, {color: colors.tertiary}]}>Daugiau</Text>
+          </TouchableDebounce>
+        )}
       </View>
-      <HistoryArticleList articles={data?.items ?? []} />
+      {data.items.length == 0 ? (
+        <Text style={styles.emptyText}>Jūsų istorija tuščia.</Text>
+      ) : (
+        <HistoryArticleList articles={data.items} />
+      )}
     </View>
   );
 };
@@ -88,5 +94,9 @@ const styles = StyleSheet.create({
   moreText: {
     fontSize: 14,
     textTransform: 'uppercase',
+  },
+  emptyText: {
+    padding: 12,
+    fontSize: 16,
   },
 });

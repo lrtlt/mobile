@@ -10,6 +10,14 @@ export const useSearchArticlesByIds = (ids: string[] | number[]) =>
     queryKey: [QUERY_KEY, ...ids],
     queryFn: async ({queryKey, signal}) => {
       const [_key, ...articleIds] = queryKey;
+
+      if (articleIds.length === 0) {
+        const result: ArticleSearchResponse = {
+          items: [],
+        };
+        return result;
+      }
+
       const response = await HttpClient.get<ArticleSearchResponse>(
         `https://www.lrt.lt/api/json/search?ids=${articleIds.join(',')}`,
         {
@@ -20,5 +28,4 @@ export const useSearchArticlesByIds = (ids: string[] | number[]) =>
     },
     placeholderData: keepPreviousData,
     staleTime: DEFAULT_STALE_TIME,
-    enabled: ids.length > 0,
   });
