@@ -5,8 +5,6 @@ function SvgComponent(props) {
     <Svg
       width={props.size}
       height={props.size}
-      scaleX={1.2}
-      scaleY={1.2}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

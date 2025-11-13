@@ -102,6 +102,8 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
 
   useEffect(() => {
     navigation.setOptions({
+      headerLeftContainerStyle: {paddingStart: 4},
+      headerRightContainerStyle: {paddingEnd: 4},
       headerLeft: () => (
         <ActionButton
           onPress={() => navigation.toggleDrawer()}
@@ -120,7 +122,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           {user ? (
             <UserAvatar size={dim.appBarIconSize + 4} />
           ) : (
-            <IconUserNew name="user" size={dim.appBarIconSize + 2} color={colors.headerTint} />
+            <IconUserNew name="user" size={dim.appBarIconSize + 4} color={colors.headerTint} />
           )}
         </ActionButton>
       ),

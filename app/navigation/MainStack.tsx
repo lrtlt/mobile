@@ -159,10 +159,12 @@ export default () => {
 
   return (
     <Stack.Navigator
+      key={isOfflineMode ? 'offline' : 'online'}
       initialRouteName={isOfflineMode ? 'Offline' : 'Home'}
       screenOptions={{
         presentation: 'card',
         headerBackButtonDisplayMode: 'minimal',
+
         // headerBackTitleVisible: false,
         // headerRightContainerStyle: {paddingEnd: 4},
         headerTitle: '',

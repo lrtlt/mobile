@@ -81,7 +81,8 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
+    padding: 16,
+    paddingHorizontal: 24,
     gap: 8,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },

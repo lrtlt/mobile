@@ -3,7 +3,7 @@ import {View, StyleSheet} from 'react-native';
 import {Text, TouchableDebounce} from '../../../components';
 import {useAuth0} from 'react-native-auth0';
 import UserAvatar from './UserAvatar';
-import {IconUserNew} from '../../../components/svg';
+import {IconSettings2, IconUserNew} from '../../../components/svg';
 import {useTheme} from '../../../Theme';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -56,15 +56,18 @@ const UserHeader: React.FC = () => {
   return (
     <TouchableDebounce onPress={handleProfileSettings}>
       <View style={[styles.container, {borderColor: colors.border}]}>
-        <UserAvatar size={60} />
-        <View>
-          <Text style={[styles.emailText, {}]} fontFamily="SourceSansPro-SemiBold">
-            {user?.name}
-          </Text>
-          <Text style={[styles.emailText]} type="secondary">
-            {userEmail}
-          </Text>
+        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', gap: 16}}>
+          <UserAvatar size={40} />
+          <View>
+            <Text style={[styles.emailText, {}]} fontFamily="SourceSansPro-SemiBold">
+              {user?.name}
+            </Text>
+            <Text style={[styles.emailText]} type="secondary">
+              {userEmail}
+            </Text>
+          </View>
         </View>
+        <IconSettings2 size={18} color={colors.iconInactive} />
       </View>
     </TouchableDebounce>
   );
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
     height: 73,
     gap: 16,
     borderWidth: StyleSheet.hairlineWidth,
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
     borderRadius: 8,
   },
   emailText: {

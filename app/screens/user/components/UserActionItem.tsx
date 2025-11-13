@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 64,
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
     borderRadius: 8,
     borderWidth: StyleSheet.hairlineWidth,
   },

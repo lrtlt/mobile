@@ -40,7 +40,7 @@ const UserAvatar: React.FC<Props> = ({size}) => {
         <FastImage
           source={{uri: user.picture}}
           style={{...styles.avatarContainer, width: size, height: size}}
-          resizeMode="contain"
+          resizeMode="cover"
         />
       ) : (
         <View

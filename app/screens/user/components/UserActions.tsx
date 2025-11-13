@@ -50,8 +50,7 @@ const UserActions: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 8,
-    gap: 12,
+    gap: 16,
   },
 });
 
