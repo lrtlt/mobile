@@ -139,7 +139,7 @@ const SearchDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
           drawerType: 'slide',
           drawerHideStatusBarOnOpen: false,
         }}
-        drawerContent={(props) => <SearchFilterDrawer {...props} />}>
+        drawerContent={(props) => <SearchFilterDrawer />}>
         <SearchDrawer.Screen
           name="SearchScreen"
           component={Screens.SearchScreen}
