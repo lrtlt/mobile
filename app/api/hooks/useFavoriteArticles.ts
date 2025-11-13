@@ -75,7 +75,6 @@ export const useDeleteFavoriteUserArticle = () =>
 export const useAddFavoriteUserArticle = () =>
   useMutation({
     mutationFn: async (articleId: number | string) => {
-      console.log('Adding article to favorites');
       const response = await HttpClient.put<{}>(
         `https://www.lrt.lt/servisai/authrz/user/articles/${articleId}`,
       );
@@ -104,7 +103,19 @@ export const useAddFavoriteUserArticle = () =>
 
 export const useFavoriteArticleSync = () => {
   const {savedArticles, removeArticle} = useArticleStorageStore.getState();
-  const addFavoriteArticleMutation = useAddFavoriteUserArticle();
+
+  //We create a mutation for adding favorite articles here.
+  //Because useAddFavoriteUserArticle is optimistic and updates the cache immediately,
+  const addFavoriteArticleMutation = useMutation({
+    mutationFn: async (articleId: number | string) => {
+      console.log('Syncing article id:', articleId);
+      const response = await HttpClient.put<{}>(
+        `https://www.lrt.lt/servisai/authrz/user/articles/${articleId}`,
+      );
+      return response.data;
+    },
+    retry: 2,
+  });
 
   return useMutation({
     mutationFn: async () => {
@@ -116,7 +127,9 @@ export const useFavoriteArticleSync = () => {
           return addFavoriteArticleMutation.mutateAsync(article.article_id);
         }
       });
+      console.log('Article sync mutations created:', mutations.length);
       await Promise.all(mutations);
+      console.log('Article sync mutations executed:', mutations.length);
       return savedArticles.length;
     },
     onSuccess: (count) => {
@@ -133,6 +146,9 @@ export const useFavoriteArticleSync = () => {
           removeArticle(article.article_id, true);
         }
       });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({queryKey: [QUERY_KEY]});
     },
   });
 };
