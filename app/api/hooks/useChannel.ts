@@ -22,8 +22,7 @@ export const useChannelById = (id: number | string) => {
       });
       return response;
     },
-    staleTime: 1000 * 60 * 2, // 1 minutes
-    refetchInterval: 1000 * 60 * 2, // 1 minutes
+    staleTime: 1000 * 60 * 2, // 2 minutes
   });
 };
 

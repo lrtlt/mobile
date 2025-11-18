@@ -95,11 +95,13 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   const shouldRenderTVBar = !!data || !!error;
 
   return (
-    <SafeAreaView style={styles.screen} edges={['left', 'right']}>
+    <SafeAreaView style={styles.screen} edges={['left', 'right', 'bottom']}>
       <MyScrollView style={styles.scrollContainer}>
         <View style={styles.container}>
-          {content}
-          {shouldRenderTVBar && <ScrollingChannels onChannelPress={onChannelPressHandler} />}
+          <View collapsable={false}>{content}</View>
+          <View collapsable={false}>
+            {shouldRenderTVBar && <ScrollingChannels onChannelPress={onChannelPressHandler} />}
+          </View>
         </View>
       </MyScrollView>
     </SafeAreaView>

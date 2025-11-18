@@ -28,7 +28,16 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   const articles = data?.articles_list || [];
 
   const scaleValues = articles.map(() => useSharedValue(1));
+
   const {setPlaylist} = useMediaPlayer();
+
+  const selectedIndexSafe = Math.min(selectedIndex, articles.length - 1);
+
+  useEffect(() => {
+    if (selectedIndex >= articles.length) {
+      setSelectedIndex(Math.max(0, articles.length - 1));
+    }
+  }, [articles.length]);
 
   const playItem = useCallback(
     (index: number) => {
@@ -39,22 +48,22 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
         ),
       );
     },
-    [articles],
+    [articles.length],
   );
 
   useEffect(() => {
     // Reset all scales to 1
     scaleValues.forEach((scale, index) => {
-      scale.value = withTiming(index === selectedIndex ? 1.1 : 1, {duration: 200});
+      scale.value = withTiming(index === selectedIndexSafe ? 1.1 : 1, {duration: 200});
     });
-  }, [selectedIndex]);
+  }, [selectedIndexSafe]);
 
   const getAnimatedStyle = (index: number) => {
     return useAnimatedStyle(() => {
       return {
         transform: [{scale: scaleValues[index].value}],
         borderWidth: 2,
-        borderColor: index === selectedIndex ? '#FFFFFF' : 'transparent',
+        borderColor: index === selectedIndexSafe ? '#FFFFFF' : 'transparent',
       };
     });
   };
@@ -63,19 +72,20 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
     setSelectedIndex(index);
   }, []);
 
-  const imgUrl = buildImageUri(
-    IMG_SIZE_XXL,
-    articles[selectedIndex].hero_photo?.img_path_prefix ?? articles[selectedIndex].img_path_prefix,
-    articles[selectedIndex].hero_photo?.img_path_postfix ?? articles[selectedIndex].img_path_postfix,
-  );
-
-  const aspectRatio = articles[selectedIndex].hero_photo?.w_h ?? articles[selectedIndex].img_w_h ?? 1.77;
-
-  const durationMinutes = Math.floor((articles[selectedIndex].media_duration_sec ?? 0) / 60);
-
   if (articles?.length === 0) {
     return null;
   }
+
+  const imgUrl = buildImageUri(
+    IMG_SIZE_XXL,
+    articles[selectedIndexSafe].hero_photo?.img_path_prefix ?? articles[selectedIndexSafe].img_path_prefix,
+    articles[selectedIndexSafe].hero_photo?.img_path_postfix ?? articles[selectedIndexSafe].img_path_postfix,
+  );
+
+  const aspectRatio =
+    articles[selectedIndexSafe].hero_photo?.w_h ?? articles[selectedIndexSafe].img_w_h ?? 1.77;
+
+  const durationMinutes = Math.floor((articles[selectedIndexSafe].media_duration_sec ?? 0) / 60);
 
   return (
     <ThemeProvider forceTheme={themeLight}>
@@ -108,15 +118,15 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
               {durationMinutes}min.
             </Text>
             <Text style={styles.title} fontFamily="PlayfairDisplay-Regular">
-              {articles[selectedIndex].title}
+              {articles[selectedIndexSafe].title}
             </Text>
-            <Text style={styles.subtitle}>{articles[selectedIndex].category_title} </Text>
+            <Text style={styles.subtitle}>{articles[selectedIndexSafe].category_title} </Text>
             <View style={styles.buttonContainer}>
-              <PlayButton onPress={() => playItem(selectedIndex)} />
+              <PlayButton onPress={() => playItem(selectedIndexSafe)} />
               <TouchableDebounce
                 style={styles.moreButton}
                 onPress={() => {
-                  onArticlePress?.(articles[selectedIndex]);
+                  onArticlePress?.(articles[selectedIndexSafe]);
                 }}>
                 <Text style={styles.moreButtonText}>Daugiau</Text>
               </TouchableDebounce>

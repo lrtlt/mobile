@@ -11,8 +11,8 @@ export const useWeeklyProgram = () => {
       });
       return response;
     },
-    staleTime: 1000 * 60 * 1, // 1 minutes
-    refetchInterval: 1000 * 60 * 1, // 1 minutes
+    staleTime: 1000 * 60 * 2, // 2 minutes
+    refetchInterval: 1000 * 60 * 2, // 2 minutes
   });
 };
 
@@ -25,7 +25,7 @@ export const useCurrentProgram = () => {
       });
       return response;
     },
-    staleTime: 1000 * 60 * 1, // 1 minutes
-    refetchInterval: 1000 * 60 * 1, // 1 minutes
+    staleTime: 1000 * 60 * 2, // 2 minutes
+    refetchInterval: 1000 * 60 * 2, // 2 minutes
   });
 };
