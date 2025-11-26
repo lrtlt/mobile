@@ -23,8 +23,17 @@ const getAspectRatio = (w_h: string | number) => {
   return DEFAULT_ASPECT_RATIO;
 };
 
-const PhotoComponent = (photo: ArticlePhotoType, pressHandler?: (selectedPhoto: any) => void) => {
+interface PhotoComponentProps {
+  photo: ArticlePhotoType;
+  pressHandler?: (selectedPhoto: any) => void;
+}
+
+const PhotoComponent: React.FC<PhotoComponentProps> = ({photo, pressHandler}) => {
   const {colors} = useTheme();
+  const onPress = useCallback(() => {
+    pressHandler && pressHandler({type: 'photo', item: photo});
+  }, [photo, pressHandler]);
+
   return (
     <View
       style={{
@@ -32,11 +41,7 @@ const PhotoComponent = (photo: ArticlePhotoType, pressHandler?: (selectedPhoto: 
         backgroundColor: colors.photoBackground,
         flex: 1,
       }}>
-      <TouchableDebounce
-        style={styles.flex}
-        onPress={useCallback(() => {
-          pressHandler && pressHandler({type: 'photo', item: photo});
-        }, [photo, pressHandler])}>
+      <TouchableDebounce style={styles.flex} onPress={onPress}>
         {photo && (
           <CoverImage
             style={{
@@ -51,11 +56,17 @@ const PhotoComponent = (photo: ArticlePhotoType, pressHandler?: (selectedPhoto: 
   );
 };
 
-const PhotoWithOverlayComponent = (
-  photo: ArticlePhotoType,
-  pressHandler: (selectedPhoto: any) => void,
-  count: number,
-) => {
+interface PhotoWithOverlayComponentProps {
+  photo: ArticlePhotoType;
+  pressHandler: (selectedPhoto: any) => void;
+  count: number;
+}
+
+const PhotoWithOverlayComponent: React.FC<PhotoWithOverlayComponentProps> = ({
+  photo,
+  pressHandler,
+  count,
+}) => {
   const onPressHandler = useCallback(() => {
     pressHandler && pressHandler({type: 'photo', item: photo});
   }, [photo, pressHandler]);
@@ -63,7 +74,7 @@ const PhotoWithOverlayComponent = (
   return (
     <TouchableDebounce onPress={onPressHandler}>
       <View style={styles.imageContainer}>
-        {PhotoComponent(photo)}
+        <PhotoComponent photo={photo} />
 
         <View style={styles.imageCountOverlay}>
           <TextComponent style={styles.imageCountOverlayText} fontFamily="SourceSansPro-SemiBold">
@@ -86,20 +97,20 @@ const ArticleGallery: React.FC<React.PropsWithChildren<Props>> = ({data, itemSel
 
   return (
     <Stack space={4} paddingTop={8} paddingBottom={4}>
-      {data.length > 0 && PhotoComponent(data[0], itemSelectHandler)}
+      {data.length > 0 && <PhotoComponent photo={data[0]} pressHandler={itemSelectHandler} />}
       <Tiles space={4} columns={2} flex={'fluid'}>
-        {data.length > 1 && PhotoComponent(data[1], itemSelectHandler)}
-        {data.length > 2 && PhotoComponent(data[2], itemSelectHandler)}
+        {data.length > 1 && <PhotoComponent photo={data[1]} pressHandler={itemSelectHandler} />}
+        {data.length > 2 && <PhotoComponent photo={data[2]} pressHandler={itemSelectHandler} />}
       </Tiles>
       <Tiles space={4} columns={2} flex={'fluid'}>
-        {data.length > 3 && PhotoComponent(data[3], itemSelectHandler)}
-        {data.length > 4 && PhotoComponent(data[4], itemSelectHandler)}
+        {data.length > 3 && <PhotoComponent photo={data[3]} pressHandler={itemSelectHandler} />}
+        {data.length > 4 && <PhotoComponent photo={data[4]} pressHandler={itemSelectHandler} />}
       </Tiles>
-      {data[6]
-        ? PhotoWithOverlayComponent(data[5], itemSelectHandler, data.length - 6)
-        : data[5]
-        ? PhotoComponent(data[5], itemSelectHandler)
-        : null}
+      {data[6] ? (
+        <PhotoWithOverlayComponent photo={data[5]} pressHandler={itemSelectHandler} count={data.length - 6} />
+      ) : data[5] ? (
+        <PhotoComponent photo={data[5]} pressHandler={itemSelectHandler} />
+      ) : null}
     </Stack>
   );
 };
