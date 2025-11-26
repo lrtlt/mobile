@@ -17,7 +17,7 @@ import {MainDrawerParamList, MainStackParamList} from '../../navigation/MainStac
 import {StackNavigationProp} from '@react-navigation/stack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import SimpleArticleScreen from './tabScreen/simple/SimpleArticleScreen';
-import NotificationsModal from '../../components/notificationsModal/NotificationsModal';
+import WalkthroughModal from '../../components/walkthroughModal/WalkthroughModal';
 import useOnboardingLogic from './useOnboardingLogic';
 import {useNavigationStore} from '../../state/navigation_store';
 import CategoryHomeScreen from './tabScreen/category/CategoryHomeScreen';
@@ -115,7 +115,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
       headerRight: () => (
         <ActionButton
           onPress={async () => {
-            navigation.navigate('User');
+            navigation.navigate('User', {instantLogin: false});
           }}
           accessibilityLabel="Nustatymai"
           accessibilityHint="Atidaryti nustatymų ekraną">
@@ -218,7 +218,14 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           lazyPreloadDistance={0}
           initialLayout={{height: 0, width: Dimensions.get('screen').width}}
         />
-        <NotificationsModal visible={isVisible} onClose={onClose} />
+        <WalkthroughModal
+          visible={isVisible}
+          onClose={onClose}
+          onLogin={() => {
+            onClose();
+            navigation.navigate('User', {instantLogin: true});
+          }}
+        />
       </>
     </SafeAreaView>
   );

@@ -24,7 +24,7 @@ export type MainStackParamList = {
   Home: undefined;
   Offline: undefined;
   Settings: undefined;
-  User: undefined;
+  User: {instantLogin?: boolean};
   UserPersonalSettings: undefined;
   Notifications: undefined;
   Favorites: undefined;

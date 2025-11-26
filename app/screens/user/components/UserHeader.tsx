@@ -8,16 +8,17 @@ import {useTheme} from '../../../Theme';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
-import Config from 'react-native-config';
-import {logEvent, getAnalytics} from '@react-native-firebase/analytics';
+import useLogin from '../useLogin';
 
 interface UserHeaderProps {
   pressable?: boolean;
 }
 
 const UserHeader: React.FC<UserHeaderProps> = ({pressable = true}) => {
-  const {user, authorize, saveCredentials} = useAuth0();
+  const {user} = useAuth0();
+  const {login} = useLogin();
   const {colors} = useTheme();
+
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const userEmail = user?.email || '-';
@@ -28,19 +29,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({pressable = true}) => {
 
   if (!user) {
     return (
-      <TouchableDebounce
-        onPress={() =>
-          authorize({
-            //"openid profile email" are default scopes
-            //"offline_access" is needed to get refresh token
-            scope: 'openid profile email offline_access',
-            audience: Config.AUTH0_AUDIENCE,
-
-            ui_locales: 'lt',
-          } as any)
-            .then(saveCredentials)
-            .then(() => logEvent(getAnalytics(), 'app_lrt_lt_user_signed_in'))
-        }>
+      <TouchableDebounce onPress={login}>
         <View style={styles.container}>
           <View
             style={{

@@ -9,20 +9,30 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler';
 import UserHistory from './components/UserHistory';
 import {useAuth0} from 'react-native-auth0';
+import {RouteProp} from '@react-navigation/native';
+import useLogin from './useLogin';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
+  route: RouteProp<MainStackParamList, 'User'>;
 };
 
-const UserScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
+const UserScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const {user} = useAuth0();
   const {strings} = useTheme();
+  const {login} = useLogin();
 
   useEffect(() => {
     navigation.setOptions({
       headerTitle: user ? user.name : strings.user,
     });
   }, [user]);
+
+  useEffect(() => {
+    if (route.params?.instantLogin) {
+      login();
+    }
+  }, [route]);
 
   return (
     <SafeAreaView style={styles.root} edges={['bottom']}>
