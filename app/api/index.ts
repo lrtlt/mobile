@@ -145,7 +145,7 @@ export const sendSearchUserEvent = (event: AIUserEvent) =>
   post<AIUserEventResponse>(postSearchUserEvent(event), event.data);
 
 export const fetchMenuItemsV2 = async (): Promise<Menu2Response> => {
-  const snapshot = await getFirestore().collection('internal').doc('app-menu-v2').get();
+  const snapshot = await getFirestore().collection('internal').doc('app-menu-v2').get({source: 'server'});
   if (snapshot.exists()) {
     return snapshot.data() as Menu2Response;
   } else {

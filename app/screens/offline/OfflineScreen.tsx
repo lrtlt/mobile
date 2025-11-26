@@ -8,8 +8,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import TabBar from '../main/tabBar/TabBar';
 import {TabView, TabViewProps} from 'react-native-tab-view';
 import CachedArticlesScreen from './CachedArticlesScreen';
-import {HeaderBackButton} from '@react-navigation/elements';
-import {ActionButton} from '../../components';
+import {HeaderBackButton, HeaderButton} from '@react-navigation/elements';
 import {IconSettings} from '../../components/svg';
 import {logEvent, getAnalytics} from '@react-native-firebase/analytics';
 
@@ -44,14 +43,24 @@ const OfflineScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <HeaderBackButton onPress={onSetOnlinePress} tintColor={colors.headerTint} />,
+      headerLeftContainerStyle: {
+        padding: 0,
+        margin: 12,
+      },
+      headerLeft: () => (
+        <HeaderBackButton
+          style={{marginHorizontal: 0}}
+          onPress={onSetOnlinePress}
+          tintColor={colors.headerTint}
+        />
+      ),
       headerRight: () => (
-        <ActionButton
+        <HeaderButton
           onPress={() => navigation.navigate('Settings')}
           accessibilityLabel="Nustatymai"
-          accessibilityHint="Atidaryti nustatymų ekraną">
-          <IconSettings name="menu" size={dim.appBarIconSize} color={colors.headerTint} />
-        </ActionButton>
+          style={{aspectRatio: 1}}>
+          <IconSettings name="menu" size={dim.appBarIconSize + 2} color={colors.headerTint} />
+        </HeaderButton>
       ),
     });
   }, [navigation, colors]);
