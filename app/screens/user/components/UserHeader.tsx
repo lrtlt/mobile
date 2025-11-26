@@ -11,7 +11,11 @@ import {MainStackParamList} from '../../../navigation/MainStack';
 import Config from 'react-native-config';
 import {logEvent, getAnalytics} from '@react-native-firebase/analytics';
 
-const UserHeader: React.FC = () => {
+interface UserHeaderProps {
+  pressable?: boolean;
+}
+
+const UserHeader: React.FC<UserHeaderProps> = ({pressable = true}) => {
   const {user, authorize, saveCredentials} = useAuth0();
   const {colors} = useTheme();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -54,7 +58,7 @@ const UserHeader: React.FC = () => {
   }
 
   return (
-    <TouchableDebounce onPress={handleProfileSettings}>
+    <TouchableDebounce onPress={pressable ? handleProfileSettings : undefined}>
       <View style={[styles.container, {borderColor: colors.border}]}>
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', gap: 16}}>
           <UserAvatar size={40} />
@@ -67,7 +71,7 @@ const UserHeader: React.FC = () => {
             </Text>
           </View>
         </View>
-        <IconSettings2 size={18} color={colors.iconInactive} />
+        {pressable && <IconSettings2 size={18} color={colors.iconInactive} />}
       </View>
     </TouchableDebounce>
   );

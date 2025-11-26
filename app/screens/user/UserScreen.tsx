@@ -8,19 +8,21 @@ import UserActions from './components/UserActions';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler';
 import UserHistory from './components/UserHistory';
+import {useAuth0} from 'react-native-auth0';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
 };
 
 const UserScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
+  const {user} = useAuth0();
   const {strings} = useTheme();
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: strings.user,
+      headerTitle: user ? user.name : strings.user,
     });
-  }, []);
+  }, [user]);
 
   return (
     <SafeAreaView style={styles.root} edges={['bottom']}>

@@ -36,6 +36,7 @@ interface Dictionary {
   nightModeTitle: string;
   settings: string;
   user: string;
+  profile: string;
   textSizeTitle: string;
   videoNotAvailable: string;
   embedArticleHeader: string;
@@ -88,6 +89,7 @@ export const strings: Dictionary = {
   nightModeTitle: 'Nakties režimas',
   settings: 'NUSTATYMAI',
   user: 'VARTOTOJAS',
+  profile: 'PROFILIS',
   textSizeTitle: 'Šrifto dydis',
   videoNotAvailable: 'Vaizdo įrašas nepasiekiamas jūsų šalyje',
   embedArticleHeader: 'TAIP PAT SKAITYKITE',

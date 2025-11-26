@@ -49,7 +49,7 @@ const UserPersonalSettingsScreen: React.FC<React.PropsWithChildren<Props>> = ({n
   return (
     <SafeAreaView style={styles.root} edges={['bottom']}>
       <View style={styles.container}>
-        <UserHeader />
+        <UserHeader pressable={false} />
         <UserActionItem
           icon={<IcLogout size={32} color={colors.text} />}
           label="ATSIJUNGTI"
