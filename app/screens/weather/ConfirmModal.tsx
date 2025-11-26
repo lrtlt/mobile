@@ -28,9 +28,11 @@ const ConfirmModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
       onBackdropPress={props.onCancel}
       onBackButtonPress={props.onCancel}>
       <View style={{...styles.modalContentContainer, backgroundColor: colors.background}}>
-        <TextComponent style={styles.titleText} fontFamily="PlayfairDisplay-Regular">
-          {props.title}
-        </TextComponent>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TextComponent style={styles.titleText} fontFamily="PlayfairDisplay-Regular">
+            {props.title}
+          </TextComponent>
+        </View>
         <View style={styles.row}>
           <TouchableDebounce
             style={{
@@ -65,6 +67,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderRadius: 8,
+    gap: 12,
   },
   row: {
     flexDirection: 'row',
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 19,
-    width: '100%',
+    flex: 1,
     textAlign: 'center',
   },
 
