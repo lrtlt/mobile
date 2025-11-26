@@ -35,7 +35,9 @@ const UserHeader: React.FC<UserHeaderProps> = ({pressable = true}) => {
             //"offline_access" is needed to get refresh token
             scope: 'openid profile email offline_access',
             audience: Config.AUTH0_AUDIENCE,
-          })
+
+            ui_locales: 'lt',
+          } as any)
             .then(saveCredentials)
             .then(() => logEvent(getAnalytics(), 'app_lrt_lt_user_signed_in'))
         }>

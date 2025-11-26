@@ -16,6 +16,7 @@ import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import LiveBadge from '../liveBadge/LiveBadge';
 import {
   IconFullscreen,
+  IconFullscreenExit,
   IconPlayerForward,
   IconPlayerMute,
   IconPlayerPauseV2,
@@ -301,10 +302,14 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
         onPress={handleFullscreenClick}
         hitSlop={HIT_SLOP}
         activeOpacity={0.6}>
-        <IconFullscreen size={ICON_SIZE - 6} color={ICON_COLOR} />
+        {isFullScreen ? (
+          <IconFullscreenExit size={ICON_SIZE} color={ICON_COLOR} />
+        ) : (
+          <IconFullscreen size={ICON_SIZE - 6} color={ICON_COLOR} />
+        )}
       </TouchableOpacity>
     ),
-    [handleFullscreenClick],
+    [isFullScreen, handleFullscreenClick],
   );
 
   const ChromeCastControl = <CastButton style={[styles.fullScreenIcon, styles.center]} tintColor="white" />;

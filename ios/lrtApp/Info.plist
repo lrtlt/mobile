@@ -19,6 +19,11 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>lt</string>
+		<string>en</string>
+	</array>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
 	<array>

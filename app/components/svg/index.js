@@ -47,6 +47,7 @@ export {default as IconPlayerPrevious} from './ic_player_previous';
 export {default as IconPlayerNext} from './ic_player_next';
 export {default as IconPlayerClose} from './ic_player_close';
 export {default as IconFullscreen} from './ic_fullscreen';
+export {default as IconFullscreenExit} from './ic_fullscreen_exit';
 export {default as IconPhotoCamera} from './ic_photo_camera';
 export {default as IconScreenError} from './ic_screen_error';
 export {default as IconArrowLeft} from './ic_arrow_left';
