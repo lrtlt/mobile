@@ -8,6 +8,7 @@ import PagerView from 'react-native-pager-view';
 import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import WalkthroughDots from './WalkthroughDots';
 import {Page1, Page2, Page3, Page4} from './WalkthroughPages';
+import {useAuth0} from 'react-native-auth0';
 
 const PAGE_COUNT = 4;
 
@@ -18,6 +19,7 @@ interface WalkthroughModalProps {
 }
 
 const WalkthroughModal: React.FC<WalkthroughModalProps> = ({visible, onClose, onLogin}) => {
+  const {user} = useAuth0();
   const [pageIndex, setPageIndex] = useState<number>(0);
 
   const pagerRef = useRef<PagerView>(null);
@@ -120,12 +122,12 @@ const WalkthroughModal: React.FC<WalkthroughModalProps> = ({visible, onClose, on
           <View style={{width: 100, alignItems: 'flex-end'}}>
             {pageIndex === PAGE_COUNT - 1 ? (
               <TouchableDebounce
-                onPress={increment}
-                accessibilityLabel="Prisijungti"
-                accessibilityHint="Prisijungti prie paskyros">
+                onPress={user ? onClose : increment}
+                accessibilityLabel={user ? 'Prisijungti' : 'Uždaryti'}
+                accessibilityHint={user ? 'Prisijungti prie paskyros' : 'Uždaryti dialogo langą'}>
                 <View style={[styles.loginButton, {backgroundColor: 'black'}]}>
                   <Text style={[styles.buttonText, {color: 'white'}]} numberOfLines={1}>
-                    {'Prisijungti'}
+                    {user ? 'Uždaryti' : 'Prisijungti'}
                   </Text>
                 </View>
               </TouchableDebounce>
