@@ -33,8 +33,8 @@ export const Page3: React.FC<PropsWithChildren<{}>> = () => {
   return (
     <ImageTextPage
       image={image3}
-      title="Pasiekiama visuose įrenginiuose"
-      text="Jūsų nustatymai ir išsaugotas turinys keliauja su jumis – pradėkite telefone, tęskite planšetėje ar kompiuteryje."
+      title="Išsaugotas turinys ir istorija"
+      text="Žymėkitės patikusius straipsnius bei laidų įrašus ir peržiūrėkite savo naršymo istoriją. Anksčiau telefone išsaugoti straipsniai bus rodomi, kai prisijungsite."
     />
   );
 };
@@ -44,7 +44,7 @@ export const Page4: React.FC<PropsWithChildren<{}>> = () => {
     <ImageTextPage
       image={image4}
       title="Pasiekiama visuose įrenginiuose"
-      text="Jūsų nustatymai ir išsaugotas turinys keliauja su jumis – pradėkite telefone, tęskite planšetėje ar kompiuteryje."
+      text="Jūsų nustatymai ir išsaugotas turinys keliauja su jumis – pradėkite telefone, tęskite planšetėje."
     />
   );
 };

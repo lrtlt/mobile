@@ -88,7 +88,12 @@ const WalkthroughModal: React.FC<WalkthroughModalProps> = ({visible, onClose, on
           </View>
         </View>
 
-        <PagerView ref={pagerRef} style={{height: 500}} initialPage={pageIndex} scrollEnabled={false}>
+        <PagerView
+          ref={pagerRef}
+          style={{height: 525}}
+          initialPage={pageIndex}
+          scrollEnabled={true}
+          onPageSelected={(e) => setPageIndex(e.nativeEvent.position)}>
           <Page1 key="1" />
           <Page2 key="2" />
           <Page3 key="3" />

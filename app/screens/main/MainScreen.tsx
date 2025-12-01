@@ -223,7 +223,9 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           onClose={onClose}
           onLogin={() => {
             onClose();
-            navigation.navigate('User', {instantLogin: true});
+            setTimeout(() => {
+              navigation.navigate('User', {instantLogin: true});
+            }, 350);
           }}
         />
       </>
