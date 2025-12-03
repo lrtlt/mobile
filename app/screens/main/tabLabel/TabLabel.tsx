@@ -20,7 +20,11 @@ const TabLabel: React.FC<TabLabelProps> = ({route, focused}) => {
         </View>
       );
     } else {
-      return <Text style={{...styles.label, color: color}}>{route.title}</Text>;
+      return (
+        <Text style={{...styles.label, color: color}} numberOfLines={1}>
+          {route.title}
+        </Text>
+      );
     }
   }, [color, route.title, strings.mainWindow]);
 
@@ -32,7 +36,7 @@ export default TabLabel;
 const styles = StyleSheet.create({
   label: {
     fontSize: 14,
-    width: '100%',
+    paddingHorizontal: 2,
     textTransform: 'uppercase',
   },
   homeContainer: {
