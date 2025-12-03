@@ -45,7 +45,7 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
   const {simplyfied} = useTheme();
   const articleData = useMemo(() => compose(article, simplyfied), [article]);
 
-  const {appBar, snackbar, onScroll} = useArticleHeader(article);
+  const {appBar, onScroll} = useArticleHeader(article);
 
   const renderItem = useCallback(
     (item: ListRenderItemInfo<ArticleContentItemType>): React.ReactElement | null => {
@@ -119,8 +119,6 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
           contentContainerStyle={{paddingTop: appBarHeight.fullHeight, paddingBottom: 24}}
           data={articleData}
           showsVerticalScrollIndicator={false}
-          // estimatedFirstItemOffset={600}
-          // estimatedItemSize={400}
           renderItem={renderItem}
           removeClippedSubviews={false}
           keyExtractor={useCallback((item: ArticleContentItemType, index: number) => {
@@ -128,7 +126,6 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
           }, [])}
         />
       </View>
-      {snackbar}
     </>
   );
 };

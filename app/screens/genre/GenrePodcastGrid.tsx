@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   image: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#FFFFFF',

@@ -98,7 +98,7 @@ const VerticalVideoComponent: React.FC<{article: Article}> = ({article}) => {
     <View style={{borderRadius: 8, overflow: 'hidden'}}>
       <View style={{aspectRatio: 0.6, width: 176, justifyContent: 'flex-end'}}>
         <FastImage
-          style={{...StyleSheet.absoluteFillObject}}
+          style={{...StyleSheet.absoluteFill}}
           source={{
             uri: imgUri,
           }}

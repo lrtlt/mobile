@@ -119,7 +119,7 @@ const useArticleHeader = (article?: ArticleContent) => {
           title="Norėdami išsaugoti straipsnį, prisijunkite prie savo paskyros."
           onConfirm={() => {
             setModalVisible(false);
-            navigation.navigate('User');
+            navigation.navigate('User', {instantLogin: false});
           }}
           onCancel={() => setModalVisible(false)}
         />

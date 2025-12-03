@@ -80,7 +80,7 @@ export const RadiotekaHeroCarousel: React.FC<RadiotekaHeroCarouselProps> = ({
         </View>
 
         <LinearGradient
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
           colors={['#000000', '#00000066', '#00000033']}
           useAngle={true}
           angle={0}

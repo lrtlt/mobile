@@ -56,6 +56,6 @@ export default ProgressiveImage;
 
 const styles = StyleSheet.create({
   imageOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
   },
 });

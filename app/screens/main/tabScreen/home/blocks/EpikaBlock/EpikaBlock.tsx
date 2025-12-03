@@ -113,5 +113,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
   },
-  fill: StyleSheet.absoluteFillObject,
+  fill: StyleSheet.absoluteFill,
 });

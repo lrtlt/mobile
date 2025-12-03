@@ -37,7 +37,7 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
     (season) => season.lrt_season_id === (article as ArticleContentMedia).lrt_season_id,
   );
 
-  const {appBar, snackbar, onScroll: _} = useArticleHeader(article);
+  const {appBar, onScroll: _} = useArticleHeader(article);
 
   const theme = useTheme();
   const {strings, colors} = theme;
@@ -144,7 +144,6 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
               </ScrollView>
             </SafeAreaView>
           )}
-          {snackbar}
         </>
       );
     }

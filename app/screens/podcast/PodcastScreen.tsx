@@ -43,7 +43,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
     (season) => season.lrt_season_id === (article as ArticleContentMedia).lrt_season_id,
   );
 
-  const {appBar, snackbar, onScroll: _} = useArticleHeader(article);
+  const {appBar, onScroll: _} = useArticleHeader(article);
 
   const {episodes} = useSeason(currentSeason?.season_url, undefined, false, 100);
   const {setPlaylist} = useMediaPlayer();
@@ -168,7 +168,6 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
               </ScrollView>
             </SafeAreaView>
           )}
-          {snackbar}
         </>
       );
     }

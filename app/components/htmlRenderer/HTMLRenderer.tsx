@@ -21,7 +21,7 @@ import SafeWebView from '../safeWebView/SafeWebView';
 import useTextStyle from '../text/useTextStyle';
 
 const DEFAULT_FONT_SIZE = 18.5;
-const EXTRA_LINE_SPACING = 10;
+const EXTRA_LINE_SPACING = 8;
 const LI_TAG_VERTICAL_MARGIN = 8;
 
 interface Props {
@@ -166,7 +166,7 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
   return useMemo(
     () => ({
       p: {
-        marginVertical: 4,
+        paddingVertical: 4,
         alignSelf: 'center',
         minWidth: '100%',
       },
@@ -175,7 +175,7 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
         fontWeight: '900',
       },
       blockquote: {
-        margin: 12,
+        padding: 12,
         flexDirection: 'row',
         fontFamily: 'SourceSansPro-LightItalic',
         fontSize: DEFAULT_FONT_SIZE + 3,
@@ -216,7 +216,7 @@ const HTMLRenderer: React.FC<React.PropsWithChildren<Props>> = ({html, textSize,
       fontSize: textSize ?? DEFAULT_FONT_SIZE,
       lineHeight: lineHeight ?? (textSize ?? DEFAULT_FONT_SIZE) + EXTRA_LINE_SPACING,
       textDecorationColor: colors.primary,
-      marginVertical: simplyfied ? 12 : 8,
+      paddingVertical: simplyfied ? 12 : 8,
     },
   });
 
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   quoteText: {
-    margin: 8,
+    padding: 8,
   },
   bubble: {
     width: 6,

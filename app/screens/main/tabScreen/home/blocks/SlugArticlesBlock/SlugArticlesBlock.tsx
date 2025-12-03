@@ -66,7 +66,7 @@ const SlugArticlesBlock: React.FC<SlugArticlesBlockProps> = ({block}) => {
       <View>
         {template_id === 9 ? (
           <FastImage
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
             source={
               block.background_image
                 ? {uri: buildArticleImageUri(IMG_SIZE_L, block.background_image)}
@@ -78,7 +78,7 @@ const SlugArticlesBlock: React.FC<SlugArticlesBlockProps> = ({block}) => {
         <>
           {template_id === 9 && (
             <LinearGradient
-              style={StyleSheet.absoluteFillObject}
+              style={StyleSheet.absoluteFill}
               colors={['#000000EE', '#00000099', '#00000050']}
               useAngle={true}
               angle={0}
