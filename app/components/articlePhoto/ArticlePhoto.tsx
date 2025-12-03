@@ -165,6 +165,6 @@ const styles = StyleSheet.create({
   },
   bottomText: {
     fontSize: 13,
-    marginTop: 6,
+    paddingTop: 6,
   },
 });

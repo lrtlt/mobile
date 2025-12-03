@@ -68,7 +68,7 @@ const MediatekaHorizontalList: React.FC<MediatekaHorizontalListProps> = ({
           </Text>
         )}
         {item.title && (
-          <Text type="primary" fontFamily="PlayfairDisplay-Regular" style={styles.title} numberOfLines={4}>
+          <Text type="primary" fontFamily="PlayfairDisplay-Regular" style={styles.title} numberOfLines={6}>
             {item.title}
           </Text>
         )}

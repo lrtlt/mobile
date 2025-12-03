@@ -70,8 +70,7 @@ const styles = StyleSheet.create({
   },
   articleTitle: {
     fontSize: 18,
-    marginTop: 24,
-    marginBottom: 8,
+    paddingVertical: 12,
   },
   embededArticleText: {
     fontSize: 18,

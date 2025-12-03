@@ -63,7 +63,7 @@ const RadiotekaHorizontalList: React.FC<RadiotekaHorizontalListProps> = ({
             </Text>
           )}
           {item.title && (
-            <Text type="primary" fontFamily="PlayfairDisplay-Regular" style={styles.title} numberOfLines={4}>
+            <Text type="primary" fontFamily="PlayfairDisplay-Regular" style={styles.title} numberOfLines={6}>
               {item.title}
             </Text>
           )}

@@ -141,11 +141,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   summaryText: {
-    marginTop: 16,
-    marginBottom: 16,
+    paddingVertical: 16,
     lineHeight: 34,
     fontSize: 23,
     alignSelf: 'baseline',
+    width: '100%',
   },
   playerContainer: {
     width: '100%',

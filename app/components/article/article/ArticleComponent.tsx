@@ -126,7 +126,7 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
         onPress={onPressHandler}
         activeOpacity={0.8}
         accessibilityRole="link">
-        <View accessible={false}>
+        <View style={{gap: 6}} accessible={false}>
           <View
             // eslint-disable-next-line react-native/no-inline-styles
             style={{
@@ -217,8 +217,6 @@ const styles = StyleSheet.create({
   },
   categoryTitleContainer: {
     flexDirection: 'row',
-    paddingTop: 6,
-    paddingBottom: 4,
     justifyContent: 'flex-start',
     alignItems: 'center',
     flexWrap: 'wrap',
@@ -230,20 +228,17 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   title: {
-    marginTop: 4,
     fontSize: 22,
   },
   subtitle: {
-    marginTop: 8,
+    paddingTop: 4,
     fontSize: 14.5,
   },
   mediaIndicator: {
     position: 'absolute',
     alignSelf: 'center',
   },
-  badge: {
-    marginTop: 2,
-  },
+  badge: {},
   mediaDurationText: {
     position: 'absolute',
     right: 0,
