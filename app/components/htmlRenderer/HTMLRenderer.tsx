@@ -20,7 +20,7 @@ import getTableCssRules from './getTableCssRules';
 import SafeWebView from '../safeWebView/SafeWebView';
 import useTextStyle from '../text/useTextStyle';
 
-const DEFAULT_FONT_SIZE = 18.5;
+const DEFAULT_FONT_SIZE = 19;
 const EXTRA_LINE_SPACING = 8;
 const LI_TAG_VERTICAL_MARGIN = 8;
 
@@ -32,7 +32,10 @@ interface Props {
 
 const MyTextualRenderer: CustomTextualRenderer = (props) => {
   const nodeProps = getNativePropsForTNode(props);
-  return React.createElement(TextComponent, {...nodeProps, selectable: true});
+  return React.createElement(TextComponent, {
+    ...nodeProps,
+    selectable: true,
+  });
 };
 
 const BlockquoteRenderer: CustomBlockRenderer = (props) => {
@@ -274,8 +277,7 @@ const styles = StyleSheet.create({
   },
   liContainer: {
     paddingVertical: LI_TAG_VERTICAL_MARGIN + 4,
+    paddingHorizontal: 6,
     flexDirection: 'row',
-    gap: 8,
-    padding: 6,
   },
 });
