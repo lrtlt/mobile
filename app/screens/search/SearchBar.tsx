@@ -1,9 +1,8 @@
-import {Keyboard, StyleSheet, TextInput, View} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import {useTheme} from '../../Theme';
-import SearchAutocomplete from './SearchAutocomplete';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import {IconSearch} from '../../components/svg';
-import {useCallback, useEffect, useState} from 'react';
+import {useState} from 'react';
 
 interface Props {
   subHeaderHeight: number;
@@ -12,27 +11,8 @@ interface Props {
 
 const SearchBar: React.FC<React.PropsWithChildren<Props>> = ({onQueryChange, subHeaderHeight}) => {
   const [query, setQuery] = useState<string>('');
-  const [autocompleteEnabled, setAutocompleteEnabled] = useState<boolean>(false);
 
   const {colors, dim} = useTheme();
-
-  useEffect(() => {
-    const subscription = Keyboard.addListener('keyboardDidHide', () => {
-      setAutocompleteEnabled(false);
-    });
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
-  const autocompletePressHandler = useCallback(
-    (suggestion: string) => {
-      setAutocompleteEnabled(false);
-      setQuery(suggestion);
-      onQueryChange(suggestion);
-    },
-    [onQueryChange],
-  );
 
   return (
     <View style={{...styles.searchBar, backgroundColor: colors.card}}>
@@ -42,18 +22,13 @@ const SearchBar: React.FC<React.PropsWithChildren<Props>> = ({onQueryChange, sub
           multiline={false}
           placeholder={'Paieška'}
           numberOfLines={1}
-          onEndEditing={() => {
-            setAutocompleteEnabled(false);
-          }}
           autoCorrect={false}
           onSubmitEditing={() => {
-            setAutocompleteEnabled(false);
             onQueryChange(query);
           }}
           returnKeyType="search"
           placeholderTextColor={colors.textDisbled}
           onChangeText={(text) => {
-            setAutocompleteEnabled(true);
             setQuery(text);
           }}
           value={query}
@@ -61,18 +36,11 @@ const SearchBar: React.FC<React.PropsWithChildren<Props>> = ({onQueryChange, sub
         <BorderlessButton
           style={styles.searchButton}
           onPress={() => {
-            setAutocompleteEnabled(false);
             onQueryChange(query);
           }}>
           <IconSearch size={dim.appBarIconSize} color={colors.headerTint} />
         </BorderlessButton>
       </View>
-
-      {autocompleteEnabled && (
-        <View style={{position: 'absolute', top: subHeaderHeight, left: 0, right: 0}}>
-          <SearchAutocomplete query={query} onItemPress={autocompletePressHandler} />
-        </View>
-      )}
     </View>
   );
 };
