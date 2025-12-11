@@ -10,7 +10,6 @@ import {
   categoryHomeGet,
   counter,
   genreGet,
-  getAISearchResults,
   getDailyQuestion,
   getMediatekaArticlesBySeason,
   getRadiotekaArticleByUrl,
@@ -27,7 +26,6 @@ import {
 } from './Endpoints';
 import {get, put} from './HttpClient';
 import {
-  AISearchResponse,
   ArticleContentResponse,
   ArticleSearchResponse,
   CarPlayCategoryResponse,
@@ -120,23 +118,6 @@ export const fetchCounter = (id: number | string, url: string = 'https://www.lrt
       Referer: url ?? 'https://www.lrt.lt/',
     },
   });
-
-export const fetchAISearchResults = (options: {
-  query: string;
-  pageSize: number;
-  orderBy?: string;
-  pageToken?: string;
-  includeAISummary?: boolean;
-}) =>
-  get<AISearchResponse>(
-    getAISearchResults(
-      options.query,
-      options.pageSize,
-      options.orderBy,
-      options.pageToken,
-      options.includeAISummary,
-    ),
-  );
 
 export const fetchMenuItemsV2 = async (): Promise<Menu2Response> => {
   const snapshot = await getFirestore().collection('internal').doc('app-menu-v2').get({source: 'server'});
