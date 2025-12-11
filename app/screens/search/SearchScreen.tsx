@@ -14,11 +14,9 @@ import {defaultSearchFilter} from './context/SearchContext';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import SearchAISummary from './SearchAISummary';
 import {pushArticle} from '../../util/NavigationUtils';
 import {useArticleSearch} from '../../api/hooks/useSearch';
 import SearchBar from './SearchBar';
-import {useAISummary} from '../../api/hooks/useAISummary';
 import {SearchCategorySuggestion} from '../../api/Types';
 import SearchSuggestions from './SearchSuggestions';
 
@@ -36,12 +34,6 @@ type Props = {
 
 const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
   const {query, setQuery, filter, setFilter} = useSearch();
-  const {
-    data: aiSummary,
-    isLoading: aiSummaryLoading,
-    isEnabled: aiSummaryEnabled,
-    refetch: retryAISummary,
-  } = useAISummary(query);
   const {
     data: searchResponse,
     isLoading,
@@ -117,7 +109,6 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
           color={colors.primary}
           onPress={() => {
             retrySearch();
-            retryAISummary();
           }}
         />
       </View>
@@ -134,12 +125,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
         data={searchResults}
         ListHeaderComponentStyle={{flex: 1}}
         ListHeaderComponent={
-          <View style={{flex: 1}}>
-            {aiSummaryEnabled && (
-              <View style={{paddingTop: 12}}>
-                <SearchAISummary isLoading={aiSummaryLoading} summary={aiSummary} />
-              </View>
-            )}
+          <View style={{flex: 1, paddingTop: 16}}>
             <SearchSuggestions
               suggestions={similar_categories}
               onSearchSuggestionClick={searchSuggestionPressHandler}
