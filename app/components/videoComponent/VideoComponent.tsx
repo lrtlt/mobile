@@ -7,7 +7,6 @@ import TextComponent from '../text/Text';
 import {RectButton} from 'react-native-gesture-handler';
 import TheoMediaPlayer from './TheoMediaPlayer';
 import {MediaType} from './context/PlayerContext';
-import useUserMediaEvents from './useUserMediaEvents';
 import {StreamData, useStreamInfo} from '../../api/hooks/useStream';
 
 interface Props {
@@ -56,13 +55,11 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
     title,
     initialData: streamData,
   });
-  const {sendMediaPlayEvent} = useUserMediaEvents(mediaId);
 
   const errorCountRef = useRef(0);
 
   const onPlayPress = useCallback(() => {
     setUserPlayPressed(true);
-    sendMediaPlayEvent();
   }, [streamUrl, title, mediaId]);
 
   const onPlayerError = useCallback(

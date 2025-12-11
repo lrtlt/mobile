@@ -32,7 +32,6 @@ import {useShallow} from 'zustand/shallow';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Config from 'react-native-config';
-import {sendSearchUserEvent} from '../../../../api';
 import {pushArticle} from '../../../../util/NavigationUtils';
 
 const selectHomeScreenState = () => (state: ArticleState) => {
@@ -62,14 +61,6 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
   useEffect(() => {
     Gemius.sendPartialPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, {
       page: 'home',
-    });
-    sendSearchUserEvent({
-      type: 'view-home-page',
-      data: {
-        attributes: {
-          source: 'mobile_app',
-        },
-      },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

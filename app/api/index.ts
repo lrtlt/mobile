@@ -22,15 +22,12 @@ import {
   newestArticlesGet,
   opusPlaylistGet,
   popularArticlesGet,
-  postSearchUserEvent,
   putDailyQuestionVote,
   radiotekaGet,
 } from './Endpoints';
-import {get, post, put} from './HttpClient';
+import {get, put} from './HttpClient';
 import {
   AISearchResponse,
-  AIUserEvent,
-  AIUserEventResponse,
   ArticleContentResponse,
   ArticleSearchResponse,
   CarPlayCategoryResponse,
@@ -140,9 +137,6 @@ export const fetchAISearchResults = (options: {
       options.includeAISummary,
     ),
   );
-
-export const sendSearchUserEvent = (event: AIUserEvent) =>
-  post<AIUserEventResponse>(postSearchUserEvent(event), event.data);
 
 export const fetchMenuItemsV2 = async (): Promise<Menu2Response> => {
   const snapshot = await getFirestore().collection('internal').doc('app-menu-v2').get({source: 'server'});

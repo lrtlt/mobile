@@ -14,7 +14,6 @@ import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPl
 import ArticlePlaylist from '../../components/videoComponent/context/playlist/ArticlePlaylist';
 import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection';
 import PlaylistAbout from './about/PlaylistAbout';
-import useMediaUserEvents from '../../components/videoComponent/useUserMediaEvents';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Playlist'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Playlist'>;
@@ -31,8 +30,6 @@ const PlaylistScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, r
   const episodes = data.playlist_items;
   const article = data.playlist_items[selectedEpisode];
   const {setPlaylist} = useMediaPlayer();
-
-  const {sendMediaPlayEvent} = useMediaUserEvents(article.id.toString());
 
   const {colors} = useTheme();
 
@@ -52,7 +49,6 @@ const PlaylistScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, r
           episodes.findIndex((episode) => episode.id == id),
         ),
       );
-      sendMediaPlayEvent();
     },
     [episodes, setPlaylist, article],
   );

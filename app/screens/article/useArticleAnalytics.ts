@@ -1,25 +1,11 @@
 import useNavigationAnalytics, {TrackingParams} from '../../util/useNavigationAnalytics';
-import {AIUserEventViewItem, ArticleContent, isDefaultArticle} from '../../api/Types';
-import {debounce} from 'lodash';
-import {sendSearchUserEvent} from '../../api';
-import {useEffect} from 'react';
-
-const _sendUserEventDebounce = debounce((e: AIUserEventViewItem) => sendSearchUserEvent(e), 500);
+import {ArticleContent, isDefaultArticle} from '../../api/Types';
 
 type Params = {
   article?: ArticleContent;
 };
 
 const useArticleAnalytics = ({article}: Params) => {
-  //Send user event if needed
-  useEffect(() => {
-    const event = articleToUserEvent(article);
-    if (!event) {
-      return;
-    }
-    _sendUserEventDebounce(event);
-  }, [article]);
-
   //Send navigation analytics
   const params = articleToTrackingParams(article);
   useNavigationAnalytics(params);
@@ -55,36 +41,6 @@ const articleToTrackingParams = (article?: ArticleContent): TrackingParams | und
         sections: !!article.category_title ? ['Mediateka', article.category_title] : ['Mediateka'],
       };
     }
-  }
-};
-
-const articleToUserEvent = (article?: ArticleContent): AIUserEventViewItem | undefined => {
-  if (!article) {
-    return undefined;
-  }
-
-  if (isDefaultArticle(article)) {
-    return {
-      type: 'view-item',
-      data: {
-        documentId: article.article_id?.toString(),
-        attributes: {
-          source: 'mobile_app',
-          category: article.category_title,
-        },
-      },
-    };
-  } else {
-    return {
-      type: 'view-item',
-      data: {
-        documentId: article.id?.toString(),
-        attributes: {
-          source: 'mobile_app',
-          category: article.category_title,
-        },
-      },
-    };
   }
 };
 
