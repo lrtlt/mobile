@@ -289,16 +289,16 @@ export const MENU_DATA = [
         title: 'Auksinis protas',
         url: 'https://www.lrt.lt/projektai/auksinis-protas',
       },
-      {
-        type: 'webpage',
-        title: 'Nacionalinis judumo iššūkis',
-        url: 'https://www.lrt.lt/projektai/nacionalinis-judumo-issukis',
-      },
-      {
-        type: 'webpage',
-        title: 'Parašyk man dainą',
-        url: 'https://www.lrt.lt/projektai/parasyk-man-daina',
-      },
+      // {
+      //   type: 'webpage',
+      //   title: 'Nacionalinis judumo iššūkis',
+      //   url: 'https://www.lrt.lt/projektai/nacionalinis-judumo-issukis',
+      // },
+      // {
+      //   type: 'webpage',
+      //   title: 'Parašyk man dainą',
+      //   url: 'https://www.lrt.lt/projektai/parasyk-man-daina',
+      // },
       // {
       //   type: 'webpage',
       //   title: '„Sirenų“ Lietuvos teatro programos žiūroviškiausio spektaklio rinkimai',
@@ -356,6 +356,11 @@ export const MENU_DATA = [
     type: 'webpage',
     title: 'LRT PAPRASTAI',
     url: 'https://www.lrt.lt/naujienos/lrt-paprastai?_gl=1*i78eis*_gcl_au*MTM5MDA2ODE3My4xNzU1NzYxNjA2',
+  },
+  {
+    type: 'webpage',
+    title: 'EUROVISION SPORT',
+    url: 'https://www.lrt.lt/projektai/eurovision-sport',
   },
   {
     type: 'group',
