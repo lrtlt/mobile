@@ -15,8 +15,9 @@ const SearchBar: React.FC<React.PropsWithChildren<Props>> = ({onQueryChange, sub
   const {colors, dim} = useTheme();
 
   return (
-    <View style={{...styles.searchBar, backgroundColor: colors.card}}>
-      <View style={{...styles.searchInputHolder, backgroundColor: colors.background}}>
+    <View style={{...styles.searchBar, backgroundColor: colors.headerBackground}}>
+      <View
+        style={{...styles.searchInputHolder, backgroundColor: colors.background, borderColor: colors.border}}>
         <TextInput
           style={{...styles.searchInput, color: colors.text}}
           multiline={false}
@@ -49,30 +50,31 @@ export default SearchBar;
 
 const styles = StyleSheet.create({
   searchBar: {
-    padding: 8,
+    padding: 12,
     paddingVertical: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 1,
+    // },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 1.41,
+    // elevation: 2,
   },
   searchInputHolder: {
     borderRadius: 4,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 2,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.23,
+    // shadowRadius: 2.62,
+    // elevation: 2,
+    borderWidth: 1,
   },
   searchInput: {
     padding: 8,

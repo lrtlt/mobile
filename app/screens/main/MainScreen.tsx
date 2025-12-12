@@ -102,8 +102,6 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeftContainerStyle: {paddingStart: 4},
-      headerRightContainerStyle: {paddingEnd: 4},
       headerLeft: () => (
         <ActionButton
           onPress={() => navigation.toggleDrawer()}
@@ -112,6 +110,10 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           <IconDrawerMenu size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
+      headerLeftContainerStyle: {
+        borderRightWidth: StyleSheet.hairlineWidth,
+        borderColor: colors.border,
+      },
       headerRight: () => (
         <ActionButton
           onPress={async () => {
@@ -120,13 +122,16 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           accessibilityLabel="Nustatymai"
           accessibilityHint="Atidaryti nustatymų ekraną">
           {user ? (
-            <UserAvatar size={dim.appBarIconSize + 4} />
+            <UserAvatar size={dim.appBarIconSize} />
           ) : (
-            <IconUserNew name="user" size={dim.appBarIconSize + 4} color={colors.headerTint} />
+            <IconUserNew name="user" size={dim.appBarIconSize} color={colors.headerTint} />
           )}
         </ActionButton>
       ),
-
+      headerRightContainerStyle: {
+        borderLeftWidth: StyleSheet.hairlineWidth,
+        borderColor: colors.border,
+      },
       headerTitle: () => (
         <Pressable
           onPress={() => {
@@ -137,7 +142,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           accessibilityRole="button"
           accessibilityLanguage="lt">
           <View style={styles.logoContainer}>
-            <Logo />
+            <Logo width={75} height={40} />
           </View>
         </Pressable>
       ),

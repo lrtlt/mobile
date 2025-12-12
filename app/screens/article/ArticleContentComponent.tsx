@@ -27,6 +27,7 @@ import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {useTheme} from '../../Theme';
 import SimpleFooter from './simpleFooter/SimpleFooter';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export type ArticleSelectableItem = {
   type: 'photo' | 'article';
@@ -109,6 +110,7 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
   );
 
   const appBarHeight = useAppBarHeight();
+  const insets = useSafeAreaInsets();
 
   return (
     <>
@@ -116,7 +118,12 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
       <View style={styles.container}>
         <FlashList
           onScroll={onScroll}
-          contentContainerStyle={{paddingTop: appBarHeight.fullHeight, paddingBottom: 24}}
+          contentContainerStyle={{
+            paddingTop: appBarHeight.fullHeight,
+            paddingBottom: 24,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+          }}
           data={articleData}
           showsVerticalScrollIndicator={false}
           renderItem={renderItem}

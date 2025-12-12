@@ -30,7 +30,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({pressable = true}) => {
   if (!user) {
     return (
       <TouchableDebounce onPress={login}>
-        <View style={styles.container}>
+        <View style={[styles.container, {borderColor: colors.border}]}>
           <View
             style={{
               width: 40,

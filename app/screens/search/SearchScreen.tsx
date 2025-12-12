@@ -163,11 +163,14 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
           navigation.goBack();
         }}
         translateY={translateY}
-        actions={
-          <ActionButton onPress={() => navigation.toggleDrawer()} accessibilityLabel={'šoninis meniu'}>
-            <IconFilter size={dim.appBarIconSize} color={colors.headerTint} />
+        headerRight={() => (
+          <ActionButton
+            style={{minHeight: '100%'}}
+            onPress={() => navigation.toggleDrawer()}
+            accessibilityLabel={'šoninis meniu'}>
+            <IconFilter size={dim.appBarIconSize - 2} color={colors.headerTint} />
           </ActionButton>
-        }
+        )}
         subHeader={<SearchBar onQueryChange={setQuery} subHeaderHeight={subHeaderHeight} />}
       />
       <SafeAreaView edges={['bottom']}>{content}</SafeAreaView>

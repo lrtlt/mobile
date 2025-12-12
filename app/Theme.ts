@@ -1,6 +1,7 @@
 import {Theme} from '@react-navigation/native';
 import {ThemeContext} from './theme/ThemeContext';
 import {useContext} from 'react';
+import {Platform} from 'react-native';
 
 export interface AppTheme extends Theme {
   dark: boolean;
@@ -11,6 +12,7 @@ export interface AppTheme extends Theme {
 }
 
 interface Dimensions {
+  appBarActionButtonSize: number;
   appBarIconSize: number;
   drawerIconSize: number;
   drawerPadding: number;
@@ -178,6 +180,7 @@ type ColorScheme = {
   tabBarBackground: string;
   tabLableSelected: string;
   headerTint: string;
+  headerBackground: string;
   statusBar: string;
   greyBackground: string;
   darkGreyBackground: string;
@@ -230,6 +233,7 @@ const colorsLight: ColorScheme = {
   tabBarBackground: '#FFFFFF',
   tabLableSelected: 'primaryDark',
   headerTint: '#444444',
+  headerBackground: '#FFFFFF',
   greyBackground: '#F4F6F8',
   darkGreyBackground: 'rgb(228, 228, 231)',
   lightGreyBackground: '#F9F9F9',
@@ -280,6 +284,7 @@ const colorsDark: ColorScheme = {
   tabBarBackground: '#242D36',
   tabLableSelected: 'primaryDark',
   headerTint: '#DADADA',
+  headerBackground: '#242D36',
   actionButton: '#333333',
   greyBackground: '#2B3640',
   darkGreyBackground: 'rgb(228, 228, 231)',
@@ -309,7 +314,8 @@ const colorsDark: ColorScheme = {
 //#endregion
 
 const dimensions: Dimensions = {
-  appBarIconSize: 20,
+  appBarActionButtonSize: Platform.OS === 'ios' ? 36 : 40,
+  appBarIconSize: 24,
   drawerIconSize: 18,
   drawerPadding: 10,
 };

@@ -1,10 +1,9 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createNativeStackNavigator, NativeStackNavigationOptions} from '@react-navigation/native-stack';
 import {createDrawerNavigator, DrawerNavigationProp} from '@react-navigation/drawer';
 
 import * as Screens from '../screens';
 import {SearchFilterDrawer} from '../components';
-import {themeDark, themeLight} from '../Theme';
 import {
   ArticleContent,
   ArticlePhotoType,
@@ -15,10 +14,10 @@ import {
 import {NavigatorScreenParams} from '@react-navigation/native';
 import SearchContextProvider from '../screens/search/context/SearchContextProvider';
 import {Article} from '../../Types';
-import {useSettingsStore} from '../state/settings_store';
 import {Platform} from 'react-native';
 import {useNavigationStore} from '../state/navigation_store';
 import Drawer2Component from '../components/drawer2/Drawer2';
+import DefaultAppBar from '../components/appBar/DefaultAppBar';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -101,6 +100,7 @@ const MainDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
       screenOptions={{
         overlayAccessibilityLabel: 'Uždaryti meniu',
         freezeOnBlur: true,
+        header: (props) => <DefaultAppBar {...(props.options as NativeStackNavigationOptions)} />,
       }}
       drawerContent={(props) => (
         <Drawer2Component
@@ -112,7 +112,6 @@ const MainDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
         component={Screens.MainScreen}
         options={{
           headerShown: true,
-          headerTitleAlign: 'center',
         }}
       />
     </MainDrawer.Navigator>
@@ -154,8 +153,6 @@ const SearchDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
 
 export default () => {
   const isOfflineMode = useNavigationStore((state) => state.isOfflineMode);
-  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
-  const theme = isDarkMode ? themeDark : themeLight;
 
   return (
     <Stack.Navigator
@@ -163,20 +160,7 @@ export default () => {
       initialRouteName={isOfflineMode ? 'Offline' : 'Home'}
       screenOptions={{
         presentation: 'card',
-        headerBackButtonDisplayMode: 'minimal',
-
-        // headerBackTitleVisible: false,
-        // headerRightContainerStyle: {paddingEnd: 4},
-        headerTitle: '',
-        headerTitleStyle: {
-          color: theme.colors.headerTint,
-          fontFamily: 'SourceSansPro-SemiBold',
-          fontSize: 16,
-        },
-        headerTintColor: theme.colors.headerTint,
-        headerStyle: {
-          backgroundColor: theme.colors.card,
-        },
+        header: (props) => <DefaultAppBar {...props.options} />,
       }}>
       <Stack.Screen
         name="Home"
