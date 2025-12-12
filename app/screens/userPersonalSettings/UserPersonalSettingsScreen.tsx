@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
@@ -23,6 +23,12 @@ const UserPersonalSettingsScreen: React.FC<React.PropsWithChildren<Props>> = ({n
   const {mutateAsync: deleteUser} = useDeleteCurrentUser();
 
   const {colors} = useTheme();
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: user?.name ?? '',
+    });
+  }, [user]);
 
   const handleLogout = async () => {
     if (user) {

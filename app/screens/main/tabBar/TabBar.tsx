@@ -40,7 +40,6 @@ export default TabBarComponent;
 const styles = StyleSheet.create({
   tab: {
     width: 'auto',
-    paddingLeft: 16,
-    paddingRight: 16,
+    padding: 0,
   },
 });

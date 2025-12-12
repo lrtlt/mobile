@@ -90,7 +90,7 @@ export const strings: Dictionary = {
   tryAgain: 'Bandykite dar kartą',
   nightModeTitle: 'Nakties režimas',
   settings: 'NUSTATYMAI',
-  user: 'VARTOTOJAS',
+  user: 'PASKYRA',
   profile: 'PROFILIS',
   textSizeTitle: 'Šrifto dydis',
   videoNotAvailable: 'Vaizdo įrašas nepasiekiamas jūsų šalyje',

@@ -28,9 +28,7 @@ const PleaseLoginModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
       onBackdropPress={props.onCancel}
       onBackButtonPress={props.onCancel}>
       <View style={{...styles.modalContentContainer, backgroundColor: colors.background}}>
-        <TextComponent style={styles.titleText} fontFamily="SourceSansPro-SemiBold">
-          {props.title}
-        </TextComponent>
+        <TextComponent style={styles.titleText}>{props.title}</TextComponent>
         <View style={styles.row}>
           <TouchableDebounce
             style={{
@@ -60,11 +58,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   modalContentContainer: {
-    minWidth: '50%',
-    maxWidth: '80%',
+    minWidth: '60%',
+    maxWidth: '90%',
     alignItems: 'center',
-    padding: 22,
     borderRadius: 8,
+    paddingVertical: 24,
+    paddingHorizontal: 24,
   },
   row: {
     flexDirection: 'row',
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
+    borderRadius: 4,
     borderWidth: 1,
   },
   buttonText: {
