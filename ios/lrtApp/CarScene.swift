@@ -138,8 +138,18 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
 
       Task {
         do {
-          let listItems: [CPListItem]
+          var listItems: [CPListItem]
           listItems = try await loadItems(for: listTemplate.title ?? "")
+
+          if listTemplate.title == "Naujausi" {
+            let refreshItem = CPListItem(text: "Atnaujinti", detailText: nil)
+            refreshItem.handler = { [weak self] _, completion in
+              self?.tabBarTemplate(tabBarTemplate, didSelect: listTemplate)
+              completion()
+            }
+            listItems.insert(refreshItem, at: 0)
+          }
+
           listTemplate.updateSections([CPListSection(items: listItems)])
         } catch {
           let item = CPListItem(
