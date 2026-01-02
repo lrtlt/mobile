@@ -1,19 +1,16 @@
 import React, {useEffect, useMemo} from 'react';
 
 import Gemius from 'react-native-gemius-plugin';
-import {EVENT_LOGO_PRESS} from '../../../../constants';
 import useNewestArticlesProvider from './articleProviders/useNewestArticlesProvider';
 import usePopularArticlesProvider from './articleProviders/usePopularArticlesProvider';
 import TabScreenContent from './SimpleArticleScreenContent';
 import {ArticleScreenAdapter} from './articleProviders/Types';
 import useCategoryArticlesProvider from './articleProviders/useCategoryArticlesProvider';
-import {EventRegister} from 'react-native-event-listeners';
 import useSimpleArticleScreenAnalytics from './useSimpleArticleScreenAnalytics';
 import Config from 'react-native-config';
 import {MENU_TYPE_CATEGORY, MENU_TYPE_NEWEST, MENU_TYPE_POPULAR} from '../../../../api/Types';
 
 interface Props {
-  isCurrent: boolean;
   type: typeof MENU_TYPE_CATEGORY | typeof MENU_TYPE_NEWEST | typeof MENU_TYPE_POPULAR;
   showTitle: boolean;
   showBackToHome?: boolean;
@@ -21,12 +18,13 @@ interface Props {
   categoryTitle?: string;
   categoryUrl?: string;
   headerComponent?: React.ReactElement;
+  onScroll?: (event: any) => void;
+  paddingTop?: number;
 }
 
 const TWO_MINUTES = 1000 * 60 * 2;
 
 const SimpleArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({
-  isCurrent,
   type,
   showTitle,
   showBackToHome,
@@ -34,6 +32,8 @@ const SimpleArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({
   categoryTitle,
   categoryUrl,
   headerComponent,
+  onScroll,
+  paddingTop,
 }) => {
   const provider: ArticleScreenAdapter = useMemo(() => {
     switch (type) {
@@ -67,20 +67,6 @@ const SimpleArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({
     }
   }, [categoryId, type]);
 
-  useEffect(() => {
-    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {
-      if (isCurrent) {
-        refresh();
-      }
-    });
-
-    if (typeof listener === 'string') {
-      return () => {
-        EventRegister.removeEventListener(listener);
-      };
-    }
-  }, [isCurrent, refresh]);
-
   return (
     <TabScreenContent
       data={state}
@@ -89,6 +75,8 @@ const SimpleArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({
       showTitle={showTitle}
       showBackToHome={showBackToHome}
       headerComponent={headerComponent}
+      onScroll={onScroll}
+      paddingTop={paddingTop}
     />
   );
 };

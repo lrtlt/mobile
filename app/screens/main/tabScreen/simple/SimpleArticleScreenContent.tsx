@@ -28,6 +28,8 @@ interface Props {
   headerComponent?: React.ReactElement;
   requestNextPage: () => void;
   requestRefresh: () => void;
+  onScroll?: (event: any) => void;
+  paddingTop?: number;
 }
 
 const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
@@ -37,6 +39,8 @@ const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
   headerComponent,
   requestNextPage,
   requestRefresh,
+  onScroll,
+  paddingTop,
 }) => {
   const {isError, articles, isFetching, isRefreshing, title} = data;
   const {colors, strings} = useTheme();
@@ -118,7 +122,7 @@ const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
         showsVerticalScrollIndicator={false}
         //style={styles.container}
         data={articles}
-        contentContainerStyle={{paddingBottom: insets.bottom}}
+        contentContainerStyle={{paddingTop: paddingTop ?? 0, paddingBottom: insets.bottom}}
         ListHeaderComponent={headerComponent ? headerComponent : showTitle ? renderTitle() : null}
         //windowSize={4}
         onEndReachedThreshold={0.3}
@@ -128,6 +132,7 @@ const SimpleArticleScreenContent: React.FC<React.PropsWithChildren<Props>> = ({
         refreshControl={<RefreshControl refreshing={Boolean(isRefreshing)} onRefresh={requestRefresh} />}
         removeClippedSubviews={false}
         keyExtractor={keyExtractor}
+        onScroll={onScroll}
       />
     </View>
   );

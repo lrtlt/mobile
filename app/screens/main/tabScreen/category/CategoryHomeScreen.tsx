@@ -9,7 +9,7 @@ import {
   Text,
 } from '../../../../components';
 import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
-import {ARTICLE_EXPIRE_DURATION, EVENT_LOGO_PRESS, EVENT_SELECT_CATEGORY_INDEX} from '../../../../constants';
+import {ARTICLE_EXPIRE_DURATION, EVENT_SELECT_CATEGORY_INDEX} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {useNavigation} from '@react-navigation/native';
@@ -57,13 +57,20 @@ const selectCategoryState = (id: number) => (state: ArticleState) => {
 };
 
 interface Props {
-  isCurrent: boolean;
   id: number;
   title: string;
   url: string;
+  onScroll?: (event: any) => void;
+  paddingTop?: number;
 }
 
-const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, id, title, url}) => {
+const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({
+  id,
+  title,
+  url,
+  onScroll,
+  paddingTop,
+}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const listRef = useRef<FlashListRef<any>>(null);
 
@@ -86,22 +93,6 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
     categoryTitle: title,
   });
 
-  useEffect(() => {
-    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {
-      if (isCurrent) {
-        listRef.current?.scrollToOffset({
-          animated: true,
-          offset: 0,
-        });
-        fetchCategoryHome(id);
-      }
-    });
-
-    return () => {
-      EventRegister.removeEventListener(listener as string);
-    };
-  }, [isCurrent, id]);
-
   const checkForRefresh = useCallback(() => {
     if (!refreshing && Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
       console.log(`Category ${id} data expired!`);
@@ -111,10 +102,8 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
   }, [refreshing, state.lastFetchTime]);
 
   useEffect(() => {
-    if (isCurrent) {
-      checkForRefresh();
-    }
-  }, [isCurrent, checkForRefresh]);
+    checkForRefresh();
+  }, [checkForRefresh]);
 
   useAppStateCallback(
     useCallback(() => {
@@ -224,7 +213,7 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
     <View style={styles.container}>
       <FlashList
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: insets.bottom}}
+        contentContainerStyle={{paddingTop: paddingTop ?? 0, paddingBottom: insets.bottom}}
         ref={listRef}
         ListHeaderComponent={renderTitle()}
         extraData={extraData}
@@ -235,6 +224,7 @@ const CategoryHomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent
         data={items}
         removeClippedSubviews={false}
         keyExtractor={keyExtractor}
+        onScroll={onScroll}
       />
     </View>
   );

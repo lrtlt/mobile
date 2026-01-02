@@ -2,9 +2,8 @@ import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View, RefreshControl, StyleSheet, StatusBar} from 'react-native';
 import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
 import {ScreenLoader} from '../../../../components';
-import {EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
+import {ARTICLE_EXPIRE_DURATION} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
-import {EventRegister} from 'react-native-event-listeners';
 import {useTheme} from '../../../../Theme';
 import moment from 'moment';
 
@@ -38,7 +37,8 @@ const WIDGET_ID_LATEST = 25;
 const WIDGET_ID_POPULAR = 26;
 
 interface Props {
-  isCurrent: boolean;
+  onScroll?: (event: any) => void;
+  paddingTop?: number;
 }
 
 const selectMediatekaScreenState = (state: ArticleState) => {
@@ -61,7 +61,7 @@ const isArticlePopular = (readCount?: number): boolean => {
   return readCount > 5000;
 };
 
-const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
+const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({onScroll, paddingTop}) => {
   const listRef = useRef<FlashListRef<any>>(null);
   const {colors, dark} = useTheme();
 
@@ -85,21 +85,6 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
     sections: ['Mediateka'],
   });
 
-  useEffect(() => {
-    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {
-      if (isCurrent) {
-        listRef.current?.scrollToIndex({
-          animated: true,
-          index: 0,
-        });
-        fetchMediatekaV2();
-      }
-    });
-    return () => {
-      EventRegister.removeEventListener(listener as string);
-    };
-  }, [isCurrent]);
-
   const refresh = useCallback(() => {
     if (!refreshing && Date.now() - lastFetchTime > ARTICLE_EXPIRE_DURATION) {
       console.log('Mediateka data expired!');
@@ -109,10 +94,8 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
   }, [refreshing, state.lastFetchTime]);
 
   useEffect(() => {
-    if (isCurrent) {
-      refresh();
-    }
-  }, [isCurrent, refresh]);
+    refresh();
+  }, [refresh]);
 
   useAppStateCallback(
     useCallback(() => {
@@ -283,12 +266,13 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
           showsVerticalScrollIndicator={false}
           ref={listRef}
           extraData={extraData}
-          contentContainerStyle={{paddingBottom: bottom}}
+          contentContainerStyle={{paddingTop: paddingTop ?? 0, paddingBottom: bottom}}
           renderItem={renderItem}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => fetchMediatekaV2()} />}
           data={data}
           removeClippedSubviews={false}
           keyExtractor={(item, index) => String(index) + String(item)}
+          onScroll={onScroll}
         />
       </View>
     </>

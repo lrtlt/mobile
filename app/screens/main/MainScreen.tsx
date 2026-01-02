@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, Dimensions, StyleSheet} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
+import {View, Dimensions, StyleSheet, Animated as RNAnimated} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
 import {ActionButton, Logo} from '../../components';
 import {IconDrawerMenu, IconUserNew} from '../../components/svg';
@@ -11,6 +11,7 @@ import {EventRegister} from 'react-native-event-listeners';
 import {EVENT_LOGO_PRESS, EVENT_OPEN_CATEGORY, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import Animated, {useSharedValue, useAnimatedStyle, withTiming} from 'react-native-reanimated';
 
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {MainDrawerParamList, MainStackParamList} from '../../navigation/MainStack';
@@ -46,6 +47,8 @@ type Props = {
   navigation: ScreenNavigationProp;
 };
 
+const TAB_BAR_HEIGHT = 48;
+
 const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
@@ -53,6 +56,52 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const {colors, dim} = useTheme();
 
   const {isVisible, onClose} = useOnboardingLogic();
+
+  // Scroll-based TabBar visibility
+  const isTabBarVisible = useSharedValue(1);
+  const lastContentOffset = useSharedValue(0);
+  const tabBarPosition = useRef(new RNAnimated.Value(selectedTabIndex)).current;
+
+  useEffect(() => {
+    RNAnimated.timing(tabBarPosition, {
+      toValue: selectedTabIndex,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+
+    // Show TabBar when tab changes (swipe or click)
+    isTabBarVisible.value = withTiming(1, {duration: 200});
+    lastContentOffset.value = 0;
+  }, [selectedTabIndex, tabBarPosition, isTabBarVisible, lastContentOffset]);
+
+  const handleScroll = useCallback((event: any) => {
+    'worklet';
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    const diff = currentOffset - lastContentOffset.value;
+
+    // Only hide/show if scrolled more than threshold and not at the top
+    if (Math.abs(diff) > 5 && currentOffset > 50) {
+      if (diff > 0) {
+        // Scrolling down - hide tab bar
+        isTabBarVisible.value = withTiming(0, {duration: 200});
+      } else {
+        // Scrolling up - show tab bar
+        isTabBarVisible.value = withTiming(1, {duration: 200});
+      }
+    } else if (currentOffset <= 50) {
+      // Always show tab bar when near the top
+      isTabBarVisible.value = withTiming(1, {duration: 200});
+    }
+
+    lastContentOffset.value = currentOffset;
+  }, []);
+
+  const tabBarAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{translateY: (1 - isTabBarVisible.value) * -TAB_BAR_HEIGHT}],
+      opacity: isTabBarVisible.value,
+    };
+  });
 
   const routes = useNavigationStore((state) => state.routesV2);
   const state = useMemo(() => {
@@ -136,6 +185,9 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
         <Pressable
           onPress={() => {
             EventRegister.emit(EVENT_LOGO_PRESS, null);
+            if (selectedTabIndex !== 0) {
+              setSelectedTabIndex(0);
+            }
           }}
           accessibilityLabel="LRT logotipas"
           accessibilityHint="Spauskite, kad atnaujinti naujienas"
@@ -162,41 +214,57 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
 
       switch (route.type) {
         case MENU_TYPE_HOME:
-          return <HomeScreen isCurrent={current} />;
+          return <HomeScreen isCurrent={current} onScroll={handleScroll} paddingTop={TAB_BAR_HEIGHT} />;
         case MENU_TYPE_MEDIATEKA:
-          return <MediatekaScreen isCurrent={current} />;
+          return <MediatekaScreen onScroll={handleScroll} paddingTop={TAB_BAR_HEIGHT} />;
         case MENU_TYPE_RADIOTEKA:
-          return <RadiotekaScreen isCurrent={current} />;
+          return <RadiotekaScreen onScroll={handleScroll} paddingTop={TAB_BAR_HEIGHT} />;
         case MENU_TYPE_CATEGORY:
           return route.hasHome ? (
             <CategoryHomeScreen
               id={route.categoryId}
               title={route.title}
               url={route.categoryUrl}
-              isCurrent={current}
+              onScroll={handleScroll}
+              paddingTop={TAB_BAR_HEIGHT}
             />
           ) : (
             <SimpleArticleScreen
               type={MENU_TYPE_CATEGORY}
-              isCurrent={current}
               showTitle
               showBackToHome
               categoryId={route.categoryId}
               categoryTitle={route.title}
               categoryUrl={route.categoryUrl}
+              onScroll={handleScroll}
+              paddingTop={TAB_BAR_HEIGHT}
             />
           );
         case MENU_TYPE_NEWEST:
-          return <SimpleArticleScreen type={MENU_TYPE_NEWEST} isCurrent={current} showTitle showBackToHome />;
+          return (
+            <SimpleArticleScreen
+              type={MENU_TYPE_NEWEST}
+              showTitle
+              showBackToHome
+              onScroll={handleScroll}
+              paddingTop={TAB_BAR_HEIGHT}
+            />
+          );
         case MENU_TYPE_POPULAR:
           return (
-            <SimpleArticleScreen type={MENU_TYPE_POPULAR} isCurrent={current} showTitle showBackToHome />
+            <SimpleArticleScreen
+              type={MENU_TYPE_POPULAR}
+              showTitle
+              showBackToHome
+              onScroll={handleScroll}
+              paddingTop={TAB_BAR_HEIGHT}
+            />
           );
         default:
           return <TestScreen text={'Unkown type: ' + JSON.stringify(route)} />;
       }
     },
-    [selectedTabIndex, state],
+    [selectedTabIndex, state, handleScroll],
   );
 
   const renderLazyPlaceHolder = useCallback(() => {
@@ -205,35 +273,49 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right']} accessible={false}>
-      <>
-        <TabView
-          accessible={false}
-          renderLazyPlaceholder={renderLazyPlaceHolder}
-          tabBarPosition="top"
+      <TabView
+        accessible={false}
+        renderLazyPlaceholder={renderLazyPlaceHolder}
+        tabBarPosition="top"
+        navigationState={{
+          routes: state.routes,
+          index: selectedTabIndex,
+        }}
+        // swipeEnabled={state.routes[selectedTabIndex]?.type !== MENU_TYPE_AUDIOTEKA}
+        swipeEnabled={true}
+        renderScene={renderScene}
+        renderTabBar={() => null}
+        onIndexChange={setSelectedTabIndex}
+        lazy={true}
+        lazyPreloadDistance={0}
+        initialLayout={{height: 0, width: Dimensions.get('screen').width}}
+      />
+      <Animated.View style={[styles.tabBarContainer, tabBarAnimatedStyle]}>
+        <TabBar
           navigationState={{
             routes: state.routes,
             index: selectedTabIndex,
           }}
-          // swipeEnabled={state.routes[selectedTabIndex]?.type !== MENU_TYPE_AUDIOTEKA}
-          swipeEnabled={true}
-          renderScene={renderScene}
-          renderTabBar={(tabBarProps) => <TabBar {...tabBarProps} />}
-          onIndexChange={setSelectedTabIndex}
-          lazy={true}
-          lazyPreloadDistance={0}
-          initialLayout={{height: 0, width: Dimensions.get('screen').width}}
-        />
-        <WalkthroughModal
-          visible={isVisible}
-          onClose={onClose}
-          onLogin={() => {
-            onClose();
-            setTimeout(() => {
-              navigation.navigate('User', {instantLogin: true});
-            }, 350);
+          jumpTo={(key) => {
+            const index = state.routes.findIndex((r) => r.key === key);
+            if (index !== -1) {
+              setSelectedTabIndex(index);
+            }
           }}
+          position={tabBarPosition}
+          layout={{width: Dimensions.get('window').width, height: 0}}
         />
-      </>
+      </Animated.View>
+      <WalkthroughModal
+        visible={isVisible}
+        onClose={onClose}
+        onLogin={() => {
+          onClose();
+          setTimeout(() => {
+            navigation.navigate('User', {instantLogin: true});
+          }, 350);
+        }}
+      />
     </SafeAreaView>
   );
 };
@@ -250,5 +332,12 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  tabBarContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
   },
 });

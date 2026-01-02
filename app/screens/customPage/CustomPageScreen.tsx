@@ -63,7 +63,6 @@ const CustomPageScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation,
               <SimpleArticleScreen
                 type={MENU_TYPE_CATEGORY}
                 showTitle
-                isCurrent={false}
                 categoryId={sceneRounte.categoryId}
                 categoryTitle={sceneRounte.title}
               />

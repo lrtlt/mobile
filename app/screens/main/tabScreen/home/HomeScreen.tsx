@@ -45,9 +45,11 @@ const selectHomeScreenState = () => (state: ArticleState) => {
 
 interface Props {
   isCurrent: boolean;
+  onScroll?: (event: any) => void;
+  paddingTop?: number;
 }
 
-const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
+const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, onScroll, paddingTop}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const listRef = useRef<FlashListRef<any>>(null);
 
@@ -73,19 +75,16 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {
-      if (isCurrent) {
-        listRef.current?.scrollToOffset({
-          animated: true,
-          offset: 0,
-        });
-        callApi();
-      }
+      listRef.current?.scrollToTop({
+        animated: false,
+      });
+      callApi();
     });
 
     return () => {
       EventRegister.removeEventListener(listener as string);
     };
-  }, [isCurrent]);
+  }, []);
 
   const refresh = useCallback(() => {
     if (!refreshing && Date.now() - state.lastFetchTime > ARTICLE_EXPIRE_DURATION) {
@@ -201,7 +200,7 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
       <View style={styles.container}>
         <FlashList
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom: insets.bottom}}
+          contentContainerStyle={{paddingTop: paddingTop ?? 0, paddingBottom: insets.bottom}}
           ref={listRef}
           extraData={extraData}
           renderItem={renderItem}
@@ -210,6 +209,7 @@ const HomeScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
           data={items}
           removeClippedSubviews={false}
           keyExtractor={keyExtractor}
+          onScroll={onScroll}
         />
       </View>
     </>

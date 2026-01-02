@@ -2,9 +2,8 @@ import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View, RefreshControl, StyleSheet, StatusBar} from 'react-native';
 import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
 import {ScreenLoader} from '../../../../components';
-import {EVENT_LOGO_PRESS, ARTICLE_EXPIRE_DURATION} from '../../../../constants';
+import {ARTICLE_EXPIRE_DURATION} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
-import {EventRegister} from 'react-native-event-listeners';
 import {useTheme} from '../../../../Theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -31,7 +30,8 @@ const WIDGET_ID_LATEST = 12;
 const WIDGET_ID_POPULAR = 11;
 
 interface Props {
-  isCurrent: boolean;
+  onScroll?: (event: any) => void;
+  paddingTop?: number;
 }
 
 const selectRadiotekaScreenState = (state: ArticleState) => {
@@ -43,7 +43,7 @@ const selectRadiotekaScreenState = (state: ArticleState) => {
   };
 };
 
-const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) => {
+const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({onScroll, paddingTop}) => {
   const listRef = useRef<FlashListRef<any>>(null);
   const {colors, dark} = useTheme();
 
@@ -68,21 +68,6 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
     sections: ['Radioteka'],
   });
 
-  useEffect(() => {
-    const listener = EventRegister.addEventListener(EVENT_LOGO_PRESS, (_data) => {
-      if (isCurrent) {
-        listRef.current?.scrollToIndex({
-          animated: true,
-          index: 0,
-        });
-        fetchRadioteka();
-      }
-    });
-    return () => {
-      EventRegister.removeEventListener(listener as string);
-    };
-  }, [isCurrent]);
-
   const refresh = useCallback(() => {
     if (!refreshing && Date.now() - lastFetchTime > ARTICLE_EXPIRE_DURATION) {
       console.log('Radioteka data expired!');
@@ -92,10 +77,8 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
   }, [refreshing, state.lastFetchTime]);
 
   useEffect(() => {
-    if (isCurrent) {
-      refresh();
-    }
-  }, [isCurrent, refresh]);
+    refresh();
+  }, [refresh]);
 
   useAppStateCallback(
     useCallback(() => {
@@ -328,12 +311,13 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({isCurrent}) 
           showsVerticalScrollIndicator={false}
           ref={listRef}
           extraData={extraData}
-          contentContainerStyle={{paddingBottom: bottom}}
+          contentContainerStyle={{paddingTop: paddingTop ?? 0, paddingBottom: bottom}}
           renderItem={renderItem}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => fetchRadioteka()} />}
           data={data}
           removeClippedSubviews={false}
           keyExtractor={(item, index) => String(index) + String(item)}
+          onScroll={onScroll}
         />
       </View>
     </>

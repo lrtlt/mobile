@@ -38,7 +38,6 @@ const CategoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, r
     <SafeAreaView style={styles.screen} edges={['left', 'right']}>
       <SimpleArticleScreen
         type={MENU_TYPE_CATEGORY}
-        isCurrent={false}
         showTitle={false}
         categoryId={id}
         categoryTitle={name}
