@@ -8,6 +8,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
 import {IconApplicationSettings, IconBell, IconBookmarkNew} from '../../../components/svg';
 import UserActionItem from './UserActionItem';
+import {useArticleStorageStore} from '../../../state/article_storage_store';
 
 const UserActions: React.FC = () => {
   const {user} = useAuth0();
@@ -26,11 +27,20 @@ const UserActions: React.FC = () => {
     navigation.navigate('Notifications');
   };
 
+  const {savedArticles} = useArticleStorageStore.getState();
+  const numberOfUnsavedArticles = user ? 0 : savedArticles.length;
+
   return (
     <View style={styles.container}>
       <UserActionItem
         icon={<IconBookmarkNew size={32} color={colors.iconInactive} />}
         label={strings.bookmarks}
+        caption={
+          numberOfUnsavedArticles > 0
+            ? 'Savo išsaugotus straipsnius pamatysite prisijungę prie LRT.lt'
+            : undefined
+        }
+        numberOfItems={numberOfUnsavedArticles}
         onPress={user ? handleFavorites : undefined}
       />
       <UserActionItem
