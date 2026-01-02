@@ -185,7 +185,6 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
         <Pressable
           onPress={() => {
             EventRegister.emit(EVENT_LOGO_PRESS, null);
-            console.log('selectedTabIndex:', selectedTabIndex);
             if (selectedTabIndex !== 0) {
               setSelectedTabIndex(0);
             }
