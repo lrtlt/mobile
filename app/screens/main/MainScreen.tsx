@@ -185,6 +185,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
         <Pressable
           onPress={() => {
             EventRegister.emit(EVENT_LOGO_PRESS, null);
+            console.log('selectedTabIndex:', selectedTabIndex);
             if (selectedTabIndex !== 0) {
               setSelectedTabIndex(0);
             }
@@ -199,7 +200,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
         </Pressable>
       ),
     });
-  }, [colors.headerTint, dim.appBarIconSize, navigation, user]);
+  }, [colors.headerTint, dim.appBarIconSize, navigation, user, selectedTabIndex]);
 
   const renderScene = useCallback(
     (sceneProps: SceneRendererProps & {route: (typeof state.routes)[0]}) => {
