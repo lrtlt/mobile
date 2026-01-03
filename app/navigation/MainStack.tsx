@@ -23,6 +23,7 @@ export type MainStackParamList = {
   Home: undefined;
   Offline: undefined;
   Settings: undefined;
+  Games: undefined;
   User: {instantLogin?: boolean};
   UserPersonalSettings: undefined;
   Notifications: undefined;
@@ -207,6 +208,7 @@ export default () => {
       <Stack.Screen name="Page" component={Screens.CustomPageScreen} />
       <Stack.Screen name="WebPage" component={Screens.WebPageScreen} />
       <Stack.Screen name="Weather" component={Screens.WeatherScreen} />
+      <Stack.Screen name="Games" component={Screens.GamesScreen} />
       <Stack.Screen name="Category" component={Screens.CategoryScreen} />
       <Stack.Screen name="Simple" component={Screens.SimpleScreen} />
       <Stack.Screen

@@ -73,7 +73,8 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
         navigation.navigate('Slug', {slugUrl: item.url, name: item.title});
         break;
       case 'program':
-        navigation.navigate('Program');
+        // navigation.navigate('Program');
+        navigation.navigate('Games');
         break;
       case 'settings':
         navigation.navigate('Settings');
