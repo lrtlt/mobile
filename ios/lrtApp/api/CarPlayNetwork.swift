@@ -13,11 +13,11 @@ class CarPlayNetwork {
   private init() {}
 
   func fetchRecommended() async throws -> [CarPlayItem] {
-    return try await fetchItems(from: recommendedUrl)
+    return try await fetchItems(from: recommendedUrl, ignoreCache: false)
   }
 
   func fetchNewest() async throws -> [CarPlayItem] {
-    return try await fetchItems(from: newestUrl)
+    return try await fetchItems(from: newestUrl, ignoreCache: true)
   }
 
   func fetchLive() async throws -> [CarPlayItem] {
@@ -123,9 +123,9 @@ class CarPlayNetwork {
     return response.response.data
   }
 
-  private func fetchItems(from url: URL) async throws -> [CarPlayItem] {
-    // Check cache first
-    if let cached = CarPlayCache.shared.getCachedItems(for: url) as? [CarPlayItem] {
+  private func fetchItems(from url: URL, ignoreCache: Bool) async throws -> [CarPlayItem] {
+    // Check cache first (unless ignoreCache is true)
+    if !ignoreCache, let cached = CarPlayCache.shared.getCachedItems(for: url) as? [CarPlayItem] {
       return cached
     }
 

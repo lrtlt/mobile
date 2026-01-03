@@ -31,8 +31,8 @@ class LRTAutoRepository(private val api: LRTAutoService) {
         recommended
     }
 
-    suspend fun getNewest() = withContext(Dispatchers.IO) {
-        if (System.currentTimeMillis() - newestLastFetchTime > CACHE_DURATION || newest.isEmpty()) {
+    suspend fun getNewest(forceRefresh: Boolean = false) = withContext(Dispatchers.IO) {
+        if (forceRefresh || System.currentTimeMillis() - newestLastFetchTime > NEWEST_CACHE_DURATION || newest.isEmpty()) {
             try{
                 newest = api.getNewestPlaylist().filter { it.streamUrl != null }
                 if (newest.isNotEmpty()){
@@ -131,6 +131,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
         private const val BLOCKED_STREAM_MESSAGE = "Transliacija internetu negalima"
         private const val BLOCKED_STREAM_URL = "https://stream-vod3.lrt.lt/AUDIO/Block/tikLT.m4a/playlist.m3u8"
         private const val CACHE_DURATION = 5 * 60 * 1000L // 5 minutes
+        private const val NEWEST_CACHE_DURATION = 2 * 60 * 1000L // 2 minutes
         private const val PODCAST_CACHE_DURATION = 4 * 60 * 60 * 1000L // 4 hours
     }
 }

@@ -16,6 +16,11 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import lt.mediapark.lrt.auto.data.LRTAutoRepository
 import lt.mediapark.lrt.auto.data.LRTAutoService
@@ -25,6 +30,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback  {
 
     private val repository: LRTAutoRepository
+    private val scope = CoroutineScope(Dispatchers.Default)
+    private var newestRefreshJob: Job? = null
+    private var currentSession: MediaLibraryService.MediaLibrarySession? = null
 
     init {
         val retrofit: Retrofit = Retrofit.Builder()
@@ -34,6 +42,33 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
         val service: LRTAutoService = retrofit.create(LRTAutoService::class.java)
         repository = LRTAutoRepository(service)
         MediaItemTree.initialize()
+    }
+
+    private fun startNewestAutoRefresh(session: MediaLibraryService.MediaLibrarySession) {
+        stopNewestAutoRefresh()
+        currentSession = session
+        newestRefreshJob = scope.launch {
+            while (true) {
+                delay(2 * 60 * 1000L) // 2 minutes
+                try {
+                    val newestItems = repository.getNewest(forceRefresh = true)
+                    MediaItemTree.setNewestItems(newestItems)
+                    session.notifyChildrenChanged(
+                        MediaItemTree.NEWEST,
+                        MediaItemTree.getChildren(MediaItemTree.NEWEST).size,
+                        null
+                    )
+                    Log.d(TAG, "Auto-refreshed newest items")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error auto-refreshing newest items", e)
+                }
+            }
+        }
+    }
+
+    private fun stopNewestAutoRefresh() {
+        newestRefreshJob?.cancel()
+        newestRefreshJob = null
     }
 
     private fun isAutomotive(packageName: String): Boolean {
@@ -108,8 +143,9 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
 
         if (parentId == MediaItemTree.NEWEST) {
             logAnalyticsEvent(browser.packageName, "android_auto_newest_open")
+            startNewestAutoRefresh(session)
             return submitBlocking {
-                val newestItems = repository.getNewest()
+                val newestItems = repository.getNewest(forceRefresh = true)
                 MediaItemTree.setNewestItems(newestItems)
                 LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
