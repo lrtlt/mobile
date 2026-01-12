@@ -9,6 +9,7 @@ import {MainStackParamList} from '../../../navigation/MainStack';
 import {IconApplicationSettings, IconBell, IconBookmarkNew} from '../../../components/svg';
 import UserActionItem from './UserActionItem';
 import {useArticleStorageStore} from '../../../state/article_storage_store';
+import {useFavoriteUserArticleIds} from '../../../api/hooks/useFavoriteArticles';
 
 const UserActions: React.FC = () => {
   const {user} = useAuth0();
@@ -28,7 +29,8 @@ const UserActions: React.FC = () => {
   };
 
   const {savedArticles} = useArticleStorageStore.getState();
-  const numberOfUnsavedArticles = user ? 0 : savedArticles.length;
+  const {data: favoriteArticleIds} = useFavoriteUserArticleIds(!!user);
+  const numberOfUnsavedArticles = user ? favoriteArticleIds?.length ?? 0 : savedArticles.length;
 
   return (
     <View style={styles.container}>
@@ -36,7 +38,7 @@ const UserActions: React.FC = () => {
         icon={<IconBookmarkNew size={32} color={colors.iconInactive} />}
         label={strings.bookmarks}
         caption={
-          numberOfUnsavedArticles > 0
+          numberOfUnsavedArticles > 0 && !user
             ? 'Savo išsaugotus straipsnius pamatysite prisijungę prie LRT.lt'
             : undefined
         }

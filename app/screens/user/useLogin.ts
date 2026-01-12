@@ -12,7 +12,6 @@ const useLogin = () => {
       //"offline_access" is needed to get refresh token
       scope: 'openid profile email offline_access',
       audience: Config.AUTH0_AUDIENCE,
-
       ui_locales: 'lt',
     } as any)
       .then(saveCredentials)
