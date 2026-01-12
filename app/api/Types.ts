@@ -436,7 +436,7 @@ export const isMediatekaBlockBanner = (data?: MediatekaBlockType): data is Media
 export type MediatekaBlockSlug = {
   is_slug_block: 1;
   slug_url: string;
-  template_id: 53;
+  template_id: 53 | 60;
   slug_title: string;
   articles_list: FeedArticle[];
   select_opts: {
@@ -447,7 +447,7 @@ export type MediatekaBlockSlug = {
 
 export const isMediatekaBlockSlug = (data?: MediatekaBlockType): data is MediatekaBlockSlug => {
   const a = data as MediatekaBlockSlug | undefined;
-  return a?.template_id === 53;
+  return a?.template_id === 53 || a?.template_id === 60;
 };
 
 export type MediatekaBlockCategory = {

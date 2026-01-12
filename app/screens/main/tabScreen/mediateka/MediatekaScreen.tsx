@@ -203,7 +203,9 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({onScroll, pa
           categoryTitle={item.slug_title}
           separatorTop={false}
           keywords={
-            item.select_opts.slug
+            item.template_id === 60
+              ? undefined
+              : item.select_opts.slug
               ? [
                   {
                     name: item.slug_title,
