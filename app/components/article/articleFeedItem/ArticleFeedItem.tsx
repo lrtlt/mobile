@@ -49,7 +49,11 @@ const ArticleFeedItem: React.FC<React.PropsWithChildren<Props>> = (props) => {
   return (
     <TouchableDebounce onPress={onPressHandler} debounceTime={500} activeOpacity={0.4}>
       <View style={{flexDirection: 'row'}}>
-        <CoverImage style={{...styles.image}} source={{uri: imgUri ?? DEFAULT_ARTICLE_IMAGE}} />
+        <CoverImage
+          style={{...styles.image, aspectRatio: article.photo_aspectratio ?? 1.5}}
+          source={{uri: imgUri ?? DEFAULT_ARTICLE_IMAGE}}
+          resizeMode="contain"
+        />
         <View style={{...styles.container}}>
           <View
             style={{
@@ -93,8 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   image: {
-    width: 110,
-    aspectRatio: 1,
+    width: 120,
   },
   categoryTitle: {
     fontSize: 12,
