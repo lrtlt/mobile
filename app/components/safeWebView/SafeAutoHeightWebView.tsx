@@ -18,6 +18,7 @@ interface Props extends AutoHeightWebViewProps {
  */
 const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardRef<WebView, Props>(
   (props, ref) => {
+    const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
     const {dark} = useTheme();
     const animationDisabled = useRef(false);
 
@@ -34,14 +35,16 @@ const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardR
       if (isUserClickAction) {
         //User clicked on the link which should redirect to other page.
         //Opening the page on the browser...
+        if (request.url === 'https://www.lrt.lt/zaidimai') {
+          navigation.navigate('Games');
+          return false;
+        }
         Linking.openURL(request.url);
         return false;
       }
 
       return true;
     }, []);
-
-    const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
     const onSizeUpdate = useCallback(({height}: SizeUpdate) => {
       if (height > screenHeight && !animationDisabled.current) {

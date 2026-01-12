@@ -69,12 +69,14 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
       case 'weather':
         navigation.navigate('Weather');
         break;
+      case 'games':
+        navigation.navigate('Games');
+        break;
       case 'slug':
         navigation.navigate('Slug', {slugUrl: item.url, name: item.title});
         break;
       case 'program':
-        // navigation.navigate('Program');
-        navigation.navigate('Games');
+        navigation.navigate('Program');
         break;
       case 'settings':
         navigation.navigate('Settings');
@@ -146,6 +148,7 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
               case 'category':
               case 'slug':
               case 'page':
+              case 'games':
               case 'webpage':
                 return <DrawerBasicItem key={item.title} item={item} onPress={handleItemPress} />;
               case 'search':

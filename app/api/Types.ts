@@ -9,6 +9,7 @@ export const MENU_TYPE_MEDIATEKA = 'mediateka';
 export const MENU_TYPE_RADIOTEKA = 'radioteka';
 export const MENU_TYPE_PROGRAM = 'program';
 export const MENU_TYPE_WEATHER = 'weather';
+export const MENU_TYPE_GAMES = 'games';
 export const MENU_TYPE_CHANNELS = 'channels';
 export const MENU_TYPE_CATEGORY = 'category';
 export const MENU_TYPE_SLUG = 'slug';
@@ -46,6 +47,7 @@ export type Menu2Item =
   | Menu2ItemSlug
   | Menu2ItemPage
   | Menu2ItemNewest
+  | Menu2ItemGames
   | Menu2ItemPopular
   | Menu2ItemExpandable
   | Menu2ItemSimple
@@ -90,6 +92,11 @@ export type Menu2ItemNewest = {
 
 export type Menu2ItemHistory = {
   type: typeof MENU_TYPE_HISTORY;
+  title: string;
+};
+
+export type Menu2ItemGames = {
+  type: typeof MENU_TYPE_GAMES;
   title: string;
 };
 

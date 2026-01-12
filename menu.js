@@ -266,6 +266,11 @@ export const MENU_DATA = [
     ],
   },
   {
+    type: 'games',
+    title: 'ŽAIDIMAI',
+    url: 'https://www.lrt.lt/zaidimai',
+  },
+  {
     type: 'expandable',
     title: 'PROJEKTAI',
     items: [
