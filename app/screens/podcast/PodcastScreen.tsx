@@ -19,7 +19,7 @@ import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection'
 import useArticleAnalytics from '../article/useArticleAnalytics';
 import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPlayer';
 import ArticlePlaylist from '../../components/videoComponent/context/playlist/ArticlePlaylist';
-import useSeason from './episodeSelection/useSeason';
+import {useAllSeasonEpisodes} from './episodeSelection/useSeason';
 import RadiotekaGenres from '../main/tabScreen/radioteka/components/genres/RadiotekaGenres';
 import useArticleHeader from '../article/useArticleHeader_v2';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
@@ -43,7 +43,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
 
   const {appBar, onScroll: _} = useArticleHeader(article);
 
-  const {episodes} = useSeason(currentSeason?.season_url, undefined, false, 100);
+  const {episodes} = useAllSeasonEpisodes(currentSeason?.season_url, false);
   const {setPlaylist} = useMediaPlayer();
 
   const {strings, colors} = useTheme();

@@ -63,4 +63,58 @@ const useSeason = (
   };
 };
 
+const useAllSeasonEpisodes = (seasonUrl?: string, isVodcast?: boolean) => {
+  const [items, setItems] = useState<Article[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (!seasonUrl) {
+      return;
+    }
+
+    const fetchAllEpisodes = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      const api = isVodcast ? fetchMediatekaSeasonPlaylist : fetchRadiotekaSeasonPlaylist;
+      const MAX_PAGE_SIZE = 100;
+      let allItems: Article[] = [];
+      let currentPage = 1;
+      let hasMore = true;
+
+      try {
+        while (hasMore) {
+          const response = await api(seasonUrl, currentPage, MAX_PAGE_SIZE);
+
+          if (response.items && response.items.length > 0) {
+            allItems = allItems.concat(response.items);
+            hasMore = response.items.length >= MAX_PAGE_SIZE;
+            currentPage++;
+          } else {
+            hasMore = false;
+          }
+        }
+
+        setItems(allItems);
+        console.log(`Loaded all episodes: ${allItems.length} total`);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Failed to fetch episodes'));
+        console.error('Error fetching all episodes:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAllEpisodes();
+  }, [seasonUrl, isVodcast]);
+
+  return {
+    episodes: items,
+    isLoading,
+    error,
+  };
+};
+
 export default useSeason;
+export {useAllSeasonEpisodes};
