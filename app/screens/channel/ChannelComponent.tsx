@@ -43,6 +43,11 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
     setSelectedStream(streamData);
   }, [channel_info]);
 
+  // Safety check: if channel_info is missing or invalid, return null
+  if (!channel_info || !channel_info.get_streams_url) {
+    return null;
+  }
+
   const isAudio = audioStreamData?.streamUri === selectedStream.streamUri;
 
   const streamSelectionComponent = audioStreamData ? (

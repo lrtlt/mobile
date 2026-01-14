@@ -14,12 +14,18 @@ const EmbedVideo: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
     <View>
       {data.map(
         useCallback((item, i) => {
+          // Skip rendering if no valid stream URL
+          const streamUrl = item.el?.get_playlist_url || item.el?.get_streams_url;
+          if (!streamUrl) {
+            return null;
+          }
+
           return (
             <View style={styles.container} key={i}>
               <VideoComponent
                 style={styles.player}
                 cover={item.el}
-                streamUrl={(item.el.get_playlist_url || item.el.get_streams_url)!}
+                streamUrl={streamUrl}
                 mediaId={item.el.article_id?.toString()}
                 autoPlay={false}
                 startTime={item.el.record_offset}

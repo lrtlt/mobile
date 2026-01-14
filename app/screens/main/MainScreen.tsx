@@ -106,20 +106,22 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   const routes = useNavigationStore((state) => state.routesV2);
   const state = useMemo(() => {
     return {
-      routes: routes.map((r) => {
-        if (r.type === MENU_TYPE_CATEGORY) {
-          return {
-            type: r.type,
-            key: r.url,
-            title: r.title,
-            categoryId: r.category_id,
-            categoryUrl: r.url,
-            hasHome: r.hasHome,
-          };
-        } else {
-          return {type: r.type, key: r.title, title: r.title};
-        }
-      }),
+      routes: routes
+        .filter((r) => r && r.type && r.title)
+        .map((r) => {
+          if (r.type === MENU_TYPE_CATEGORY) {
+            return {
+              type: r.type,
+              key: r.url || r.title,
+              title: r.title,
+              categoryId: r.category_id,
+              categoryUrl: r.url,
+              hasHome: r.hasHome,
+            };
+          } else {
+            return {type: r.type, key: r.title, title: r.title};
+          }
+        }),
     };
   }, [routes]);
 

@@ -20,8 +20,8 @@ const TabBarComponent: React.FC<TabBarComponentProps> = (props) => {
       pressOpacity={0.6}
       pressColor={colors.androidTouchFeedback}
       renderTabBarItem={(props) => {
-        if (!props) {
-          // If props are not provided, return an empty view
+        if (!props || !props.route) {
+          // If props or route are not provided, return an empty view
           // We received crash reports from Android phones with this issue
           return <View />;
         }

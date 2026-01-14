@@ -14,6 +14,11 @@ const EmbedBroadcast: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
     <View>
       {data.map(
         useCallback((item, i) => {
+          // Skip rendering if no valid stream URL
+          if (!item.el?.get_streams_url) {
+            return null;
+          }
+
           return (
             <View style={styles.container} key={i}>
               <VideoComponent

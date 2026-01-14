@@ -30,7 +30,7 @@ export const useChannelStreamInfo = (channelId: number | string) => {
   const {data: channelResponse} = useChannelById(channelId);
 
   return useQuery({
-    queryKey: ['channelStreamInfo', channelResponse?.channel_info.get_streams_url ?? '-'],
+    queryKey: ['channelStreamInfo', channelResponse?.channel_info?.get_streams_url ?? '-'],
     queryFn: async ({signal, queryKey}) => {
       const [_key, url] = queryKey;
 
@@ -42,7 +42,7 @@ export const useChannelStreamInfo = (channelId: number | string) => {
         const {data} = response.response;
         const isBlocked = !!data.restriction;
         const streamData: StreamData = {
-          channelTitle: channelResponse?.channel_info.channel,
+          channelTitle: channelResponse?.channel_info?.channel,
           isLiveStream: true,
           streamUri: isBlocked ? BLOCKED_STREAM_URL : data.content.trim(),
           title: channelResponse?.channel_info?.title ?? 'untitled-live-stream',

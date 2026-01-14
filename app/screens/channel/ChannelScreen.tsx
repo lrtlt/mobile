@@ -80,7 +80,7 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
       );
       break;
     }
-    case !!data && !!streamData && !!channelData: {
+    case !!data && !!streamData && !!channelData && !!channelData.channel_info: {
       content = (
         <ChannelComponent
           channelData={channelData!}
