@@ -4,7 +4,7 @@ import {ArticleContentResponse} from '../Types';
 
 const QUERY_KEY = 'article';
 
-export const useArticle = (articleId: number | string, isMedia?: boolean) => {
+export const useArticle = (articleId?: number | string, isMedia?: boolean) => {
   const url = `https://www.lrt.lt/api/json/article/${articleId}${isMedia ? '?media' : ''}`;
   const urlFallback = `https://www.lrt.lt/api/json/article/${articleId}${!isMedia ? '?media' : ''}`;
 
@@ -26,5 +26,6 @@ export const useArticle = (articleId: number | string, isMedia?: boolean) => {
       }
     },
     staleTime: 1000 * 60 * 2, // 2 minutes
+    enabled: !!articleId,
   });
 };

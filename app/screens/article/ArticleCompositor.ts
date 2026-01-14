@@ -212,6 +212,7 @@ const getAudio = (article: ArticleContentMedia): ArticleContentItemType => {
   return {
     type: TYPE_AUDIO,
     data: {
+      id: article.id,
       title: article.title,
       cover: article.main_photo,
       streamUri: article.stream_url,

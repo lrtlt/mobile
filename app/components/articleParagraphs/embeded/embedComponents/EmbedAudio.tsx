@@ -18,6 +18,7 @@ const EmbedAudio: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
           return (
             <View key={`audio-${id}`} style={styles.container}>
               <AudioComponent
+                id={id}
                 style={styles.player}
                 streamUri={stream_url}
                 isLiveStream={false}
