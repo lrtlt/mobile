@@ -47,6 +47,20 @@ yarn test          # Run Jest tests
 
 **Android**: Ensure Android SDK is configured. The app uses Gradle build system.
 
+### Version Bumping
+
+The app follows semantic versioning (MAJOR.MINOR.PATCH). When bumping versions, update both platforms:
+
+**Android** (`android/app/build.gradle`):
+- `versionCode`: Calculated as MAJOR×100000 + MINOR×100 + PATCH (e.g., 2.65.2 = 206502)
+- `versionName`: String version (e.g., "2.65.2")
+
+**iOS** (`ios/lrtApp.xcodeproj/project.pbxproj`):
+- `CURRENT_PROJECT_VERSION`: Same as Android versionCode (e.g., 206502)
+- `MARKETING_VERSION`: Same as Android versionName (e.g., 2.65.2)
+
+Both Debug and Release configurations must be updated in the iOS project file.
+
 ## Architecture
 
 ### State Management
