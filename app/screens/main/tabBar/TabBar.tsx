@@ -13,6 +13,16 @@ const TabBarComponent: React.FC<TabBarComponentProps> = (props) => {
 
   const renderLabel = useCallback((labelProps: any) => <TabLabel {...labelProps} />, []);
 
+  if (
+    !props ||
+    !props.navigationState ||
+    props.navigationState.routes.findIndex((r) => r === undefined) > 0
+  ) {
+    // If props or navigationState or routes are not provided, return an empty view
+    // We received crash reports from Android phones with this issue
+    return <View />;
+  }
+
   return (
     <TabBar
       {...props}

@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {View, StyleSheet, Dimensions, ScrollView} from 'react-native';
-import Animated, {useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated';
 import {Text, TouchableDebounce} from '../../../../../../components';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
 import {themeLight} from '../../../../../../Theme';
@@ -25,22 +24,22 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const {data} = block;
-  const articles = data?.articles_list || [];
-
-  const scaleValues = articles.map(() => useSharedValue(1));
+  const articles = data?.articles_list;
 
   const {setPlaylist} = useMediaPlayer();
 
-  const selectedIndexSafe = Math.min(selectedIndex, articles.length - 1);
+  const articlesLength = articles?.length ?? 0;
+  const selectedIndexSafe = Math.min(selectedIndex, Math.max(0, articlesLength - 1));
 
   useEffect(() => {
-    if (selectedIndex >= articles.length) {
-      setSelectedIndex(Math.max(0, articles.length - 1));
+    if (articlesLength > 0 && selectedIndex >= articlesLength) {
+      setSelectedIndex(Math.max(0, articlesLength - 1));
     }
-  }, [articles.length]);
+  }, [articlesLength, selectedIndex]);
 
   const playItem = useCallback(
     (index: number) => {
+      if (!articles || articles.length === 0) return;
       setPlaylist(
         new ArticlePlaylist(
           articles.map((item) => item.id),
@@ -48,31 +47,22 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
         ),
       );
     },
-    [articles.length],
+    [articles, setPlaylist],
   );
 
-  useEffect(() => {
-    // Reset all scales to 1
-    scaleValues.forEach((scale, index) => {
-      scale.value = withTiming(index === selectedIndexSafe ? 1.1 : 1, {duration: 200});
-    });
-  }, [selectedIndexSafe]);
-
-  const getAnimatedStyle = (index: number) => {
-    return useAnimatedStyle(() => {
-      return {
-        transform: [{scale: scaleValues[index].value}],
-        borderWidth: 2,
-        borderColor: index === selectedIndexSafe ? '#FFFFFF' : 'transparent',
-      };
-    });
+  const getAnimatedStyle = (index: number, isSelected: boolean) => {
+    return {
+      transform: [{scale: isSelected ? 1.1 : 1}],
+      borderWidth: 2,
+      borderColor: isSelected ? '#FFFFFF' : 'transparent',
+    };
   };
 
   const handleItemPress = useCallback((index: number) => {
     setSelectedIndex(index);
   }, []);
 
-  if (articles?.length === 0) {
+  if (!articles || articles.length === 0) {
     return null;
   }
 
@@ -139,7 +129,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
             contentContainerStyle={styles.bottomList}>
             {articles.map((item, index) => (
               <TouchableDebounce key={item.id} onPress={() => handleItemPress(index)}>
-                <Animated.View style={[styles.thumbnailContainer, getAnimatedStyle(index)]}>
+                <View style={[styles.thumbnailContainer, getAnimatedStyle(index, index === selectedIndexSafe)]}>
                   <FastImage
                     source={{
                       uri: buildImageUri(
@@ -150,7 +140,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
                     }}
                     style={styles.thumbnail}
                   />
-                </Animated.View>
+                </View>
               </TouchableDebounce>
             ))}
           </ScrollView>
