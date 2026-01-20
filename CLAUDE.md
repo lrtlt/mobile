@@ -49,7 +49,10 @@ yarn test          # Run Jest tests
 
 ### Version Bumping
 
-The app follows semantic versioning (MAJOR.MINOR.PATCH). When bumping versions, update both platforms:
+The app follows semantic versioning (MAJOR.MINOR.PATCH). When bumping versions, update all three locations:
+
+**package.json**:
+- `version`: String version (e.g., "2.65.2")
 
 **Android** (`android/app/build.gradle`):
 - `versionCode`: Calculated as MAJOR×100000 + MINOR×100 + PATCH (e.g., 2.65.2 = 206502)
