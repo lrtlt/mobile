@@ -30,6 +30,7 @@ const useAuthInterceptor = () => {
       }
     };
     authInterceptor.setAuthGetter(idTokenProvider);
+
     syncFavorites();
 
     return () => authInterceptor.setAuthGetter(null);
