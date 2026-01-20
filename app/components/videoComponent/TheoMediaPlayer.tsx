@@ -14,6 +14,7 @@ import {
   ReadyStateChangeEvent,
   PresentationMode,
   PresentationModeChangeEvent,
+  AudioSessionMode,
 } from 'react-native-theoplayer';
 import MediaControls from './MediaControls';
 import {useMediaPlayer} from './context/useMediaPlayer';
@@ -322,8 +323,12 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     player.addEventListener(PlayerEventType.TIME_UPDATE, onTimeUpdateHandler);
     player.addEventListener(PlayerEventType.READYSTATE_CHANGE, onReadyStateChangeHandler);
     player.addEventListener(PlayerEventType.PRESENTATIONMODE_CHANGE, onPresentationChangeHandler);
-    player.backgroundAudioConfiguration = {enabled: backgroundAudioEnabled};
-
+    player.backgroundAudioConfiguration = {
+      enabled: backgroundAudioEnabled,
+      shouldResumeAfterInterruption: true,
+      stopOnBackground: false,
+      audioSessionMode: AudioSessionMode.SPOKEN_AUDIO,
+    };
     player.autoplay = autoStart;
     player.preload = 'auto';
     player.muted = false;

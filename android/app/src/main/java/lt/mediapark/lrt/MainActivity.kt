@@ -1,5 +1,6 @@
 package lt.mediapark.lrt;
 
+import android.app.PictureInPictureUiState
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
@@ -64,6 +65,19 @@ class MainActivity : ReactActivity() {
             val intent = Intent("onPictureInPictureModeChanged")
             intent.putExtra("isInPictureInPictureMode", isInPictureInPictureMode)
             this.sendBroadcast(intent)
+        }
+    }
+
+    override fun onPictureInPictureUiStateChanged(pipState: PictureInPictureUiState) {
+        super.onPictureInPictureUiStateChanged(pipState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM &&
+            pipState.isTransitioningToPip
+        ) {
+            Intent("onPictureInPictureModeChanged").also {
+                it.putExtra("isTransitioningToPip", true)
+                sendBroadcast(it)
+            }
         }
     }
 }
