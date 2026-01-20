@@ -1,4 +1,4 @@
-import {Image, Platform, StyleProp, StyleSheet, TextStyle, View, ViewStyle} from 'react-native';
+import {StyleProp, StyleSheet, TextStyle, View, ViewStyle} from 'react-native';
 
 import {HeaderOptions} from '@react-navigation/elements';
 import {themeDark, themeLight} from '../../Theme';
@@ -7,7 +7,7 @@ import Text from '../text/Text';
 import {useNavigation} from '@react-navigation/native';
 import {useSettingsStore} from '../../state/settings_store';
 import useAppBarHeight from './useAppBarHeight';
-import ActionButton from '../actionButton/ActionButton';
+import AppBarBackButton from './AppBarBackButton';
 
 interface Props {
   onBackPress?: () => void;
@@ -36,7 +36,7 @@ const DefaultAppBar: React.FC<Props> = ({
 
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? themeDark : themeLight;
-  const {colors, dim} = theme;
+  const {colors} = theme;
 
   const insets = useSafeAreaInsets();
   const {fullHeight, actionBarHeigh} = useAppBarHeight();
@@ -83,23 +83,7 @@ const DefaultAppBar: React.FC<Props> = ({
           {!!HeaderLeft ? (
             <HeaderLeft canGoBack={navigation.canGoBack()} tintColor={headerTintColor ?? colors.headerTint} />
           ) : (
-            <ActionButton
-              style={{
-                height: actionBarHeigh,
-              }}
-              accessibilityLabel="atgal"
-              onPress={onBackPress ?? navigation.goBack}>
-              <Image
-                source={require('../../../node_modules/@react-navigation/elements/src/assets/back-icon.png')}
-                resizeMode="contain"
-                fadeDuration={0}
-                tintColor={colors.headerTint}
-                style={{
-                  width: Platform.OS === 'ios' ? dim.appBarIconSize - 4 : dim.appBarIconSize,
-                  height: Platform.OS === 'ios' ? dim.appBarIconSize - 4 : dim.appBarIconSize,
-                }}
-              />
-            </ActionButton>
+            <AppBarBackButton onPress={onBackPress ?? navigation.goBack} />
           )}
         </View>
         <View accessible={false} style={{...styles.titleContainer, height: actionBarHeigh}}>
