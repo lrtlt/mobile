@@ -28,6 +28,7 @@ interface Dictionary {
   tvProgramButtonText: string;
   history: string;
   bookmarks: string;
+  notifications: string;
   favorites: string;
   liveChannelTitle: string;
   channelScreenTitle: string;
@@ -91,6 +92,7 @@ export const strings: Dictionary = {
   nightModeTitle: 'Nakties režimas',
   settings: 'NUSTATYMAI',
   user: 'PASKYRA',
+  notifications: 'PRANEŠIMAI',
   profile: 'PROFILIS',
   textSizeTitle: 'Šrifto dydis',
   videoNotAvailable: 'Vaizdo įrašas nepasiekiamas jūsų šalyje',

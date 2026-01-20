@@ -47,7 +47,7 @@ const UserActions: React.FC = () => {
       />
       <UserActionItem
         icon={<IconBell size={32} color={colors.iconInactive} />}
-        label={'PRANEŠIMAI'}
+        label={strings.notifications}
         onPress={user ? handleNotifications : undefined}
       />
 

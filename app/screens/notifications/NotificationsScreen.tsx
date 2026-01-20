@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
@@ -6,12 +6,19 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler';
 import SettingsNotifications from '../settings/SettingsNotifications';
 import {Text} from '../../components';
+import {useTheme} from '../../Theme';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
 };
 
 const NotificationsScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
+  const {strings} = useTheme();
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: strings.notifications,
+    });
+  }, [navigation]);
   return (
     <SafeAreaView style={styles.root} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.container}>
