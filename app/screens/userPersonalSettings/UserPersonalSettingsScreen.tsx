@@ -13,7 +13,7 @@ import {useDisassociateDeviceToken} from '../../api/hooks/usePushNotifications';
 import ConfirmModal from '../weather/ConfirmModal';
 import UserHeader from '../user/components/UserHeader';
 import {getAnalytics, logEvent} from '@react-native-firebase/analytics';
-import {getFcmToken} from '../../util/useFCMTokenSync';
+import {clearFCMUserData, getFcmToken} from '../../util/useFCMTokenSync';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
@@ -37,11 +37,15 @@ const UserPersonalSettingsScreen: React.FC<React.PropsWithChildren<Props>> = ({n
     const fcmToken = await getFcmToken();
     if (fcmToken) {
       console.log('Logout: Disassociating FCM token...');
-      try {
+      if (user) {
+        // Disassociate token from user on backend
         await disassociateToken(fcmToken);
-        console.log('FCM token disassociated successfully');
-      } catch (error) {
-        console.error('Failed to disassociate FCM token:', error);
+
+        // Clear local FCM user data
+        clearFCMUserData(user.id);
+        console.log('FCM token cleared for user ', user.id);
+      } else {
+        throw new Error('No user logged in');
       }
     }
   };

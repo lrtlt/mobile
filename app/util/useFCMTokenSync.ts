@@ -6,6 +6,28 @@ import {
   subscribeToAllDefaultTopics,
   unsubscribeFromAllTopicsExceptHidden,
 } from './useFirebaseTopicSubscription';
+import {MMKV} from 'react-native-mmkv';
+
+// MMKV storage for FCM token sync data
+const storage = new MMKV({
+  id: 'fcm-token-sync',
+});
+
+// Storage keys
+const FCM_INITIAL_SYNC_COMPLETED = 'fcm_initial_sync_completed';
+
+// Helper functions for storage
+const setInitialSyncCompleted = (userId: string) => {
+  storage.set(`${FCM_INITIAL_SYNC_COMPLETED}_${userId}`, true);
+};
+
+const getInitialSyncCompleted = (userId: string): boolean => {
+  return storage.getBoolean(`${FCM_INITIAL_SYNC_COMPLETED}_${userId}`) || false;
+};
+
+const clearUserData = (userId: string) => {
+  storage.delete(`${FCM_INITIAL_SYNC_COMPLETED}_${userId}`);
+};
 
 /**
  * Hook to sync FCM token with backend server.
@@ -15,8 +37,8 @@ import {
  */
 const useFCMTokenSync = () => {
   const {user, isLoading} = useAuth0();
-  const {mutate: registerToken} = useRegisterDeviceToken();
-  const {mutate: syncSubscriptions} = useSyncSubscriptions();
+  const {mutateAsync: registerToken} = useRegisterDeviceToken();
+  const {mutateAsync: syncSubscriptions} = useSyncSubscriptions();
 
   const previousUserRef = useRef<typeof user>(undefined);
 
@@ -41,15 +63,20 @@ const useFCMTokenSync = () => {
         return;
       }
 
-      if (isNewLogin) {
-        // New login: unsubscribe from topics and register token
-        await Promise.allSettled([handleLoginPushNotifications(token, registerToken), syncSubscriptions()]);
-      } else {
-        // Already logged in: just register token
-        registerToken(token, {
-          onSuccess: () => console.log('FCM token registered with backend'),
-          onError: (error) => console.error('Failed to register FCM token:', error),
-        });
+      const initialSyncCompleted = getInitialSyncCompleted(user.id);
+
+      // Always try to register token when user is logged in
+      await registerToken(token, {
+        onSuccess: () => console.log('FCM token registered with backend'),
+        onError: (error) => console.error('Failed to register FCM token:', error),
+      });
+
+      // Only do topic management on new login
+      if (isNewLogin && !initialSyncCompleted) {
+        console.log('Login: Unsubscribing from FCM topics (keeping hidden topics)...');
+        await unsubscribeFromAllTopicsExceptHidden();
+        await syncSubscriptions();
+        setInitialSyncCompleted(user.id);
       }
     };
 
@@ -75,33 +102,6 @@ const useFCMTokenSync = () => {
 };
 
 /**
- * Handle push notification setup when user logs in.
- * Unsubscribes from FCM topics (guests use topics, logged-in users use tokens)
- * and registers the FCM token with the user's account.
- */
-const handleLoginPushNotifications = async (
-  fcmToken: string,
-  registerToken: ReturnType<typeof useRegisterDeviceToken>['mutate'],
-) => {
-  console.log('Handling login push notification setup...');
-  try {
-    // Step 1: Re-register token with user_id (now that user is authenticated)
-    console.log('Login: Registering FCM token with user...');
-    registerToken(fcmToken, {
-      onSuccess: () => console.log('FCM token registered with user'),
-      onError: (error) => console.error('Failed to register FCM token with user:', error),
-    });
-
-    // Step 2: Unsubscribe from all FCM topics except hidden topics (hidden: 1)
-    // This prevents duplicate notifications (guests get via topics, logged-in via tokens)
-    console.log('Login: Unsubscribing from FCM topics (keeping hidden topics)...');
-    await unsubscribeFromAllTopicsExceptHidden();
-  } catch (error) {
-    console.error('Error during login push notification setup:', error);
-  }
-};
-
-/**
  * Get the FCM token from the messaging module.
  * Useful for logout flow to disassociate token from user.
  */
@@ -112,6 +112,14 @@ export const getFcmToken = async (): Promise<string | undefined> => {
     console.error('Failed to get FCM token:', error);
     return undefined;
   }
+};
+
+/**
+ * Clear FCM sync data for a user.
+ * Should be called during logout to reset sync state.
+ */
+export const clearFCMUserData = (userId: string) => {
+  clearUserData(userId);
 };
 
 export default useFCMTokenSync;

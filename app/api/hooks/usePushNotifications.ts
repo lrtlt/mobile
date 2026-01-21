@@ -40,7 +40,6 @@ export const useRegisterDeviceToken = () =>
         'https://www.lrt.lt/servisai/dev-authrz/api/v1/devices/token',
         request,
       );
-      console.log('response', response);
       return response.data;
     },
     retry: 3,
@@ -96,7 +95,7 @@ export const useUserSubscriptions = (enabled = true) =>
           signal,
         },
       );
-      return response.subscriptions;
+      return response.subscriptions.sort((a, b) => a.subscription_key.localeCompare(b.subscription_key));
     },
     staleTime: 1000 * 60 * 2, // 2 minutes
     retry: 2,
