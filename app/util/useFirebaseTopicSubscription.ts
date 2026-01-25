@@ -18,6 +18,15 @@ export type FirebaseTopic = {
   active: 0 | 1;
 };
 
+const TEST_TOPIC: FirebaseTopic = {
+  id: 'test',
+  name: 'Test topic',
+  slug: 'test',
+  order_by: -1,
+  hidden: 1,
+  active: 1,
+};
+
 export type FirebaseTopicsResponse = FirebaseTopic[];
 
 // Cache for push categories to avoid repeated fetches
@@ -35,6 +44,11 @@ export const fetchPushCategories = async (): Promise<FirebaseTopicsResponse> => 
   const response = await fetch(PUSH_CATEGORIES_URL, {method: 'GET'});
 
   const data = (await response.json()) as FirebaseTopicsResponse;
+
+  if (__DEV__) {
+    data.push(TEST_TOPIC);
+  }
+
   cachedTopics = data;
   return data;
 };
