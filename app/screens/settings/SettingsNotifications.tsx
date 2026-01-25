@@ -58,6 +58,7 @@ const LoggedInNotifications: React.FC = () => {
               updateSubscription({
                 subscription_key: s.subscription_key,
                 is_active: value,
+                name: s.name ?? s.subscription_key,
               });
             }}
             value={s.is_active}
