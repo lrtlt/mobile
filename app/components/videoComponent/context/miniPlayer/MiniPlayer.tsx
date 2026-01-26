@@ -15,10 +15,10 @@ import {
   IconPlayerRewind,
 } from '../../../svg';
 import {useMediaPlayer} from '../useMediaPlayer';
-import PlayerSekBar from '../../PlayerSeekBar';
+import PlayerSekBar from './PlayerSeekBar';
 import {MediaType} from '../PlayerContext';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import PlayerPlaybackRatio from '../../PlayerPlaybackRatio';
+import {Pressable} from 'react-native-gesture-handler';
+import PlayerPlaybackRatio from './PlayerPlaybackRatio';
 
 const PLAYER_HEIGHT = 80;
 const PADDING = 8;
@@ -87,6 +87,8 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
     return null;
   }
 
+  const playerAspectRatio = mediaData.mediaType === MediaType.AUDIO ? 1 : 16 / 9;
+
   return (
     <View
       style={{
@@ -103,31 +105,32 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
           gap: PADDING,
           borderColor: colors.border,
         }}>
-        <TouchableWithoutFeedback
+        <View
           style={[
             styles.videoContainer,
             {
-              aspectRatio: mediaData.mediaType === MediaType.AUDIO ? 1 : 16 / 9,
+              aspectRatio: playerAspectRatio,
             },
-          ]}
-          onPress={handleFullScreen}>
-          <TheoMediaPlayer
-            key={mediaData.uri}
-            isLiveStream={!!mediaData.isLiveStream}
-            mediaType={mediaData.mediaType}
-            poster={mediaData.poster}
-            title={mediaData.title}
-            streamUri={mediaData.uri}
-            startTime={mediaData.startTime}
-            tracks={mediaData.tracks}
-            autoStart={true}
-            isMini={true}
-            aspectRatio={mediaData.mediaType === MediaType.AUDIO ? 1 : 16 / 9}
-            controls={false}
-            onEnded={onEnded}
-            onPlayerReadyCallback={setPlayer}
-          />
-        </TouchableWithoutFeedback>
+          ]}>
+          <Pressable style={StyleSheet.absoluteFill} onPress={handleFullScreen}>
+            <TheoMediaPlayer
+              key={mediaData.uri}
+              isLiveStream={!!mediaData.isLiveStream}
+              mediaType={mediaData.mediaType}
+              poster={mediaData.poster}
+              title={mediaData.title}
+              streamUri={mediaData.uri}
+              startTime={mediaData.startTime}
+              tracks={mediaData.tracks}
+              autoStart={true}
+              isMini={true}
+              aspectRatio={playerAspectRatio}
+              controls={false}
+              onEnded={onEnded}
+              onPlayerReadyCallback={setPlayer}
+            />
+          </Pressable>
+        </View>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingHorizontal: PADDING}}>
           <View style={{flex: 1, maxWidth: 340}}>
             <View

@@ -2,7 +2,11 @@ import {useEffect, useRef} from 'react';
 import useOrientation from '../../util/useOrientation';
 import {PresentationMode, THEOplayer} from 'react-native-theoplayer';
 
-const usePlayerOrientationChange = (player?: THEOplayer) => {
+interface UsePlayerOrientationChangeParams {
+  player: THEOplayer | undefined;
+}
+
+const usePlayerOrientationChange = ({player}: UsePlayerOrientationChangeParams) => {
   const previousOrientation = useRef<string>(undefined);
   const orientation = useOrientation();
 

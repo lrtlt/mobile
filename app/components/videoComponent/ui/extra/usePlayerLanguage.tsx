@@ -1,9 +1,10 @@
 import {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {MediaTrack, PlayerEventType, THEOplayer} from 'react-native-theoplayer';
-import {IconLanguage} from '../svg';
-import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from './MediaControls';
-import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
+import {IconLanguage} from '../../../svg';
+import TouchableDebounce from '../../../touchableDebounce/TouchableDebounce';
+import {PlayerButton} from '../components/playerButton/PlayerButton';
+import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from '../MediaControls.constants';
 
 type Options = {
   player?: THEOplayer;
@@ -114,13 +115,9 @@ const LanguageButton: React.FC<React.PropsWithChildren<Props>> = ({audioTracks, 
     return null;
   } else {
     return (
-      <TouchableDebounce
-        style={[styles.center]}
-        onPress={() => onPress()}
-        hitSlop={HIT_SLOP}
-        activeOpacity={0.6}>
+      <PlayerButton style={styles.center} onPress={onPress} hitSlop={HIT_SLOP} activeOpacity={0.6}>
         <IconLanguage size={ICON_SIZE - 2} color={ICON_COLOR} />
-      </TouchableDebounce>
+      </PlayerButton>
     );
   }
 };
