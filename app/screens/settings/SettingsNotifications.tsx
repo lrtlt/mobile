@@ -1,31 +1,31 @@
 import React, {PropsWithChildren} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {useAuth0} from 'react-native-auth0';
-import {useUserSubscriptions, useUpdateSubscription} from '../../api/hooks/usePushNotifications';
 import SettingsSwitch from './SettingsSwitch';
 import {ScreenError, Text} from '../../components';
 import {useTheme} from '../../Theme';
+import {
+  useDefaultTopics,
+  useSubscribeToTopic,
+  useUnsubscribeFromTopic,
+} from '../../api/hooks/useNotificationTopics';
 
 interface SettingsNotificationsProps {}
 
 const SettingsNotifications: React.FC<PropsWithChildren<SettingsNotificationsProps>> = ({}) => {
-  const {user} = useAuth0();
-  const isLoggedIn = !!user;
+  // const {user} = useAuth0();
+  // const isLoggedIn = !!user;
 
-  if (isLoggedIn) {
-    return <LoggedInNotifications />;
-  }
-
-  return <View />;
+  return <TopicNotifications />;
 };
 
 /**
- * Logged-in user notification settings - uses backend subscriptions
+ * Topic notification settings - uses FCM topic subscriptions
  */
-const LoggedInNotifications: React.FC = () => {
+const TopicNotifications: React.FC = () => {
   const {colors} = useTheme();
-  const {data: subscriptions, isLoading, isError} = useUserSubscriptions();
-  const {mutate: updateSubscription} = useUpdateSubscription();
+  const {data: topics, isLoading, isError} = useDefaultTopics();
+  const subscribeToTopicMutation = useSubscribeToTopic();
+  const unsubscribeFromTopicMutation = useUnsubscribeFromTopic();
 
   if (isLoading) {
     return (
@@ -43,25 +43,28 @@ const LoggedInNotifications: React.FC = () => {
     );
   }
 
-  if (!subscriptions) {
+  if (!topics) {
     return <ScreenError text="Nerasta pranešimų nustatymų" />;
   }
 
+  // Filter out hidden topics from the UI
+  const visibleTopics = topics.filter((t) => !t.hidden);
+
   return (
     <>
-      {subscriptions.map((s) => {
+      {visibleTopics.map((t) => {
         return (
           <SettingsSwitch
-            key={s.subscription_key}
-            title={s.name ?? s.subscription_key}
+            key={t.id}
+            title={t.name}
             onValueChange={(value) => {
-              updateSubscription({
-                subscription_key: s.subscription_key,
-                is_active: value,
-                name: s.name ?? s.subscription_key,
-              });
+              if (value) {
+                subscribeToTopicMutation.mutate(t.slug);
+              } else {
+                unsubscribeFromTopicMutation.mutate(t.slug);
+              }
             }}
-            value={s.is_active}
+            value={!!t.active}
           />
         );
       })}

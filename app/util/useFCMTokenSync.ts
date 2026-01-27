@@ -1,11 +1,8 @@
 import {useEffect, useRef} from 'react';
 import {getMessaging, onTokenRefresh, getToken} from '@react-native-firebase/messaging';
 import {useAuth0} from 'react-native-auth0';
-import {useRegisterDeviceToken, useSyncSubscriptions} from '../api/hooks/usePushNotifications';
-import {
-  subscribeToAllDefaultTopics,
-  unsubscribeFromAllTopicsExceptHidden,
-} from './useFirebaseTopicSubscription';
+import {useRegisterDeviceToken} from '../api/hooks/usePushNotifications';
+import {subscribeToAllDefaultTopics} from './useFirebaseTopicSubscription';
 import {MMKV} from 'react-native-mmkv';
 
 // MMKV storage for FCM token sync data
@@ -38,7 +35,6 @@ const clearUserData = (userId: string) => {
 const useFCMTokenSync = () => {
   const {user, isLoading} = useAuth0();
   const {mutateAsync: registerToken} = useRegisterDeviceToken();
-  const {mutateAsync: syncSubscriptions} = useSyncSubscriptions();
 
   const previousUserRef = useRef<typeof user>(undefined);
 
@@ -74,8 +70,8 @@ const useFCMTokenSync = () => {
       // Only do topic management on new login
       if (isNewLogin && !initialSyncCompleted) {
         console.log('Login: Unsubscribing from FCM topics (keeping hidden topics)...');
-        await unsubscribeFromAllTopicsExceptHidden();
-        await syncSubscriptions();
+        // await unsubscribeFromAllTopicsExceptHidden();
+        // await syncSubscriptions();
         setInitialSyncCompleted(user.id);
       }
     };

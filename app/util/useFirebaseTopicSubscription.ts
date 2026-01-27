@@ -1,57 +1,12 @@
 import messaging from '@react-native-firebase/messaging';
 import {MMKV} from 'react-native-mmkv';
+import {fetchPushCategories} from '../api/hooks/useNotificationTopics';
 
 const TOPICS_STORAGE_KEY = 'initialTopicSubscription';
-
-const PUSH_CATEGORIES_URL = 'https://www.lrt.lt/static/data/push_categories.json';
 
 const storage = new MMKV({
   id: 'topics-storage',
 });
-
-export type FirebaseTopic = {
-  id: string;
-  name: string;
-  slug: string;
-  order_by: number;
-  hidden: 0 | 1;
-  active: 0 | 1;
-};
-
-const TEST_TOPIC: FirebaseTopic = {
-  id: 'test',
-  name: 'Test topic',
-  slug: 'test',
-  order_by: -1,
-  hidden: 1,
-  active: 1,
-};
-
-export type FirebaseTopicsResponse = FirebaseTopic[];
-
-// Cache for push categories to avoid repeated fetches
-let cachedTopics: FirebaseTopicsResponse | null = null;
-
-/**
- * Fetch push categories from the server.
- * Returns cached data if available.
- */
-export const fetchPushCategories = async (): Promise<FirebaseTopicsResponse> => {
-  if (cachedTopics) {
-    return cachedTopics;
-  }
-
-  const response = await fetch(PUSH_CATEGORIES_URL, {method: 'GET'});
-
-  const data = (await response.json()) as FirebaseTopicsResponse;
-
-  if (__DEV__) {
-    data.push(TEST_TOPIC);
-  }
-
-  cachedTopics = data;
-  return data;
-};
 
 /**
  * Subscribe to all default FCM topics.
@@ -158,4 +113,68 @@ export const unsubscribeFromAllTopicsExceptHidden = async (): Promise<void> => {
   } catch (error) {
     console.error('Failed to unsubscribe from topics:', error);
   }
+};
+
+/**
+ * Subscribe to a single FCM topic.
+ * Updates the stored subscriptions list to include the new topic.
+ */
+export const subscribeToTopic = async (slug: string): Promise<boolean> => {
+  try {
+    await messaging().subscribeToTopic(slug);
+    console.log('Subscribed to topic:', slug);
+
+    // Update storage to include this topic
+    const topicsJson = storage.getString(TOPICS_STORAGE_KEY);
+    let currentSubscriptions: string[] = topicsJson ? JSON.parse(topicsJson) : [];
+
+    if (!currentSubscriptions.includes(slug)) {
+      currentSubscriptions.push(slug);
+      storage.set(TOPICS_STORAGE_KEY, JSON.stringify(currentSubscriptions));
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Failed to subscribe to topic:', slug, error);
+    return false;
+  }
+};
+
+/**
+ * Unsubscribe from a single FCM topic.
+ * Updates the stored subscriptions list to remove the topic.
+ */
+export const unsubscribeFromTopic = async (slug: string): Promise<boolean> => {
+  try {
+    await messaging().unsubscribeFromTopic(slug);
+    console.log('Unsubscribed from topic:', slug);
+
+    // Update storage to remove this topic
+    const topicsJson = storage.getString(TOPICS_STORAGE_KEY);
+    let currentSubscriptions: string[] = topicsJson ? JSON.parse(topicsJson) : [];
+
+    currentSubscriptions = currentSubscriptions.filter((s) => s !== slug);
+    storage.set(TOPICS_STORAGE_KEY, JSON.stringify(currentSubscriptions));
+
+    return true;
+  } catch (error) {
+    console.error('Failed to unsubscribe from topic:', slug, error);
+    return false;
+  }
+};
+
+/**
+ * Get the list of currently subscribed topic slugs from storage.
+ */
+export const getSubscribedTopics = (): string[] => {
+  const topicsJson = storage.getString(TOPICS_STORAGE_KEY);
+  return topicsJson ? JSON.parse(topicsJson) : [];
+};
+
+/**
+ * Check if a specific topic slug is currently subscribed.
+ */
+export const isTopicSubscribed = (slug: string): boolean => {
+  const subscribedTopics = getSubscribedTopics();
+  return subscribedTopics.includes(slug);
 };
