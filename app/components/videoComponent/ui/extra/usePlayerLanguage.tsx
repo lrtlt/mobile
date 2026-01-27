@@ -2,7 +2,6 @@ import {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {MediaTrack, PlayerEventType, THEOplayer} from 'react-native-theoplayer';
 import {IconLanguage} from '../../../svg';
-import TouchableDebounce from '../../../touchableDebounce/TouchableDebounce';
 import {PlayerButton} from '../components/playerButton/PlayerButton';
 import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from '../MediaControls.constants';
 
@@ -66,13 +65,13 @@ const usePlayerLanguage = ({player}: Options) => {
   const renderAudioTrackItem = useCallback(
     ({item}: {item: MediaTrack}) => {
       return (
-        <TouchableDebounce
+        <PlayerButton
           key={item.uid}
           style={{...styles.center, ...styles.rounded, backgroundColor: '#FFFFFFEE', padding: 8}}
           activeOpacity={0.9}
           onPress={() => selectAudioTrack(item)}>
           <Text>{getLanguageName(item.language)}</Text>
-        </TouchableDebounce>
+        </PlayerButton>
       );
     },
     [selectAudioTrack],
@@ -80,13 +79,13 @@ const usePlayerLanguage = ({player}: Options) => {
 
   const renderBackButton = useCallback(() => {
     return (
-      <TouchableDebounce
+      <PlayerButton
         key={'close'}
         style={{...styles.center, ...styles.rounded, backgroundColor: '#FFFFFF99', padding: 8}}
         activeOpacity={0.9}
         onPress={() => handleModalClose()}>
         <Text>Uždaryti</Text>
-      </TouchableDebounce>
+      </PlayerButton>
     );
   }, []);
 
