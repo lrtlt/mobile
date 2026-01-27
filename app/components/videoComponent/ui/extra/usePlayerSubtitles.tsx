@@ -1,12 +1,12 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {StyleSheet, View, Text, Platform} from 'react-native';
 import {PlayerEventType, TextTrack, TextTrackKind, THEOplayer} from 'react-native-theoplayer';
-import {IconSubtitles} from '../svg';
-import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from './MediaControls';
-import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import {ScrollView} from 'react-native-gesture-handler';
-import {getLanguageName} from './usePlayerLanguage';
 import {getAnalytics, logEvent} from '@react-native-firebase/analytics';
+import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from '../MediaControls.constants';
+import {IconSubtitles} from '../../../svg';
+import {getLanguageName} from './usePlayerLanguage';
+import {PlayerButton} from '../components/playerButton/PlayerButton';
 
 type Options = {
   player?: THEOplayer;
@@ -51,7 +51,7 @@ const usePlayerSubtitles = ({player}: Options) => {
   const renderTextTrackItem = useCallback(
     ({item}: {item: TextTrack}) => {
       return (
-        <TouchableDebounce
+        <PlayerButton
           key={item.uid}
           style={{
             ...styles.center,
@@ -69,7 +69,7 @@ const usePlayerSubtitles = ({player}: Options) => {
             });
           }}>
           <Text style={{flex: 1, textAlign: 'center'}}>{getLanguageName(item.language)}</Text>
-        </TouchableDebounce>
+        </PlayerButton>
       );
     },
     [selectTextTrack],
@@ -77,7 +77,7 @@ const usePlayerSubtitles = ({player}: Options) => {
 
   const renderBackButton = useCallback(() => {
     return (
-      <TouchableDebounce
+      <PlayerButton
         key={'close'}
         style={{...styles.center, ...styles.rounded, backgroundColor: '#FFFFFF99', padding: 8}}
         activeOpacity={0.9}
@@ -88,7 +88,7 @@ const usePlayerSubtitles = ({player}: Options) => {
           setShowMenu(false);
         }}>
         <Text>Išjungti</Text>
-      </TouchableDebounce>
+      </PlayerButton>
     );
   }, [player]);
 
@@ -121,13 +121,9 @@ const SubtitlesButton: React.FC<React.PropsWithChildren<Props>> = ({textTracks, 
     return null;
   } else {
     return (
-      <TouchableDebounce
-        style={[styles.center]}
-        onPress={() => onPress()}
-        hitSlop={HIT_SLOP}
-        activeOpacity={0.6}>
+      <PlayerButton style={styles.center} onPress={onPress} hitSlop={HIT_SLOP} activeOpacity={0.6}>
         <IconSubtitles size={ICON_SIZE + 6} color={ICON_COLOR} />
-      </TouchableDebounce>
+      </PlayerButton>
     );
   }
 };

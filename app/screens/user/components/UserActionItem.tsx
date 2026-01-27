@@ -24,7 +24,7 @@ const UserActionItem: React.FC<UserActionItemProps> = ({
     <TouchableDebounce
       style={[
         styles.actionItem,
-        {borderColor: colors.border},
+        {borderColor: colors.border, opacity: onPress ? 1 : 0.5},
         isDestructive && {borderColor: colors.textError, borderWidth: 1},
       ]}
       onPress={onPress}>

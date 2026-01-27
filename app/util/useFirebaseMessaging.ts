@@ -12,7 +12,7 @@ import {
   experimentalSetDeliveryMetricsExportedToBigQueryEnabled,
 } from '@react-native-firebase/messaging';
 import {Linking} from 'react-native';
-import useFirebaseTopicSubscription from './useFirebaseTopicSubscription';
+import useFCMTokenSync from './useFCMTokenSync';
 import notifee, {
   AndroidImportance,
   AndroidVisibility,
@@ -81,7 +81,8 @@ notifee.onBackgroundEvent(_onNotificationEvent);
 setBackgroundMessageHandler(getMessaging(), async (_) => {});
 
 const useFirebaseMessaging = (isNavigationReady: boolean) => {
-  useFirebaseTopicSubscription();
+  // Sync FCM token with backend
+  useFCMTokenSync();
 
   //Setup firebase messaging && notification channels
   useEffect(() => {

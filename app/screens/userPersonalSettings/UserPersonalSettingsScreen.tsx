@@ -9,9 +9,11 @@ import {useTheme} from '../../Theme';
 import {useAuth0} from 'react-native-auth0';
 import queryClient from '../../../AppQueryClient';
 import {useDeleteCurrentUser} from '../../api/hooks/useUser';
+import {useDisassociateDeviceToken} from '../../api/hooks/usePushNotifications';
 import ConfirmModal from '../weather/ConfirmModal';
 import UserHeader from '../user/components/UserHeader';
 import {getAnalytics, logEvent} from '@react-native-firebase/analytics';
+import {clearFCMUserData, getFcmToken} from '../../util/useFCMTokenSync';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
@@ -21,6 +23,7 @@ const UserPersonalSettingsScreen: React.FC<React.PropsWithChildren<Props>> = ({n
   const {clearSession, user} = useAuth0();
   const [deleteAccountConfirmVisible, setDeleteAccountConfirmVisible] = useState(false);
   const {mutateAsync: deleteUser} = useDeleteCurrentUser();
+  const {mutateAsync: disassociateToken} = useDisassociateDeviceToken();
 
   const {colors} = useTheme();
 
@@ -30,18 +33,41 @@ const UserPersonalSettingsScreen: React.FC<React.PropsWithChildren<Props>> = ({n
     });
   }, [user]);
 
+  const clearFCMToken = async () => {
+    const fcmToken = await getFcmToken();
+    if (fcmToken) {
+      console.log('Logout: Disassociating FCM token...');
+      if (user) {
+        // Disassociate token from user on backend
+        await disassociateToken(fcmToken);
+
+        // Clear local FCM user data
+        clearFCMUserData(user.id);
+        console.log('FCM token cleared for user ', user.id);
+      } else {
+        throw new Error('No user logged in');
+      }
+    }
+  };
+
   const handleLogout = async () => {
     if (user) {
-      await clearSession();
-      logEvent(getAnalytics(), 'app_lrt_lt_user_signed_out');
-      queryClient.removeQueries();
-      queryClient.invalidateQueries();
-      navigation.pop();
+      try {
+        await clearFCMToken();
+        await clearSession();
+        logEvent(getAnalytics(), 'app_lrt_lt_user_signed_out');
+        queryClient.removeQueries();
+        queryClient.invalidateQueries();
+        navigation.pop();
+      } catch (error) {
+        console.error('Error during logout:', error);
+      }
     }
   };
 
   const handleDeleteAccount = async () => {
     try {
+      await clearFCMToken();
       await deleteUser();
       logEvent(getAnalytics(), 'app_lrt_lt_user_account_deleted');
       queryClient.removeQueries();

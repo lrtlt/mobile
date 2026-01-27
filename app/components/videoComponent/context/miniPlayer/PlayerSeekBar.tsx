@@ -1,8 +1,8 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {PanResponder, PanResponderInstance, StyleSheet, View, ViewStyle} from 'react-native';
 import {LoadedMetadataEvent, PlayerEventType, THEOplayer, TimeUpdateEvent} from 'react-native-theoplayer';
-import {useTheme} from '../../Theme';
-import TextComponent from '../text/Text';
+import {useTheme} from '../../../../Theme';
+import TextComponent from '../../../text/Text';
 
 const formatTimeElapsed = (currentTime: number, duration: number) => {
   const time = Math.floor(Math.min(Math.max(currentTime / 1000, 0), duration / 1000));

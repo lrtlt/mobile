@@ -1,6 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useCallback} from 'react';
 import {View, StyleSheet, Dimensions, ScrollView} from 'react-native';
-import Animated, {useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated';
 
 import FastImage from '@d11/react-native-fast-image';
 
@@ -8,14 +7,14 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import {MediatekaBlockWidget} from '../../../../../../api/Types';
 import {Article} from '../../../../../../../Types';
-import {buildImageUri, IMG_SIZE_M, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
+import {buildImageUri, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
 import {themeLight, useTheme} from '../../../../../../Theme';
 import {Text, TouchableDebounce} from '../../../../../../components';
 import {IconPlay} from '../../../../../../components/svg';
+import ThumbnailItem from './ThumbnailItem';
 
 const {height} = Dimensions.get('window');
-const width = Math.min(Dimensions.get('window').width * 0.4, 300);
 
 interface Props {
   block: MediatekaBlockWidget;
@@ -29,37 +28,17 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
 
   const {colors} = useTheme();
 
-  const scaleValues = articles.map(() => useSharedValue(1));
-
- 
-  useEffect(() => {
-    // Reset all scales to 1
-    scaleValues.forEach((scale, index) => {
-      scale.value = withTiming(index === selectedIndex ? 1.05 : 1, {duration: 200});
-    });
-  }, [selectedIndex, scaleValues]);
-
-  const getAnimatedStyle = (index: number) => {
-    return useAnimatedStyle(() => {
-      return {
-        transform: [{scale: scaleValues[index]?.value ?? 1}],
-        borderWidth: 2,
-        borderColor: index === selectedIndex ? '#FFFFFF' : 'transparent',
-      };
-    });
-  };
-
-  const selectedArticle = articles[selectedIndex];
-  if (!selectedArticle) {
-    return null;
-  }
-
   const handleItemPress = useCallback((index: number) => {
     setSelectedIndex(index);
   }, []);
 
-   // Early return if no articles
+  // Early return if no articles
   if (!articles || articles.length === 0) {
+    return null;
+  }
+
+  const selectedArticle = articles[selectedIndex];
+  if (!selectedArticle) {
     return null;
   }
 
@@ -125,20 +104,13 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
             style={styles.bottomScrollView}
             contentContainerStyle={styles.bottomList}>
             {articles.map((item, index) => (
-              <TouchableDebounce key={item.id} onPress={() => handleItemPress(index)}>
-                <Animated.View style={[styles.thumbnailContainer, getAnimatedStyle(index)]}>
-                  <FastImage
-                    source={{
-                      uri: buildImageUri(
-                        IMG_SIZE_M,
-                        item.img_path_prefix ?? item.category_img_path_prefix,
-                        item.img_path_postfix ?? item.category_img_path_postfix,
-                      ),
-                    }}
-                    style={styles.thumbnail}
-                  />
-                </Animated.View>
-              </TouchableDebounce>
+              <ThumbnailItem
+                key={item.id}
+                item={item}
+                index={index}
+                isSelected={index === selectedIndex}
+                onPress={handleItemPress}
+              />
             ))}
           </ScrollView>
         </View>
@@ -217,16 +189,6 @@ const styles = StyleSheet.create({
     paddingVertical: 32,
     paddingHorizontal: 18,
     gap: 12,
-  },
-  thumbnailContainer: {
-    width: width,
-    aspectRatio: 1.8,
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
-  thumbnail: {
-    flex: 1,
-    borderRadius: 8,
   },
 });
 

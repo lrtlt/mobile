@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {MediaBaseData, PlayerContext, PlayerContextType} from './PlayerContext';
 import {useTheme} from '../../../Theme';
-import MiniPlayerAudio from './miniPlayerAudio/MiniPlayerAudio';
+import MiniPlayerAudio from './miniPlayer/MiniPlayer';
 import {View} from 'react-native';
 import {Playlist} from './playlist/Playlist';
 

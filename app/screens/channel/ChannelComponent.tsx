@@ -148,8 +148,8 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
               textAlign: 'center',
               paddingVertical: 8,
             }}>
-            Transliaciją galima žiūrėti ir su <Text style={{fontWeight: 'bold'}}>DI</Text> pagalba
-            generuojamais subtitrais lietuvių, anglų, lenkų, ukrainiečių ir rusų kalba.
+            Transliaciją galima žiūrėti ir su dirbtiniu intelektu generuojamais subtitrais lietuvių, anglų,
+            lenkų, ukrainiečių ir rusų kalbomis.
           </Text>
         ) : null}
         {programComponent}

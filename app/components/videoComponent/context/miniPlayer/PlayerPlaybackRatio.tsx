@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react';
 import {ViewStyle} from 'react-native';
 import {THEOplayer} from 'react-native-theoplayer';
-import {Text, TouchableDebounce} from '..';
-import {themeLight} from '../../Theme';
+import {Text, TouchableDebounce} from '../../..';
+import {themeLight} from '../../../../Theme';
 
 interface Props {
   style?: ViewStyle;

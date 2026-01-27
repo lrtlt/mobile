@@ -1,9 +1,9 @@
 import {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {MediaTrack, PlayerEventType, THEOplayer} from 'react-native-theoplayer';
-import {IconLanguage} from '../svg';
-import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from './MediaControls';
-import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
+import {IconLanguage} from '../../../svg';
+import {PlayerButton} from '../components/playerButton/PlayerButton';
+import {HIT_SLOP, ICON_COLOR, ICON_SIZE} from '../MediaControls.constants';
 
 type Options = {
   player?: THEOplayer;
@@ -65,13 +65,13 @@ const usePlayerLanguage = ({player}: Options) => {
   const renderAudioTrackItem = useCallback(
     ({item}: {item: MediaTrack}) => {
       return (
-        <TouchableDebounce
+        <PlayerButton
           key={item.uid}
           style={{...styles.center, ...styles.rounded, backgroundColor: '#FFFFFFEE', padding: 8}}
           activeOpacity={0.9}
           onPress={() => selectAudioTrack(item)}>
           <Text>{getLanguageName(item.language)}</Text>
-        </TouchableDebounce>
+        </PlayerButton>
       );
     },
     [selectAudioTrack],
@@ -79,13 +79,13 @@ const usePlayerLanguage = ({player}: Options) => {
 
   const renderBackButton = useCallback(() => {
     return (
-      <TouchableDebounce
+      <PlayerButton
         key={'close'}
         style={{...styles.center, ...styles.rounded, backgroundColor: '#FFFFFF99', padding: 8}}
         activeOpacity={0.9}
         onPress={() => handleModalClose()}>
         <Text>Uždaryti</Text>
-      </TouchableDebounce>
+      </PlayerButton>
     );
   }, []);
 
@@ -114,13 +114,9 @@ const LanguageButton: React.FC<React.PropsWithChildren<Props>> = ({audioTracks, 
     return null;
   } else {
     return (
-      <TouchableDebounce
-        style={[styles.center]}
-        onPress={() => onPress()}
-        hitSlop={HIT_SLOP}
-        activeOpacity={0.6}>
+      <PlayerButton style={styles.center} onPress={onPress} hitSlop={HIT_SLOP} activeOpacity={0.6}>
         <IconLanguage size={ICON_SIZE - 2} color={ICON_COLOR} />
-      </TouchableDebounce>
+      </PlayerButton>
     );
   }
 };
