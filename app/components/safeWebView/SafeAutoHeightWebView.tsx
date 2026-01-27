@@ -35,7 +35,7 @@ const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardR
       if (isUserClickAction) {
         //User clicked on the link which should redirect to other page.
         //Opening the page on the browser...
-        if (request.url === 'https://www.lrt.lt/zaidimai') {
+        if (request.url === 'https://www.lrt.lt/zaidimai' || request.url === 'https://www.lrt.lt/zaidimai/') {
           navigation.navigate('Games');
           return false;
         }
