@@ -26,6 +26,7 @@ import {
 
 import {ChannelColor, channelColors} from '../Theme';
 import {Color} from 'react-native-unistyles/lib/typescript/src/types';
+import {LRT_100, LRT_KLASIKA, LRT_LITHUANICA, LRT_OPUS, LRT_PLUS, LRT_RADIJAS, LRT_TV} from '../constants';
 
 export type IconSize = {
   width?: number;
@@ -143,6 +144,32 @@ export const getIconForChannelById = (channelId: number, size?: IconSize) => {
       return getIconForChannel('LRT100', size);
     default:
       return <Logo {...size} useOnlyInternal />;
+  }
+};
+
+export const getPosterByChannelId = (channelId: string) => {
+  switch (channelId) {
+    case '1': {
+      return LRT_TV;
+    }
+    case '2': {
+      return LRT_PLUS;
+    }
+    case '3': {
+      return LRT_LITHUANICA;
+    }
+    case '5': {
+      return LRT_KLASIKA;
+    }
+    case '6': {
+      return LRT_OPUS;
+    }
+    case '37': {
+      return LRT_100;
+    }
+    default: {
+      return LRT_RADIJAS;
+    }
   }
 };
 

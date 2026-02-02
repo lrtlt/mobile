@@ -2,16 +2,9 @@ import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import {get} from '../HttpClient';
 import {ChannelResponse, isVideoLiveStream, VideoDataDefault, VideoDataLiveStream} from '../Types';
 import {MediaType} from '../../components/videoComponent/context/PlayerContext';
-import {
-  BLOCKED_STREAM_URL,
-  LRT_KLASIKA,
-  LRT_LITHUANICA,
-  LRT_OPUS,
-  LRT_PLUS,
-  LRT_RADIJAS,
-  LRT_TV,
-} from '../../constants';
+import {BLOCKED_STREAM_URL} from '../../constants';
 import {StreamData} from './useStream';
+import {getPosterByChannelId} from '../../util/UI';
 
 export const useChannelById = (id: number | string) => {
   return useQuery({
@@ -72,27 +65,4 @@ export const useChannelStreamInfo = (channelId: number | string) => {
     placeholderData: keepPreviousData,
     enabled: !!channelResponse,
   });
-};
-
-const getPosterByChannelId = (channelId: string) => {
-  switch (channelId) {
-    case '1': {
-      return LRT_TV;
-    }
-    case '2': {
-      return LRT_PLUS;
-    }
-    case '3': {
-      return LRT_LITHUANICA;
-    }
-    case '5': {
-      return LRT_KLASIKA;
-    }
-    case '6': {
-      return LRT_OPUS;
-    }
-    default: {
-      return LRT_RADIJAS;
-    }
-  }
 };
