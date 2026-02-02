@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     minWidth: '60%',
     maxWidth: '90%',
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 12,
     paddingVertical: 24,
     paddingHorizontal: 24,
   },
@@ -72,17 +72,18 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 19,
+    lineHeight: 30,
     textAlign: 'center',
   },
   button: {
     flex: 1,
-    height: 40,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 4,
     borderWidth: 1,
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 17,
   },
 });

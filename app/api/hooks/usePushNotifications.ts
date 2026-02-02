@@ -5,12 +5,6 @@ import {Platform} from 'react-native';
 
 const SUBSCRIPTIONS_QUERY_KEY = 'userSubscriptions';
 
-const TEST_SUBSCRIPTION: UpdateSubscriptionRequest = {
-  name: 'Test',
-  subscription_key: 'test',
-  is_active: false,
-};
-
 export type UserSubscription = {
   subscription_key: string;
   is_active: boolean;
@@ -106,21 +100,29 @@ export const useUserSubscriptions = (enabled = true) =>
         a.subscription_key.localeCompare(b.subscription_key),
       );
 
-      if (__DEV__) {
-        const containsTest =
-          sorted.findIndex((sub) => sub.subscription_key === TEST_SUBSCRIPTION.subscription_key) !== -1;
-
-        if (!containsTest) {
-          sorted.push(TEST_SUBSCRIPTION);
-        }
-      }
-
       return sorted;
     },
     staleTime: 1000 * 60 * 2, // 2 minutes
     retry: 2,
     enabled,
   });
+
+/**
+ * Check if user is subscribed to a specific notification category.
+ * Returns true if the subscription exists and is active, false otherwise.
+ */
+export const useIsSubscribed = (category_id: number, enabled: boolean): boolean => {
+  const {data: subscriptions} = useUserSubscriptions(!!category_id && enabled);
+
+  if (!subscriptions) {
+    return false;
+  }
+
+  const subscription_key = `category-${category_id}`;
+
+  const subscription = subscriptions.find((sub) => sub.subscription_key === subscription_key);
+  return subscription?.is_active ?? false;
+};
 
 /**
  * Update a single subscription preference.

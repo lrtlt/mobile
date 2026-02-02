@@ -5,7 +5,7 @@ import {Animated, ScrollViewProps, StyleSheet, View} from 'react-native';
 import Share from 'react-native-share';
 import {ArticleContent, isDefaultArticle} from '../../api/Types';
 import {AnimatedAppBar, Text, TouchableDebounce} from '../../components';
-import {IconBookmarkNew, ShareIcon} from '../../components/svg';
+import {IconBookmarkNew, IconSubscribe, IconSubscribeActive, ShareIcon} from '../../components/svg';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
@@ -17,6 +17,7 @@ import {
 } from '../../api/hooks/useFavoriteArticles';
 import {useAuth0} from 'react-native-auth0';
 import PleaseLoginModal from './PleaseLoginModal';
+import {useIsSubscribed, useUpdateSubscription} from '../../api/hooks/usePushNotifications';
 
 const getArticleId = (article?: ArticleContent) => {
   if (!article) {
@@ -75,6 +76,10 @@ const HeaderRight: React.FC<{article?: ArticleContent}> = ({article}) => {
 
   const {mutate: addFavoriteArticle} = useAddFavoriteUserArticle();
   const {mutate: deleteFavoriteArticle} = useDeleteFavoriteUserArticle();
+
+  const {mutate: updateSubscription} = useUpdateSubscription();
+  const isSubscribed = useIsSubscribed(article?.category_id ?? 0, !!user && isFocused);
+
   const {data: isFavorite} = useIsFavoriteUserArticle(getArticleId(article), !!user && isFocused);
 
   const _saveArticlePress = () => {
@@ -97,6 +102,28 @@ const HeaderRight: React.FC<{article?: ArticleContent}> = ({article}) => {
       articleStorage.saveArticle(article);
       addFavoriteArticle(getArticleId(article));
     }
+  };
+
+  const _subscribePress = () => {
+    if (!article || !article.category_id) {
+      return;
+    }
+
+    if (!user) {
+      console.log('User not logged in, showing login modal');
+      setModalVisible(true);
+      return;
+    }
+
+    const category_id = article.category_id;
+    const newStatus = !isSubscribed;
+    const subscriptionKey = `category-${category_id}`;
+
+    updateSubscription({
+      subscription_key: subscriptionKey,
+      name: article.category_title || subscriptionKey,
+      is_active: newStatus,
+    });
   };
 
   const _handleSharePress = () => {
@@ -138,6 +165,27 @@ const HeaderRight: React.FC<{article?: ArticleContent}> = ({article}) => {
         />
         <Text>{isFavorite ? 'Išsaugota' : 'Saugoti'}</Text>
       </TouchableDebounce>
+      {article?.is_video || article?.is_audio ? (
+        <>
+          <View style={[styles.divider, {backgroundColor: colors.border}]} />
+          <TouchableDebounce
+            accessibilityLabel="Prenumeruoti"
+            style={styles.buttonContainer}
+            hitSlop={{
+              top: EXTRA_HIT_SLOP,
+              bottom: EXTRA_HIT_SLOP,
+            }}
+            onPress={_subscribePress}>
+            {isSubscribed ? (
+              <IconSubscribeActive size={dim.appBarIconSize - 7} color={colors.iconActive} />
+            ) : (
+              <IconSubscribe size={dim.appBarIconSize - 7} color={colors.headerTint} />
+            )}
+            <Text>{isSubscribed ? 'Prenumeruojama' : 'Prenumeruoti'}</Text>
+          </TouchableDebounce>
+        </>
+      ) : null}
+
       <View style={[styles.divider, {backgroundColor: colors.border}]} />
       <TouchableDebounce
         style={styles.buttonContainer}
@@ -151,7 +199,7 @@ const HeaderRight: React.FC<{article?: ArticleContent}> = ({article}) => {
       </TouchableDebounce>
       <PleaseLoginModal
         visible={modalVisible}
-        title="Norėdami išsaugoti straipsnį, prisijunkite prie savo paskyros."
+        title="Norėdami išsaugoti straipsnį arba prenumeruoti rubriką, prisijunkite prie savo paskyros."
         onConfirm={() => {
           setModalVisible(false);
           navigation.navigate('User', {instantLogin: false});

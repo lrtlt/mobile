@@ -27,6 +27,7 @@ export type MainStackParamList = {
   User: {instantLogin?: boolean};
   UserPersonalSettings: undefined;
   Notifications: undefined;
+  Subscriptions: undefined;
   Favorites: undefined;
   Article: {
     articleId: number;
@@ -201,6 +202,7 @@ export default () => {
       <Stack.Screen name="User" component={Screens.UserScreen} />
       <Stack.Screen name="UserPersonalSettings" component={Screens.UserPersonalSettingsScreen} />
       <Stack.Screen name="Notifications" component={Screens.NotificationsScreen} />
+      <Stack.Screen name="Subscriptions" component={Screens.SubscriptionsScreen} />
       <Stack.Screen name="Favorites" component={Screens.FavoritesScreen} />
       <Stack.Screen name="History" component={Screens.HistoryScreen} />
       <Stack.Screen name="Program" component={Screens.ProgramScreen} />

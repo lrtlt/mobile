@@ -6,7 +6,7 @@ import {useAuth0} from 'react-native-auth0';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
-import {IconApplicationSettings, IconBell, IconBookmarkNew} from '../../../components/svg';
+import {IconApplicationSettings, IconBell, IconBookmarkNew, IconSubscribe} from '../../../components/svg';
 import UserActionItem from './UserActionItem';
 import {useArticleStorageStore} from '../../../state/article_storage_store';
 import {useFavoriteUserArticleIds} from '../../../api/hooks/useFavoriteArticles';
@@ -26,6 +26,10 @@ const UserActions: React.FC = () => {
 
   const handleNotifications = () => {
     navigation.navigate('Notifications');
+  };
+
+  const handleSubscriptions = () => {
+    navigation.navigate('Subscriptions');
   };
 
   const {savedArticles} = useArticleStorageStore.getState();
@@ -49,6 +53,15 @@ const UserActions: React.FC = () => {
         icon={<IconBell size={32} color={colors.iconInactive} />}
         label={strings.notifications}
         onPress={user ? handleNotifications : undefined}
+      />
+      <UserActionItem
+        icon={
+          <View style={{padding: 2}}>
+            <IconSubscribe size={32 - 4} color={colors.iconInactive} />
+          </View>
+        }
+        label={strings.subscriptoions}
+        onPress={user ? handleSubscriptions : undefined}
       />
 
       <UserActionItem

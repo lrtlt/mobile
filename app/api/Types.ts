@@ -928,6 +928,7 @@ export type ArticleContentDefault = {
   'n-18'?: 0 | 1;
   age_restriction?: string | null;
   is_video?: 0 | 1;
+  is_audio?: 0 | 1;
   read_count?: number;
 };
 

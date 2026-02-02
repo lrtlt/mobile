@@ -29,6 +29,7 @@ interface Dictionary {
   history: string;
   bookmarks: string;
   notifications: string;
+  subscriptoions: string;
   favorites: string;
   liveChannelTitle: string;
   channelScreenTitle: string;
@@ -93,6 +94,7 @@ export const strings: Dictionary = {
   settings: 'NUSTATYMAI',
   user: 'PASKYRA',
   notifications: 'PRANEŠIMAI',
+  subscriptoions: 'PRENUMERATOS',
   profile: 'PROFILIS',
   textSizeTitle: 'Šrifto dydis',
   videoNotAvailable: 'Vaizdo įrašas nepasiekiamas jūsų šalyje',
