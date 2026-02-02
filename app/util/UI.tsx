@@ -21,6 +21,7 @@ import {
   IconWeatherSnowWind,
   IconWeatherSprinkle,
   LRTLogo,
+  Channel100Icon,
 } from '../components/svg';
 
 import {ChannelColor, channelColors} from '../Theme';
@@ -37,24 +38,27 @@ export const getSmallestDim = () => {
 };
 
 export const getColorsForChannel = (channel: string, fallback?: ChannelColor) => {
-  switch (channel) {
-    case 'LTV1': {
+  switch (channel.toLocaleLowerCase()) {
+    case 'ltv1': {
       return channelColors.color_set_lrtHD;
     }
-    case 'LTV2': {
+    case 'ltv2': {
       return channelColors.color_set_lrtPlius;
     }
-    case 'WORLD': {
+    case 'world': {
       return channelColors.color_set_lrt_world;
     }
-    case 'LR': {
+    case 'lr': {
       return channelColors.color_set_l_radio;
     }
-    case 'Klasika': {
+    case 'klasika': {
       return channelColors.color_set_classic;
     }
-    case 'Opus': {
+    case 'opus': {
       return channelColors.color_set_opus;
+    }
+    case 'lrt100': {
+      return channelColors.color_set_100;
     }
     default: {
       return fallback || channelColors.color_set_default;
@@ -82,6 +86,9 @@ export const getColorsForChannelById = (channel_id?: number, fallback?: ChannelC
     case 6: {
       return channelColors.color_set_opus;
     }
+    case 37: {
+      return channelColors.color_set_100;
+    }
     default: {
       return fallback || channelColors.color_set_default;
     }
@@ -108,6 +115,10 @@ export const getIconForChannel = (channel: string, size?: IconSize, color?: Colo
     case 'opus': {
       return <ChannelOpusIcon {...size} color={color} />;
     }
+    case 'lrt100': {
+      return <Channel100Icon {...size} color={color} />;
+    }
+
     default: {
       return <LRTLogo {...size} color={color} />;
     }
@@ -128,6 +139,8 @@ export const getIconForChannelById = (channelId: number, size?: IconSize) => {
       return getIconForChannel('Klasika', size);
     case 6:
       return getIconForChannel('Opus', size);
+    case 37:
+      return getIconForChannel('LRT100', size);
     default:
       return <Logo {...size} useOnlyInternal />;
   }

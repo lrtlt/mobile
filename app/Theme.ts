@@ -144,6 +144,7 @@ type ChannelColorScheme = {
   color_set_l_radio: ChannelColor;
   color_set_classic: ChannelColor;
   color_set_opus: ChannelColor;
+  color_set_100: ChannelColor;
 };
 
 export const channelColors: ChannelColorScheme = {
@@ -154,6 +155,7 @@ export const channelColors: ChannelColorScheme = {
   color_set_classic: {primary: '#C47FAA', secondary: '#603680'},
   color_set_opus: {primary: '#F2B12E', secondary: '#E7792B'},
   color_set_lrtLT: {primary: '#545a94', secondary: '#2f357d'},
+  color_set_100: {primary: '#00A494', secondary: '#00524a'},
   color_set_default: {primary: '#BADAFB', secondary: '#93BDE7'},
 };
 //#endregion

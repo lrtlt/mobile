@@ -5,6 +5,7 @@ export {default as ChannelLRTHDIcon} from './ic_channel_lrt_hd';
 export {default as ChannelLRTPliusIcon} from './ic_channel_lrt_plius';
 export {default as ChannelLRTWorldIcon} from './ic_channel_lrt_world';
 export {default as ChannelOpusIcon} from './ic_channel_opus';
+export {default as Channel100Icon} from './ic_channel_100';
 export {default as LRTArchivesIcon} from './ic_lrt_archives';
 export {default as IconComments} from './ic_comments';
 export {default as SaveIcon} from './ic_save';
