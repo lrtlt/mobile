@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {ActivityIndicator, Pressable, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {ICON_SIZE} from './MediaControls.constants';
 import {useControlsVisibility, usePlayerState} from '../context/player/usePlayer';
@@ -11,6 +11,7 @@ import Timer from './components/Timer';
 import ChromeCastButton from './components/ChromeCastButton';
 import FullScreenButton from './components/FullScreenButton';
 import Overlay from './components/Overlay';
+import {PlayerButton} from './components/playerButton/PlayerButton';
 
 interface Props {
   enabled: boolean;
@@ -43,12 +44,12 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   const visible = enabled && visibility.visible;
 
   if (!visible) {
-    return <Pressable collapsable={false} style={showPressableStyle} onPressIn={showControls} />;
+    return <PlayerButton style={showPressableStyle} onPress={showControls} />;
   } else {
     return (
       <Animated.View style={containerStyle} entering={FadeIn.duration(400)} exiting={FadeOut.duration(400)}>
         <Overlay style={StyleSheet.absoluteFill} />
-        <Pressable style={hidePressableStyle} onPressIn={hideControls} />
+        <PlayerButton style={hidePressableStyle} onPress={hideControls} />
         <Title title={title} />
         <CenterButtons />
 
