@@ -1,12 +1,9 @@
 import React, {PropsWithChildren} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import SettingsSwitch from '../settings/SettingsSwitch';
-import {ScreenError, Text} from '../../components';
+import {Text} from '../../components';
 import {useTheme} from '../../Theme';
-import {
-  useUserSubscriptions,
-  useUpdateSubscription,
-} from '../../api/hooks/usePushNotifications';
+import {useUserSubscriptions, useUpdateSubscription} from '../../api/hooks/usePushNotifications';
 
 interface SubscriptionsSettingsProps {}
 
@@ -32,7 +29,11 @@ const SubscriptionsSettings: React.FC<PropsWithChildren<SubscriptionsSettingsPro
   }
 
   if (!subscriptions || subscriptions.length === 0) {
-    return <ScreenError text="Nerasta prenumeratų nustatymų" />;
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Aktyvių prenumeratų nėra.</Text>
+      </View>
+    );
   }
 
   return (

@@ -49,9 +49,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
     gap: 8,
+    minHeight: '100%',
   },
   card: {
-    borderRadius: 16,
+    flex: 1,
     margin: 12,
     overflow: 'hidden',
   },
