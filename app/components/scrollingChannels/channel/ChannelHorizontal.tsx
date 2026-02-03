@@ -62,7 +62,9 @@ const ChannelHorizontal: React.FC<React.PropsWithChildren<Props>> = ({data, onPr
           {data.title}
         </TextComponent>
         <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-          <TextComponent style={{...styles.timeText, color: colors.text}} importantForAccessibility="no">
+          <TextComponent
+            style={{...styles.timeText, color: colorsSet.secondary}}
+            importantForAccessibility="no">
             {data.time_start + ' - ' + data.time_end}
           </TextComponent>
           {bottomBarContainer}

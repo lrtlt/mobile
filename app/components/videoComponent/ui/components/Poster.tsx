@@ -7,14 +7,7 @@ interface Props {
 }
 
 const Poster: React.FC<PropsWithChildren<Props>> = ({posterUri}) => {
-  return <FastImage source={{uri: posterUri}} style={styles.img} resizeMode="cover" />;
+  return <FastImage source={{uri: posterUri}} style={StyleSheet.absoluteFill} resizeMode="cover" />;
 };
 
 export default Poster;
-
-const styles = StyleSheet.create({
-  img: {
-    flex: 1,
-    position: 'absolute',
-  },
-});

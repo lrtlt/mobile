@@ -49,6 +49,7 @@ export const useChannelStreamInfo = (channelId: number | string) => {
           audioStreamData = {
             ...streamData,
             streamUri: isBlocked ? BLOCKED_STREAM_URL : data.audio.trim(),
+            mediaId: data.audio,
             mediaType: MediaType.AUDIO,
             poster: getPosterByChannelId(String(channelId)),
           };
@@ -59,6 +60,8 @@ export const useChannelStreamInfo = (channelId: number | string) => {
           streamData,
           audioStreamData,
         };
+      } else {
+        throw new Error('Channel stream is not a live stream');
       }
     },
     staleTime: 1000 * 60 * 2, // 2 minutes

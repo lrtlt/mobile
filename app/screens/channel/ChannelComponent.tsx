@@ -23,14 +23,26 @@ interface Props {
   audioStreamData?: StreamData;
 }
 
+const isAudioChannel = (channelId: number) =>
+  [
+    4, // LRT Radijas
+    5, // LRT Klasika
+    6, // LRT Opus
+    37, // LRT 100
+  ].indexOf(channelId) !== -1;
+
 const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
   channelData,
   streamData,
   audioStreamData,
 }) => {
-  const [selectedStream, setSelectedStream] = useState(streamData);
-
   const {channel_info, prog} = channelData;
+  const chanelId = channel_info.channel_id;
+
+  const [selectedStream, setSelectedStream] = useState(
+    isAudioChannel(chanelId) ? audioStreamData ?? streamData : streamData,
+  );
+
   const {colors, strings} = useTheme();
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Channel'>>();
@@ -40,7 +52,7 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
   }, [navigation]);
 
   useEffect(() => {
-    setSelectedStream(streamData);
+    setSelectedStream(isAudioChannel(chanelId) ? audioStreamData ?? streamData : streamData);
   }, [channel_info]);
 
   // Safety check: if channel_info is missing or invalid, return null

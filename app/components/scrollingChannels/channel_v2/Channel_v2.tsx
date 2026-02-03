@@ -66,7 +66,9 @@ const ChannelV2: React.FC<React.PropsWithChildren<Props>> = ({data, isLive, onPr
             {getIconForChannel(data.channel, {height: 24}, dark ? colors.text : colorsSet.secondary)}
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-            <TextComponent style={{...styles.timeText, color: colors.text}} importantForAccessibility="no">
+            <TextComponent
+              style={{...styles.timeText, color: colorsSet.secondary}}
+              importantForAccessibility="no">
               {data.time_start + ' - ' + data.time_end}
             </TextComponent>
             {bottomBarContainer}

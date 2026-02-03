@@ -1,6 +1,10 @@
+import React from 'react';
 import Svg, {Path, G, Defs, ClipPath} from 'react-native-svg';
+import {useTheme} from '../../Theme';
 
 function SvgComponent(props) {
+  const {dark, colors} = useTheme();
+
   return (
     <Svg
       width={props.height ? (props.height * 76) / 32 : 76}

@@ -258,7 +258,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
               </View>
             )}
             {!isLoading && player ? (
-              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{flex: 1}}>
                 {mediaType == MediaType.AUDIO && <Poster posterUri={poster} />}
                 <MediaControls
                   enabled={!!controls || player.presentationMode === PresentationMode.fullscreen}
