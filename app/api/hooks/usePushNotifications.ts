@@ -144,9 +144,13 @@ export const useUpdateSubscription = () =>
       // Optimistic update
       queryClient.setQueryData<UserSubscription[]>([SUBSCRIPTIONS_QUERY_KEY], (old) => {
         if (!old) return old;
-        return old.map((sub) =>
-          sub.subscription_key === request.subscription_key ? {...sub, is_active: request.is_active} : sub,
-        );
+        const exists = old.some((sub) => sub.subscription_key === request.subscription_key);
+        if (exists) {
+          return old.map((sub) =>
+            sub.subscription_key === request.subscription_key ? {...sub, is_active: request.is_active} : sub,
+          );
+        }
+        return [...old, {subscription_key: request.subscription_key, is_active: request.is_active, name: request.name}];
       });
 
       return {previousData};
