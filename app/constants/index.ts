@@ -57,3 +57,4 @@ export const SQUARE_LRT_LITHUANICA = 'https://www.lrt.lt/images/app_logo/WORLD.p
 export const SQUARE_LRT_RADIJAS = 'https://www.lrt.lt/images/app_logo/LR.png?v=2';
 export const SQUARE_LRT_KLASIKA = 'https://www.lrt.lt/images/app_logo/Klasika.png?v=2';
 export const SQUARE_LRT_OPUS = 'https://www.lrt.lt/images/app_logo/Opus.png?v=2';
+export const SQUARE_LRT_100 = 'https://www.lrt.lt/images/app_logo/LRT100.png?v=2';

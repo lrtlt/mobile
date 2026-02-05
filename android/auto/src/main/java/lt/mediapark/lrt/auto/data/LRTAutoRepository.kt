@@ -51,27 +51,33 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                 val programItems = api.getLivePlaylist().program?.items ?: emptyList()
                 live = programItems
                     .filter { it.streamUrl != null }
-                    .map { api.getStreamInfo(it.streamUrl!!) }
-                    .map { it.response?.streamInfo }
-                    .mapIndexedNotNull{
-                            index, streamInfo -> PlaylistItem(
-                        title = if (streamInfo?.restriction.isNullOrEmpty()) programItems[index].channelTitle else BLOCKED_STREAM_MESSAGE,
-                        content = programItems[index].title,
-                        cover = getCoverByChannelId(programItems[index]),
-                        streamUrl = if (streamInfo?.restriction.isNullOrEmpty()) streamInfo?.audio ?: streamInfo?.content ?: "" else BLOCKED_STREAM_URL, 
-                    )
+                    .map { programItem ->
+                        Pair(programItem, api.getStreamInfo(programItem.streamUrl!!).response?.streamInfo)
                     }
-                    .sortedBy { item ->
-                        when(programItems.first { it.channelTitle == item.title }.channelId) {
+                    .mapNotNull { (programItem, streamInfo) ->
+                        Pair(
+                            programItem.channelId,
+                            PlaylistItem(
+                                title = if (streamInfo?.restriction.isNullOrEmpty()) programItem.channelTitle else BLOCKED_STREAM_MESSAGE,
+                                content = programItem.title,
+                                cover = getCoverByChannelId(programItem),
+                                streamUrl = if (streamInfo?.restriction.isNullOrEmpty()) streamInfo?.audio ?: streamInfo?.content ?: "" else BLOCKED_STREAM_URL,
+                            )
+                        )
+                    }
+                    .sortedBy { (channelId, _) ->
+                        when(channelId) {
                             "4" -> 0
-                            "5" -> 1
-                            "6" -> 2
-                            "1" -> 3
-                            "2" -> 4
-                            "3" -> 5
-                            else -> 6
+                            "37" -> 1
+                            "5" -> 2
+                            "6" -> 3
+                            "1" -> 4
+                            "2" -> 5
+                            "3" -> 6
+                            else -> 7
                         }
                     }
+                    .map { (_, playlistItem) -> playlistItem }
                 if(live.isNotEmpty()){
                     liveLastFetchTime = System.currentTimeMillis()
                 }
@@ -123,6 +129,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
             "3" -> "https://www.lrt.lt/images/app_logo/WORLD.png?v=2"
             "5" -> "https://www.lrt.lt/images/app_logo/Klasika.png?v=2"
             "6" -> "https://www.lrt.lt/images/app_logo/Opus.png?v=2"
+            "37" -> "https://www.lrt.lt/images/app_logo/LRT100.png?v=2"
             else -> "https://www.lrt.lt/images/app_logo/LR.png?v=2"
         }
     }
