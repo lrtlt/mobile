@@ -68,9 +68,9 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                     .sortedBy { (channelId, _) ->
                         when(channelId) {
                             "4" -> 0
-                            "37" -> 1
-                            "5" -> 2
-                            "6" -> 3
+                            "5" -> 1
+                            "6" -> 2
+                            "37" -> 3
                             "1" -> 4
                             "2" -> 5
                             "3" -> 6

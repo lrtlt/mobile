@@ -31,7 +31,7 @@ class CarPlayNetwork {
     let response = try JSONDecoder().decode(LiveProgramResponse.self, from: data)
     let program = response.tvprog
 
-    let channelIdOrder = [4, 37, 5, 6, 1, 2, 3]
+    let channelIdOrder = [4, 5, 6, 37, 1, 2, 3]
     let sortedProgramItems = program.items.sorted {
       (item1: LiveProgramItem, item2: LiveProgramItem) -> Bool in
       let index1 = channelIdOrder.firstIndex(of: item1.channel_id) ?? Int.max
