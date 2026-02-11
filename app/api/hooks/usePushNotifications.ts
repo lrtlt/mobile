@@ -2,6 +2,7 @@ import {useMutation, useQuery} from '@tanstack/react-query';
 import * as HttpClient from '../HttpClient';
 import queryClient from '../../../AppQueryClient';
 import {Platform} from 'react-native';
+import {getAnalytics, logEvent} from '@react-native-firebase/analytics';
 
 const SUBSCRIPTIONS_QUERY_KEY = 'userSubscriptions';
 
@@ -136,6 +137,16 @@ export const useUpdateSubscription = () =>
         request,
       );
       return response.data;
+    },
+    onSuccess: (_data, request) => {
+      logEvent(
+        getAnalytics(),
+        request.is_active ? 'app_lrt_lt_subscription_subscribed' : 'app_lrt_lt_subscription_unsubscribed',
+        {
+          subscription_key: request.subscription_key,
+          name: request.name,
+        },
+      );
     },
     onMutate: async (request) => {
       await queryClient.cancelQueries({queryKey: [SUBSCRIPTIONS_QUERY_KEY]});
