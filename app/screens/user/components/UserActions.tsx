@@ -60,7 +60,7 @@ const UserActions: React.FC = () => {
             <IconSubscribe size={32 - 4} color={colors.iconInactive} />
           </View>
         }
-        label={strings.subscriptoions}
+        label={'SEKAMOS LAIDOS'}
         onPress={user ? handleSubscriptions : undefined}
       />
 

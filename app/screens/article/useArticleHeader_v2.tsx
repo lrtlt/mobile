@@ -169,7 +169,7 @@ const HeaderRight: React.FC<{article?: ArticleContent}> = ({article}) => {
         <>
           <View style={[styles.divider, {backgroundColor: colors.border}]} />
           <TouchableDebounce
-            accessibilityLabel="Prenumeruoti"
+            accessibilityLabel="Sekti"
             style={styles.buttonContainer}
             hitSlop={{
               top: EXTRA_HIT_SLOP,
@@ -181,7 +181,7 @@ const HeaderRight: React.FC<{article?: ArticleContent}> = ({article}) => {
             ) : (
               <IconSubscribe size={dim.appBarIconSize - 7} color={colors.headerTint} />
             )}
-            <Text>{isSubscribed ? 'Prenumeruojama' : 'Prenumeruoti'}</Text>
+            <Text>{isSubscribed ? 'Sekama' : 'Sekti'}</Text>
           </TouchableDebounce>
         </>
       ) : null}
