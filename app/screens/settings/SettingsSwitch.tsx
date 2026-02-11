@@ -16,15 +16,19 @@ const SettingsSwitch: React.FC<PropsWithChildren<Props>> = ({title, onValueChang
   const {dark, colors} = useTheme();
   return (
     <View style={[styles.cell, {borderColor: colors.listSeparator}, cellStyle]}>
-      <Text style={styles.title}>{title}</Text>
-      <Switch
-        thumbColor={dark ? colors.text : colors.greyBackground}
-        trackColor={{
-          true: dark ? colors.textDisbled : colors.primary,
-        }}
-        onValueChange={onValueChange}
-        value={value}
-      />
+      <Text style={styles.title} numberOfLines={1}>
+        {title}
+      </Text>
+      <View style={styles.center}>
+        <Switch
+          thumbColor={dark ? colors.text : colors.greyBackground}
+          trackColor={{
+            true: dark ? colors.textDisbled : colors.primary,
+          }}
+          onValueChange={onValueChange}
+          value={value}
+        />
+      </View>
     </View>
   );
 };
@@ -32,6 +36,11 @@ const SettingsSwitch: React.FC<PropsWithChildren<Props>> = ({title, onValueChang
 export default SettingsSwitch;
 
 const styles = StyleSheet.create({
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   cell: {
     flexDirection: 'row',
     gap: 8,

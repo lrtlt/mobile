@@ -1,16 +1,28 @@
 import React, {PropsWithChildren} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, Pressable, View} from 'react-native';
 import SettingsSwitch from '../settings/SettingsSwitch';
 import {Text} from '../../components';
 import {useTheme} from '../../Theme';
-import {useUserSubscriptions, useUpdateSubscription} from '../../api/hooks/usePushNotifications';
+import {
+  useUserSubscriptions,
+  useUpdateSubscription,
+  UserSubscription,
+} from '../../api/hooks/usePushNotifications';
+import {fetchCategoryPlaylist} from '../../api';
+import {MainStackParamList} from '../../navigation/MainStack';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
 
 interface SubscriptionsSettingsProps {}
 
 const SubscriptionsSettings: React.FC<PropsWithChildren<SubscriptionsSettingsProps>> = ({}) => {
+  const [isOpening, setIsOpening] = React.useState(false);
+
   const {colors} = useTheme();
   const {data: subscriptions, isLoading, isError} = useUserSubscriptions();
   const updateSubscriptionMutation = useUpdateSubscription();
+
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Subscriptions'>>();
 
   if (isLoading) {
     return (
@@ -36,25 +48,48 @@ const SubscriptionsSettings: React.FC<PropsWithChildren<SubscriptionsSettingsPro
     );
   }
 
+  const onPress = (sub: UserSubscription) => {
+    const categoryId = sub.subscription_key.substring('category-'.length);
+    setIsOpening(true);
+    fetchCategoryPlaylist(categoryId)
+      .then((response) => {
+        const article = response.articles?.[0];
+        if (article) {
+          if (article.is_audio) {
+            navigation.navigate('Podcast', {articleId: article.id});
+          } else if (article.is_video) {
+            navigation.navigate('Vodcast', {articleId: article.id});
+          } else {
+            navigation.navigate('Article', {articleId: article.id});
+          }
+        }
+      })
+      .finally(() => {
+        setIsOpening(false);
+      });
+  };
+
   return (
-    <>
+    <View style={{opacity: isOpening ? 0.5 : 1}} pointerEvents={isOpening ? 'none' : 'auto'}>
       {subscriptions.map((sub) => {
         return (
-          <SettingsSwitch
-            key={sub.subscription_key}
-            title={sub.name || sub.subscription_key}
-            onValueChange={(value) => {
-              updateSubscriptionMutation.mutate({
-                name: sub.name || sub.subscription_key,
-                subscription_key: sub.subscription_key,
-                is_active: value,
-              });
-            }}
-            value={sub.is_active}
-          />
+          <Pressable onPress={() => onPress(sub)}>
+            <SettingsSwitch
+              key={sub.subscription_key}
+              title={sub.name || sub.subscription_key}
+              onValueChange={(value) => {
+                updateSubscriptionMutation.mutate({
+                  name: sub.name || sub.subscription_key,
+                  subscription_key: sub.subscription_key,
+                  is_active: value,
+                });
+              }}
+              value={sub.is_active}
+            />
+          </Pressable>
         );
       })}
-    </>
+    </View>
   );
 };
 
