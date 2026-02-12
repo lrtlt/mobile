@@ -3,6 +3,7 @@ import CarPlay
 import Foundation
 import MediaPlayer
 
+@MainActor
 class CarPlayUIManager {
   private weak var interfaceController: CPInterfaceController?
 
@@ -202,7 +203,7 @@ class CarPlayUIManager {
     self.interfaceController?.presentTemplate(alert, animated: true, completion: nil)
   }
 
-  static func loadImage(from urlString: String) async -> UIImage? {
+  nonisolated static func loadImage(from urlString: String) async -> UIImage? {
     guard let url = URL(string: urlString) else { return nil }
 
     do {
