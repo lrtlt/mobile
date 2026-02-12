@@ -3,6 +3,7 @@ import CarPlay
 import Foundation
 import MediaPlayer
 
+@MainActor
 class CarPlayUIManager {
   private weak var interfaceController: CPInterfaceController?
 
@@ -16,7 +17,7 @@ class CarPlayUIManager {
 
   func setupInitialUI(delegate: CPTabBarTemplateDelegate, initialTemplate: String?) {
     let recommendedTab = createListTemplate(title: "Siūlome", imageName: "star.fill")
-    let liveTab = createListTemplate(title: "Tiesiogiai", imageName: "play.square.fill")
+    let liveTab = createGridTemplate(title: "Tiesiogiai", imageName: "play.square.fill")
     let newestTab = createListTemplate(title: "Naujausi", imageName: "newspaper.fill")
     let podcastsTab = createListTemplate(title: "Laidos", imageName: "circle.grid.3x3.fill")
 
@@ -49,6 +50,52 @@ class CarPlayUIManager {
     let listTemplate = CPListTemplate(title: title, sections: [])
     listTemplate.tabImage = image
     return listTemplate
+  }
+
+  private func createGridTemplate(title: String, imageName: String) -> CPGridTemplate {
+    let image = UIImage(systemName: imageName)
+    let placeholderImage = UIImage(systemName: "radio")!
+    let placeholders = (0..<7).map { _ in
+      CPGridButton(titleVariants: [""], image: placeholderImage) { _ in }
+    }
+    let gridTemplate = CPGridTemplate(title: title, gridButtons: placeholders)
+    gridTemplate.tabImage = image
+    return gridTemplate
+  }
+
+  func createGridButtons(from items: [CarPlayItem], handler: @escaping (CarPlayItem) -> Void) async -> [CPGridButton] {
+    // Load images concurrently first
+    var images = [UIImage?](repeating: nil, count: items.count)
+    
+    await withTaskGroup(of: (Int, UIImage?).self) { group in
+      for (index, item) in items.enumerated() {
+        if let coverUrl = item.cover {
+          group.addTask {
+            let image = await CarPlayUIManager.loadImage(from: coverUrl)
+            return (index, image)
+          }
+        }
+      }
+
+      for await (index, image) in group {
+        images[index] = image
+      }
+    }
+
+    // Create grid buttons with loaded images
+    var gridButtons = [CPGridButton]()
+    for (index, item) in items.enumerated() {
+      let buttonImage = images[index] ?? UIImage(systemName: "play.circle.fill")!
+      let button = CPGridButton(titleVariants: [item.title], image: buttonImage) { [weak self] _ in
+        Task { [weak self] in
+          guard self != nil else { return }
+          handler(item)
+        }
+      }
+      gridButtons.append(button)
+    }
+
+    return gridButtons
   }
 
   func createListItems(from items: [CarPlayItem], handler: @escaping (CarPlayItem) -> Void) async

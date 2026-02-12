@@ -14,6 +14,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   private let cache = CarPlayCache.shared
 
   private var uiManager: CarPlayUIManager?
+  private var gridLoadedAt: Date?
 
   // Used to track connection time. To avoid duplicated events on simulator
   private var connectedAt: Date?
@@ -124,6 +125,46 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   }
 
   func tabBarTemplate(_ tabBarTemplate: CPTabBarTemplate, didSelect selectedTemplate: CPTemplate) {
+    // Handle CPGridTemplate for "Tiesiogiai"
+    if let gridTemplate = selectedTemplate as? CPGridTemplate {
+      if let loadedAt = gridLoadedAt, Date().timeIntervalSince(loadedAt) < 600 {
+        return
+      }
+      print("Selected tab: Tiesiogiai")
+      Analytics.logEvent("carplay_tab_open_Tiesiogiai", parameters: nil)
+      cache.setCurrentTemplateTitle("Tiesiogiai")
+
+      gridLoadedAt = Date()
+      Task { @MainActor [weak self] in
+        guard let self = self else { return }
+        do {
+          let items = try await CarPlayService.shared.fetchLive()
+          let gridButtons = await uiManager?.createGridButtons(from: items) { [weak self] selectedItem in
+            guard let self = self else { return }
+            if let index = items.firstIndex(where: { $0.streamUrl == selectedItem.streamUrl }) {
+              playlist.currentIndex = index
+            }
+            playlist.currentPlaylist = items
+            self.onPlayableItemSelected(from: selectedItem)
+          }
+          gridTemplate.updateGridButtons(gridButtons ?? [])
+        } catch {
+          print("CarPlay grid error: \(error.localizedDescription)")
+          self.gridLoadedAt = nil
+          let errorButton = CPGridButton(
+            titleVariants: ["Įvyko klaida! Patikrinkite interneto ryšį"],
+            image: UIImage(systemName: "exclamationmark.triangle")!
+          ) { [weak self] _ in
+            guard let self = self else { return }
+            self.gridLoadedAt = nil
+            self.tabBarTemplate(tabBarTemplate, didSelect: gridTemplate)
+          }
+          gridTemplate.updateGridButtons([errorButton])
+        }
+      }
+      return
+    }
+
     if let listTemplate = selectedTemplate as? CPListTemplate {
       print("Selected tab: \(listTemplate.title ?? "?")")
       Analytics.logEvent("carplay_tab_open_\(listTemplate.title ?? "?")", parameters: nil)

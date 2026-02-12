@@ -18,7 +18,6 @@ class PhoneSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     window = UIWindow(windowScene: windowScene)
     appDelegate.initAppFromScene(connectionOptions: connectionOptions, window: window!)
-
   }
 
   //Called when deep link is opened from push notifications
