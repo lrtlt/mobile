@@ -22,7 +22,7 @@ const linking: LinkingOptions<MainStackParamList> = {
   config: {
     initialRouteName: 'Home',
     screens: {
-      ArticleDeepLinkProxy: {
+      Article: {
         path: '/naujienos/:category/*/:articleId/:title',
       },
       Vodcast: {
@@ -31,7 +31,7 @@ const linking: LinkingOptions<MainStackParamList> = {
       Podcast: {
         path: '/radioteka/irasas/:articleId/:title',
       },
-      Article: {
+      ArticleProxy: {
         path: 'article/:articleId',
       },
       Channel: {

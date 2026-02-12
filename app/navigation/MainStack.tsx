@@ -33,7 +33,7 @@ export type MainStackParamList = {
     articleId: number;
     isMedia?: boolean;
   };
-  ArticleDeepLinkProxy: MainStackParamList['Article'];
+  ArticleProxy: MainStackParamList['Article'];
   CachedArticle: {
     article: ArticleContent;
   };
@@ -184,9 +184,15 @@ export default () => {
         options={{headerShown: false}} //We use custom header in the screen
       />
       <Stack.Screen
-        name="ArticleDeepLinkProxy"
-        component={Screens.ArticleScreen as any}
-        options={{headerShown: false}} //We use custom header in the screen
+        name="ArticleProxy"
+        component={Screens.ArticleDeepLinkProxyScreen}
+        options={{
+          headerShown: false,
+          presentation: 'formSheet',
+          sheetAllowedDetents: [0.5],
+          sheetGrabberVisible: true,
+          sheetCornerRadius: 12,
+        }} //We use custom header in the screen
       />
       <Stack.Screen name="Comments" component={Screens.CommentsScreen} />
       <Stack.Screen

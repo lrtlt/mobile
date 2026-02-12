@@ -27,3 +27,13 @@ export const navigateArticle = (navigation: NavigationProp, article: ArticleNavi
     navigation.navigate('Article', {articleId: article.id});
   }
 };
+
+export const replaceArticle = (navigation: NavigationProp, article: ArticleNavigationProps) => {
+  if (article.is_audio) {
+    navigation.replace('Podcast', {articleId: article.id});
+  } else if (article.is_video) {
+    navigation.replace('Vodcast', {articleId: article.id});
+  } else {
+    navigation.replace('Article', {articleId: article.id});
+  }
+};

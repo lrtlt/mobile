@@ -29,3 +29,4 @@ export {default as UserPersonalSettingsScreen} from './userPersonalSettings/User
 export {default as NotificationsScreen} from './notifications/NotificationsScreen';
 export {default as SubscriptionsScreen} from './subscriptions/SubscriptionsScreen';
 export {default as GamesScreen} from './games/GamesScreen';
+export {default as ArticleDeepLinkProxyScreen} from './articleDeepLinkProxy/ArticleDeepLinkProxyScreen';
