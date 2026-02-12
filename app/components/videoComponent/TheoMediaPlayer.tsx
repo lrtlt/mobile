@@ -59,6 +59,10 @@ const config: PlayerConfiguration = {
       appID: '87169DE4',
     },
   },
+  mediaControl: {
+    mediaSessionEnabled: true,
+    allowLivePlayPause: true,
+  },
 };
 
 const makeSource = (
@@ -74,8 +78,8 @@ const makeSource = (
     // album: 'Album',
     displayIconUri: poster,
     // artist: 'Artist',
-    // nowPlayingServiceIdentifier: 'lrt-nowPlayingServiceIdentifier',
-    // nowPlayingContentIdentifier: 'lrt-nowPlayingContentIdentifier',
+    nowPlayingServiceIdentifier: 'lrt-nowPlayingServiceIdentifier',
+    nowPlayingContentIdentifier: 'lrt-nowPlayingContentIdentifier',
   },
   sources: [
     {
@@ -94,14 +98,6 @@ const makeSource = (
   //     kind: 'subtitles',
   //     srclang: 'lt',
   //   },
-  //   //## Not working
-  //   // {
-  //   //   default: true,
-  //   //   kind: 'subtitles',
-  //   //   label: 'Subtitrai',
-  //   //   src: 'https://www.lrt.lt/media/VIDEO/2024-11/LAI90147_8a8b3d71-36a8-4bdb-9490-528ae870692a.txt',
-  //   //   srclang: 'lt',
-  //   // },
   // ],
   textTracks: tracks,
 });
