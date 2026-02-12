@@ -4,7 +4,9 @@ import {getFirestore, onSnapshot} from '@react-native-firebase/firestore';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 import Text from '../text/Text';
-import OpusPlaylistModal from '../opusPlaylistModal/OpusPlaylistModal';
+import ChannelPlaylistModal from '../opusPlaylistModal/ChannelPlaylistModal';
+import {useChannelPlaylist} from '../../api/hooks/useChannelPlaylist';
+import {getColorsForChannelById} from '../../util/UI';
 
 interface Props {
   channelId?: number;
@@ -25,13 +27,20 @@ const getRDSDocId = (channelId?: number) => {
       return null;
   }
 };
+
+const getStationFromDocId = (docId: string | null): string | null => {
+  if (!docId) return null;
+  return docId.split('/')[1] || null;
+};
 const NowComponent: React.FC<React.PropsWithChildren<Props>> = ({channelId}) => {
+  const [docId] = useState(getRDSDocId(channelId));
+  const [station] = useState(getStationFromDocId(docId));
   const [currentSong, setCurrentSong] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
-  const {colors, strings} = useTheme();
+  const {data: playlist} = useChannelPlaylist(station);
 
-  const docId = getRDSDocId(channelId);
+  const {colors, strings} = useTheme();
 
   useEffect(() => {
     if (!docId) {
@@ -86,7 +95,12 @@ const NowComponent: React.FC<React.PropsWithChildren<Props>> = ({channelId}) => 
           </TouchableOpacity>
         </View>
       </View>
-      <OpusPlaylistModal visible={modalVisible} currentSong={currentSong} onCancel={cancelModalHandler} />
+      <ChannelPlaylistModal
+        visible={modalVisible}
+        color={getColorsForChannelById(channelId)?.secondary}
+        onCancel={cancelModalHandler}
+        items={playlist?.rds || []}
+      />
     </>
   );
 };

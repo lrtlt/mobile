@@ -90,13 +90,6 @@ export const radiotekaGet = () => {
 };
 
 /**
- * Returns previously played songs
- */
-export const opusPlaylistGet = () => {
-  return `${BASE_URL}rds?station=opus`;
-};
-
-/**
  * Sets a user vote on daily question.
  */
 export const putDailyQuestionVote = (questionId: number | string, answerId: number | string) => {

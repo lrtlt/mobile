@@ -19,7 +19,6 @@ import {
   mediatekaGetV2,
   menuGet,
   newestArticlesGet,
-  opusPlaylistGet,
   popularArticlesGet,
   putDailyQuestionVote,
   radiotekaGet,
@@ -39,7 +38,6 @@ import {
   Menu2Response,
   MenuResponse,
   NewestArticlesResponse,
-  OpusPlaylistResponse,
   PopularArticlesResponse,
   RadiotekaArticle,
   RadiotekaResponse,
@@ -77,8 +75,6 @@ export const fetchCategoryApi = (
 ) => get<CategoryArticlesResponse>(categoryGet(categoryId, page, count, date_max, not_id));
 
 export const fetchCategoryHome = (id: number) => get<HomeDataResponse>(categoryHomeGet(id));
-
-export const fetchOpusPlaylist = () => get<OpusPlaylistResponse>(opusPlaylistGet());
 
 export const fetchLiveFeed = (id: string | number, count: number, order: 'asc' | 'desc') =>
   get<LiveFeedResponse>(liveFeedGet(id, count, order));

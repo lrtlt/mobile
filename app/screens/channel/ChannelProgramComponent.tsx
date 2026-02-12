@@ -18,7 +18,7 @@ const ChannelProgramComponent: React.FC<ChannelProgramComponentProps> = ({prog, 
   }
 
   return (
-    <>
+    <View>
       {prog.map((item, i) => {
         if (i >= PROGRAM_ITEMS_VISIBLE) {
           return null;
@@ -58,7 +58,7 @@ const ChannelProgramComponent: React.FC<ChannelProgramComponentProps> = ({prog, 
           </View>
         );
       })}
-    </>
+    </View>
   );
 };
 

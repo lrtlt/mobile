@@ -1,34 +1,23 @@
-import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {View, StyleSheet, TouchableOpacity, ColorValue} from 'react-native';
 import Modal from 'react-native-modal';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {fetchOpusPlaylist} from '../../api';
 import {OpusPlayListItem} from '../../api/Types';
-import useCancellablePromise from '../../hooks/useCancellablePromise';
 import {useTheme} from '../../Theme';
 import {IconClose} from '../svg';
 import Text from '../text/Text';
-import OpusPaylistList from './OpusPlaylistList';
+import ChannelPlaylistList from './ChannelPlaylistList';
 
-interface OpusPlaylistModalProps {
+interface ChannelPlaylistModalProps {
   visible: boolean;
-  currentSong: string;
   onCancel: () => void;
+  color?: ColorValue;
+  items: OpusPlayListItem[];
 }
 
-const OpusPlaylistModal: React.FC<OpusPlaylistModalProps> = ({visible, currentSong, onCancel}) => {
-  const [items, setItems] = useState<OpusPlayListItem[]>([]);
-
+const ChannelPlaylistModal: React.FC<ChannelPlaylistModalProps> = ({visible, onCancel, items, color}) => {
   const {colors} = useTheme();
   const insets = useSafeAreaInsets();
-
-  const cancellablePromise = useCancellablePromise();
-
-  useEffect(() => {
-    if (visible) {
-      cancellablePromise(fetchOpusPlaylist()).then((response) => setItems(response.rds));
-    }
-  }, [cancellablePromise, visible]);
 
   return (
     <Modal
@@ -55,13 +44,13 @@ const OpusPlaylistModal: React.FC<OpusPlaylistModalProps> = ({visible, currentSo
             </Text>
           </View>
         </TouchableOpacity>
-        <OpusPaylistList items={items} currentSong={currentSong} />
+        <ChannelPlaylistList items={items} color={color} />
       </View>
     </Modal>
   );
 };
 
-export default OpusPlaylistModal;
+export default ChannelPlaylistModal;
 
 const styles = StyleSheet.create({
   flex: {

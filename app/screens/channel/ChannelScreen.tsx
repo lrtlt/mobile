@@ -41,7 +41,7 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
       headerTitleAlign: 'center',
       headerTitle: () => {
         return (
-          <View style={styles.logoContainer}>{getIconForChannelById(selectedChannel, {height: 26})}</View>
+          <View style={styles.logoContainer}>{getIconForChannelById(selectedChannel, {height: 30})}</View>
         );
       },
     });

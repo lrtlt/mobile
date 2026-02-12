@@ -117,7 +117,7 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
         />
       </View>
       {channel_info.daily_question && (
-        <DailyQuestionWrapper id={channel_info.daily_question} contentMargin={12} />
+        <DailyQuestionWrapper id={channel_info.daily_question} contentMargin={0} />
       )}
       <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>
         <View
@@ -126,7 +126,6 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: 16,
           }}>
           {getIconForChannelById(channel_info.channel_id)}
           {streamSelectionComponent}
@@ -137,6 +136,7 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
             style={{
               color: colors.textSecondary,
               fontSize: 14,
+              marginTop: 16,
             }}>
             Transliaciją galima žiūrėti ir su dirbtiniu intelektu generuojamais subtitrais lietuvių, anglų,
             lenkų, ukrainiečių ir rusų kalbomis.

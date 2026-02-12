@@ -27,7 +27,7 @@ const SubscriptionsScreen: React.FC<React.PropsWithChildren<Props>> = ({navigati
             {'Prenumeratos'}
           </Text>
           <Text style={styles.caption} type="secondary" fontFamily="SourceSansPro-Regular">
-            {'Pasirinkite kategoriją, apie kurią norite gauti pranešimus.'}
+            {'Pasirinkite laidą, apie kurią norite gauti pranešimus.'}
           </Text>
 
           <View style={{...styles.card}}>

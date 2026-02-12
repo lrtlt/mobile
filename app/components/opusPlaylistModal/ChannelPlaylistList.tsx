@@ -1,17 +1,17 @@
 import React, {useCallback} from 'react';
-import {View, StyleSheet, ListRenderItemInfo} from 'react-native';
+import {View, StyleSheet, ListRenderItemInfo, ColorValue} from 'react-native';
 import {OpusPlayListItem} from '../../api/Types';
 import {useTheme} from '../../Theme';
 import Divider from '../divider/Divider';
 import MyFlatList from '../MyFlatList/MyFlatList';
 import TextComponent from '../text/Text';
 
-interface OpusPaylistListProps {
+interface ChannelPlaylistListProps {
   items: OpusPlayListItem[];
-  currentSong: string;
+  color?: ColorValue;
 }
 
-const OpusPaylistList: React.FC<OpusPaylistListProps> = ({items}) => {
+const ChannelPlaylistList: React.FC<ChannelPlaylistListProps> = ({items, color}) => {
   const {colors} = useTheme();
 
   const keyExtractor = useCallback((item: OpusPlayListItem, index: number) => {
@@ -22,7 +22,7 @@ const OpusPaylistList: React.FC<OpusPaylistListProps> = ({items}) => {
     const {item} = itemInfo;
     return (
       <View style={styles.listItem}>
-        <TextComponent style={styles.timeText} fontFamily="SourceSansPro-SemiBold">
+        <TextComponent style={[styles.timeText, {color: color || colors.textSecondary}]}>
           {item.dt}
         </TextComponent>
         <TextComponent style={styles.songText}>{item.song}</TextComponent>
@@ -53,7 +53,7 @@ const OpusPaylistList: React.FC<OpusPaylistListProps> = ({items}) => {
   );
 };
 
-export default OpusPaylistList;
+export default ChannelPlaylistList;
 
 const styles = StyleSheet.create({
   flex: {
@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   timeText: {
-    color: '#e7792b',
     fontSize: 13,
   },
   songText: {
