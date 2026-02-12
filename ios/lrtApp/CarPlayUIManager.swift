@@ -125,7 +125,8 @@ class CarPlayUIManager {
                   ? "https://lrt.lt\(episode.imgPathPrefix!)282x158\(episode.imgPathPostfix!)"
                   : nil,
                 streamUrl: episodeInfo.info!.streamUrl,
-                isLive: false
+                isLive: false,
+                channelId: nil
               )
               onEpisodeSelected(carPlayItem)
             } catch {

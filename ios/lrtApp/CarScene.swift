@@ -211,6 +211,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     Analytics.logEvent("carplay_disconnected", parameters: nil)
     saveState()
     player.pause()
+    RDSNowPlayingService.shared.stopListening()
     self.interfaceController = nil
   }
 

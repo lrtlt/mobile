@@ -62,7 +62,8 @@ class CarPlayNetwork {
             streamUrl: isRestricted
               ? restrictedStreamUrl.absoluteString
               : audioUrl.trimmingCharacters(in: .whitespacesAndNewlines),
-            isLive: true
+            isLive: true,
+            channelId: item.channel_id
           ))
       }
     }

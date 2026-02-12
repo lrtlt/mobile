@@ -6,6 +6,7 @@ struct CarPlayItem: Decodable {
   let cover: String?
   let streamUrl: String?
   let isLive: Bool?
+  let channelId: Int?
 }
 
 struct LiveProgramResponse: Decodable {

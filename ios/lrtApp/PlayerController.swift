@@ -37,6 +37,7 @@ class PlayerController {
     guard let streamUrl = item.streamUrl, let url = URL(string: streamUrl) else {
       print("Invalid stream URL \(String(describing: item.streamUrl))")
       MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+      RDSNowPlayingService.shared.stopListening()
       throw NSError(
         domain: "PlayerError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid stream URL"])
     }
@@ -199,7 +200,10 @@ class PlayerController {
     var nowPlayingInfo = [String: Any]()
     nowPlayingInfo[MPMediaItemPropertyTitle] = playlistItem.title
 
-    if playlistItem.isLive != true {
+    if playlistItem.isLive == true, let channelId = playlistItem.channelId {
+      RDSNowPlayingService.shared.startListening(channelId: channelId)
+    } else {
+      RDSNowPlayingService.shared.stopListening()
       nowPlayingInfo[MPMediaItemPropertyArtist] = playlistItem.content
     }
 
