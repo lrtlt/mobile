@@ -1,27 +1,50 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {IconNote} from '../svg';
 import {getFirestore, onSnapshot} from '@react-native-firebase/firestore';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 import Text from '../text/Text';
 import OpusPlaylistModal from '../opusPlaylistModal/OpusPlaylistModal';
 
-const OPUS_COLOR = 'rgba(240,81,35,.3)';
+interface Props {
+  channelId?: number;
+}
 
-const OpusNowComponent: React.FC<React.PropsWithChildren<{}>> = () => {
+const getRDSDocId = (channelId?: number) => {
+  switch (channelId) {
+    case 4:
+      // return 'rds/radijas';
+      return null;
+    case 5:
+      return 'rds/klasika';
+    case 6:
+      return 'rds/opus';
+    case 37:
+      return 'rds/lrt100';
+    default:
+      return null;
+  }
+};
+const NowComponent: React.FC<React.PropsWithChildren<Props>> = ({channelId}) => {
   const [currentSong, setCurrentSong] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
   const {colors, strings} = useTheme();
 
+  const docId = getRDSDocId(channelId);
+
   useEffect(() => {
+    if (!docId) {
+      return;
+    }
+
     const db = getFirestore();
-    const doc = db.doc('rds/opus');
+    const doc = db.doc(docId);
     const unsubscribe = onSnapshot<any>(doc, {
       next(snapshot) {
         try {
           const {info} = snapshot.data() as any;
+
           setCurrentSong(info);
         } catch (e) {
           console.log(e);
@@ -33,7 +56,7 @@ const OpusNowComponent: React.FC<React.PropsWithChildren<{}>> = () => {
       },
     });
     return unsubscribe;
-  }, []);
+  }, [docId]);
 
   const previousSongsPressHandler = useCallback(() => {
     setModalVisible(true);
@@ -43,22 +66,23 @@ const OpusNowComponent: React.FC<React.PropsWithChildren<{}>> = () => {
     setModalVisible(false);
   }, []);
 
-  console.log('currectsong', currentSong);
+  if (!docId) {
+    return null;
+  }
+
   return (
     <>
-      <View>
-        <View style={{...styles.container, backgroundColor: OPUS_COLOR}}>
-          <TextComponent style={styles.title} fontFamily="SourceSansPro-SemiBold">
-            Eteryje
+      <View style={{flexDirection: 'row', alignItems: 'center', gap: 16, paddingTop: 24, paddingBottom: 12}}>
+        <View style={{...styles.verticalDivider, backgroundColor: colors.listSeparator}} />
+        <View style={styles.container}>
+          <TextComponent style={styles.title} type="secondary">
+            Eteryje klausote
           </TextComponent>
           <TextComponent style={styles.song}>{currentSong.replace('Eteryje: ', '')}</TextComponent>
-          <TouchableOpacity onPress={previousSongsPressHandler}>
-            <View style={{...styles.previousSongsButton, backgroundColor: OPUS_COLOR}}>
-              <View style={styles.iconContainer}>
-                <IconNote size={12} color={colors.text} />
-              </View>
-              <Text style={styles.previousSongsButtonText}>{strings.previous_songs}</Text>
-            </View>
+          <TouchableOpacity style={styles.previousSongsButton} onPress={previousSongsPressHandler}>
+            <Text style={{...styles.previousSongsButtonText, color: colors.tertiary}}>
+              {strings.previous_songs}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -67,41 +91,35 @@ const OpusNowComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   );
 };
 
-export default OpusNowComponent;
+export default NowComponent;
 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    padding: 8,
-    borderBottomLeftRadius: 4,
-    borderBottomRightRadius: 4,
   },
-  iconContainer: {
-    width: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
+  verticalDivider: {
+    width: 3,
+    height: '100%',
   },
   title: {
-    fontSize: 15,
+    fontSize: 13,
   },
   song: {
     flex: 1,
-    marginVertical: 8,
+    marginVertical: 2,
+    paddingEnd: 24,
     fontSize: 14,
   },
   previousSongsButton: {
-    width: '100%',
-    minWidth: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignSelf: 'flex-start',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     flexDirection: 'row',
-    padding: 12,
-    borderRadius: 4,
-    marginTop: 4,
+    padding: 8,
+    paddingLeft: 0,
   },
   previousSongsButtonText: {
     textAlign: 'center',
-
-    fontSize: 16,
+    fontSize: 14,
   },
 });

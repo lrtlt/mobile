@@ -19,7 +19,7 @@ export {default as MoreArticlesButton} from './moreArticlesButton/MoreArticlesBu
 export {default as PhotoCountBadge} from './photoCount/PhotoCount';
 export {default as ProgramDay} from './programDay/ProgramDay';
 export {default as ProgramItem} from './programItem/ProgramItem';
-export {default as OpusNowPlaying} from './opusNowPlaying/OpusNowPlaying';
+export {default as NowPlaying} from './NowPlaying/NowPlaying';
 export {default as ProgressiveImage} from './progressiveImage/ProgressiveImage';
 export {default as ScreenError} from './screenError/ScreenError';
 export {default as ScreenLoader} from './screenLoader/ScreenLoader';

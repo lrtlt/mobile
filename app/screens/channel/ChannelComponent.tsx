@@ -3,19 +3,19 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {ChannelResponse} from '../../api/Types';
-import {OpusNowPlaying, ProgramItem, Text, TouchableDebounce, VideoComponent} from '../../components';
+import {Text, TouchableDebounce, VideoComponent} from '../../components';
 import {VIDEO_ASPECT_RATIO} from '../../constants';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
-import {getSmallestDim} from '../../util/UI';
+import {getIconForChannelById, getSmallestDim} from '../../util/UI';
 import TextComponent from '../../components/text/Text';
 
 import {CameraIcon, IconAudioReadCount} from '../../components/svg';
 import DailyQuestionWrapper from '../../components/dailyQuestion/DailyQuestionWrapper';
 import {StreamData} from '../../api/hooks/useStream';
-
-/** Count of visible program items below player */
-const PROGRAM_ITEMS_VISIBLE = 2;
+import Divider from '../../components/divider/Divider';
+import PulsingRedDot from '../../components/drawer2/components/PulsingRedDot';
+import ChannelProgramComponent from './ChannelProgramComponent';
 
 interface Props {
   channelData: ChannelResponse;
@@ -80,7 +80,7 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
               ...styles.streamSelectionText,
               color: !isAudio ? colors.onPrimary : colors.text,
             }}>
-            Su vaizdu
+            Video
           </TextComponent>
         </View>
       </TouchableDebounce>
@@ -96,41 +96,11 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
             ...styles.streamSelectionText,
             color: isAudio ? colors.onPrimary : colors.text,
           }}>
-          Tik garsas
+          Audio
         </TextComponent>
       </TouchableDebounce>
     </View>
   ) : undefined;
-
-  const programComponent = prog
-    ? prog.map((item, i) => {
-        if (i >= PROGRAM_ITEMS_VISIBLE) {
-          return;
-        }
-
-        let opusNowPlayingComponent;
-        if (i === 0 && channel_info.channel.toLowerCase().includes('opus')) {
-          opusNowPlayingComponent = <OpusNowPlaying />;
-        }
-
-        const marginTop = i > 0 ? 8 : 0;
-
-        return (
-          <View key={item.time_start + item.title}>
-            <ProgramItem
-              style={{marginTop}}
-              title={item.title}
-              startTime={item.time_start}
-              percent={item.proc}
-              description={item.description}
-              channelId={channel_info.channel_id}
-              record_article_id={item.record_article_id}
-            />
-            {opusNowPlayingComponent}
-          </View>
-        );
-      })
-    : undefined;
 
   return (
     <View style={{flex: 1}}>
@@ -150,29 +120,50 @@ const ChannelComponent: React.FC<React.PropsWithChildren<Props>> = ({
         <DailyQuestionWrapper id={channel_info.daily_question} contentMargin={12} />
       )}
       <View style={{...styles.programContainer, backgroundColor: colors.greyBackground}}>
-        {streamSelectionComponent}
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 16,
+          }}>
+          {getIconForChannelById(channel_info.channel_id)}
+          {streamSelectionComponent}
+        </View>
+
         {channel_info.channel_id === 1 ? (
           <Text
             style={{
               color: colors.textSecondary,
               fontSize: 14,
-              marginBottom: 12,
-              textAlign: 'center',
-              paddingVertical: 8,
             }}>
             Transliaciją galima žiūrėti ir su dirbtiniu intelektu generuojamais subtitrais lietuvių, anglų,
             lenkų, ukrainiečių ir rusų kalbomis.
           </Text>
         ) : null}
-        {programComponent}
+        <Divider style={{marginVertical: 16}} />
+        <View style={{flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16}}>
+          <PulsingRedDot />
+          <Text
+            style={{
+              color: colors.textSecondary,
+              fontSize: 14,
+            }}>
+            Tiesiogiai
+          </Text>
+        </View>
+        <ChannelProgramComponent prog={prog} channelInfo={channel_info} />
 
-        <TouchableDebounce onPress={onProgramPressHandler}>
+        <TouchableDebounce style={{paddingVertical: 16}} onPress={onProgramPressHandler}>
           <Text
             // eslint-disable-next-line react-native/no-inline-styles
             style={{
               ...styles.fullProgramText,
-              marginTop: programComponent !== undefined ? 8 : 0,
-              backgroundColor: colors.background,
+              color: colors.onPrimary,
+              marginTop: prog !== undefined ? 8 : 0,
+              backgroundColor: colors.mediatekaPlayButton,
+              borderRadius: 8,
             }}>
             {strings.tvProgramButtonText}
           </Text>
@@ -194,9 +185,8 @@ const styles = StyleSheet.create({
   programContainer: {
     width: '100%',
     minWidth: '100%',
-    alignItems: 'center',
     padding: 8,
-    paddingTop: 8,
+    paddingTop: 16,
   },
   player: {
     width: '100%',
@@ -216,7 +206,6 @@ const styles = StyleSheet.create({
   },
   streamSelectionContainer: {
     // minWidth: '100%',
-    marginBottom: 8,
     flexDirection: 'row',
     gap: 0,
     borderWidth: StyleSheet.hairlineWidth,

@@ -73,9 +73,8 @@ const SubscriptionsSettings: React.FC<PropsWithChildren<SubscriptionsSettingsPro
     <View style={{opacity: isOpening ? 0.5 : 1}} pointerEvents={isOpening ? 'none' : 'auto'}>
       {subscriptions.map((sub) => {
         return (
-          <Pressable onPress={() => onPress(sub)}>
+          <Pressable key={sub.subscription_key} onPress={() => onPress(sub)}>
             <SettingsSwitch
-              key={sub.subscription_key}
               title={sub.name || sub.subscription_key}
               onValueChange={(value) => {
                 updateSubscriptionMutation.mutate({
