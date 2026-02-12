@@ -7,5 +7,6 @@ data class PlaylistItem (
     @SerializedName("title"     ) var title     : String? = null,
     @SerializedName("content"   ) var content   : String? = null,
     @SerializedName("cover"     ) var cover     : String? = null,
-    @SerializedName("streamUrl" ) var streamUrl : String? = null
+    @SerializedName("streamUrl" ) var streamUrl : String? = null,
+    var channelId: Int? = null
 )

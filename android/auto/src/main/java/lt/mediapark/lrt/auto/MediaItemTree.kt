@@ -1,6 +1,7 @@
 package lt.mediapark.lrt.auto
 
 import android.net.Uri
+import android.os.Bundle
 import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaItem.SubtitleConfiguration
@@ -25,6 +26,7 @@ object MediaItemTree {
     private const val ITEM_PREFIX = "[item]"
     private const val PODCAST_PREFIX = "[podcast]"
     private const val PODCAST_EPISODE_PREFIX = "[podcast_episode]"
+    const val EXTRA_CHANNEL_ID = "channel_id"
 
     private class MediaItemNode(val item: MediaItem) {
         val searchTitle = normalizeSearchText(item.mediaMetadata.title)
@@ -135,7 +137,8 @@ object MediaItemTree {
         artist: String? = null,
         genre: String? = null,
         sourceUri: Uri? = null,
-        imageUri: Uri? = null
+        imageUri: Uri? = null,
+        extras: Bundle? = null
     ): MediaItem {
         val metadata =
             MediaMetadata.Builder()
@@ -147,6 +150,7 @@ object MediaItemTree {
                 .setIsPlayable(isPlayable)
                 .setArtworkUri(imageUri)
                 .setMediaType(mediaType)
+                .setExtras(extras)
                 .build()
 
         return MediaItem.Builder()
@@ -204,6 +208,9 @@ object MediaItemTree {
         treeNodes[LIVE]!!.clearChildren()
         items.forEach {
             val mediaId = ITEM_PREFIX + it.streamUrl
+            val extras = it.channelId?.let { id ->
+                Bundle().apply { putInt(EXTRA_CHANNEL_ID, id) }
+            }
             val item = buildMediaItem(
                 title = it.title ?: "-",
                 mediaId = mediaId,
@@ -211,7 +218,8 @@ object MediaItemTree {
                 isBrowsable = false,
                 mediaType = MediaMetadata.MEDIA_TYPE_NEWS,
                 sourceUri = Uri.parse(it.streamUrl),
-                imageUri = Uri.parse(it.cover)
+                imageUri = Uri.parse(it.cover),
+                extras = extras
             )
 
             treeNodes[mediaId] = MediaItemNode(item)

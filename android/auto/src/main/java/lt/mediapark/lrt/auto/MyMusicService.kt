@@ -11,6 +11,7 @@ class MyMusicService : MediaLibraryService() {
 
     private lateinit var player: Player
     private lateinit var mediaSession: MediaLibrarySession
+    private lateinit var rdsService: RDSNowPlayingService
 
     override fun onCreate() {
         super.onCreate()
@@ -28,27 +29,39 @@ class MyMusicService : MediaLibraryService() {
                     }
 
                     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-                        //Maybe implement?
+                        handleMediaItemTransition(mediaItem)
                     }
                 })
             }
         player.repeatMode = Player.REPEAT_MODE_ALL
+
+        rdsService = RDSNowPlayingService(player)
 
         mediaSession = MediaLibrarySession
             .Builder(this, player, LRTMediaSessionCallback())
             .build()
     }
 
+    private fun handleMediaItemTransition(mediaItem: MediaItem?) {
+        val channelId = mediaItem?.mediaMetadata?.extras?.getInt(
+            MediaItemTree.EXTRA_CHANNEL_ID, -1
+        ) ?: -1
+
+        if (channelId > 0 && RDSNowPlayingService.firestoreDocPath(channelId) != null) {
+            rdsService.startListening(channelId)
+        } else {
+            rdsService.stopListening()
+        }
+    }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? {
         return mediaSession
     }
 
     override fun onDestroy() {
+        rdsService.stopListening()
         mediaSession.release()
         player.release()
         super.onDestroy()
     }
 }
-
-

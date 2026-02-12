@@ -35,6 +35,7 @@ dependencies {
     // Also it's shown during build process in terminal
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation "com.google.firebase:firebase-analytics"
+    implementation "com.google.firebase:firebase-firestore"
 
     implementation 'androidx.media3:media3-session:1.4.1'
     implementation 'androidx.media3:media3-exoplayer:1.4.1'
