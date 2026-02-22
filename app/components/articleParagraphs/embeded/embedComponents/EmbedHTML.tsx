@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {Platform, View} from 'react-native';
 import {WebViewSource} from 'react-native-webview/src/WebViewTypes';
 
 import {ArticleEmbedHTMLType} from '../../../../api/Types';
 import SafeAutoHeightWebView from '../../../safeWebView/SafeAutoHeightWebView';
+import {extractBlockedIframeSrc, WIDTH_REGEX} from './embedHtmlUtils';
 
 interface Props {
   data: ArticleEmbedHTMLType[];
@@ -37,26 +38,21 @@ const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
                 uri: src,
               };
             } else if (html) {
-              const formattedHTML = html
-                //Replace width value without quotes in range 300-2400.
-                .replace(
-                  new RegExp(
-                    '\\width=\\b([3-8][0-9]{2}|9[0-8][0-9]|99[0-9]|1[0-9]{3}|2[0-3][0-9]{2}|2400)\\b',
-                  ),
-                  'width=' + width,
-                )
-                //Replace width value with quotes in range 300-2400.
-                .replace(
-                  new RegExp(
-                    '\\width\\s*=\\s*["\']\\b([3-8][0-9]{2}|9[0-8][0-9]|99[0-9]|1[0-9]{3}|2[0-3][0-9]{2}|2400)\\b["\']',
-                  ),
-                  'width="' + width + '"',
-                );
+              // On Android, load iframe src directly to avoid ERR_BLOCKED_BY_RESPONSE
+              const iframeSrc = Platform.OS === 'android' ? extractBlockedIframeSrc(html) : null;
+              if (iframeSrc) {
+                source = {
+                  uri: iframeSrc,
+                };
+              } else {
+                const formattedHTML = html
+                  // Replace width=300..2400 (unquoted) and width="300..2400" (quoted)
+                  .replace(WIDTH_REGEX, `width="${width}"`);
 
-              //console.log(formattedHTML);
-              source = {
-                html: formattedHTML,
-              };
+                source = {
+                  html: formattedHTML,
+                };
+              }
             }
 
             if (!source) {
