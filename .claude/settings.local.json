@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(yarn ts:*)",
-      "Bash(yarn test:*)"
+      "Bash(yarn test:*)",
+      "WebFetch(domain:www.lrt.lt)",
+      "Bash(yarn lint:*)"
     ]
   }
 }

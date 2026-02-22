@@ -62,9 +62,14 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
         openMediatekaRoute();
         navigation.closeDrawer();
         break;
+      case 'mediateka-shows':
+        navigation.navigate('ShowList', {type: 'mediateka'});
       case 'radioteka':
         openRadiotekaRoute();
         navigation.closeDrawer();
+        break;
+      case 'radioteka-shows':
+        navigation.navigate('ShowList', {type: 'radioteka'});
         break;
       case 'weather':
         navigation.navigate('Weather');

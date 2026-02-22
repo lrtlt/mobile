@@ -1,4 +1,4 @@
-import {Animated} from 'react-native';
+import {Animated, StyleProp, TextStyle} from 'react-native';
 
 import {HeaderOptions} from '@react-navigation/elements';
 import useAppBarHeight from './useAppBarHeight';
@@ -10,9 +10,18 @@ interface Props {
   onBackPress: () => void;
   headerRight?: HeaderOptions['headerRight'];
   subHeader?: React.ReactNode;
+  headerTitle?: HeaderOptions['headerTitle'];
+  headerTitleStyle?: StyleProp<TextStyle>;
 }
 
-const AnimatedAppBar: React.FC<Props> = ({translateY, onBackPress, headerRight, subHeader}) => {
+const AnimatedAppBar: React.FC<Props> = ({
+  translateY,
+  onBackPress,
+  headerRight,
+  subHeader,
+  headerTitle,
+  headerTitleStyle,
+}) => {
   const {fullHeight, subHeaderHeight} = useAppBarHeight();
 
   return (
@@ -34,7 +43,12 @@ const AnimatedAppBar: React.FC<Props> = ({translateY, onBackPress, headerRight, 
         zIndex: 1,
         elevation: 2,
       }}>
-      <DefaultAppBar onBackPress={onBackPress} headerRight={headerRight} />
+      <DefaultAppBar
+        onBackPress={onBackPress}
+        headerRight={headerRight}
+        headerTitle={headerTitle}
+        headerTitleStyle={headerTitleStyle}
+      />
       {subHeader ? (
         <Animated.View
           style={{

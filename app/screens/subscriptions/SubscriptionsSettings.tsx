@@ -9,6 +9,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/native';
 import {useHistoryCategories} from '../../api/hooks/useHistoryCategories';
+import {navigateArticle} from '../../util/NavigationUtils';
 
 interface SubscriptionsSettingsProps {}
 
@@ -73,13 +74,7 @@ const SubscriptionsSettings: React.FC<PropsWithChildren<SubscriptionsSettingsPro
       .then((response) => {
         const article = response.articles?.[0];
         if (article) {
-          if (article.is_audio) {
-            navigation.navigate('Podcast', {articleId: article.id});
-          } else if (article.is_video) {
-            navigation.navigate('Vodcast', {articleId: article.id});
-          } else {
-            navigation.navigate('Article', {articleId: article.id});
-          }
+          navigateArticle(navigation, article);
         }
       })
       .finally(() => {

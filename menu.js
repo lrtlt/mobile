@@ -145,7 +145,7 @@ export const MENU_DATA = [
         url: 'https://www.lrt.lt/programa',
       },
       {
-        type: 'webpage',
+        type: 'mediateka-shows',
         title: 'Laidos',
         url: 'https://www.lrt.lt/mediateka/tv-laidos',
       },
@@ -176,7 +176,7 @@ export const MENU_DATA = [
         url: 'https://www.lrt.lt/programa',
       },
       {
-        type: 'webpage',
+        type: 'radioteka-shows',
         title: 'Radijo laidų sąrašas',
         url: 'https://www.lrt.lt/mediateka/radijo-laidos',
       },

@@ -6,7 +6,9 @@ export const MENU_TYPE_SETTINGS = 'settings';
 export const MENU_TYPE_BOOKMARKS = 'bookmarks';
 export const MENU_TYPE_HISTORY = 'history';
 export const MENU_TYPE_MEDIATEKA = 'mediateka';
+export const MENU_TYPE_MEDIATEKA_SHOWS = 'mediateka-shows';
 export const MENU_TYPE_RADIOTEKA = 'radioteka';
+export const MENU_TYPE_RADIOTEKA_SHOWS = 'radioteka-shows';
 export const MENU_TYPE_PROGRAM = 'program';
 export const MENU_TYPE_WEATHER = 'weather';
 export const MENU_TYPE_GAMES = 'games';
@@ -39,7 +41,9 @@ export type Menu2Item =
   | Menu2ItemHistory
   | Menu2ItemChannels
   | Menu2ItemMediateka
+  | Menu2ItemMediatekaShows
   | Menu2ItemRadioteka
+  | Menu2ItemRadiotekaShows
   | Menu2ItemProgram
   | Menu2ItemWeather
   | Menu2ItemWebpage
@@ -106,8 +110,20 @@ export type Menu2ItemMediateka = {
   url: string;
 };
 
+export type Menu2ItemMediatekaShows = {
+  type: typeof MENU_TYPE_MEDIATEKA_SHOWS;
+  title: string;
+  url: string;
+};
+
 export type Menu2ItemRadioteka = {
   type: typeof MENU_TYPE_RADIOTEKA;
+  title: string;
+  url: string;
+};
+
+export type Menu2ItemRadiotekaShows = {
+  type: typeof MENU_TYPE_RADIOTEKA_SHOWS;
   title: string;
   url: string;
 };

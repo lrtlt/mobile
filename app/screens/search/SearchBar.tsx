@@ -7,9 +7,10 @@ import {useState} from 'react';
 interface Props {
   subHeaderHeight: number;
   onQueryChange: (text: string) => void;
+  onValueChange?: (text: string) => void;
 }
 
-const SearchBar: React.FC<React.PropsWithChildren<Props>> = ({onQueryChange, subHeaderHeight}) => {
+const SearchBar: React.FC<React.PropsWithChildren<Props>> = ({onQueryChange, onValueChange, subHeaderHeight}) => {
   const [query, setQuery] = useState<string>('');
 
   const {colors, dim} = useTheme();
@@ -31,6 +32,7 @@ const SearchBar: React.FC<React.PropsWithChildren<Props>> = ({onQueryChange, sub
           placeholderTextColor={colors.textDisbled}
           onChangeText={(text) => {
             setQuery(text);
+            onValueChange?.(text);
           }}
           value={query}
         />

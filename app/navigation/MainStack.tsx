@@ -87,6 +87,9 @@ export type MainStackParamList = {
     genreId: number;
     title: string;
   };
+  ShowList: {
+    type: 'mediateka' | 'radioteka';
+  };
 };
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
@@ -231,6 +234,7 @@ export default () => {
       />
       <Stack.Screen name="Playlist" component={Screens.PlaylistScreen} />
       <Stack.Screen name="Genre" component={Screens.GenreScreen} />
+      <Stack.Screen name="ShowList" component={Screens.ShowListScreen} options={{headerShown: false}} />
       <Stack.Screen
         name="VideoList"
         component={Screens.VerticalVideosScreen}

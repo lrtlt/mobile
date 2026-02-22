@@ -30,3 +30,4 @@ export {default as NotificationsScreen} from './notifications/NotificationsScree
 export {default as SubscriptionsScreen} from './subscriptions/SubscriptionsScreen';
 export {default as GamesScreen} from './games/GamesScreen';
 export {default as ArticleDeepLinkProxyScreen} from './articleDeepLinkProxy/ArticleDeepLinkProxyScreen';
+export {default as ShowListScreen} from './showList/ShowListScreen';

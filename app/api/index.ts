@@ -45,6 +45,7 @@ import {
 } from './Types';
 
 import {getFirestore} from '@react-native-firebase/firestore';
+import {MENU_DATA} from '../../menu';
 
 export const fetchMenuItemsApi = () => get<MenuResponse>(menuGet());
 
@@ -116,10 +117,13 @@ export const fetchCounter = (id: number | string, url: string = 'https://www.lrt
   });
 
 export const fetchMenuItemsV2 = async (): Promise<Menu2Response> => {
-  const snapshot = await getFirestore().collection('internal').doc('app-menu-v2').get({source: 'server'});
-  if (snapshot.exists()) {
-    return snapshot.data() as Menu2Response;
-  } else {
-    throw new Error('Menu document not found');
+  try {
+    const snapshot = await getFirestore().collection('internal').doc('app-menu-v3').get({source: 'server'});
+    if (snapshot.exists()) {
+      return snapshot.data() as Menu2Response;
+    }
+  } catch (e) {
+    console.warn('Failed to fetch menu from Firestore, using fallback', e);
   }
+  return {items: MENU_DATA} as Menu2Response;
 };
