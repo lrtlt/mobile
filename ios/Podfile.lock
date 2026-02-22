@@ -3323,7 +3323,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-gemius-plugin (1.7.0):
+  - react-native-gemius-plugin (1.7.4):
     - React
   - react-native-google-cast (4.6.2):
     - React
@@ -5067,7 +5067,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 4c50cf6af44286015a20a5995d5321f625c93459
   React-microtasksnativemodule: a84b9331106616ab1fa36de9ae555718d4bbdcf5
   react-native-config: 916e53e7333d5b2bcb7ee9882f5605143b4fc4c5
-  react-native-gemius-plugin: 705cc53f6b7d882ad6bcc8f7ff484042bdd2842e
+  react-native-gemius-plugin: 3bafb37396948ed5f00a7f80007a3b3338965f3e
   react-native-google-cast: 872b05bf12f7db32c2f66818fdd5406474af25f1
   react-native-mmkv: 7b9c7469fa0a7e463f9411ad3e4fe273bd5ff030
   react-native-netinfo: 64f05e94821ee3f3adcd9b67b35c1480e5564915

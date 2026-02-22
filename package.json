@@ -46,7 +46,7 @@
     "react-native-awesome-gallery": "^0.4.3",
     "react-native-config": "^1.6.1",
     "react-native-event-listeners": "^1.0.7",
-    "react-native-gemius-plugin": "1.7.0",
+    "react-native-gemius-plugin": "^1.7.4",
     "react-native-gesture-handler": "2.30.0",
     "react-native-google-cast": "4.9.1",
     "react-native-gradient-shimmer": "^2.2.0",
