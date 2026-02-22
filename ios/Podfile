@@ -72,7 +72,7 @@ end
 
 target 'FCMImageNotification' do
   use_frameworks! :linkage => :static
-  pod 'Firebase/Messaging', '~> 11.15.0'
+  pod 'Firebase/Messaging', '~> 12.8.0'
   #This was added manually
   #Change version if needed, just copy from Podfile.lock
   pod 'GoogleUtilities', '~> 8.1.0'
