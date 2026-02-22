@@ -58,7 +58,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                         Pair(
                             programItem.channelId,
                             PlaylistItem(
-                                title = if (streamInfo?.restriction.isNullOrEmpty()) programItem.channelTitle else BLOCKED_STREAM_MESSAGE,
+                                title = if (streamInfo?.restriction.isNullOrEmpty()) programItem.channelTitle?.uppercase() else BLOCKED_STREAM_MESSAGE,
                                 content = programItem.title,
                                 cover = getCoverByChannelId(programItem),
                                 streamUrl = if (streamInfo?.restriction.isNullOrEmpty()) streamInfo?.audio ?: streamInfo?.content ?: "" else BLOCKED_STREAM_URL,

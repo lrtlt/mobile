@@ -56,7 +56,7 @@ class CarPlayNetwork {
         items.append(
           CarPlayItem(
             title: isRestricted
-              ? "Transliacija internetu negalima" : item.channel_title,
+              ? "Transliacija internetu negalima" : item.channel_title.uppercased(),
             content: item.title,
             cover: CarPlayUtils.getCoverByChannelId(channelId: item.channel_id),
             streamUrl: isRestricted
