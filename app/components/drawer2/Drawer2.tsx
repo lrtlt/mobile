@@ -55,18 +55,25 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
   const handleItemPress = useCallback((item: Menu2Item) => {
     switch (item.type) {
       case 'home':
-        openHomeRoute();
         navigation.closeDrawer();
+        setTimeout(() => {
+          openHomeRoute();
+        }, 300);
         break;
       case 'mediateka':
-        openMediatekaRoute();
         navigation.closeDrawer();
+        setTimeout(() => {
+          openMediatekaRoute();
+        }, 300);
         break;
       case 'mediateka-shows':
         navigation.navigate('ShowList', {type: 'mediateka'});
       case 'radioteka':
-        openRadiotekaRoute();
         navigation.closeDrawer();
+        setTimeout(() => {
+          openRadiotekaRoute();
+        }, 300);
+
         break;
       case 'radioteka-shows':
         navigation.navigate('ShowList', {type: 'radioteka'});
@@ -87,7 +94,9 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
         navigation.navigate('Settings');
         break;
       case 'category':
-        openCategoryById(item.category_id, item.title);
+        setTimeout(() => {
+          openCategoryById(item.category_id, item.title);
+        }, 300);
         navigation.closeDrawer();
         break;
       case 'search':
