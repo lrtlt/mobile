@@ -34,9 +34,6 @@ buildscript {
 
  allprojects {
      repositories {
-         flatDir {
-             dirs "$rootDir/../node_modules/react-native-gemius-plugin/android/libs"
-         }
          maven {
              credentials {
                  username gemiusProperties["MAVEN_GEMIUS_USER"] as String
