@@ -20,7 +20,10 @@ const AppBarBackButton: React.FC<PropsWithChildren<Props>> = ({onPress}) => {
       accessibilityLabel="atgal"
       onPress={onPress}>
       <Image
-        source={require('../../../node_modules/@react-navigation/elements/src/assets/back-icon.png')}
+        source={Platform.select({
+          ios: require('../../../assets/img/back-icon-ios.png'),
+          android: require('../../../assets/img/back-icon-android.png'),
+        })}
         resizeMode="contain"
         fadeDuration={0}
         tintColor={colors.headerTint}
