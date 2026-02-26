@@ -4,7 +4,9 @@
       "Bash(yarn ts:*)",
       "Bash(yarn test:*)",
       "WebFetch(domain:www.lrt.lt)",
-      "Bash(yarn lint:*)"
+      "Bash(yarn lint:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }
