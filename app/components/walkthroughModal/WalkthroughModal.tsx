@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState, useRef} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Dimensions} from 'react-native';
 import Modal from 'react-native-modal';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../../Theme';
@@ -11,6 +11,9 @@ import {Page1, Page2, Page3, Page4} from './WalkthroughPages';
 import {useAuth0} from 'react-native-auth0';
 
 const PAGE_COUNT = 4;
+
+const MODAL_HEIGHT = Math.min(525, Dimensions.get('window').height * 0.8);
+const MODAL_WIDTH = Math.min(360, Dimensions.get('window').width - 32);
 
 interface WalkthroughModalProps {
   visible: boolean;
@@ -58,7 +61,10 @@ const WalkthroughModal: React.FC<WalkthroughModalProps> = ({visible, onClose, on
       coverScreen={true}
       backdropOpacity={0.7}
       onBackButtonPress={onClose}>
-      <View style={[{width: 360, backgroundColor: colors.background, borderRadius: 16, overflow: 'hidden'}]}>
+      <View
+        style={[
+          {width: MODAL_WIDTH, backgroundColor: colors.background, borderRadius: 16, overflow: 'hidden'},
+        ]}>
         <View
           style={{
             height: 46,
@@ -90,7 +96,7 @@ const WalkthroughModal: React.FC<WalkthroughModalProps> = ({visible, onClose, on
 
         <PagerView
           ref={pagerRef}
-          style={{height: 525}}
+          style={{height: MODAL_HEIGHT}}
           initialPage={pageIndex}
           scrollEnabled={true}
           onPageSelected={(e) => setPageIndex(e.nativeEvent.position)}>
