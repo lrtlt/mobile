@@ -12,8 +12,8 @@ import androidx.media3.session.SessionError
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
+import android.content.Context
+import com.google.firebase.analytics.FirebaseAnalytics
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +27,7 @@ import lt.mediapark.lrt.auto.data.LRTAutoService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback  {
+class LRTMediaSessionCallback(private val context: Context): MediaLibraryService.MediaLibrarySession.Callback  {
 
     private val repository: LRTAutoRepository
     private val scope = CoroutineScope(Dispatchers.Default)
@@ -84,7 +84,7 @@ class LRTMediaSessionCallback: MediaLibraryService.MediaLibrarySession.Callback 
 
         try{
             Log.d(TAG, "logAnalyticsEvent: $event")
-            Firebase.analytics.logEvent(event, null)
+            FirebaseAnalytics.getInstance(context).logEvent(event, null)
         }catch (e: Exception){
             //
         }

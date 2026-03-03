@@ -38,7 +38,7 @@ class MyMusicService : MediaLibraryService() {
         rdsService = RDSNowPlayingService(player)
 
         mediaSession = MediaLibrarySession
-            .Builder(this, player, LRTMediaSessionCallback())
+            .Builder(this, player, LRTMediaSessionCallback(this))
             .build()
     }
 
