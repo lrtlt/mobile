@@ -33,7 +33,7 @@ dependencies {
     // !!IMPORTANT: Might need to update from time to time
     // Check gradle dependencies on react-native-firebase-* packages for required version
     // Also it's shown during build process in terminal
-    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation(platform("com.google.firebase:firebase-bom:34.8.0"))
     implementation "com.google.firebase:firebase-analytics"
     implementation "com.google.firebase:firebase-firestore"
 
