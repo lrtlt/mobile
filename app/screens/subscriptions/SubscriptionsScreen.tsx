@@ -1,40 +1,90 @@
-import React, {useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ScrollView} from 'react-native-gesture-handler';
-import SubscriptionsSettings from './SubscriptionsSettings';
-import {Text} from '../../components';
+import {Text, TouchableDebounce} from '../../components';
 import {useTheme} from '../../Theme';
+import RecommendedTab from './tabs/RecommendedTab';
+import FollowedTab from './tabs/FollowedTab';
+import AllShowsTab from './tabs/AllShowsTab';
+import SearchTab from './tabs/SearchTab';
+import {IconSearch} from '../../components/svg';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
 };
 
+type TabKey = 'rekomenduojame' | 'sekamos' | 'visos' | 'ieskoti';
+
+const TABS: {key: TabKey; label: string}[] = [
+  {key: 'rekomenduojame', label: 'Rekomenduojame'},
+  {key: 'sekamos', label: 'Sekamos'},
+  {key: 'visos', label: 'Visos'},
+  {key: 'ieskoti', label: 'Ieškoti'},
+];
+
 const SubscriptionsScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
-  const {strings} = useTheme();
+  const {colors} = useTheme();
+  const [activeTab, setActiveTab] = useState<TabKey>('rekomenduojame');
+
   useEffect(() => {
-    navigation.setOptions({
-      headerTitle: strings.subscriptoions,
-    });
+    navigation.setOptions({headerTitle: 'PRENUMERATOS'});
   }, [navigation]);
+
   return (
     <SafeAreaView style={styles.root} edges={['bottom']}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <>
-          <Text style={styles.label} type="secondary" fontFamily="SourceSansPro-SemiBold">
-            {'Prenumeratos'}
-          </Text>
-          <Text style={styles.caption} type="secondary" fontFamily="SourceSansPro-Regular">
-            {'Pasirinkite laidą, apie kurią norite gauti pranešimus.'}
-          </Text>
+      <View style={[styles.tabBarWrapper, {borderBottomColor: colors.listSeparator}]}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.tabBarContent}>
+          {TABS.filter((t) => t.key !== 'ieskoti').map((tab) => {
+            const isActive = activeTab === tab.key;
+            return (
+              <TouchableDebounce
+                key={tab.key}
+                onPress={() => setActiveTab(tab.key)}
+                style={[
+                  styles.tab,
+                  {borderColor: isActive ? colors.primary : colors.listSeparator},
+                  isActive && {backgroundColor: colors.mediatekaPlayButton},
+                ]}>
+                <Text style={[styles.tabLabel, {color: isActive ? colors.onPrimary : colors.text}]}>
+                  {tab.label}
+                </Text>
+              </TouchableDebounce>
+            );
+          })}
+          <View style={styles.tabSpacer} />
+          {(() => {
+            const tab = TABS.find((t) => t.key === 'ieskoti')!;
+            const isActive = activeTab === tab.key;
+            return (
+              <TouchableDebounce
+                key={tab.key}
+                onPress={() => setActiveTab(tab.key)}
+                style={[
+                  styles.tab,
+                  {borderColor: isActive ? colors.primary : colors.listSeparator},
+                  isActive && {backgroundColor: colors.mediatekaPlayButton},
+                ]}>
+                <IconSearch size={16} color={isActive ? colors.onPrimary : colors.text} />
+                <Text style={[styles.tabLabel, {color: isActive ? colors.onPrimary : colors.text}]}>
+                  {tab.label}
+                </Text>
+              </TouchableDebounce>
+            );
+          })()}
+        </ScrollView>
+      </View>
 
-          <View style={{...styles.card}}>
-            <SubscriptionsSettings />
-          </View>
-        </>
-      </ScrollView>
+      <View style={styles.content}>
+        {activeTab === 'rekomenduojame' && <RecommendedTab />}
+        {activeTab === 'sekamos' && <FollowedTab />}
+        {activeTab === 'visos' && <AllShowsTab />}
+        {activeTab === 'ieskoti' && <SearchTab />}
+      </View>
     </SafeAreaView>
   );
 };
@@ -45,27 +95,29 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
   },
-  container: {
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    gap: 8,
-    minHeight: '100%',
-  },
-  card: {
-    flex: 1,
-    margin: 12,
-    overflow: 'hidden',
-  },
-  label: {
-    fontSize: 14,
+  tabBarWrapper: {},
+  tabBarContent: {
+    flexDirection: 'row',
     padding: 12,
-    paddingTop: 24,
-    paddingHorizontal: 12,
-    textTransform: 'uppercase',
+    gap: 4,
+    minWidth: '100%',
   },
-  caption: {
-    fontSize: 16,
-    paddingVertical: 4,
-    paddingHorizontal: 12,
+  tab: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 4,
+    borderWidth: 1,
+  },
+  tabSpacer: {
+    flex: 1,
+  },
+  tabLabel: {
+    fontSize: 14,
+  },
+  content: {
+    flex: 1,
   },
 });

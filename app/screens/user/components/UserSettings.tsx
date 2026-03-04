@@ -47,7 +47,7 @@ const MySwitch: React.FC<{title: string; value: boolean; onValueChange: (value: 
       <Switch
         thumbColor={value ? colors.text : colors.greyBackground}
         trackColor={{
-          true: value ? colors.textDisbled : colors.primary,
+          true: value ? colors.textDisbled : colors.mediatekaPlayButton,
         }}
         onValueChange={onValueChange}
         value={value}

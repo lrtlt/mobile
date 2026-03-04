@@ -23,7 +23,7 @@ const SettingsSwitch: React.FC<PropsWithChildren<Props>> = ({title, onValueChang
         <Switch
           thumbColor={dark ? colors.text : colors.greyBackground}
           trackColor={{
-            true: dark ? colors.textDisbled : colors.primary,
+            true: dark ? colors.textDisbled : colors.mediatekaPlayButton,
           }}
           onValueChange={onValueChange}
           value={value}
