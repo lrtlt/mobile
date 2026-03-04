@@ -10,6 +10,7 @@ import {IconApplicationSettings, IconBell, IconBookmarkNew, IconSubscribe} from 
 import UserActionItem from './UserActionItem';
 import {useArticleStorageStore} from '../../../state/article_storage_store';
 import {useFavoriteUserArticleIds} from '../../../api/hooks/useFavoriteArticles';
+import {useUserSubscriptions} from '../../../api/hooks/usePushNotifications';
 
 const UserActions: React.FC = () => {
   const {user} = useAuth0();
@@ -36,6 +37,9 @@ const UserActions: React.FC = () => {
   const {data: favoriteArticleIds} = useFavoriteUserArticleIds(!!user);
   const numberOfUnsavedArticles = user ? favoriteArticleIds?.length ?? 0 : savedArticles.length;
 
+  const {data: subscriptions} = useUserSubscriptions(!!user);
+  const numberOfActiveSubscriptions = subscriptions?.filter((sub) => sub.is_active).length ?? 0;
+
   return (
     <View style={styles.container}>
       <UserActionItem
@@ -50,18 +54,20 @@ const UserActions: React.FC = () => {
         onPress={user ? handleFavorites : undefined}
       />
       <UserActionItem
-        icon={<IconBell size={32} color={colors.iconInactive} />}
-        label={strings.notifications}
-        onPress={user ? handleNotifications : undefined}
-      />
-      <UserActionItem
         icon={
           <View style={{padding: 2}}>
             <IconSubscribe size={32 - 4} color={colors.iconInactive} />
           </View>
         }
         label={strings.subscriptoions}
+        caption={!user ? 'Prenumeratos, jų paieška ir rekomendacijos – prisijungus prie LRT.lt' : undefined}
+        numberOfItems={numberOfActiveSubscriptions > 0 ? numberOfActiveSubscriptions : undefined}
         onPress={user ? handleSubscriptions : undefined}
+      />
+      <UserActionItem
+        icon={<IconBell size={32} color={colors.iconInactive} />}
+        label={strings.notifications}
+        onPress={user ? handleNotifications : undefined}
       />
 
       <UserActionItem

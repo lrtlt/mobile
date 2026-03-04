@@ -24,13 +24,17 @@ const UserActionItem: React.FC<UserActionItemProps> = ({
     <TouchableDebounce
       style={[
         styles.actionItem,
-        {borderColor: colors.border, opacity: onPress ? 1 : 0.5},
+        {borderColor: colors.border},
         isDestructive && {borderColor: colors.textError, borderWidth: 1},
       ]}
       onPress={onPress}>
       <View style={styles.labelContainer}>
-        <View style={styles.iconContainer}>{icon}</View>
-        <Text style={[styles.actionLabel, {color: isDestructive ? colors.textError : colors.text}]}>
+        <View style={[styles.iconContainer, {opacity: onPress ? 1 : 0.3}]}>{icon}</View>
+        <Text
+          style={[
+            styles.actionLabel,
+            {color: isDestructive ? colors.textError : colors.text, opacity: onPress ? 1 : 0.3},
+          ]}>
           {label}
         </Text>
         {numberOfItems ? (
@@ -53,7 +57,7 @@ const UserActionItem: React.FC<UserActionItemProps> = ({
             paddingTop: 6,
             paddingLeft: 6,
           }}
-          type="secondary">
+          type="primary">
           {caption}
         </Text>
       )}
