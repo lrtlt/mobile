@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Platform, View} from 'react-native';
+import {View} from 'react-native';
 import {WebViewSource} from 'react-native-webview/src/WebViewTypes';
 
 import {ArticleEmbedHTMLType} from '../../../../api/Types';
@@ -38,8 +38,9 @@ const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
                 uri: src,
               };
             } else if (html) {
-              // On Android, load iframe src directly to avoid ERR_BLOCKED_BY_RESPONSE
-              const iframeSrc = Platform.OS === 'android' ? extractBlockedIframeSrc(html) : null;
+              // Load iframe src directly: avoids ERR_BLOCKED_BY_RESPONSE on Android
+              // and null-origin issues with Twitter/X embeds on iOS
+              const iframeSrc = extractBlockedIframeSrc(html);
               if (iframeSrc) {
                 source = {
                   uri: iframeSrc,
@@ -67,7 +68,8 @@ const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
                 scrollEnabled={false}
                 nestedScrollEnabled={false}
                 allowsFullscreenVideo={true}
-                mediaPlaybackRequiresUserAction={true}
+                allowsInlineMediaPlayback={true}
+                mediaPlaybackRequiresUserAction={false}
                 androidLayerType="hardware"
                 startInLoadingState={true}
                 viewportContent={`width=${width}, user-scalable=no`}
