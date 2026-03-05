@@ -94,7 +94,7 @@ export const strings: Dictionary = {
   settings: 'NUSTATYMAI',
   user: 'PASKYRA',
   notifications: 'PRANEŠIMAI',
-  subscriptoions: 'SEKAMOS LAIDOS',
+  subscriptoions: 'PRENUMERATOS',
   profile: 'PROFILIS',
   textSizeTitle: 'Šrifto dydis',
   videoNotAvailable: 'Vaizdo įrašas nepasiekiamas jūsų šalyje',

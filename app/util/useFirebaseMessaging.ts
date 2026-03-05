@@ -13,6 +13,7 @@ import {
 } from '@react-native-firebase/messaging';
 import {Linking} from 'react-native';
 import useFCMTokenSync from './useFCMTokenSync';
+import {asNotNull} from './StringUtils';
 import notifee, {
   AndroidImportance,
   AndroidVisibility,
@@ -119,10 +120,9 @@ const useFirebaseMessaging = (isNavigationReady: boolean) => {
     const unsubscribeOnMessage = onMessage(getMessaging(), async (remoteMessage) => {
       if (remoteMessage.notification) {
         const iosFCMOptions: any = remoteMessage.data?.fcm_options;
-
         notifee.displayNotification({
           id: remoteMessage.messageId,
-          title: remoteMessage.notification.title,
+          title: asNotNull(remoteMessage.notification.title),
           body: remoteMessage.notification.body,
           data: remoteMessage.data,
           ios: {
