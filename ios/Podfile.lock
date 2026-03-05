@@ -3650,34 +3650,6 @@ PODS:
     - THEOplayer-Integration-GoogleCast (~> 10.7)
     - THEOplayer-Integration-THEOlive (~> 10.7)
     - THEOplayerSDK-core (~> 10.7)
-  - react-native-unistyles (2.43.0):
-    - boost
-    - DoubleConversion
-    - fast_float
-    - fmt
-    - glog
-    - hermes-engine
-    - RCT-Folly
-    - RCT-Folly/Fabric
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - SocketRocket
-    - Yoga
   - react-native-webview (13.16.0):
     - boost
     - DoubleConversion
@@ -4986,7 +4958,6 @@ DEPENDENCIES:
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-theoplayer (from `../node_modules/react-native-theoplayer`)
-  - react-native-unistyles (from `../node_modules/react-native-unistyles`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-networking (from `../node_modules/react-native/ReactCommon/react/networking`)
@@ -5201,8 +5172,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-theoplayer:
     :path: "../node_modules/react-native-theoplayer"
-  react-native-unistyles:
-    :path: "../node_modules/react-native-unistyles"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-NativeModulesApple:
@@ -5400,7 +5369,6 @@ SPEC CHECKSUMS:
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 0a3b034bb63a5b684dd2f5fffd3c90ef6ed41ee8
   react-native-theoplayer: 7e935970c6da1372c81efdefb7d96354bde93a04
-  react-native-unistyles: 37d94b819a796ab7188b94450f9eb99cc3cc810d
   react-native-webview: cdce419e8022d0ef6f07db21890631258e7a9e6e
   React-NativeModulesApple: b5abec3c13cec8436c802b09cde04fbf70fa3a7b
   React-networking: 7868e362186628f01f12674e550933736d96f017
