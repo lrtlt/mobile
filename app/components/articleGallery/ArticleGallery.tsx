@@ -7,7 +7,6 @@ import {ArticlePhotoType} from '../../api/Types';
 import {checkEqual} from '../../util/LodashEqualityCheck';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
-import {Stack, Tiles} from '@grapp/stacks';
 
 const DEFAULT_ASPECT_RATIO = 1.5;
 
@@ -96,22 +95,22 @@ const ArticleGallery: React.FC<React.PropsWithChildren<Props>> = ({data, itemSel
   }
 
   return (
-    <Stack space={4} paddingTop={8} paddingBottom={4}>
+    <View style={styles.stack}>
       {data.length > 0 && <PhotoComponent photo={data[0]} pressHandler={itemSelectHandler} />}
-      <Tiles space={4} columns={2} flex={'fluid'}>
+      <View style={styles.tilesRow}>
         {data.length > 1 && <PhotoComponent photo={data[1]} pressHandler={itemSelectHandler} />}
         {data.length > 2 && <PhotoComponent photo={data[2]} pressHandler={itemSelectHandler} />}
-      </Tiles>
-      <Tiles space={4} columns={2} flex={'fluid'}>
+      </View>
+      <View style={styles.tilesRow}>
         {data.length > 3 && <PhotoComponent photo={data[3]} pressHandler={itemSelectHandler} />}
         {data.length > 4 && <PhotoComponent photo={data[4]} pressHandler={itemSelectHandler} />}
-      </Tiles>
+      </View>
       {data[6] ? (
         <PhotoWithOverlayComponent photo={data[5]} pressHandler={itemSelectHandler} count={data.length - 6} />
       ) : data[5] ? (
         <PhotoComponent photo={data[5]} pressHandler={itemSelectHandler} />
       ) : null}
-    </Stack>
+    </View>
   );
 };
 
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: '100%',
-    paddingTop: 24,
+    paddingTop: 12,
     paddingBottom: 12,
   },
   imageContainer: {
@@ -146,10 +145,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 40,
   },
-  space: {
-    width: 12,
-    height: 12,
-  },
   row: {
     paddingTop: 12,
     width: '100%',
@@ -158,5 +153,14 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     alignSelf: 'center',
+  },
+  stack: {
+    gap: 8,
+    paddingTop: 32,
+    paddingBottom: 16,
+  },
+  tilesRow: {
+    flexDirection: 'row',
+    gap: 8,
   },
 });

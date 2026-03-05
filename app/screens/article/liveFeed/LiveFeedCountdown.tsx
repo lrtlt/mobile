@@ -49,7 +49,7 @@ export default LiveFeedCountdown;
 
 const styles = StyleSheet.create({
   refreshTimeContainer: {
-    height: 80,
+    height: 64,
     alignContent: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(238,0,14,.05)',

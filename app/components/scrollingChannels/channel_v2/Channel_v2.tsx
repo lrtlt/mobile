@@ -6,7 +6,6 @@ import TouchableDebounce from '../../touchableDebounce/TouchableDebounce';
 import TextComponent from '../../text/Text';
 import {useTheme} from '../../../Theme';
 import {TVProgramChannel} from '../../../api/Types';
-import {Box} from '@grapp/stacks';
 
 interface Props {
   data: TVProgramChannel;
@@ -45,14 +44,15 @@ const ChannelV2: React.FC<React.PropsWithChildren<Props>> = ({data, isLive, onPr
   }, [data, onPress]);
 
   return (
-    <Box flex={'fluid'}>
+    <View style={styles.fluidBox}>
       <TouchableDebounce
+        style={{flex: 1}}
         debounceTime={500}
         onPress={onPressHandler}
         accessibilityLabel={`${data.channel_title ?? ''} ${data.title}`}>
         <View
           style={{
-            height: '100%',
+            flex: 1,
             justifyContent: 'flex-start',
             alignItems: 'flex-start',
             backgroundColor: dark ? '#FFFFFF08' : colorsSet.primary + '10',
@@ -78,7 +78,7 @@ const ChannelV2: React.FC<React.PropsWithChildren<Props>> = ({data, isLive, onPr
           </TextComponent>
         </View>
       </TouchableDebounce>
-    </Box>
+    </View>
   );
 };
 
@@ -110,5 +110,9 @@ const styles = StyleSheet.create({
   bottomBarOverlay: {
     height: 4,
     position: 'absolute',
+  },
+  fluidBox: {
+    flex: 1,
+    flexBasis: 0,
   },
 });

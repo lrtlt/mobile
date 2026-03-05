@@ -7,7 +7,6 @@ import TouchableDebounce from '../touchableDebounce/TouchableDebounce';
 import {useNavigation} from '@react-navigation/native';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Box, Tiles} from '@grapp/stacks';
 import ChannelV2 from './channel_v2/Channel_v2';
 import {useCurrentProgram} from '../../api/hooks/useProgram';
 
@@ -38,19 +37,15 @@ const ScrollingChannels: React.FC<React.PropsWithChildren<Props>> = ({onChannelP
 
   const {items, live_items} = data.tvprog;
 
-  const channelsContent =
-    items &&
-    items.map((item, i) => {
-      return (
-        <ChannelV2 data={item} key={`${i}-${item.proc}`} isLive={false} onPress={onChannelPressHandler} />
-      );
-    });
+  const allChannels = [
+    ...(live_items ?? []).map((item) => ({item, isLive: true})),
+    ...(items ?? []).map((item) => ({item, isLive: false})),
+  ];
 
-  const liveChannelsContent =
-    live_items &&
-    live_items.map((liveItem) => {
-      return <ChannelV2 data={liveItem} key={liveItem.title} isLive={true} onPress={onChannelPressHandler} />;
-    });
+  const rows: {item: TVProgramChannel; isLive: boolean}[][] = [];
+  for (let i = 0; i < allChannels.length; i += 2) {
+    rows.push(allChannels.slice(i, i + 2));
+  }
 
   return (
     <View style={{...styles.container}}>
@@ -64,13 +59,20 @@ const ScrollingChannels: React.FC<React.PropsWithChildren<Props>> = ({onChannelP
           </TextComponent>
         </TouchableDebounce>
       </View>
-      <View style={styles.scrollContent}>
-        <Box flex={'fluid'}>
-          <Tiles space={2} columns={2} margin={1}>
-            {liveChannelsContent}
-            {channelsContent}
-          </Tiles>
-        </Box>
+      <View style={styles.tilesContainer}>
+        {rows.map((row, rowIndex) => (
+          <View key={rowIndex} style={styles.tilesRow}>
+            {row.map(({item, isLive}, i) => (
+              <ChannelV2
+                data={item}
+                key={`${rowIndex}-${i}-${item.proc}`}
+                isLive={isLive}
+                onPress={onChannelPressHandler}
+              />
+            ))}
+            {row.length === 1 && <View style={styles.tilePlaceholder} pointerEvents="none" />}
+          </View>
+        ))}
       </View>
     </View>
   );
@@ -93,11 +95,6 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 8,
   },
-  scrollContent: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-
   leftText: {
     fontSize: 18,
     textTransform: 'uppercase',
@@ -108,5 +105,17 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
     padding: 8,
     margin: 8,
+  },
+  tilesContainer: {
+    gap: 8,
+    margin: 4,
+  },
+  tilesRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  tilePlaceholder: {
+    flex: 1,
+    flexBasis: 0,
   },
 });

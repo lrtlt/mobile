@@ -25,7 +25,6 @@ import {
 } from '../components/svg';
 
 import {ChannelColor, channelColors} from '../Theme';
-import {Color} from 'react-native-unistyles/lib/typescript/src/types';
 import {LRT_100, LRT_KLASIKA, LRT_LITHUANICA, LRT_OPUS, LRT_PLUS, LRT_RADIJAS, LRT_TV} from '../constants';
 
 export type IconSize = {
@@ -96,7 +95,7 @@ export const getColorsForChannelById = (channel_id?: number, fallback?: ChannelC
   }
 };
 
-export const getIconForChannel = (channel: string, size?: IconSize, color?: Color) => {
+export const getIconForChannel = (channel: string, size?: IconSize, color?: string) => {
   switch (channel.toLowerCase()) {
     case 'ltv1': {
       return <ChannelLRTHDIcon {...size} color={color} />;
