@@ -24,9 +24,9 @@ const NotificationBanner: React.FC = () => {
     return () => subscription.remove();
   }, []);
 
-  // if (!denied) {
-  //   return null;
-  // }
+  if (!denied) {
+    return null;
+  }
 
   const handlePress = Platform.select({
     ios: () => Linking.openURL('app-settings:'),

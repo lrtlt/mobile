@@ -7,6 +7,7 @@ import WebView, {AutoHeightWebViewProps, SizeUpdate} from 'react-native-autoheig
 import {type ShouldStartLoadRequest} from 'react-native-webview/src/WebViewTypes';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
+import useInjectBeforeLoad from './useInjectBeforeLoad';
 
 interface Props extends AutoHeightWebViewProps {
   openLinksExternally?: boolean;
@@ -23,6 +24,8 @@ const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardR
     const animationDisabled = useRef(false);
 
     const {height: screenHeight} = useWindowDimensions();
+
+    const injectedBeforeLoad = useInjectBeforeLoad(props);
 
     const handleShouldLoadWithRequest = useCallback((request: ShouldStartLoadRequest) => {
       const isUserClickAction =
@@ -74,6 +77,7 @@ const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardR
           style={[styles.webView, props.style]}
           containerStyle={[styles.webViewContainer, props.containerStyle]}
           onShouldStartLoadWithRequest={props.openLinksExternally ? handleShouldLoadWithRequest : undefined}
+          injectedJavaScriptBeforeContentLoaded={injectedBeforeLoad}
         />
       </View>
     );

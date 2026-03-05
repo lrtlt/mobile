@@ -2,6 +2,7 @@ import React, {forwardRef} from 'react';
 import {StyleSheet, View} from 'react-native';
 import WebView, {WebViewProps} from 'react-native-webview';
 import {useTheme} from '../../Theme';
+import useInjectBeforeLoad from './useInjectBeforeLoad';
 
 interface Props extends WebViewProps {
   allowDarkMode?: boolean;
@@ -13,12 +14,12 @@ interface Props extends WebViewProps {
 const SafeWebView: React.FC<React.PropsWithChildren<Props>> = forwardRef<WebView, Props>((props, ref) => {
   const {dark} = useTheme();
 
+  const injectedBeforeLoad = useInjectBeforeLoad(props);
   return (
     <View style={[props.style as {}, styles.webViewContainer]}>
       <WebView
         ref={ref}
         originWhitelist={['*']}
-        cacheEnabled={false}
         domStorageEnabled={true}
         setSupportMultipleWindows={false}
         javaScriptEnabled={true}
@@ -30,6 +31,7 @@ const SafeWebView: React.FC<React.PropsWithChildren<Props>> = forwardRef<WebView
         {...props}
         style={[styles.webView, props.style]}
         containerStyle={styles.webViewContainer}
+        injectedJavaScriptBeforeContentLoaded={injectedBeforeLoad}
       />
     </View>
   );

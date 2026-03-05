@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {View, StyleSheet, ViewStyle} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {ForecastLocation} from '../../api/Types';
@@ -17,7 +17,7 @@ const WeatherLocations: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const [searchResults, setSearchResults] = useState<ForecastLocation[]>([]);
 
   const {data} = useWeatherForecastLocations();
-  const locations = data || [];
+  const locations = useMemo(() => data || [], [data]);
 
   const {colors, strings} = useTheme();
 
