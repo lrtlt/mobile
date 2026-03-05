@@ -10,6 +10,7 @@ import FollowedTab from './tabs/FollowedTab';
 import AllShowsTab from './tabs/AllShowsTab';
 import SearchTab from './tabs/SearchTab';
 import {IconSearch} from '../../components/svg';
+import NotificationBanner from './components/NotificationBanner';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
@@ -34,6 +35,7 @@ const SubscriptionsScreen: React.FC<React.PropsWithChildren<Props>> = ({navigati
 
   return (
     <SafeAreaView style={styles.root} edges={['bottom']}>
+      <NotificationBanner />
       <View style={[styles.tabBarWrapper, {borderBottomColor: colors.listSeparator}]}>
         <ScrollView
           horizontal
