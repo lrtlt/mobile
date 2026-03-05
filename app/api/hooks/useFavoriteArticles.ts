@@ -102,10 +102,6 @@ export const useAddFavoriteUserArticle = () =>
   });
 
 export const useFavoriteArticleSync = () => {
-  const {savedArticles, removeArticle} = useArticleStorageStore.getState();
-
-  //We create a mutation for adding favorite articles here.
-  //Because useAddFavoriteUserArticle is optimistic and updates the cache immediately,
   const addFavoriteArticleMutation = useMutation({
     mutationFn: async (articleId: number | string) => {
       console.log('Syncing article id:', articleId);
@@ -119,6 +115,18 @@ export const useFavoriteArticleSync = () => {
 
   return useMutation({
     mutationFn: async () => {
+      const {savedArticles, articleSyncCompleted} = useArticleStorageStore.getState();
+
+      if (articleSyncCompleted) {
+        console.log('Article sync already completed, skipping.');
+        return 0;
+      }
+
+      if (savedArticles.length === 0) {
+        console.log('No local articles to sync.');
+        return 0;
+      }
+
       console.log('Article sync started!');
       const mutations = savedArticles.map((article) => {
         if (isMediaArticle(article)) {
@@ -127,25 +135,12 @@ export const useFavoriteArticleSync = () => {
           return addFavoriteArticleMutation.mutateAsync(article.article_id);
         }
       });
-      console.log('Article sync mutations created:', mutations.length);
       await Promise.all(mutations);
-      console.log('Article sync mutations executed:', mutations.length);
-      return savedArticles.length;
+      console.log('Article sync complete! Articles count:', mutations.length);
+      return mutations.length;
     },
-    onSuccess: (count) => {
-      if (count === 0) {
-        console.log('No articles to sync.');
-        return;
-      }
-
-      console.log('Article sync complete! Articles count:', count);
-      savedArticles.forEach((article) => {
-        if (isMediaArticle(article)) {
-          removeArticle(article.id, true);
-        } else if (isDefaultArticle(article)) {
-          removeArticle(article.article_id, true);
-        }
-      });
+    onSuccess: () => {
+      useArticleStorageStore.getState().setArticleSyncCompleted();
     },
     onSettled: () => {
       queryClient.invalidateQueries({queryKey: [QUERY_KEY]});

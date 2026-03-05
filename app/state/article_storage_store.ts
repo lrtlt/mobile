@@ -23,12 +23,14 @@ type ArticleStorageState = {
   history: ArticleContent[];
   savedArticles: ArticleContent[];
   lastSyncTime?: number;
+  articleSyncCompleted?: boolean;
 };
 
 type ArticleStorageActions = {
   saveArticle: (article: ArticleContent) => void;
   removeArticle: (articleId: number, noAnalytics?: boolean) => void;
   addArticleToHistory: (article: ArticleContent) => void;
+  setArticleSyncCompleted: () => void;
 };
 
 type ArticleStorageStore = ArticleStorageState & ArticleStorageActions;
@@ -84,6 +86,9 @@ export const useArticleStorageStore = create<ArticleStorageStore>()(
         }
         _cacheImages([article]);
         set({history});
+      },
+      setArticleSyncCompleted: () => {
+        set({articleSyncCompleted: true});
       },
     }),
     {
