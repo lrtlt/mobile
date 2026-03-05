@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, FlatList, StyleSheet, ListRenderItemInfo} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {useLiveFeedState} from './useLiveFeedState';
 import {LiveFeedItem} from '../../../api/Types';
 import TextComponent from '../../../components/text/Text';
@@ -51,7 +51,7 @@ const ArticleLiveFeed: React.FC<React.PropsWithChildren<Props>> = ({id}) => {
   }, []);
 
   const renderItem = useCallback(
-    ({item}: ListRenderItemInfo<LiveFeedItem>) => {
+    (item: LiveFeedItem) => {
       let imgUri: string | undefined;
       if (item.img_path_prefix && item.img_path_postfix) {
         imgUri = buildImageUri(IMG_SIZE_M, item.img_path_prefix, item.img_path_postfix);
@@ -111,18 +111,15 @@ const ArticleLiveFeed: React.FC<React.PropsWithChildren<Props>> = ({id}) => {
     [getTimeDifference],
   );
 
-  const keyExtractor = useCallback((item: LiveFeedItem) => item.feed_item_id.toString(), []);
-
   return (
     <View style={styles.container}>
       <LiveFeedCountdown onDeadline={() => reload()} />
       {state.feed ? (
-        <FlatList
-          style={{marginTop: 16}}
-          data={state.feed['feed-items'].slice(0, itemCount)}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-        />
+        <View style={{marginTop: 16}}>
+          {state.feed['feed-items'].slice(0, itemCount).map((item) => (
+            <React.Fragment key={item.feed_item_id.toString()}>{renderItem(item)}</React.Fragment>
+          ))}
+        </View>
       ) : null}
       <MoreArticlesButton onPress={() => setItemCount((count) => count + ITEM_COUNT_INCREMENT)} />
     </View>
