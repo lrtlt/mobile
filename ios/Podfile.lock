@@ -3644,12 +3644,12 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-theoplayer (10.10.0):
+  - react-native-theoplayer (10.11.0):
     - React-Core
-    - THEOplayer-Connector-SideloadedSubtitle (~> 10.7)
-    - THEOplayer-Integration-GoogleCast (~> 10.7)
-    - THEOplayer-Integration-THEOlive (~> 10.7)
-    - THEOplayerSDK-core (~> 10.7)
+    - THEOplayer-Connector-SideloadedSubtitle (~> 10.10)
+    - THEOplayer-Integration-GoogleCast (~> 10.10)
+    - THEOplayer-Integration-THEOlive (~> 10.10)
+    - THEOplayerSDK-core (~> 10.10)
   - react-native-webview (13.16.0):
     - boost
     - DoubleConversion
@@ -5368,7 +5368,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: b93d2fcd4dc06c519b8ad0ceddaf183fb5fa32e7
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 0a3b034bb63a5b684dd2f5fffd3c90ef6ed41ee8
-  react-native-theoplayer: 7e935970c6da1372c81efdefb7d96354bde93a04
+  react-native-theoplayer: ffc9cd79190a96674cc387f733951aaa53776555
   react-native-webview: cdce419e8022d0ef6f07db21890631258e7a9e6e
   React-NativeModulesApple: b5abec3c13cec8436c802b09cde04fbf70fa3a7b
   React-networking: 7868e362186628f01f12674e550933736d96f017

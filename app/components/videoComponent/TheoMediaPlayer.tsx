@@ -220,8 +220,8 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     player.preload = 'auto';
     player.muted = false;
     player.pipConfiguration = {
-      //TODO: enable on android after the fix on TheoPlayer side
-      startsAutomatically: backgroundAudioEnabled && Platform.OS === 'ios',
+      startsAutomatically: backgroundAudioEnabled && mediaType !== MediaType.AUDIO,
+      reparentPip: Platform.OS === 'android',
     };
     player.aspectRatio = AspectRatio.FIT;
     onPlayerReadyCallback?.(player);
