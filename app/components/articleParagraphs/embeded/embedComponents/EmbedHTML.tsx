@@ -46,9 +46,15 @@ const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
                   uri: iframeSrc,
                 };
               } else {
-                const formattedHTML = html
+                let formattedHTML = html
                   // Replace width=300..2400 (unquoted) and width="300..2400" (quoted)
                   .replace(WIDTH_REGEX, `width="${width}"`);
+
+                // Wrap script-only HTML in proper document structure so it renders
+                const trimmed = formattedHTML.trim();
+                if (trimmed.startsWith('<script') && !/<(?!script|\/script)\w/i.test(trimmed)) {
+                  formattedHTML = `<html><body>${formattedHTML}</body></html>`;
+                }
 
                 source = {
                   html: formattedHTML,
