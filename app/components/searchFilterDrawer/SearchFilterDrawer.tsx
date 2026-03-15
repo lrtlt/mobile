@@ -158,7 +158,7 @@ const SearchFilterDrawer: React.FC<React.PropsWithChildren<{}>> = () => {
         </TextComponent>
         <SelectableItem selected={days === ''} text={'Visos'} onPress={() => selectDays('')} />
         <SelectableItem selected={days === '1'} text={'Per 24 valandas'} onPress={() => selectDays('1')} />
-        <SelectableItem selected={days === '7'} text={'Per savaite'} onPress={() => selectDays('7')} />
+        <SelectableItem selected={days === '7'} text={'Per savaitę'} onPress={() => selectDays('7')} />
         <SelectableItem selected={days === '30'} text={'Per 30 d.'} onPress={() => selectDays('30')} />
       </View>
     );
