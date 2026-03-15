@@ -1,9 +1,9 @@
 import {useCallback, useEffect, useState} from 'react';
-import {MMKV} from 'react-native-mmkv';
+import {createMMKV} from 'react-native-mmkv';
 
 const LOCAL_STORAGE_KEY = 'WalkthroughModalShown_v1';
 
-const storage = new MMKV({
+const storage = createMMKV({
   id: 'onboarding-storage',
 });
 

@@ -1,10 +1,10 @@
 import messaging from '@react-native-firebase/messaging';
-import {MMKV} from 'react-native-mmkv';
+import {createMMKV} from 'react-native-mmkv';
 import {fetchPushCategories} from '../api/hooks/useNotificationTopics';
 
 const TOPICS_STORAGE_KEY = 'initialTopicSubscription';
 
-const storage = new MMKV({
+const storage = createMMKV({
   id: 'topics-storage',
 });
 

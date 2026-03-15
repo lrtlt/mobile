@@ -3,10 +3,10 @@ import {getMessaging, onTokenRefresh, getToken} from '@react-native-firebase/mes
 import {useAuth0} from 'react-native-auth0';
 import {useRegisterDeviceToken} from '../api/hooks/usePushNotifications';
 import {subscribeToAllDefaultTopics} from './useFirebaseTopicSubscription';
-import {MMKV} from 'react-native-mmkv';
+import {createMMKV} from 'react-native-mmkv';
 
 // MMKV storage for FCM token sync data
-const storage = new MMKV({
+const storage = createMMKV({
   id: 'fcm-token-sync',
 });
 
@@ -23,7 +23,7 @@ const getInitialSyncCompleted = (userId: string): boolean => {
 };
 
 const clearUserData = (userId: string) => {
-  storage.delete(`${FCM_INITIAL_SYNC_COMPLETED}_${userId}`);
+  storage.remove(`${FCM_INITIAL_SYNC_COMPLETED}_${userId}`);
 };
 
 /**

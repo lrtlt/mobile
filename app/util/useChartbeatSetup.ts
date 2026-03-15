@@ -1,8 +1,8 @@
 import ChartbeatReactNativeTracker from 'chartbeat-react-native-sdk';
 import Config from 'react-native-config';
-import {MMKV} from 'react-native-mmkv';
+import {createMMKV} from 'react-native-mmkv';
 
-const storage = new MMKV({
+const storage = createMMKV({
   id: 'chartbeat-storage',
 });
 

@@ -23,7 +23,7 @@ import notifee, {
   AndroidStyle,
 } from '@notifee/react-native';
 import crashlytics from '@react-native-firebase/crashlytics';
-import {MMKV, Mode} from 'react-native-mmkv';
+import {createMMKV} from 'react-native-mmkv';
 
 const INITIAL_URL_STORAGE_KEY = 'initialUrl';
 const FOREGROUND_NOTIFICATION_CHANNEL_ID = 'lrt_foreground_notifications';
@@ -32,9 +32,9 @@ type NotificationData = {
   launchUrl?: string;
 };
 
-const storage = new MMKV({
+const storage = createMMKV({
   id: 'messaging-storage',
-  mode: Mode.MULTI_PROCESS,
+  mode: 'multi-process',
 });
 
 const _handleNotificationOpen = async (data: NotificationData | undefined, isInitial: boolean) => {
