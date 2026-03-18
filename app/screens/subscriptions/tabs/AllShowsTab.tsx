@@ -111,6 +111,7 @@ const AllShowsTab: React.FC = () => {
           isSubscribed={isSubscribed(item.item.id)}
           categoryId={item.item.id}
           type={item.showType}
+          latestArticleDate={item.item.latest_article_date}
           onToggle={(value) => {
             updateSubscriptionMutation.mutate({
               name: item.item.title,

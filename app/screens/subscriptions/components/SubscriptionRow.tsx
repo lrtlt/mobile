@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Switch} from 'react-native-gesture-handler';
 import {Text, TouchableDebounce} from '../../../components';
@@ -15,14 +15,41 @@ interface Props {
   isSubscribed: boolean;
   onToggle: (value: boolean) => void;
   type?: 'mediateka' | 'radioteka';
+  latestArticleDate?: string;
   categoryId?: number;
 }
 
-const SubscriptionRow: React.FC<Props> = ({type, title, isSubscribed, onToggle, categoryId}) => {
+const SubscriptionRow: React.FC<Props> = ({
+  type,
+  title,
+  isSubscribed,
+  onToggle,
+  latestArticleDate,
+  categoryId,
+}) => {
   const {dark, colors} = useTheme();
   const [isOpening, setIsOpening] = useState(false);
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
+
+  const formattedDate = useMemo(() => {
+    if (!latestArticleDate) return undefined;
+    const [datePart] = latestArticleDate.split(' ');
+    const [year, month, day] = datePart.split(/[-.]/).map(Number);
+    const articleDate = new Date(year, month - 1, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const diffDays = Math.floor((today.getTime() - articleDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return 'Šiandien';
+    if (diffDays === 1) return 'Vakar';
+    if (diffDays <= 7) return `Prieš ${diffDays} d.`;
+    if (diffDays <= 30) {
+      const weeks = Math.floor(diffDays / 7);
+      return `Prieš ${weeks} sav.`;
+    }
+    return datePart;
+  }, [latestArticleDate]);
 
   const onPress = () => {
     if (!categoryId || isOpening) return;
@@ -51,6 +78,14 @@ const SubscriptionRow: React.FC<Props> = ({type, title, isSubscribed, onToggle, 
           <Text style={styles.title} numberOfLines={2}>
             {title}
           </Text>
+          {latestArticleDate && (
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={styles.latestArticleDate} type="secondary">
+                Paskutinis įrašas:
+              </Text>
+              <Text style={styles.latestArticleDate}>{' ' + formattedDate}</Text>
+            </View>
+          )}
         </TouchableDebounce>
       </View>
       <View style={styles.right}>
@@ -86,10 +121,13 @@ const styles = StyleSheet.create({
   },
   titleArea: {
     flex: 1,
+    paddingVertical: 4,
   },
   title: {
     fontSize: 16,
-    paddingVertical: 4,
+  },
+  latestArticleDate: {
+    fontSize: 13,
   },
   right: {
     flexDirection: 'row',

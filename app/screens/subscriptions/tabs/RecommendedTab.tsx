@@ -52,6 +52,7 @@ const RecommendedTab: React.FC = () => {
           title={item.title}
           isSubscribed={isSubscribed(item.id)}
           categoryId={item.id}
+          latestArticleDate={item.latestArticleDate}
           onToggle={(value) => {
             updateSubscriptionMutation.mutate({
               name: item.title,

@@ -6,6 +6,7 @@ export type ShowListItem = {
   url: string;
   title: string;
   curr: 1 | null;
+  latest_article_date?: string;
 };
 
 type ShowListSection = {
