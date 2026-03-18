@@ -17,7 +17,7 @@ interface Props extends AutoHeightWebViewProps {
 /**
  * Component extending default WebView applying fixes for android crashes.
  */
-const SafeAutoHeightWebView: React.FC<React.PropsWithChildren<Props>> = forwardRef<WebView, Props>(
+const SafeAutoHeightWebView = forwardRef<WebView, Props>(
   (props, ref) => {
     const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
     const {dark} = useTheme();
