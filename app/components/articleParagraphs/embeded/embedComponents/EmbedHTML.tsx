@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {WebViewSource} from 'react-native-webview/src/WebViewTypes';
+import WebView from 'react-native-webview';
 
 import {ArticleEmbedHTMLType} from '../../../../api/Types';
 import SafeAutoHeightWebView from '../../../safeWebView/SafeAutoHeightWebView';
@@ -11,14 +12,47 @@ interface Props {
 }
 
 const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
-  const [dimensions, setDimensions] = useState({width: 0, height: 0});
+  const [initialWidth, setInitialWidth] = useState(0);
+  const [currentWidth, setCurrentWidth] = useState(0);
+  const webViewRefs = useRef<Map<number, WebView>>(new Map());
+  const initializedRef = useRef(false);
 
-  const {width} = dimensions;
+  const onLayout = useCallback(
+    (event: {nativeEvent: {layout: {width: number; height: number}}}) => {
+      const newWidth = event.nativeEvent.layout.width;
+      setCurrentWidth(newWidth);
+
+      if (!initializedRef.current && newWidth > 0) {
+        setInitialWidth(newWidth);
+        initializedRef.current = true;
+      } else if (initializedRef.current && newWidth > 0) {
+        // Orientation changed — inject JS to resize content without reloading
+        webViewRefs.current.forEach((webView) => {
+          webView?.injectJavaScript(`
+            (function() {
+              document.querySelectorAll('iframe').forEach(function(iframe) {
+                iframe.style.width = '${newWidth}px';
+                iframe.setAttribute('width', '${newWidth}');
+              });
+              if (document.body) {
+                document.body.style.width = '${newWidth}px';
+              }
+              var meta = document.querySelector('meta[name="viewport"]');
+              if (meta) {
+                meta.setAttribute('content', 'width=${newWidth}, user-scalable=no');
+              }
+            })();
+            true;
+          `);
+        });
+      }
+    },
+    [],
+  );
+
+  const width = initialWidth;
   return (
-    <View
-      onLayout={(event) => {
-        setDimensions(event.nativeEvent.layout);
-      }}>
+    <View onLayout={onLayout}>
       {width === 0
         ? null
         : data.map((item, i) => {
@@ -69,8 +103,15 @@ const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
 
             return (
               <SafeAutoHeightWebView
+                ref={(ref: WebView | null) => {
+                  if (ref) {
+                    webViewRefs.current.set(i, ref);
+                  } else {
+                    webViewRefs.current.delete(i);
+                  }
+                }}
                 key={i}
-                style={{width}}
+                style={{width: currentWidth || width}}
                 scrollEnabled={false}
                 nestedScrollEnabled={false}
                 allowsFullscreenVideo={true}
