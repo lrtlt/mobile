@@ -1056,9 +1056,8 @@ export type SingleDayProgram = {
 
 export type ProgramResponse = {
   all_programs: {
-    days: any;
-    [key: string]: SingleDayProgram[];
-  };
+    days: string[];
+  } & Record<string, SingleDayProgram[]>;
 };
 
 export type ChannelResponse = {

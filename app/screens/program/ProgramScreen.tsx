@@ -9,6 +9,7 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import ProgramDateModal from './ProgramDateModal';
 import {delay} from 'lodash';
+import moment from 'moment';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import {useWeeklyProgram} from '../../api/hooks/useProgram';
 
@@ -33,7 +34,9 @@ const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
 
   useEffect(() => {
     if (program && !selectedDate) {
-      setSelectedDate(program.days[0]);
+      const today = moment().format('YYYY.MM.DD');
+      const todayDate = program.days.find((d) => d === today);
+      setSelectedDate(todayDate ?? program.days[0]);
     }
   }, [program, selectedDate]);
 

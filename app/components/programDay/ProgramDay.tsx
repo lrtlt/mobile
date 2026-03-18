@@ -23,7 +23,6 @@ const ProgramDay: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {strings} = useTheme();
 
   const date = moment(props.dateString, 'YYYY-MM-DD');
-
   const dayOfWeek = date.day();
   const dayName = dayOfWeek === moment().day() ? strings.today : weekDays[dayOfWeek];
 
