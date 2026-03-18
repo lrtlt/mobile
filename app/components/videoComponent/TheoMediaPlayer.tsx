@@ -212,7 +212,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
     player.backgroundAudioConfiguration = {
       enabled: backgroundAudioEnabled,
-      shouldResumeAfterInterruption: true,
+      shouldResumeAfterInterruption: false,
       stopOnBackground: false,
       audioSessionMode: AudioSessionMode.SPOKEN_AUDIO,
     };
