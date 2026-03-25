@@ -45,7 +45,7 @@ const ChannelPlaylistList: React.FC<ChannelPlaylistListProps> = ({items, color})
         extraData={items}
         initialNumToRender={20}
         ItemSeparatorComponent={renderReparator}
-        inverted={true}
+        inverted={false}
         windowSize={16}
         keyExtractor={keyExtractor}
       />
