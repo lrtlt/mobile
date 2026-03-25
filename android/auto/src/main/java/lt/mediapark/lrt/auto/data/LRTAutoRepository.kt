@@ -17,6 +17,9 @@ class LRTAutoRepository(private val api: LRTAutoService) {
     private var podcastCategoriesLastFetchTime: Long = 0
     private var podcastCategories: List<PodcastCategory> = emptyList()
 
+    private var subscriptionsLastFetchTime: Long = 0
+    private var subscriptions: List<UserSubscription> = emptyList()
+
     suspend fun getRecommended() = withContext(Dispatchers.IO) {
         if (System.currentTimeMillis() - recommendedLastFetchTime > CACHE_DURATION || recommended.isEmpty()) {
             try{
@@ -121,6 +124,28 @@ class LRTAutoRepository(private val api: LRTAutoService) {
             e.printStackTrace()
         }
         result
+    }
+
+    suspend fun getSubscriptions(accessToken: String) = withContext(Dispatchers.IO) {
+        if (System.currentTimeMillis() - subscriptionsLastFetchTime > CACHE_DURATION || subscriptions.isEmpty()) {
+            try {
+                subscriptions = api.getSubscriptions(
+                    "https://www.lrt.lt/servisai/dev-authrz/api/v1/users/subscriptions",
+                    "Bearer $accessToken"
+                ).subscriptions.filter { it.isActive }
+                if (subscriptions.isNotEmpty()) {
+                    subscriptionsLastFetchTime = System.currentTimeMillis()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        subscriptions
+    }
+
+    fun clearSubscriptionsCache() {
+        subscriptionsLastFetchTime = 0
+        subscriptions = emptyList()
     }
 
     private fun getCoverByChannelId(programItem: TvProgramItem): String {

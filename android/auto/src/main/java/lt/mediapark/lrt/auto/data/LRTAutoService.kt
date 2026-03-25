@@ -1,6 +1,7 @@
 package lt.mediapark.lrt.auto.data
 
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
@@ -26,4 +27,10 @@ interface LRTAutoService {
 
     @GET("api/json/article/{id}")
     suspend fun getPodcastEpisodeInfo(@Path("id") id: Int): PodcastEpisodeInfoResponse
+
+    @GET
+    suspend fun getSubscriptions(
+        @Url url: String,
+        @Header("Authorization") authorization: String
+    ): SubscriptionsResponse
 }

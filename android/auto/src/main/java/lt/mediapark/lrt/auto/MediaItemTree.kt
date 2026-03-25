@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableList
 import lt.mediapark.lrt.auto.data.PlaylistItem
 import lt.mediapark.lrt.auto.data.PodcastCategory
 import lt.mediapark.lrt.auto.data.PodcastEpisode
+import lt.mediapark.lrt.auto.data.UserSubscription
 
 object MediaItemTree {
     private var treeNodes: MutableMap<String, MediaItemNode> = mutableMapOf()
@@ -22,10 +23,13 @@ object MediaItemTree {
     const val LIVE = "[live]"
     const val NEWEST = "[newest]"
     const val PODCAST_CATEGORIES = "[podcast_categories]"
+    const val SUBSCRIPTIONS = "[subscriptions]"
 
     private const val ITEM_PREFIX = "[item]"
     private const val PODCAST_PREFIX = "[podcast]"
     private const val PODCAST_EPISODE_PREFIX = "[podcast_episode]"
+    private const val SUBSCRIPTION_PREFIX = "[subscription]"
+    private const val SUBSCRIPTION_EPISODE_PREFIX = "[subscription_episode]"
     const val EXTRA_CHANNEL_ID = "channel_id"
 
     private class MediaItemNode(val item: MediaItem) {
@@ -114,6 +118,17 @@ object MediaItemTree {
                 buildMediaItem(
                     title = "Laidos",
                     mediaId = PODCAST_CATEGORIES,
+                    isPlayable = false,
+                    isBrowsable = true,
+                    mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PODCASTS
+                )
+            )
+
+        treeNodes[SUBSCRIPTIONS] =
+            MediaItemNode(
+                buildMediaItem(
+                    title = "Prenumeratos",
+                    mediaId = SUBSCRIPTIONS,
                     isPlayable = false,
                     isBrowsable = true,
                     mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PODCASTS
@@ -230,8 +245,11 @@ object MediaItemTree {
         }
     }
 
-    fun setPodcastCategories(items: List<PodcastCategory>){
+    fun setPodcastCategories(items: List<PodcastCategory>, includeSubscriptions: Boolean = false){
         treeNodes[PODCAST_CATEGORIES]!!.clearChildren()
+        if (includeSubscriptions) {
+            treeNodes[PODCAST_CATEGORIES]!!.addChild(SUBSCRIPTIONS)
+        }
         items.forEach {
             val mediaId = PODCAST_PREFIX + it.id
             val item = buildMediaItem(
@@ -270,6 +288,92 @@ object MediaItemTree {
                 titleMap[t.lowercase()] = treeNodes[mediaId]!!
             }
         }
+    }
+
+    fun setSubscriptionCategories(items: List<UserSubscription>) {
+        treeNodes[SUBSCRIPTIONS]!!.clearChildren()
+        items.forEach {
+            val categoryId = it.subscriptionKey.removePrefix("category-")
+            val mediaId = SUBSCRIPTION_PREFIX + categoryId
+            val item = buildMediaItem(
+                title = it.name ?: "-",
+                mediaId = mediaId,
+                isPlayable = false,
+                isBrowsable = true,
+                mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PODCASTS
+            )
+            treeNodes[mediaId] = MediaItemNode(item)
+            treeNodes[SUBSCRIPTIONS]!!.addChild(mediaId)
+        }
+    }
+
+    fun setSubscriptionNotLoggedIn() {
+        treeNodes[SUBSCRIPTIONS]!!.clearChildren()
+        val mediaId = "[subscription_login_message]"
+        val item = buildMediaItem(
+            title = "Prisijunkite programėlėje, kad matytumėte asmeninį turinį",
+            mediaId = mediaId,
+            isPlayable = false,
+            isBrowsable = false,
+            mediaType = MediaMetadata.MEDIA_TYPE_MIXED
+        )
+        treeNodes[mediaId] = MediaItemNode(item)
+        treeNodes[SUBSCRIPTIONS]!!.addChild(mediaId)
+    }
+
+    fun setSubscriptionNoItems() {
+        treeNodes[SUBSCRIPTIONS]!!.clearChildren()
+        val mediaId = "[subscription_empty_message]"
+        val item = buildMediaItem(
+            title = "Neturite prenumeratų",
+            mediaId = mediaId,
+            isPlayable = false,
+            isBrowsable = false,
+            mediaType = MediaMetadata.MEDIA_TYPE_MIXED
+        )
+        treeNodes[mediaId] = MediaItemNode(item)
+        treeNodes[SUBSCRIPTIONS]!!.addChild(mediaId)
+    }
+
+    fun setSubscriptionEpisodes(categoryId: Int, episodes: List<PodcastEpisode>) {
+        val imgSize = "282x158"
+        val parentId = SUBSCRIPTION_PREFIX + categoryId
+
+        episodes.forEach {
+            val mediaId = SUBSCRIPTION_EPISODE_PREFIX + it.id
+            val item = buildMediaItem(
+                title = it.title ?: "-",
+                mediaId = mediaId,
+                isPlayable = true,
+                isBrowsable = false,
+                mediaType = MediaMetadata.MEDIA_TYPE_PODCAST_EPISODE,
+                imageUri = Uri.parse("https://lrt.lt${it.imgPathPrefix}$imgSize${it.imgPathPostfix}")
+            )
+            treeNodes[mediaId] = MediaItemNode(item)
+            treeNodes[parentId]?.addChild(mediaId)
+            it.title?.let { t ->
+                titleMap[t.lowercase()] = treeNodes[mediaId]!!
+            }
+        }
+    }
+
+    fun getSubscriptionCategoryId(mediaId: String): Int {
+        if (mediaId.startsWith(SUBSCRIPTION_PREFIX)) {
+            return mediaId.substring(SUBSCRIPTION_PREFIX.length).toIntOrNull() ?: -1
+        }
+        return -1
+    }
+
+    fun getSubscriptionEpisodeId(mediaId: String): Int {
+        if (mediaId.startsWith(SUBSCRIPTION_EPISODE_PREFIX)) {
+            return mediaId.substring(SUBSCRIPTION_EPISODE_PREFIX.length).toIntOrNull() ?: -1
+        }
+        return -1
+    }
+
+    fun buildSubscriptionEpisodeItem(episodeId: String, streamUrl: String): MediaItem {
+        val item = treeNodes[episodeId]?.item
+        return item!!.buildUpon().setUri(Uri.parse(streamUrl)).build()
     }
 
     fun buildPodcastEpisodeItem(podcastEpisodeId: String, streamUrl: String): MediaItem {

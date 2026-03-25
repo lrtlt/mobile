@@ -117,6 +117,15 @@ class CarPlayNetwork {
     return episodeInfo
   }
 
+  func fetchSubscriptions(accessToken: String) async throws -> [UserSubscription] {
+    let url = URL(string: "https://www.lrt.lt/servisai/dev-authrz/api/v1/users/subscriptions")!
+    var request = URLRequest(url: url)
+    request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+    let (data, _) = try await URLSession.shared.data(for: request)
+    let response = try JSONDecoder().decode(SubscriptionsResponse.self, from: data)
+    return response.subscriptions
+  }
+
   private func fetchStreamInfo(streamUrl: String) async throws -> StreamInfo {
     let url = URL(string: streamUrl)!
     let (data, _) = try await URLSession.shared.data(from: url)

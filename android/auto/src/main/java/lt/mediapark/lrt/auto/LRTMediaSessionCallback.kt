@@ -22,6 +22,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import lt.mediapark.lrt.auto.data.AutoAuthManager
 import lt.mediapark.lrt.auto.data.LRTAutoRepository
 import lt.mediapark.lrt.auto.data.LRTAutoService
 import retrofit2.Retrofit
@@ -30,11 +31,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 class LRTMediaSessionCallback(private val context: Context): MediaLibraryService.MediaLibrarySession.Callback  {
 
     private val repository: LRTAutoRepository
+    private val authManager: AutoAuthManager
     private val scope = CoroutineScope(Dispatchers.Default)
     private var newestRefreshJob: Job? = null
     private var currentSession: MediaLibraryService.MediaLibrarySession? = null
 
     init {
+        authManager = AutoAuthManager(context)
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://lrt.lt/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -164,8 +167,38 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
             logAnalyticsEvent(browser.packageName, "android_auto_podcasts_open")
             return submitBlocking {
                 val podcastCategories = repository.getPodcastCategories()
-                MediaItemTree.setPodcastCategories(podcastCategories)
+                val hasSubscriptions = authManager.isLoggedIn()
+                MediaItemTree.setPodcastCategories(podcastCategories, includeSubscriptions = hasSubscriptions)
                 LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
+            }
+        }
+
+        if (parentId == MediaItemTree.SUBSCRIPTIONS) {
+            logAnalyticsEvent(browser.packageName, "android_auto_subscriptions_open")
+            return submitBlocking {
+                try {
+                    val token = authManager.getAccessToken()
+                    val subs = repository.getSubscriptions(token)
+                    if (subs.isEmpty()) {
+                        MediaItemTree.setSubscriptionNoItems()
+                    } else {
+                        MediaItemTree.setSubscriptionCategories(subs)
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error fetching subscriptions", e)
+                    MediaItemTree.setSubscriptionNoItems()
+                }
+                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
+            }
+        }
+
+        MediaItemTree.getSubscriptionCategoryId(parentId).let {
+            if (it > 0) {
+                return submitBlocking {
+                    val episodes = repository.getPodcastEpisodes(it)
+                    MediaItemTree.setSubscriptionEpisodes(it, episodes)
+                    LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
+                }
             }
         }
 
@@ -204,6 +237,31 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
         if (mediaItems.size == 1) {
             val item = mediaItems.first()
+
+            MediaItemTree.getSubscriptionEpisodeId(item.mediaId).let {
+                if (it > 0) {
+                    return submitBlocking {
+                        val episodeInfo = repository.getPodcastEpisodeInfo(it)
+                        if (episodeInfo?.streamUrl != null) {
+                            val episodeMediaItem = MediaItemTree.buildSubscriptionEpisodeItem(
+                                item.mediaId,
+                                episodeInfo.streamUrl
+                            )
+                            MediaSession.MediaItemsWithStartPosition(
+                                listOf(episodeMediaItem),
+                                startIndex,
+                                startPositionMs
+                            )
+                        } else {
+                            MediaSession.MediaItemsWithStartPosition(
+                                resolveMediaItems(mediaItems),
+                                startIndex,
+                                startPositionMs
+                            )
+                        }
+                    }
+                }
+            }
 
             MediaItemTree.getPodcastEpisodeId(item.mediaId).let {
                 if(it > 0) {

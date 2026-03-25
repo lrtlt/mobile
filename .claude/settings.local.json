@@ -6,7 +6,12 @@
       "WebFetch(domain:www.lrt.lt)",
       "Bash(yarn lint:*)",
       "Bash(ls:*)",
-      "Bash(yarn remove:*)"
+      "Bash(yarn remove:*)",
+      "Bash(find /Users/kestasvenslauskas/mobile/lrt/ios -type f -name *CarPlay* -o -name *carplay*)",
+      "Bash(find /Users/kestasvenslauskas/mobile/lrt/android -type f -name *AndroidAuto* -o -name *CarApp* -o -name *androidauto*)",
+      "Bash(find /Users/kestasvenslauskas/mobile/lrt/app/api/hooks -type f -name *.ts)",
+      "Bash(find /Users/kestasvenslauskas/mobile/lrt/node_modules/react-native-auth0/ios -name *.swift -o -name *.m -o -name *.h)",
+      "Bash(find /Users/kestasvenslauskas/mobile/lrt/node_modules/react-native-auth0/android -name *.kt -o -name *.java)"
     ]
   }
 }
