@@ -14,8 +14,9 @@ import {defaultSearchFilter} from './context/SearchContext';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {pushArticle} from '../../util/NavigationUtils';
+import {pushArticle, navigateArticle} from '../../util/NavigationUtils';
 import {useArticleSearch} from '../../api/hooks/useSearch';
+import {fetchCategoryPlaylist} from '../../api';
 import SearchBar from './SearchBar';
 import {SearchCategorySuggestion} from '../../api/Types';
 import SearchSuggestions from './SearchSuggestions';
@@ -80,7 +81,15 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
 
   const searchSuggestionPressHandler = useCallback(
     (suggestion: SearchCategorySuggestion) => {
-      if (suggestion.category_id) {
+      if (!suggestion.category_id) return;
+      if (suggestion.is_audio || suggestion.is_video) {
+        fetchCategoryPlaylist(suggestion.category_id).then((response) => {
+          const article = response.articles?.[0];
+          if (article) {
+            navigateArticle(navigation, article);
+          }
+        });
+      } else {
         navigation.navigate('Category', {
           id: suggestion.category_id,
           name: suggestion.category_title,
