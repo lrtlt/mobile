@@ -6,7 +6,11 @@ import useTextStyle from './useTextStyle';
 
 type Type = 'primary' | 'secondary' | 'disabled' | 'error';
 
-type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-SemiBold' | 'PlayfairDisplay-Regular';
+type FontFamily =
+  | 'SourceSansPro-Regular'
+  | 'SourceSansPro-SemiBold'
+  | 'SourceSansPro-LightItalic'
+  | 'PlayfairDisplay-Regular';
 
 export interface TextComponentProps extends TextProps {
   type?: Type;

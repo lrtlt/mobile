@@ -112,6 +112,7 @@ const renderers: CustomTagRendererRecord = {
   blockquote: BlockquoteRenderer,
   p: MyTextualRenderer,
   li: MyTextualRenderer,
+  em: MyTextualRenderer,
   h5: MyTextualRenderer,
   h4: MyTextualRenderer,
   h3: MyTextualRenderer,
@@ -188,10 +189,15 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
       },
       em: {
         fontFamily: 'SourceSansPro-LightItalic',
+        fontStyle: 'italic',
       },
       li: {
         // paddingVertical: LI_TAG_VERTICAL_MARGIN,
         flex: 1,
+      },
+      span: {
+        textDecorationLine: 'underline',
+        textDecorationColor: colors.text,
       },
       h4: {
         fontSize: DEFAULT_FONT_SIZE,
