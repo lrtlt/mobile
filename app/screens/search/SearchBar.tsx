@@ -2,7 +2,7 @@ import {StyleSheet, TextInput, View} from 'react-native';
 import {useTheme} from '../../Theme';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import {IconSearch} from '../../components/svg';
-import {useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 interface Props {
   subHeaderHeight: number;
@@ -10,8 +10,21 @@ interface Props {
   onValueChange?: (text: string) => void;
 }
 
-const SearchBar: React.FC<React.PropsWithChildren<Props>> = ({onQueryChange, onValueChange, subHeaderHeight}) => {
+const SearchBar: React.FC<React.PropsWithChildren<Props>> = ({
+  onQueryChange,
+  onValueChange,
+  subHeaderHeight,
+}) => {
   const [query, setQuery] = useState<string>('');
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+    };
+  }, []);
 
   const {colors, dim} = useTheme();
 
@@ -33,6 +46,14 @@ const SearchBar: React.FC<React.PropsWithChildren<Props>> = ({onQueryChange, onV
           onChangeText={(text) => {
             setQuery(text);
             onValueChange?.(text);
+            if (debounceTimer.current) {
+              clearTimeout(debounceTimer.current);
+            }
+            if (text.length >= 3) {
+              debounceTimer.current = setTimeout(() => {
+                onQueryChange(text);
+              }, 400);
+            }
           }}
           value={query}
         />
