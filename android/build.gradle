@@ -32,7 +32,10 @@ buildscript {
 }
 
  allprojects {
-     repositories {
+    ext.mavenGemiusUser = gemiusProperties["MAVEN_GEMIUS_USER"]
+    ext.mavenGemiusPassword = gemiusProperties["MAVEN_GEMIUS_PASSWORD"]
+
+     repositories {    
          maven {
              credentials {
                  username gemiusProperties["MAVEN_GEMIUS_USER"] as String

@@ -1511,7 +1511,7 @@ PODS:
   - libwebp/sharpyuv (1.5.0)
   - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
-  - LRTGemiusPlugin (2.0.0):
+  - LRTGemiusPlugin (2.1.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -5361,7 +5361,7 @@ SPEC CHECKSUMS:
   libavif: 84bbb62fb232c3018d6f1bab79beea87e35de7b7
   libdav1d: 23581a4d8ec811ff171ed5e2e05cd27bad64c39f
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
-  LRTGemiusPlugin: 6240d2a4d7da1b2f5e7b776bfe0daae001361cbf
+  LRTGemiusPlugin: 5dd991715c85bf503ee1a9b859d4741a573e5e82
   MMKVCore: d078dce7d6586a888b2c2ef5343b6242678e3ee8
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   NitroMmkv: 7480088d33a4540823cb1d2ad3f149677922f529
