@@ -16,6 +16,10 @@ export type MediaBaseData = {
   isLiveStream: boolean;
   startTime?: number;
   tracks?: VideoTextTrack[];
+  // Article id used by playback-progress tracking ("continue playing").
+  articleId?: number;
+  // Raw {WxH} path (not a built URL) for playback-progress tracking.
+  photoPath?: string;
 };
 
 export type PlayerContextType = {

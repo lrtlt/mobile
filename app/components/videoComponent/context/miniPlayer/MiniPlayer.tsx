@@ -122,6 +122,15 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
               streamUri={mediaData.uri}
               startTime={mediaData.startTime}
               tracks={mediaData.tracks}
+              progressTracking={
+                mediaData.articleId
+                  ? {
+                      articleId: mediaData.articleId,
+                      url: mediaData.articleUrl,
+                      photo: mediaData.photoPath,
+                    }
+                  : undefined
+              }
               autoStart={true}
               isMini={true}
               aspectRatio={playerAspectRatio}

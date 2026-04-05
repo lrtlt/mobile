@@ -4,6 +4,15 @@ import {ArticleContentMedia, isMediaArticle} from '../../../../api/Types';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../../../util/ImageUtil';
 import {MediaBaseData, MediaType} from '../PlayerContext';
 import {Playlist, PlaylistItem} from './Playlist';
+import {usePlaybackProgressStore} from '../../../../state/playback_progress_store';
+import {PLAYBACK_PROGRESS_MIN_POSITION_SEC} from '../../../../constants';
+
+const resolveResumeStartTime = (articleId: number): number | undefined => {
+  const entry = usePlaybackProgressStore.getState().entries[articleId];
+  if (!entry || entry.completed) return undefined;
+  if (entry.positionSec < PLAYBACK_PROGRESS_MIN_POSITION_SEC) return undefined;
+  return entry.positionSec;
+};
 
 const articleToMediaData = (article: ArticleContentMedia): MediaBaseData => ({
   uri: article.stream_url,
@@ -14,6 +23,9 @@ const articleToMediaData = (article: ArticleContentMedia): MediaBaseData => ({
     buildArticleImageUri(IMG_SIZE_M, article.category_img_info?.path),
   mediaType: article.is_video ? MediaType.VIDEO : MediaType.AUDIO,
   isLiveStream: false,
+  startTime: resolveResumeStartTime(article.id),
+  articleId: article.id,
+  photoPath: article.main_photo?.path ?? article.category_img_info?.path,
 });
 
 class ArticlePlaylist implements Playlist {

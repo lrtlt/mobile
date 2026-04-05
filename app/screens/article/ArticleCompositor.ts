@@ -197,6 +197,15 @@ const getAudioContent = (article: ArticleContentMedia): ArticleContentItemType =
   };
 };
 
+const buildProgressTracking = (article: ArticleContentMedia) => ({
+  articleId: article.id,
+  url: article.url,
+  subtitle: article.subtitle,
+  category_title: article.category_title,
+  category_id: article.category_id,
+  photo: article.main_photo?.path ?? article.category_img_info?.path,
+});
+
 const getVideo = (article: ArticleContentMedia): ArticleContentItemType => {
   return {
     type: TYPE_VIDEO,
@@ -204,6 +213,8 @@ const getVideo = (article: ArticleContentMedia): ArticleContentItemType => {
       cover: article.main_photo,
       streamUrl: article.get_playlist_url,
       mediaId: String(article.id),
+      title: article.title,
+      progressTracking: buildProgressTracking(article),
     },
   };
 };
@@ -217,6 +228,7 @@ const getAudio = (article: ArticleContentMedia): ArticleContentItemType => {
       cover: article.main_photo,
       streamUri: article.stream_url,
       mediaId: String(article.id),
+      progressTracking: buildProgressTracking(article),
     },
   };
 };

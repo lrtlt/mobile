@@ -4,9 +4,7 @@ import {buildArticleImageUri, IMG_SIZE_M} from '../../../util/ImageUtil';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
-import {useCallback, useMemo} from 'react';
-import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
-import ArticlePlaylist from '../../../components/videoComponent/context/playlist/ArticlePlaylist';
+import {useMemo} from 'react';
 import MediatekaHorizontalList from '../../main/tabScreen/mediateka/components/horizontal_list/MediatekaHorizontalList';
 import {useArticleRecommendations} from '../../../api/hooks/useArticlesRecommendations';
 import {ArticleSearchResponse} from '../../../api/Types';
@@ -23,8 +21,6 @@ const VodcastRecommendations: React.FC<React.PropsWithChildren<Props>> = ({artic
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Podcast'>>();
 
-  const {setPlaylist} = useMediaPlayer();
-
   const items = useMemo(() => {
     return recommendations.items.map((item) => ({
       title: item.title,
@@ -34,18 +30,6 @@ const VodcastRecommendations: React.FC<React.PropsWithChildren<Props>> = ({artic
       ageRestricted: !!item.age_restriction,
     }));
   }, [recommendations.items]);
-
-  const playItem = useCallback(
-    (index: number) => {
-      setPlaylist(
-        new ArticlePlaylist(
-          recommendations.items.map((item) => item.id),
-          index,
-        ),
-      );
-    },
-    [recommendations, setPlaylist],
-  );
 
   if (items.length === 0) {
     return null;
@@ -58,7 +42,6 @@ const VodcastRecommendations: React.FC<React.PropsWithChildren<Props>> = ({artic
       </Text>
       <MediatekaHorizontalList
         items={items}
-        onItemPlayPress={playItem}
         onItemPress={(index) => {
           navigation.navigate('Vodcast', {articleId: recommendations.items[index].id});
         }}

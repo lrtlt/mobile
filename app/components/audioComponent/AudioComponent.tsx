@@ -5,6 +5,9 @@ import {ArticleContentMedia, ArticlePhotoType} from '../../api/Types';
 import TheoMediaPlayer from '../videoComponent/TheoMediaPlayer';
 import {MediaType} from '../videoComponent/context/PlayerContext';
 import {useArticle} from '../../api/hooks/useArticle';
+import {PlaybackTrackingMeta} from '../videoComponent/usePlaybackProgressTracker';
+import {usePlaybackProgressStore} from '../../state/playback_progress_store';
+import {PLAYBACK_PROGRESS_MIN_POSITION_SEC} from '../../constants';
 
 interface AudioComponentProps {
   id?: number;
@@ -15,10 +18,19 @@ interface AudioComponentProps {
   cover?: ArticlePhotoType;
   autoStart: boolean;
   startTime?: number;
+  progressTracking?: PlaybackTrackingMeta;
 }
 
 const MAX_ERROR_COUNT = 3;
 const ERROR_DELAY = 300;
+
+const resolveResumeStartTime = (articleId: number | undefined): number | undefined => {
+  if (articleId == null) return undefined;
+  const entry = usePlaybackProgressStore.getState().entries[articleId];
+  if (!entry || entry.completed) return undefined;
+  if (entry.positionSec < PLAYBACK_PROGRESS_MIN_POSITION_SEC) return undefined;
+  return entry.positionSec;
+};
 
 const AudioComponent: React.FC<AudioComponentProps> = ({
   id,
@@ -29,6 +41,7 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
   isLiveStream,
   startTime,
   streamUri,
+  progressTracking,
 }) => {
   const [errorCount, setErrorCount] = useState(0);
 
@@ -63,7 +76,8 @@ const AudioComponent: React.FC<AudioComponentProps> = ({
         mediaType={MediaType.AUDIO}
         autoStart={autoStart}
         poster={poster}
-        startTime={startTime}
+        startTime={startTime ?? resolveResumeStartTime(progressTracking?.articleId)}
+        progressTracking={progressTracking}
         onError={onPlayerError}
       />
     </View>

@@ -15,6 +15,7 @@ import MediaControls from './ui/MediaControls';
 import {useMediaPlayer} from './context/useMediaPlayer';
 import {MediaType} from './context/PlayerContext';
 import usePlayerTracking from './usePlayerTracking';
+import usePlaybackProgressTracker, {PlaybackTrackingMeta} from './usePlaybackProgressTracker';
 import {VIDEO_DEFAULT_BACKGROUND_IMAGE} from '../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {useTheme} from '../../Theme';
@@ -47,6 +48,7 @@ interface Props {
   aspectRatio?: number;
   backgroundAudioEnabled?: boolean;
   tracks?: VideoTextTrack[];
+  progressTracking?: PlaybackTrackingMeta;
   onError?: (e?: any) => void;
   onEnded?: () => void;
   onPlayerReadyCallback?: (player: THEOplayer) => void;
@@ -111,6 +113,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   isLiveStream,
   startTime,
   tracks,
+  progressTracking,
   isMini = false,
   loop = false,
   minifyEnabled = true,
@@ -128,6 +131,15 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   // Set up analytics tracking
   usePlayerTracking({player, streamUri, startTime});
+
+  // Track playback position for "continue playing" feature
+  usePlaybackProgressTracker({
+    player,
+    meta: progressTracking,
+    mediaType,
+    isLiveStream,
+    title,
+  });
 
   // Set up back button handler
   usePlayerBackListener({player});
@@ -166,6 +178,9 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
             isLiveStream: isLiveStream,
             startTime: player.currentTime / 1000,
             tracks: tracks,
+            articleId: progressTracking?.articleId,
+            articleUrl: progressTracking?.url,
+            photoPath: progressTracking?.photo,
           });
         }
       }

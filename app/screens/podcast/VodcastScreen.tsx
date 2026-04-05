@@ -124,6 +124,16 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                     title={(article as ArticleContentMedia).title}
                     cover={article.main_photo}
                     autoPlay={true}
+                    progressTracking={{
+                      articleId: (article as ArticleContentMedia).id,
+                      url: (article as ArticleContentMedia).url,
+                      subtitle: (article as ArticleContentMedia).subtitle,
+                      category_title: (article as ArticleContentMedia).category_title,
+                      category_id: (article as ArticleContentMedia).category_id,
+                      photo:
+                        (article as ArticleContentMedia).main_photo?.path ??
+                        (article as ArticleContentMedia).category_img_info?.path,
+                    }}
                     onEnded={playNextEpisode}
                   />
                 </View>

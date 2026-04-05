@@ -1,6 +1,12 @@
 export const ARTICLE_HISTORY_COUNT = 50;
 export const ARTICLE_SAVED_MAX_COUNT = 51;
 
+//Playback progress ("continue playing")
+export const PLAYBACK_PROGRESS_MAX_ENTRIES = 40;
+export const PLAYBACK_PROGRESS_MIN_POSITION_SEC = 6;
+export const PLAYBACK_PROGRESS_COMPLETED_PCT = 0.95;
+export const PLAYBACK_PROGRESS_SAVE_INTERVAL_MS = 3000;
+
 export const EVENT_LOGO_PRESS = 'logo-press';
 export const EVENT_SELECT_CATEGORY_INDEX = 'select-category-index';
 export const EVENT_OPEN_CATEGORY = 'open-category';

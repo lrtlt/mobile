@@ -72,6 +72,9 @@ interface Dictionary {
   menu_about: string;
   login: string;
   logout: string;
+  continueWatching: string;
+  continueListening: string;
+  removeFromContinue: string;
 }
 
 export const strings: Dictionary = {
@@ -128,6 +131,9 @@ export const strings: Dictionary = {
   menu_about: 'Apie LRT',
   login: 'Prisijungti',
   logout: 'Atsijungti',
+  continueWatching: 'Žiūrėkite toliau',
+  continueListening: 'Klausykite toliau',
+  removeFromContinue: 'Pašalinti iš sąrašo',
 };
 //#endregion
 

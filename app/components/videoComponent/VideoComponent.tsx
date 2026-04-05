@@ -8,6 +8,9 @@ import {RectButton} from 'react-native-gesture-handler';
 import TheoMediaPlayer from './TheoMediaPlayer';
 import {MediaType} from './context/PlayerContext';
 import {StreamData, useStreamInfo} from '../../api/hooks/useStream';
+import {PlaybackTrackingMeta} from './usePlaybackProgressTracker';
+import {usePlaybackProgressStore} from '../../state/playback_progress_store';
+import {PLAYBACK_PROGRESS_MIN_POSITION_SEC} from '../../constants';
 
 interface Props {
   style?: ViewStyle;
@@ -24,11 +27,20 @@ interface Props {
   minifyEnabled?: boolean;
   aspectRatio?: number;
   backgroundAudioEnabled?: boolean;
+  progressTracking?: PlaybackTrackingMeta;
   onEnded?: () => void;
 }
 
 const MAX_ERROR_COUNT = 2;
 const ERROR_DELAY = 1000;
+
+const resolveResumeStartTime = (articleId: number | undefined): number | undefined => {
+  if (articleId == null) return undefined;
+  const entry = usePlaybackProgressStore.getState().entries[articleId];
+  if (!entry || entry.completed) return undefined;
+  if (entry.positionSec < PLAYBACK_PROGRESS_MIN_POSITION_SEC) return undefined;
+  return entry.positionSec;
+};
 
 const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
   style,
@@ -45,6 +57,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
   minifyEnabled = true,
   backgroundAudioEnabled = true,
   aspectRatio,
+  progressTracking,
   onEnded,
 }) => {
   const [userPlayPressed, setUserPlayPressed] = useState(autoPlay);
@@ -126,12 +139,19 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
         autoStart={true}
         loop={loop}
         isLiveStream={data.isLiveStream}
-        startTime={data.isLiveStream ? undefined : startTime || data.offset}
+        startTime={
+          data.isLiveStream
+            ? undefined
+            : startTime ||
+              resolveResumeStartTime(progressTracking?.articleId) ||
+              data.offset
+        }
         poster={backgroundImage ?? data.poster}
         tracks={data.tracks}
         minifyEnabled={minifyEnabled}
         aspectRatio={aspectRatio}
         backgroundAudioEnabled={backgroundAudioEnabled}
+        progressTracking={progressTracking}
         mediaType={
           data.mediaType != undefined
             ? data.mediaType

@@ -7,6 +7,7 @@ import {
   LiveChannel,
   MediatekaBlockType,
   RadiotekaResponse,
+  RadiotekaTemplate,
   TVChannel,
 } from '../api/Types';
 import {
@@ -213,9 +214,15 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
     );
     try {
       const data = await fetchMediatekaApiV2();
+      const continueBlock: MediatekaBlockType = {
+        type: 'continue_watching',
+        template_id: 999,
+        mediaType: 'video',
+      } as any;
+      const items = [data.homeblocks[0], continueBlock, ...data.homeblocks.slice(1)];
       set({
         mediatekaV2: {
-          items: data.homeblocks,
+          items,
           isFetching: false,
           isError: false,
           lastFetchTime: Date.now(),
@@ -240,9 +247,15 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
     );
     try {
       const data = await fetchRadiotekaApi();
+      const continueBlock: RadiotekaTemplate = {
+        type: 'continue_listening',
+        template_id: 999,
+        mediaType: 'audio',
+      } as any;
+      const items = [data[0], continueBlock, ...data.slice(1)];
       set({
         radioteka: {
-          data,
+          data: items,
           isFetching: false,
           isError: false,
           lastFetchTime: Date.now(),

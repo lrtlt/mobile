@@ -7,7 +7,9 @@
       "Bash(yarn lint:*)",
       "Bash(ls:*)",
       "Bash(yarn remove:*)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npx tsc:*)",
+      "Bash(echo \"EXIT: $?\")"
     ]
   }
 }

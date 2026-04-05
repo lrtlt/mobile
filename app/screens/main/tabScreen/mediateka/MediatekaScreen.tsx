@@ -22,6 +22,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {
   isMediatekaBlockBanner,
   isMediatekaBlockCategory,
+  isMediatekaBlockContinue,
   isMediatekaBlockSlug,
   isMediatekaBlockWidget,
   MediatekaBlockType,
@@ -31,6 +32,7 @@ import MediatekaHero from './components/hero/MediatekaHero';
 import MediatekaHorizontalCategoryList from './components/horizontal_list/MediatekaHorizontalCategoryList';
 import VideoListBlock from '../home/blocks/VideoListBlock/VideoListBlock';
 import {pushArticle} from '../../../../util/NavigationUtils';
+import ContinueRow from '../../../../components/continueRow/ContinueRow';
 
 const WIDGET_ID_HERO = 24;
 const WIDGET_ID_LATEST = 25;
@@ -105,6 +107,10 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({onScroll, pa
 
   const renderItem = useCallback((listItem: ListRenderItemInfo<MediatekaBlockType>) => {
     const {item} = listItem;
+
+    if (isMediatekaBlockContinue(item)) {
+      return <ContinueRow mediaType="video" />;
+    }
 
     if (isMediatekaBlockWidget(item)) {
       switch (item.widget_id) {
@@ -206,13 +212,13 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({onScroll, pa
             item.template_id === 60
               ? undefined
               : item.select_opts.slug
-              ? [
-                  {
-                    name: item.slug_title,
-                    slug: item.select_opts.slug,
-                  },
-                ]
-              : undefined
+                ? [
+                    {
+                      name: item.slug_title,
+                      slug: item.select_opts.slug,
+                    },
+                  ]
+                : undefined
           }
           items={item.articles_list.map((a) => ({
             title: a.title,

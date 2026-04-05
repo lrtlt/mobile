@@ -12,7 +12,7 @@ import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import {useShallow} from 'zustand/shallow';
 import Config from 'react-native-config';
-import {RadiotekaTemplate} from '../../../../api/Types';
+import {isRadiotekaBlockContinue, RadiotekaTemplate} from '../../../../api/Types';
 import RadiotekaHero from './components/hero/RadiotekaHero';
 import RadiotekaHorizontalCategoryList from './components/horizontal_list/RadiotekaHorizontalCategoryList';
 import {buildImageUri, IMG_SIZE_L} from '../../../../util/ImageUtil';
@@ -24,6 +24,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useMediaPlayer} from '../../../../components/videoComponent/context/useMediaPlayer';
 import ArticlePlaylist from '../../../../components/videoComponent/context/playlist/ArticlePlaylist';
 import {pushArticle} from '../../../../util/NavigationUtils';
+import ContinueRow from '../../../../components/continueRow/ContinueRow';
 
 const WIDGET_ID_HERO = 21;
 const WIDGET_ID_LATEST = 12;
@@ -88,6 +89,11 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({onScroll, pa
 
   const renderItem = useCallback((listItem: ListRenderItemInfo<RadiotekaTemplate>) => {
     const {item} = listItem;
+
+    if (isRadiotekaBlockContinue(item)) {
+      return <ContinueRow mediaType="audio" />;
+    }
+
     switch (item.type) {
       case 'articles_block': {
         if (item.widget_id === WIDGET_ID_HERO) {

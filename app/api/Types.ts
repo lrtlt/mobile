@@ -480,11 +480,23 @@ export const isMediatekaBlockCategory = (data?: MediatekaBlockType): data is Med
   return a?.template_id === 52 || a?.template_id === 22;
 };
 
+export type MediatekaBlockContinue = {
+  type: 'continue_watching';
+  template_id: 999;
+  mediaType: 'video' | 'audio';
+};
+
+export const isMediatekaBlockContinue = (data?: MediatekaBlockType): data is MediatekaBlockContinue => {
+  const a = data as MediatekaBlockContinue | undefined;
+  return a?.type === 'continue_watching';
+};
+
 export type MediatekaBlockType =
   | MediatekaBlockWidget
   | MediatekaBlockBanner
   | MediatekaBlockSlug
-  | MediatekaBlockCategory;
+  | MediatekaBlockCategory
+  | MediatekaBlockContinue;
 
 export type MediatekaV2DataResponse = {
   homeblocks: MediatekaBlockType[];
@@ -566,6 +578,17 @@ export type URLTypeExternalURL = {
   url: string;
 };
 
+export type RadiotekaContinueBlock = {
+  type: 'continue_listening';
+  template_id: 999;
+  mediaType: 'audio';
+};
+
+export const isRadiotekaBlockContinue = (data?: RadiotekaTemplate): data is RadiotekaContinueBlock => {
+  const a = data as RadiotekaContinueBlock | undefined;
+  return a?.type === 'continue_listening';
+};
+
 export type RadiotekaResponse = RadiotekaTemplate[];
 
 export type RadiotekaTemplate =
@@ -574,7 +597,8 @@ export type RadiotekaTemplate =
   | RadiotekaCategoryCollectionBlock
   | RadiotekaCategoryBlock
   | RadiotekaGenresBlock
-  | RadiotekaPlaylistBlock;
+  | RadiotekaPlaylistBlock
+  | RadiotekaContinueBlock;
 
 export type RadiotekaTopArticlesBlock = {
   widget_id: 21;
