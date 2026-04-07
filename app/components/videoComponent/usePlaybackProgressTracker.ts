@@ -2,18 +2,11 @@ import {useEffect, useRef} from 'react';
 import {THEOplayer, PlayerEventType} from 'react-native-theoplayer';
 import {MediaType} from './context/PlayerContext';
 import {usePlaybackProgressStore} from '../../state/playback_progress_store';
-import {
-  PLAYBACK_PROGRESS_MIN_POSITION_SEC,
-  PLAYBACK_PROGRESS_SAVE_INTERVAL_MS,
-} from '../../constants';
+import {PLAYBACK_PROGRESS_MIN_POSITION_SEC, PLAYBACK_PROGRESS_SAVE_INTERVAL_MS} from '../../constants';
 
 export type PlaybackTrackingMeta = {
   articleId: number;
-  url?: string;
-  subtitle?: string;
-  category_title?: string;
   category_id?: number;
-  photo?: string;
 };
 
 interface Params {
@@ -21,7 +14,6 @@ interface Params {
   meta?: PlaybackTrackingMeta;
   mediaType: MediaType;
   isLiveStream: boolean;
-  title?: string;
 }
 
 /**
@@ -31,7 +23,7 @@ interface Params {
  * Writes are throttled to at most one per PLAYBACK_PROGRESS_SAVE_INTERVAL_MS and
  * flushed on PAUSE / SEEKED / ENDED / unmount.
  */
-const usePlaybackProgressTracker = ({player, meta, mediaType, isLiveStream, title}: Params) => {
+const usePlaybackProgressTracker = ({player, meta, mediaType, isLiveStream}: Params) => {
   const lastSaveAtRef = useRef(0);
 
   useEffect(() => {
@@ -39,8 +31,7 @@ const usePlaybackProgressTracker = ({player, meta, mediaType, isLiveStream, titl
     if (!meta?.articleId) return;
     if (isLiveStream) return;
 
-    const {articleId, url, subtitle, category_title, category_id, photo} = meta;
-    const resolvedTitle = title ?? '';
+    const {articleId, category_id} = meta;
 
     const persist = (completed: boolean) => {
       const positionSec = (player.currentTime ?? 0) / 1000;
@@ -55,14 +46,9 @@ const usePlaybackProgressTracker = ({player, meta, mediaType, isLiveStream, titl
       if (!completed && positionSec < PLAYBACK_PROGRESS_MIN_POSITION_SEC) return;
 
       usePlaybackProgressStore.getState().upsertProgress({
-        id: articleId,
-        url,
+        articleId,
         mediaType: mediaType === MediaType.AUDIO ? 'audio' : 'video',
-        title: resolvedTitle,
-        subtitle,
-        category_title,
         category_id,
-        photo,
         positionSec,
         durationSec,
         completed,
@@ -96,14 +82,9 @@ const usePlaybackProgressTracker = ({player, meta, mediaType, isLiveStream, titl
   }, [
     player,
     meta?.articleId,
-    meta?.url,
-    meta?.subtitle,
-    meta?.category_title,
     meta?.category_id,
-    meta?.photo,
     mediaType,
     isLiveStream,
-    title,
   ]);
 };
 

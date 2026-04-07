@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useMemo, useRef} from 'react';
 import {View, StyleSheet, FlatList, Dimensions} from 'react-native';
 import FastImage from '@d11/react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
@@ -16,8 +16,15 @@ import {
   useResumableVideo,
 } from '../../state/playback_progress_store';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../util/ImageUtil';
+import {useSearchArticlesByIds} from '../../api/hooks/useSearchArticles';
 
 const CARD_WIDTH = Math.min(Dimensions.get('window').width * 0.5, 300);
+
+type ContinuePlayItem = PlaybackProgressEntry & {
+  title: string;
+  category_title?: string;
+  photo?: string;
+};
 
 interface Props {
   mediaType: PlaybackMediaType;
@@ -30,27 +37,43 @@ const ContinueRow: React.FC<Props> = ({mediaType}) => {
   const videoEntries = useResumableVideo();
   const entries = mediaType === 'audio' ? audioEntries : videoEntries;
 
+  const articleIds = useMemo(() => entries.map((e) => e.articleId), [entries]);
+  const {data: searchData} = useSearchArticlesByIds(articleIds.length > 0 ? articleIds : undefined);
+
+  const enrichedEntries = useMemo(() => {
+    const articlesById = new Map(searchData?.items?.map((item) => [item.id, item]));
+    return entries.map((entry) => {
+      const article = articlesById.get(entry.articleId);
+      return {
+        ...entry,
+        title: article?.title ?? '',
+        category_title: article?.category_title,
+        photo: article?.photo,
+      };
+    });
+  }, [entries, searchData]);
+
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
   const listRef = useRef<FlatList>(null);
 
   const onItemPress = useCallback(
-    (entry: PlaybackProgressEntry) => {
+    (entry: ContinuePlayItem) => {
       if (entry.mediaType === 'audio') {
-        navigation.push('Podcast', {articleId: entry.id});
+        navigation.push('Podcast', {articleId: entry.articleId});
       } else {
-        navigation.push('Vodcast', {articleId: entry.id});
+        navigation.push('Vodcast', {articleId: entry.articleId});
       }
     },
     [navigation],
   );
 
-  const onRemovePress = useCallback((entry: PlaybackProgressEntry) => {
-    usePlaybackProgressStore.getState().removeProgress(entry.id);
+  const onRemovePress = useCallback((entry: ContinuePlayItem) => {
+    usePlaybackProgressStore.getState().removeProgress(entry.articleId);
   }, []);
 
   const renderItem = useCallback(
-    ({item}: {item: PlaybackProgressEntry}) => {
+    ({item}: {item: ContinuePlayItem}) => {
       const imageUri = item.photo ? buildArticleImageUri(IMG_SIZE_M, item.photo) : undefined;
       const isAudio = mediaType === 'audio';
       return (
@@ -65,12 +88,12 @@ const ContinueRow: React.FC<Props> = ({mediaType}) => {
                 <IconClose size={10} color="#FFF" />
               </View>
             </TouchableDebounce>
-            <View style={[styles.progressBarTrack, {backgroundColor: '#000000'}]}>
+            <View style={[styles.progressBarTrack, {backgroundColor: '#FFF'}]}>
               <View
                 style={[
                   styles.progressBarFill,
                   {
-                    backgroundColor: colors.tertiary,
+                    backgroundColor: colors.playerIcons,
                     width: `${Math.max(2, item.progressPct * 100)}%`,
                   },
                 ]}
@@ -94,7 +117,7 @@ const ContinueRow: React.FC<Props> = ({mediaType}) => {
         </TouchableDebounce>
       );
     },
-    [colors.listSeparator, colors.primary, mediaType, onItemPress, onRemovePress],
+    [colors.tertiary, mediaType, onItemPress, onRemovePress],
   );
 
   if (entries.length === 0) {
@@ -113,9 +136,9 @@ const ContinueRow: React.FC<Props> = ({mediaType}) => {
       </View>
       <FlatList
         ref={listRef}
-        data={entries}
+        data={enrichedEntries}
         renderItem={renderItem}
-        keyExtractor={(item) => String(item.id)}
+        keyExtractor={(item) => String(item.articleId)}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
@@ -178,10 +201,13 @@ const styles = StyleSheet.create({
   },
   progressBarTrack: {
     position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 4,
+    left: 6,
+    right: 6,
+    bottom: 4,
+    height: 5,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#CCC',
   },
   progressBarFill: {
     height: '100%',

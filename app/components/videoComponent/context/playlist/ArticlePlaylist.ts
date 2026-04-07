@@ -16,7 +16,6 @@ const resolveResumeStartTime = (articleId: number): number | undefined => {
 
 const articleToMediaData = (article: ArticleContentMedia): MediaBaseData => ({
   uri: article.stream_url,
-  articleUrl: article.url,
   title: article.title,
   poster:
     buildArticleImageUri(IMG_SIZE_M, article.main_photo?.path) ??
@@ -25,7 +24,7 @@ const articleToMediaData = (article: ArticleContentMedia): MediaBaseData => ({
   isLiveStream: false,
   startTime: resolveResumeStartTime(article.id),
   articleId: article.id,
-  photoPath: article.main_photo?.path ?? article.category_img_info?.path,
+  category_id: article.category_id,
 });
 
 class ArticlePlaylist implements Playlist {
@@ -55,7 +54,6 @@ class ArticlePlaylist implements Playlist {
     }
 
     if (current.data) {
-      fetchCounter(current.id, current.data?.articleUrl, Platform.OS);
       return current.data;
     }
 

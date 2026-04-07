@@ -35,7 +35,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
   onEpisodePress,
 }) => {
   const [selectedSeasonUrl, setSelectedSeasonUrl] = useState<string | undefined>(
-    currentSeason?.season_url ?? (seasons && seasons.length > 0) ? seasons![0].season_url : undefined,
+    (currentSeason?.season_url ?? (seasons && seasons.length > 0)) ? seasons![0].season_url : undefined,
   );
 
   const {mediaData} = useMediaPlayer();
@@ -69,7 +69,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
 
   const renderItem = useCallback(
     ({item}: ListRenderItemInfo<Article>) => {
-      const isCurrent = currentArticleId == item.id || mediaData?.articleUrl == item.url;
+      const isCurrent = currentArticleId == item.id || mediaData?.articleId == item.id;
       return (
         <View style={styles.item_root}>
           {isVodcast ? (
@@ -117,7 +117,8 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
       useNativeDriver={true}
       coverScreen={true}
       backdropOpacity={1}
-      onBackButtonPress={onClose}>
+      onBackButtonPress={onClose}
+    >
       <View style={[styles.root, {backgroundColor: colors.background}]}>
         <FlashList
           data={episodes}
@@ -143,7 +144,8 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
                         ]}
                         onPress={() => {
                           setSelectedSeasonUrl(s.season_url);
-                        }}>
+                        }}
+                      >
                         <Text
                           style={
                             (styles.season_button_text,
@@ -155,7 +157,8 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
                                     : themeLight.colors.text
                                   : themeLight.colors.text,
                             })
-                          }>
+                          }
+                        >
                           {s.season_title}
                         </Text>
                       </TouchableDebounce>

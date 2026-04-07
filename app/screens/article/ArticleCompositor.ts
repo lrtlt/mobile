@@ -199,11 +199,7 @@ const getAudioContent = (article: ArticleContentMedia): ArticleContentItemType =
 
 const buildProgressTracking = (article: ArticleContentMedia) => ({
   articleId: article.id,
-  url: article.url,
-  subtitle: article.subtitle,
-  category_title: article.category_title,
   category_id: article.category_id,
-  photo: article.main_photo?.path ?? article.category_img_info?.path,
 });
 
 const getVideo = (article: ArticleContentMedia): ArticleContentItemType => {

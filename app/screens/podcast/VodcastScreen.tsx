@@ -104,9 +104,11 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
           {article && (
             <SafeAreaView
               style={[styles.screen, {backgroundColor: colors.greyBackground}]}
-              edges={['left', 'right']}>
+              edges={['left', 'right']}
+            >
               <ScrollView
-                contentContainerStyle={{paddingBottom: bottom + 32, paddingTop: appBarHeight.fullHeight}}>
+                contentContainerStyle={{paddingBottom: bottom + 32, paddingTop: appBarHeight.fullHeight}}
+              >
                 <PodcastEpisodeSelection
                   currentSeason={currentSeason}
                   categoryInfo={category_info}
@@ -126,13 +128,7 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                     autoPlay={true}
                     progressTracking={{
                       articleId: (article as ArticleContentMedia).id,
-                      url: (article as ArticleContentMedia).url,
-                      subtitle: (article as ArticleContentMedia).subtitle,
-                      category_title: (article as ArticleContentMedia).category_title,
                       category_id: (article as ArticleContentMedia).category_id,
-                      photo:
-                        (article as ArticleContentMedia).main_photo?.path ??
-                        (article as ArticleContentMedia).category_img_info?.path,
                     }}
                     onEnded={playNextEpisode}
                   />

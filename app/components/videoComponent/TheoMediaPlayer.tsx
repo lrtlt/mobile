@@ -138,7 +138,6 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
     meta: progressTracking,
     mediaType,
     isLiveStream,
-    title,
   });
 
   // Set up back button handler
@@ -179,8 +178,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
             startTime: player.currentTime / 1000,
             tracks: tracks,
             articleId: progressTracking?.articleId,
-            articleUrl: progressTracking?.url,
-            photoPath: progressTracking?.photo,
+            category_id: progressTracking?.category_id,
           });
         }
       }
@@ -262,7 +260,8 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
       mediaType={mediaType}
       title={title}
       poster={poster}
-      controlsEnabled={!!controls || isFullScreen}>
+      controlsEnabled={!!controls || isFullScreen}
+    >
       <View style={{...styles.container, aspectRatio}}>
         <PlayerFlingHandler>
           <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady}>

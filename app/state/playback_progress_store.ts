@@ -2,25 +2,15 @@ import {create} from 'zustand';
 import {createJSONStorage, persist} from 'zustand/middleware';
 import {useShallow} from 'zustand/react/shallow';
 import {zustandStorage} from './mmkv';
-import {
-  PLAYBACK_PROGRESS_COMPLETED_PCT,
-  PLAYBACK_PROGRESS_MAX_ENTRIES,
-} from '../constants';
+import {PLAYBACK_PROGRESS_COMPLETED_PCT, PLAYBACK_PROGRESS_MAX_ENTRIES} from '../constants';
 
 export type PlaybackMediaType = 'audio' | 'video';
 
 export type PlaybackProgressEntry = {
   // Identity
-  id: number;
-  url?: string;
+  articleId: number;
   mediaType: PlaybackMediaType;
-
-  // Display
-  title: string;
-  subtitle?: string;
-  category_title?: string;
   category_id?: number;
-  photo?: string;
 
   // Progress
   positionSec: number;
@@ -31,14 +21,9 @@ export type PlaybackProgressEntry = {
 };
 
 export type UpsertProgressInput = {
-  id: number;
-  url?: string;
+  articleId: number;
   mediaType: PlaybackMediaType;
-  title: string;
-  subtitle?: string;
-  category_title?: string;
   category_id?: number;
-  photo?: string;
   positionSec: number;
   durationSec: number;
   completed?: boolean;
@@ -79,7 +64,7 @@ const trimToMax = (entries: Record<number, PlaybackProgressEntry>) => {
     .slice(0, PLAYBACK_PROGRESS_MAX_ENTRIES);
   const next: Record<number, PlaybackProgressEntry> = {};
   sorted.forEach((e) => {
-    next[e.id] = e;
+    next[e.articleId] = e;
   });
   return next;
 };
@@ -89,19 +74,14 @@ export const usePlaybackProgressStore = create<Store>()(
     (set, get) => ({
       ...initialState,
       upsertProgress: (input) => {
-        const existing = get().entries[input.id];
+        if (!input.articleId || !input.durationSec) return;
+        const existing = get().entries[input.articleId];
         const progressPct = computeProgress(input.positionSec, input.durationSec);
-        const completed =
-          input.completed === true || progressPct >= PLAYBACK_PROGRESS_COMPLETED_PCT;
+        const completed = input.completed === true || progressPct >= PLAYBACK_PROGRESS_COMPLETED_PCT;
         const entry: PlaybackProgressEntry = {
-          id: input.id,
-          url: input.url ?? existing?.url,
+          articleId: input.articleId,
           mediaType: input.mediaType,
-          title: input.title ?? existing?.title,
-          subtitle: input.subtitle ?? existing?.subtitle,
-          category_title: input.category_title ?? existing?.category_title,
           category_id: input.category_id ?? existing?.category_id,
-          photo: input.photo ?? existing?.photo,
           positionSec: completed ? 0 : input.positionSec,
           durationSec: input.durationSec,
           progressPct: completed ? 1 : progressPct,
@@ -109,7 +89,7 @@ export const usePlaybackProgressStore = create<Store>()(
           updatedAt: Date.now(),
         };
         set((state) => ({
-          entries: trimToMax({...state.entries, [input.id]: entry}),
+          entries: trimToMax({...state.entries, [input.articleId]: entry}),
         }));
       },
       removeProgress: (id) => {
@@ -124,7 +104,7 @@ export const usePlaybackProgressStore = create<Store>()(
         set((state) => {
           const next: Record<number, PlaybackProgressEntry> = {};
           Object.values(state.entries).forEach((e) => {
-            if (!e.completed) next[e.id] = e;
+            if (!e.completed) next[e.articleId] = e;
           });
           return {entries: next};
         });
@@ -138,14 +118,13 @@ export const usePlaybackProgressStore = create<Store>()(
     }),
     {
       name: 'playback-progress',
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => zustandStorage),
     },
   ),
 );
 
-const sortByUpdatedAtDesc = (a: PlaybackProgressEntry, b: PlaybackProgressEntry) =>
-  b.updatedAt - a.updatedAt;
+const sortByUpdatedAtDesc = (a: PlaybackProgressEntry, b: PlaybackProgressEntry) => b.updatedAt - a.updatedAt;
 
 export const useResumableAudio = (): PlaybackProgressEntry[] =>
   usePlaybackProgressStore(
@@ -168,7 +147,9 @@ export const useResumableVideo = (): PlaybackProgressEntry[] =>
 export const useResumableAll = (): PlaybackProgressEntry[] =>
   usePlaybackProgressStore(
     useShallow((state) =>
-      Object.values(state.entries).filter((e) => !e.completed).sort(sortByUpdatedAtDesc),
+      Object.values(state.entries)
+        .filter((e) => !e.completed)
+        .sort(sortByUpdatedAtDesc),
     ),
   );
 

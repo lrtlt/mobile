@@ -94,7 +94,8 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
       style={{
         marginHorizontal: PADDING + 4,
         marginVertical: PADDING,
-      }}>
+      }}
+    >
       <View
         style={{
           ...styles.layout,
@@ -104,14 +105,16 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
           padding: PADDING,
           gap: PADDING,
           borderColor: colors.border,
-        }}>
+        }}
+      >
         <View
           style={[
             styles.videoContainer,
             {
               aspectRatio: playerAspectRatio,
             },
-          ]}>
+          ]}
+        >
           <Pressable style={StyleSheet.absoluteFill} onPress={handleFullScreen}>
             <TheoMediaPlayer
               key={mediaData.uri}
@@ -126,8 +129,7 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
                 mediaData.articleId
                   ? {
                       articleId: mediaData.articleId,
-                      url: mediaData.articleUrl,
-                      photo: mediaData.photoPath,
+                      category_id: mediaData.category_id,
                     }
                   : undefined
               }
@@ -148,7 +150,8 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-              }}>
+              }}
+            >
               <TouchableDebounce onPress={onPrevious} hitSlop={12}>
                 <IconPlayerPrevious size={22} color={colors.darkIcon + (onPrevious ? '' : '33')} />
               </TouchableDebounce>
@@ -176,7 +179,8 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   gap: 4,
-                }}>
+                }}
+              >
                 <PlayerSekBar style={{width: '100%'}} player={player} />
                 {mediaData?.isLiveStream ? null : <PlayerPlaybackRatio player={player} />}
               </View>

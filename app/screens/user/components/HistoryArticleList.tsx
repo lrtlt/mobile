@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 80,
+    maxHeight: 80,
   },
   categoryTitle: {
     fontSize: 12,
