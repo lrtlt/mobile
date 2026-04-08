@@ -1,31 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
 import {Text} from '../../../components';
 import {useTheme} from '../../../Theme';
-import {
-  UserSubscription,
-  useUserSubscriptions,
-  useUpdateSubscription,
-} from '../../../api/hooks/usePushNotifications';
 import SubscriptionRow from '../components/SubscriptionRow';
+import {useFollowedSubscriptions} from './useFollowedSubscriptions';
 
 const FollowedTab: React.FC = () => {
   const {colors} = useTheme();
-
-  const {data: subscriptions, isLoading} = useUserSubscriptions();
-  const updateSubscriptionMutation = useUpdateSubscription();
-
-  // Snapshot on mount: capture subscription list once, keep showing it even after toggles
-  const [snapshot, setSnapshot] = useState<UserSubscription[] | null>(null);
-  useEffect(() => {
-    if (snapshot === null && subscriptions) {
-      setSnapshot(subscriptions.filter((s) => s.is_active));
-    }
-  }, [subscriptions, snapshot]);
-
-  const getIsActive = (key: string): boolean => {
-    return subscriptions?.some((s) => s.subscription_key === key && s.is_active) ?? false;
-  };
+  const {listData, isLoading, updateSubscription} = useFollowedSubscriptions();
 
   if (isLoading) {
     return (
@@ -37,15 +19,8 @@ const FollowedTab: React.FC = () => {
 
   return (
     <FlatList
-      data={snapshot ?? []}
-      keyExtractor={(item) => item.subscription_key}
-      ListHeaderComponent={
-        <Text
-          style={[styles.caption, {color: colors.textSecondary, backgroundColor: colors.slugBackground}]}
-          fontFamily="SourceSansPro-SemiBold">
-          {'Jūsų sekamos temos'}
-        </Text>
-      }
+      data={listData}
+      keyExtractor={(item) => item.key}
       ListEmptyComponent={
         <View style={styles.centered}>
           <Text style={[styles.emptyText, {color: colors.textSecondary}]}>{'Nesekate jokių laidų.'}</Text>
@@ -53,13 +28,15 @@ const FollowedTab: React.FC = () => {
       }
       renderItem={({item}) => (
         <SubscriptionRow
-          title={item.name || item.subscription_key}
-          isSubscribed={getIsActive(item.subscription_key)}
-          categoryId={parseInt(item.subscription_key.replace('category-', ''), 10) || undefined}
+          title={item.name}
+          isSubscribed={item.isActive}
+          categoryId={item.categoryId}
+          type={item.type}
+          isRecommended={item.isRecommended}
           onToggle={(value) => {
-            updateSubscriptionMutation.mutate({
-              name: item.name || item.subscription_key,
-              subscription_key: item.subscription_key,
+            updateSubscription({
+              name: item.name,
+              subscription_key: item.key,
               is_active: value,
             });
           }}
@@ -78,17 +55,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
-  },
-  caption: {
-    fontSize: 15,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    marginBottom: 12,
-    marginHorizontal: 12,
-    borderRadius: 8,
-    textAlign: 'center',
-    fontStyle: 'italic',
-    fontWeight: '600',
   },
   emptyText: {
     fontSize: 15,

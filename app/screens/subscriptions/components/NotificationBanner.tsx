@@ -44,7 +44,7 @@ const NotificationBanner: React.FC = () => {
             Prenumeratų pranešimai šiuo metu išjungti. Įjunkite juos nustatymuose, kad gautumėte naujienas
           </Text>
         </View>
-        <IconChevronLeft size={24} color={colors.textSecondary} />
+        <IconChevronLeft size={24} color={colors.text} />
       </TouchableDebounce>
     </View>
   );
@@ -55,6 +55,7 @@ export default NotificationBanner;
 const styles = StyleSheet.create({
   wrapper: {
     padding: 12,
+    paddingBottom: 0,
   },
   container: {
     flexDirection: 'row',

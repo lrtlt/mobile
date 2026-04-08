@@ -1,9 +1,8 @@
 import React, {useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Switch} from 'react-native-gesture-handler';
 import {Text, TouchableDebounce} from '../../../components';
 import {useTheme} from '../../../Theme';
-import {CameraIcon, MicIcon} from '../../../components/svg';
+import {CameraIcon, IconCheckCircle, IconPlusCircle, MicIcon} from '../../../components/svg';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
@@ -17,6 +16,7 @@ interface Props {
   type?: 'mediateka' | 'radioteka';
   latestArticleDate?: string;
   categoryId?: number;
+  isRecommended?: boolean;
 }
 
 const SubscriptionRow: React.FC<Props> = ({
@@ -26,8 +26,9 @@ const SubscriptionRow: React.FC<Props> = ({
   onToggle,
   latestArticleDate,
   categoryId,
+  isRecommended,
 }) => {
-  const {dark, colors} = useTheme();
+  const {colors} = useTheme();
   const [isOpening, setIsOpening] = useState(false);
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -69,15 +70,22 @@ const SubscriptionRow: React.FC<Props> = ({
   return (
     <View style={[styles.row, {borderColor: colors.listSeparator}, isOpening && styles.opening]}>
       {type === 'mediateka' ? (
-        <CameraIcon size={16} colorAccent={'#97A2B6A0'} colorBase={'#97A2B6'} />
+        <CameraIcon size={16} colorAccent={colors.iconInactive} colorBase={colors.iconInactive} />
       ) : type === 'radioteka' ? (
-        <MicIcon size={16} colorAccent={'#97A2B6'} colorBase={'#97A2B6'} />
+        <MicIcon size={16} colorAccent={colors.iconInactive} colorBase={colors.iconInactive} />
       ) : null}
       <View style={styles.titleArea}>
         <TouchableDebounce onPress={onPress} disabled={!categoryId || isOpening}>
-          <Text style={styles.title} numberOfLines={2}>
-            {title}
-          </Text>
+          <View style={styles.titleRow}>
+            <Text style={styles.title} numberOfLines={2}>
+              {title}
+            </Text>
+            {isRecommended && (
+              <View style={styles.recommendedBadge}>
+                <Text style={styles.recommendedText}>{'Rekomenduojama'}</Text>
+              </View>
+            )}
+          </View>
           {latestArticleDate && (
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={styles.latestArticleDate} type="secondary">
@@ -88,19 +96,14 @@ const SubscriptionRow: React.FC<Props> = ({
           )}
         </TouchableDebounce>
       </View>
-      <View style={styles.right}>
-        <Text style={[styles.label, {color: isSubscribed ? colors.text : colors.textSecondary}]}>
-          {isSubscribed ? 'Sekate' : 'Sekti'}
-        </Text>
-        <Switch
-          thumbColor={dark ? colors.text : colors.greyBackground}
-          trackColor={{
-            true: dark ? colors.textDisbled : colors.mediatekaPlayButton,
-          }}
-          onValueChange={onToggle}
-          value={isSubscribed}
-        />
-      </View>
+      <TouchableDebounce style={styles.right} onPress={() => onToggle(!isSubscribed)}>
+        <Text style={styles.label}>{isSubscribed ? 'Sekate' : 'Sekti'}</Text>
+        {isSubscribed ? (
+          <IconCheckCircle size={28} color={colors.iconActive} />
+        ) : (
+          <IconPlusCircle size={28} color={colors.iconInactive} />
+        )}
+      </TouchableDebounce>
     </View>
   );
 };
@@ -123,8 +126,25 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 4,
   },
+  titleRow: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    gap: 8,
+    flexWrap: 'wrap' as const,
+  },
   title: {
     fontSize: 16,
+  },
+  recommendedBadge: {
+    borderWidth: 1,
+    borderColor: '#FFC107',
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    backgroundColor: '#FFC10722',
+  },
+  recommendedText: {
+    fontSize: 12,
   },
   latestArticleDate: {
     fontSize: 13,
