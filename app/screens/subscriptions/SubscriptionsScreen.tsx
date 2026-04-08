@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text, TouchableDebounce} from '../../components';
 import {useTheme} from '../../Theme';
 import FollowedTab from './tabs/FollowedTab';
@@ -29,9 +28,9 @@ const SubscriptionsScreen: React.FC<React.PropsWithChildren<Props>> = ({navigati
   }, [navigation]);
 
   return (
-    <SafeAreaView style={styles.root} edges={['bottom']}>
+    <View style={styles.root}>
       <NotificationBanner />
-      <View style={[styles.tabBarWrapper, {borderColor: colors.listSeparator}]}>
+      <View style={styles.tabBarWrapper}>
         {TABS.map((tab) => {
           const isActive = activeTab === tab.key;
           return (
@@ -55,7 +54,7 @@ const SubscriptionsScreen: React.FC<React.PropsWithChildren<Props>> = ({navigati
         {activeTab === 'sekamos' && <FollowedTab />}
         {activeTab === 'visos' && <AllSubscriptionsTab />}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -67,8 +66,8 @@ const styles = StyleSheet.create({
   },
   tabBarWrapper: {
     flexDirection: 'row',
-    marginHorizontal: 12,
-    marginVertical: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 24,
     overflow: 'hidden',
     gap: 6,
   },

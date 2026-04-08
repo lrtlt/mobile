@@ -6,11 +6,12 @@ import {useAuth0} from 'react-native-auth0';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
-import {IconApplicationSettings, IconBell, IconBookmarkNew, IconSubscribe} from '../../../components/svg';
+import {IconApplicationSettings, IconBookmarkNew, IconSubscribe} from '../../../components/svg';
 import UserActionItem from './UserActionItem';
 import {useArticleStorageStore} from '../../../state/article_storage_store';
 import {useFavoriteUserArticleIds} from '../../../api/hooks/useFavoriteArticles';
 import {useUserSubscriptions} from '../../../api/hooks/usePushNotifications';
+import {useDefaultTopics} from '../../../api/hooks/useNotificationTopics';
 
 const UserActions: React.FC = () => {
   const {user} = useAuth0();
@@ -25,9 +26,9 @@ const UserActions: React.FC = () => {
     navigation.navigate('Settings');
   };
 
-  const handleNotifications = () => {
-    navigation.navigate('Notifications');
-  };
+  // const handleNotifications = () => {
+  //   navigation.navigate('Notifications');
+  // };
 
   const handleSubscriptions = () => {
     navigation.navigate('Subscriptions');
@@ -38,7 +39,10 @@ const UserActions: React.FC = () => {
   const numberOfUnsavedArticles = user ? favoriteArticleIds?.length ?? 0 : savedArticles.length;
 
   const {data: subscriptions} = useUserSubscriptions(!!user);
-  const numberOfActiveSubscriptions = subscriptions?.filter((sub) => sub.is_active).length ?? 0;
+  const {data: topics} = useDefaultTopics();
+  const numberOfActiveTopics = topics?.filter((t) => !t.hidden && t.active).length ?? 0;
+  const numberOfActiveSubscriptions =
+    (subscriptions?.filter((sub) => sub.is_active).length ?? 0) + numberOfActiveTopics;
 
   return (
     <View style={styles.container}>
@@ -64,11 +68,11 @@ const UserActions: React.FC = () => {
         numberOfItems={numberOfActiveSubscriptions > 0 ? numberOfActiveSubscriptions : undefined}
         onPress={user ? handleSubscriptions : undefined}
       />
-      <UserActionItem
+      {/* <UserActionItem
         icon={<IconBell size={32} color={colors.iconInactive} />}
         label={strings.notifications}
         onPress={user ? handleNotifications : undefined}
-      />
+      /> */}
 
       <UserActionItem
         icon={<IconApplicationSettings size={32} color={colors.iconInactive} />}

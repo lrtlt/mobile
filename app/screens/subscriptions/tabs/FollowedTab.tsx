@@ -7,7 +7,7 @@ import {useFollowedSubscriptions} from './useFollowedSubscriptions';
 
 const FollowedTab: React.FC = () => {
   const {colors} = useTheme();
-  const {listData, isLoading, updateSubscription} = useFollowedSubscriptions();
+  const {listData, isLoading, toggleItem} = useFollowedSubscriptions();
 
   if (isLoading) {
     return (
@@ -33,13 +33,7 @@ const FollowedTab: React.FC = () => {
           categoryId={item.categoryId}
           type={item.type}
           isRecommended={item.isRecommended}
-          onToggle={(value) => {
-            updateSubscription({
-              name: item.name,
-              subscription_key: item.key,
-              is_active: value,
-            });
-          }}
+          onToggle={(value) => toggleItem(item, value)}
         />
       )}
       contentContainerStyle={styles.list}

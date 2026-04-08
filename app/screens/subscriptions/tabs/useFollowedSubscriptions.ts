@@ -2,6 +2,11 @@ import {useEffect, useMemo, useState} from 'react';
 import {useUserSubscriptions, useUpdateSubscription} from '../../../api/hooks/usePushNotifications';
 import {useHistoryCategories} from '../../../api/hooks/useHistoryCategories';
 import {useShowList} from '../../../api/hooks/useShowList';
+import {
+  useDefaultTopics,
+  useSubscribeToTopic,
+  useUnsubscribeFromTopic,
+} from '../../../api/hooks/useNotificationTopics';
 
 export type FollowedListItem = {
   key: string;
@@ -10,7 +15,7 @@ export type FollowedListItem = {
   latestArticleDate?: string;
   isRecommended: boolean;
   isActive: boolean;
-  type?: 'mediateka' | 'radioteka';
+  type?: 'mediateka' | 'radioteka' | 'rubrikos';
 };
 
 export const useFollowedSubscriptions = () => {
@@ -20,8 +25,11 @@ export const useFollowedSubscriptions = () => {
   const {categories: recommendedCategories, isLoading: recLoading} = useHistoryCategories(5);
   const {data: mediatekaData} = useShowList('mediateka');
   const {data: radioData} = useShowList('radioteka');
+  const {data: topics, isLoading: topicsLoading} = useDefaultTopics();
+  const subscribeToTopicMutation = useSubscribeToTopic();
+  const unsubscribeFromTopicMutation = useUnsubscribeFromTopic();
 
-  const isLoading = subsLoading || recLoading;
+  const isLoading = subsLoading || recLoading || topicsLoading;
 
   // Snapshot initial keys so unfollowed items stay visible during the session
   const [initialKeys] = useState<Set<string>>(() => new Set());
@@ -32,6 +40,15 @@ export const useFollowedSubscriptions = () => {
       }
     }
   }, [subscriptions, initialKeys]);
+
+  const [initialTopicSlugs] = useState<Set<string>>(() => new Set());
+  useEffect(() => {
+    if (initialTopicSlugs.size === 0 && topics) {
+      for (const t of topics.filter((t) => !t.hidden && t.active)) {
+        initialTopicSlugs.add(t.slug);
+      }
+    }
+  }, [topics, initialTopicSlugs]);
 
   const recommendedIds = useMemo(() => {
     return new Set(recommendedCategories.map((c) => c.id));
@@ -90,14 +107,43 @@ export const useFollowedSubscriptions = () => {
       });
     }
 
+    // Add notification topics that are active or were active on mount
+    const visibleTopics = topics?.filter((t) => !t.hidden && (t.active || initialTopicSlugs.has(t.slug))) ?? [];
+    for (const topic of visibleTopics) {
+      items.push({
+        key: `topic-${topic.slug}`,
+        name: topic.name,
+        isRecommended: false,
+        isActive: !!topic.active,
+        type: 'rubrikos',
+      });
+    }
+
     items.sort((a, b) => a.name.localeCompare(b.name, 'lt'));
 
     return items;
-  }, [subscriptions, initialKeys, recommendedCategories, recommendedIds, categoryTypeMap, activeKeys]);
+  }, [subscriptions, initialKeys, recommendedCategories, recommendedIds, categoryTypeMap, activeKeys, topics, initialTopicSlugs]);
+
+  const toggleItem = (item: FollowedListItem, value: boolean) => {
+    if (item.key.startsWith('topic-')) {
+      const slug = item.key.replace('topic-', '');
+      if (value) {
+        subscribeToTopicMutation.mutate(slug);
+      } else {
+        unsubscribeFromTopicMutation.mutate(slug);
+      }
+    } else {
+      updateSubscriptionMutation.mutate({
+        name: item.name,
+        subscription_key: item.key,
+        is_active: value,
+      });
+    }
+  };
 
   return {
     listData,
     isLoading,
-    updateSubscription: updateSubscriptionMutation.mutate,
+    toggleItem,
   };
 };

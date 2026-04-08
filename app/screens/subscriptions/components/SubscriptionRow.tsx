@@ -2,7 +2,7 @@ import React, {useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Text, TouchableDebounce} from '../../../components';
 import {useTheme} from '../../../Theme';
-import {CameraIcon, IconCheckCircle, IconPlusCircle, MicIcon} from '../../../components/svg';
+import {CameraIcon, IconCheckCircle, IconPlusCircle, IconSquares, MicIcon} from '../../../components/svg';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../navigation/MainStack';
@@ -13,7 +13,7 @@ interface Props {
   title: string;
   isSubscribed: boolean;
   onToggle: (value: boolean) => void;
-  type?: 'mediateka' | 'radioteka';
+  type?: 'mediateka' | 'radioteka' | 'rubrikos';
   latestArticleDate?: string;
   categoryId?: number;
   isRecommended?: boolean;
@@ -73,6 +73,8 @@ const SubscriptionRow: React.FC<Props> = ({
         <CameraIcon size={16} colorAccent={colors.iconInactive} colorBase={colors.iconInactive} />
       ) : type === 'radioteka' ? (
         <MicIcon size={16} colorAccent={colors.iconInactive} colorBase={colors.iconInactive} />
+      ) : type === 'rubrikos' ? (
+        <IconSquares size={16} color={colors.iconInactive} />
       ) : null}
       <View style={styles.titleArea}>
         <TouchableDebounce onPress={onPress} disabled={!categoryId || isOpening}>
@@ -80,7 +82,7 @@ const SubscriptionRow: React.FC<Props> = ({
             <Text style={styles.title} numberOfLines={2}>
               {title}
             </Text>
-            {isRecommended && (
+            {isRecommended && !isSubscribed && (
               <View style={styles.recommendedBadge}>
                 <Text style={styles.recommendedText}>{'Rekomenduojama'}</Text>
               </View>

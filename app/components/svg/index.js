@@ -99,4 +99,5 @@ export {default as IconSettings2} from './ic_settings2';
 export {default as IconSubscribe} from './ic_subscribe';
 export {default as IconSubscribeActive} from './ic_subscribe_active';
 export {default as IconCheckCircle} from './ic_check_circle';
+export {default as IconSquares} from './ic_rubrikos';
 export {default as IconPlusCircle} from './ic_plus_circle';

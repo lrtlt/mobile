@@ -5,18 +5,26 @@ import {Text, TouchableDebounce} from '../../../components';
 import {useTheme} from '../../../Theme';
 import {ShowListItem, useShowList} from '../../../api/hooks/useShowList';
 import {useUserSubscriptions, useUpdateSubscription} from '../../../api/hooks/usePushNotifications';
+import {
+  useDefaultTopics,
+  useSubscribeToTopic,
+  useUnsubscribeFromTopic,
+} from '../../../api/hooks/useNotificationTopics';
 import SubscriptionRow from '../components/SubscriptionRow';
 import SearchBar from '../../search/SearchBar';
 import {IconChevronLeft} from '../../../components/svg';
 
-type TypeFilter = 'all' | 'mediateka' | 'radioteka';
+type TypeFilter = 'all' | 'mediateka' | 'radioteka' | 'rubrikos';
 
-type ListRow = {item: ShowListItem; showType: 'mediateka' | 'radioteka'};
+type ListRow =
+  | {kind: 'show'; item: ShowListItem; showType: 'mediateka' | 'radioteka'}
+  | {kind: 'topic'; slug: string; name: string; isActive: boolean};
 
 const TYPE_FILTER_OPTIONS: {label: string; value: TypeFilter}[] = [
   {label: 'Visi', value: 'all'},
   {label: 'Video', value: 'mediateka'},
   {label: 'Audio', value: 'radioteka'},
+  {label: 'Rubrikos', value: 'rubrikos'},
 ];
 
 const AllSubscriptionsTab: React.FC = () => {
@@ -31,8 +39,11 @@ const AllSubscriptionsTab: React.FC = () => {
   const {data: radioData, isLoading: radioLoading} = useShowList('radioteka');
   const {data: subscriptions} = useUserSubscriptions();
   const updateSubscriptionMutation = useUpdateSubscription();
+  const {data: topics, isLoading: topicsLoading} = useDefaultTopics();
+  const subscribeToTopicMutation = useSubscribeToTopic();
+  const unsubscribeFromTopicMutation = useUnsubscribeFromTopic();
 
-  const isLoading = mediatekaLoading || radioLoading;
+  const isLoading = mediatekaLoading || radioLoading || topicsLoading;
 
   const isSubscribed = (itemId: number): boolean => {
     return subscriptions?.some((s) => s.subscription_key === `category-${itemId}` && s.is_active) ?? false;
@@ -59,7 +70,7 @@ const AllSubscriptionsTab: React.FC = () => {
             matchesLetter(item.title) &&
             (!query || item.title.toLowerCase().includes(q))
           ) {
-            rows.push({item, showType});
+            rows.push({kind: 'show', item, showType});
           }
         }
       }
@@ -72,15 +83,24 @@ const AllSubscriptionsTab: React.FC = () => {
       addItems(radioData, 'radioteka');
     }
 
+    if (typeFilter === 'all' || typeFilter === 'rubrikos') {
+      const visibleTopics = topics?.filter((t) => !t.hidden) ?? [];
+      for (const topic of visibleTopics) {
+        if (matchesLetter(topic.name) && (!query || topic.name.toLowerCase().includes(q))) {
+          rows.push({kind: 'topic', slug: topic.slug, name: topic.name, isActive: !!topic.active});
+        }
+      }
+    }
+
     return rows;
-  }, [mediatekaData, radioData, typeFilter, selectedLetter, query, currentSeasonOnly]);
+  }, [mediatekaData, radioData, topics, typeFilter, selectedLetter, query, currentSeasonOnly]);
 
   const letters = useMemo(() => {
     const seen = new Set<string>();
     const result: string[] = ['Visi', '0-9'];
     const sources = [
-      ...(typeFilter !== 'radioteka' ? mediatekaData ?? [] : []),
-      ...(typeFilter !== 'mediateka' ? radioData ?? [] : []),
+      ...(typeFilter !== 'radioteka' && typeFilter !== 'rubrikos' ? mediatekaData ?? [] : []),
+      ...(typeFilter !== 'mediateka' && typeFilter !== 'rubrikos' ? radioData ?? [] : []),
     ];
     for (const section of sources) {
       const l = section.letter.l;
@@ -89,11 +109,43 @@ const AllSubscriptionsTab: React.FC = () => {
         result.push(l);
       }
     }
+    if (typeFilter === 'all' || typeFilter === 'rubrikos') {
+      for (const topic of topics?.filter((t) => !t.hidden) ?? []) {
+        const l = topic.name.charAt(0).toUpperCase();
+        if (!seen.has(l) && !/^\d/.test(l)) {
+          seen.add(l);
+          result.push(l);
+        }
+      }
+      result.sort((a, b) => {
+        if (a === 'Visi') return -1;
+        if (b === 'Visi') return 1;
+        if (a === '0-9') return -1;
+        if (b === '0-9') return 1;
+        return a.localeCompare(b, 'lt');
+      });
+    }
     return result;
-  }, [mediatekaData, radioData, typeFilter, currentSeasonOnly]);
+  }, [mediatekaData, radioData, topics, typeFilter, currentSeasonOnly]);
 
   const renderItem = useCallback(
     ({item}: {item: ListRow}) => {
+      if (item.kind === 'topic') {
+        return (
+          <SubscriptionRow
+            title={item.name}
+            isSubscribed={item.isActive}
+            type="rubrikos"
+            onToggle={(value) => {
+              if (value) {
+                subscribeToTopicMutation.mutate(item.slug);
+              } else {
+                unsubscribeFromTopicMutation.mutate(item.slug);
+              }
+            }}
+          />
+        );
+      }
       return (
         <SubscriptionRow
           title={item.item.title}
@@ -112,7 +164,7 @@ const AllSubscriptionsTab: React.FC = () => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [subscriptions, updateSubscriptionMutation],
+    [subscriptions, updateSubscriptionMutation, subscribeToTopicMutation, unsubscribeFromTopicMutation, topics],
   );
 
   if (isLoading) {
@@ -215,7 +267,9 @@ const AllSubscriptionsTab: React.FC = () => {
       <View style={{flex: 1}}>
         <FlatList
           data={listData}
-          keyExtractor={(item) => `${item.item.id}-${item.showType}`}
+          keyExtractor={(item) =>
+            item.kind === 'topic' ? `topic-${item.slug}` : `${item.item.id}-${item.showType}`
+          }
           renderItem={renderItem}
           ListEmptyComponent={
             <View style={styles.centered}>
