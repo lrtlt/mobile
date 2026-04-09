@@ -6,7 +6,8 @@
       "WebFetch(domain:www.lrt.lt)",
       "Bash(yarn lint:*)",
       "Bash(ls:*)",
-      "Bash(yarn remove:*)"
+      "Bash(yarn remove:*)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }
