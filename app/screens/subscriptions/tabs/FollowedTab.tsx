@@ -32,7 +32,6 @@ const FollowedTab: React.FC = () => {
           isSubscribed={item.isActive}
           categoryId={item.categoryId}
           type={item.type}
-          isRecommended={item.isRecommended}
           onToggle={(value) => toggleItem(item, value)}
         />
       )}

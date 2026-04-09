@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, FlatList, Modal, ScrollView, StyleSheet, View} from 'react-native';
 import {Switch} from 'react-native-gesture-handler';
 import {Text, TouchableDebounce} from '../../../components';
@@ -10,6 +10,7 @@ import {
   useSubscribeToTopic,
   useUnsubscribeFromTopic,
 } from '../../../api/hooks/useNotificationTopics';
+import {useHistoryCategories} from '../../../api/hooks/useHistoryCategories';
 import SubscriptionRow from '../components/SubscriptionRow';
 import SearchBar from '../../search/SearchBar';
 import {IconChevronLeft} from '../../../components/svg';
@@ -18,7 +19,8 @@ type TypeFilter = 'all' | 'mediateka' | 'radioteka' | 'rubrikos';
 
 type ListRow =
   | {kind: 'show'; item: ShowListItem; showType: 'mediateka' | 'radioteka'}
-  | {kind: 'topic'; slug: string; name: string; isActive: boolean};
+  | {kind: 'topic'; slug: string; name: string; isActive: boolean}
+  | {kind: 'recommendation'; categoryId: number; name: string; latestArticleDate?: string; isActive: boolean; showType?: 'mediateka' | 'radioteka'};
 
 const TYPE_FILTER_OPTIONS: {label: string; value: TypeFilter}[] = [
   {label: 'Visi', value: 'all'},
@@ -43,13 +45,37 @@ const AllSubscriptionsTab: React.FC = () => {
   const subscribeToTopicMutation = useSubscribeToTopic();
   const unsubscribeFromTopicMutation = useUnsubscribeFromTopic();
 
-  const isLoading = mediatekaLoading || radioLoading || topicsLoading;
+  const initialSubscriptionKeysRef = useRef<string[] | null>(null);
+  if (initialSubscriptionKeysRef.current === null && subscriptions) {
+    initialSubscriptionKeysRef.current = subscriptions.filter((s) => s.is_active).map((s) => s.subscription_key);
+  }
+  const {categories: recommendedCategories, isLoading: recLoading} = useHistoryCategories(
+    3,
+    initialSubscriptionKeysRef.current ?? undefined,
+  );
+
+  const isLoading = mediatekaLoading || radioLoading || topicsLoading || recLoading;
 
   const isSubscribed = (itemId: number): boolean => {
     return subscriptions?.some((s) => s.subscription_key === `category-${itemId}` && s.is_active) ?? false;
   };
 
   const selectedTypeLabel = TYPE_FILTER_OPTIONS.find((o) => o.value === typeFilter)?.label ?? 'All';
+
+  const categoryTypeMap = useMemo(() => {
+    const map = new Map<number, 'mediateka' | 'radioteka'>();
+    for (const section of mediatekaData ?? []) {
+      for (const item of section.items) {
+        map.set(item.id, 'mediateka');
+      }
+    }
+    for (const section of radioData ?? []) {
+      for (const item of section.items) {
+        map.set(item.id, 'radioteka');
+      }
+    }
+    return map;
+  }, [mediatekaData, radioData]);
 
   const listData = useMemo((): ListRow[] => {
     const rows: ListRow[] = [];
@@ -60,6 +86,20 @@ const AllSubscriptionsTab: React.FC = () => {
       if (selectedLetter === '0-9') return /^\d/.test(title);
       return title.toUpperCase().startsWith(selectedLetter);
     };
+
+    // Add up to 3 recommendations at the top (only when no filters are active)
+    if (selectedLetter === 'Visi' && !query && typeFilter === 'all') {
+      for (const cat of recommendedCategories.slice(0, 3)) {
+        rows.push({
+          kind: 'recommendation',
+          categoryId: cat.id,
+          name: cat.title,
+          latestArticleDate: cat.latestArticleDate,
+          isActive: isSubscribed(cat.id),
+          showType: categoryTypeMap.get(cat.id),
+        });
+      }
+    }
 
     const addItems = (sections: typeof mediatekaData, showType: 'mediateka' | 'radioteka') => {
       if (!sections) return;
@@ -93,7 +133,7 @@ const AllSubscriptionsTab: React.FC = () => {
     }
 
     return rows;
-  }, [mediatekaData, radioData, topics, typeFilter, selectedLetter, query, currentSeasonOnly]);
+  }, [mediatekaData, radioData, topics, typeFilter, selectedLetter, query, currentSeasonOnly, recommendedCategories, categoryTypeMap, subscriptions]);
 
   const letters = useMemo(() => {
     const seen = new Set<string>();
@@ -146,6 +186,25 @@ const AllSubscriptionsTab: React.FC = () => {
           />
         );
       }
+      if (item.kind === 'recommendation') {
+        return (
+          <SubscriptionRow
+            title={item.name}
+            isSubscribed={item.isActive}
+            categoryId={item.categoryId}
+            type={item.showType}
+            latestArticleDate={item.latestArticleDate}
+            isRecommended
+            onToggle={(value) => {
+              updateSubscriptionMutation.mutate({
+                name: item.name,
+                subscription_key: `category-${item.categoryId}`,
+                is_active: value,
+              });
+            }}
+          />
+        );
+      }
       return (
         <SubscriptionRow
           title={item.item.title}
@@ -164,7 +223,13 @@ const AllSubscriptionsTab: React.FC = () => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [subscriptions, updateSubscriptionMutation, subscribeToTopicMutation, unsubscribeFromTopicMutation, topics],
+    [
+      subscriptions,
+      updateSubscriptionMutation,
+      subscribeToTopicMutation,
+      unsubscribeFromTopicMutation,
+      topics,
+    ],
   );
 
   if (isLoading) {
@@ -227,17 +292,19 @@ const AllSubscriptionsTab: React.FC = () => {
             </View>
           </TouchableDebounce>
         </View>
-        <View style={styles.filterRight}>
-          <Text style={[styles.filterLabel, {color: colors.textSecondary}]}>{'Šio sezono laidos'}</Text>
-          <Switch
-            thumbColor={dark ? colors.text : colors.greyBackground}
-            trackColor={{
-              true: dark ? colors.textDisbled : colors.iconActive,
-            }}
-            onValueChange={setCurrentSeasonOnly}
-            value={currentSeasonOnly}
-          />
-        </View>
+        {typeFilter != 'rubrikos' && (
+          <View style={styles.filterRight}>
+            <Text style={[styles.filterLabel, {color: colors.textSecondary}]}>{'Šio sezono laidos'}</Text>
+            <Switch
+              thumbColor={dark ? colors.text : colors.greyBackground}
+              trackColor={{
+                true: dark ? colors.textDisbled : colors.iconActive,
+              }}
+              onValueChange={setCurrentSeasonOnly}
+              value={currentSeasonOnly}
+            />
+          </View>
+        )}
       </View>
 
       {/* Type picker modal */}
@@ -268,7 +335,11 @@ const AllSubscriptionsTab: React.FC = () => {
         <FlatList
           data={listData}
           keyExtractor={(item) =>
-            item.kind === 'topic' ? `topic-${item.slug}` : `${item.item.id}-${item.showType}`
+            item.kind === 'topic'
+              ? `topic-${item.slug}`
+              : item.kind === 'recommendation'
+              ? `rec-${item.categoryId}`
+              : `${item.item.id}-${item.showType}`
           }
           renderItem={renderItem}
           ListEmptyComponent={
