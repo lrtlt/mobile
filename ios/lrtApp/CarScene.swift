@@ -52,6 +52,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       nextTrackAction: { [weak self] in
         do {
           try self?.player.playNext()
+          self?.uiManager?.showNowPlayingTemplate(isLive: self?.playlist.current?.isLive ?? false)
         } catch {
           print("Error playing next track: \(error.localizedDescription)")
         }
@@ -59,6 +60,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       previousTrackAction: { [weak self] in
         do {
           try self?.player.playPrevious()
+          self?.uiManager?.showNowPlayingTemplate(isLive: self?.playlist.current?.isLive ?? false)
         } catch {
           print("Error playing previous track: \(error.localizedDescription)")
         }
@@ -73,6 +75,9 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     }
     uiManager?.setForwardButtonHandler { [weak self] in
       self?.player.seekForward()
+    }
+    uiManager?.setPlaybackRateHandler { [weak self] in
+      return self?.player.cyclePlaybackRate() ?? 1.0
     }
   }
 

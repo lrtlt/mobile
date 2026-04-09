@@ -14,6 +14,34 @@ class PlayerController {
   private var readyToPlayObserver: NSKeyValueObservation?
   private var interruptionObserver: Any?
 
+  private static let playbackRates: [Float] = [1.0, 1.25, 1.5]
+  private var currentRateIndex: Int = 0
+
+  var playbackRate: Float {
+    return PlayerController.playbackRates[currentRateIndex]
+  }
+
+  func cyclePlaybackRate() -> Float {
+    currentRateIndex = (currentRateIndex + 1) % PlayerController.playbackRates.count
+    let newRate = PlayerController.playbackRates[currentRateIndex]
+    if isPlaying {
+      player?.rate = newRate
+    }
+    updateNowPlayingRate()
+    return newRate
+  }
+
+  func resetPlaybackRate() {
+    currentRateIndex = 0
+  }
+
+  private func updateNowPlayingRate() {
+    var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
+    nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? playbackRate : 0.0
+    nowPlayingInfo[MPNowPlayingInfoPropertyDefaultPlaybackRate] = playbackRate
+    MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+  }
+
   var currentTime: CMTime {
     return player?.currentTime() ?? .zero
   }
@@ -33,6 +61,7 @@ class PlayerController {
   func setupStream(for item: CarPlayItem) throws {
     player?.pause()
     removeObservers()
+    resetPlaybackRate()
 
     guard let streamUrl = item.streamUrl, let url = URL(string: streamUrl) else {
       print("Invalid stream URL \(String(describing: item.streamUrl))")
@@ -64,7 +93,9 @@ class PlayerController {
 
   func play() {
     player?.play()
+    player?.rate = playbackRate
     MPNowPlayingInfoCenter.default().playbackState = .playing
+    updateNowPlayingRate()
   }
 
   func pause() {

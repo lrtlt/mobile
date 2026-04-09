@@ -10,6 +10,7 @@ class CarPlayUIManager {
   private var nowPlayingTemplate: CPNowPlayingTemplate?
   private var backwardButtonHandler: (() -> Void)?
   private var forwardButtonHandler: (() -> Void)?
+  private var playbackRateHandler: (() -> Float)?
 
   init(interfaceController: CPInterfaceController) {
     self.interfaceController = interfaceController
@@ -183,7 +184,14 @@ class CarPlayUIManager {
         [weak self] _ in
         self?.forwardButtonHandler?()
       }
-      nowPlayingTemplate?.updateNowPlayingButtons([backwardButton, forwardButton])
+      let speedButton = CPNowPlayingImageButton(
+        image: Self.playbackRateImage(rate: PlayerController.shared.playbackRate)
+      ) { [weak self] _ in
+        if let newRate = self?.playbackRateHandler?() {
+          self?.updatePlaybackRateButton(rate: newRate, isLive: false)
+        }
+      }
+      nowPlayingTemplate?.updateNowPlayingButtons([backwardButton, speedButton, forwardButton])
     }
 
     if interfaceController?.topTemplate !== nowPlayingTemplate {
@@ -221,5 +229,45 @@ class CarPlayUIManager {
 
   func setForwardButtonHandler(_ handler: @escaping () -> Void) {
     forwardButtonHandler = handler
+  }
+
+  func setPlaybackRateHandler(_ handler: @escaping () -> Float) {
+    playbackRateHandler = handler
+  }
+
+  private func updatePlaybackRateButton(rate: Float, isLive: Bool) {
+    guard !isLive else { return }
+    showNowPlayingTemplate(isLive: false)
+  }
+
+  private static func playbackRateImage(rate: Float) -> UIImage {
+    let label: String
+    if rate.truncatingRemainder(dividingBy: 1) == 0 {
+      label = String(format: "%.0fx", rate)
+    } else if rate == 1.25 {
+      label = "1.25x"
+    } else {
+      label = String(format: "%.1fx", rate)
+    }
+
+    let imageSize = CGSize(width: 100, height: 48)
+    let format = UIGraphicsImageRendererFormat()
+    format.scale = 1
+    let renderer = UIGraphicsImageRenderer(size: imageSize, format: format)
+    let image = renderer.image { _ in
+      let fontSize: CGFloat = 38
+      let attributes: [NSAttributedString.Key: Any] = [
+        .font: UIFont.systemFont(ofSize: fontSize, weight: .semibold),
+        .foregroundColor: UIColor.white,
+      ]
+      let text = label as NSString
+      let textSize = text.size(withAttributes: attributes)
+      let point = CGPoint(
+        x: (imageSize.width - textSize.width) / 2,
+        y: (imageSize.height - textSize.height) / 2
+      )
+      text.draw(at: point, withAttributes: attributes)
+    }
+    return image.withRenderingMode(.alwaysOriginal)
   }
 }
