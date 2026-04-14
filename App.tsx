@@ -18,6 +18,7 @@ import useAuthInterceptor from './app/util/useAuthInterceptor';
 import queryClient from './AppQueryClient';
 import {QueryClientProvider} from '@tanstack/react-query';
 import useQueryAppStateSync from './app/util/useNetworkStatus';
+import {usePeriodicPlaybackProgressFlush} from './app/api/hooks/usePlaybackProgress';
 import Config from 'react-native-config';
 
 enableFreeze(true);
@@ -29,6 +30,7 @@ const App: React.FC = () => {
   useAppTrackingPermission();
   useGoogleAnalyticsSetup();
   useAuthInterceptor();
+  usePeriodicPlaybackProgressFlush();
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>

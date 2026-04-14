@@ -18,6 +18,9 @@ export type PlaybackProgressEntry = {
   progressPct: number;
   completed: boolean;
   updatedAt: number;
+
+  // Sync
+  dirty?: boolean;
 };
 
 export type UpsertProgressInput = {
@@ -39,6 +42,10 @@ type Actions = {
   clearCompleted: () => void;
   clearAll: () => void;
   getEntry: (id: number) => PlaybackProgressEntry | undefined;
+  getEntries: (options?: {mediaType?: PlaybackMediaType; count?: number}) => PlaybackProgressEntry[];
+  getDirtyEntries: () => PlaybackProgressEntry[];
+  markSynced: (ids: number[], syncedAt: number) => void;
+  mergeRemoteEntries: (remote: PlaybackProgressEntry[]) => void;
 };
 
 type Store = State & Actions;
@@ -76,17 +83,20 @@ export const usePlaybackProgressStore = create<Store>()(
       upsertProgress: (input) => {
         if (!input.articleId || !input.durationSec) return;
         const existing = get().entries[input.articleId];
-        const progressPct = computeProgress(input.positionSec, input.durationSec);
+        const positionSec = Math.round(input.positionSec);
+        const durationSec = Math.round(input.durationSec);
+        const progressPct = Math.round(computeProgress(positionSec, durationSec) * 100) / 100;
         const completed = input.completed === true || progressPct >= PLAYBACK_PROGRESS_COMPLETED_PCT;
         const entry: PlaybackProgressEntry = {
           articleId: input.articleId,
           mediaType: input.mediaType,
           category_id: input.category_id ?? existing?.category_id,
-          positionSec: completed ? 0 : input.positionSec,
-          durationSec: input.durationSec,
+          positionSec: completed ? 0 : positionSec,
+          durationSec,
           progressPct: completed ? 1 : progressPct,
           completed,
           updatedAt: Date.now(),
+          dirty: true,
         };
         set((state) => ({
           entries: trimToMax({...state.entries, [input.articleId]: entry}),
@@ -114,6 +124,69 @@ export const usePlaybackProgressStore = create<Store>()(
       },
       getEntry: (id) => {
         return get().entries[id];
+      },
+      getEntries: (options) => {
+        const {mediaType, count} = options ?? {};
+        let result = Object.values(get().entries).filter((e) => !e.completed);
+        if (mediaType) {
+          result = result.filter((e) => e.mediaType === mediaType);
+        }
+        result.sort(sortByUpdatedAtDesc);
+        if (count != null) {
+          result = result.slice(0, count);
+        }
+        return result;
+      },
+      getDirtyEntries: () => {
+        return Object.values(get().entries).filter((e) => e.dirty);
+      },
+      markSynced: (ids, syncedAt) => {
+        set((state) => {
+          const next = {...state.entries};
+          ids.forEach((id) => {
+            const e = next[id];
+            // Only clear dirty if nothing newer happened after the push was fired
+            if (e && e.dirty && e.updatedAt <= syncedAt) {
+              next[id] = {...e, dirty: false};
+            }
+          });
+          return {entries: next};
+        });
+      },
+      mergeRemoteEntries: (remote) => {
+        set((state) => {
+          let next = {...state.entries};
+          remote.forEach((r) => {
+            if (!r || !r.articleId) {
+              return;
+            }
+
+            const local = next[r.articleId];
+            if (!local) {
+              next[r.articleId] = {...r, dirty: false};
+              return;
+            }
+            // Remote wins if strictly newer (covers cross-device updates even when local is dirty).
+            if (r.updatedAt > local.updatedAt) {
+              next[r.articleId] = {...r, dirty: false};
+              return;
+            }
+            // Otherwise keep local dirty/unsynced changes; sync non-dirty locals up to remote.
+            if (!local.dirty && r.updatedAt === local.updatedAt) {
+              next[r.articleId] = {...r, dirty: false};
+            }
+          });
+          // Rebuild the map in sorted order so Object.values() iteration matches the sort.
+          const trimmed = trimToMax(next);
+          const sorted: Record<number, PlaybackProgressEntry> = {};
+          Object.values(trimmed)
+            .sort(sortByUpdatedAtDesc)
+            .forEach((e) => {
+              sorted[e.articleId] = e;
+            });
+          next = sorted;
+          return {entries: next};
+        });
       },
     }),
     {

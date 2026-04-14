@@ -14,6 +14,7 @@ import ConfirmModal from '../weather/ConfirmModal';
 import UserHeader from '../user/components/UserHeader';
 import {getAnalytics, logEvent} from '@react-native-firebase/analytics';
 import {clearFCMUserData, getFcmToken} from '../../util/useFCMTokenSync';
+import {usePlaybackProgressStore} from '../../state/playback_progress_store';
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList>;
@@ -56,6 +57,7 @@ const UserPersonalSettingsScreen: React.FC<React.PropsWithChildren<Props>> = ({n
         await clearFCMToken();
         await clearSession();
         logEvent(getAnalytics(), 'app_lrt_lt_user_signed_out');
+        usePlaybackProgressStore.getState().clearAll();
         queryClient.removeQueries();
         queryClient.invalidateQueries();
         navigation.pop();
@@ -70,6 +72,7 @@ const UserPersonalSettingsScreen: React.FC<React.PropsWithChildren<Props>> = ({n
       await clearFCMToken();
       await deleteUser();
       logEvent(getAnalytics(), 'app_lrt_lt_user_account_deleted');
+      usePlaybackProgressStore.getState().clearAll();
       queryClient.removeQueries();
       await clearSession();
       navigation.popToTop();

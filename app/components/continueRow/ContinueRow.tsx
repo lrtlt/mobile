@@ -12,11 +12,10 @@ import {
   PlaybackMediaType,
   PlaybackProgressEntry,
   usePlaybackProgressStore,
-  useResumableAudio,
-  useResumableVideo,
 } from '../../state/playback_progress_store';
 import {buildArticleImageUri, IMG_SIZE_M} from '../../util/ImageUtil';
 import {useSearchArticlesByIds} from '../../api/hooks/useSearchArticles';
+import {useDeletePlaybackProgress, usePlaybackProgress} from '../../api/hooks/usePlaybackProgress';
 
 const CARD_WIDTH = Math.min(Dimensions.get('window').width * 0.5, 300);
 
@@ -33,9 +32,10 @@ interface Props {
 const ContinueRow: React.FC<Props> = ({mediaType}) => {
   const {colors, strings} = useTheme();
 
-  const audioEntries = useResumableAudio();
-  const videoEntries = useResumableVideo();
-  const entries = mediaType === 'audio' ? audioEntries : videoEntries;
+  const {data: entries = []} = usePlaybackProgress({
+    mediaType,
+    count: 20,
+  });
 
   const articleIds = useMemo(() => entries.map((e) => e.articleId), [entries]);
   const {data: searchData} = useSearchArticlesByIds(articleIds.length > 0 ? articleIds : undefined);
@@ -68,9 +68,15 @@ const ContinueRow: React.FC<Props> = ({mediaType}) => {
     [navigation],
   );
 
-  const onRemovePress = useCallback((entry: ContinuePlayItem) => {
-    usePlaybackProgressStore.getState().removeProgress(entry.articleId);
-  }, []);
+  const {mutate: deletePlaybackProgress} = useDeletePlaybackProgress();
+
+  const onRemovePress = useCallback(
+    (entry: ContinuePlayItem) => {
+      usePlaybackProgressStore.getState().removeProgress(entry.articleId);
+      deletePlaybackProgress(entry.articleId);
+    },
+    [deletePlaybackProgress],
+  );
 
   const renderItem = useCallback(
     ({item}: {item: ContinuePlayItem}) => {
