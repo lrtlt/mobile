@@ -98,3 +98,19 @@ struct PodcastEpisodeInfo: Decodable {
     case streamUrl = "stream_url"
   }
 }
+
+struct SubscriptionsResponse: Decodable {
+  let subscriptions: [UserSubscription]
+}
+
+struct UserSubscription: Decodable {
+  let subscriptionKey: String
+  let isActive: Bool
+  let name: String?
+
+  enum CodingKeys: String, CodingKey {
+    case subscriptionKey = "subscription_key"
+    case isActive = "is_active"
+    case name
+  }
+}

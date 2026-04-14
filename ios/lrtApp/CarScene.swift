@@ -81,6 +81,60 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     }
   }
 
+  private func loadSubscriptionsSection() async -> CPListSection? {
+    guard CarPlayService.shared.isLoggedIn() else {
+      return nil
+    }
+
+    do {
+      let subscriptions = try await CarPlayService.shared.fetchSubscriptions()
+      let activeSubscriptions = subscriptions.filter { $0.isActive }
+
+      guard !activeSubscriptions.isEmpty else {
+        return nil
+      }
+
+      let items = activeSubscriptions.compactMap { subscription -> CPListItem? in
+        let item = CPListItem(text: subscription.name ?? "", detailText: nil)
+        item.handler = { [weak self] _, completion in
+          guard let self = self else {
+            completion()
+            return
+          }
+          let categoryIdStr = subscription.subscriptionKey.replacingOccurrences(
+            of: "category-", with: "")
+          guard let categoryId = Int(categoryIdStr) else {
+            completion()
+            return
+          }
+
+          Task {
+            do {
+              let episodes = try await CarPlayService.shared.fetchEpisodes(
+                categoryId: categoryId)
+              await self.uiManager?.showEpisodesList(
+                episodes: episodes, categoryTitle: subscription.name ?? ""
+              ) { episode in
+                self.playlist.currentPlaylist = [episode]
+                self.playlist.currentIndex = 0
+                self.onPlayableItemSelected(from: episode)
+              }
+            } catch {
+              print("Failed to fetch subscription episodes: \(error.localizedDescription)")
+            }
+            completion()
+          }
+        }
+        return item
+      }
+
+      return CPListSection(items: items, header: "Prenumeratos", sectionIndexTitle: "★")
+    } catch {
+      print("Failed to load subscriptions: \(error.localizedDescription)")
+      return nil
+    }
+  }
+
   private func loadPodcasts(for listTemplate: CPListTemplate) async {
     do {
       let categories = try await CarPlayService.shared.fetchPodcasts()
@@ -92,7 +146,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       }
 
       // Sort sections alphabetically
-      let sortedSections = groupedCategories.keys.sorted().map { letter in
+      var sections = groupedCategories.keys.sorted().map { letter in
         let items = (groupedCategories[letter] ?? []).map { category in
           let item = CPListItem(text: category.title ?? "", detailText: nil)
           item.handler = { [weak self] _, completion in
@@ -122,7 +176,13 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
         }
         return CPListSection(items: items, header: letter, sectionIndexTitle: letter)
       }
-      listTemplate.updateSections(sortedSections)
+
+      // Add subscriptions section at the top if available
+      if let subscriptionsSection = await loadSubscriptionsSection() {
+        sections.insert(subscriptionsSection, at: 0)
+      }
+
+      listTemplate.updateSections(sections)
     } catch {
       print("Failed to load podcasts: \(error.localizedDescription)")
     }
@@ -140,6 +200,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
         }
         return
       }
+
 
       Task {
         do {

@@ -30,4 +30,13 @@ class CarPlayService {
   func fetchEpisodeInfo(episodeId: Int) async throws -> PodcastEpisodeInfoResponse {
     return try await network.fetchEpisodeInfo(episodeId: episodeId)
   }
+
+  func fetchSubscriptions() async throws -> [UserSubscription] {
+    let token = try await CarPlayAuthManager.shared.getAccessToken()
+    return try await network.fetchSubscriptions(accessToken: token)
+  }
+
+  func isLoggedIn() -> Bool {
+    return CarPlayAuthManager.shared.isLoggedIn()
+  }
 }
