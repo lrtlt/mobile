@@ -126,6 +126,37 @@ class CarPlayNetwork {
     return response.subscriptions
   }
 
+  private let watchHistoryUrl = "https://www.lrt.lt/servisai/dev-authrz/api/v1/user/watch-history"
+
+  func fetchWatchHistory(mediaType: String, count: Int, accessToken: String) async throws
+    -> [WatchHistoryEntry]
+  {
+    let url = URL(string: "\(watchHistoryUrl)/\(mediaType)/\(count)")!
+    var request = URLRequest(url: url)
+    request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+    let (data, _) = try await URLSession.shared.data(for: request)
+    let response = try JSONDecoder().decode(WatchHistoryResponse.self, from: data)
+    return response.list
+  }
+
+  func pushWatchHistory(entries: [WatchHistoryEntry], accessToken: String) async throws {
+    guard let url = URL(string: watchHistoryUrl) else { return }
+    var request = URLRequest(url: url)
+    request.httpMethod = "PUT"
+    request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.httpBody = try JSONEncoder().encode(WatchHistoryPushRequest(list: entries))
+    _ = try await URLSession.shared.data(for: request)
+  }
+
+  func deleteWatchHistory(articleId: Int, accessToken: String) async throws {
+    guard let url = URL(string: "\(watchHistoryUrl)/\(articleId)") else { return }
+    var request = URLRequest(url: url)
+    request.httpMethod = "DELETE"
+    request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+    _ = try await URLSession.shared.data(for: request)
+  }
+
   private func fetchStreamInfo(streamUrl: String) async throws -> StreamInfo {
     let url = URL(string: streamUrl)!
     let (data, _) = try await URLSession.shared.data(from: url)

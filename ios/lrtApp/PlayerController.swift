@@ -14,6 +14,11 @@ class PlayerController {
   private var readyToPlayObserver: NSKeyValueObservation?
   private var interruptionObserver: Any?
 
+  // Watch-history tracking
+  private var watchHistoryTimer: Timer?
+  private var trackedItem: CarPlayItem?
+  private static let watchHistoryTickSec: TimeInterval = 10.0
+
   private static let playbackRates: [Float] = [1.0, 1.25, 1.5]
   private var currentRateIndex: Int = 0
 
@@ -84,11 +89,15 @@ class PlayerController {
       play()
     } else {
       player = AVPlayer(url: url)
+      if let startSec = item.startPositionSec, startSec > 0 {
+        player?.seek(to: CMTime(seconds: Double(startSec), preferredTimescale: CMTimeScale(NSEC_PER_SEC)))
+      }
       play()
     }
 
     addPlayerObservers()
     syncNowPlayingInfo(playlistItem: item)
+    startWatchHistoryTracking(item: item)
   }
 
   func play() {
@@ -96,11 +105,15 @@ class PlayerController {
     player?.rate = playbackRate
     MPNowPlayingInfoCenter.default().playbackState = .playing
     updateNowPlayingRate()
+    if trackedItem != nil && watchHistoryTimer == nil {
+      scheduleWatchHistoryTimer()
+    }
   }
 
   func pause() {
     player?.pause()
     MPNowPlayingInfoCenter.default().playbackState = .paused
+    stopWatchHistoryTracking(pushFinal: true)
   }
 
   func seekForward() {
@@ -194,9 +207,69 @@ class PlayerController {
 
   private func onPlayerEnded() {
     MPNowPlayingInfoCenter.default().playbackState = .stopped
+    stopWatchHistoryTracking(pushFinal: true, completed: true)
     do {
       try playNext()
     } catch {}
+  }
+
+  private func startWatchHistoryTracking(item: CarPlayItem) {
+    stopWatchHistoryTracking(pushFinal: false)
+    guard item.articleId != nil, item.isLive != true else { return }
+    trackedItem = item
+    scheduleWatchHistoryTimer()
+  }
+
+  private func scheduleWatchHistoryTimer() {
+    watchHistoryTimer?.invalidate()
+    watchHistoryTimer = Timer.scheduledTimer(
+      withTimeInterval: PlayerController.watchHistoryTickSec, repeats: true
+    ) { [weak self] _ in
+      self?.pushWatchHistoryTick(completed: false)
+    }
+  }
+
+  private func stopWatchHistoryTracking(pushFinal: Bool, completed: Bool = false) {
+    watchHistoryTimer?.invalidate()
+    watchHistoryTimer = nil
+    if pushFinal {
+      pushWatchHistoryTick(completed: completed)
+    }
+    if completed {
+      trackedItem = nil
+    }
+  }
+
+  private func pushWatchHistoryTick(completed: Bool) {
+    guard let item = trackedItem, let articleId = item.articleId, let player = player,
+      let currentItem = player.currentItem
+    else {
+      return
+    }
+    let position = CMTimeGetSeconds(player.currentTime())
+    let duration = CMTimeGetSeconds(currentItem.duration)
+    guard position.isFinite, !position.isNaN, position >= 0 else { return }
+    let positionSec = Int(position.rounded())
+    let durationSec = (duration.isFinite && !duration.isNaN && duration > 0)
+      ? Int(duration.rounded()) : 0
+    let progressPct: Double = durationSec > 0
+      ? (Double(positionSec) / Double(durationSec) * 100).rounded() / 100 : 0
+    let entry = WatchHistoryEntry(
+      articleId: articleId,
+      mediaType: "audio",
+      categoryId: nil,
+      positionSec: positionSec,
+      durationSec: durationSec,
+      progressPct: progressPct,
+      completed: completed,
+      updatedAt: Int64(Date().timeIntervalSince1970 * 1000)
+    )
+    Task {
+      await CarPlayService.shared.pushPlaybackProgress(entry: entry)
+      await MainActor.run {
+        NotificationCenter.default.post(name: .watchHistoryUpdated, object: nil)
+      }
+    }
   }
 
   private func removeObservers() {

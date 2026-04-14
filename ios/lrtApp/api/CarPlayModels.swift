@@ -7,6 +7,54 @@ struct CarPlayItem: Decodable {
   let streamUrl: String?
   let isLive: Bool?
   let channelId: Int?
+  let articleId: Int?
+  let startPositionSec: Int?
+  let progressPct: Double?
+
+  enum CodingKeys: String, CodingKey {
+    case title, content, cover, streamUrl, isLive, channelId, startPositionSec, progressPct
+    case articleId = "id"
+  }
+
+  init(
+    title: String, content: String, cover: String?, streamUrl: String?, isLive: Bool?,
+    channelId: Int?, articleId: Int? = nil, startPositionSec: Int? = nil,
+    progressPct: Double? = nil
+  ) {
+    self.title = title
+    self.content = content
+    self.cover = cover
+    self.streamUrl = streamUrl
+    self.isLive = isLive
+    self.channelId = channelId
+    self.articleId = articleId
+    self.startPositionSec = startPositionSec
+    self.progressPct = progressPct
+  }
+}
+
+struct WatchHistoryEntry: Codable {
+  let articleId: Int
+  let mediaType: String
+  let categoryId: Int?
+  let positionSec: Int
+  let durationSec: Int
+  let progressPct: Double
+  let completed: Bool
+  let updatedAt: Int64
+
+  enum CodingKeys: String, CodingKey {
+    case articleId, mediaType, positionSec, durationSec, progressPct, completed, updatedAt
+    case categoryId = "category_id"
+  }
+}
+
+struct WatchHistoryResponse: Decodable {
+  let list: [WatchHistoryEntry]
+}
+
+struct WatchHistoryPushRequest: Encodable {
+  let list: [WatchHistoryEntry]
 }
 
 struct LiveProgramResponse: Decodable {
@@ -92,11 +140,21 @@ struct PodcastEpisodeInfoResponse: Decodable {
 struct PodcastEpisodeInfo: Decodable {
   let id: Int?
   let streamUrl: String?
+  let title: String?
+  let categoryTitle: String?
+  let mainPhoto: MainPhoto?
 
   enum CodingKeys: String, CodingKey {
     case id
     case streamUrl = "stream_url"
+    case title
+    case categoryTitle = "category_title"
+    case mainPhoto = "main_photo"
   }
+}
+
+struct MainPhoto: Decodable {
+  let path: String?
 }
 
 struct SubscriptionsResponse: Decodable {

@@ -18,6 +18,10 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   // Used to track connection time. To avoid duplicated events on simulator
   private var connectedAt: Date?
 
+  private var watchHistoryObserver: NSObjectProtocol?
+  private weak var recommendedTemplate: CPListTemplate?
+  private var latestRecommendedItems: [CPListItem] = []
+
   func templateApplicationScene(
     _ templateApplicationScene: CPTemplateApplicationScene,
     didConnect interfaceController: CPInterfaceController
@@ -30,6 +34,12 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     uiManager = CarPlayUIManager(interfaceController: interfaceController)
     uiManager?.setupInitialUI(
       delegate: self, initialTemplate: cache.getCurrentTemplateTitle())
+
+    watchHistoryObserver = NotificationCenter.default.addObserver(
+      forName: .watchHistoryUpdated, object: nil, queue: .main
+    ) { [weak self] _ in
+      self?.refreshRecommendedSections()
+    }
 
     // Attempt to resume playback if state exists
     if cache.getShouldResumePlayer(),
@@ -216,7 +226,14 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
             listItems.insert(refreshItem, at: 0)
           }
 
-          listTemplate.updateSections([CPListSection(items: listItems)])
+          if listTemplate.title == "Siūlome" {
+            self.recommendedTemplate = listTemplate
+            self.latestRecommendedItems = listItems
+            await self.applyRecommendedSections()
+            Task { await CarPlayService.shared.refreshContinuePlaying() }
+          } else {
+            listTemplate.updateSections([CPListSection(items: listItems)])
+          }
         } catch {
           let item = CPListItem(
             text: "Įvyko klaida! Patikrinkite interneto ryšį",
@@ -278,6 +295,12 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     saveState()
     player.pause()
     RDSNowPlayingService.shared.stopListening()
+    if let observer = watchHistoryObserver {
+      NotificationCenter.default.removeObserver(observer)
+      watchHistoryObserver = nil
+    }
+    recommendedTemplate = nil
+    latestRecommendedItems = []
     self.interfaceController = nil
   }
 
@@ -290,6 +313,33 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     } else {
       print("Not connected for more than 2 seconds")
     }
+  }
+
+  private func refreshRecommendedSections() {
+    Task { await applyRecommendedSections() }
+  }
+
+  private func applyRecommendedSections() async {
+    guard let template = recommendedTemplate else { return }
+    let continueItems = CarPlayService.shared.cachedContinuePlaying
+    var sections: [CPListSection] = []
+    if !continueItems.isEmpty, let uiManager = uiManager {
+      let cpItems = await uiManager.createListItems(from: continueItems) { [weak self] selected in
+        guard let self = self else { return }
+        self.playlist.currentPlaylist = continueItems
+        if let idx = continueItems.firstIndex(where: { $0.streamUrl == selected.streamUrl }) {
+          self.playlist.currentIndex = idx
+        }
+        self.onPlayableItemSelected(from: selected)
+      }
+      for (idx, cpItem) in cpItems.enumerated() where idx < continueItems.count {
+        let pct = continueItems[idx].progressPct ?? 0
+        cpItem.playbackProgress = CGFloat(max(0, min(1, pct)))
+      }
+      sections.append(CPListSection(items: cpItems, header: "Klausykite toliau", sectionIndexTitle: nil))
+    }
+    sections.append(CPListSection(items: latestRecommendedItems, header: "Siūlome", sectionIndexTitle: nil))
+    template.updateSections(sections)
   }
 
   private func onPlayableItemSelected(from selectedItem: CarPlayItem) {
