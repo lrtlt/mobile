@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 16,
     gap: 8,
     borderTopWidth: StyleSheet.hairlineWidth,
   },
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap' as const,
   },
   title: {
-    fontSize: 16,
+    fontSize: 17,
   },
   recommendedBadge: {
     borderWidth: 1,
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   latestArticleDate: {
-    fontSize: 13,
+    fontSize: 13.5,
   },
   right: {
     flexDirection: 'row',
@@ -157,6 +157,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   label: {
-    fontSize: 14,
+    fontSize: 15,
   },
 });

@@ -4,10 +4,13 @@ import {Text} from '../../../components';
 import {useTheme} from '../../../Theme';
 import SubscriptionRow from '../components/SubscriptionRow';
 import {useFollowedSubscriptions} from './useFollowedSubscriptions';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const FollowedTab: React.FC = () => {
   const {colors} = useTheme();
   const {listData, isLoading, toggleItem} = useFollowedSubscriptions();
+
+  const insets = useSafeAreaInsets();
 
   if (isLoading) {
     return (
@@ -35,7 +38,7 @@ const FollowedTab: React.FC = () => {
           onToggle={(value) => toggleItem(item, value)}
         />
       )}
-      contentContainerStyle={styles.list}
+      contentContainerStyle={{...styles.list, paddingBottom: insets.bottom}}
     />
   );
 };
