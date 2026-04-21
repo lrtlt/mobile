@@ -1550,7 +1550,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - NitroModules (0.35.1):
+  - NitroModules (0.35.4):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2945,7 +2945,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-pager-view (8.0.0):
+  - react-native-pager-view (8.0.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3035,12 +3035,12 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-theoplayer (10.13.0):
+  - react-native-theoplayer (11.0.0):
     - React-Core
-    - THEOplayer-Connector-SideloadedSubtitle (~> 10.12)
-    - THEOplayer-Integration-GoogleCast (~> 10.12)
-    - THEOplayer-Integration-THEOlive (~> 10.12)
-    - THEOplayerSDK-core (~> 10.10)
+    - THEOplayer-Connector-SideloadedSubtitle (~> 11.0)
+    - THEOplayer-Integration-GoogleCast (~> 11.0)
+    - THEOplayer-Integration-THEOlive (~> 11.0)
+    - THEOplayerSDK-core (~> 11.0)
   - react-native-webview (13.16.1):
     - hermes-engine
     - RCTRequired
@@ -3606,7 +3606,7 @@ PODS:
     - ReactNativeDependencies
     - RNFBApp
     - Yoga
-  - RNGestureHandler (2.30.1):
+  - RNGestureHandler (2.31.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3770,7 +3770,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNShare (12.2.5):
+  - RNShare (12.2.6):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3791,7 +3791,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNSVG (15.15.3):
+  - RNSVG (15.15.4):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3811,9 +3811,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
-    - RNSVG/common (= 15.15.3)
+    - RNSVG/common (= 15.15.4)
     - Yoga
-  - RNSVG/common (15.15.3):
+  - RNSVG/common (15.15.4):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3919,20 +3919,20 @@ PODS:
     - DSFRegex (~> 3.3.1)
     - TinyCSV (~> 0.6.1)
   - SwiftUIIntrospect (1.3.0)
-  - THEOplayer-Connector-SideloadedSubtitle (10.12.1):
+  - THEOplayer-Connector-SideloadedSubtitle (11.0.1):
     - Swifter (= 1.5.0)
     - SwiftSubtitles (= 0.9.1)
-    - THEOplayerSDK-core (~> 10.7)
-  - THEOplayer-Integration-GoogleCast (10.12.1):
-    - THEOplayer-Integration-GoogleCast/Base (= 10.12.1)
-    - THEOplayer-Integration-GoogleCast/Dependencies (= 10.12.1)
-  - THEOplayer-Integration-GoogleCast/Base (10.12.1)
-  - THEOplayer-Integration-GoogleCast/Dependencies (10.12.1):
+    - THEOplayerSDK-core (~> 11)
+  - THEOplayer-Integration-GoogleCast (11.0.0):
+    - THEOplayer-Integration-GoogleCast/Base (= 11.0.0)
+    - THEOplayer-Integration-GoogleCast/Dependencies (= 11.0.0)
+  - THEOplayer-Integration-GoogleCast/Base (11.0.0)
+  - THEOplayer-Integration-GoogleCast/Dependencies (11.0.0):
     - google-cast-sdk-dynamic-xcframework (~> 4.8)
-  - THEOplayer-Integration-THEOlive (10.12.1):
-    - THEOplayer-Integration-THEOlive/Base (= 10.12.1)
-  - THEOplayer-Integration-THEOlive/Base (10.12.1)
-  - THEOplayerSDK-core (10.12.1)
+  - THEOplayer-Integration-THEOlive (11.0.0):
+    - THEOplayer-Integration-THEOlive/Base (= 11.0.0)
+  - THEOplayer-Integration-THEOlive/Base (11.0.0)
+  - THEOplayerSDK-core (11.0.0)
   - TinyCSV (0.6.1)
   - Yoga (0.0.0)
 
@@ -4344,7 +4344,7 @@ SPEC CHECKSUMS:
   MMKVCore: 3d16ce9f7d411e135020915fde98a056859a1efa
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   NitroMmkv: ec5ea9bb8390e02653c2e46d7b87e307e9e360b6
-  NitroModules: 1a806015521a13eb013743eb6edb825fe21e057a
+  NitroModules: 8a6c66ded5536083561482c07889c676f3f9ceaf
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   RCTDeprecation: 7489702d717ceea80e271eeacb3fbca39fa3c056
@@ -4385,10 +4385,10 @@ SPEC CHECKSUMS:
   react-native-config: 325041b048b990b5308a15560c6d757fc250bf1c
   react-native-google-cast: 872b05bf12f7db32c2f66818fdd5406474af25f1
   react-native-netinfo: adec161a2fc40d327f2c1bab7d8c57a91943ab74
-  react-native-pager-view: 3940c389055f6b9b1d2559a73725765f9fdf61bc
+  react-native-pager-view: 58cdd1bcb4a219738176542ebd57d37dc9421a77
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 45435943d06e262f946fcc3f4c4de6bfd0c9cbe1
-  react-native-theoplayer: aa7cef5f66ff530bc71f98725583dc17cf88d3c1
+  react-native-theoplayer: 4c333a6c32ca163b5251bb8bcb56dd3374f46536
   react-native-webview: cac57e5c9caaac09627c910efb968bac54d5b4dd
   React-NativeModulesApple: 1eade1fa3a182fbfe8a0ffe80833daf35e5161de
   React-networking: cc690cd054fc4c3a4a4804a188238c5b443d11ea
@@ -4432,13 +4432,13 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: 8391f2b507cbf8c2dfa7a626937a6d3c9371a7a4
   RNFBFirestore: b6984f241fcab2fe438528a641918f4d6981939b
   RNFBMessaging: f19b9069ed9787119fb55f26d3c02319d7811c78
-  RNGestureHandler: dc2810a1d8222dabd6adf901f2745f352dc82d63
+  RNGestureHandler: 242d92132af8f48b021baaa437a715ceef574f96
   RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
   RNPermissions: be1ce310c8b673d404886f5dcbfdeaf1721c6941
   RNReanimated: 160413ac24aa8876337bbdc53c03276e3a5765ab
   RNScreens: d0b84395f70841b48de7af26e45704ed4a24c62e
-  RNShare: bb7ffdb0a5785f9b67c4d76c78c71631f914256d
-  RNSVG: 8e3f7761226162bf86d7420a0ba9445f3f0377f3
+  RNShare: 4db97500d742393e28dbf603c5e858b76222653b
+  RNSVG: 194bee0b443d3ea8ca41c86c657edcaf64f00f35
   RNWorklets: 1ea54706807e7780b6aa67dab0f11e5c73cfeeef
   SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
   SDWebImageAVIFCoder: afe194a084e851f70228e4be35ef651df0fc5c57
@@ -4448,10 +4448,10 @@ SPEC CHECKSUMS:
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   SwiftSubtitles: c659af19d710a2946779015464c0577d07fe4666
   SwiftUIIntrospect: fee9aa07293ee280373a591e1824e8ddc869ba5d
-  THEOplayer-Connector-SideloadedSubtitle: 6a1db6b05b6b8add7e0bd0e685bb46e7416eec02
-  THEOplayer-Integration-GoogleCast: e67b752bf83cc1f65abd1c5305f0ea0c5456fab7
-  THEOplayer-Integration-THEOlive: a69cb1783447f838d74a0f8cd63c53e53f5b0511
-  THEOplayerSDK-core: 338706ae0be7a471c587493cfc4ee6cae0f1cf07
+  THEOplayer-Connector-SideloadedSubtitle: bfbe2f5abcc28677f3887b752811a5a115c90b7d
+  THEOplayer-Integration-GoogleCast: bdc8ffaa54fec3d9f511300f4133fc38aaf12826
+  THEOplayer-Integration-THEOlive: d0ca496ec0a3326b615f108c0b953b712ca5c574
+  THEOplayerSDK-core: e6505e392563404145fdb2d418781c6260860643
   TinyCSV: fd6228edbcf1c07466ac34b76dac5e052143eaba
   Yoga: 9e495ad6f457c4ff504a8328981496b5cf41dd7f
 
