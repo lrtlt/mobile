@@ -57,7 +57,7 @@ class CarPlayService {
   /// Fetches watch-history entries from backend, hydrates with article metadata,
   /// caches the result in memory, and posts a `watchHistoryUpdated` notification.
   @discardableResult
-  func refreshContinuePlaying(count: Int = 4) async -> [CarPlayItem] {
+  func refreshContinuePlaying(count: Int = 20) async -> [CarPlayItem] {
     guard isLoggedIn() else {
       continuePlayingCache = []
       NotificationCenter.default.post(name: .watchHistoryUpdated, object: nil)

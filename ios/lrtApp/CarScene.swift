@@ -319,12 +319,15 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     Task { await applyRecommendedSections() }
   }
 
+  private static let continuePlayingVisibleCount = 3
+
   private func applyRecommendedSections() async {
     guard let template = recommendedTemplate else { return }
     let continueItems = CarPlayService.shared.cachedContinuePlaying
     var sections: [CPListSection] = []
     if !continueItems.isEmpty, let uiManager = uiManager {
-      let cpItems = await uiManager.createListItems(from: continueItems) { [weak self] selected in
+      let visibleItems = Array(continueItems.prefix(Self.continuePlayingVisibleCount))
+      let cpItems = await uiManager.createListItems(from: visibleItems) { [weak self] selected in
         guard let self = self else { return }
         self.playlist.currentPlaylist = continueItems
         if let idx = continueItems.firstIndex(where: { $0.streamUrl == selected.streamUrl }) {
@@ -332,14 +335,46 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
         }
         self.onPlayableItemSelected(from: selected)
       }
-      for (idx, cpItem) in cpItems.enumerated() where idx < continueItems.count {
-        let pct = continueItems[idx].progressPct ?? 0
+      for (idx, cpItem) in cpItems.enumerated() where idx < visibleItems.count {
+        let pct = visibleItems[idx].progressPct ?? 0
         cpItem.playbackProgress = CGFloat(max(0, min(1, pct)))
       }
-      sections.append(CPListSection(items: cpItems, header: "Klausykite toliau", sectionIndexTitle: nil))
+
+      var sectionItems = cpItems
+      if continueItems.count > Self.continuePlayingVisibleCount {
+        let moreItem = CPListItem(text: "Daugiau", detailText: nil)
+        moreItem.accessoryType = .disclosureIndicator
+        moreItem.handler = { [weak self] _, completion in
+          Task { [weak self] in
+            await self?.showAllContinuePlaying(items: continueItems)
+            completion()
+          }
+        }
+        sectionItems.append(moreItem)
+      }
+
+      sections.append(CPListSection(items: sectionItems, header: "Klausykite toliau", sectionIndexTitle: nil))
     }
     sections.append(CPListSection(items: latestRecommendedItems, header: "Siūlome", sectionIndexTitle: nil))
     template.updateSections(sections)
+  }
+
+  private func showAllContinuePlaying(items: [CarPlayItem]) async {
+    guard let uiManager = uiManager, let interfaceController = interfaceController else { return }
+    let cpItems = await uiManager.createListItems(from: items) { [weak self] selected in
+      guard let self = self else { return }
+      self.playlist.currentPlaylist = items
+      if let idx = items.firstIndex(where: { $0.streamUrl == selected.streamUrl }) {
+        self.playlist.currentIndex = idx
+      }
+      self.onPlayableItemSelected(from: selected)
+    }
+    for (idx, cpItem) in cpItems.enumerated() where idx < items.count {
+      let pct = items[idx].progressPct ?? 0
+      cpItem.playbackProgress = CGFloat(max(0, min(1, pct)))
+    }
+    let template = CPListTemplate(title: "Klausykite toliau", sections: [CPListSection(items: cpItems)])
+    interfaceController.pushTemplate(template, animated: true, completion: nil)
   }
 
   private func onPlayableItemSelected(from selectedItem: CarPlayItem) {
