@@ -92,6 +92,9 @@ const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
 
                 source = {
                   html: formattedHTML,
+                  // Provide a real https origin so embeds (e.g. YouTube) receive a valid
+                  // Referer/Origin and don't fail with e.g. YouTube Error 153.
+                  baseUrl: 'https://www.lrt.lt',
                 };
               }
             }
