@@ -9,6 +9,7 @@ const SeekBar: React.FC = () => {
   const {
     player,
     actions: {seek},
+    state: {seekerStart, seekerEnd},
   } = usePlayer();
 
   const {
@@ -20,8 +21,6 @@ const SeekBar: React.FC = () => {
   const [scrubbing, setScrubbing] = useState(false);
   const [seekerPosition, setSeekerPosition] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-  const [seekerStart, setSeekerStart] = useState(0);
-  const [seekerEnd, setSeekerEnd] = useState(0);
 
   const seekerWidth = useRef(0);
   const offset = useRef(0);
@@ -35,26 +34,13 @@ const SeekBar: React.FC = () => {
       }
     };
 
-    const handleLoadedMetadata = () => {
-      const start = (player.seekable[0]?.start ?? 1) / 1000;
-      const end = (player.seekable[0]?.end ?? 1) / 1000;
-      setSeekerStart(start);
-      setSeekerEnd(end);
-    };
-
     player.addEventListener(PlayerEventType.TIME_UPDATE, handleTimeUpdate);
-    player.addEventListener(PlayerEventType.LOADED_METADATA, handleLoadedMetadata);
 
     // Set initial values
     setCurrentTime(player.currentTime / 1000);
-    const start = (player.seekable[0]?.start ?? 1) / 1000;
-    const end = (player.seekable[0]?.end ?? 1) / 1000;
-    setSeekerStart(start);
-    setSeekerEnd(end);
 
     return () => {
       player.removeEventListener(PlayerEventType.TIME_UPDATE, handleTimeUpdate);
-      player.removeEventListener(PlayerEventType.LOADED_METADATA, handleLoadedMetadata);
     };
   }, [player, scrubbing]);
 
@@ -98,7 +84,11 @@ const SeekBar: React.FC = () => {
         const newPosition = setPosition(positionX);
         const normalizedPosition = Math.max(0, Math.min(seekerWidth.current, newPosition));
         const percentage = normalizedPosition / seekerWidth.current;
-        const newTime = (seekerEnd - seekerStart) * percentage;
+        // Seek to an absolute time within the seekable window. For live streams
+        // `seekerStart` is non-zero, so we must offset by it, otherwise we'd
+        // seek to a time outside the seekable range and iOS would snap back to
+        // the live edge.
+        const newTime = seekerStart + (seekerEnd - seekerStart) * percentage;
 
         seek(newTime);
 

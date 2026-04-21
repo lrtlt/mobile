@@ -35,19 +35,12 @@ const usePlayerState = ({player}: UsePlayerStateParams) => {
   useEffect(() => {
     if (!player) return;
 
-    const handleTimeUpdate = () => {
-      const curr = (player?.currentTime ?? 0) / 1000;
-      const dur = (player.duration === Infinity ? 0 : player.duration ?? 0) / 1000;
-      const end = (player.seekable[0]?.end ?? 1) / 1000;
-      const isLiveStream = isNaN(dur) || !isFinite(dur) || dur <= 0;
-      const isOnStart = !isLiveStream && curr <= 1;
-      setIsOnStart(isOnStart);
-      const isEnding = !isLiveStream && end - curr <= 1;
-      setIsEnding(isEnding);
-      setIsBuffering(player.seeking && !player.paused);
-    };
-
-    const handleLoadedData = () => {
+    // Compute seekable/duration/isLiveStream/isSeekerEnabled from the player's
+    // current state. For live streams the seekable window grows over time, so
+    // we need to re-evaluate this on TIME_UPDATE as well, not only on
+    // LOADED_DATA / LOADED_METADATA. Otherwise the seekbar would be hidden
+    // because the DVR window wasn't reported yet at load time on iOS.
+    const syncSeekable = () => {
       const start = (player.seekable[0]?.start ?? 1) / 1000;
       const end = (player.seekable[0]?.end ?? 1) / 1000;
       const dur = (player.duration === Infinity ? 0 : player.duration ?? 0) / 1000;
@@ -55,11 +48,24 @@ const usePlayerState = ({player}: UsePlayerStateParams) => {
       setSeekerStart(start);
       setSeekerEnd(end);
       setDuration(dur);
-      const isLiveStream = isNaN(dur) || !isFinite(dur) || dur <= 0;
-      setIsLiveStream(isLiveStream);
-      const isSeekerEnabled = (!isLiveStream || end - start > 60) && !isNaN(player.currentTime);
+      const isLive = isNaN(dur) || !isFinite(dur) || dur <= 0;
+      setIsLiveStream(isLive);
+      const enabled = (!isLive || end - start > 60) && !isNaN(player.currentTime);
+      setIsSeekerEnabled(enabled);
+    };
 
-      setIsSeekerEnabled(isSeekerEnabled);
+    const handleTimeUpdate = () => {
+      const curr = (player?.currentTime ?? 0) / 1000;
+      const dur = (player.duration === Infinity ? 0 : player.duration ?? 0) / 1000;
+      const end = (player.seekable[0]?.end ?? 1) / 1000;
+      const isLive = isNaN(dur) || !isFinite(dur) || dur <= 0;
+      const isOnStart = !isLive && curr <= 1;
+      setIsOnStart(isOnStart);
+      const isEnding = !isLive && end - curr <= 1;
+      setIsEnding(isEnding);
+      setIsBuffering(player.seeking && !player.paused);
+      // For live streams, keep the seekable window fresh as it advances.
+      syncSeekable();
     };
 
     const handleFullScreenChange = () => {
@@ -78,31 +84,26 @@ const usePlayerState = ({player}: UsePlayerStateParams) => {
     player.addEventListener(PlayerEventType.PAUSE, handlePause);
     player.addEventListener(PlayerEventType.VOLUME_CHANGE, handleVolumeChange);
     player.addEventListener(PlayerEventType.TIME_UPDATE, handleTimeUpdate);
-    player.addEventListener(PlayerEventType.LOADED_DATA, handleLoadedData);
+    player.addEventListener(PlayerEventType.LOADED_DATA, syncSeekable);
+    player.addEventListener(PlayerEventType.LOADED_METADATA, syncSeekable);
+    player.addEventListener(PlayerEventType.DURATION_CHANGE, syncSeekable);
     player.addEventListener(PlayerEventType.PRESENTATIONMODE_CHANGE, handleFullScreenChange);
     player.addEventListener(PlayerEventType.SEEKING, handleSeeking);
 
     // Set initial values
-    const start = (player.seekable[0]?.start ?? 1) / 1000;
-    const end = (player.seekable[0]?.end ?? 1) / 1000;
-    const dur = (player.duration === Infinity ? 0 : player.duration ?? 0) / 1000;
-    setSeekerStart(start);
-    setSeekerEnd(end);
-    setDuration(dur);
+    syncSeekable();
     setIsMuted(player.muted);
     setIsPaused(player.paused);
     setIsFullScreen(player.presentationMode === PresentationMode.fullscreen);
-    const isLiveStream = isNaN(dur) || !isFinite(dur) || dur <= 0;
-    setIsLiveStream(isLiveStream);
-    const isSeekerEnabled = (!isLiveStream || end - start > 60) && !isNaN(player.currentTime);
-    setIsSeekerEnabled(isSeekerEnabled);
 
     return () => {
       player.removeEventListener(PlayerEventType.PLAY, handlePlay);
       player.removeEventListener(PlayerEventType.PAUSE, handlePause);
       player.removeEventListener(PlayerEventType.VOLUME_CHANGE, handleVolumeChange);
       player.removeEventListener(PlayerEventType.TIME_UPDATE, handleTimeUpdate);
-      player.removeEventListener(PlayerEventType.LOADED_DATA, handleLoadedData);
+      player.removeEventListener(PlayerEventType.LOADED_DATA, syncSeekable);
+      player.removeEventListener(PlayerEventType.LOADED_METADATA, syncSeekable);
+      player.removeEventListener(PlayerEventType.DURATION_CHANGE, syncSeekable);
       player.removeEventListener(PlayerEventType.PRESENTATIONMODE_CHANGE, handleFullScreenChange);
       player.removeEventListener(PlayerEventType.SEEKING, handleSeeking);
     };

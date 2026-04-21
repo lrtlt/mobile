@@ -141,16 +141,22 @@ export const PlayerContextProvider: React.FC<PlayerContextProviderProps> = ({
 
       seek: (time: number) => {
         if (player) {
-          player.currentTime = time * 1000;
-          castClient?.seek({position: time});
+          const seekerStart = (player.seekable[0]?.start ?? 0) / 1000;
+          const seekerEnd = (player.seekable[0]?.end ?? Infinity) / 1000;
+          const clamped = Math.max(seekerStart, Math.min(time, seekerEnd));
+          player.currentTime = clamped * 1000;
+          castClient?.seek({position: clamped});
         }
         resetControlsTimeout();
       },
 
       seekBy: (delta: number) => {
         if (player) {
-          const newTime = player.currentTime + delta * 1000;
-          player.currentTime = newTime;
+          const currentTime = player.currentTime / 1000;
+          const seekerStart = (player.seekable[0]?.start ?? 0) / 1000;
+          const seekerEnd = (player.seekable[0]?.end ?? Infinity) / 1000;
+          const target = Math.max(seekerStart, Math.min(currentTime + delta, seekerEnd));
+          player.currentTime = target * 1000;
           castClient?.seek({position: delta, relative: true});
         }
         resetControlsTimeout();
