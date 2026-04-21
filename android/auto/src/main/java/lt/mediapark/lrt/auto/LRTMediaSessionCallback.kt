@@ -93,6 +93,38 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         }
     }
 
+    private suspend fun fetchContinuePlaying(): List<lt.mediapark.lrt.auto.data.PlaylistItem> {
+        if (!authManager.isLoggedIn()) return emptyList()
+        return try {
+            val token = authManager.getAccessToken()
+            repository.refreshContinuePlaying(token)
+        } catch (e: Exception) {
+            Log.e(TAG, "fetchContinuePlaying failed", e)
+            emptyList()
+        }
+    }
+
+    fun pushPlaybackProgress(entry: lt.mediapark.lrt.auto.data.WatchHistoryEntry) {
+        if (!authManager.isLoggedIn()) return
+        scope.launch {
+            try {
+                val token = authManager.getAccessToken()
+                Log.d(TAG, "pushPlaybackProgress: articleId=${entry.articleId} pos=${entry.positionSec}/${entry.durationSec} pct=${entry.progressPct} completed=${entry.completed}")
+                repository.pushPlaybackProgress(entry, token)
+            } catch (e: Exception) {
+                Log.e(TAG, "pushPlaybackProgress failed", e)
+            }
+        }
+    }
+
+    fun notifyContinuePlayingChanged() {
+        currentSession?.notifyChildrenChanged(
+            MediaItemTree.RECOMMENDED,
+            MediaItemTree.getChildren(MediaItemTree.RECOMMENDED).size,
+            null
+        )
+    }
+
     override fun onConnect(
         mediaSession: MediaSession,
         controller: MediaSession.ControllerInfo
@@ -134,12 +166,14 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         pageSize: Int,
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+        currentSession = session
 
         if (parentId == MediaItemTree.RECOMMENDED) {
             logAnalyticsEvent(browser.packageName, "android_auto_recommended_open")
             return submitBlocking {
                 val recommendedItems = repository.getRecommended()
-                MediaItemTree.setRecommendedItems(recommendedItems)
+                val continueItems = fetchContinuePlaying()
+                MediaItemTree.applyRecommendedSections(continueItems, recommendedItems)
                 LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
@@ -237,6 +271,26 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
         if (mediaItems.size == 1) {
             val item = mediaItems.first()
+
+            if (MediaItemTree.isContinuePlayingItem(item.mediaId)) {
+                val siblingsParent = if (MediaItemTree.isContinuePlayingAllItem(item.mediaId)) {
+                    MediaItemTree.CONTINUE_PLAYING_ALL
+                } else {
+                    MediaItemTree.RECOMMENDED
+                }
+                val siblings = MediaItemTree.getChildren(siblingsParent)
+                    .filter { MediaItemTree.isContinuePlayingItem(it.mediaId) }
+                    .mapNotNull { MediaItemTree.expandItem(it) }
+                val idx = siblings.indexOfFirst { it.mediaId == item.mediaId }.coerceAtLeast(0)
+                val startPos = MediaItemTree.getStartPositionMs(item.mediaId)
+                return Futures.immediateFuture(
+                    MediaSession.MediaItemsWithStartPosition(
+                        siblings,
+                        idx,
+                        if (startPositionMs > 0) startPositionMs else startPos
+                    )
+                )
+            }
 
             MediaItemTree.getSubscriptionEpisodeId(item.mediaId).let {
                 if (it > 0) {

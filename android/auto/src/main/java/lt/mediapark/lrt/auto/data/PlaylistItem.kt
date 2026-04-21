@@ -8,5 +8,8 @@ data class PlaylistItem (
     @SerializedName("content"   ) var content   : String? = null,
     @SerializedName("cover"     ) var cover     : String? = null,
     @SerializedName("streamUrl" ) var streamUrl : String? = null,
-    var channelId: Int? = null
+    @SerializedName("id"        ) var articleId : Int? = null,
+    var channelId: Int? = null,
+    var startPositionSec: Int? = null,
+    var progressPct: Double? = null
 )

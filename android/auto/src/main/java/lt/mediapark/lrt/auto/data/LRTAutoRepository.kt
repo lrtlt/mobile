@@ -20,6 +20,12 @@ class LRTAutoRepository(private val api: LRTAutoService) {
     private var subscriptionsLastFetchTime: Long = 0
     private var subscriptions: List<UserSubscription> = emptyList()
 
+    private var continuePlayingCache: List<PlaylistItem> = emptyList()
+    private val articleInfoCache: MutableMap<Int, PodcastEpisodeInfo> = mutableMapOf()
+
+    val cachedContinuePlaying: List<PlaylistItem>
+        get() = continuePlayingCache
+
     suspend fun getRecommended() = withContext(Dispatchers.IO) {
         if (System.currentTimeMillis() - recommendedLastFetchTime > CACHE_DURATION || recommended.isEmpty()) {
             try{
@@ -148,6 +154,78 @@ class LRTAutoRepository(private val api: LRTAutoService) {
         subscriptions = emptyList()
     }
 
+    suspend fun refreshContinuePlaying(accessToken: String, count: Int = 20): List<PlaylistItem> =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = api.getWatchHistory(
+                    "$WATCH_HISTORY_URL/audio/$count",
+                    "Bearer $accessToken"
+                )
+                val entries = response.list.sortedByDescending { it.updatedAt }
+                val items = hydrateEntries(entries)
+                continuePlayingCache = items
+                items
+            } catch (e: Exception) {
+                e.printStackTrace()
+                continuePlayingCache
+            }
+        }
+
+    suspend fun pushPlaybackProgress(entry: WatchHistoryEntry, accessToken: String) =
+        withContext(Dispatchers.IO) {
+            try {
+                api.pushWatchHistory(
+                    WATCH_HISTORY_URL,
+                    WatchHistoryPushRequest(listOf(entry)),
+                    "Bearer $accessToken"
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+    suspend fun deletePlaybackProgress(articleId: Int, accessToken: String) =
+        withContext(Dispatchers.IO) {
+            try {
+                api.deleteWatchHistory("$WATCH_HISTORY_URL/$articleId", "Bearer $accessToken")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+    fun clearContinuePlayingCache() {
+        continuePlayingCache = emptyList()
+    }
+
+    private suspend fun hydrateEntries(entries: List<WatchHistoryEntry>): List<PlaylistItem> {
+        entries.filter { articleInfoCache[it.articleId] == null }.forEach { entry ->
+            try {
+                val info = api.getPodcastEpisodeInfo(entry.articleId)?.info
+                if (info != null) articleInfoCache[entry.articleId] = info
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return entries.mapNotNull { entry ->
+            val info = articleInfoCache[entry.articleId] ?: return@mapNotNull null
+            val streamUrl = info.streamUrl
+            if (streamUrl.isNullOrEmpty()) return@mapNotNull null
+            val cover = info.mainPhoto?.path?.let {
+                "https://www.lrt.lt${it.replace("{WxH}", "393x221")}"
+            }
+            PlaylistItem(
+                title = info.title ?: "",
+                content = info.categoryTitle ?: "",
+                cover = cover,
+                streamUrl = streamUrl,
+                articleId = entry.articleId,
+                channelId = null,
+                startPositionSec = entry.positionSec,
+                progressPct = entry.progressPct
+            )
+        }
+    }
+
     private fun getCoverByChannelId(programItem: TvProgramItem): String {
         return when (programItem.channelId) {
             "1" -> "https://www.lrt.lt/images/app_logo/LTV1.png?v=2"
@@ -166,5 +244,6 @@ class LRTAutoRepository(private val api: LRTAutoService) {
         private const val CACHE_DURATION = 5 * 60 * 1000L // 5 minutes
         private const val NEWEST_CACHE_DURATION = 2 * 60 * 1000L // 2 minutes
         private const val PODCAST_CACHE_DURATION = 4 * 60 * 60 * 1000L // 4 hours
+        private const val WATCH_HISTORY_URL = "https://www.lrt.lt/servisai/dev-authrz/api/v1/user/watch-history"
     }
 }

@@ -31,6 +31,13 @@ data class PodcastEpisodeInfoResponse(
 )
 
 data class PodcastEpisodeInfo(
-    @SerializedName("id"        ) val id   : Int? = null,
-    @SerializedName("stream_url") val streamUrl : String? = null
+    @SerializedName("id"             ) val id            : Int? = null,
+    @SerializedName("stream_url"     ) val streamUrl     : String? = null,
+    @SerializedName("title"          ) val title         : String? = null,
+    @SerializedName("category_title" ) val categoryTitle : String? = null,
+    @SerializedName("main_photo"     ) val mainPhoto     : MainPhoto? = null
+)
+
+data class MainPhoto(
+    @SerializedName("path") val path: String? = null
 )

@@ -18,12 +18,14 @@ object MediaItemTree {
     private var titleMap: MutableMap<String, MediaItemNode> = mutableMapOf()
     private var isInitialized = false
 
-    private const val ROOT = "[root]"
+    const val ROOT = "[root]"
     const val RECOMMENDED = "[recommended]"
     const val LIVE = "[live]"
     const val NEWEST = "[newest]"
     const val PODCAST_CATEGORIES = "[podcast_categories]"
     const val SUBSCRIPTIONS = "[subscriptions]"
+    const val CONTINUE_PLAYING = "[continue_playing]"
+    const val CONTINUE_PLAYING_ALL = "[continue_playing_all]"
 
     private const val ITEM_PREFIX = "[item]"
     private const val PODCAST_PREFIX = "[podcast]"
@@ -31,6 +33,15 @@ object MediaItemTree {
     private const val SUBSCRIPTION_PREFIX = "[subscription]"
     private const val SUBSCRIPTION_EPISODE_PREFIX = "[subscription_episode]"
     const val EXTRA_CHANNEL_ID = "channel_id"
+    const val EXTRA_ARTICLE_ID = "article_id"
+    const val EXTRA_START_POSITION_SEC = "start_position_sec"
+    private const val CONTINUE_PLAYING_ITEM_PREFIX = "[continue_item]"
+    private const val CONTINUE_PLAYING_ALL_ITEM_PREFIX = "[continue_all_item]"
+    private const val CONTINUE_PLAYING_VISIBLE_COUNT = 3
+    private const val KEY_COMPLETION_STATUS = "android.media.extra.PLAYBACK_STATUS"
+    private const val KEY_COMPLETION_PERCENTAGE =
+        "android.media.extra.PLAYBACK_COMPLETION_PERCENTAGE"
+    private const val KEY_GROUP_TITLE = "android.media.browse.CONTENT_STYLE_GROUP_TITLE_HINT"
 
     private class MediaItemNode(val item: MediaItem) {
         val searchTitle = normalizeSearchText(item.mediaMetadata.title)
@@ -177,10 +188,79 @@ object MediaItemTree {
     }
 
 
-    fun setRecommendedItems(items: List<PlaylistItem>){
-        treeNodes[RECOMMENDED]!!.clearChildren()
-        items.forEach {
+    fun isContinuePlayingItem(mediaId: String): Boolean =
+        mediaId.startsWith(CONTINUE_PLAYING_ITEM_PREFIX) ||
+                mediaId.startsWith(CONTINUE_PLAYING_ALL_ITEM_PREFIX)
+
+    fun isContinuePlayingAllItem(mediaId: String): Boolean =
+        mediaId.startsWith(CONTINUE_PLAYING_ALL_ITEM_PREFIX)
+
+    private fun buildContinuePlayingItem(
+        source: PlaylistItem,
+        mediaId: String,
+        groupTitle: String?
+    ): MediaItem {
+        val extras = Bundle().apply {
+            source.articleId?.let { id -> putInt(EXTRA_ARTICLE_ID, id) }
+            source.startPositionSec?.let { pos -> putInt(EXTRA_START_POSITION_SEC, pos) }
+            val pct = (source.progressPct ?: 0.0).coerceIn(0.0, 1.0)
+            putDouble(KEY_COMPLETION_PERCENTAGE, pct)
+            if (groupTitle != null) putString(KEY_GROUP_TITLE, groupTitle)
+        }
+        return buildMediaItem(
+            title = source.title ?: "-",
+            mediaId = mediaId,
+            isPlayable = true,
+            isBrowsable = false,
+            mediaType = MediaMetadata.MEDIA_TYPE_PODCAST_EPISODE,
+            sourceUri = Uri.parse(source.streamUrl),
+            imageUri = source.cover?.let(Uri::parse),
+            extras = extras
+        )
+    }
+
+    fun applyRecommendedSections(
+        continueItems: List<PlaylistItem>,
+        recommendedItems: List<PlaylistItem>
+    ) {
+        val recommended = treeNodes[RECOMMENDED] ?: return
+        recommended.clearChildren()
+        treeNodes[CONTINUE_PLAYING_ALL]?.clearChildren()
+
+        val visible = continueItems.take(CONTINUE_PLAYING_VISIBLE_COUNT)
+        visible.forEach {
+            val mediaId = CONTINUE_PLAYING_ITEM_PREFIX + it.articleId
+            val item = buildContinuePlayingItem(it, mediaId, groupTitle = "Klausykite toliau")
+            treeNodes[mediaId] = MediaItemNode(item)
+            recommended.addChild(mediaId)
+        }
+
+        if (continueItems.size > CONTINUE_PLAYING_VISIBLE_COUNT) {
+            val moreFolder = buildMediaItem(
+                title = "Daugiau",
+                mediaId = CONTINUE_PLAYING_ALL,
+                isPlayable = false,
+                isBrowsable = true,
+                mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_MIXED,
+                extras = Bundle().apply { putString(KEY_GROUP_TITLE, "Klausykite toliau") }
+            )
+            val allNode = MediaItemNode(moreFolder)
+            treeNodes[CONTINUE_PLAYING_ALL] = allNode
+            continueItems.forEach {
+                val mediaId = CONTINUE_PLAYING_ALL_ITEM_PREFIX + it.articleId
+                val item = buildContinuePlayingItem(it, mediaId, groupTitle = null)
+                treeNodes[mediaId] = MediaItemNode(item)
+                allNode.addChild(mediaId)
+            }
+            recommended.addChild(CONTINUE_PLAYING_ALL)
+        }
+
+        recommendedItems.forEach {
             val mediaId = ITEM_PREFIX + it.streamUrl
+            val extras = Bundle().apply {
+                it.articleId?.let { id -> putInt(EXTRA_ARTICLE_ID, id) }
+                putString(KEY_GROUP_TITLE, "Siūlome")
+            }
             val item = buildMediaItem(
                 title = it.title ?: "-",
                 mediaId = mediaId,
@@ -188,7 +268,45 @@ object MediaItemTree {
                 isBrowsable = false,
                 mediaType = MediaMetadata.MEDIA_TYPE_NEWS,
                 sourceUri = Uri.parse(it.streamUrl),
-                imageUri = Uri.parse(it.cover)
+                imageUri = Uri.parse(it.cover),
+                extras = extras
+            )
+            treeNodes[mediaId] = MediaItemNode(item)
+            recommended.addChild(mediaId)
+            it.title?.let { t ->
+                titleMap[t.lowercase()] = treeNodes[mediaId]!!
+            }
+        }
+    }
+
+    fun getStartPositionMs(mediaId: String): Long {
+        val item = treeNodes[mediaId]?.item ?: return 0L
+        val sec = item.mediaMetadata.extras?.getInt(EXTRA_START_POSITION_SEC, 0) ?: 0
+        return sec.toLong() * 1000L
+    }
+
+    fun getArticleIdFromMediaId(mediaId: String): Int? {
+        val item = treeNodes[mediaId]?.item ?: return null
+        val id = item.mediaMetadata.extras?.getInt(EXTRA_ARTICLE_ID, -1) ?: -1
+        return if (id > 0) id else null
+    }
+
+    fun setRecommendedItems(items: List<PlaylistItem>){
+        treeNodes[RECOMMENDED]!!.clearChildren()
+        items.forEach {
+            val mediaId = ITEM_PREFIX + it.streamUrl
+            val extras = it.articleId?.let { id ->
+                Bundle().apply { putInt(EXTRA_ARTICLE_ID, id) }
+            }
+            val item = buildMediaItem(
+                title = it.title ?: "-",
+                mediaId = mediaId,
+                isPlayable = true,
+                isBrowsable = false,
+                mediaType = MediaMetadata.MEDIA_TYPE_NEWS,
+                sourceUri = Uri.parse(it.streamUrl),
+                imageUri = Uri.parse(it.cover),
+                extras = extras
             )
             treeNodes[mediaId] = MediaItemNode(item)
             treeNodes[RECOMMENDED]!!.addChild(mediaId)
@@ -202,6 +320,9 @@ object MediaItemTree {
         treeNodes[NEWEST]!!.clearChildren()
         items.forEach {
             val mediaId = ITEM_PREFIX + it.streamUrl
+            val extras = it.articleId?.let { id ->
+                Bundle().apply { putInt(EXTRA_ARTICLE_ID, id) }
+            }
             val item = buildMediaItem(
                 title = it.title ?: "-",
                 mediaId = mediaId,
@@ -209,7 +330,8 @@ object MediaItemTree {
                 isBrowsable = false,
                 mediaType = MediaMetadata.MEDIA_TYPE_NEWS,
                 sourceUri = Uri.parse(it.streamUrl),
-                imageUri = Uri.parse(it.cover)
+                imageUri = Uri.parse(it.cover),
+                extras = extras
             )
             treeNodes[mediaId] = MediaItemNode(item)
             treeNodes[NEWEST]!!.addChild(mediaId)
@@ -274,13 +396,17 @@ object MediaItemTree {
 
         episodes.forEach {
             val mediaId = PODCAST_EPISODE_PREFIX + it.id
+            val extras = it.id?.let { id ->
+                Bundle().apply { putInt(EXTRA_ARTICLE_ID, id) }
+            }
             val item = buildMediaItem(
                 title = it.title ?: "-",
                 mediaId = mediaId,
                 isPlayable = true,
                 isBrowsable = false,
                 mediaType = MediaMetadata.MEDIA_TYPE_PODCAST_EPISODE,
-                imageUri = Uri.parse("https://lrt.lt${it.imgPathPrefix}$imgSize${it.imgPathPostfix}")
+                imageUri = Uri.parse("https://lrt.lt${it.imgPathPrefix}$imgSize${it.imgPathPostfix}"),
+                extras = extras
             )
             treeNodes[mediaId] = MediaItemNode(item)
             treeNodes[parentId]?.addChild(mediaId)
@@ -341,13 +467,17 @@ object MediaItemTree {
 
         episodes.forEach {
             val mediaId = SUBSCRIPTION_EPISODE_PREFIX + it.id
+            val extras = it.id?.let { id ->
+                Bundle().apply { putInt(EXTRA_ARTICLE_ID, id) }
+            }
             val item = buildMediaItem(
                 title = it.title ?: "-",
                 mediaId = mediaId,
                 isPlayable = true,
                 isBrowsable = false,
                 mediaType = MediaMetadata.MEDIA_TYPE_PODCAST_EPISODE,
-                imageUri = Uri.parse("https://lrt.lt${it.imgPathPrefix}$imgSize${it.imgPathPostfix}")
+                imageUri = Uri.parse("https://lrt.lt${it.imgPathPrefix}$imgSize${it.imgPathPostfix}"),
+                extras = extras
             )
             treeNodes[mediaId] = MediaItemNode(item)
             treeNodes[parentId]?.addChild(mediaId)
