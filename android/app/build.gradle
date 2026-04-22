@@ -125,6 +125,16 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
 //Uncomment if problems with kotlin versions
 //    packagingOptions {
 //        exclude "META-INF/annotation-experimental_release.kotlin_module"
@@ -146,9 +156,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-    
-    //Uncomment if problems with building signed apk / bundle
-    //coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
+    //Required by theo player v11+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 }
 
 def safeExtGet(prop, fallback) {
