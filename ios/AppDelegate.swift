@@ -38,11 +38,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       return
     }
 
-    //Prepare launchOptions if application launched from Universal Link
+    //Prepare launchOptions if application launched from a Universal Link or a custom URL scheme
     var launchOptions: [AnyHashable: Any] = [:]
-    let launchUrl = connectionOptions?.userActivities.first?.webpageURL
-    if launchUrl != nil {
-      launchOptions = [UIApplication.LaunchOptionsKey.url: launchUrl ?? ""]
+    if let universalLinkUrl = connectionOptions?.userActivities.first?.webpageURL {
+      launchOptions[UIApplication.LaunchOptionsKey.url] = universalLinkUrl
+    } else if let schemeUrl = connectionOptions?.urlContexts.first?.url {
+      launchOptions[UIApplication.LaunchOptionsKey.url] = schemeUrl
     }
 
     let delegate = ReactNativeDelegate()
