@@ -121,7 +121,9 @@ const ArticleLiveFeed: React.FC<React.PropsWithChildren<Props>> = ({id}) => {
           ))}
         </View>
       ) : null}
-      <MoreArticlesButton onPress={() => setItemCount((count) => count + ITEM_COUNT_INCREMENT)} />
+      {state.feed && itemCount < state.feed['feed-items'].length ? (
+        <MoreArticlesButton onPress={() => setItemCount((count) => count + ITEM_COUNT_INCREMENT)} />
+      ) : null}
     </View>
   );
 };
