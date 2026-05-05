@@ -260,8 +260,7 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
       mediaType={mediaType}
       title={title}
       poster={poster}
-      controlsEnabled={!!controls || isFullScreen}
-    >
+      controlsEnabled={!!controls || isFullScreen}>
       <View style={{...styles.container, aspectRatio}}>
         <PlayerFlingHandler>
           <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady}>

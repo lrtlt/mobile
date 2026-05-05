@@ -43,12 +43,12 @@ const MediaControls: React.FC<React.PropsWithChildren<Props>> = ({
   const visible = enabled && visibility.visible;
 
   if (!visible) {
-    return <Pressable style={showPressableStyle} onPressIn={showControls} />;
+    return <Pressable style={showPressableStyle} importantForAccessibility="no" onPressIn={showControls} />;
   } else {
     return (
       <Animated.View style={containerStyle} entering={FadeIn.duration(400)} exiting={FadeOut.duration(400)}>
         <Overlay style={StyleSheet.absoluteFill} />
-        <Pressable style={hidePressableStyle} onPressIn={hideControls} />
+        <Pressable style={hidePressableStyle} importantForAccessibility="no" onPressIn={hideControls} />
         <Title title={title} />
         <CenterButtons />
 

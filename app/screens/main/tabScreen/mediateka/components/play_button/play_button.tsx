@@ -13,6 +13,8 @@ const PlayButton: React.FC<PropsWithChildren<Props>> = ({style, onPress}) => {
   const {colors} = useTheme();
   return (
     <TouchableDebounce
+      importantForAccessibility="no"
+      accessibilityLabel="Groti"
       style={[
         styles.playButton,
         {

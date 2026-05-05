@@ -94,8 +94,7 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
       style={{
         marginHorizontal: PADDING + 4,
         marginVertical: PADDING,
-      }}
-    >
+      }}>
       <View
         style={{
           ...styles.layout,
@@ -105,17 +104,15 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
           padding: PADDING,
           gap: PADDING,
           borderColor: colors.border,
-        }}
-      >
+        }}>
         <View
           style={[
             styles.videoContainer,
             {
               aspectRatio: playerAspectRatio,
             },
-          ]}
-        >
-          <Pressable style={StyleSheet.absoluteFill} onPress={handleFullScreen}>
+          ]}>
+          <Pressable style={StyleSheet.absoluteFill} onPress={handleFullScreen} accessibilityLabel="Grotuvas">
             <TheoMediaPlayer
               key={mediaData.uri}
               isLiveStream={!!mediaData.isLiveStream}
@@ -150,25 +147,33 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-              }}
-            >
-              <TouchableDebounce onPress={onPrevious} hitSlop={12}>
+              }}>
+              <TouchableDebounce accessibilityLabel="Ankstesnis" onPress={onPrevious} hitSlop={12}>
                 <IconPlayerPrevious size={22} color={colors.darkIcon + (onPrevious ? '' : '33')} />
               </TouchableDebounce>
-              <TouchableDebounce onPress={() => handleSeekBy(-10)} hitSlop={12}>
+              <TouchableDebounce
+                accessibilityLabel="Atgal 10 sekundžių"
+                onPress={() => handleSeekBy(-10)}
+                hitSlop={12}>
                 <IconPlayerRewind size={22} color={colors.darkIcon} />
               </TouchableDebounce>
-              <TouchableDebounce onPress={handlePlayPause} hitSlop={12}>
+              <TouchableDebounce
+                accessibilityLabel={isPlaying ? 'Pauzė' : 'Groti'}
+                onPress={handlePlayPause}
+                hitSlop={12}>
                 {isPlaying ? (
                   <IconPlayerPauseV2 size={22} color={colors.playerIcons} />
                 ) : (
                   <IconPlayerPlayV2 size={22} color={colors.playerIcons} />
                 )}
               </TouchableDebounce>
-              <TouchableDebounce onPress={() => handleSeekBy(10)} hitSlop={12}>
+              <TouchableDebounce
+                accessibilityLabel="Į priekį 10 sekundžių"
+                onPress={() => handleSeekBy(10)}
+                hitSlop={12}>
                 <IconPlayerForward size={22} color={colors.darkIcon} />
               </TouchableDebounce>
-              <TouchableDebounce onPress={onNext} hitSlop={12}>
+              <TouchableDebounce accessibilityLabel="Kitas" onPress={onNext} hitSlop={12}>
                 <IconPlayerNext size={22} color={colors.darkIcon + (onNext ? '' : '33')} />
               </TouchableDebounce>
             </View>
@@ -179,8 +184,7 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   gap: 4,
-                }}
-              >
+                }}>
                 <PlayerSekBar style={{width: '100%'}} player={player} />
                 {mediaData?.isLiveStream ? null : <PlayerPlaybackRatio player={player} />}
               </View>
@@ -189,7 +193,11 @@ const MiniPlayerAudio: React.FC<React.PropsWithChildren<Props>> = ({onEnded, onN
         </View>
       </View>
       <View style={{...styles.closeButttonContainer, borderColor: colors.border}}>
-        <TouchableDebounce onPress={close} hitSlop={12}>
+        <TouchableDebounce
+          accessibilityLabel="Uždaryti grotuvą"
+          accessibilityHint="Uždaryti mini grotuvą"
+          onPress={close}
+          hitSlop={12}>
           <IconPlayerClose size={18} color={colors.darkIcon} />
         </TouchableDebounce>
       </View>

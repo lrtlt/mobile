@@ -170,7 +170,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           onPress={async () => {
             navigation.navigate('User', {instantLogin: false});
           }}
-          accessibilityLabel="Nustatymai"
+          accessibilityLabel="Vartotojo profilis"
           accessibilityHint="Atidaryti nustatymų ekraną">
           {user ? (
             <UserAvatar size={dim.appBarIconSize} />

@@ -128,8 +128,12 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
             style={styles.bottomScrollView}
             contentContainerStyle={styles.bottomList}>
             {articles.map((item, index) => (
-              <TouchableDebounce key={item.id} onPress={() => handleItemPress(index)}>
-                <View style={[styles.thumbnailContainer, getAnimatedStyle(index, index === selectedIndexSafe)]}>
+              <TouchableDebounce
+                key={item.id}
+                accessibilityLabel={item.title}
+                onPress={() => handleItemPress(index)}>
+                <View
+                  style={[styles.thumbnailContainer, getAnimatedStyle(index, index === selectedIndexSafe)]}>
                   <FastImage
                     source={{
                       uri: buildImageUri(

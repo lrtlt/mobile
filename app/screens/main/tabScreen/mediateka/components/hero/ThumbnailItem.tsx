@@ -37,7 +37,7 @@ const ThumbnailItem: React.FC<ThumbnailItemProps> = ({item, index, isSelected, o
   }, [index, onPress]);
 
   return (
-    <TouchableDebounce onPress={handlePress}>
+    <TouchableDebounce onPress={handlePress} accessibilityLabel={`Žiūrėti: ${item.title}`}>
       <Animated.View style={[styles.container, animatedStyle]}>
         <FastImage
           source={{

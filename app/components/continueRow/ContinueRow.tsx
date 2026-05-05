@@ -89,7 +89,10 @@ const ContinueRow: React.FC<Props> = ({mediaType}) => {
             <TouchableDebounce
               style={styles.removeButton}
               onPress={() => onRemovePress(item)}
-              hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}>
+              hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}
+              accessibilityLabel="Pašalinti"
+              accessibilityHint="Pašalinti iš tęstinio žiūrėjimo sąrašo"
+              accessibilityRole="button">
               <View style={styles.removeButtonInner}>
                 <IconClose size={10} color="#FFF" />
               </View>
