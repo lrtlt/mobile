@@ -25,6 +25,37 @@ import {fetchMenuItemsApi, fetchMenuItemsV2} from '../api';
 import {EventRegister} from 'react-native-event-listeners';
 import {EVENT_OPEN_CATEGORY, EVENT_SELECT_CATEGORY_INDEX} from '../constants';
 import {useSettingsStore} from './settings_store';
+import {createMMKV} from 'react-native-mmkv';
+
+const menuCache = createMMKV({id: 'menu-cache'});
+const MENU_CACHE_KEY = 'app-menu-v3';
+const MENU_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
+
+type MenuCacheEntry = {
+  timestamp: number;
+  data: Menu2Response;
+};
+
+const readMenuCache = (): Menu2Response | undefined => {
+  const cached = menuCache.getString(MENU_CACHE_KEY);
+  if (!cached) {
+    return undefined;
+  }
+  try {
+    const entry = JSON.parse(cached) as MenuCacheEntry;
+    if (Date.now() - entry.timestamp < MENU_CACHE_TTL_MS) {
+      return entry.data;
+    }
+  } catch {
+    menuCache.remove(MENU_CACHE_KEY);
+  }
+  return undefined;
+};
+
+const writeMenuCache = (data: Menu2Response) => {
+  const entry: MenuCacheEntry = {timestamp: Date.now(), data};
+  menuCache.set(MENU_CACHE_KEY, JSON.stringify(entry));
+};
 
 export type NavigationState = {
   menu?: Menu2Response;
@@ -86,9 +117,16 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
     }
   },
   fetchMenuItemsV2: async () => {
+    const cached = readMenuCache();
+    if (cached) {
+      set({menu: cached, routesV2: parseRoutesV2(cached), isLoading: false, isReady: true, isError: false});
+      return;
+    }
+
     set({isLoading: true, isError: false, isReady: false});
     try {
       const data = await fetchMenuItemsV2();
+      writeMenuCache(data);
       set({menu: data, routesV2: parseRoutesV2(data), isLoading: false, isReady: true});
     } catch (e) {
       console.log('fetchMenuItemsV2 error', e);
