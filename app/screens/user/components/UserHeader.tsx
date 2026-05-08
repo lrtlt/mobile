@@ -54,10 +54,10 @@ const UserHeader: React.FC<UserHeaderProps> = ({pressable = true}) => {
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', gap: 16}}>
           <UserAvatar size={40} />
           <View>
-            <Text style={[styles.emailText, {}]} fontFamily="SourceSansPro-SemiBold">
+            <Text style={[styles.emailText, {}]} fontFamily="SourceSansPro-SemiBold" numberOfLines={1}>
               {user?.name}
             </Text>
-            <Text style={[styles.emailText]} type="secondary">
+            <Text style={[styles.emailText]} type="secondary" numberOfLines={1}>
               {userEmail}
             </Text>
           </View>

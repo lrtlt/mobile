@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {View, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import {View, StyleSheet, Dimensions, ScrollView, useWindowDimensions} from 'react-native';
 import {Text, TouchableDebounce} from '../../../../../../components';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
 import {themeLight} from '../../../../../../Theme';
@@ -12,7 +12,6 @@ import PlayButton from '../play_button/play_button';
 import {useMediaPlayer} from '../../../../../../components/videoComponent/context/useMediaPlayer';
 import ArticlePlaylist from '../../../../../../components/videoComponent/context/playlist/ArticlePlaylist';
 
-const {height} = Dimensions.get('window');
 const width = Math.min(Dimensions.get('window').width * 0.32, 150);
 
 interface Props {
@@ -27,6 +26,8 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   const articles = data?.articles_list;
 
   const {setPlaylist} = useMediaPlayer();
+  const {height: windowHeight, width: windowWidth} = useWindowDimensions();
+  const isLandscape = windowWidth > windowHeight;
 
   const articlesLength = articles?.length ?? 0;
   const selectedIndexSafe = Math.min(selectedIndex, Math.max(0, articlesLength - 1));
@@ -79,7 +80,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
 
   return (
     <ThemeProvider forceTheme={themeLight}>
-      <View style={styles.container}>
+      <View style={[styles.container, !isLandscape && {height: windowHeight - 132}]}>
         <View>
           <FastImage
             style={{
@@ -157,11 +158,11 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: height - 132,
     justifyContent: 'space-between',
     paddingBottom: 40,
     marginBottom: 64,
     backgroundColor: '#181927',
+    overflow: 'hidden',
   },
   header: {
     paddingHorizontal: 12,

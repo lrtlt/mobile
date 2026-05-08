@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {View, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView, useWindowDimensions} from 'react-native';
 
 import FastImage from '@d11/react-native-fast-image';
 
@@ -14,8 +14,6 @@ import {Text, TouchableDebounce} from '../../../../../../components';
 import {IconPlay} from '../../../../../../components/svg';
 import ThumbnailItem from './ThumbnailItem';
 
-const {height} = Dimensions.get('window');
-
 interface Props {
   block: MediatekaBlockWidget;
   onArticlePress: (article: Article) => void;
@@ -27,6 +25,8 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   const articles = block['widget-data']?.articles_list ?? [];
 
   const {colors} = useTheme();
+  const {height: windowHeight, width: windowWidth} = useWindowDimensions();
+  const isLandscape = windowWidth > windowHeight;
 
   const handleItemPress = useCallback((index: number) => {
     setSelectedIndex(index);
@@ -54,13 +54,10 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   const durationMinutes = Math.floor((selectedArticle.media_duration_sec ?? 0) / 60);
   return (
     <ThemeProvider forceTheme={themeLight}>
-      <View style={styles.container}>
+      <View style={[styles.container, !isLandscape && {height: windowHeight - 132}]}>
         <View>
           <FastImage
-            style={{
-              width: '100%',
-              aspectRatio: aspectRatio,
-            }}
+            style={{width: '100%', aspectRatio: aspectRatio}}
             source={{uri: imgUrl}}
             resizeMode="cover"
           />
@@ -122,11 +119,11 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: height - 132,
     backgroundColor: '#181927',
     justifyContent: 'space-between',
     paddingBottom: 40,
     marginBottom: 64,
+    overflow: 'hidden',
   },
   header: {
     paddingHorizontal: 12,
