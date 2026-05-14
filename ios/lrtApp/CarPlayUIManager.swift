@@ -241,33 +241,14 @@ class CarPlayUIManager {
   }
 
   private static func playbackRateImage(rate: Float) -> UIImage {
-    let label: String
-    if rate.truncatingRemainder(dividingBy: 1) == 0 {
-      label = String(format: "%.0fx", rate)
-    } else if rate == 1.25 {
-      label = "1.25x"
+    let name: String
+    if rate == 1.25 {
+      name = "playback-1.25x"
+    } else if rate == 1.5 {
+      name = "playback-1.5x"
     } else {
-      label = String(format: "%.1fx", rate)
+      name = "playback-1x"
     }
-
-    let imageSize = CGSize(width: 100, height: 48)
-    let format = UIGraphicsImageRendererFormat()
-    format.scale = 1
-    let renderer = UIGraphicsImageRenderer(size: imageSize, format: format)
-    let image = renderer.image { _ in
-      let fontSize: CGFloat = 38
-      let attributes: [NSAttributedString.Key: Any] = [
-        .font: UIFont.systemFont(ofSize: fontSize, weight: .semibold),
-        .foregroundColor: UIColor.white,
-      ]
-      let text = label as NSString
-      let textSize = text.size(withAttributes: attributes)
-      let point = CGPoint(
-        x: (imageSize.width - textSize.width) / 2,
-        y: (imageSize.height - textSize.height) / 2
-      )
-      text.draw(at: point, withAttributes: attributes)
-    }
-    return image.withRenderingMode(.alwaysOriginal)
+    return (UIImage(named: name) ?? UIImage()).withRenderingMode(.alwaysTemplate)
   }
 }
