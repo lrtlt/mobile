@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   image: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
   },
   removeButton: {
     position: 'absolute',

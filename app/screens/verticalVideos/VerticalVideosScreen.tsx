@@ -48,7 +48,7 @@ const VerticalVideoScreen: React.FC<React.PropsWithChildren<Props>> = ({navigati
         pageWrapperStyle={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
         pageBuffer={1}
         vertical={false}
-        pageInterpolator={pageInterpolatorTurnIn}
+        pageInterpolator={pageInterpolatorTurnIn as any}
         initialIndex={initialIndex}
         renderPage={(props) => {
           let validIndex = ((props.index % articles.length) + articles.length) % articles.length;

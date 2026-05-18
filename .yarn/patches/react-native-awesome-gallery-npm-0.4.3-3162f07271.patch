@@ -1,0 +1,26 @@
+diff --git a/lib/module/index.js b/lib/module/index.js
+index 04e8dc0130a81e9ad94da51049fa96b40868c6ec..54c26d68d420afbe1b61e31d2e881f23b06a6491 100644
+--- a/lib/module/index.js
++++ b/lib/module/index.js
+@@ -45,7 +45,7 @@ const defaultRenderImage = ({
+       uri: item
+     },
+     resizeMode: "contain",
+-    style: StyleSheet.absoluteFillObject
++    style: StyleSheet.absoluteFill
+   });
+ };
+ 
+diff --git a/src/index.tsx b/src/index.tsx
+index 4aa4c541c3ef3ae95ea1b5cefd33fd63953bd8d7..83ffd8c5c3742916cd439ffec9d919f22a2a368a 100644
+--- a/src/index.tsx
++++ b/src/index.tsx
+@@ -82,7 +82,7 @@ const defaultRenderImage = ({
+       }}
+       source={{ uri: item }}
+       resizeMode="contain"
+-      style={StyleSheet.absoluteFillObject}
++      style={StyleSheet.absoluteFill}
+     />
+   );
+ };

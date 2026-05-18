@@ -1,6 +1,6 @@
 PODS:
-  - A0Auth0 (5.4.0):
-    - Auth0 (= 2.16.2)
+  - A0Auth0 (5.6.0):
+    - Auth0 (= 2.19.0)
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -1214,7 +1214,7 @@ PODS:
     - GoogleUtilities/Environment (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - PromisesObjC (~> 2.4)
-  - Auth0 (2.16.2):
+  - Auth0 (2.19.0):
     - JWTDecode (= 3.3.0)
     - SimpleKeychain (= 1.3.0)
   - BoringSSL-GRPC (0.0.37):
@@ -4310,10 +4310,10 @@ CHECKOUT OPTIONS:
     :git: https://github.com/Danesz/react-native-google-cast.git
 
 SPEC CHECKSUMS:
-  A0Auth0: 6aaf4a6964aa539bcf5ae1b29acba85d73c81474
+  A0Auth0: ed9096aa7d942cb39321df11ee03c04d99e92976
   abseil: a05cc83bf02079535e17169a73c5be5ba47f714b
   AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
-  Auth0: f08ad1b74d49ffe806175845ef326d9a7674b34c
+  Auth0: edcdfffffb453a18cc15e122a04f284c913136d6
   BoringSSL-GRPC: dded2a44897e45f28f08ae87a55ee4bcd19bc508
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
   DSFRegex: 8493187c71ac199695245eb9ec98bad4f87a2f0b
