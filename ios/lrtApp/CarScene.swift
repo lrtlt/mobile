@@ -41,12 +41,17 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       self?.refreshRecommendedSections()
     }
 
+    // Rebind remote command handlers to this delegate. The previous scene
+    // delegate's handlers linger in MPRemoteCommandCenter with a nil weak self
+    // after disconnect, which leaves the persistent media widget unresponsive
+    // on reconnect until the user picks a new item.
+    setupControls()
+
     // Attempt to resume playback if state exists
     if cache.getShouldResumePlayer(),
       player.isReadyToPlay
     {
       player.play()
-      setupControls()
       uiManager?.showNowPlayingTemplate(isLive: playlist.current?.isLive ?? false)
     }
   }
@@ -295,6 +300,9 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     saveState()
     player.pause()
     RDSNowPlayingService.shared.stopListening()
+    // Drop handlers that capture this soon-to-be-released delegate so they
+    // don't sit in MPRemoteCommandCenter as no-ops after weak self goes nil.
+    RemoteControlManager.shared.clearRemoteControls()
     if let observer = watchHistoryObserver {
       NotificationCenter.default.removeObserver(observer)
       watchHistoryObserver = nil
