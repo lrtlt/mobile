@@ -1,16 +1,18 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
-import Gallery from 'react-native-awesome-gallery';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
+import {View, StyleSheet, useWindowDimensions, NativeSyntheticEvent} from 'react-native';
+import PagerView, {PagerViewOnPageSelectedEventData} from 'react-native-pager-view';
 import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
 import {BorderlessButton} from 'react-native-gesture-handler';
 import {Text} from '../../components';
 import {useTheme} from '../../Theme';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {IconClose} from '../../components/svg';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import ZoomableImage from './ZoomableImage';
+import ThumbnailStrip from './ThumbnailStrip';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Gallery'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Gallery'>;
@@ -19,6 +21,9 @@ type Props = {
   route: ScreenRouteProp;
   navigation: ScreenNavigationProp;
 };
+
+const CAPTION_HEIGHT = 88;
+const THUMB_STRIP_HEIGHT = 72;
 
 const GalleryScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigation}) => {
   const [state] = useState(() => {
@@ -38,7 +43,13 @@ const GalleryScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigat
     };
   });
 
+  const {width: screenWidth, height: screenHeight} = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  const {colors} = useTheme();
+
+  const pagerRef = useRef<PagerView>(null);
   const [selectedIndex, setSelectedIndex] = useState(state.initialIndex);
+  const [scrollEnabled, setScrollEnabled] = useState(true);
 
   useNavigationAnalytics(
     useMemo(
@@ -50,50 +61,82 @@ const GalleryScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigat
     ),
   );
 
+  const pagerHeight = Math.max(
+    0,
+    screenHeight - insets.top - insets.bottom - CAPTION_HEIGHT - THUMB_STRIP_HEIGHT,
+  );
+
   const goBackHandler = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
-  const {images, imageUrls} = state;
-  const {colors, dark} = useTheme();
+  const handlePageSelected = useCallback(
+    (e: NativeSyntheticEvent<PagerViewOnPageSelectedEventData>) => {
+      setSelectedIndex(e.nativeEvent.position);
+    },
+    [],
+  );
 
+  const handleThumbSelect = useCallback((index: number) => {
+    pagerRef.current?.setPage(index);
+    setSelectedIndex(index);
+  }, []);
+
+  const handleZoomChange = useCallback((zoomed: boolean) => {
+    setScrollEnabled(!zoomed);
+  }, []);
+
+  const {images, imageUrls} = state;
   const image = images[selectedIndex];
 
   return (
     <View style={styles.container}>
-      <Gallery
-        style={{backgroundColor: colors.background}}
-        data={imageUrls}
-        keyExtractor={(item, i) => item ?? i.toString()}
-        numToRender={3}
-        initialIndex={state.initialIndex}
-        onIndexChange={setSelectedIndex}
-        loop={true}
-        emptySpaceWidth={8}
-      />
-      <View style={{...styles.detailsContainer, backgroundColor: colors.background}}>
-        <SafeAreaView edges={['bottom']}>
-          <View style={styles.row}>
-            <Text style={styles.authorText} type="secondary">
-              {image.author}
-            </Text>
-            <Text style={styles.authorText} type="secondary">
-              {`${selectedIndex + 1} / ${images.length}`}
-            </Text>
+      <PagerView
+        ref={pagerRef}
+        style={[styles.pager, {height: pagerHeight, marginTop: insets.top}]}
+        initialPage={state.initialIndex}
+        onPageSelected={handlePageSelected}
+        scrollEnabled={scrollEnabled}
+        offscreenPageLimit={1}>
+        {imageUrls.map((uri, i) => (
+          <View key={uri ?? i.toString()} style={styles.page}>
+            {uri && (
+              <ZoomableImage
+                uri={uri}
+                width={screenWidth}
+                height={pagerHeight}
+                onZoomChange={handleZoomChange}
+              />
+            )}
           </View>
-          <Text style={styles.title} fontFamily="PlayfairDisplay-Regular">
-            {image.title}
+        ))}
+      </PagerView>
+
+      <View style={styles.caption}>
+        <Text style={styles.title} fontFamily="SourceSansPro-Regular" numberOfLines={2}>
+          {image?.title}
+        </Text>
+        <View style={styles.row}>
+          <Text style={styles.authorText} fontFamily="SourceSansPro-SemiBold">
+            {`${selectedIndex + 1} / ${images.length}`}
           </Text>
-        </SafeAreaView>
+          {!!image?.author && <Text style={styles.authorText}>{image.author}</Text>}
+        </View>
       </View>
+
+      <SafeAreaView edges={['bottom']} style={styles.thumbStripWrapper}>
+        <View style={styles.thumbStripInner}>
+          <ThumbnailStrip
+            images={images}
+            selectedIndex={selectedIndex}
+            onSelect={handleThumbSelect}
+          />
+        </View>
+      </SafeAreaView>
+
       <View style={styles.absoluteLayout}>
         <SafeAreaView edges={['top', 'left']}>
-          <View
-            // eslint-disable-next-line react-native/no-inline-styles
-            style={{
-              ...styles.backButtonContainer,
-              backgroundColor: dark ? '#343434cc' : '#eaeaeacc',
-            }}>
+          <View style={styles.backButtonContainer}>
             <BorderlessButton onPress={goBackHandler} hitSlop={{left: 12, right: 12, top: 12, bottom: 12}}>
               <IconClose color={colors.headerTint} size={16} />
             </BorderlessButton>
@@ -109,38 +152,53 @@ export default GalleryScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#000',
+  },
+  pager: {
+    width: '100%',
+  },
+  page: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    gap: 8,
   },
   absoluteLayout: {
     position: 'absolute',
+    top: 0,
+    start: 0,
   },
   backButtonContainer: {
     margin: 8,
     padding: 16,
     borderRadius: 8,
-    backgroundColor: '#545454cc',
+    backgroundColor: '#eaeaeacc',
   },
-  backButtonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  detailsContainer: {
-    padding: 16,
-    position: 'absolute',
-    bottom: 0,
-    start: 0,
-    end: 0,
-    opacity: 0.8,
+  caption: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 8,
+    height: CAPTION_HEIGHT,
+    gap: 4,
   },
   authorText: {
-    fontSize: 13,
+    fontSize: 12.5,
     marginTop: 4,
+    color: '#fff',
   },
   title: {
-    marginTop: 4,
-    fontSize: 16,
+    fontSize: 16.5,
+    color: '#fff',
+  },
+  thumbStripWrapper: {
+    backgroundColor: '#000',
+  },
+  thumbStripInner: {
+    height: THUMB_STRIP_HEIGHT,
+    justifyContent: 'center',
   },
 });
