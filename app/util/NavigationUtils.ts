@@ -5,6 +5,7 @@ type ArticleNavigationProps = {
   id: number;
   is_video?: 0 | 1 | undefined;
   is_audio?: 0 | 1 | undefined;
+  scrollToLiveFeed?: boolean;
 };
 type NavigationProp = StackNavigationProp<MainStackParamList>;
 
@@ -14,7 +15,7 @@ export const pushArticle = (navigation: NavigationProp, article: ArticleNavigati
   } else if (article.is_video) {
     navigation.push('Vodcast', {articleId: article.id});
   } else {
-    navigation.push('Article', {articleId: article.id});
+    navigation.push('Article', {articleId: article.id, scrollToLiveFeed: article.scrollToLiveFeed});
   }
 };
 
@@ -24,7 +25,7 @@ export const navigateArticle = (navigation: NavigationProp, article: ArticleNavi
   } else if (article.is_video) {
     navigation.navigate('Vodcast', {articleId: article.id});
   } else {
-    navigation.navigate('Article', {articleId: article.id});
+    navigation.navigate('Article', {articleId: article.id, scrollToLiveFeed: article.scrollToLiveFeed});
   }
 };
 
@@ -34,6 +35,6 @@ export const replaceArticle = (navigation: NavigationProp, article: ArticleNavig
   } else if (article.is_video) {
     navigation.replace('Vodcast', {articleId: article.id});
   } else {
-    navigation.replace('Article', {articleId: article.id});
+    navigation.replace('Article', {articleId: article.id, scrollToLiveFeed: article.scrollToLiveFeed});
   }
 };

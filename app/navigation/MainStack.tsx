@@ -32,6 +32,7 @@ export type MainStackParamList = {
   Article: {
     articleId: number;
     isMedia?: boolean;
+    scrollToLiveFeed?: boolean;
   };
   ArticleProxy: MainStackParamList['Article'];
   CachedArticle: {

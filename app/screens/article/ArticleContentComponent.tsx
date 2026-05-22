@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View, StyleSheet, useWindowDimensions} from 'react-native';
 import Header from './header/Header';
 import {getSmallestDim} from '../../util/UI';
@@ -24,7 +24,7 @@ import ArticleMainPhoto from './mainPhoto/ArticleMainPhoto';
 import ArticleKeywords from './keywords/ArticleKeywords';
 import useArticleHeader from './useArticleHeader_v2';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
-import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
+import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
 import {useTheme} from '../../Theme';
 import SimpleFooter from './simpleFooter/SimpleFooter';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -37,14 +37,39 @@ export type ArticleSelectableItem = {
 interface Props {
   article: ArticleContent;
   itemPressHandler: (item: ArticleSelectableItem) => void;
+  scrollToLiveFeed?: boolean;
 }
 
-const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({article, itemPressHandler}) => {
+const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({
+  article,
+  itemPressHandler,
+  scrollToLiveFeed,
+}) => {
   const {width: screenWidth} = useWindowDimensions();
   const contentWidth = screenWidth - 12 * 2;
 
   const {simplyfied} = useTheme();
   const articleData = useMemo(() => compose(article, simplyfied), [article]);
+
+  const listRef = useRef<FlashListRef<ArticleContentItemType>>(null);
+
+  const liveFeedIndex = useMemo(() => {
+    return articleData.findIndex(
+      (item) =>
+        item.type === TYPE_PARAGRAPH &&
+        Array.isArray(item.data?.embed) &&
+        item.data.embed.some((e: {embed_type: string}) => e.embed_type === 'timeline'),
+    );
+  }, [articleData]);
+
+  useEffect(() => {
+    if (scrollToLiveFeed && liveFeedIndex >= 0) {
+      const timeout = setTimeout(() => {
+        listRef.current?.scrollToIndex({index: liveFeedIndex, animated: true});
+      }, 300);
+      return () => clearTimeout(timeout);
+    }
+  }, [scrollToLiveFeed, liveFeedIndex]);
 
   const {appBar, onScroll} = useArticleHeader(article);
 
@@ -117,6 +142,7 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({arti
       {appBar}
       <View style={styles.container}>
         <FlashList
+          ref={listRef}
           onScroll={onScroll}
           contentContainerStyle={{
             paddingTop: appBarHeight.fullHeight,

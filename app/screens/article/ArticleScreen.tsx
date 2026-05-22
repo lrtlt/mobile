@@ -24,7 +24,7 @@ type Props = {
 };
 
 const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
-  const {articleId, isMedia} = route.params;
+  const {articleId, isMedia, scrollToLiveFeed} = route.params;
   console.log(`articleId: ${articleId}, isMedia: ${isMedia}`);
 
   const theme = useTheme();
@@ -128,7 +128,11 @@ const ArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
           {article && (
             <ThemeProvider
               forceTheme={{...theme, simplyfied: article.category_id === SIMPLIFIED_CATEGORY_ID}}>
-              <ArticleContentComponent article={article} itemPressHandler={articleItemPressHandler} />
+              <ArticleContentComponent
+                article={article}
+                itemPressHandler={articleItemPressHandler}
+                scrollToLiveFeed={scrollToLiveFeed}
+              />
             </ThemeProvider>
           )}
         </>

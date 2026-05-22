@@ -17,6 +17,15 @@ export type Article = {
   channel_bg_img?: string;
   channel_title?: string;
 
+  chain_items: {
+    id?: number;
+    chain_item_id?: number;
+    title: string;
+    url: string;
+  }[];
+  chain_option: number;
+  chain_option_title?: string;
+
   img_path_prefix?: string;
   img_path_postfix?: string;
   category_id?: number;
