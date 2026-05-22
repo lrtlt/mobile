@@ -9,8 +9,12 @@ import {
   usePlaybackProgressStore,
 } from '../../state/playback_progress_store';
 
+const ENTRY_MAX_AGE_DAYS = 15;
+const ENTRY_MAX_AGE_MS = ENTRY_MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
+
 const QUERY_KEY = 'playbackProgress';
 const FLUSH_INTERVAL_MS = 1000 * 30; // push every 30s if dirty
+
 const URL = 'https://www.lrt.lt/servisai/dev-authrz/api/v1/user/watch-history';
 
 type PlaybackProgressResponse = {
@@ -49,7 +53,11 @@ export const usePlaybackProgress = (options: PlaybackProgressSyncOptions) => {
   // upserts/removes/dirty updates reflect immediately, while the query keeps
   // the remote side in sync.
   const data = useMemo(() => {
-    return usePlaybackProgressStore.getState().getEntries({mediaType, count});
+    const minUpdatedAt = Date.now() - ENTRY_MAX_AGE_MS;
+    return usePlaybackProgressStore
+      .getState()
+      .getEntries({mediaType, count})
+      .filter((e) => e.updatedAt >= minUpdatedAt);
   }, [entriesMap, mediaType, count]);
 
   return {...query, data};
