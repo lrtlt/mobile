@@ -16,7 +16,8 @@ const FullScreenButton: React.FC = () => {
       style={styles.fullScreenIcon}
       onPress={toggleFullScreen}
       hitSlop={HIT_SLOP}
-      activeOpacity={0.6}>
+      activeOpacity={0.6}
+      accessibilityLabel={isFullScreen ? 'Išjungti viso ekrano režimą' : 'Įjungti viso ekrano režimą'}>
       {isFullScreen ? (
         <IconFullscreenExit size={ICON_SIZE} color={ICON_COLOR} />
       ) : (

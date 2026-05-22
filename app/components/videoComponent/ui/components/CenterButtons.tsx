@@ -27,13 +27,21 @@ const CenterButtons: React.FC<Props> = () => {
   return (
     <View style={styles.centerControlsRow}>
       {isSeekerEnabled && (
-        <PlayerButton onPress={handleSeekBack} hitSlop={HIT_SLOP} activeOpacity={0.6}>
+        <PlayerButton
+          onPress={handleSeekBack}
+          hitSlop={HIT_SLOP}
+          activeOpacity={0.6}
+          accessibilityLabel="Atsukti 10 sekundžių atgal">
           <IconPlayerRewind style={styles.rewindIcon} size={iconSize} color={ICON_COLOR} />
         </PlayerButton>
       )}
       <PlayPauseButton />
       {isSeekerEnabled && (
-        <PlayerButton onPress={handleSeekForward} hitSlop={HIT_SLOP} activeOpacity={0.6}>
+        <PlayerButton
+          onPress={handleSeekForward}
+          hitSlop={HIT_SLOP}
+          activeOpacity={0.6}
+          accessibilityLabel="Persukti 10 sekundžių į priekį">
           <IconPlayerForward style={styles.forwardIcon} size={iconSize} color={ICON_COLOR} />
         </PlayerButton>
       )}

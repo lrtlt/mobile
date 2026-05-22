@@ -6,6 +6,8 @@ export interface PlayerButtonProps {
   onPress?: () => void;
   activeOpacity?: number | undefined;
   hitSlop?: number | Insets;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 }
 
 /**
@@ -15,6 +17,8 @@ export const PlayerButton: React.FC<PropsWithChildren<PlayerButtonProps>> = ({
   style,
   onPress,
   activeOpacity,
+  accessibilityLabel,
+  accessibilityHint,
   children,
 }) => {
   const [pressed, setPressed] = useState<boolean>(false);
@@ -54,7 +58,10 @@ export const PlayerButton: React.FC<PropsWithChildren<PlayerButtonProps>> = ({
     <View
       {...panResponder.panHandlers}
       style={[style, pressed && {opacity: activeOpacity ?? 0.5}]}
-      accessible>
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}>
       {children}
     </View>
   );

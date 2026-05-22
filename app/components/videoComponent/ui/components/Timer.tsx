@@ -30,6 +30,13 @@ const formatLiveStreamTime = (time: number, minTime: number, maxTime: number) =>
   return result;
 };
 
+const formatTimeForA11y = (totalSeconds: number) => {
+  const time = Math.max(0, Math.floor(totalSeconds));
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+  return `${minutes} min. ${seconds} sek.`;
+};
+
 const Timer: React.FC = () => {
   const {
     player,
@@ -62,6 +69,19 @@ const Timer: React.FC = () => {
     [currentTime, seekerStart, seekerEnd],
   );
 
+  const elapsedTimeA11yLabel = useMemo(
+    () => `Praleista ${formatTimeForA11y(currentTime ?? 0)}`,
+    [currentTime],
+  );
+  const totalTimeA11yLabel = useMemo(
+    () => `Trukmė ${formatTimeForA11y(seekerEnd ?? 0)}`,
+    [seekerEnd],
+  );
+  const liveStreamA11yLabel = useMemo(
+    () => `Atsilikimas nuo tiesioginės transliacijos ${formatTimeForA11y(Math.max(0, seekerEnd - (currentTime ?? seekerStart)))}`,
+    [currentTime, seekerStart, seekerEnd],
+  );
+
   return (
     <View style={styles.progressContainer}>
       {!isLiveStream ? (
@@ -69,14 +89,16 @@ const Timer: React.FC = () => {
           <TextComponent
             style={styles.timerText}
             allowFontScaling={false}
-            fontFamily="SourceSansPro-SemiBold">
+            fontFamily="SourceSansPro-SemiBold"
+            accessibilityLabel={elapsedTimeA11yLabel}>
             {elapsedTimeText}
           </TextComponent>
           {isSeekerEnabled ? (
             <TextComponent
               style={styles.timerText}
               allowFontScaling={false}
-              fontFamily="SourceSansPro-SemiBold">
+              fontFamily="SourceSansPro-SemiBold"
+              accessibilityLabel={totalTimeA11yLabel}>
               {totalTimeText}
             </TextComponent>
           ) : null}
@@ -87,7 +109,8 @@ const Timer: React.FC = () => {
           <TextComponent
             style={styles.timerText}
             allowFontScaling={false}
-            fontFamily="SourceSansPro-SemiBold">
+            fontFamily="SourceSansPro-SemiBold"
+            accessibilityLabel={liveStreamA11yLabel}>
             {liveStreamTimeText}
           </TextComponent>
         </>

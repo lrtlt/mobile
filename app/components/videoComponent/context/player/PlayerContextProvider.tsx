@@ -1,4 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
+import {AccessibilityInfo} from 'react-native';
 import {PresentationMode, THEOplayer} from 'react-native-theoplayer';
 import {MediaPlayerState} from 'react-native-google-cast';
 import {debounce} from 'lodash';
@@ -12,8 +13,7 @@ import {
 } from './PlayerContext';
 import useChromecast from '../../useChromecast';
 import usePlayerState from '../../ui/usePlayerState';
-
-const CONTROLS_TIMEOUT_MS = 2500;
+import {CONTROLS_TIMEOUT_MS} from '../../ui/MediaControls.constants';
 
 interface PlayerContextProviderProps {
   player: THEOplayer | undefined;
@@ -37,6 +37,13 @@ export const PlayerContextProvider: React.FC<PlayerContextProviderProps> = ({
   children,
 }) => {
   const [visible, setVisible] = useState(controlsEnabled);
+  const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
+
+  useEffect(() => {
+    AccessibilityInfo.isScreenReaderEnabled().then(setScreenReaderEnabled);
+    const sub = AccessibilityInfo.addEventListener('screenReaderChanged', setScreenReaderEnabled);
+    return () => sub.remove();
+  }, []);
 
   // Set up chromecast integration
   const {client: castClient, mediaStatus: castMediaStatus} = useChromecast({
@@ -55,9 +62,12 @@ export const PlayerContextProvider: React.FC<PlayerContextProviderProps> = ({
   const resetControlsTimeout = useMemo(
     () =>
       debounce(() => {
+        if (screenReaderEnabled && controlsEnabled) {
+          return;
+        }
         setVisible(false);
       }, CONTROLS_TIMEOUT_MS),
-    [],
+    [screenReaderEnabled, controlsEnabled],
   );
 
   // Initialize timeout on mount
@@ -175,9 +185,13 @@ export const PlayerContextProvider: React.FC<PlayerContextProviderProps> = ({
   // Visibility state
   const visibility: ControlsVisibilityState = useMemo(
     () => ({
-      visible: visible || state.isOnStart || state.isEnding,
+      visible:
+        visible ||
+        state.isOnStart ||
+        state.isEnding ||
+        (screenReaderEnabled && controlsEnabled),
     }),
-    [visible, state],
+    [visible, state, screenReaderEnabled, controlsEnabled],
   );
 
   const contextValue: PlayerContextType = useMemo(

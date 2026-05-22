@@ -9,7 +9,7 @@ const LiveButton: React.FC = () => {
   } = usePlayer();
 
   return (
-    <PlayerButton onPress={seekToLive}>
+    <PlayerButton onPress={seekToLive} accessibilityLabel="Tiesioginė transliacija">
       <LiveBadge />
     </PlayerButton>
   );

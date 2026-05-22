@@ -12,7 +12,12 @@ const VolumeButton: React.FC = () => {
   } = usePlayer();
 
   return (
-    <PlayerButton style={styles.volumeIcon} onPress={toggleMute} hitSlop={HIT_SLOP} activeOpacity={0.6}>
+    <PlayerButton
+      style={styles.volumeIcon}
+      onPress={toggleMute}
+      hitSlop={HIT_SLOP}
+      activeOpacity={0.6}
+      accessibilityLabel={isMuted ? 'Įjungti garsą' : 'Išjungti garsą'}>
       {isMuted ? (
         <IconPlayerMute size={ICON_SIZE} color={ICON_COLOR} />
       ) : (

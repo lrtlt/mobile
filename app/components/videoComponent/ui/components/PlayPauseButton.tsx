@@ -12,7 +12,12 @@ const PlayPauseButton: React.FC = () => {
   } = usePlayer();
 
   return (
-    <PlayerButton style={styles.playPauseIcon} onPress={playPause} hitSlop={HIT_SLOP} activeOpacity={0.6}>
+    <PlayerButton
+      style={styles.playPauseIcon}
+      onPress={playPause}
+      hitSlop={HIT_SLOP}
+      activeOpacity={0.6}
+      accessibilityLabel={isPaused ? 'Groti' : 'Pristabdyti'}>
       {isPaused ? (
         <IconPlayerPlayV2 size={ICON_SIZE} color={ICON_COLOR} />
       ) : (

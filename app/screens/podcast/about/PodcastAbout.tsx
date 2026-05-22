@@ -57,7 +57,10 @@ const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article, isVodcast = 
       <>
         <View style={[styles.row, {gap: 4, marginVertical: 12, paddingTop: 12, paddingBottom: 8}]}>
           <IconAudioReadCount size={16} color={colors.text} />
-          <TextComponent style={[styles.caption, {color: colors.text}]} fontFamily="SourceSansPro-SemiBold">
+          <TextComponent
+            style={[styles.caption, {color: colors.text}]}
+            fontFamily="SourceSansPro-SemiBold"
+            accessibilityLabel={`Peržiūrų skaičius: ${article.read_count}`}>
             {article.read_count}
           </TextComponent>
           <View
@@ -68,7 +71,10 @@ const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article, isVodcast = 
               backgroundColor: colors.text,
             }}
           />
-          <TextComponent style={[styles.caption, {color: colors.text}]} fontFamily="SourceSansPro-SemiBold">
+          <TextComponent
+            style={[styles.caption, {color: colors.text}]}
+            fontFamily="SourceSansPro-SemiBold"
+            accessibilityLabel={`Įrašo trukmė: ${getMediaDurationMinutes(article.media_duration)} minutės`}>
             {getMediaDurationMinutes(article.media_duration)} min.
           </TextComponent>
         </View>
