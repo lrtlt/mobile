@@ -89,10 +89,15 @@ const ZoomableImage: React.FC<Props> = ({uri, width, height, onZoomChange}) => {
   const pan = Gesture.Pan()
     .minPointers(1)
     .maxPointers(2)
-    .onUpdate((e) => {
-      if (scale.value <= 1) {
-        return;
+    .manualActivation(true)
+    .onTouchesMove((_, stateManager) => {
+      if (scale.value > 1) {
+        stateManager.activate();
+      } else {
+        stateManager.fail();
       }
+    })
+    .onUpdate((e) => {
       const c = clampTranslation(
         scale.value,
         savedTranslateX.value + e.translationX,

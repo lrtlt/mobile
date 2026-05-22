@@ -70,12 +70,9 @@ const GalleryScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigat
     navigation.goBack();
   }, [navigation]);
 
-  const handlePageSelected = useCallback(
-    (e: NativeSyntheticEvent<PagerViewOnPageSelectedEventData>) => {
-      setSelectedIndex(e.nativeEvent.position);
-    },
-    [],
-  );
+  const handlePageSelected = useCallback((e: NativeSyntheticEvent<PagerViewOnPageSelectedEventData>) => {
+    setSelectedIndex(e.nativeEvent.position);
+  }, []);
 
   const handleThumbSelect = useCallback((index: number) => {
     pagerRef.current?.setPage(index);
@@ -126,11 +123,7 @@ const GalleryScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigat
 
       <SafeAreaView edges={['bottom']} style={styles.thumbStripWrapper}>
         <View style={styles.thumbStripInner}>
-          <ThumbnailStrip
-            images={images}
-            selectedIndex={selectedIndex}
-            onSelect={handleThumbSelect}
-          />
+          <ThumbnailStrip images={images} selectedIndex={selectedIndex} onSelect={handleThumbSelect} />
         </View>
       </SafeAreaView>
 
