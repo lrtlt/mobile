@@ -6,7 +6,7 @@ import {ArticlePhotoType} from '../../api/Types';
 
 const THUMB_WIDTH = 88;
 const THUMB_HEIGHT = 64;
-const GAP = 4;
+const GAP = 8;
 
 type Props = {
   images: ArticlePhotoType[];
@@ -21,7 +21,7 @@ const ThumbnailStrip: React.FC<Props> = ({images, selectedIndex, onSelect}) => {
     listRef.current?.scrollToIndex({
       index: selectedIndex,
       animated: true,
-      viewPosition: 0.5,
+      viewPosition: selectedIndex > 0 ? 0.5 : 0.0,
     });
   }, [selectedIndex]);
 
@@ -30,6 +30,7 @@ const ThumbnailStrip: React.FC<Props> = ({images, selectedIndex, onSelect}) => {
       ref={listRef}
       data={images}
       horizontal
+      contentContainerStyle={{paddingHorizontal: 12}}
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item, i) => item.path ?? i.toString()}
       getItemLayout={(_, index) => ({
