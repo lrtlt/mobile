@@ -74,6 +74,7 @@ interface Dictionary {
   logout: string;
   continueWatching: string;
   continueListening: string;
+  continuePlaying: string;
   removeFromContinue: string;
 }
 
@@ -133,6 +134,7 @@ export const strings: Dictionary = {
   logout: 'Atsijungti',
   continueWatching: 'Žiūrėkite toliau',
   continueListening: 'Klausykite toliau',
+  continuePlaying: 'Žiūrėti toliau',
   removeFromContinue: 'Pašalinti iš sąrašo',
 };
 //#endregion

@@ -52,6 +52,7 @@ export type MainStackParamList = {
   Search: NavigatorScreenParams<SearchDrawerParamList>;
   Bookmarks: undefined;
   History: undefined;
+  ContinuePlaying: undefined;
   Program: undefined;
   Slug: {
     name: string;
@@ -215,6 +216,7 @@ export default () => {
       <Stack.Screen name="Subscriptions" component={Screens.SubscriptionsScreen} />
       <Stack.Screen name="Favorites" component={Screens.FavoritesScreen} />
       <Stack.Screen name="History" component={Screens.HistoryScreen} />
+      <Stack.Screen name="ContinuePlaying" component={Screens.ContinuePlayingScreen} />
       <Stack.Screen name="Program" component={Screens.ProgramScreen} />
       <Stack.Screen name="Slug" component={Screens.SlugScreen} />
       <Stack.Screen name="Page" component={Screens.CustomPageScreen} />
