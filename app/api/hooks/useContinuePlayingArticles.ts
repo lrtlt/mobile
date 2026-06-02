@@ -38,7 +38,7 @@ export const useContinuePlayingArticles = (count?: number) => {
 
   return {
     articles,
-    isLoading: articleIds.length > 0 && search.isLoading && !search.data,
+    isLoading: (video.isPending || audio.isPending || search.isPending) && articles.length === 0,
     error: video.error ?? audio.error ?? search.error,
   };
 };
