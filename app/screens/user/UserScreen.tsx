@@ -8,6 +8,7 @@ import UserActions from './components/UserActions';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler';
 import UserHistory from './components/UserHistory';
+import UserContinuePlaying from './components/UserContinuePlaying';
 import {RouteProp} from '@react-navigation/native';
 import useLogin from './useLogin';
 
@@ -39,6 +40,7 @@ const UserScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route
           <UserHeader />
           {/* <UserSettings /> */}
           <UserHistory />
+          <UserContinuePlaying />
           <UserActions />
         </>
       </ScrollView>
