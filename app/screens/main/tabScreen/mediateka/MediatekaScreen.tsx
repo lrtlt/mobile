@@ -9,6 +9,7 @@ import moment from 'moment';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+//
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
@@ -212,13 +213,13 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({onScroll, pa
             item.template_id === 60
               ? undefined
               : item.select_opts.slug
-                ? [
-                    {
-                      name: item.slug_title,
-                      slug: item.select_opts.slug,
-                    },
-                  ]
-                : undefined
+              ? [
+                  {
+                    name: item.slug_title,
+                    slug: item.select_opts.slug,
+                  },
+                ]
+              : undefined
           }
           items={item.articles_list.map((a) => ({
             title: a.title,
