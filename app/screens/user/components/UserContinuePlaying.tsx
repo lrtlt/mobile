@@ -33,7 +33,7 @@ const UserContinuePlaying: React.FC<PropsWithChildren<Props>> = () => {
         <IconPlayCircle size={32} color={colors.iconInactive} />
         <Text style={styles.headerText}>{strings.continuePlaying}</Text>
         <TouchableDebounce onPress={onMorePress}>
-          <Text style={[styles.moreText, {color: colors.tertiary}]}>Daugiau</Text>
+          <Text style={[styles.moreText, {color: colors.tertiary}]}>{strings.moreButtonText}</Text>
         </TouchableDebounce>
       </View>
       <HistoryArticleList articles={articles} />
