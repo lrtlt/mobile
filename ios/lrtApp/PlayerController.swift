@@ -9,6 +9,12 @@ class PlayerController {
 
   private let playlist = Playlist.shared
 
+  private let commandCenter = MPRemoteCommandCenter.shared()
+
+  private init() {
+    setupRemoteCommands()
+  }
+
   private var mediaEndObserver: Any?
   private var playerIntervalObserver: Any?
   private var readyToPlayObserver: NSKeyValueObservation?
@@ -98,9 +104,24 @@ class PlayerController {
     addPlayerObservers()
     syncNowPlayingInfo(playlistItem: item)
     startWatchHistoryTracking(item: item)
+
+    // Notify observers (e.g. the CarPlay scene) so the Now Playing template can refresh its
+    // live/on-demand button set. Best-effort: a no-op when no scene is connected.
+    NotificationCenter.default.post(name: .nowPlayingItemChanged, object: nil)
   }
 
   func play() {
+    // Re-activate the audio session before resuming. After a long pause or while
+    // backgrounded (e.g. a CarPlay disconnect) iOS may have deactivated it, in which
+    // case play() would silently fail to produce audio.
+    let audioSession = AVAudioSession.sharedInstance()
+    do {
+      try audioSession.setCategory(.playback, mode: .spokenAudio, policy: .longFormAudio)
+      try audioSession.setActive(true)
+    } catch {
+      print("Failed to (re)activate audio session: \(error.localizedDescription)")
+    }
+
     player?.play()
     player?.rate = playbackRate
     MPNowPlayingInfoCenter.default().playbackState = .playing
@@ -108,6 +129,71 @@ class PlayerController {
     if trackedItem != nil && watchHistoryTimer == nil {
       scheduleWatchHistoryTimer()
     }
+  }
+
+  // MARK: - Remote commands
+
+  /// Registers MPRemoteCommandCenter handlers once, against this app-lifetime singleton.
+  /// They must NOT be tied to the CarPlay template scene, otherwise the persistent CarPlay
+  /// dashboard Music widget has no target and play/pause/skip do nothing when the user
+  /// hasn't opened the app's own CarPlay screen.
+  private func setupRemoteCommands() {
+    commandCenter.playCommand.isEnabled = true
+    commandCenter.playCommand.addTarget { [weak self] _ in
+      self?.play()
+      return .success
+    }
+
+    commandCenter.pauseCommand.isEnabled = true
+    commandCenter.pauseCommand.addTarget { [weak self] _ in
+      self?.pause()
+      return .success
+    }
+
+    // iOS 26.5's single widget button may send togglePlayPause instead of discrete commands.
+    commandCenter.togglePlayPauseCommand.isEnabled = true
+    commandCenter.togglePlayPauseCommand.addTarget { [weak self] _ in
+      guard let self = self else { return .commandFailed }
+      if self.isPlaying {
+        self.pause()
+      } else {
+        self.play()
+      }
+      return .success
+    }
+
+    commandCenter.nextTrackCommand.isEnabled = true
+    commandCenter.nextTrackCommand.addTarget { [weak self] _ in
+      do {
+        try self?.playNext()
+        return .success
+      } catch {
+        print("Error playing next track: \(error.localizedDescription)")
+        return .commandFailed
+      }
+    }
+
+    commandCenter.previousTrackCommand.isEnabled = true
+    commandCenter.previousTrackCommand.addTarget { [weak self] _ in
+      do {
+        try self?.playPrevious()
+        return .success
+      } catch {
+        print("Error playing previous track: \(error.localizedDescription)")
+        return .commandFailed
+      }
+    }
+
+    commandCenter.changePlaybackPositionCommand.isEnabled = true
+    commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
+      if let positionEvent = event as? MPChangePlaybackPositionCommandEvent {
+        self?.seekTo(position: positionEvent.positionTime)
+      }
+      return .success
+    }
+
+    commandCenter.skipForwardCommand.isEnabled = false
+    commandCenter.skipBackwardCommand.isEnabled = false
   }
 
   func pause() {

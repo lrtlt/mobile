@@ -2,6 +2,7 @@ import Foundation
 
 extension Notification.Name {
   static let watchHistoryUpdated = Notification.Name("watchHistoryUpdated")
+  static let nowPlayingItemChanged = Notification.Name("nowPlayingItemChanged")
 }
 
 class CarPlayService {

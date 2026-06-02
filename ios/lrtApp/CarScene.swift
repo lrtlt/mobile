@@ -19,6 +19,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   private var connectedAt: Date?
 
   private var watchHistoryObserver: NSObjectProtocol?
+  private var nowPlayingObserver: NSObjectProtocol?
   private weak var recommendedTemplate: CPListTemplate?
   private var latestRecommendedItems: [CPListItem] = []
 
@@ -41,11 +42,19 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       self?.refreshRecommendedSections()
     }
 
-    // Rebind remote command handlers to this delegate. The previous scene
-    // delegate's handlers linger in MPRemoteCommandCenter with a nil weak self
-    // after disconnect, which leaves the persistent media widget unresponsive
-    // on reconnect until the user picks a new item.
-    setupControls()
+    // Keep the Now Playing template's button set in sync when PlayerController changes
+    // track (e.g. next/prev pressed from the dashboard widget, or auto-advance).
+    nowPlayingObserver = NotificationCenter.default.addObserver(
+      forName: .nowPlayingItemChanged, object: nil, queue: .main
+    ) { [weak self] _ in
+      guard let self = self, self.interfaceController != nil else { return }
+      self.uiManager?.showNowPlayingTemplate(isLive: self.playlist.current?.isLive ?? false)
+    }
+
+    // Remote command handlers now live on PlayerController.shared for the whole app
+    // lifetime (so the dashboard Music widget works without opening the app). Here we only
+    // wire up the CarPlay Now Playing template's custom buttons.
+    setupTemplateButtons()
 
     // Attempt to resume playback if state exists
     if cache.getShouldResumePlayer(),
@@ -56,35 +65,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     }
   }
 
-  private func setupControls() {
-    RemoteControlManager.shared.setupRemoteCommands(
-      playAction: { [weak self] in
-        self?.player.play()
-      },
-      pauseAction: { [weak self] in
-        self?.player.pause()
-      },
-      nextTrackAction: { [weak self] in
-        do {
-          try self?.player.playNext()
-          self?.uiManager?.showNowPlayingTemplate(isLive: self?.playlist.current?.isLive ?? false)
-        } catch {
-          print("Error playing next track: \(error.localizedDescription)")
-        }
-      },
-      previousTrackAction: { [weak self] in
-        do {
-          try self?.player.playPrevious()
-          self?.uiManager?.showNowPlayingTemplate(isLive: self?.playlist.current?.isLive ?? false)
-        } catch {
-          print("Error playing previous track: \(error.localizedDescription)")
-        }
-      },
-      changePlaybackPositionAction: { [weak self] position in
-        self?.player.seekTo(position: position)
-      }
-    )
-
+  private func setupTemplateButtons() {
     uiManager?.setBackwardButtonHandler { [weak self] in
       self?.player.seekBackward()
     }
@@ -300,12 +281,16 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     saveState()
     player.pause()
     RDSNowPlayingService.shared.stopListening()
-    // Drop handlers that capture this soon-to-be-released delegate so they
-    // don't sit in MPRemoteCommandCenter as no-ops after weak self goes nil.
-    RemoteControlManager.shared.clearRemoteControls()
+    // Note: remote command handlers are intentionally NOT cleared here. They live on
+    // PlayerController.shared for the app's lifetime so the persistent CarPlay dashboard
+    // Music widget keeps responding after the template scene disconnects.
     if let observer = watchHistoryObserver {
       NotificationCenter.default.removeObserver(observer)
       watchHistoryObserver = nil
+    }
+    if let observer = nowPlayingObserver {
+      NotificationCenter.default.removeObserver(observer)
+      nowPlayingObserver = nil
     }
     recommendedTemplate = nil
     latestRecommendedItems = []
@@ -388,7 +373,6 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   private func onPlayableItemSelected(from selectedItem: CarPlayItem) {
     do {
       try player.setupStream(for: selectedItem)
-      setupControls()
       uiManager?.showNowPlayingTemplate(isLive: selectedItem.isLive == true)
     } catch {
       print("Error loading stream: \(error.localizedDescription)")
