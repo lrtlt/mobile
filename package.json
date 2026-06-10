@@ -43,6 +43,7 @@
     "react-native": "0.85.3",
     "react-native-auth0": "^5.6.0",
     "react-native-autoheight-webview": "^1.6.5",
+    "react-native-bootsplash": "^7.3.1",
     "react-native-config": "^1.6.1",
     "react-native-event-listeners": "^1.0.7",
     "react-native-gemius-plugin": "^2.1.0",

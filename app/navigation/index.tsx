@@ -1,14 +1,16 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {StatusBar} from 'react-native';
 import {LinkingOptions, NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
+import BootSplash from 'react-native-bootsplash';
 import SplashViewComponent from '../screens/splash/SplashScreenView';
+import BootstrapErrorScreen from '../screens/splash/BootstrapErrorScreen';
+import useSplashScreenState from '../screens/splash/useSplashScreenState';
 
 import crashlytics from '@react-native-firebase/crashlytics';
 
 import {DEEP_LINKING_URL_PREFIX} from '../constants';
 import Gemius, {GemiusParams} from 'react-native-gemius-plugin';
 import MainStack, {MainStackParamList} from './MainStack';
-import {SplashScreen} from '../screens';
 import useFirebaseMessaging from '../util/useFirebaseMessaging';
 import {useTheme} from '../Theme';
 import {useArticleStore} from '../state/article_store';
@@ -51,7 +53,31 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
 
   const theme = useTheme();
 
+  const splash = useSplashScreenState();
+  const [hasBootstrapError, setHasBootstrapError] = useState(false);
+
   useFirebaseMessaging(isNavigatorReady);
+
+  // Latch the bootstrap error so the error screen stays mounted across retries —
+  // it owns its own spinner while the retry is in flight (the native splash is gone by then).
+  useEffect(() => {
+    if (splash.isError) {
+      setHasBootstrapError(true);
+    }
+  }, [splash.isError]);
+
+  // Hide the native bootsplash once the app is ready (fade), or the moment we surface the error screen.
+  useEffect(() => {
+    if (isAppReady) {
+      BootSplash.hide({fade: true});
+    }
+  }, [isAppReady]);
+
+  useEffect(() => {
+    if (hasBootstrapError) {
+      BootSplash.hide();
+    }
+  }, [hasBootstrapError]);
 
   const trackRoute = useCallback(() => {
     const currentRoute = navRef.current?.getCurrentRoute();
@@ -80,7 +106,11 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   }, []);
 
   if (!isAppReady && !isOfflineMode) {
-    return <SplashScreen />;
+    if (hasBootstrapError) {
+      return <BootstrapErrorScreen onRetry={() => splash.load(true)} />;
+    }
+    // The native bootsplash stays on screen during the menu + home fetch.
+    return null;
   }
 
   return (

@@ -15,9 +15,7 @@
 		61299A4B3648B6D7C37FBFA8 /* Pods_lrtApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B444A0B5A3869DA4136C766C /* Pods_lrtApp.framework */; };
 		6E77BFFD1A0446E7AF06C197 /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A3C40A1A26044BDA6A6599C /* SourceSansPro-Regular.ttf */; };
 		6F35ABBC254AC514009EE240 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8CD6215A52E5AF386243CC8C /* Pods_FCMImageNotification.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ECBDBE108BCC8ED36ACADFE /* Pods_FCMImageNotification.framework */; };
-		9C0CA4ED28291CF100E1601F /* logo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C0CA4EC28291CF100E1601F /* logo2.png */; };
 		9C54AE302D2D8886009F63EC /* CarPlayCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2A2D2D8886009F63EC /* CarPlayCache.swift */; };
 		9C54AE312D2D8886009F63EC /* CarPlayModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2B2D2D8886009F63EC /* CarPlayModels.swift */; };
 		9C54AE322D2D8886009F63EC /* CarPlayNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2C2D2D8886009F63EC /* CarPlayNetwork.swift */; };
@@ -34,7 +32,9 @@
 		9C9EDE8B2D2FE24200C0E5D4 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EDE8A2D2FE24200C0E5D4 /* Playlist.swift */; };
 		9CAUTH0012D2FD77100C0E5D4 /* CarPlayAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAUTH0002D2FD77100C0E5D4 /* CarPlayAuthManager.swift */; };
 		9CRDS00012D2FD77100C0E5D4 /* RDSNowPlayingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CRDS00002D2FD77100C0E5D4 /* RDSNowPlayingService.swift */; };
+		D0F77A4B35B443F783932A89 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D42BF160130450C990DE748 /* Colors.xcassets */; };
 		ECA5399AC90AC950D6455561 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 9C808A8D2C19AEAE00C5A257 /* PrivacyInfo.xcprivacy */; };
+		F146554F44F944058DD58DBE /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7E06F24F62A47B98508C43F /* BootSplash.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,14 +87,13 @@
 		2D02E4901E0B4A5D006451C7 /* lrtApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "lrtApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A436044A3C041F281F7BF8B /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-SemiBold.ttf"; path = "../assets/font/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
 		4B1BAAF427CA44828E0B7B95 /* PlayfairDisplay-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "PlayfairDisplay-Regular.ttf"; path = "../assets/font/PlayfairDisplay-Regular.ttf"; sourceTree = "<group>"; };
+		4D42BF160130450C990DE748 /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = lrtApp/Colors.xcassets; sourceTree = "<group>"; };
 		5673A636AC7025F0302A6B84 /* Pods-FCMImageNotification.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FCMImageNotification.release.xcconfig"; path = "Target Support Files/Pods-FCMImageNotification/Pods-FCMImageNotification.release.xcconfig"; sourceTree = "<group>"; };
 		62350164273C4F2A885BD709 /* SourceSansPro-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-LightItalic.ttf"; path = "../assets/font/SourceSansPro-LightItalic.ttf"; sourceTree = "<group>"; };
 		6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6F60A1252549BE0B005E14EA /* lrtApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = lrtApp.entitlements; path = lrtApp/lrtApp.entitlements; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = lrtApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F73005EC221D36C68379F41 /* Pods-lrtApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp.debug.xcconfig"; path = "Target Support Files/Pods-lrtApp/Pods-lrtApp.debug.xcconfig"; sourceTree = "<group>"; };
 		945979D07578987EF3B629E6 /* Pods-lrtApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp.release.xcconfig"; path = "Target Support Files/Pods-lrtApp/Pods-lrtApp.release.xcconfig"; sourceTree = "<group>"; };
-		9C0CA4EC28291CF100E1601F /* logo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo2.png; path = lrtApp/logo2.png; sourceTree = "<group>"; };
 		9C54AE2A2D2D8886009F63EC /* CarPlayCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayCache.swift; sourceTree = "<group>"; };
 		9C54AE2B2D2D8886009F63EC /* CarPlayModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayModels.swift; sourceTree = "<group>"; };
 		9C54AE2C2D2D8886009F63EC /* CarPlayNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayNetwork.swift; sourceTree = "<group>"; };
@@ -116,6 +115,7 @@
 		9CB19FE32B0EAC2B00F49E23 /* lrtAppRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = lrtAppRelease.entitlements; path = lrtApp/lrtAppRelease.entitlements; sourceTree = "<group>"; };
 		9CRDS00002D2FD77100C0E5D4 /* RDSNowPlayingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RDSNowPlayingService.swift; path = lrtApp/RDSNowPlayingService.swift; sourceTree = "<group>"; };
 		B444A0B5A3869DA4136C766C /* Pods_lrtApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lrtApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7E06F24F62A47B98508C43F /* BootSplash.storyboard */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = BootSplash.storyboard; path = lrtApp/BootSplash.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -173,14 +173,14 @@
 				9C78266D2B588AD800B7183B /* CarScene.swift */,
 				9C78266C2B588AD800B7183B /* PhoneScene.swift */,
 				9CB19FE32B0EAC2B00F49E23 /* lrtAppRelease.entitlements */,
-				9C0CA4EC28291CF100E1601F /* logo2.png */,
 				6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */,
 				6F60A1252549BE0B005E14EA /* lrtApp.entitlements */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				9C7826692B5887FD00B7183B /* lrtApp-Bridging-Header.h */,
 				9C808A8D2C19AEAE00C5A257 /* PrivacyInfo.xcprivacy */,
+				D7E06F24F62A47B98508C43F /* BootSplash.storyboard */,
+				4D42BF160130450C990DE748 /* Colors.xcassets */,
 			);
 			name = lrtApp;
 			sourceTree = "<group>";
@@ -448,15 +448,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				6F35ABBC254AC514009EE240 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				9C808A8E2C19AEAE00C5A257 /* PrivacyInfo.xcprivacy in Resources */,
 				30DF8C0F1DC54C25996EA68C /* PlayfairDisplay-Regular.ttf in Resources */,
-				9C0CA4ED28291CF100E1601F /* logo2.png in Resources */,
 				20564F7D1ABD4A148FCB3E78 /* SourceSansPro-LightItalic.ttf in Resources */,
 				6E77BFFD1A0446E7AF06C197 /* SourceSansPro-Regular.ttf in Resources */,
 				5DE5469DBE4D4DF687A0D573 /* SourceSansPro-SemiBold.ttf in Resources */,
+				F146554F44F944058DD58DBE /* BootSplash.storyboard in Resources */,
+				D0F77A4B35B443F783932A89 /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

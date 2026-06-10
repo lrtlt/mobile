@@ -1,4 +1,3 @@
-export {default as SplashScreen} from './splash/SplashScreen';
 export {default as OfflineScreen} from './offline/OfflineScreen';
 export {default as MainScreen} from './main/MainScreen';
 export {default as SettingsScreen} from './settings/SettingsScreen';

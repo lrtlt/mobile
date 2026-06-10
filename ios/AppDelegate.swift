@@ -5,6 +5,7 @@ import RNFBAppCheck
 import React
 import ReactAppDependencyProvider
 import React_RCTAppDelegate
+import RNBootSplash
 import UIKit
 
 @main
@@ -78,6 +79,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
+  override func customize(_ rootView: RCTRootView) {
+    super.customize(rootView)
+    RNBootSplash.initWithStoryboard("BootSplash", rootView: rootView)
+  }
+
   override func sourceURL(for bridge: RCTBridge) -> URL? {
     self.bundleURL()
   }

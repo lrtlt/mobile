@@ -37,6 +37,7 @@ interface Dictionary {
   locationSearch: string;
   moreButtonText: string;
   tryAgain: string;
+  savedArticles: string;
   nightModeTitle: string;
   settings: string;
   user: string;
@@ -94,6 +95,7 @@ export const strings: Dictionary = {
   locationSearch: 'Įveskite miestą',
   moreButtonText: 'Daugiau',
   tryAgain: 'Bandykite dar kartą',
+  savedArticles: 'Išsaugoti straipsniai',
   nightModeTitle: 'Nakties režimas',
   settings: 'NUSTATYMAI',
   user: 'PASKYRA',

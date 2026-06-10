@@ -3420,6 +3420,27 @@ PODS:
     - React-utils (= 0.85.3)
     - ReactNativeDependencies
   - ReactNativeDependencies (0.85.3)
+  - RNBootSplash (7.3.1):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - RNCAsyncStorage (2.2.0):
     - hermes-engine
     - RCTRequired
@@ -4027,6 +4048,7 @@ DEPENDENCIES:
   - ReactCodegen (from `build/generated/ios/ReactCodegen`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeDependencies (from `../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec`)
+  - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNFastImage (from `../node_modules/@d11/react-native-fast-image`)"
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
@@ -4269,6 +4291,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeDependencies:
     :podspec: "../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec"
+  RNBootSplash:
+    :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNFastImage:
@@ -4430,6 +4454,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 01edc8d202005315c06ca3826d1eaad2c619cae7
   ReactCommon: ced9cfa50957cb9e6b7a1a7cd4ee20f5da6fa3a4
   ReactNativeDependencies: 0ccb978088a05251f34eacaa2945edcfd0888973
+  RNBootSplash: 0a753e6123f194dfcfa869b83fcce1128abfc7ba
   RNCAsyncStorage: a455ed0edb854f0c8471b3049935680d5868796a
   RNFastImage: d6b630819037d141fe5254d4377c67fa6c2868ce
   RNFBAnalytics: 039772fcea89aba884068c6696381a75718f55e3
