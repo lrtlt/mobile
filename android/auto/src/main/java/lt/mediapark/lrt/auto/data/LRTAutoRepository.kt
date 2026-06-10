@@ -161,7 +161,10 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                     "$WATCH_HISTORY_URL/audio/$count",
                     "Bearer $accessToken"
                 )
-                val entries = response.list.sortedByDescending { it.updatedAt }
+                val now = System.currentTimeMillis()
+                val entries = response.list
+                    .filter { now - it.updatedAt <= CONTINUE_PLAYING_MAX_AGE_MS }
+                    .sortedByDescending { it.updatedAt }
                 val items = hydrateEntries(entries)
                 continuePlayingCache = items
                 items
@@ -245,5 +248,9 @@ class LRTAutoRepository(private val api: LRTAutoService) {
         private const val NEWEST_CACHE_DURATION = 2 * 60 * 1000L // 2 minutes
         private const val PODCAST_CACHE_DURATION = 4 * 60 * 60 * 1000L // 4 hours
         private const val WATCH_HISTORY_URL = "https://www.lrt.lt/servisai/dev-authrz/api/v1/user/watch-history"
+
+        // Continue-playing entries older than this many days are filtered out.
+        private const val CONTINUE_PLAYING_MAX_AGE_DAYS = 15
+        private const val CONTINUE_PLAYING_MAX_AGE_MS = CONTINUE_PLAYING_MAX_AGE_DAYS * 24L * 60 * 60 * 1000
     }
 }

@@ -8,6 +8,9 @@ extension Notification.Name {
 class CarPlayService {
   static let shared = CarPlayService()
 
+  /// Continue-playing entries older than this many days are filtered out.
+  private static let continuePlayingMaxAgeDays = 15
+
   private let network = CarPlayNetwork.shared
 
   // In-memory only (per requirements — no disk persistence).
@@ -66,9 +69,12 @@ class CarPlayService {
     }
     do {
       let token = try await CarPlayAuthManager.shared.getAccessToken()
-      let entries = try await network.fetchWatchHistory(
+      let allEntries = try await network.fetchWatchHistory(
         mediaType: "audio", count: count, accessToken: token
       )
+      let maxAgeMs = Int64(Self.continuePlayingMaxAgeDays) * 24 * 60 * 60 * 1000
+      let nowMs = Int64(Date().timeIntervalSince1970 * 1000)
+      let entries = allEntries.filter { nowMs - $0.updatedAt <= maxAgeMs }
       for e in entries {
         print("watch-history entry: articleId=\(e.articleId) pos=\(e.positionSec)/\(e.durationSec) pct=\(e.progressPct)")
       }
