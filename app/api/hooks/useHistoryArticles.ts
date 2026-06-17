@@ -42,8 +42,28 @@ export const useHistoryUserArticles = (page: number, count?: number) => {
     enabled: !!user,
   });
 
-  const articleIds = HttpClient.isAuthenticated() ? data : localHistoryArticleIds;
+  // For authenticated users the displayed order comes from the server list. Overlay
+  // the local store's recency order so a just-opened article jumps to the top on this
+  // device regardless of how/whether the backend bumps its position (see ADR-0001).
+  // IDs only known to the server (older items, other devices) keep their server order.
+  const articleIds = HttpClient.isAuthenticated() ? overlayLocalOrder(data, history) : localHistoryArticleIds;
   return useSearchArticlesByIds(articleIds);
+};
+
+const overlayLocalOrder = (
+  serverIds: number[] | undefined,
+  localHistory: ReturnType<typeof useArticleStorageStore.getState>['history'],
+): number[] | undefined => {
+  if (!serverIds) {
+    return serverIds;
+  }
+  const localRank = new Map(
+    localHistory.map((item, index) => [isMediaArticle(item) ? item.id : item.article_id, index]),
+  );
+  return [...serverIds].sort(
+    (a, b) =>
+      (localRank.get(a) ?? Number.MAX_SAFE_INTEGER) - (localRank.get(b) ?? Number.MAX_SAFE_INTEGER),
+  );
 };
 
 export const useAddHistoryUserArticle = () =>
