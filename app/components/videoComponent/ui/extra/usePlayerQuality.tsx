@@ -46,7 +46,8 @@ const usePlayerQuality = ({player}: Options) => {
       });
       setQualities(sorted);
 
-      const nextSelectedUid = player.targetVideoQuality ?? undefined;
+      const targetQuality = player.targetVideoQuality;
+      const nextSelectedUid = Array.isArray(targetQuality) ? targetQuality[0] : targetQuality ?? undefined;
       setSelectedUid(sorted.some((q) => q.uid === nextSelectedUid) ? nextSelectedUid : undefined);
 
       if (sorted.length < 2) {

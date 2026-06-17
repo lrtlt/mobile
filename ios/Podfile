@@ -52,7 +52,8 @@ target 'lrtApp' do
 
   pod 'react-native-google-cast', :git => 'https://github.com/Danesz/react-native-google-cast.git', branch: 'feature/guestmode_apple_silicon'
   #THIS IS A WORKAROUND FOR ARCHIVE BUILD BECAUSE OF FCMImageNotification
-  pod 'GoogleUtilities', '~> 8.1.0'
+  #Version is intentionally unpinned so it follows whatever Firebase/RN resolve to
+  pod 'GoogleUtilities'
 
   use_react_native!(
     :path => config[:reactNativePath],
@@ -72,8 +73,8 @@ end
 
 target 'FCMImageNotification' do
   use_frameworks! :linkage => :static
-  pod 'Firebase/Messaging', '~> 12.8.0'
-  #This was added manually
-  #Change version if needed, just copy from Podfile.lock
-  pod 'GoogleUtilities', '~> 8.1.0'
+  #Version is intentionally unpinned so it follows the host app's resolved Firebase version
+  pod 'Firebase/Messaging'
+  #This was added manually so it matches the host app's resolved version
+  pod 'GoogleUtilities'
 end
