@@ -24,12 +24,14 @@ import {
   isMediatekaBlockCategory,
   isMediatekaBlockContinue,
   isMediatekaBlockSlug,
+  isMediatekaBlockVideoCollection,
   isMediatekaBlockWidget,
   MediatekaBlockType,
 } from '../../../../api/Types';
 import EpikaBlock from '../home/blocks/EpikaBlock/EpikaBlock';
 import MediatekaHero from './components/hero/MediatekaHero';
 import MediatekaHorizontalCategoryList from './components/horizontal_list/MediatekaHorizontalCategoryList';
+import MediatekaCollectionList from './components/collection_list/MediatekaCollectionList';
 import VideoListBlock from '../home/blocks/VideoListBlock/VideoListBlock';
 import {pushArticle} from '../../../../util/NavigationUtils';
 import ContinueRow from '../../../../components/continueRow/ContinueRow';
@@ -37,6 +39,9 @@ import ContinueRow from '../../../../components/continueRow/ContinueRow';
 const WIDGET_ID_HERO = 24;
 const WIDGET_ID_LATEST = 25;
 const WIDGET_ID_POPULAR = 26;
+
+// Shown for a Show in a Show Collection (template 59) when it has no poster image.
+const COLLECTION_PLACEHOLDER_IMAGE = 'https://www.lrt.lt/radioteka-static/images/lrt-placeholder.jpg';
 
 interface Props {
   onScroll?: (event: any) => void;
@@ -201,6 +206,26 @@ const MediatekaScreen: React.FC<React.PropsWithChildren<Props>> = ({onScroll, pa
           />
         );
       }
+    }
+
+    if (isMediatekaBlockVideoCollection(item)) {
+      const {description, category_list} = item.video_category_collection;
+      return (
+        <MediatekaCollectionList
+          title={description.article_title}
+          items={category_list.map((show) => {
+            const img = show.category_images?.img1;
+            return {
+              imageUrl: img?.img_path_prefix
+                ? buildImageUri(IMG_SIZE_L, img.img_path_prefix, img.img_path_postfix)
+                : COLLECTION_PLACEHOLDER_IMAGE,
+            };
+          })}
+          onItemPress={(index) => {
+            pushArticle(navigation, category_list[index].LATEST_ITEM);
+          }}
+        />
+      );
     }
 
     if (isMediatekaBlockSlug(item)) {
