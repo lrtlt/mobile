@@ -39,10 +39,19 @@ const usePlayerQuality = ({player}: Options) => {
 
     const syncQualities = () => {
       const track = getActiveVideoTrack(player);
-      const sorted = [...(track?.qualities ?? [])].sort(
-        (a, b) => (b as VideoQuality).height - (a as VideoQuality).height,
-      );
+      const sorted = [...(track?.qualities ?? [])].sort((a, b) => {
+        const aHeight = isVideoQuality(a) ? a.height ?? 0 : 0;
+        const bHeight = isVideoQuality(b) ? b.height ?? 0 : 0;
+        return bHeight - aHeight;
+      });
       setQualities(sorted);
+
+      const nextSelectedUid = player.targetVideoQuality ?? undefined;
+      setSelectedUid(sorted.some((q) => q.uid === nextSelectedUid) ? nextSelectedUid : undefined);
+
+      if (sorted.length < 2) {
+        setShowMenu(false);
+      }
     };
 
     const handleTrackEvent = (event: {trackType?: MediaTrackType}) => {
