@@ -480,6 +480,43 @@ export const isMediatekaBlockCategory = (data?: MediatekaBlockType): data is Med
   return a?.template_id === 52 || a?.template_id === 22;
 };
 
+// A single Show inside a Show Collection (template 59). Carries its own
+// vertical poster (category_images.img1) and the latest Episode (LATEST_ITEM).
+export type MediatekaCollectionShow = {
+  title: string;
+  category_url?: string;
+  category_images?: {
+    img1?: {
+      img_path_prefix: string;
+      img_path_postfix: string;
+      img_path: string;
+      w_h: string;
+    };
+  };
+  LATEST_ITEM: ArticleContentMedia;
+};
+
+// 59 - Mediatekos laidų kolekcija: a horizontal row of Shows shown as vertical
+// posters. Tapping a poster opens that Show's latest Episode.
+export type MediatekaBlockVideoCollection = {
+  template_id: 59;
+  is_video_category_collection: 1;
+  video_category_collection: {
+    description: {
+      article_title: string;
+      category_url: string;
+    };
+    category_list: MediatekaCollectionShow[];
+  };
+};
+
+export const isMediatekaBlockVideoCollection = (
+  data?: MediatekaBlockType,
+): data is MediatekaBlockVideoCollection => {
+  const a = data as MediatekaBlockVideoCollection | undefined;
+  return a?.template_id === 59;
+};
+
 export type MediatekaBlockContinue = {
   type: 'continue_watching';
   template_id: 999;
@@ -496,6 +533,7 @@ export type MediatekaBlockType =
   | MediatekaBlockBanner
   | MediatekaBlockSlug
   | MediatekaBlockCategory
+  | MediatekaBlockVideoCollection
   | MediatekaBlockContinue;
 
 export type MediatekaV2DataResponse = {
