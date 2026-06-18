@@ -5,8 +5,8 @@ import {TouchableDebounce} from '../../../../../../components';
 import FastImage from '@d11/react-native-fast-image';
 // import PlayButton from '../play_button/play_button';
 
-const CARD_WIDTH_FULL = Math.min(Dimensions.get('window').width * 0.5, 300);
-const CARD_WIDTH_MINIMAL = Math.min(Dimensions.get('window').width * 0.33, 150);
+const CARD_WIDTH_FULL = Math.min(Dimensions.get('window').width * 0.4, 300);
+const CARD_WIDTH_MINIMAL = Math.min(Dimensions.get('window').width * 0.26, 150);
 
 export type RadiotekaListItem = {
   category?: string;

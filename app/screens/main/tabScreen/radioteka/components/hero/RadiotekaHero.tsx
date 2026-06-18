@@ -12,7 +12,7 @@ import PlayButton from '../play_button/play_button';
 import {useMediaPlayer} from '../../../../../../components/videoComponent/context/useMediaPlayer';
 import ArticlePlaylist from '../../../../../../components/videoComponent/context/playlist/ArticlePlaylist';
 
-const width = Math.min(Dimensions.get('window').width * 0.32, 150);
+const width = Math.min(Dimensions.get('window').width * 0.26, 150);
 
 interface Props {
   block: RadiotekaTopArticlesBlock;
