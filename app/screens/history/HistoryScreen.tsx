@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo} from 'react';
-import {ListRenderItemInfo, StyleSheet, View} from 'react-native';
+import React, {useCallback, useEffect, useMemo} from 'react';
+import {ActivityIndicator, ListRenderItemInfo, StyleSheet, View} from 'react-native';
 import {ArticleRow, MyFlatList, ScreenError, ScreenLoader} from '../../components';
 import {useTheme} from '../../Theme';
 import {RouteProp} from '@react-navigation/native';
@@ -10,7 +10,7 @@ import useNavigationAnalytics from '../../util/useNavigationAnalytics';
 import {SavedArticle} from '../../state/article_storage_store';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {pushArticle} from '../../util/NavigationUtils';
-import {useHistoryUserArticles} from '../../api/hooks/useHistoryArticles';
+import {useHistoryUserArticlesInfinite} from '../../api/hooks/useHistoryArticles';
 import {ArticleSearchItem} from '../../api/Types';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'History'>;
@@ -34,15 +34,25 @@ const mapFavoriteArticles = (article: ArticleSearchItem): SavedArticle => ({
 });
 
 const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
-  const {strings} = useTheme();
+  const {strings, colors} = useTheme();
 
-  const {data, isLoading, error} = useHistoryUserArticles(1);
-  const responseArticles = data?.items ?? [];
+  const {pages, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage} =
+    useHistoryUserArticlesInfinite();
 
+  // Format each page independently and concatenate, so already-loaded rows keep their
+  // grouping (and identity) when a new page is appended — avoids the whole-list reflow
+  // that made the list jump on scroll.
   const articles = useMemo(
-    () => formatArticles(-1, responseArticles.map(mapFavoriteArticles), false),
-    [responseArticles],
+    () => pages.flatMap((page) => formatArticles(-1, page.map(mapFavoriteArticles), false)),
+    [pages],
   );
+
+  const onEndReached = useCallback(() => {
+    // RN can fire onEndReached repeatedly — guard so it's a no-op mid-fetch / at the end.
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -71,10 +81,12 @@ const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
 
   const {bottom} = useSafeAreaInsets();
 
-  if (isLoading && !data) {
+  if (isLoading) {
     return <ScreenLoader />;
   }
-  if (error) {
+  // Full-screen error only guards the initial load. A next-page (fetchNextPage) failure
+  // leaves the already-loaded list intact — the footer spinner just stops.
+  if (error && pages.length === 0) {
     return <ScreenError text={error.message} />;
   }
 
@@ -88,6 +100,13 @@ const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
         renderItem={renderItem}
         removeClippedSubviews={false}
         keyExtractor={(item, index) => `${index}-${item.map((i) => i.id)}`}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <ActivityIndicator style={styles.footer} color={colors.primary} />
+          ) : null
+        }
       />
     </View>
   );
@@ -98,5 +117,8 @@ export default HistoryScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  footer: {
+    paddingVertical: 16,
   },
 });
