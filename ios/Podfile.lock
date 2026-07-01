@@ -3060,13 +3060,13 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-theoplayer (11.2.1):
+  - react-native-theoplayer (11.3.0):
     - React-Core
     - THEOplayer-Connector-SideloadedSubtitle (> 11.0.1, ~> 11.0)
     - THEOplayer-Integration-GoogleCast (~> 11.4)
     - THEOplayer-Integration-THEOlive (~> 11.4)
     - THEOplayerSDK-core (~> 11.4)
-  - react-native-webview (13.16.1):
+  - react-native-webview (14.0.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3643,7 +3643,7 @@ PODS:
     - ReactNativeDependencies
     - RNFBApp
     - Yoga
-  - RNGestureHandler (3.0.1):
+  - RNGestureHandler (3.0.2):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3691,7 +3691,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNReanimated (4.4.1):
+  - RNReanimated (4.5.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3712,11 +3712,12 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
-    - RNReanimated/apple (= 4.4.1)
-    - RNReanimated/common (= 4.4.1)
+    - RNReanimated/apple (= 4.5.0)
+    - RNReanimated/common (= 4.5.0)
+    - RNReanimated/view (= 4.5.0)
     - RNWorklets
     - Yoga
-  - RNReanimated/apple (4.4.1):
+  - RNReanimated/apple (4.5.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3739,7 +3740,30 @@ PODS:
     - ReactNativeDependencies
     - RNWorklets
     - Yoga
-  - RNReanimated/common (4.4.1):
+  - RNReanimated/common (4.5.0):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - RNWorklets
+    - Yoga
+  - RNReanimated/view (4.5.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3871,7 +3895,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNWorklets (0.9.2):
+  - RNWorklets (0.10.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3892,10 +3916,10 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
-    - RNWorklets/apple (= 0.9.2)
-    - RNWorklets/common (= 0.9.2)
+    - RNWorklets/apple (= 0.10.1)
+    - RNWorklets/common (= 0.10.1)
     - Yoga
-  - RNWorklets/apple (0.9.2):
+  - RNWorklets/apple (0.10.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3917,7 +3941,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNWorklets/common (0.9.2):
+  - RNWorklets/common (0.10.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -4429,8 +4453,8 @@ SPEC CHECKSUMS:
   react-native-netinfo: adec161a2fc40d327f2c1bab7d8c57a91943ab74
   react-native-pager-view: bae7c4ab4ac57609c728c450f5ddd4d3b5ec1bce
   react-native-safe-area-context: f7d04fb7a42e10aab12b453f66ec5d9f73fbb08d
-  react-native-theoplayer: 07df54b53655e95dedd3c9b925bea1200289a548
-  react-native-webview: cac57e5c9caaac09627c910efb968bac54d5b4dd
+  react-native-theoplayer: aa12535ac7eb3103ff65c324a7f3902c9b58208d
+  react-native-webview: bb573d695bfd9a717d9394fd6e3fa1d57665636f
   React-NativeModulesApple: 6f8a4b47b7561c796094a6b03ab570c63fb98548
   React-networking: 2fbe0ada4dd67c2c65656d5429f71a96df5eaa02
   React-oscompat: e3c95718adca6d0e7ca9e5b01a04d057f4aa8f72
@@ -4475,14 +4499,14 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: 0fb6bec4ae5832abe4c0dd797f5a15e2af61494e
   RNFBFirestore: 0b59456cb9d4f041d8365d7c71b00af6a47e5c59
   RNFBMessaging: deb0ea86ae14038368a7b1a0d3414251419dc40f
-  RNGestureHandler: f74cacfca0b480f7121799e3ea88233e5d498f95
+  RNGestureHandler: 88bae0031dc19c52e5a8c3cceb3f3cb356ec1131
   RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
   RNPermissions: c330325844b666fd1700f01b22aa8fc365a0627c
-  RNReanimated: 17ca61febb1b66f6c876abc0ae317583ccab6d2a
+  RNReanimated: 1f1e845e499f1071daa20e1c9812632f92fa1b6a
   RNScreens: df54f9e1092ce77fe96fc0c3a5314862d05a506e
   RNShare: 1e1a7b4fe6c0ff025b2bc98430a76fda260e79b0
   RNSVG: 62a6c89ec3d32194bbbbb423388776411f783d17
-  RNWorklets: 720601f970c2aa5d156cf4b6c7d6cdbcc5c0b28d
+  RNWorklets: c1ef669bc37dcfe4af83cc6a3da12c4b3217ab20
   SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
   SDWebImageAVIFCoder: afe194a084e851f70228e4be35ef651df0fc5c57
   SDWebImageSVGCoder: 15a300a97ec1c8ac958f009c02220ac0402e936c
