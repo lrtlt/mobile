@@ -1,12 +1,14 @@
-import {keepPreviousData, useMutation, useQuery} from '@tanstack/react-query';
+import {keepPreviousData, useInfiniteQuery, useMutation, useQuery} from '@tanstack/react-query';
+import {useMemo} from 'react';
 import * as HttpClient from '../HttpClient';
 import queryClient from '../../../AppQueryClient';
-import {useSearchArticlesByIds} from './useSearchArticles';
+import {searchArticlesByIds, useSearchArticlesByIds} from './useSearchArticles';
 import {useArticleStorageStore} from '../../state/article_storage_store';
-import {isMediaArticle} from '../Types';
+import {ArticleSearchItem, isMediaArticle} from '../Types';
 import {useAuth0} from 'react-native-auth0';
 
 const QUERY_KEY = 'historyUserArticles';
+const QUERY_KEY_INFINITE = 'historyUserArticlesInfinite';
 const DEFAULT_STALE_TIME = 1000 * 60 * 5; // 5 minutes
 
 type HistoryArticleResponse = {
@@ -42,28 +44,81 @@ export const useHistoryUserArticles = (page: number, count?: number) => {
     enabled: !!user,
   });
 
-  // For authenticated users the displayed order comes from the server list. Overlay
-  // the local store's recency order so a just-opened article jumps to the top on this
-  // device regardless of how/whether the backend bumps its position (see ADR-0001).
-  // IDs only known to the server (older items, other devices) keep their server order.
-  const articleIds = HttpClient.isAuthenticated() ? overlayLocalOrder(data, history) : localHistoryArticleIds;
+  // Authenticated users are ordered by the server history list; unauthenticated users
+  // by their local store (its only data source).
+  const articleIds = HttpClient.isAuthenticated() ? data : localHistoryArticleIds;
   return useSearchArticlesByIds(articleIds);
 };
 
-const overlayLocalOrder = (
-  serverIds: number[] | undefined,
-  localHistory: ReturnType<typeof useArticleStorageStore.getState>['history'],
-): number[] | undefined => {
-  if (!serverIds) {
-    return serverIds;
-  }
-  const localRank = new Map(
-    localHistory.map((item, index) => [isMediaArticle(item) ? item.id : item.article_id, index]),
-  );
-  return [...serverIds].sort(
-    (a, b) =>
-      (localRank.get(a) ?? Number.MAX_SAFE_INTEGER) - (localRank.get(b) ?? Number.MAX_SAFE_INTEGER),
-  );
+const localHistoryId = (item: ReturnType<typeof useArticleStorageStore.getState>['history'][number]) =>
+  isMediaArticle(item) ? item.id : item.article_id;
+
+type HistoryPage = {
+  items: ArticleSearchItem[];
+  // Raw count of ids in this history page — the end-of-list signal. Judged on ids,
+  // NOT on hydrated items, so a page whose ids all fail to hydrate isn't mistaken
+  // for the end (see ADR-0002, "Empty-page sentinel").
+  idCount: number;
+};
+
+/**
+ * Infinite (load-more-on-scroll) variant of the reading History list for the
+ * History screen. Authenticated users page through the server history; every page
+ * fetches its history-id slice and search-hydrates it in one queryFn. Unauthenticated
+ * users get their local history as a single terminal page (no "load more"). See ADR-0002.
+ */
+export const useHistoryUserArticlesInfinite = () => {
+  const {user} = useAuth0();
+  const isAuthenticated = !!user;
+
+  const query = useInfiniteQuery({
+    queryKey: [QUERY_KEY_INFINITE, isAuthenticated],
+    initialPageParam: 1,
+    queryFn: async ({pageParam, signal}): Promise<HistoryPage> => {
+      if (!isAuthenticated) {
+        // Local-only history: a single page of whatever the device stored.
+        const ids = useArticleStorageStore.getState().history.map(localHistoryId);
+        const response = await searchArticlesByIds(ids, signal);
+        return {items: response.items, idCount: ids.length};
+      }
+
+      const response = await HttpClient.get<HistoryArticleResponse>(
+        `https://www.lrt.lt/servisai/authrz/user/history/${pageParam}`,
+        {signal},
+      );
+      const ids = response.articles.map((item) => item.articleId);
+      const hydrated = await searchArticlesByIds(ids, signal);
+      return {items: hydrated.items, idCount: ids.length};
+    },
+    getNextPageParam: (lastPage, _allPages, lastPageParam) => {
+      // Unauthenticated history is a single terminal page.
+      if (!isAuthenticated) {
+        return undefined;
+      }
+      // Empty-page sentinel: keep paging until a history page returns no ids.
+      return lastPage.idCount > 0 ? lastPageParam + 1 : undefined;
+    },
+    placeholderData: keepPreviousData,
+    staleTime: DEFAULT_STALE_TIME,
+  });
+
+  // Per-page item arrays in server order. Kept page-by-page (not flattened) so the
+  // screen can format each page independently — formatting the whole list at once
+  // reflows row grouping across page seams and makes the list visibly jump on append
+  // (see ADR-0002).
+  const pages = useMemo(() => {
+    return (query.data?.pages ?? []).map((page) => page.items);
+  }, [query.data]);
+
+  return {
+    pages,
+    isLoading: query.isLoading,
+    error: query.error,
+    fetchNextPage: query.fetchNextPage,
+    hasNextPage: query.hasNextPage,
+    isFetchingNextPage: query.isFetchingNextPage,
+    refetch: query.refetch,
+  };
 };
 
 export const useAddHistoryUserArticle = () =>
@@ -75,6 +130,11 @@ export const useAddHistoryUserArticle = () =>
       return response.data;
     },
     onSuccess: () => {
+      // Separate calls: invalidateQueries matches by key prefix, so the two history
+      // hooks (keyed [QUERY_KEY, ...] and [QUERY_KEY_INFINITE, ...]) must each be
+      // invalidated on their own prefix — a combined [QUERY_KEY, QUERY_KEY_INFINITE]
+      // array is a two-element prefix that matches neither.
       queryClient.invalidateQueries({queryKey: [QUERY_KEY]});
+      queryClient.invalidateQueries({queryKey: [QUERY_KEY_INFINITE]});
     },
   });
