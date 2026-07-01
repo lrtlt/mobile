@@ -9,16 +9,13 @@ import HTML, {
   RenderersProps,
   TChildrenRenderer,
   TNodeChildrenRenderer,
-} from 'react-native-render-html';
+} from '@native-html/render';
 import {View, StyleSheet, Linking, useWindowDimensions} from 'react-native';
-
-import TableRenderer, {tableModel} from '@native-html/table-plugin';
 
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
-import getTableCssRules from './getTableCssRules';
-import SafeWebView from '../safeWebView/SafeWebView';
 import useTextStyle from '../text/useTextStyle';
+import SafeWebView from '../safeWebView/SafeWebView';
 
 const DEFAULT_FONT_SIZE = 19;
 const EXTRA_LINE_SPACING = 8;
@@ -108,7 +105,6 @@ const ULRenderer: CustomBlockRenderer = (props) => {
 };
 
 const renderers: CustomTagRendererRecord = {
-  table: TableRenderer,
   blockquote: BlockquoteRenderer,
   p: MyTextualRenderer,
   li: MyTextualRenderer,
@@ -129,8 +125,7 @@ const fonts: string[] = [
 ];
 
 const useRendererProps = (): Partial<RenderersProps> => {
-  const theme = useTheme();
-  const {colors} = theme;
+  const {colors} = useTheme();
 
   return useMemo(
     () => ({
@@ -155,12 +150,8 @@ const useRendererProps = (): Partial<RenderersProps> => {
           padding: 4,
         },
       },
-      table: {
-        cssRules: getTableCssRules(theme),
-        startInLoadingState: true,
-      },
     }),
-    [colors.primary, theme],
+    [colors.tertiary],
   );
 };
 
@@ -179,6 +170,7 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
         fontWeight: '900',
       },
       blockquote: {
+        margin: 0,
         padding: 12,
         flexDirection: 'row',
         fontFamily: 'SourceSansPro-LightItalic',
@@ -254,9 +246,6 @@ const HTMLRenderer: React.FC<React.PropsWithChildren<Props>> = ({html, textSize,
             },
       }}
       renderersProps={useRendererProps()}
-      customHTMLElementModels={{
-        table: tableModel,
-      }}
     />
   );
 };
@@ -268,11 +257,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   quoteSimbol: {
-    fontSize: 70,
+    fontSize: 80,
     marginRight: 4,
   },
   quoteText: {
-    padding: 8,
+    paddingHorizontal: 8,
   },
   bubble: {
     width: 6,
