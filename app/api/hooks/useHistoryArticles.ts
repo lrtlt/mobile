@@ -69,17 +69,21 @@ type HistoryPage = {
  */
 export const useHistoryUserArticlesInfinite = () => {
   const {user} = useAuth0();
+  const {history} = useArticleStorageStore();
   const isAuthenticated = !!user;
+  const localHistoryIds = history.map(localHistoryId);
 
   const query = useInfiniteQuery({
-    queryKey: [QUERY_KEY_INFINITE, isAuthenticated],
+    // Unauthenticated history has no server invalidation to hang off of, so key on the
+    // local ids: opening an article reorders the store, changing the key and refetching.
+    // Authenticated history stays history-free here (it is invalidated via the mutation).
+    queryKey: [QUERY_KEY_INFINITE, isAuthenticated, isAuthenticated ? null : localHistoryIds.join(',')],
     initialPageParam: 1,
     queryFn: async ({pageParam, signal}): Promise<HistoryPage> => {
       if (!isAuthenticated) {
         // Local-only history: a single page of whatever the device stored.
-        const ids = useArticleStorageStore.getState().history.map(localHistoryId);
-        const response = await searchArticlesByIds(ids, signal);
-        return {items: response.items, idCount: ids.length};
+        const response = await searchArticlesByIds(localHistoryIds, signal);
+        return {items: response.items, idCount: localHistoryIds.length};
       }
 
       const response = await HttpClient.get<HistoryArticleResponse>(

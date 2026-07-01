@@ -84,7 +84,9 @@ const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
   if (isLoading) {
     return <ScreenLoader />;
   }
-  if (error) {
+  // Full-screen error only guards the initial load. A next-page (fetchNextPage) failure
+  // leaves the already-loaded list intact — the footer spinner just stops.
+  if (error && pages.length === 0) {
     return <ScreenError text={error.message} />;
   }
 

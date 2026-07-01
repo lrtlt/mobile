@@ -8,7 +8,7 @@
 
 ## Decisions
 
-1. **Authenticated users only.** Unauthenticated history is local-only and hard-capped at 50 items (`ARTICLE_HISTORY_COUNT`), all of which already load in one shot — there is nothing beyond page 1 to fetch. For unauthenticated users the list renders as a single terminal page with no "load more."
+1. **Authenticated users only.** Unauthenticated history is local-only and hard-capped at 50 items (`ARTICLE_HISTORY_COUNT`), all of which already load in one shot — there is nothing beyond page 1 to fetch. For unauthenticated users the list renders as a single terminal page with no "load more." Because the local store has no server-side mutation to invalidate against (opening an article only updates the store, and the server history mutation runs for authenticated users only), the unauthenticated query is **keyed on the local history IDs** — a store change (article opened → reordered) changes the key and refetches, keeping the screen reactive while mounted. The authenticated query key stays history-free (it is invalidated via the mutation).
 
 2. **One `useInfiniteQuery`, page = "history-ID page + search-hydrate."** Each page's `queryFn` fetches the history-ID page **and** hydrates those IDs, returning ready `ArticleSearchItem`s. The screen flat-maps `pages`. This keeps IDs and article details co-located per page and keeps the `?ids=…` search URL bounded (rejected: accumulating all IDs into one ever-growing search call).
 
@@ -18,7 +18,7 @@
 
 5. **End detected by empty-page sentinel.** The history response carries no `total`/`hasMore`, and the server page size is unverified, so `getNextPageParam` keeps paging until a page returns **0 items**, then stops. End-of-list is judged from the raw history-ID page length (the `articles` array), **not** the hydrated item count — a page of IDs that all fail to hydrate must not be mistaken for the end. Cost: one extra empty trailing request. Rejected a hard-coded `PAGE_SIZE` short-page heuristic because a wrong constant would silently truncate history.
 
-6. **Load-more UX.** `onEndReached` (threshold ≈ 0.5) calls `fetchNextPage()`, guarded to a no-op while `isFetchingNextPage` or `!hasNextPage`. A footer spinner shows while a next page loads. A next-page fetch error leaves the already-loaded list intact (footer spinner stops); the full-screen `<ScreenError>` still guards only the initial load.
+6. **Load-more UX.** `onEndReached` (threshold ≈ 0.5) calls `fetchNextPage()`, guarded to a no-op while `isFetchingNextPage` or `!hasNextPage`. A footer spinner shows while a next page loads. A next-page fetch error leaves the already-loaded list intact (footer spinner stops); the full-screen `<ScreenError>` is guarded on `pages.length === 0` so it only fires on the **initial** load (`useInfiniteQuery`'s `error` is set for *any* failed fetch, including `fetchNextPage`, so the guard is required).
 
 7. **Grouping page-by-page.** Each page is formatted independently (`pages.flatMap(page => formatArticles(-1, page, false))`) and the row groups concatenated. *Originally* decided as a single `formatArticles` over the whole accumulated list (for even rows across seams), but in practice appending a page reflowed the previous page's row grouping — existing rows changed content/identity, `keyExtractor` keys shifted, and the list **visibly jumped** on scroll. Formatting per page keeps already-loaded rows stable on append. Accepted cost: a page whose item count isn't a multiple of the row size leaves a partial trailing row at the seam (preferred over the jump).
 
