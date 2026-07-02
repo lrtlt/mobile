@@ -1,4 +1,4 @@
-import {View, ViewStyle, PanResponder, StyleProp, Insets} from 'react-native';
+import {View, ViewStyle, PanResponder, Platform, StyleProp, Insets} from 'react-native';
 import React, {useState, useRef, PropsWithChildren} from 'react';
 
 export interface PlayerButtonProps {
@@ -24,6 +24,11 @@ export const PlayerButton: React.FC<PropsWithChildren<PlayerButtonProps>> = ({
   const [pressed, setPressed] = useState<boolean>(false);
   const pressedRef = useRef(false);
 
+  // The PanResponder is created once, so read the latest onPress through a ref
+  // instead of capturing the first render's callback.
+  const onPressRef = useRef(onPress);
+  onPressRef.current = onPress;
+
   const handlePressIn = () => {
     setPressed(true);
     pressedRef.current = true;
@@ -42,10 +47,14 @@ export const PlayerButton: React.FC<PropsWithChildren<PlayerButtonProps>> = ({
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => false,
+      // Blocking the native responder (the Android default) makes the native side cancel
+      // the touch stream right after the grant on RN 0.86 new architecture when the player
+      // is inline, so the finger-up never reaches JS and RELEASE never fires.
+      onShouldBlockNativeResponder: () => Platform.OS !== 'android',
       onPanResponderGrant: () => handlePressIn(),
       onPanResponderRelease: () => {
         if (pressedRef.current) {
-          onPress?.();
+          onPressRef.current?.();
         }
         handlePressOut();
       },

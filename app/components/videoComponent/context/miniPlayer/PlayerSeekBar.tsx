@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {PanResponder, PanResponderInstance, StyleSheet, View, ViewStyle} from 'react-native';
+import {PanResponder, PanResponderInstance, Platform, StyleSheet, View, ViewStyle} from 'react-native';
 import {LoadedMetadataEvent, PlayerEventType, THEOplayer, TimeUpdateEvent} from 'react-native-theoplayer';
 import {useTheme} from '../../../../Theme';
 import TextComponent from '../../../text/Text';
@@ -98,11 +98,16 @@ const PlayerSekBar: React.FC<React.PropsWithChildren<Props>> = ({style, player})
     return PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
-      onShouldBlockNativeResponder: () => true,
+      // Blocking the native responder (the Android default) makes the native side cancel
+      // the touch stream right after the grant on RN 0.86 new architecture, so the
+      // finger-up never reaches JS and RELEASE never fires.
+      onShouldBlockNativeResponder: () => Platform.OS !== 'android',
       onPanResponderTerminationRequest: () => true,
 
-      onPanResponderTerminate: (evt, gestureState) => {
-        console.log('onPanResponderTerminate', evt, gestureState);
+      // Abort the scrub without seeking when a parent takes the responder over,
+      // so the seekbar resumes tracking playback.
+      onPanResponderTerminate: () => {
+        setScrubbing(false);
       },
 
       onPanResponderGrant: (event, _gestureState) => {
