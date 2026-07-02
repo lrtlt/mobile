@@ -31,7 +31,6 @@ import usePlayerSubtitles from './ui/extra/usePlayerSubtitles';
 import usePlayerLoop from './usePlayerLoop';
 import usePlayerFullScreen from './usePlayerFullScreen';
 import Poster from './ui/components/Poster';
-import PlayerFlingHandler from './PlayerFlingHandler';
 
 interface Props {
   mediaType: MediaType;
@@ -262,32 +261,30 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
       poster={poster}
       controlsEnabled={!!controls || isFullScreen}>
       <View style={{...styles.container, aspectRatio}}>
-        <PlayerFlingHandler>
-          <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady}>
-            <>
-              {isLoading && (
-                <View style={{flex: 1, justifyContent: 'center'}}>
-                  <ActivityIndicator size="large" animating={isLoading} color={colors.playerIcons} />
-                </View>
-              )}
-              {!isLoading && player ? (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                  {mediaType == MediaType.AUDIO && <Poster posterUri={poster} aspectRatio={aspectRatio} />}
-                  <MediaControls
-                    enabled={!!controls || isFullScreen}
-                    aspectRatio={aspectRatio}
-                    title={title}
-                    enableFullScreen={true}
-                    enableMute={false}
-                    extraControls={[SubtitlesButton, LanguageButton]}
-                  />
-                </View>
-              ) : null}
-              {SubtitlesMenu}
-              {LanguageMenu}
-            </>
-          </THEOplayerView>
-        </PlayerFlingHandler>
+        <THEOplayerView style={styles.video} config={config} onPlayerReady={onPlayerReady}>
+          <>
+            {isLoading && (
+              <View style={{flex: 1, justifyContent: 'center'}}>
+                <ActivityIndicator size="large" animating={isLoading} color={colors.playerIcons} />
+              </View>
+            )}
+            {!isLoading && player ? (
+              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                {mediaType == MediaType.AUDIO && <Poster posterUri={poster} aspectRatio={aspectRatio} />}
+                <MediaControls
+                  enabled={!!controls || isFullScreen}
+                  aspectRatio={aspectRatio}
+                  title={title}
+                  enableFullScreen={true}
+                  enableMute={false}
+                  extraControls={[SubtitlesButton, LanguageButton]}
+                />
+              </View>
+            ) : null}
+            {SubtitlesMenu}
+            {LanguageMenu}
+          </>
+        </THEOplayerView>
       </View>
     </PlayerContextProvider>
   );
