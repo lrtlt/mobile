@@ -16,3 +16,45 @@ export const extractBlockedIframeSrc = (html: string): string | null => {
 };
 
 export const WIDTH_REGEX = /width\s*=\s*["']?\b(\d{3,4})\b["']?/gi;
+
+/**
+ * Injected CSS can't cross iframe boundaries, so dark mode has to be requested
+ * through each provider's own theme parameter.
+ */
+export const applyDarkThemeToEmbedSrc = (src: string): string => {
+  const separator = src.includes('?') ? '&' : '?';
+  if (/(platform\.twitter\.com|platform\.x\.com)/.test(src) && !/[?&]theme=/.test(src)) {
+    return `${src}${separator}theme=dark`;
+  }
+  if (src.includes('datawrapper.dwcdn.net') && !/[?&]dark=/.test(src)) {
+    return `${src}${separator}dark=true`;
+  }
+  return src;
+};
+
+export type EmbedThemeColors = {
+  background: string;
+  text: string;
+};
+
+export const applyDarkThemeToEmbedHtml = (html: string, colors: EmbedThemeColors): string => {
+  const themedHtml = html
+    // Twitter/X blockquote embeds pick the theme from a data attribute
+    .replace(/<blockquote([^>]*class=["'][^"']*twitter-tweet[^"']*["'][^>]*)>/gi, (match, attrs) =>
+      attrs.includes('data-theme') ? match : `<blockquote${attrs} data-theme="dark">`,
+    )
+    .replace(
+      /(<iframe[^>]+src=["'])([^"']+)(["'])/gi,
+      (_match, prefix, src, suffix) => `${prefix}${applyDarkThemeToEmbedSrc(src)}${suffix}`,
+    );
+
+  // Plain HTML fragments (text, links) render black-on-white by default.
+  // color-scheme lets the engine adjust UA defaults (links, form controls) too.
+  const darkBaseStyle =
+    '<style>' +
+    ':root { color-scheme: dark; }' +
+    `body { background-color: ${colors.background}; color: ${colors.text}; }` +
+    '</style>';
+
+  return `${darkBaseStyle}${themedHtml}`;
+};
