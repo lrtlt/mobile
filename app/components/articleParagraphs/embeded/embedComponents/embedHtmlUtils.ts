@@ -26,7 +26,16 @@ export const applyDarkThemeToEmbedSrc = (src: string): string => {
   if (/(platform\.twitter\.com|platform\.x\.com)/.test(src) && !/[?&]theme=/.test(src)) {
     return `${src}${separator}theme=dark`;
   }
-  if (src.includes('datawrapper.dwcdn.net') && !/[?&]dark=/.test(src)) {
+
+  let isDatawrapperHost = false;
+  try {
+    const parsedUrl = new URL(src);
+    isDatawrapperHost = parsedUrl.hostname === 'datawrapper.dwcdn.net';
+  } catch {
+    isDatawrapperHost = false;
+  }
+
+  if (isDatawrapperHost && !/[?&]dark=/.test(src)) {
     return `${src}${separator}dark=true`;
   }
   return src;
