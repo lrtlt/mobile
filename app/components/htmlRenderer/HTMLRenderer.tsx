@@ -194,11 +194,9 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
       },
       h4: {
         fontSize: DEFAULT_FONT_SIZE,
-        paddingTop: 8,
-        paddingBottom: 20,
-        borderBottomColor: colors.listSeparator,
+        paddingTop: 12,
+        paddingBottom: 12,
         fontFamily: 'SourceSansPro-SemiBold',
-        borderBottomWidth: 1,
         textTransform: 'uppercase',
       },
     }),
