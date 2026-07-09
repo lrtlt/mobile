@@ -5,30 +5,36 @@ import WebView from 'react-native-webview';
 
 import {ArticleEmbedHTMLType} from '../../../../api/Types';
 import SafeAutoHeightWebView from '../../../safeWebView/SafeAutoHeightWebView';
-import {extractBlockedIframeSrc, WIDTH_REGEX} from './embedHtmlUtils';
+import {
+  applyDarkThemeToEmbedHtml,
+  applyDarkThemeToEmbedSrc,
+  extractBlockedIframeSrc,
+  WIDTH_REGEX,
+} from './embedHtmlUtils';
+import {useTheme} from '../../../../Theme';
 
 interface Props {
   data: ArticleEmbedHTMLType[];
 }
 
 const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
+  const {dark: isDarkMode, colors} = useTheme();
   const [initialWidth, setInitialWidth] = useState(0);
   const [currentWidth, setCurrentWidth] = useState(0);
   const webViewRefs = useRef<Map<number, WebView>>(new Map());
   const initializedRef = useRef(false);
 
-  const onLayout = useCallback(
-    (event: {nativeEvent: {layout: {width: number; height: number}}}) => {
-      const newWidth = event.nativeEvent.layout.width;
-      setCurrentWidth(newWidth);
+  const onLayout = useCallback((event: {nativeEvent: {layout: {width: number; height: number}}}) => {
+    const newWidth = event.nativeEvent.layout.width;
+    setCurrentWidth(newWidth);
 
-      if (!initializedRef.current && newWidth > 0) {
-        setInitialWidth(newWidth);
-        initializedRef.current = true;
-      } else if (initializedRef.current && newWidth > 0) {
-        // Orientation changed — inject JS to resize content without reloading
-        webViewRefs.current.forEach((webView) => {
-          webView?.injectJavaScript(`
+    if (!initializedRef.current && newWidth > 0) {
+      setInitialWidth(newWidth);
+      initializedRef.current = true;
+    } else if (initializedRef.current && newWidth > 0) {
+      // Orientation changed — inject JS to resize content without reloading
+      webViewRefs.current.forEach((webView) => {
+        webView?.injectJavaScript(`
             (function() {
               document.querySelectorAll('iframe').forEach(function(iframe) {
                 iframe.style.width = '${newWidth}px';
@@ -44,11 +50,9 @@ const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
             })();
             true;
           `);
-        });
-      }
-    },
-    [],
-  );
+      });
+    }
+  }, []);
 
   const width = initialWidth;
   return (
@@ -69,7 +73,7 @@ const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
 
             if (src) {
               source = {
-                uri: src,
+                uri: isDarkMode ? applyDarkThemeToEmbedSrc(src) : src,
               };
             } else if (html) {
               // Load iframe src directly: avoids ERR_BLOCKED_BY_RESPONSE on Android
@@ -77,7 +81,7 @@ const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
               const iframeSrc = extractBlockedIframeSrc(html);
               if (iframeSrc) {
                 source = {
-                  uri: iframeSrc,
+                  uri: isDarkMode ? applyDarkThemeToEmbedSrc(iframeSrc) : iframeSrc,
                 };
               } else {
                 let formattedHTML = html
@@ -88,6 +92,13 @@ const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
                 const trimmed = formattedHTML.trim();
                 if (trimmed.startsWith('<script') && !/<(?!script|\/script)\w/i.test(trimmed)) {
                   formattedHTML = `<html><body>${formattedHTML}</body></html>`;
+                }
+
+                if (isDarkMode) {
+                  formattedHTML = applyDarkThemeToEmbedHtml(formattedHTML, {
+                    background: colors.background,
+                    text: colors.text,
+                  });
                 }
 
                 source = {
@@ -124,6 +135,7 @@ const EmbedHTML: React.FC<React.PropsWithChildren<Props>> = ({data}) => {
                 startInLoadingState={true}
                 viewportContent={`width=${width}, user-scalable=no`}
                 source={source}
+                allowDarkMode
                 openLinksExternally
               />
             );

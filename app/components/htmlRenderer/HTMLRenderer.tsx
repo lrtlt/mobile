@@ -162,6 +162,7 @@ const useTagStyles = (): Record<string, MixedStyleDeclaration> => {
     () => ({
       p: {
         paddingVertical: 4,
+        marginVertical: 8,
         alignSelf: 'center',
         minWidth: '100%',
       },
