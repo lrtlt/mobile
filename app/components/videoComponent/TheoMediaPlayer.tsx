@@ -27,6 +27,7 @@ import Config from 'react-native-config';
 import usePlayerOrientationChange from './usePlayerOrientationChange';
 import {PlayerContextProvider} from './context/player/PlayerContextProvider';
 import usePlayerBackListener from './usePlayerBackListener';
+import usePlayerPipListener from './usePlayerPipListener';
 import usePlayerSubtitles from './ui/extra/usePlayerSubtitles';
 import usePlayerLoop from './usePlayerLoop';
 import usePlayerFullScreen from './usePlayerFullScreen';
@@ -141,6 +142,9 @@ const TheoMediaPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
   // Set up back button handler
   usePlayerBackListener({player});
+
+  // Stop playback when PiP window is dismissed
+  usePlayerPipListener({player});
 
   // Set up looping
   usePlayerLoop({player, loop});
