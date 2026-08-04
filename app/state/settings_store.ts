@@ -3,10 +3,17 @@ import {createJSONStorage, persist} from 'zustand/middleware';
 import {DailyQuestionChoice, ForecastLocation} from '../api/Types';
 import {zustandStorage} from './mmkv';
 
+/**
+ * The user's remembered subtitle choice, applied to every stream that follows.
+ * An absent value means the user has never used the subtitles menu.
+ */
+export type SubtitlePreference = {kind: 'off'} | {kind: 'language'; language: string};
+
 type SettingsStoreState = {
   isDarkMode: boolean;
   isContinuousPlayEnabled: boolean;
   textSizeMultiplier: number;
+  subtitlePreference?: SubtitlePreference;
   //TODO: export to separate store
   logo?: {
     url: string;
@@ -25,6 +32,7 @@ type SettingsStoreActions = {
   setIsDarkMode: (isDarkMode: boolean) => void;
   setIsContinuousPlayEnabled: (isContinuousPlayEnabled: boolean) => void;
   setTextSizeMultiplier: (textSizeMultiplier: number) => void;
+  setSubtitlePreference: (subtitlePreference: SubtitlePreference) => void;
   setForecastLocation: (forecastLocation?: ForecastLocation) => void;
   setDailyQuestionChoice: (daily_question_id: number, choice: DailyQuestionChoice) => void;
   fetchLogo: (url?: string) => Promise<void>;
@@ -45,6 +53,7 @@ export const useSettingsStore = create<SettingsStore>()(
       setIsDarkMode: (isDarkMode) => set({isDarkMode: isDarkMode}),
       setIsContinuousPlayEnabled: (isContinuousPlayEnabled) => set({isContinuousPlayEnabled}),
       setTextSizeMultiplier: (textSizeMultiplier) => set({textSizeMultiplier}),
+      setSubtitlePreference: (subtitlePreference) => set({subtitlePreference}),
       setForecastLocation: (forecastLocation) => set({forecastLocation}),
       setDailyQuestionChoice: (daily_question_id, choice) =>
         set({daily_question_response: {daily_question_id, choice}}),

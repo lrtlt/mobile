@@ -14,6 +14,7 @@ const ThemeProvider: React.FC<PropsWithChildren<Props>> = ({children, forceTheme
       isDarkMode: state.isDarkMode,
       textSizeMultiplier: state.textSizeMultiplier,
       isContinuousPlayEnabled: state.isContinuousPlayEnabled,
+      subtitlePreference: state.subtitlePreference,
     })),
   );
   console.log('SETTINGS', settings);
