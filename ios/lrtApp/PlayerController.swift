@@ -25,6 +25,15 @@ class PlayerController {
   private var trackedItem: CarPlayItem?
   private static let watchHistoryTickSec: TimeInterval = 10.0
 
+  /// Mirrors of the phone app's `PLAYBACK_PROGRESS_*` constants in `app/constants/index.ts`.
+  /// Both clients write the same watch-history endpoint, so these have to be kept in step by
+  /// hand — nothing enforces it.
+  ///
+  /// Progress at or beyond this fraction counts as finished even without an end-of-stream event.
+  private static let playbackCompletedPct = 0.95
+  /// Below this many seconds there is nothing worth resuming, so no entry is written.
+  private static let playbackMinPositionSec = 6
+
   private static let playbackRates: [Float] = [1.0, 1.25, 1.5]
   private var currentRateIndex: Int = 0
 
@@ -383,6 +392,14 @@ class PlayerController {
     }
   }
 
+  /// Builds and pushes one watch-history entry, mirroring the phone app's
+  /// `playback_progress_store.upsertProgress` — that store is the source of truth for what an
+  /// entry means, and CarPlay writes to the same endpoint, so the rules have to match or the two
+  /// clients disagree about the same article.
+  ///
+  /// `completed` here is the *caller's* signal (playback reached the end). The value actually
+  /// sent is derived, because the app also treats anything past `playbackCompletedPct` as
+  /// finished — a driver who skips the outro should not be offered the last few seconds forever.
   private func pushWatchHistoryTick(completed: Bool) {
     guard let item = trackedItem, let articleId = item.articleId, let player = player,
       let currentItem = player.currentItem
@@ -395,18 +412,41 @@ class PlayerController {
     let positionSec = Int(position.rounded())
     let durationSec = (duration.isFinite && !duration.isNaN && duration > 0)
       ? Int(duration.rounded()) : 0
-    let progressPct: Double = durationSec > 0
-      ? (Double(positionSec) / Double(durationSec) * 100).rounded() / 100 : 0
+
+    // No duration means no progress can be expressed, and an entry that can never satisfy the
+    // completion threshold would sit in the list forever. `upsertProgress` drops these outright.
+    guard durationSec > 0 else { return }
+
+    let rawPct = min(max(Double(positionSec) / Double(durationSec), 0), 1)
+    let progressPct = (rawPct * 100).rounded() / 100
+    let isCompleted = completed || progressPct >= PlayerController.playbackCompletedPct
+
+    // Below the resume threshold there is nothing worth continuing from, so nothing is written.
+    // A completed entry always goes through regardless — that write is what clears the row.
+    guard isCompleted || positionSec >= PlayerController.playbackMinPositionSec else { return }
+
     let entry = WatchHistoryEntry(
       articleId: articleId,
       mediaType: "audio",
       categoryId: nil,
-      positionSec: positionSec,
+      // A finished entry is normalised to the start rather than left at the end. It is filtered
+      // out of `Klausykite toliau` either way, but if it is ever surfaced again — replayed, or
+      // returned by a client that does not filter — resuming lands at 0 instead of the outro.
+      positionSec: isCompleted ? 0 : positionSec,
       durationSec: durationSec,
-      progressPct: progressPct,
-      completed: completed,
+      progressPct: isCompleted ? 1 : progressPct,
+      completed: isCompleted,
       updatedAt: Int64(Date().timeIntervalSince1970 * 1000)
     )
+    // Local cache first, then the network — the phone app's store-then-flush order. The row has
+    // to disappear when the episode ends, not one round-trip later, and not only if the PUT
+    // succeeds. The push below posts `watchHistoryUpdated` again once it lands; that second
+    // repaint is a no-op because the signature will not have moved.
+    if isCompleted {
+      CarPlayService.shared.removeFromContinuePlaying(articleId: articleId)
+      NotificationCenter.default.post(name: .watchHistoryUpdated, object: nil)
+    }
+
     Task {
       await CarPlayService.shared.pushPlaybackProgress(entry: entry)
       await MainActor.run {

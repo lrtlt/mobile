@@ -141,8 +141,25 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         }
     }
 
-    fun pushPlaybackProgress(entry: lt.mediapark.lrt.auto.data.WatchHistoryEntry) {
-        if (!authManager.isLoggedIn()) return
+    /**
+     * Pushes one watch-history entry, then runs [onPushed] whether or not the push succeeded.
+     *
+     * The callback exists for the completion case. `onGetChildren` answers every browse with a
+     * live fetch (§7 of docs/androidauto-ui.md), so notifying the head unit before the PUT has
+     * landed races it: the GET can return the entry still marked unfinished and the row comes
+     * straight back. Sequencing the notify after the push closes that.
+     *
+     * It runs on failure too — a repaint that reflects the local intent is better than a row
+     * that silently stays, and the next browse re-fetches the truth anyway.
+     */
+    fun pushPlaybackProgress(
+        entry: lt.mediapark.lrt.auto.data.WatchHistoryEntry,
+        onPushed: (() -> Unit)? = null,
+    ) {
+        if (!authManager.isLoggedIn()) {
+            onPushed?.invoke()
+            return
+        }
         scope.launch {
             try {
                 val token = authManager.getAccessToken()
@@ -150,6 +167,8 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
                 repository.pushPlaybackProgress(entry, token)
             } catch (e: Exception) {
                 Log.e(TAG, "pushPlaybackProgress failed", e)
+            } finally {
+                onPushed?.invoke()
             }
         }
     }

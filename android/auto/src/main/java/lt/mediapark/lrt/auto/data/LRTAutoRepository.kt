@@ -224,8 +224,12 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                     "Bearer $accessToken"
                 )
                 val now = System.currentTimeMillis()
+                // `completed` is filtered here, not by the backend, which returns finished
+                // entries like any other. The phone app does the same in
+                // `playback_progress_store.getEntries`, which is the source of truth for what
+                // this screen means — a finished episode is history, not something to continue.
                 val entries = response.list
-                    .filter { now - it.updatedAt <= CONTINUE_PLAYING_MAX_AGE_MS }
+                    .filter { !it.completed && now - it.updatedAt <= CONTINUE_PLAYING_MAX_AGE_MS }
                     .sortedByDescending { it.updatedAt }
                 val items = hydrateEntries(entries)
                 continuePlayingCache = items

@@ -35,6 +35,22 @@ class CarPlayService {
     stateQueue.sync(flags: .barrier) { self.continuePlayingCache = items }
   }
 
+  /// Drops one article from the cached continue-playing list.
+  ///
+  /// Needed because this cache is otherwise written only by `refreshContinuePlaying`, which runs
+  /// on a tab load — so finishing an episode would push `completed` to the backend and leave the
+  /// row on screen until the driver navigated somewhere. Worse, `CarSceneDelegate` skips a
+  /// repaint when the cached data's signature is unchanged, so the `watchHistoryUpdated` that
+  /// follows the push would do nothing at all.
+  ///
+  /// The phone app needs no equivalent: its store is local, so `upsertProgress` writing and
+  /// `getEntries` re-deriving happen in the same tick. This is the CarPlay stand-in for that.
+  func removeFromContinuePlaying(articleId: Int) {
+    stateQueue.sync(flags: .barrier) {
+      self.continuePlayingCache.removeAll { $0.articleId == articleId }
+    }
+  }
+
   private func cachedArticleInfo(for articleId: Int) -> PodcastEpisodeInfo? {
     return stateQueue.sync { articleInfoCache[articleId] }
   }
@@ -153,10 +169,16 @@ class CarPlayService {
       )
       let maxAgeMs = Int64(Self.continuePlayingMaxAgeDays) * 24 * 60 * 60 * 1000
       let nowMs = Int64(Date().timeIntervalSince1970 * 1000)
-      let entries = allEntries.filter { nowMs - $0.updatedAt <= maxAgeMs }
-      for e in entries {
-        print("watch-history entry: articleId=\(e.articleId) pos=\(e.positionSec)/\(e.durationSec) pct=\(e.progressPct)")
-      }
+      // `completed` is filtered here, not by the backend, which returns finished entries like
+      // any other. The phone app does the same thing in `playback_progress_store.getEntries`,
+      // which is the single source of truth for this screen's semantics — an entry that has
+      // been played to the end is history, not something to continue.
+      //
+      // Sorted newest-first to match both the phone app and Android Auto; the endpoint's own
+      // order is not relied on.
+      let entries = allEntries
+        .filter { !$0.completed && nowMs - $0.updatedAt <= maxAgeMs }
+        .sorted { $0.updatedAt > $1.updatedAt }
       let items = await hydrateEntries(entries)
 
       setCachedContinuePlaying(items)
