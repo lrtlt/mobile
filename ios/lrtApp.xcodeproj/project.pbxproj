@@ -21,6 +21,7 @@
 		9C54AE302D2D8886009F63EC /* CarPlayCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2A2D2D8886009F63EC /* CarPlayCache.swift */; };
 		9C54AE312D2D8886009F63EC /* CarPlayModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2B2D2D8886009F63EC /* CarPlayModels.swift */; };
 		9C54AE322D2D8886009F63EC /* CarPlayNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2C2D2D8886009F63EC /* CarPlayNetwork.swift */; };
+		9C54AEA02D2D8886009F63EC /* CategoryMediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AEA12D2D8886009F63EC /* CategoryMediaType.swift */; };
 		9C54AE332D2D8886009F63EC /* CarPlayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2D2D2D8886009F63EC /* CarPlayService.swift */; };
 		9C54AE342D2D8886009F63EC /* CarPlayUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2E2D2D8886009F63EC /* CarPlayUtils.swift */; };
 		9C54AE3A2D2D8E93009F63EC /* CarPlayUIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE372D2D8E93009F63EC /* CarPlayUIManager.swift */; };
@@ -98,6 +99,7 @@
 		9C54AE2A2D2D8886009F63EC /* CarPlayCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayCache.swift; sourceTree = "<group>"; };
 		9C54AE2B2D2D8886009F63EC /* CarPlayModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayModels.swift; sourceTree = "<group>"; };
 		9C54AE2C2D2D8886009F63EC /* CarPlayNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayNetwork.swift; sourceTree = "<group>"; };
+		9C54AEA12D2D8886009F63EC /* CategoryMediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryMediaType.swift; sourceTree = "<group>"; };
 		9C54AE2D2D2D8886009F63EC /* CarPlayService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayService.swift; sourceTree = "<group>"; };
 		9C54AE2E2D2D8886009F63EC /* CarPlayUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayUtils.swift; sourceTree = "<group>"; };
 		9C54AE372D2D8E93009F63EC /* CarPlayUIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CarPlayUIManager.swift; path = lrtApp/CarPlayUIManager.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				9C54AE2C2D2D8886009F63EC /* CarPlayNetwork.swift */,
 				9C54AE2D2D2D8886009F63EC /* CarPlayService.swift */,
 				9C54AE2E2D2D8886009F63EC /* CarPlayUtils.swift */,
+				9C54AEA12D2D8886009F63EC /* CategoryMediaType.swift */,
 			);
 			name = api;
 			path = lrtApp/api;
@@ -776,6 +779,7 @@
 				9C54AE342D2D8886009F63EC /* CarPlayUtils.swift in Sources */,
 				9C54AE312D2D8886009F63EC /* CarPlayModels.swift in Sources */,
 				9C54AE322D2D8886009F63EC /* CarPlayNetwork.swift in Sources */,
+				9C54AEA02D2D8886009F63EC /* CategoryMediaType.swift in Sources */,
 				9C78266F2B588AD800B7183B /* CarScene.swift in Sources */,
 				9C78266E2B588AD800B7183B /* PhoneScene.swift in Sources */,
 				9C9EDE892D2FD77100C0E5D4 /* PlayerController.swift in Sources */,

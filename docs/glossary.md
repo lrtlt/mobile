@@ -50,6 +50,10 @@ How many rows a CarPlay tab's one open-ended section may use. `CPListTemplate` t
 
 The resolved slice of a podcast or subscription episode list that Android Auto's player actually holds. An episode's stream URL lives only in its article payload, and ExoPlayer rejects a `MediaItem` without a URI, so CarPlay's approach — queue the whole list unresolved, fill each entry in on arrival — has no Android equivalent. The queue starts at the tapped episode alone and grows by two ahead on every transition. Costs the car's "up next" view its full length and puts earlier episodes out of skip-previous reach. See androidauto-ui.md §6.1.
 
+## Category media type
+
+Whether a show category publishes audio (radioteka) or video (mediateka) episodes. Not carried by any subscription payload — a subscription is a bare `category-<id>` key — so it is derived by resolving the id against `api/json/search/categories?type=audio`, whose id set is exactly the radioteka half and disjoint from the `type=video` half. Held by `CategoryMediaTypeResolver` on both platforms; `keepAudio` is the half in use, filtering video subscriptions out of `Prenumeratos`, and `mediaTypeOf` is kept for the video half that is expected back. Resolves to *unknown* rather than video when the catalogue is unavailable or truncated, and every caller fails open on that. See ADR-0003.
+
 ## Content style hint
 
 The Android Auto extras that decide whether a row draws as a list entry or a cover tile — `CONTENT_STYLE_SINGLE_ITEM_HINT` per row, over the `CONTENT_STYLE_BROWSABLE_HINT`/`PLAYABLE_HINT` defaults the root declares, and ignored altogether unless the root also sets `CONTENT_STYLE_SUPPORTED`. Android's answer to CarPlay's `CPListImageRowItem`, and the reason `Klausykite toliau` stays a list on both platforms: a tile has nowhere to put a progress bar. `CONTENT_STYLE_GROUP_TITLE_HINT` is the related extra that gives a row its section header. See androidauto-ui.md §2.1.

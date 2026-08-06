@@ -368,12 +368,17 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     Task { await CarPlayService.shared.refreshContinuePlaying() }
   }
 
-  /// Active subscriptions, or an empty list when the fetch fails. A network error is not
+  /// Active **audio** subscriptions, or an empty list when the fetch fails. A network error is not
   /// distinguished from having none: both drop the `Prenumeratos` section, and the A–Z browse
   /// stays reachable from its own tab either way.
+  ///
+  /// Video subscriptions are dropped because the same subscription list backs the phone app, where
+  /// following a mediateka show is legitimate — there is just nothing to play from one here.
+  /// Filtered before the covers are fetched, so a dropped tile costs no request either.
   private func activeSubscriptions() async -> [UserSubscription] {
     do {
-      return try await CarPlayService.shared.fetchSubscriptions().filter { $0.isActive }
+      let active = try await CarPlayService.shared.fetchSubscriptions().filter { $0.isActive }
+      return await CategoryMediaTypeResolver.shared.keepAudio(active)
     } catch {
       print("Failed to load subscriptions: \(error.localizedDescription)")
       return []
