@@ -377,12 +377,16 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         }
 
         val continueItems = fetchContinuePlaying()
-        val subscriptions = try {
+        val allSubscriptions = try {
             repository.getSubscriptions(authManager.getAccessToken())
         } catch (e: Exception) {
             Log.e(TAG, "Error fetching subscriptions", e)
             emptyList()
         }
+        // Video subscriptions are dropped: the same subscription list backs the phone app, where a
+        // mediateka show is a legitimate thing to follow, but there is nothing to play from one
+        // here. Filtered before the covers so a dropped tile costs no request either.
+        val subscriptions = repository.categoryMediaTypes.keepAudio(allSubscriptions)
         val covers = repository.getSubscriptionCovers(subscriptions)
         MediaItemTree.applyManoLRTSections(continueItems, subscriptions, covers)
     }

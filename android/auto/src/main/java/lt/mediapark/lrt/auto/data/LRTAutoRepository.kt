@@ -9,6 +9,13 @@ import kotlinx.coroutines.withContext
 
 class LRTAutoRepository(private val api: LRTAutoService) {
 
+    /**
+     * Audio/video classification for category ids. Owned here so it shares the repository's
+     * lifetime and its catalogue cache, but the filtering decision stays at the call site — see
+     * [CategoryMediaTypeResolver].
+     */
+    val categoryMediaTypes = CategoryMediaTypeResolver(api)
+
     private var recommendedLastFetchTime: Long = 0
     private var recommended: List<PlaylistItem> = emptyList()
 
