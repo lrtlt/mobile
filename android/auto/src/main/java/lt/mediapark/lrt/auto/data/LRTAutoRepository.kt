@@ -1,6 +1,10 @@
 package lt.mediapark.lrt.auto.data
 
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
 class LRTAutoRepository(private val api: LRTAutoService) {
@@ -20,8 +24,17 @@ class LRTAutoRepository(private val api: LRTAutoService) {
     private var subscriptionsLastFetchTime: Long = 0
     private var subscriptions: List<UserSubscription> = emptyList()
 
+    // Written from whichever IO thread a browse lands on and read from another — Home and Mano LRT
+    // both fetch continue-playing, and the subscription-cover fan-out is concurrent by design.
+    @Volatile
     private var continuePlayingCache: List<PlaylistItem> = emptyList()
-    private val articleInfoCache: MutableMap<Int, PodcastEpisodeInfo> = mutableMapOf()
+    private val articleInfoCache = ConcurrentHashMap<Int, PodcastEpisodeInfo>()
+
+    /**
+     * Subscription cover URLs by `subscriptionKey`. Each miss costs a category fetch, so this is
+     * what keeps `Prenumeratos` from re-requesting every episode list on each browse.
+     */
+    private val subscriptionCoverCache = ConcurrentHashMap<String, String>()
 
     val cachedContinuePlaying: List<PlaylistItem>
         get() = continuePlayingCache
@@ -154,6 +167,55 @@ class LRTAutoRepository(private val api: LRTAutoService) {
         subscriptions = emptyList()
     }
 
+    /**
+     * Cover art for each subscription, keyed by `subscriptionKey`.
+     *
+     * Neither [UserSubscription] nor [PodcastCategory] carries artwork — only [PodcastEpisode]
+     * does — so a category's cover has to be borrowed from its newest episode. That is one request
+     * per subscription, run concurrently and cached for the process, which is the price of drawing
+     * `Prenumeratos` as cover tiles rather than as bare text rows.
+     *
+     * A subscription whose fetch fails is simply absent from the result; its row renders without
+     * art.
+     */
+    suspend fun getSubscriptionCovers(subscriptions: List<UserSubscription>): Map<String, String> =
+        withContext(Dispatchers.IO) {
+            val wanted = subscriptions.filter { it.categoryId != null }
+            val missing = wanted.filter { subscriptionCoverCache[it.subscriptionKey] == null }
+
+            if (missing.isNotEmpty()) {
+                coroutineScope {
+                    missing.map { subscription ->
+                        async {
+                            try {
+                                val episodes =
+                                    api.getPodcastEpisodes(subscription.categoryId!!).items
+                                        ?: emptyList()
+                                val cover = episodes.firstNotNullOfOrNull { episode ->
+                                    val prefix = episode.imgPathPrefix
+                                    val postfix = episode.imgPathPostfix
+                                    if (prefix != null && postfix != null) {
+                                        "https://lrt.lt$prefix$SUBSCRIPTION_COVER_SIZE$postfix"
+                                    } else null
+                                }
+                                if (cover != null) {
+                                    subscriptionCoverCache[subscription.subscriptionKey] = cover
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }.awaitAll()
+                }
+            }
+
+            wanted.mapNotNull { subscription ->
+                subscriptionCoverCache[subscription.subscriptionKey]?.let {
+                    subscription.subscriptionKey to it
+                }
+            }.toMap()
+        }
+
     suspend fun refreshContinuePlaying(accessToken: String, count: Int = 20): List<PlaylistItem> =
         withContext(Dispatchers.IO) {
             try {
@@ -200,34 +262,37 @@ class LRTAutoRepository(private val api: LRTAutoService) {
         continuePlayingCache = emptyList()
     }
 
-    private suspend fun hydrateEntries(entries: List<WatchHistoryEntry>): List<PlaylistItem> {
-        entries.filter { articleInfoCache[it.articleId] == null }.forEach { entry ->
-            try {
-                val info = api.getPodcastEpisodeInfo(entry.articleId)?.info
-                if (info != null) articleInfoCache[entry.articleId] = info
-            } catch (e: Exception) {
-                e.printStackTrace()
+    private suspend fun hydrateEntries(entries: List<WatchHistoryEntry>): List<PlaylistItem> =
+        coroutineScope {
+            entries.filter { articleInfoCache[it.articleId] == null }.map { entry ->
+                async {
+                    try {
+                        val info = api.getPodcastEpisodeInfo(entry.articleId)?.info
+                        if (info != null) articleInfoCache[entry.articleId] = info
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }.awaitAll()
+            entries.mapNotNull { entry ->
+                val info = articleInfoCache[entry.articleId] ?: return@mapNotNull null
+                val streamUrl = info.streamUrl
+                if (streamUrl.isNullOrEmpty()) return@mapNotNull null
+                val cover = info.mainPhoto?.path?.let {
+                    "https://www.lrt.lt${it.replace("{WxH}", "393x221")}"
+                }
+                PlaylistItem(
+                    title = info.title ?: "",
+                    content = info.categoryTitle ?: "",
+                    cover = cover,
+                    streamUrl = streamUrl,
+                    articleId = entry.articleId,
+                    channelId = null,
+                    startPositionSec = entry.positionSec,
+                    progressPct = entry.progressPct
+                )
             }
         }
-        return entries.mapNotNull { entry ->
-            val info = articleInfoCache[entry.articleId] ?: return@mapNotNull null
-            val streamUrl = info.streamUrl
-            if (streamUrl.isNullOrEmpty()) return@mapNotNull null
-            val cover = info.mainPhoto?.path?.let {
-                "https://www.lrt.lt${it.replace("{WxH}", "393x221")}"
-            }
-            PlaylistItem(
-                title = info.title ?: "",
-                content = info.categoryTitle ?: "",
-                cover = cover,
-                streamUrl = streamUrl,
-                articleId = entry.articleId,
-                channelId = null,
-                startPositionSec = entry.positionSec,
-                progressPct = entry.progressPct
-            )
-        }
-    }
 
     private fun getCoverByChannelId(programItem: TvProgramItem): String {
         return when (programItem.channelId) {
@@ -248,6 +313,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
         private const val NEWEST_CACHE_DURATION = 2 * 60 * 1000L // 2 minutes
         private const val PODCAST_CACHE_DURATION = 4 * 60 * 60 * 1000L // 4 hours
         private const val WATCH_HISTORY_URL = "https://www.lrt.lt/servisai/dev-authrz/api/v1/user/watch-history"
+        private const val SUBSCRIPTION_COVER_SIZE = "282x158"
 
         // Continue-playing entries older than this many days are filtered out.
         private const val CONTINUE_PLAYING_MAX_AGE_DAYS = 15

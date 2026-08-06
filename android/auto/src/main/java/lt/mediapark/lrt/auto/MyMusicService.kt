@@ -58,6 +58,10 @@ class MyMusicService : MediaLibraryService() {
                     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
                         pushProgress(completed = false)
                         handleMediaItemTransition(mediaItem)
+                        // Podcast episode queues grow as they are consumed — the stream URL of an
+                        // episode only exists in its article payload, so the rest of the list is
+                        // resolved a couple of items ahead rather than all at once.
+                        callback.topUpEpisodeQueue(player)
                     }
                 })
             }
@@ -133,6 +137,7 @@ class MyMusicService : MediaLibraryService() {
     override fun onDestroy() {
         stopTracking()
         rdsService.stopListening()
+        callback.release()
         mediaSession.release()
         player.release()
         super.onDestroy()

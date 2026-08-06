@@ -1,13 +1,16 @@
 package lt.mediapark.lrt.auto
 
+import android.os.Bundle
 import android.util.Log
 import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaLibraryService.LibraryParams
 import androidx.media3.session.MediaSession
+import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionError
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
@@ -15,16 +18,22 @@ import com.google.common.util.concurrent.ListenableFuture
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
 import java.util.concurrent.Callable
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import lt.mediapark.lrt.auto.data.AutoAuthManager
 import lt.mediapark.lrt.auto.data.LRTAutoRepository
 import lt.mediapark.lrt.auto.data.LRTAutoService
+import lt.mediapark.lrt.auto.data.PlaylistItem
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -35,6 +44,27 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     private val scope = CoroutineScope(Dispatchers.Default)
     private var newestRefreshJob: Job? = null
     private var currentSession: MediaLibraryService.MediaLibrarySession? = null
+
+    /**
+     * Every browse runs here. One thread rather than one per call: [MediaItemTree] is a plain
+     * mutable map, and two browses rebuilding different branches at once would race on it.
+     */
+    private val browseExecutor: ExecutorService = Executors.newSingleThreadExecutor()
+
+    /**
+     * The episode list a tap installed as the up-next queue, and how far into it we have resolved.
+     *
+     * An episode's stream URL lives in its article payload, so hydrating a whole category would
+     * cost one request per row — and ExoPlayer cannot hold a [MediaItem] without a URI, so the
+     * CarPlay trick of queueing unresolved entries and filling them in on arrival has no direct
+     * equivalent. Instead the player's queue grows: the tapped episode goes in alone, and each
+     * transition resolves and appends enough to stay [EPISODE_LOOKAHEAD] ahead. Requests stay
+     * proportional to what the driver actually listens to.
+     */
+    private class EpisodeQueue(val mediaIds: List<String>, var nextIndex: Int)
+
+    @Volatile
+    private var episodeQueue: EpisodeQueue? = null
 
     init {
         authManager = AutoAuthManager(context)
@@ -47,29 +77,31 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         MediaItemTree.initialize()
     }
 
-    private fun startNewestAutoRefresh(session: MediaLibraryService.MediaLibrarySession) {
-        stopNewestAutoRefresh()
+    private fun startHomeAutoRefresh(session: MediaLibraryService.MediaLibrarySession) {
+        stopHomeAutoRefresh()
         currentSession = session
         newestRefreshJob = scope.launch {
             while (true) {
                 delay(2 * 60 * 1000L) // 2 minutes
                 try {
-                    val newestItems = repository.getNewest(forceRefresh = true)
-                    MediaItemTree.setNewestItems(newestItems)
+                    // The newest feed lives inside Home now, so the periodic refresh has to rebuild
+                    // the whole browsable rather than a tab of its own. Routed through the browse
+                    // executor so it cannot rebuild the tree underneath a browse in flight.
+                    submitBlocking { loadHome(forceRefreshNewest = true) }.get()
                     session.notifyChildrenChanged(
-                        MediaItemTree.NEWEST,
-                        MediaItemTree.getChildren(MediaItemTree.NEWEST).size,
+                        MediaItemTree.HOME,
+                        MediaItemTree.getChildren(MediaItemTree.HOME).size,
                         null
                     )
-                    Log.d(TAG, "Auto-refreshed newest items")
+                    Log.d(TAG, "Auto-refreshed home")
                 } catch (e: Exception) {
-                    Log.e(TAG, "Error auto-refreshing newest items", e)
+                    Log.e(TAG, "Error auto-refreshing home", e)
                 }
             }
         }
     }
 
-    private fun stopNewestAutoRefresh() {
+    private fun stopHomeAutoRefresh() {
         newestRefreshJob?.cancel()
         newestRefreshJob = null
     }
@@ -93,8 +125,13 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         }
     }
 
-    private suspend fun fetchContinuePlaying(): List<lt.mediapark.lrt.auto.data.PlaylistItem> {
-        if (!authManager.isLoggedIn()) return emptyList()
+    private suspend fun fetchContinuePlaying(): List<PlaylistItem> {
+        if (!authManager.isLoggedIn()) {
+            // Blanks `Klausykite toliau` in both browsables that render it, rather than leaving a
+            // stale group behind after a sign-out.
+            repository.clearContinuePlayingCache()
+            return emptyList()
+        }
         return try {
             val token = authManager.getAccessToken()
             repository.refreshContinuePlaying(token)
@@ -117,28 +154,80 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         }
     }
 
+    /**
+     * Both browsables that host `Klausykite toliau` have to repaint off the one playback event —
+     * whichever the driver happens to be looking at.
+     */
     fun notifyContinuePlayingChanged() {
-        currentSession?.notifyChildrenChanged(
-            MediaItemTree.RECOMMENDED,
-            MediaItemTree.getChildren(MediaItemTree.RECOMMENDED).size,
-            null
-        )
+        val session = currentSession ?: return
+        listOf(MediaItemTree.HOME, MediaItemTree.MANO_LRT).forEach { parentId ->
+            session.notifyChildrenChanged(
+                parentId,
+                MediaItemTree.getChildren(parentId).size,
+                null
+            )
+        }
     }
 
-    override fun onConnect(
+    /**
+     * Accepts the connection with the two browse-search commands withheld, which is what removes
+     * the search button Android Auto otherwise draws on every browsable.
+     *
+     * There is no flag for it. Media3's legacy stub sets the browse root's
+     * `android.media.browse.SEARCH_SUPPORTED` extra from whether
+     * [SessionCommand.COMMAND_CODE_LIBRARY_SEARCH] is available to the connecting controller, and it
+     * overwrites whatever [onGetLibraryRoot] put in that key — so withholding the command is the
+     * only way to say no.
+     *
+     * **This is the browse search box only.** Voice search is untouched: "play X" arrives as a
+     * `requestMetadata.searchQuery` on [onSetMediaItems] and is answered from [MediaItemTree.search]
+     * against the title index, which is a player command rather than a library one.
+     */
+    @OptIn(UnstableApi::class) override fun onConnect(
         mediaSession: MediaSession,
         controller: MediaSession.ControllerInfo
     ): MediaSession.ConnectionResult {
         logAnalyticsEvent(controller.packageName, "android_auto_connected")
-        return super.onConnect(mediaSession, controller)
+        val accepted = super.onConnect(mediaSession, controller)
+        return MediaSession.ConnectionResult.AcceptedResultBuilder(mediaSession)
+            .setAvailableSessionCommands(
+                accepted.availableSessionCommands.buildUpon()
+                    .remove(SessionCommand.COMMAND_CODE_LIBRARY_SEARCH)
+                    .remove(SessionCommand.COMMAND_CODE_LIBRARY_GET_SEARCH_RESULT)
+                    .build()
+            )
+            .setAvailablePlayerCommands(accepted.availablePlayerCommands)
+            .build()
     }
 
-    override fun onGetLibraryRoot(
+    @OptIn(UnstableApi::class) override fun onGetLibraryRoot(
         session: MediaLibraryService.MediaLibrarySession,
         browser: MediaSession.ControllerInfo,
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<MediaItem>> {
-        return Futures.immediateFuture(LibraryResult.ofItem(MediaItemTree.getRootItem(), params))
+        // Declare list as the default for both kinds of row; the grid groups — `Siūlome`,
+        // `Naujausi`, `Prenumeratos` — override it per item. Without CONTENT_STYLE_SUPPORTED the
+        // head unit ignores the per-item hints entirely.
+        val extras = Bundle().apply {
+            putBoolean(MediaItemTree.KEY_CONTENT_STYLE_SUPPORTED, true)
+            putInt(
+                MediaItemTree.KEY_CONTENT_STYLE_BROWSABLE_HINT,
+                MediaItemTree.CONTENT_STYLE_LIST_ITEM
+            )
+            putInt(
+                MediaItemTree.KEY_CONTENT_STYLE_PLAYABLE_HINT,
+                MediaItemTree.CONTENT_STYLE_LIST_ITEM
+            )
+        }
+        val rootParams = LibraryParams.Builder()
+            .setExtras(extras)
+            .setRecent(params?.isRecent ?: false)
+            .setOffline(params?.isOffline ?: false)
+            .setSuggested(params?.isSuggested ?: false)
+            .build()
+        return Futures.immediateFuture(
+            LibraryResult.ofItem(MediaItemTree.getRootItem(), rootParams)
+        )
     }
 
     @OptIn(UnstableApi::class) override fun onGetItem(
@@ -155,7 +244,21 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     private fun <T> submitBlocking(task: suspend () -> T): ListenableFuture<T> {
         return Futures.submit(Callable {
             runBlocking { task() }
-        }, Executors.newSingleThreadExecutor())
+        }, browseExecutor)
+    }
+
+    /**
+     * Home: `Klausykite toliau`, then `Siūlome` and `Naujausi`. All three are fetched together
+     * because they land in one browsable, and only the first is auth-dependent — Home renders for
+     * a logged-out driver.
+     */
+    private suspend fun loadHome(forceRefreshNewest: Boolean = false) = coroutineScope {
+        val recommendedFetch = async { repository.getRecommended() }
+        val newestFetch = async { repository.getNewest(forceRefresh = forceRefreshNewest) }
+        val continueFetch = async { fetchContinuePlaying() }
+        MediaItemTree.applyHomeSections(
+            continueFetch.await(), recommendedFetch.await(), newestFetch.await()
+        )
     }
 
     @OptIn(UnstableApi::class) override fun onGetChildren(
@@ -168,22 +271,19 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
         currentSession = session
 
-        if (parentId == MediaItemTree.RECOMMENDED) {
+        if (parentId == MediaItemTree.HOME) {
             logAnalyticsEvent(browser.packageName, "android_auto_recommended_open")
+            startHomeAutoRefresh(session)
             return submitBlocking {
-                val recommendedItems = repository.getRecommended()
-                val continueItems = fetchContinuePlaying()
-                MediaItemTree.applyRecommendedSections(continueItems, recommendedItems)
+                loadHome()
                 LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
 
-        if (parentId == MediaItemTree.NEWEST) {
+        if (parentId == MediaItemTree.NEWEST_ALL) {
             logAnalyticsEvent(browser.packageName, "android_auto_newest_open")
-            startNewestAutoRefresh(session)
             return submitBlocking {
-                val newestItems = repository.getNewest(forceRefresh = true)
-                MediaItemTree.setNewestItems(newestItems)
+                MediaItemTree.setNewestAllItems(repository.getNewest(forceRefresh = true))
                 LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
@@ -200,28 +300,17 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         if(parentId == MediaItemTree.PODCAST_CATEGORIES) {
             logAnalyticsEvent(browser.packageName, "android_auto_podcasts_open")
             return submitBlocking {
-                val podcastCategories = repository.getPodcastCategories()
-                val hasSubscriptions = authManager.isLoggedIn()
-                MediaItemTree.setPodcastCategories(podcastCategories, includeSubscriptions = hasSubscriptions)
+                // No subscriptions folder any more — that moved to Mano LRT, which is why this
+                // browse has no auth dependency at all.
+                MediaItemTree.setPodcastCategories(repository.getPodcastCategories())
                 LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
 
-        if (parentId == MediaItemTree.SUBSCRIPTIONS) {
-            logAnalyticsEvent(browser.packageName, "android_auto_subscriptions_open")
+        if (parentId == MediaItemTree.MANO_LRT) {
+            logAnalyticsEvent(browser.packageName, "android_auto_mano_lrt_open")
             return submitBlocking {
-                try {
-                    val token = authManager.getAccessToken()
-                    val subs = repository.getSubscriptions(token)
-                    if (subs.isEmpty()) {
-                        MediaItemTree.setSubscriptionNoItems()
-                    } else {
-                        MediaItemTree.setSubscriptionCategories(subs)
-                    }
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error fetching subscriptions", e)
-                    MediaItemTree.setSubscriptionNoItems()
-                }
+                loadManoLRT()
                 LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
@@ -253,6 +342,32 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         return Futures.immediateFuture(LibraryResult.ofError(SessionError.ERROR_BAD_VALUE))
     }
 
+    /**
+     * Mano LRT: `Klausykite toliau` exactly as Home renders it, then `Prenumeratos`. Both groups are
+     * conditional, so a signed-in driver with neither sees an empty browsable.
+     *
+     * A failed subscription fetch is not distinguished from having none — both drop the group, and
+     * the A–Z browse stays reachable from `Laidos` either way.
+     */
+    private suspend fun loadManoLRT() {
+        if (!authManager.isLoggedIn()) {
+            MediaItemTree.setManoLRTLoggedOut()
+            // Still clears the cache, so Home's `Klausykite toliau` goes with it.
+            repository.clearContinuePlayingCache()
+            return
+        }
+
+        val continueItems = fetchContinuePlaying()
+        val subscriptions = try {
+            repository.getSubscriptions(authManager.getAccessToken())
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching subscriptions", e)
+            emptyList()
+        }
+        val covers = repository.getSubscriptionCovers(subscriptions)
+        MediaItemTree.applyManoLRTSections(continueItems, subscriptions, covers)
+    }
+
     override fun onAddMediaItems(
         mediaSession: MediaSession,
         controller: MediaSession.ControllerInfo,
@@ -269,80 +384,39 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         startIndex: Int,
         startPositionMs: Long,
     ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+        // Any new queue ends the previous episode window; only the episode branch re-arms it.
+        episodeQueue = null
+
         if (mediaItems.size == 1) {
             val item = mediaItems.first()
 
-            if (MediaItemTree.isContinuePlayingItem(item.mediaId)) {
-                val siblingsParent = if (MediaItemTree.isContinuePlayingAllItem(item.mediaId)) {
-                    MediaItemTree.CONTINUE_PLAYING_ALL
-                } else {
-                    MediaItemTree.RECOMMENDED
-                }
-                val siblings = MediaItemTree.getChildren(siblingsParent)
-                    .filter { MediaItemTree.isContinuePlayingItem(it.mediaId) }
-                    .mapNotNull { MediaItemTree.expandItem(it) }
+            if (MediaItemTree.isEpisodeItem(item.mediaId)) {
+                return startEpisodeQueue(item, startPositionMs)
+            }
+
+            // The one up-next rule: the group you tapped in becomes the queue. Utility rows are
+            // browsable, so they are filtered out and can never shift the start index.
+            val siblings = MediaItemTree.sectionSiblings(item.mediaId)
+                .mapNotNull { MediaItemTree.expandItem(it) }
+            if (siblings.isNotEmpty()) {
                 val idx = siblings.indexOfFirst { it.mediaId == item.mediaId }.coerceAtLeast(0)
-                val startPos = MediaItemTree.getStartPositionMs(item.mediaId)
+                val resumeMs = MediaItemTree.getStartPositionMs(item.mediaId)
                 return Futures.immediateFuture(
                     MediaSession.MediaItemsWithStartPosition(
                         siblings,
                         idx,
-                        if (startPositionMs > 0) startPositionMs else startPos
+                        if (startPositionMs > 0) startPositionMs else resumeMs
                     )
                 )
             }
 
-            MediaItemTree.getSubscriptionEpisodeId(item.mediaId).let {
-                if (it > 0) {
-                    return submitBlocking {
-                        val episodeInfo = repository.getPodcastEpisodeInfo(it)
-                        if (episodeInfo?.streamUrl != null) {
-                            val episodeMediaItem = MediaItemTree.buildSubscriptionEpisodeItem(
-                                item.mediaId,
-                                episodeInfo.streamUrl
-                            )
-                            MediaSession.MediaItemsWithStartPosition(
-                                listOf(episodeMediaItem),
-                                startIndex,
-                                startPositionMs
-                            )
-                        } else {
-                            MediaSession.MediaItemsWithStartPosition(
-                                resolveMediaItems(mediaItems),
-                                startIndex,
-                                startPositionMs
-                            )
-                        }
-                    }
-                }
+            // Playing a category browsable outright — by voice, or the head unit's play-the-folder
+            // affordance — starts its episode list from the top. Without this the generic expansion
+            // below hands over rows with no stream URI and nothing plays at all.
+            val firstChild = MediaItemTree.getChildren(item.mediaId).firstOrNull()
+            if (firstChild != null && MediaItemTree.isEpisodeItem(firstChild.mediaId)) {
+                return startEpisodeQueue(firstChild, startPositionMs)
             }
-
-            MediaItemTree.getPodcastEpisodeId(item.mediaId).let {
-                if(it > 0) {
-                    return submitBlocking {
-                            val podcastEpisodeInfo = repository.getPodcastEpisodeInfo(it)
-                            if(podcastEpisodeInfo?.streamUrl != null) {
-                                val episodeMediaItem = MediaItemTree.buildPodcastEpisodeItem(
-                                    item.mediaId,
-                                    podcastEpisodeInfo.streamUrl
-                                )
-                                MediaSession.MediaItemsWithStartPosition(
-                                    listOf(episodeMediaItem),
-                                    startIndex,
-                                    startPositionMs
-                                )
-                            } else {
-                                MediaSession.MediaItemsWithStartPosition(
-                                    resolveMediaItems(mediaItems),
-                                    startIndex,
-                                    startPositionMs
-                                )
-                            }
-
-                    }
-                }
-            }
-
 
             // Try to expand a single item to a playlist.
             maybeExpandSingleItemToPlaylist(mediaItems.first(), startIndex, startPositionMs)?.also {
@@ -358,6 +432,76 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         )
     }
 
+    /**
+     * Installs the tapped episode's list as the up-next queue.
+     *
+     * Only the tapped episode is resolved here, so time-to-first-audio is what it always was; the
+     * lookahead is filled by [topUpEpisodeQueue] once the player reports the transition into it.
+     */
+    @OptIn(UnstableApi::class)
+    private fun startEpisodeQueue(
+        item: MediaItem,
+        startPositionMs: Long
+    ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+        val siblings = MediaItemTree.sectionSiblings(item.mediaId).map { it.mediaId }
+        val tappedIndex = siblings.indexOf(item.mediaId)
+
+        return submitBlocking {
+            val resolved = resolveEpisode(item.mediaId)
+                ?: return@submitBlocking MediaSession.MediaItemsWithStartPosition(
+                    resolveMediaItems(listOf(item)), 0, startPositionMs
+                )
+
+            if (tappedIndex >= 0) {
+                episodeQueue = EpisodeQueue(siblings, tappedIndex + 1)
+            }
+            MediaSession.MediaItemsWithStartPosition(listOf(resolved), 0, startPositionMs)
+        }
+    }
+
+    /**
+     * Keeps the player's queue [EPISODE_LOOKAHEAD] resolved episodes ahead of what is playing.
+     * Called on every media item transition; a no-op unless an episode list is the queue.
+     *
+     * Must be called on the application thread — [Player] is confined to it.
+     */
+    fun topUpEpisodeQueue(player: Player) {
+        val queue = episodeQueue ?: return
+        if (queue.nextIndex >= queue.mediaIds.size) return
+
+        val ahead = player.mediaItemCount - player.currentMediaItemIndex - 1
+        val wanted = EPISODE_LOOKAHEAD - ahead
+        if (wanted <= 0) return
+
+        val batch = (queue.nextIndex until minOf(queue.nextIndex + wanted, queue.mediaIds.size))
+            .map { queue.mediaIds[it] }
+        queue.nextIndex += batch.size
+
+        scope.launch {
+            val resolved = coroutineScope {
+                batch.map { async { resolveEpisode(it) } }.awaitAll()
+            }.filterNotNull()
+            if (resolved.isEmpty()) return@launch
+            withContext(Dispatchers.Main) {
+                // The driver can install an unrelated queue while these were in flight; appending
+                // then would splice episodes onto whatever just started playing.
+                if (episodeQueue !== queue) return@withContext
+                player.addMediaItems(resolved)
+            }
+        }
+    }
+
+    /** The episode row with its stream URL filled in, or null when it has none. */
+    private suspend fun resolveEpisode(mediaId: String): MediaItem? {
+        val articleId = MediaItemTree.getArticleIdFromMediaId(mediaId) ?: return null
+        val streamUrl = repository.getPodcastEpisodeInfo(articleId)?.streamUrl
+        if (streamUrl.isNullOrEmpty()) {
+            Log.w(TAG, "Queued episode $articleId has no stream URL")
+            return null
+        }
+        return MediaItemTree.buildResolvedEpisodeItem(mediaId, streamUrl)
+    }
+
     private fun resolveMediaItems(mediaItems: List<MediaItem>): MutableList<MediaItem> {
         val playlist = mutableListOf<MediaItem>()
         mediaItems.forEach { mediaItem ->
@@ -367,8 +511,20 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
                 playlist.addAll(MediaItemTree.search(mediaItem.requestMetadata.searchQuery!!))
             }
         }
-        return playlist
+        return playable(playlist)
     }
+
+    /**
+     * Episode rows reach the player without a stream URI — voice search indexes them, and playing a
+     * category browsable hands over its children wholesale. `DefaultMediaSourceFactory` throws on a
+     * [MediaItem] with no `localConfiguration`, taking the service down, so they are dropped here
+     * rather than queued.
+     *
+     * A single tapped episode never lands here: [onSetMediaItems] routes it to [startEpisodeQueue],
+     * which resolves it first.
+     */
+    private fun playable(items: List<MediaItem>): MutableList<MediaItem> =
+        items.filterTo(mutableListOf()) { it.localConfiguration != null }
 
     @OptIn(UnstableApi::class)
     private fun maybeExpandSingleItemToPlaylist(
@@ -377,7 +533,7 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         startPositionMs: Long,
     ): MediaSession.MediaItemsWithStartPosition? {
         var playlist = listOf<MediaItem>()
-        var indexInPlaylist = startIndex
+        var startsAtTappedItem = false
         MediaItemTree.getItem(mediaItem.mediaId)?.apply {
             if (mediaMetadata.isBrowsable == true) {
                 // Get children browsable item.
@@ -389,42 +545,39 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
                         MediaItemTree.getChildren(it).map { mediaItem ->
                             if (mediaItem.mediaId == mediaId) MediaItemTree.expandItem(mediaItem)!! else mediaItem
                         }
-                    indexInPlaylist = MediaItemTree.getIndexInMediaItems(mediaId, playlist)
+                    startsAtTappedItem = true
                 }
             }
         }
-        if (playlist.isNotEmpty()) {
-            return MediaSession.MediaItemsWithStartPosition(
-                playlist,
-                indexInPlaylist,
-                startPositionMs
-            )
-        }
-        return null
+        // Filter before taking the index — dropping an unplayable row shifts every index after it.
+        val queue = playable(playlist)
+        if (queue.isEmpty()) return null
+        return MediaSession.MediaItemsWithStartPosition(
+            queue,
+            if (startsAtTappedItem) {
+                MediaItemTree.getIndexInMediaItems(mediaItem.mediaId, queue)
+            } else {
+                startIndex.coerceIn(0, queue.size - 1)
+            },
+            startPositionMs
+        )
     }
 
-    override fun onSearch(
-        session: MediaLibraryService.MediaLibrarySession,
-        browser: MediaSession.ControllerInfo,
-        query: String,
-        params: LibraryParams?,
-    ): ListenableFuture<LibraryResult<Void>> {
-        session.notifySearchResultChanged(browser, query, MediaItemTree.search(query).size, params)
-        return Futures.immediateFuture(LibraryResult.ofVoid())
-    }
+    // Note: `onSearch` and `onGetSearchResult` were here. They answered the browse search box off
+    // `MediaItemTree.search`, and both became unreachable when [onConnect] stopped granting the
+    // library-search commands — the head unit no longer offers the box, and the legacy stub would
+    // reject the call if it did. Restoring the button means restoring the commands *and* these two
+    // overrides; `MediaItemTree.search` itself stays, because voice search still uses it.
 
-    override fun onGetSearchResult(
-        session: MediaLibraryService.MediaLibrarySession,
-        browser: MediaSession.ControllerInfo,
-        query: String,
-        page: Int,
-        pageSize: Int,
-        params: LibraryParams?,
-    ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
-        return Futures.immediateFuture(LibraryResult.ofItemList(MediaItemTree.search(query), params))
+    fun release() {
+        stopHomeAutoRefresh()
+        browseExecutor.shutdown()
     }
 
     companion object {
         private const val TAG = "LRTMediaSessionCallback"
+
+        /** Resolved episodes kept queued beyond the one playing. */
+        private const val EPISODE_LOOKAHEAD = 2
     }
 }

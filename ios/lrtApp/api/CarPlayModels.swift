@@ -166,6 +166,12 @@ struct UserSubscription: Decodable {
   let isActive: Bool
   let name: String?
 
+  /// The podcast category this subscription points at, parsed out of the `category-<id>` key.
+  /// Nil for any key that is not a category subscription, which the CarPlay tab skips.
+  var categoryId: Int? {
+    return Int(subscriptionKey.replacingOccurrences(of: "category-", with: ""))
+  }
+
   enum CodingKeys: String, CodingKey {
     case subscriptionKey = "subscription_key"
     case isActive = "is_active"

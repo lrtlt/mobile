@@ -224,15 +224,72 @@ class PlayerController {
   }
 
   func playNext() throws {
-    guard let nextItem = playlist.next() else { return }
+    // The count check comes first: `next()` advances `currentIndex` as a side effect, so
+    // running it on a queue we're not going to skip within desyncs `Playlist.current`.
     guard playlist.currentPlaylist.count > 1 else { return }
-    try setupStream(for: nextItem)
+    guard let nextItem = playlist.next() else { return }
+    try playQueuedItem(nextItem, at: playlist.currentIndex)
   }
 
   func playPrevious() throws {
-    guard let previousItem = playlist.previous() else { return }
     guard playlist.currentPlaylist.count > 1 else { return }
-    try setupStream(for: previousItem)
+    guard let previousItem = playlist.previous() else { return }
+    try playQueuedItem(previousItem, at: playlist.currentIndex)
+  }
+
+  /// Plays an item taken from the queue.
+  ///
+  /// Podcast and subscription episode lists become the queue as a whole, but an episode's
+  /// stream URL only exists in its article payload — resolving every episode up front would
+  /// be one request per row. Queue entries built from an episode list therefore carry just an
+  /// `articleId`, and the stream is fetched the first time playback reaches them and written
+  /// back into the playlist so a second pass is free.
+  private func playQueuedItem(_ item: CarPlayItem, at index: Int) throws {
+    guard item.streamUrl == nil, let articleId = item.articleId else {
+      try setupStream(for: item)
+      return
+    }
+
+    // Main actor, not the cooperative pool: `setupStream` drives AVPlayer, mutates
+    // MPNowPlayingInfoCenter, and schedules the watch-history `Timer` on the current thread's
+    // run loop. A pool thread has no running run loop, so that timer would never fire and
+    // progress would silently stop being reported for every auto-advanced episode.
+    Task { @MainActor [weak self] in
+      guard let self = self else { return }
+      do {
+        let info = try await CarPlayService.shared.fetchEpisodeInfo(episodeId: articleId)
+        guard let streamUrl = info.info?.streamUrl, !streamUrl.isEmpty else {
+          print("Queued episode \(articleId) has no stream URL")
+          return
+        }
+        // The driver can tap a row in another section while this fetch is in flight, which
+        // swaps the whole queue. Writing back into `index` then would corrupt an unrelated
+        // queue and hijack whatever just started playing.
+        guard self.playlist.item(at: index)?.articleId == articleId else {
+          print("Queue changed while resolving episode \(articleId); dropping playback")
+          return
+        }
+        let resolved = PlayerController.resolvedItem(item, streamUrl: streamUrl)
+        self.playlist.replaceItem(at: index, with: resolved)
+        try self.setupStream(for: resolved)
+      } catch {
+        print("Failed to play queued episode: \(error.localizedDescription)")
+      }
+    }
+  }
+
+  private static func resolvedItem(_ item: CarPlayItem, streamUrl: String) -> CarPlayItem {
+    return CarPlayItem(
+      title: item.title,
+      content: item.content,
+      cover: item.cover,
+      streamUrl: streamUrl,
+      isLive: item.isLive,
+      channelId: item.channelId,
+      articleId: item.articleId,
+      startPositionSec: item.startPositionSec,
+      progressPct: item.progressPct
+    )
   }
 
   private func addPlayerObservers() {

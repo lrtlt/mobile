@@ -19,29 +19,124 @@ object MediaItemTree {
     private var isInitialized = false
 
     const val ROOT = "[root]"
-    const val RECOMMENDED = "[recommended]"
-    const val LIVE = "[live]"
-    const val NEWEST = "[newest]"
-    const val PODCAST_CATEGORIES = "[podcast_categories]"
-    const val SUBSCRIPTIONS = "[subscriptions]"
-    const val CONTINUE_PLAYING = "[continue_playing]"
-    const val CONTINUE_PLAYING_ALL = "[continue_playing_all]"
 
-    private const val ITEM_PREFIX = "[item]"
+    /**
+     * The landing browsable. Its media ID keeps the value it had when this node held only the
+     * recommendations, because Android Auto caches browse trees against media IDs and the
+     * analytics event is keyed off it — the same reason CarPlay kept the tab title as identity.
+     */
+    const val HOME = "[recommended]"
+    const val LIVE = "[live]"
+    const val PODCAST_CATEGORIES = "[podcast_categories]"
+    const val MANO_LRT = "[mano_lrt]"
+
+    /** The full newest feed, behind Home's `Naujausi` group. No longer a root browsable. */
+    const val NEWEST_ALL = "[newest]"
+
     private const val PODCAST_PREFIX = "[podcast]"
     private const val PODCAST_EPISODE_PREFIX = "[podcast_episode]"
     private const val SUBSCRIPTION_PREFIX = "[subscription]"
     private const val SUBSCRIPTION_EPISODE_PREFIX = "[subscription_episode]"
+    private const val RECOMMENDED_ITEM_PREFIX = "[recommended_item]"
+    private const val NEWEST_ITEM_PREFIX = "[newest_item]"
+    private const val NEWEST_ALL_ITEM_PREFIX = "[newest_all_item]"
+    private const val LIVE_ITEM_PREFIX = "[live_item]"
+    private const val EPISODE_IMAGE_SIZE = "282x158"
+
     const val EXTRA_CHANNEL_ID = "channel_id"
     const val EXTRA_ARTICLE_ID = "article_id"
     const val EXTRA_START_POSITION_SEC = "start_position_sec"
-    private const val CONTINUE_PLAYING_ITEM_PREFIX = "[continue_item]"
-    private const val CONTINUE_PLAYING_ALL_ITEM_PREFIX = "[continue_all_item]"
+
+    /**
+     * The browsable this item hangs off, and the group within it. Together they are what the
+     * up-next rule needs: tapping a row queues the items sharing both, which is "the section you
+     * tapped in becomes the playlist" expressed against a browse tree rather than a list template.
+     *
+     * Stored rather than derived, because Home now mixes three groups under one parent and
+     * walking back up with [getParentId] would hand back all of them.
+     */
+    private const val EXTRA_PARENT_ID = "parent_id"
+    private const val EXTRA_SECTION_ID = "section_id"
+
+    private const val SECTION_CONTINUE_PLAYING = "continue_playing"
+    private const val SECTION_RECOMMENDED = "recommended"
+    private const val SECTION_NEWEST = "newest"
+    private const val SECTION_LIVE = "live"
+    private const val SECTION_EPISODES = "episodes"
+    private const val SECTION_SUBSCRIPTIONS = "subscriptions"
+
+    /** Continue-playing rows shown inline, per host. The rest are behind `Daugiau`. */
     private const val CONTINUE_PLAYING_VISIBLE_COUNT = 3
-    private const val KEY_COMPLETION_STATUS = "android.media.extra.PLAYBACK_STATUS"
+
+    /**
+     * Tiles in Home's `Naujausi` group, matching CarPlay's cap. The feed returns far more, so the
+     * `Daugiau` folder is present in practice.
+     */
+    private const val NEWEST_GRID_COUNT = 6
+
+    /**
+     * The logged-out `Mano LRT` copy, split across the row's two slots and byte-identical to
+     * CarPlay's `loggedOutTitle` / `loggedOutSubtitle`.
+     *
+     * Sized against what was measured in a car: this row's title wraps to two lines and ellipsizes
+     * near 86 characters, and CarPlay's empty-view title is one line of about 35 — so CarPlay is
+     * the binding constraint and 32 and 34 characters clear both. The subtitle slot was previously
+     * unused; the row rendered a title alone.
+     */
+    private const val LOGGED_OUT_TITLE = "Prisijunkite LRT.lt programėlėje"
+
+    private const val LOGGED_OUT_BODY = "Mėgaukitės dar patogesne patirtimi"
+
     private const val KEY_COMPLETION_PERCENTAGE =
         "android.media.extra.PLAYBACK_COMPLETION_PERCENTAGE"
     private const val KEY_GROUP_TITLE = "android.media.browse.CONTENT_STYLE_GROUP_TITLE_HINT"
+    private const val KEY_SINGLE_ITEM_HINT = "android.media.browse.CONTENT_STYLE_SINGLE_ITEM_HINT"
+
+    const val KEY_CONTENT_STYLE_SUPPORTED = "android.media.browse.CONTENT_STYLE_SUPPORTED"
+    const val KEY_CONTENT_STYLE_BROWSABLE_HINT =
+        "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT"
+    const val KEY_CONTENT_STYLE_PLAYABLE_HINT = "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT"
+    const val CONTENT_STYLE_LIST_ITEM = 1
+    const val CONTENT_STYLE_GRID_ITEM = 2
+
+    /**
+     * A browsable that renders a `Klausykite toliau` group.
+     *
+     * Home and `Mano LRT` both carry one. A media ID maps to exactly one node in [treeNodes] and a
+     * node holds one child list, so the two hosts cannot share item IDs the way they cannot share
+     * `CPListItem` instances on CarPlay — each gets its own ID space, built from the same cached
+     * array.
+     */
+    private class ContinueHost(
+        val parentId: String,
+        val itemPrefix: String,
+        val moreFolderId: String,
+        val moreItemPrefix: String,
+    )
+
+    private val homeContinueHost = ContinueHost(
+        parentId = HOME,
+        itemPrefix = "[continue_home]",
+        moreFolderId = "[continue_more_home]",
+        moreItemPrefix = "[continue_all_home]",
+    )
+
+    private val manoContinueHost = ContinueHost(
+        parentId = MANO_LRT,
+        itemPrefix = "[continue_mano]",
+        moreFolderId = "[continue_more_mano]",
+        moreItemPrefix = "[continue_all_mano]",
+    )
+
+    /**
+     * Nodes [MediaItemNode.clearChildren] detaches but never evicts from [treeNodes]. They are
+     * re-attached conditionally — a `Daugiau` folder only exists when there is more to show — and
+     * a browse landing on one after it was evicted would find nothing to populate.
+     */
+    private val permanentNodes: Set<String> = setOf(
+        ROOT, HOME, LIVE, PODCAST_CATEGORIES, MANO_LRT, NEWEST_ALL,
+        homeContinueHost.moreFolderId, manoContinueHost.moreFolderId,
+    )
 
     private class MediaItemNode(val item: MediaItem) {
         val searchTitle = normalizeSearchText(item.mediaMetadata.title)
@@ -66,7 +161,7 @@ object MediaItemTree {
 
         fun clearChildren(){
             this.children.forEach {
-                treeNodes.remove(it.mediaId)
+                if (it.mediaId !in permanentNodes) treeNodes.remove(it.mediaId)
             }
             this.children.clear()
         }
@@ -91,22 +186,11 @@ object MediaItemTree {
                 )
             )
 
-        treeNodes[RECOMMENDED] =
+        treeNodes[HOME] =
             MediaItemNode(
                 buildMediaItem(
                     title = "Siūlome",
-                    mediaId = RECOMMENDED,
-                    isPlayable = false,
-                    isBrowsable = true,
-                    mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_NEWS
-                )
-            )
-
-        treeNodes[NEWEST] =
-            MediaItemNode(
-                buildMediaItem(
-                    title = "Naujausi",
-                    mediaId = NEWEST,
+                    mediaId = HOME,
                     isPlayable = false,
                     isBrowsable = true,
                     mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_NEWS
@@ -135,25 +219,43 @@ object MediaItemTree {
                 )
             )
 
-        treeNodes[SUBSCRIPTIONS] =
+        treeNodes[MANO_LRT] =
             MediaItemNode(
                 buildMediaItem(
-                    title = "Prenumeratos",
-                    mediaId = SUBSCRIPTIONS,
+                    title = "Mano LRT",
+                    mediaId = MANO_LRT,
                     isPlayable = false,
                     isBrowsable = true,
-                    mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PODCASTS
+                    mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_MIXED
                 )
             )
 
-        treeNodes[ROOT]!!.addChild(RECOMMENDED)
-        treeNodes[ROOT]!!.addChild(NEWEST)
+        // The full newest feed keeps a node but leaves the root: it is reached through Home's
+        // `Naujausi` group now, not as a browsable of its own.
+        treeNodes[NEWEST_ALL] =
+            MediaItemNode(
+                buildMediaItem(
+                    title = "Daugiau",
+                    mediaId = NEWEST_ALL,
+                    isPlayable = false,
+                    isBrowsable = true,
+                    mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_NEWS,
+                    extras = Bundle().apply { putString(KEY_GROUP_TITLE, "Naujausi") }
+                )
+            )
+
+        treeNodes[ROOT]!!.addChild(HOME)
         treeNodes[ROOT]!!.addChild(LIVE)
         treeNodes[ROOT]!!.addChild(PODCAST_CATEGORIES)
+        treeNodes[ROOT]!!.addChild(MANO_LRT)
     }
 
+    /**
+     * [title] is nullable because `Prenumeratos` tiles carry no text at all — see
+     * [applyManoLRTSections]. Every other row names itself.
+     */
     @OptIn(UnstableApi::class) private fun buildMediaItem(
-        title: String,
+        title: String?,
         mediaId: String,
         isPlayable: Boolean,
         isBrowsable: Boolean,
@@ -161,6 +263,7 @@ object MediaItemTree {
         subtitleConfigurations: List<SubtitleConfiguration> = mutableListOf(),
         album: String? = null,
         artist: String? = null,
+        subtitle: String? = null,
         genre: String? = null,
         sourceUri: Uri? = null,
         imageUri: Uri? = null,
@@ -170,6 +273,7 @@ object MediaItemTree {
             MediaMetadata.Builder()
                 .setAlbumTitle(album)
                 .setTitle(title)
+                .setSubtitle(subtitle)
                 .setArtist(artist)
                 .setGenre(genre)
                 .setIsBrowsable(isBrowsable)
@@ -187,31 +291,47 @@ object MediaItemTree {
             .build()
     }
 
+    /**
+     * Extras every addressable row carries: where it hangs and which group it belongs to, plus the
+     * optional group header and grid hint. [sectionSiblings] reads the first two back.
+     */
+    private fun rowExtras(
+        parentId: String,
+        sectionId: String,
+        groupTitle: String? = null,
+        asGrid: Boolean = false,
+        build: Bundle.() -> Unit = {}
+    ): Bundle = Bundle().apply {
+        putString(EXTRA_PARENT_ID, parentId)
+        putString(EXTRA_SECTION_ID, sectionId)
+        if (groupTitle != null) putString(KEY_GROUP_TITLE, groupTitle)
+        // Per-item override of the browsable's declared content style. This is the Android analog
+        // of CarPlay's `CPListImageRowItem`: `Naujausi`, `Siūlome` and `Prenumeratos` draw as
+        // cover tiles, while `Klausykite toliau` stays a list so its progress bar has somewhere to
+        // go — a grid tile has nowhere to put one.
+        if (asGrid) putInt(KEY_SINGLE_ITEM_HINT, CONTENT_STYLE_GRID_ITEM)
+        build()
+    }
 
-    fun isContinuePlayingItem(mediaId: String): Boolean =
-        mediaId.startsWith(CONTINUE_PLAYING_ITEM_PREFIX) ||
-                mediaId.startsWith(CONTINUE_PLAYING_ALL_ITEM_PREFIX)
-
-    fun isContinuePlayingAllItem(mediaId: String): Boolean =
-        mediaId.startsWith(CONTINUE_PLAYING_ALL_ITEM_PREFIX)
+    // MARK: - Klausykite toliau
 
     private fun buildContinuePlayingItem(
         source: PlaylistItem,
         mediaId: String,
+        parentId: String,
         groupTitle: String?
     ): MediaItem {
-        val extras = Bundle().apply {
+        val extras = rowExtras(parentId, SECTION_CONTINUE_PLAYING, groupTitle) {
             source.articleId?.let { id -> putInt(EXTRA_ARTICLE_ID, id) }
             source.startPositionSec?.let { pos -> putInt(EXTRA_START_POSITION_SEC, pos) }
-            val pct = (source.progressPct ?: 0.0).coerceIn(0.0, 1.0)
-            putDouble(KEY_COMPLETION_PERCENTAGE, pct)
-            if (groupTitle != null) putString(KEY_GROUP_TITLE, groupTitle)
+            putDouble(KEY_COMPLETION_PERCENTAGE, (source.progressPct ?: 0.0).coerceIn(0.0, 1.0))
         }
         return buildMediaItem(
             title = source.title ?: "-",
             mediaId = mediaId,
             isPlayable = true,
             isBrowsable = false,
+            subtitle = source.content,
             mediaType = MediaMetadata.MEDIA_TYPE_PODCAST_EPISODE,
             sourceUri = Uri.parse(source.streamUrl),
             imageUri = source.cover?.let(Uri::parse),
@@ -219,63 +339,310 @@ object MediaItemTree {
         )
     }
 
-    fun applyRecommendedSections(
-        continueItems: List<PlaylistItem>,
-        recommendedItems: List<PlaylistItem>
-    ) {
-        val recommended = treeNodes[RECOMMENDED] ?: return
-        recommended.clearChildren()
-        treeNodes[CONTINUE_PLAYING_ALL]?.clearChildren()
+    /**
+     * Appends a host's `Klausykite toliau` group: up to [CONTINUE_PLAYING_VISIBLE_COUNT] rows and
+     * a `Daugiau` folder holding the full list when there is more. Adds nothing at all when there
+     * is nothing to continue, so the group below takes the top of the browsable.
+     */
+    private fun appendContinuePlaying(host: ContinueHost, items: List<PlaylistItem>) {
+        val parent = treeNodes[host.parentId] ?: return
+        treeNodes[host.moreFolderId]?.clearChildren()
 
-        val visible = continueItems.take(CONTINUE_PLAYING_VISIBLE_COUNT)
-        visible.forEach {
-            val mediaId = CONTINUE_PLAYING_ITEM_PREFIX + it.articleId
-            val item = buildContinuePlayingItem(it, mediaId, groupTitle = "Klausykite toliau")
-            treeNodes[mediaId] = MediaItemNode(item)
-            recommended.addChild(mediaId)
-        }
-
-        if (continueItems.size > CONTINUE_PLAYING_VISIBLE_COUNT) {
-            val moreFolder = buildMediaItem(
-                title = "Daugiau",
-                mediaId = CONTINUE_PLAYING_ALL,
-                isPlayable = false,
-                isBrowsable = true,
-                mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_MIXED,
-                extras = Bundle().apply { putString(KEY_GROUP_TITLE, "Klausykite toliau") }
+        items.take(CONTINUE_PLAYING_VISIBLE_COUNT).forEach {
+            val mediaId = host.itemPrefix + it.articleId
+            treeNodes[mediaId] = MediaItemNode(
+                buildContinuePlayingItem(it, mediaId, host.parentId, "Klausykite toliau")
             )
-            val allNode = MediaItemNode(moreFolder)
-            treeNodes[CONTINUE_PLAYING_ALL] = allNode
-            continueItems.forEach {
-                val mediaId = CONTINUE_PLAYING_ALL_ITEM_PREFIX + it.articleId
-                val item = buildContinuePlayingItem(it, mediaId, groupTitle = null)
-                treeNodes[mediaId] = MediaItemNode(item)
-                allNode.addChild(mediaId)
-            }
-            recommended.addChild(CONTINUE_PLAYING_ALL)
+            parent.addChild(mediaId)
         }
+
+        if (items.size <= CONTINUE_PLAYING_VISIBLE_COUNT) return
+
+        val moreFolder = buildMediaItem(
+            title = "Daugiau",
+            mediaId = host.moreFolderId,
+            isPlayable = false,
+            isBrowsable = true,
+            mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_MIXED,
+            extras = rowExtras(host.parentId, SECTION_CONTINUE_PLAYING, "Klausykite toliau")
+        )
+        val moreNode = MediaItemNode(moreFolder)
+        treeNodes[host.moreFolderId] = moreNode
+        items.forEach {
+            val mediaId = host.moreItemPrefix + it.articleId
+            treeNodes[mediaId] = MediaItemNode(
+                buildContinuePlayingItem(it, mediaId, host.moreFolderId, groupTitle = null)
+            )
+            moreNode.addChild(mediaId)
+        }
+        parent.addChild(host.moreFolderId)
+    }
+
+    // MARK: - Siūlome (Home)
+
+    /**
+     * Home, in this order: `Klausykite toliau` as rows, then `Siūlome` and `Naujausi` as grids,
+     * with a `Daugiau` folder onto the full feed. Only the first group is auth-dependent and it is
+     * simply absent when there is nothing to continue — Home renders for a logged-out driver.
+     */
+    fun applyHomeSections(
+        continueItems: List<PlaylistItem>,
+        recommendedItems: List<PlaylistItem>,
+        newestItems: List<PlaylistItem>
+    ) {
+        val home = treeNodes[HOME] ?: return
+        home.clearChildren()
+
+        appendContinuePlaying(homeContinueHost, continueItems)
 
         recommendedItems.forEach {
-            val mediaId = ITEM_PREFIX + it.streamUrl
-            val extras = Bundle().apply {
-                it.articleId?.let { id -> putInt(EXTRA_ARTICLE_ID, id) }
-                putString(KEY_GROUP_TITLE, "Siūlome")
+            val mediaId = RECOMMENDED_ITEM_PREFIX + it.streamUrl
+            treeNodes[mediaId] = MediaItemNode(
+                buildFeedItem(it, mediaId, HOME, SECTION_RECOMMENDED, "Siūlome")
+            )
+            home.addChild(mediaId)
+            indexForSearch(it.title, mediaId)
+        }
+
+        // Capped where CarPlay caps its grid; everything past the cap is behind `Daugiau`.
+        newestItems.take(NEWEST_GRID_COUNT).forEach {
+            val mediaId = NEWEST_ITEM_PREFIX + it.streamUrl
+            treeNodes[mediaId] = MediaItemNode(
+                buildFeedItem(it, mediaId, HOME, SECTION_NEWEST, "Naujausi")
+            )
+            home.addChild(mediaId)
+            indexForSearch(it.title, mediaId)
+        }
+
+        if (newestItems.size > NEWEST_GRID_COUNT) {
+            home.addChild(NEWEST_ALL)
+        }
+    }
+
+    /** The full newest feed behind Home's `Daugiau`, including the items the grid already showed. */
+    fun setNewestAllItems(items: List<PlaylistItem>) {
+        val node = treeNodes[NEWEST_ALL] ?: return
+        node.clearChildren()
+        items.forEach {
+            val mediaId = NEWEST_ALL_ITEM_PREFIX + it.streamUrl
+            treeNodes[mediaId] = MediaItemNode(
+                buildFeedItem(it, mediaId, NEWEST_ALL, SECTION_NEWEST, groupTitle = null, asGrid = false)
+            )
+            node.addChild(mediaId)
+            indexForSearch(it.title, mediaId)
+        }
+    }
+
+    private fun buildFeedItem(
+        source: PlaylistItem,
+        mediaId: String,
+        parentId: String,
+        sectionId: String,
+        groupTitle: String?,
+        asGrid: Boolean = true
+    ): MediaItem {
+        val extras = rowExtras(parentId, sectionId, groupTitle, asGrid) {
+            source.articleId?.let { id -> putInt(EXTRA_ARTICLE_ID, id) }
+        }
+        return buildMediaItem(
+            title = source.title ?: "-",
+            mediaId = mediaId,
+            isPlayable = true,
+            isBrowsable = false,
+            subtitle = source.content,
+            mediaType = MediaMetadata.MEDIA_TYPE_NEWS,
+            sourceUri = Uri.parse(source.streamUrl),
+            imageUri = source.cover?.let(Uri::parse),
+            extras = extras
+        )
+    }
+
+    // MARK: - Tiesiogiai
+
+    fun setLiveItems(items: List<PlaylistItem>){
+        val node = treeNodes[LIVE] ?: return
+        node.clearChildren()
+        items.forEach {
+            val mediaId = LIVE_ITEM_PREFIX + it.streamUrl
+            val extras = rowExtras(LIVE, SECTION_LIVE) {
+                it.channelId?.let { id -> putInt(EXTRA_CHANNEL_ID, id) }
             }
             val item = buildMediaItem(
                 title = it.title ?: "-",
                 mediaId = mediaId,
                 isPlayable = true,
                 isBrowsable = false,
+                subtitle = it.content,
                 mediaType = MediaMetadata.MEDIA_TYPE_NEWS,
                 sourceUri = Uri.parse(it.streamUrl),
-                imageUri = Uri.parse(it.cover),
+                imageUri = it.cover?.let(Uri::parse),
+                extras = extras
+            )
+
+            treeNodes[mediaId] = MediaItemNode(item)
+            node.addChild(mediaId)
+            indexForSearch(it.title, mediaId)
+        }
+    }
+
+    // MARK: - Laidos
+
+    /**
+     * The A–Z podcast browse. No auth dependency, which is why `Mano LRT` needs no route into it —
+     * podcasts stay reachable when logged out.
+     */
+    fun setPodcastCategories(items: List<PodcastCategory>){
+        val node = treeNodes[PODCAST_CATEGORIES] ?: return
+        node.clearChildren()
+        items.forEach {
+            val mediaId = PODCAST_PREFIX + it.id
+            val item = buildMediaItem(
+                title = it.title ?: "-",
+                mediaId = mediaId,
+                isPlayable = false,
+                isBrowsable = true,
+                mediaType = MediaMetadata.MEDIA_TYPE_PODCAST_EPISODE,
+            )
+
+            treeNodes[mediaId] = MediaItemNode(item)
+            node.addChild(mediaId)
+            indexForSearch(it.title, mediaId)
+        }
+    }
+
+    fun setPodcastEpisodes(podcastId: Int, episodes: List<PodcastEpisode>){
+        setEpisodes(PODCAST_PREFIX + podcastId, PODCAST_EPISODE_PREFIX, episodes)
+    }
+
+    fun setSubscriptionEpisodes(categoryId: Int, episodes: List<PodcastEpisode>) {
+        setEpisodes(SUBSCRIPTION_PREFIX + categoryId, SUBSCRIPTION_EPISODE_PREFIX, episodes)
+    }
+
+    /**
+     * Episode rows carry an article ID and no stream URI: the URI lives in the article payload, so
+     * resolving a whole category up front would cost one request per row. `LRTMediaSessionCallback`
+     * resolves them as playback reaches them.
+     */
+    private fun setEpisodes(parentId: String, prefix: String, episodes: List<PodcastEpisode>) {
+        val node = treeNodes[parentId] ?: return
+        node.clearChildren()
+        episodes.forEach {
+            val mediaId = prefix + it.id
+            val extras = rowExtras(parentId, SECTION_EPISODES) {
+                it.id?.let { id -> putInt(EXTRA_ARTICLE_ID, id) }
+            }
+            val item = buildMediaItem(
+                title = it.title ?: "-",
+                mediaId = mediaId,
+                isPlayable = true,
+                isBrowsable = false,
+                mediaType = MediaMetadata.MEDIA_TYPE_PODCAST_EPISODE,
+                imageUri = episodeCoverUri(it),
                 extras = extras
             )
             treeNodes[mediaId] = MediaItemNode(item)
-            recommended.addChild(mediaId)
-            it.title?.let { t ->
-                titleMap[t.lowercase()] = treeNodes[mediaId]!!
-            }
+            node.addChild(mediaId)
+            indexForSearch(it.title, mediaId)
+        }
+    }
+
+    private fun episodeCoverUri(episode: PodcastEpisode): Uri? {
+        val prefix = episode.imgPathPrefix ?: return null
+        val postfix = episode.imgPathPostfix ?: return null
+        return Uri.parse("https://lrt.lt$prefix$EPISODE_IMAGE_SIZE$postfix")
+    }
+
+    // MARK: - ManoLRT
+
+    /**
+     * `Mano LRT`, in this order, both groups conditional: `Klausykite toliau` exactly as Home
+     * renders it, then `Prenumeratos` as cover tiles. A signed-in driver with neither sees an
+     * empty browsable — no copy has been decided for that state.
+     *
+     * [covers] is keyed by `subscriptionKey`: no subscription payload carries artwork, so each
+     * tile borrows the cover of its category's newest episode. A subscription without one still
+     * gets a tile — unlike CarPlay, where the grid is images and a gap would shift every index
+     * after it, an Android browsable row simply renders without art.
+     *
+     * `Prenumeratos` tiles are **cover-only**: no title, no subtitle, matching what CarPlay's
+     * `.grid` style draws. Android Auto has no flag for that, so the absence has to be the
+     * metadata itself — a null title. Two consequences follow that CarPlay does not share:
+     * a tile whose cover also failed to load is now blank rather than merely unlabelled, and the
+     * episode list a tile pushes takes its header from this same title, so that screen loses its
+     * name too. Nothing else reads it — these rows were never indexed for voice search, and
+     * [setSubscriptionEpisodes] is keyed off the media ID.
+     */
+    fun applyManoLRTSections(
+        continueItems: List<PlaylistItem>,
+        subscriptions: List<UserSubscription>,
+        covers: Map<String, String>
+    ) {
+        val node = treeNodes[MANO_LRT] ?: return
+        node.clearChildren()
+
+        appendContinuePlaying(manoContinueHost, continueItems)
+
+        subscriptions.forEach { subscription ->
+            val categoryId = subscription.categoryId ?: return@forEach
+            val mediaId = SUBSCRIPTION_PREFIX + categoryId
+            val item = buildMediaItem(
+                // Cover-only tiles: neither a title nor a subtitle is drawn.
+                title = null,
+                mediaId = mediaId,
+                isPlayable = false,
+                isBrowsable = true,
+                mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PODCASTS,
+                imageUri = covers[subscription.subscriptionKey]?.let(Uri::parse),
+                extras = rowExtras(
+                    MANO_LRT, SECTION_SUBSCRIPTIONS, "Prenumeratos", asGrid = true
+                )
+            )
+            treeNodes[mediaId] = MediaItemNode(item)
+            node.addChild(mediaId)
+        }
+    }
+
+    /**
+     * The logged-out `Mano LRT`: this message and nothing else. Podcasts remain fully reachable
+     * through `Laidos`, so signing out costs only the two personal groups.
+     *
+     * The copy is a full paragraph and this is a browse row, which Android Auto ellipsizes to the
+     * row's width — there is no variant mechanism to fall back through as there is on CarPlay, and
+     * no documented character budget to write against. What actually shows has to be read off a
+     * head unit.
+     */
+    fun setManoLRTLoggedOut() {
+        val node = treeNodes[MANO_LRT] ?: return
+        node.clearChildren()
+        val mediaId = "[mano_lrt_login_message]"
+        val item = buildMediaItem(
+            title = LOGGED_OUT_TITLE,
+            subtitle = LOGGED_OUT_BODY,
+            mediaId = mediaId,
+            isPlayable = false,
+            isBrowsable = false,
+            mediaType = MediaMetadata.MEDIA_TYPE_MIXED
+        )
+        treeNodes[mediaId] = MediaItemNode(item)
+        node.addChild(mediaId)
+    }
+
+    // MARK: - Up-next queue
+
+    /**
+     * The rows that share both a parent and a group with [mediaId] — the queue a tap should
+     * install, per the one up-next rule. Folder rows (`Daugiau`) are excluded because they are not
+     * playable, so they can never shift the start index.
+     *
+     * Empty when the item is unknown or carries no group, which leaves the caller on its fallback.
+     */
+    fun sectionSiblings(mediaId: String): List<MediaItem> {
+        val extras = treeNodes[mediaId]?.item?.mediaMetadata?.extras ?: return emptyList()
+        val parentId = extras.getString(EXTRA_PARENT_ID) ?: return emptyList()
+        val sectionId = extras.getString(EXTRA_SECTION_ID) ?: return emptyList()
+        return getChildren(parentId).filter {
+            it.mediaMetadata.isPlayable == true &&
+                it.mediaMetadata.extras?.getString(EXTRA_SECTION_ID) == sectionId
         }
     }
 
@@ -291,200 +658,14 @@ object MediaItemTree {
         return if (id > 0) id else null
     }
 
-    fun setRecommendedItems(items: List<PlaylistItem>){
-        treeNodes[RECOMMENDED]!!.clearChildren()
-        items.forEach {
-            val mediaId = ITEM_PREFIX + it.streamUrl
-            val extras = it.articleId?.let { id ->
-                Bundle().apply { putInt(EXTRA_ARTICLE_ID, id) }
-            }
-            val item = buildMediaItem(
-                title = it.title ?: "-",
-                mediaId = mediaId,
-                isPlayable = true,
-                isBrowsable = false,
-                mediaType = MediaMetadata.MEDIA_TYPE_NEWS,
-                sourceUri = Uri.parse(it.streamUrl),
-                imageUri = Uri.parse(it.cover),
-                extras = extras
-            )
-            treeNodes[mediaId] = MediaItemNode(item)
-            treeNodes[RECOMMENDED]!!.addChild(mediaId)
-            it.title?.let { t ->
-                titleMap[t.lowercase()] = treeNodes[mediaId]!!
-            }
-        }
-    }
+    fun isEpisodeItem(mediaId: String): Boolean =
+        mediaId.startsWith(PODCAST_EPISODE_PREFIX) ||
+                mediaId.startsWith(SUBSCRIPTION_EPISODE_PREFIX)
 
-    fun setNewestItems(items: List<PlaylistItem>){
-        treeNodes[NEWEST]!!.clearChildren()
-        items.forEach {
-            val mediaId = ITEM_PREFIX + it.streamUrl
-            val extras = it.articleId?.let { id ->
-                Bundle().apply { putInt(EXTRA_ARTICLE_ID, id) }
-            }
-            val item = buildMediaItem(
-                title = it.title ?: "-",
-                mediaId = mediaId,
-                isPlayable = true,
-                isBrowsable = false,
-                mediaType = MediaMetadata.MEDIA_TYPE_NEWS,
-                sourceUri = Uri.parse(it.streamUrl),
-                imageUri = Uri.parse(it.cover),
-                extras = extras
-            )
-            treeNodes[mediaId] = MediaItemNode(item)
-            treeNodes[NEWEST]!!.addChild(mediaId)
-            it.title?.let { t ->
-                titleMap[t.lowercase()] = treeNodes[mediaId]!!
-            }
-        }
-    }
-
-    fun setLiveItems(items: List<PlaylistItem>){
-        treeNodes[LIVE]!!.clearChildren()
-        items.forEach {
-            val mediaId = ITEM_PREFIX + it.streamUrl
-            val extras = it.channelId?.let { id ->
-                Bundle().apply { putInt(EXTRA_CHANNEL_ID, id) }
-            }
-            val item = buildMediaItem(
-                title = it.title ?: "-",
-                mediaId = mediaId,
-                isPlayable = true,
-                isBrowsable = false,
-                mediaType = MediaMetadata.MEDIA_TYPE_NEWS,
-                sourceUri = Uri.parse(it.streamUrl),
-                imageUri = Uri.parse(it.cover),
-                extras = extras
-            )
-
-            treeNodes[mediaId] = MediaItemNode(item)
-            treeNodes[LIVE]!!.addChild(mediaId)
-            it.title?.let { t ->
-                titleMap[t.lowercase()] = treeNodes[mediaId]!!
-            }
-        }
-    }
-
-    fun setPodcastCategories(items: List<PodcastCategory>, includeSubscriptions: Boolean = false){
-        treeNodes[PODCAST_CATEGORIES]!!.clearChildren()
-        if (includeSubscriptions) {
-            treeNodes[PODCAST_CATEGORIES]!!.addChild(SUBSCRIPTIONS)
-        }
-        items.forEach {
-            val mediaId = PODCAST_PREFIX + it.id
-            val item = buildMediaItem(
-                title = it.title ?: "-",
-                mediaId = mediaId,
-                isPlayable = false,
-                isBrowsable = true,
-                mediaType = MediaMetadata.MEDIA_TYPE_PODCAST_EPISODE,
-            )
-
-            treeNodes[mediaId] = MediaItemNode(item)
-            treeNodes[PODCAST_CATEGORIES]!!.addChild(mediaId)
-            it.title?.let { t ->
-                titleMap[t.lowercase()] = treeNodes[mediaId]!!
-            }
-        }
-    }
-
-    fun setPodcastEpisodes(podcastId: Int, episodes: List<PodcastEpisode>){
-        val imgSize = "282x158"
-        val parentId = PODCAST_PREFIX + podcastId
-
-        episodes.forEach {
-            val mediaId = PODCAST_EPISODE_PREFIX + it.id
-            val extras = it.id?.let { id ->
-                Bundle().apply { putInt(EXTRA_ARTICLE_ID, id) }
-            }
-            val item = buildMediaItem(
-                title = it.title ?: "-",
-                mediaId = mediaId,
-                isPlayable = true,
-                isBrowsable = false,
-                mediaType = MediaMetadata.MEDIA_TYPE_PODCAST_EPISODE,
-                imageUri = Uri.parse("https://lrt.lt${it.imgPathPrefix}$imgSize${it.imgPathPostfix}"),
-                extras = extras
-            )
-            treeNodes[mediaId] = MediaItemNode(item)
-            treeNodes[parentId]?.addChild(mediaId)
-            it.title?.let { t ->
-                titleMap[t.lowercase()] = treeNodes[mediaId]!!
-            }
-        }
-    }
-
-    fun setSubscriptionCategories(items: List<UserSubscription>) {
-        treeNodes[SUBSCRIPTIONS]!!.clearChildren()
-        items.forEach {
-            val categoryId = it.subscriptionKey.removePrefix("category-")
-            val mediaId = SUBSCRIPTION_PREFIX + categoryId
-            val item = buildMediaItem(
-                title = it.name ?: "-",
-                mediaId = mediaId,
-                isPlayable = false,
-                isBrowsable = true,
-                mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PODCASTS
-            )
-            treeNodes[mediaId] = MediaItemNode(item)
-            treeNodes[SUBSCRIPTIONS]!!.addChild(mediaId)
-        }
-    }
-
-    fun setSubscriptionNotLoggedIn() {
-        treeNodes[SUBSCRIPTIONS]!!.clearChildren()
-        val mediaId = "[subscription_login_message]"
-        val item = buildMediaItem(
-            title = "Prisijunkite programėlėje, kad matytumėte asmeninį turinį",
-            mediaId = mediaId,
-            isPlayable = false,
-            isBrowsable = false,
-            mediaType = MediaMetadata.MEDIA_TYPE_MIXED
-        )
-        treeNodes[mediaId] = MediaItemNode(item)
-        treeNodes[SUBSCRIPTIONS]!!.addChild(mediaId)
-    }
-
-    fun setSubscriptionNoItems() {
-        treeNodes[SUBSCRIPTIONS]!!.clearChildren()
-        val mediaId = "[subscription_empty_message]"
-        val item = buildMediaItem(
-            title = "Neturite prenumeratų",
-            mediaId = mediaId,
-            isPlayable = false,
-            isBrowsable = false,
-            mediaType = MediaMetadata.MEDIA_TYPE_MIXED
-        )
-        treeNodes[mediaId] = MediaItemNode(item)
-        treeNodes[SUBSCRIPTIONS]!!.addChild(mediaId)
-    }
-
-    fun setSubscriptionEpisodes(categoryId: Int, episodes: List<PodcastEpisode>) {
-        val imgSize = "282x158"
-        val parentId = SUBSCRIPTION_PREFIX + categoryId
-
-        episodes.forEach {
-            val mediaId = SUBSCRIPTION_EPISODE_PREFIX + it.id
-            val extras = it.id?.let { id ->
-                Bundle().apply { putInt(EXTRA_ARTICLE_ID, id) }
-            }
-            val item = buildMediaItem(
-                title = it.title ?: "-",
-                mediaId = mediaId,
-                isPlayable = true,
-                isBrowsable = false,
-                mediaType = MediaMetadata.MEDIA_TYPE_PODCAST_EPISODE,
-                imageUri = Uri.parse("https://lrt.lt${it.imgPathPrefix}$imgSize${it.imgPathPostfix}"),
-                extras = extras
-            )
-            treeNodes[mediaId] = MediaItemNode(item)
-            treeNodes[parentId]?.addChild(mediaId)
-            it.title?.let { t ->
-                titleMap[t.lowercase()] = treeNodes[mediaId]!!
-            }
-        }
+    /** The episode row with its stream URI filled in, for handing to the player. */
+    fun buildResolvedEpisodeItem(mediaId: String, streamUrl: String): MediaItem? {
+        val item = treeNodes[mediaId]?.item ?: return null
+        return item.buildUpon().setUri(Uri.parse(streamUrl)).build()
     }
 
     fun getSubscriptionCategoryId(mediaId: String): Int {
@@ -494,21 +675,11 @@ object MediaItemTree {
         return -1
     }
 
-    fun getSubscriptionEpisodeId(mediaId: String): Int {
-        if (mediaId.startsWith(SUBSCRIPTION_EPISODE_PREFIX)) {
-            return mediaId.substring(SUBSCRIPTION_EPISODE_PREFIX.length).toIntOrNull() ?: -1
+    fun getPodcastCategoryId(mediaId: String): Int {
+        if (mediaId.startsWith(PODCAST_PREFIX)) {
+            return mediaId.substring(PODCAST_PREFIX.length).toIntOrNull() ?: -1
         }
         return -1
-    }
-
-    fun buildSubscriptionEpisodeItem(episodeId: String, streamUrl: String): MediaItem {
-        val item = treeNodes[episodeId]?.item
-        return item!!.buildUpon().setUri(Uri.parse(streamUrl)).build()
-    }
-
-    fun buildPodcastEpisodeItem(podcastEpisodeId: String, streamUrl: String): MediaItem {
-        val item = treeNodes[podcastEpisodeId]?.item
-        return item!!.buildUpon().setUri(Uri.parse(streamUrl)).build()
     }
 
     fun getItem(id: String): MediaItem? {
@@ -594,18 +765,9 @@ object MediaItemTree {
         return treeNodes[id]?.getChildren() ?: listOf()
     }
 
-    fun getPodcastCategoryId(mediaId: String): Int {
-        if(mediaId.startsWith(PODCAST_PREFIX)){
-            return mediaId.substring(PODCAST_PREFIX.length).toInt()
-        }
-        return -1;
-    }
-
-    fun getPodcastEpisodeId(mediaId: String): Int {
-        if(mediaId.startsWith(PODCAST_EPISODE_PREFIX)){
-            return mediaId.substring(PODCAST_EPISODE_PREFIX.length).toInt()
-        }
-        return -1;
+    private fun indexForSearch(title: String?, mediaId: String) {
+        val node = treeNodes[mediaId] ?: return
+        title?.let { titleMap[it.lowercase()] = node }
     }
 
     private fun normalizeSearchText(text: CharSequence?): String {
