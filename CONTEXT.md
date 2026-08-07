@@ -11,6 +11,10 @@ _Avoid_: Viewed articles, recently read
 **Saved Article**:
 An article the user has explicitly bookmarked for later. Distinct from History — saving is deliberate, History is automatic.
 _Avoid_: Bookmark, favorite (in storage-layer naming)
+
+**Subtitle Preference**:
+The user's remembered subtitle choice, applied app-wide to every stream that follows. Holds one of three states: unset (never chose), off (explicitly disabled), or a language. Only a manual choice in the subtitles menu sets it.
+_Avoid_: Subtitle setting, saved subtitle, last subtitle
 # LRT Mobile
 
 The LRT.lt React Native app for Lithuanian public broadcasting. This glossary captures domain terms whose meaning is easy to confuse, so code and conversation use one agreed word per concept.

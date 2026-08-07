@@ -26,6 +26,7 @@ export const getLanguageName = (language: string) => {
     case 'pol':
       return 'Lenkų';
     case 'uk':
+    case 'ukr':
       return 'Ukrainiečių';
     default:
       return language;
