@@ -146,8 +146,8 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       return
     }
 
-    // Keyed off `analyticsKey` rather than the title, which is no longer a legal Firebase
-    // event name for every tab — `Mano LRT` has a space in it. Logging after the guard also
+    // Keyed off `analyticsKey` rather than the title, which is not a legal Firebase event name
+    // for every tab — `Mano LRT` has a space, `Siūlome` a `ū`. Logging after the guard also
     // means an unrecognised title no longer mints an event nothing will ever query.
     Analytics.logEvent("carplay_tab_open_\(tab.analyticsKey)", parameters: nil)
 
@@ -580,7 +580,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   ) {
     let item = CPListItem(
       text: "Įvyko klaida! Patikrinkite interneto ryšį",
-      detailText: "Paspauskite noredami pabandyti dar kartą"
+      detailText: "Paspauskite norėdami pabandyti dar kartą"
     )
     item.handler = { _, completion in
       Task {

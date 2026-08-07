@@ -25,12 +25,21 @@ enum CarPlayTab: String, CaseIterable {
 
   /// The suffix of the `carplay_tab_open_*` analytics event.
   ///
-  /// Not the display title: Firebase event names admit only alphanumerics and underscores, so
-  /// the space in `Mano LRT` would make the whole event invalid and it would be dropped rather
-  /// than renamed. Stripping the space also keeps `carplay_tab_open_ManoLRT` emitting across the
-  /// rename, so that series stays continuous.
+  /// Not the display title: Firebase event names admit only ASCII alphanumerics and underscores,
+  /// and the titles clear neither bar — `Mano LRT` has a space, `Siūlome` has a `ū`. Either one
+  /// makes the whole event invalid, and it is dropped rather than renamed.
+  ///
+  /// Spelled out per case instead of derived from the title, so the mapping is fixed at the
+  /// source: a future rename changes the display string without silently re-keying a series in
+  /// Firebase, and the compiler asks for a key when a tab is added. `ManoLRT` is kept as it was
+  /// so that series stays continuous across the `Mano LRT` rename.
   var analyticsKey: String {
-    return rawValue.replacingOccurrences(of: " ", with: "")
+    switch self {
+    case .home: return "Siulome"
+    case .live: return "Tiesiogiai"
+    case .podcasts: return "Laidos"
+    case .manoLRT: return "ManoLRT"
+    }
   }
 
   /// Resolves a persisted tab title, mapping titles that stopped existing onto their
