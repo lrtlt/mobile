@@ -14,13 +14,57 @@ class CarPlayService {
   private let network = CarPlayNetwork.shared
 
   // In-memory only (per requirements — no disk persistence).
+  // `refreshContinuePlaying` writes these from a background executor while the CarPlay scene
+  // reads them on the main actor — and now from two tabs — so every access goes through
+  // `stateQueue`.
   private var continuePlayingCache: [CarPlayItem] = []
   private var articleInfoCache: [Int: PodcastEpisodeInfo] = [:]
+  /// Subscription cover URLs by `subscriptionKey`. Each miss costs a category fetch, so this is
+  /// what keeps `Prenumeratos` from re-requesting every episode list on each tab visit.
+  private var subscriptionCoverCache: [String: String] = [:]
+  private let stateQueue = DispatchQueue(
+    label: "com.lrt.carplay.service.state", attributes: .concurrent)
 
   private init() {}
 
   var cachedContinuePlaying: [CarPlayItem] {
-    return continuePlayingCache
+    return stateQueue.sync { continuePlayingCache }
+  }
+
+  private func setCachedContinuePlaying(_ items: [CarPlayItem]) {
+    stateQueue.sync(flags: .barrier) { self.continuePlayingCache = items }
+  }
+
+  /// Drops one article from the cached continue-playing list.
+  ///
+  /// Needed because this cache is otherwise written only by `refreshContinuePlaying`, which runs
+  /// on a tab load — so finishing an episode would push `completed` to the backend and leave the
+  /// row on screen until the driver navigated somewhere. Worse, `CarSceneDelegate` skips a
+  /// repaint when the cached data's signature is unchanged, so the `watchHistoryUpdated` that
+  /// follows the push would do nothing at all.
+  ///
+  /// The phone app needs no equivalent: its store is local, so `upsertProgress` writing and
+  /// `getEntries` re-deriving happen in the same tick. This is the CarPlay stand-in for that.
+  func removeFromContinuePlaying(articleId: Int) {
+    stateQueue.sync(flags: .barrier) {
+      self.continuePlayingCache.removeAll { $0.articleId == articleId }
+    }
+  }
+
+  private func cachedArticleInfo(for articleId: Int) -> PodcastEpisodeInfo? {
+    return stateQueue.sync { articleInfoCache[articleId] }
+  }
+
+  private func setCachedArticleInfo(_ info: PodcastEpisodeInfo, for articleId: Int) {
+    stateQueue.sync(flags: .barrier) { self.articleInfoCache[articleId] = info }
+  }
+
+  private func cachedSubscriptionCover(for key: String) -> String? {
+    return stateQueue.sync { subscriptionCoverCache[key] }
+  }
+
+  private func setCachedSubscriptionCover(_ cover: String, for key: String) {
+    stateQueue.sync(flags: .barrier) { self.subscriptionCoverCache[key] = cover }
   }
 
   func fetchRecommended() async throws -> [CarPlayItem] {
@@ -52,6 +96,56 @@ class CarPlayService {
     return try await network.fetchSubscriptions(accessToken: token)
   }
 
+  /// Cover art for each subscription, keyed by `subscriptionKey`.
+  ///
+  /// Neither `UserSubscription` nor `PodcastCategory` carries artwork — only `PodcastEpisode`
+  /// does — so a category's cover has to be borrowed from its newest episode. That is one
+  /// request per subscription, run concurrently and cached for the session, which is the price
+  /// of rendering `Prenumeratos` as a grid rather than as text rows.
+  ///
+  /// A subscription whose fetch fails is simply absent from the result; the grid drops tiles it
+  /// has no image for.
+  func fetchSubscriptionCovers(for subscriptions: [UserSubscription]) async -> [String: String] {
+    let wanted = subscriptions.filter { $0.categoryId != nil }
+    let missing = wanted.filter { cachedSubscriptionCover(for: $0.subscriptionKey) == nil }
+
+    if !missing.isEmpty {
+      await withTaskGroup(of: (String, String?).self) { group in
+        for subscription in missing {
+          group.addTask { [weak self] in
+            guard let self = self, let categoryId = subscription.categoryId else {
+              return (subscription.subscriptionKey, nil)
+            }
+            do {
+              let episodes = try await self.network.fetchPodcastEpisodes(categoryId: categoryId)
+              let cover = episodes.lazy.compactMap { episode -> String? in
+                guard let prefix = episode.imgPathPrefix, let postfix = episode.imgPathPostfix
+                else { return nil }
+                return "https://lrt.lt\(prefix)282x158\(postfix)"
+              }.first
+              return (subscription.subscriptionKey, cover)
+            } catch {
+              return (subscription.subscriptionKey, nil)
+            }
+          }
+        }
+        for await (key, cover) in group {
+          if let cover = cover {
+            setCachedSubscriptionCover(cover, for: key)
+          }
+        }
+      }
+    }
+
+    var covers = [String: String]()
+    for subscription in wanted {
+      if let cover = cachedSubscriptionCover(for: subscription.subscriptionKey) {
+        covers[subscription.subscriptionKey] = cover
+      }
+    }
+    return covers
+  }
+
   func isLoggedIn() -> Bool {
     return CarPlayAuthManager.shared.isLoggedIn()
   }
@@ -63,7 +157,8 @@ class CarPlayService {
   @discardableResult
   func refreshContinuePlaying(count: Int = 20) async -> [CarPlayItem] {
     guard isLoggedIn() else {
-      continuePlayingCache = []
+      // Blanks the `Klausykite toliau` section in both tabs that render it.
+      setCachedContinuePlaying([])
       NotificationCenter.default.post(name: .watchHistoryUpdated, object: nil)
       return []
     }
@@ -74,18 +169,24 @@ class CarPlayService {
       )
       let maxAgeMs = Int64(Self.continuePlayingMaxAgeDays) * 24 * 60 * 60 * 1000
       let nowMs = Int64(Date().timeIntervalSince1970 * 1000)
-      let entries = allEntries.filter { nowMs - $0.updatedAt <= maxAgeMs }
-      for e in entries {
-        print("watch-history entry: articleId=\(e.articleId) pos=\(e.positionSec)/\(e.durationSec) pct=\(e.progressPct)")
-      }
+      // `completed` is filtered here, not by the backend, which returns finished entries like
+      // any other. The phone app does the same thing in `playback_progress_store.getEntries`,
+      // which is the single source of truth for this screen's semantics — an entry that has
+      // been played to the end is history, not something to continue.
+      //
+      // Sorted newest-first to match both the phone app and Android Auto; the endpoint's own
+      // order is not relied on.
+      let entries = allEntries
+        .filter { !$0.completed && nowMs - $0.updatedAt <= maxAgeMs }
+        .sorted { $0.updatedAt > $1.updatedAt }
       let items = await hydrateEntries(entries)
-      
-      continuePlayingCache = items
+
+      setCachedContinuePlaying(items)
       NotificationCenter.default.post(name: .watchHistoryUpdated, object: nil)
       return items
     } catch {
       print("refreshContinuePlaying failed: \(error.localizedDescription)")
-      return continuePlayingCache
+      return cachedContinuePlaying
     }
   }
 
@@ -118,7 +219,7 @@ class CarPlayService {
   private func hydrateEntries(_ entries: [WatchHistoryEntry]) async -> [CarPlayItem] {
     // Fetch article metadata for any entries we haven't seen yet, then build CarPlayItems.
     await withTaskGroup(of: (Int, PodcastEpisodeInfo?).self) { group in
-      for entry in entries where articleInfoCache[entry.articleId] == nil {
+      for entry in entries where cachedArticleInfo(for: entry.articleId) == nil {
         group.addTask { [weak self] in
           guard let self = self else { return (entry.articleId, nil) }
           do {
@@ -131,13 +232,13 @@ class CarPlayService {
       }
       for await (articleId, info) in group {
         if let info = info {
-          articleInfoCache[articleId] = info
+          setCachedArticleInfo(info, for: articleId)
         }
       }
     }
 
     return entries.compactMap { entry in
-      guard let info = articleInfoCache[entry.articleId],
+      guard let info = cachedArticleInfo(for: entry.articleId),
         let streamUrl = info.streamUrl, !streamUrl.isEmpty
       else { return nil }
       let coverUrl = info.mainPhoto?.path.map {
