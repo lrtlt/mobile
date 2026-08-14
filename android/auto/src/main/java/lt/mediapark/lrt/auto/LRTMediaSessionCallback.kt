@@ -128,8 +128,10 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     private suspend fun fetchContinuePlaying(): List<PlaylistItem> {
         if (!authManager.isLoggedIn()) {
             // Blanks Home's `Klausykite toliau` rather than leaving a stale group behind after a
-            // sign-out.
+            // sign-out. Subscriptions are keyed by access token, but a logout that never
+            // re-browses `Mano LRT` would otherwise keep the previous user's list for 5 minutes.
             repository.clearContinuePlayingCache()
+            repository.clearSubscriptionsCache()
             return emptyList()
         }
         return try {
@@ -175,13 +177,19 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
 
     /**
      * Home hosts `Klausykite toliau`, so it is the one browsable that has to repaint off a
-     * playback event. `Mano LRT` used to carry a copy and be notified alongside it.
+     * playback event. The overflow folder is notified too — a driver sitting in `Daugiau`
+     * would otherwise keep the pre-pause rows until they backed out.
      */
     fun notifyContinuePlayingChanged() {
         val session = currentSession ?: return
         session.notifyChildrenChanged(
             MediaItemTree.HOME,
             MediaItemTree.getChildren(MediaItemTree.HOME).size,
+            null
+        )
+        session.notifyChildrenChanged(
+            MediaItemTree.CONTINUE_MORE_FOLDER,
+            MediaItemTree.getChildren(MediaItemTree.CONTINUE_MORE_FOLDER).size,
             null
         )
     }
@@ -297,6 +305,13 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
             }
         }
 
+        if (parentId == MediaItemTree.CONTINUE_MORE_FOLDER) {
+            return submitBlocking {
+                loadHome()
+                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
+            }
+        }
+
         if (parentId == MediaItemTree.RECOMMENDED_ALL) {
             logAnalyticsEvent(browser.packageName, "android_auto_recommended_all_open")
             return submitBlocking {
@@ -369,7 +384,7 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
 
     /**
      * Mano LRT: `Prenumeratos` and nothing else — `Klausykite toliau` lives in Home alone now. The
-     * group is conditional, so a signed-in driver with no subscriptions sees an empty browsable.
+     * group is conditional, so a signed-in driver with no subscriptions sees a message row.
      *
      * A failed subscription fetch is not distinguished from having none — both drop the group, and
      * the A–Z browse stays reachable from `Laidos` either way.
@@ -379,6 +394,7 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
             MediaItemTree.setManoLRTLoggedOut()
             // Still clears the cache, so Home's `Klausykite toliau` goes with it.
             repository.clearContinuePlayingCache()
+            repository.clearSubscriptionsCache()
             return
         }
 

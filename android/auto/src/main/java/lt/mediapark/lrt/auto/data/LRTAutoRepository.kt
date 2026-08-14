@@ -30,6 +30,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
 
     private var subscriptionsLastFetchTime: Long = 0
     private var subscriptions: List<UserSubscription> = emptyList()
+    private var subscriptionsCacheOwner: String? = null
 
     // Written from whichever IO thread a browse lands on and read from another — Home and Mano LRT
     // both fetch continue-playing, and the subscription-cover fan-out is concurrent by design.
@@ -153,12 +154,20 @@ class LRTAutoRepository(private val api: LRTAutoService) {
     }
 
     suspend fun getSubscriptions(accessToken: String) = withContext(Dispatchers.IO) {
-        if (System.currentTimeMillis() - subscriptionsLastFetchTime > CACHE_DURATION || subscriptions.isEmpty()) {
+        val cacheValid = subscriptionsCacheOwner == accessToken &&
+            System.currentTimeMillis() - subscriptionsLastFetchTime <= CACHE_DURATION &&
+            subscriptions.isNotEmpty()
+        if (!cacheValid) {
+            if (subscriptionsCacheOwner != accessToken) {
+                subscriptions = emptyList()
+                subscriptionsLastFetchTime = 0
+            }
             try {
                 subscriptions = api.getSubscriptions(
                     "https://www.lrt.lt/servisai/dev-authrz/api/v1/users/subscriptions",
                     "Bearer $accessToken"
                 ).subscriptions.filter { it.isActive }
+                subscriptionsCacheOwner = accessToken
                 if (subscriptions.isNotEmpty()) {
                     subscriptionsLastFetchTime = System.currentTimeMillis()
                 }
@@ -172,6 +181,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
     fun clearSubscriptionsCache() {
         subscriptionsLastFetchTime = 0
         subscriptions = emptyList()
+        subscriptionsCacheOwner = null
     }
 
     /**

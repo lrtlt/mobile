@@ -92,6 +92,10 @@ object MediaItemTree {
 
     private const val LOGGED_OUT_BODY = "Mėgaukitės dar patogesne patirtimi"
 
+    private const val EMPTY_SUBSCRIPTIONS_TITLE = "Neturite prenumeratų"
+
+    private const val EMPTY_SUBSCRIPTIONS_BODY = "Prenumeruokite laidas programėlėje"
+
     private const val KEY_COMPLETION_PERCENTAGE =
         "android.media.extra.PLAYBACK_COMPLETION_PERCENTAGE"
     private const val KEY_GROUP_TITLE = "android.media.browse.CONTENT_STYLE_GROUP_TITLE_HINT"
@@ -111,7 +115,7 @@ object MediaItemTree {
      * keep their names because Android Auto caches browse trees against them.
      */
     private const val CONTINUE_ITEM_PREFIX = "[continue_home]"
-    private const val CONTINUE_MORE_FOLDER = "[continue_more_home]"
+    const val CONTINUE_MORE_FOLDER = "[continue_more_home]"
     private const val CONTINUE_ALL_ITEM_PREFIX = "[continue_all_home]"
 
     /**
@@ -587,7 +591,7 @@ object MediaItemTree {
     /**
      * `Mano LRT`: `Prenumeratos` as cover tiles and nothing else. `Klausykite toliau` used to sit
      * above it and now lives in Home alone. The group is conditional, so a signed-in driver with no
-     * subscriptions sees an empty browsable — no copy has been decided for that state.
+     * subscriptions sees a message row rather than a blank browsable.
      *
      * [covers] is keyed by `subscriptionKey`: no subscription payload carries artwork, so each
      * tile borrows the cover of its category's newest episode. A subscription without one still
@@ -608,6 +612,15 @@ object MediaItemTree {
     ) {
         val node = treeNodes[MANO_LRT] ?: return
         node.clearChildren()
+
+        if (subscriptions.isEmpty()) {
+            addManoLRTMessage(
+                EMPTY_SUBSCRIPTIONS_TITLE,
+                EMPTY_SUBSCRIPTIONS_BODY,
+                "[mano_lrt_empty_message]"
+            )
+            return
+        }
 
         subscriptions.forEach { subscription ->
             val categoryId = subscription.categoryId ?: return@forEach
@@ -642,10 +655,14 @@ object MediaItemTree {
     fun setManoLRTLoggedOut() {
         val node = treeNodes[MANO_LRT] ?: return
         node.clearChildren()
-        val mediaId = "[mano_lrt_login_message]"
+        addManoLRTMessage(LOGGED_OUT_TITLE, LOGGED_OUT_BODY, "[mano_lrt_login_message]")
+    }
+
+    private fun addManoLRTMessage(title: String, subtitle: String, mediaId: String) {
+        val node = treeNodes[MANO_LRT] ?: return
         val item = buildMediaItem(
-            title = LOGGED_OUT_TITLE,
-            subtitle = LOGGED_OUT_BODY,
+            title = title,
+            subtitle = subtitle,
             mediaId = mediaId,
             isPlayable = false,
             isBrowsable = false,

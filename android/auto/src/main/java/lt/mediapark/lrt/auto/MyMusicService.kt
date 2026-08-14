@@ -1,5 +1,7 @@
 package lt.mediapark.lrt.auto
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -53,9 +55,12 @@ class MyMusicService : MediaLibraryService() {
                         if (isPlaying) {
                             startTracking()
                         } else {
-                            pushProgress(completed = false)
                             stopTracking()
-                            callback.notifyContinuePlayingChanged()
+                            // Same sequencing as STATE_ENDED: every browse re-fetches, so
+                            // notifying before the PUT lands can bounce the unfinished row.
+                            pushProgress(completed = false) {
+                                callback.notifyContinuePlayingChanged()
+                            }
                         }
                     }
 
@@ -74,9 +79,9 @@ class MyMusicService : MediaLibraryService() {
         rdsService = RDSNowPlayingService(player)
 
         callback = LRTMediaSessionCallback(this)
-        mediaSession = MediaLibrarySession
-            .Builder(this, player, callback)
-            .build()
+        val sessionBuilder = MediaLibrarySession.Builder(this, player, callback)
+        sessionActivity()?.let { sessionBuilder.setSessionActivity(it) }
+        mediaSession = sessionBuilder.build()
     }
 
     private fun startTracking() {
@@ -167,6 +172,17 @@ class MyMusicService : MediaLibraryService() {
         } else {
             rdsService.stopListening()
         }
+    }
+
+    private fun sessionActivity(): PendingIntent? {
+        val launchIntent = packageManager.getLaunchIntentForPackage(packageName) ?: return null
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        return PendingIntent.getActivity(
+            this,
+            0,
+            launchIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? {
