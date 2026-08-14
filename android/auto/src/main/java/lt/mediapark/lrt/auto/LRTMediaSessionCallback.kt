@@ -127,8 +127,8 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
 
     private suspend fun fetchContinuePlaying(): List<PlaylistItem> {
         if (!authManager.isLoggedIn()) {
-            // Blanks `Klausykite toliau` in both browsables that render it, rather than leaving a
-            // stale group behind after a sign-out.
+            // Blanks Home's `Klausykite toliau` rather than leaving a stale group behind after a
+            // sign-out.
             repository.clearContinuePlayingCache()
             return emptyList()
         }
@@ -174,18 +174,16 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     }
 
     /**
-     * Both browsables that host `Klausykite toliau` have to repaint off the one playback event —
-     * whichever the driver happens to be looking at.
+     * Home hosts `Klausykite toliau`, so it is the one browsable that has to repaint off a
+     * playback event. `Mano LRT` used to carry a copy and be notified alongside it.
      */
     fun notifyContinuePlayingChanged() {
         val session = currentSession ?: return
-        listOf(MediaItemTree.HOME, MediaItemTree.MANO_LRT).forEach { parentId ->
-            session.notifyChildrenChanged(
-                parentId,
-                MediaItemTree.getChildren(parentId).size,
-                null
-            )
-        }
+        session.notifyChildrenChanged(
+            MediaItemTree.HOME,
+            MediaItemTree.getChildren(MediaItemTree.HOME).size,
+            null
+        )
     }
 
     /**
@@ -224,9 +222,9 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         browser: MediaSession.ControllerInfo,
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<MediaItem>> {
-        // Declare list as the default for both kinds of row; the grid groups — `Siūlome`,
-        // `Naujausi`, `Prenumeratos` — override it per item. Without CONTENT_STYLE_SUPPORTED the
-        // head unit ignores the per-item hints entirely.
+        // Declare list as the default for both kinds of row; `Prenumeratos`, the one grid group
+        // left, overrides it per item. Without CONTENT_STYLE_SUPPORTED the head unit ignores the
+        // per-item hints entirely.
         val extras = Bundle().apply {
             putBoolean(MediaItemTree.KEY_CONTENT_STYLE_SUPPORTED, true)
             putInt(
@@ -299,6 +297,14 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
             }
         }
 
+        if (parentId == MediaItemTree.RECOMMENDED_ALL) {
+            logAnalyticsEvent(browser.packageName, "android_auto_recommended_all_open")
+            return submitBlocking {
+                MediaItemTree.setRecommendedAllItems(repository.getRecommended())
+                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
+            }
+        }
+
         if (parentId == MediaItemTree.NEWEST_ALL) {
             logAnalyticsEvent(browser.packageName, "android_auto_newest_open")
             return submitBlocking {
@@ -362,8 +368,8 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     }
 
     /**
-     * Mano LRT: `Klausykite toliau` exactly as Home renders it, then `Prenumeratos`. Both groups are
-     * conditional, so a signed-in driver with neither sees an empty browsable.
+     * Mano LRT: `Prenumeratos` and nothing else — `Klausykite toliau` lives in Home alone now. The
+     * group is conditional, so a signed-in driver with no subscriptions sees an empty browsable.
      *
      * A failed subscription fetch is not distinguished from having none — both drop the group, and
      * the A–Z browse stays reachable from `Laidos` either way.
@@ -376,7 +382,6 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
             return
         }
 
-        val continueItems = fetchContinuePlaying()
         val allSubscriptions = try {
             repository.getSubscriptions(authManager.getAccessToken())
         } catch (e: Exception) {
@@ -388,7 +393,7 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         // here. Filtered before the covers so a dropped tile costs no request either.
         val subscriptions = repository.categoryMediaTypes.keepAudio(allSubscriptions)
         val covers = repository.getSubscriptionCovers(subscriptions)
-        MediaItemTree.applyManoLRTSections(continueItems, subscriptions, covers)
+        MediaItemTree.applyManoLRTSections(subscriptions, covers)
     }
 
     override fun onAddMediaItems(

@@ -33,11 +33,15 @@ object MediaItemTree {
     /** The full newest feed, behind Home's `Naujausi` group. No longer a root browsable. */
     const val NEWEST_ALL = "[newest]"
 
+    /** The full recommendations feed, behind Home's `Siūlome` group. Never a root browsable. */
+    const val RECOMMENDED_ALL = "[recommended_all]"
+
     private const val PODCAST_PREFIX = "[podcast]"
     private const val PODCAST_EPISODE_PREFIX = "[podcast_episode]"
     private const val SUBSCRIPTION_PREFIX = "[subscription]"
     private const val SUBSCRIPTION_EPISODE_PREFIX = "[subscription_episode]"
     private const val RECOMMENDED_ITEM_PREFIX = "[recommended_item]"
+    private const val RECOMMENDED_ALL_ITEM_PREFIX = "[recommended_all_item]"
     private const val NEWEST_ITEM_PREFIX = "[newest_item]"
     private const val NEWEST_ALL_ITEM_PREFIX = "[newest_all_item]"
     private const val LIVE_ITEM_PREFIX = "[live_item]"
@@ -65,14 +69,15 @@ object MediaItemTree {
     private const val SECTION_EPISODES = "episodes"
     private const val SECTION_SUBSCRIPTIONS = "subscriptions"
 
-    /** Continue-playing rows shown inline, per host. The rest are behind `Daugiau`. */
+    /** Continue-playing rows shown inline. The rest are behind `Daugiau`. */
     private const val CONTINUE_PLAYING_VISIBLE_COUNT = 3
 
     /**
-     * Tiles in Home's `Naujausi` group, matching CarPlay's cap. The feed returns far more, so the
-     * `Daugiau` folder is present in practice.
+     * Rows in Home's `Siūlome` and `Naujausi` groups, matching CarPlay's cap. Both are lists like
+     * `Klausykite toliau` above them, and everything past the cap is behind that group's `Daugiau`
+     * folder — for `Naujausi` the feed returns far more, so the folder is there in practice.
      */
-    private const val NEWEST_GRID_COUNT = 6
+    private const val HOME_SECTION_VISIBLE_COUNT = 4
 
     /**
      * The logged-out `Mano LRT` copy, split across the row's two slots and byte-identical to
@@ -100,33 +105,14 @@ object MediaItemTree {
     const val CONTENT_STYLE_GRID_ITEM = 2
 
     /**
-     * A browsable that renders a `Klausykite toliau` group.
-     *
-     * Home and `Mano LRT` both carry one. A media ID maps to exactly one node in [treeNodes] and a
-     * node holds one child list, so the two hosts cannot share item IDs the way they cannot share
-     * `CPListItem` instances on CarPlay — each gets its own ID space, built from the same cached
-     * array.
+     * `Klausykite toliau`'s ID space. The suffixes read `_home` because `Mano LRT` used to render
+     * a second copy of the group and the two could not share item IDs — a media ID maps to exactly
+     * one node in [treeNodes], and a node holds one child list. Home is the only host now; the IDs
+     * keep their names because Android Auto caches browse trees against them.
      */
-    private class ContinueHost(
-        val parentId: String,
-        val itemPrefix: String,
-        val moreFolderId: String,
-        val moreItemPrefix: String,
-    )
-
-    private val homeContinueHost = ContinueHost(
-        parentId = HOME,
-        itemPrefix = "[continue_home]",
-        moreFolderId = "[continue_more_home]",
-        moreItemPrefix = "[continue_all_home]",
-    )
-
-    private val manoContinueHost = ContinueHost(
-        parentId = MANO_LRT,
-        itemPrefix = "[continue_mano]",
-        moreFolderId = "[continue_more_mano]",
-        moreItemPrefix = "[continue_all_mano]",
-    )
+    private const val CONTINUE_ITEM_PREFIX = "[continue_home]"
+    private const val CONTINUE_MORE_FOLDER = "[continue_more_home]"
+    private const val CONTINUE_ALL_ITEM_PREFIX = "[continue_all_home]"
 
     /**
      * Nodes [MediaItemNode.clearChildren] detaches but never evicts from [treeNodes]. They are
@@ -134,8 +120,8 @@ object MediaItemTree {
      * a browse landing on one after it was evicted would find nothing to populate.
      */
     private val permanentNodes: Set<String> = setOf(
-        ROOT, HOME, LIVE, PODCAST_CATEGORIES, MANO_LRT, NEWEST_ALL,
-        homeContinueHost.moreFolderId, manoContinueHost.moreFolderId,
+        ROOT, HOME, LIVE, PODCAST_CATEGORIES, MANO_LRT, NEWEST_ALL, RECOMMENDED_ALL,
+        CONTINUE_MORE_FOLDER,
     )
 
     private class MediaItemNode(val item: MediaItem) {
@@ -230,8 +216,21 @@ object MediaItemTree {
                 )
             )
 
-        // The full newest feed keeps a node but leaves the root: it is reached through Home's
-        // `Naujausi` group now, not as a browsable of its own.
+        // Both feeds keep a node off the root: each is reached through its own Home group rather
+        // than as a browsable of its own. The group-title extra is what keeps each `Daugiau` row
+        // rendering under the group whose overflow it holds.
+        treeNodes[RECOMMENDED_ALL] =
+            MediaItemNode(
+                buildMediaItem(
+                    title = "Daugiau",
+                    mediaId = RECOMMENDED_ALL,
+                    isPlayable = false,
+                    isBrowsable = true,
+                    mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_NEWS,
+                    extras = Bundle().apply { putString(KEY_GROUP_TITLE, "Siūlome") }
+                )
+            )
+
         treeNodes[NEWEST_ALL] =
             MediaItemNode(
                 buildMediaItem(
@@ -305,10 +304,10 @@ object MediaItemTree {
         putString(EXTRA_PARENT_ID, parentId)
         putString(EXTRA_SECTION_ID, sectionId)
         if (groupTitle != null) putString(KEY_GROUP_TITLE, groupTitle)
-        // Per-item override of the browsable's declared content style. This is the Android analog
-        // of CarPlay's `CPListImageRowItem`: `Naujausi`, `Siūlome` and `Prenumeratos` draw as
-        // cover tiles, while `Klausykite toliau` stays a list so its progress bar has somewhere to
-        // go — a grid tile has nowhere to put one.
+        // Per-item override of the browsable's declared content style. `Prenumeratos` is the only
+        // group that takes it now, drawing as cover tiles the way CarPlay's `.grid` row does.
+        // Home's three groups are all lists — `Klausykite toliau` has to be, because a grid tile
+        // has nowhere to put its progress bar, and `Siūlome` and `Naujausi` follow it.
         if (asGrid) putInt(KEY_SINGLE_ITEM_HINT, CONTENT_STYLE_GRID_ITEM)
         build()
     }
@@ -340,18 +339,18 @@ object MediaItemTree {
     }
 
     /**
-     * Appends a host's `Klausykite toliau` group: up to [CONTINUE_PLAYING_VISIBLE_COUNT] rows and
+     * Appends Home's `Klausykite toliau` group: up to [CONTINUE_PLAYING_VISIBLE_COUNT] rows and
      * a `Daugiau` folder holding the full list when there is more. Adds nothing at all when there
-     * is nothing to continue, so the group below takes the top of the browsable.
+     * is nothing to continue, so `Siūlome` takes the top of the browsable.
      */
-    private fun appendContinuePlaying(host: ContinueHost, items: List<PlaylistItem>) {
-        val parent = treeNodes[host.parentId] ?: return
-        treeNodes[host.moreFolderId]?.clearChildren()
+    private fun appendContinuePlaying(items: List<PlaylistItem>) {
+        val parent = treeNodes[HOME] ?: return
+        treeNodes[CONTINUE_MORE_FOLDER]?.clearChildren()
 
         items.take(CONTINUE_PLAYING_VISIBLE_COUNT).forEach {
-            val mediaId = host.itemPrefix + it.articleId
+            val mediaId = CONTINUE_ITEM_PREFIX + it.articleId
             treeNodes[mediaId] = MediaItemNode(
-                buildContinuePlayingItem(it, mediaId, host.parentId, "Klausykite toliau")
+                buildContinuePlayingItem(it, mediaId, HOME, "Klausykite toliau")
             )
             parent.addChild(mediaId)
         }
@@ -360,30 +359,31 @@ object MediaItemTree {
 
         val moreFolder = buildMediaItem(
             title = "Daugiau",
-            mediaId = host.moreFolderId,
+            mediaId = CONTINUE_MORE_FOLDER,
             isPlayable = false,
             isBrowsable = true,
             mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_MIXED,
-            extras = rowExtras(host.parentId, SECTION_CONTINUE_PLAYING, "Klausykite toliau")
+            extras = rowExtras(HOME, SECTION_CONTINUE_PLAYING, "Klausykite toliau")
         )
         val moreNode = MediaItemNode(moreFolder)
-        treeNodes[host.moreFolderId] = moreNode
+        treeNodes[CONTINUE_MORE_FOLDER] = moreNode
         items.forEach {
-            val mediaId = host.moreItemPrefix + it.articleId
+            val mediaId = CONTINUE_ALL_ITEM_PREFIX + it.articleId
             treeNodes[mediaId] = MediaItemNode(
-                buildContinuePlayingItem(it, mediaId, host.moreFolderId, groupTitle = null)
+                buildContinuePlayingItem(it, mediaId, CONTINUE_MORE_FOLDER, groupTitle = null)
             )
             moreNode.addChild(mediaId)
         }
-        parent.addChild(host.moreFolderId)
+        parent.addChild(CONTINUE_MORE_FOLDER)
     }
 
     // MARK: - Siūlome (Home)
 
     /**
-     * Home, in this order: `Klausykite toliau` as rows, then `Siūlome` and `Naujausi` as grids,
-     * with a `Daugiau` folder onto the full feed. Only the first group is auth-dependent and it is
-     * simply absent when there is nothing to continue — Home renders for a logged-out driver.
+     * Home, in this order: `Klausykite toliau`, `Siūlome`, `Naujausi` — three groups of the same
+     * shape, each a short list of rows over a `Daugiau` folder onto its full feed. Only the first
+     * group is auth-dependent and it is simply absent when there is nothing to continue, so Home
+     * renders for a logged-out driver.
      */
     fun applyHomeSections(
         continueItems: List<PlaylistItem>,
@@ -393,40 +393,71 @@ object MediaItemTree {
         val home = treeNodes[HOME] ?: return
         home.clearChildren()
 
-        appendContinuePlaying(homeContinueHost, continueItems)
+        appendContinuePlaying(continueItems)
+        appendFeedGroup(
+            home, recommendedItems, RECOMMENDED_ITEM_PREFIX, SECTION_RECOMMENDED,
+            "Siūlome", RECOMMENDED_ALL
+        )
+        appendFeedGroup(
+            home, newestItems, NEWEST_ITEM_PREFIX, SECTION_NEWEST, "Naujausi", NEWEST_ALL
+        )
+    }
 
-        recommendedItems.forEach {
-            val mediaId = RECOMMENDED_ITEM_PREFIX + it.streamUrl
+    /**
+     * One of Home's two feed groups: the first [HOME_SECTION_VISIBLE_COUNT] items as rows, then
+     * that group's `Daugiau` folder when the feed holds more. `Siūlome` is a short curated feed and
+     * can legitimately fit whole, which is why the folder is attached conditionally rather than
+     * always.
+     *
+     * Tapping a row queues the rows the group actually shows, not the whole feed — [sectionSiblings]
+     * reads the queue off the browse tree, and the rest of the feed lives under the folder rather
+     * than here. Tapping inside the folder queues the feed whole. This is the same rule
+     * `Klausykite toliau` has always followed.
+     */
+    private fun appendFeedGroup(
+        parent: MediaItemNode,
+        items: List<PlaylistItem>,
+        itemPrefix: String,
+        sectionId: String,
+        groupTitle: String,
+        moreFolderId: String,
+    ) {
+        items.take(HOME_SECTION_VISIBLE_COUNT).forEach {
+            val mediaId = itemPrefix + it.streamUrl
             treeNodes[mediaId] = MediaItemNode(
-                buildFeedItem(it, mediaId, HOME, SECTION_RECOMMENDED, "Siūlome")
+                buildFeedItem(it, mediaId, HOME, sectionId, groupTitle)
             )
-            home.addChild(mediaId)
+            parent.addChild(mediaId)
             indexForSearch(it.title, mediaId)
         }
 
-        // Capped where CarPlay caps its grid; everything past the cap is behind `Daugiau`.
-        newestItems.take(NEWEST_GRID_COUNT).forEach {
-            val mediaId = NEWEST_ITEM_PREFIX + it.streamUrl
-            treeNodes[mediaId] = MediaItemNode(
-                buildFeedItem(it, mediaId, HOME, SECTION_NEWEST, "Naujausi")
-            )
-            home.addChild(mediaId)
-            indexForSearch(it.title, mediaId)
-        }
-
-        if (newestItems.size > NEWEST_GRID_COUNT) {
-            home.addChild(NEWEST_ALL)
+        if (items.size > HOME_SECTION_VISIBLE_COUNT) {
+            parent.addChild(moreFolderId)
         }
     }
 
-    /** The full newest feed behind Home's `Daugiau`, including the items the grid already showed. */
+    /** The full recommendations feed behind `Siūlome`'s `Daugiau`, the shown rows included. */
+    fun setRecommendedAllItems(items: List<PlaylistItem>) {
+        setFeedFolderItems(RECOMMENDED_ALL, RECOMMENDED_ALL_ITEM_PREFIX, SECTION_RECOMMENDED, items)
+    }
+
+    /** The full newest feed behind `Naujausi`'s `Daugiau`, the shown rows included. */
     fun setNewestAllItems(items: List<PlaylistItem>) {
-        val node = treeNodes[NEWEST_ALL] ?: return
+        setFeedFolderItems(NEWEST_ALL, NEWEST_ALL_ITEM_PREFIX, SECTION_NEWEST, items)
+    }
+
+    private fun setFeedFolderItems(
+        folderId: String,
+        itemPrefix: String,
+        sectionId: String,
+        items: List<PlaylistItem>
+    ) {
+        val node = treeNodes[folderId] ?: return
         node.clearChildren()
         items.forEach {
-            val mediaId = NEWEST_ALL_ITEM_PREFIX + it.streamUrl
+            val mediaId = itemPrefix + it.streamUrl
             treeNodes[mediaId] = MediaItemNode(
-                buildFeedItem(it, mediaId, NEWEST_ALL, SECTION_NEWEST, groupTitle = null, asGrid = false)
+                buildFeedItem(it, mediaId, folderId, sectionId, groupTitle = null)
             )
             node.addChild(mediaId)
             indexForSearch(it.title, mediaId)
@@ -438,10 +469,9 @@ object MediaItemTree {
         mediaId: String,
         parentId: String,
         sectionId: String,
-        groupTitle: String?,
-        asGrid: Boolean = true
+        groupTitle: String?
     ): MediaItem {
-        val extras = rowExtras(parentId, sectionId, groupTitle, asGrid) {
+        val extras = rowExtras(parentId, sectionId, groupTitle) {
             source.articleId?.let { id -> putInt(EXTRA_ARTICLE_ID, id) }
         }
         return buildMediaItem(
@@ -555,9 +585,9 @@ object MediaItemTree {
     // MARK: - ManoLRT
 
     /**
-     * `Mano LRT`, in this order, both groups conditional: `Klausykite toliau` exactly as Home
-     * renders it, then `Prenumeratos` as cover tiles. A signed-in driver with neither sees an
-     * empty browsable — no copy has been decided for that state.
+     * `Mano LRT`: `Prenumeratos` as cover tiles and nothing else. `Klausykite toliau` used to sit
+     * above it and now lives in Home alone. The group is conditional, so a signed-in driver with no
+     * subscriptions sees an empty browsable — no copy has been decided for that state.
      *
      * [covers] is keyed by `subscriptionKey`: no subscription payload carries artwork, so each
      * tile borrows the cover of its category's newest episode. A subscription without one still
@@ -573,14 +603,11 @@ object MediaItemTree {
      * [setSubscriptionEpisodes] is keyed off the media ID.
      */
     fun applyManoLRTSections(
-        continueItems: List<PlaylistItem>,
         subscriptions: List<UserSubscription>,
         covers: Map<String, String>
     ) {
         val node = treeNodes[MANO_LRT] ?: return
         node.clearChildren()
-
-        appendContinuePlaying(manoContinueHost, continueItems)
 
         subscriptions.forEach { subscription ->
             val categoryId = subscription.categoryId ?: return@forEach
@@ -604,7 +631,8 @@ object MediaItemTree {
 
     /**
      * The logged-out `Mano LRT`: this message and nothing else. Podcasts remain fully reachable
-     * through `Laidos`, so signing out costs only the two personal groups.
+     * through `Laidos`, so signing out costs only `Prenumeratos` here and `Klausykite toliau` in
+     * Home.
      *
      * The copy is a full paragraph and this is a browse row, which Android Auto ellipsizes to the
      * row's width — there is no variant mechanism to fall back through as there is on CarPlay, and
