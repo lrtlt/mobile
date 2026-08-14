@@ -12,8 +12,8 @@ class CarPlayNetwork {
 
   private init() {}
 
-  func fetchRecommended() async throws -> [CarPlayItem] {
-    return try await fetchItems(from: recommendedUrl, ignoreCache: false)
+  func fetchRecommended(ignoreCache: Bool = false) async throws -> [CarPlayItem] {
+    return try await fetchItems(from: recommendedUrl, ignoreCache: ignoreCache)
   }
 
   func fetchNewest() async throws -> [CarPlayItem] {
@@ -130,7 +130,7 @@ class CarPlayNetwork {
     let url = URL(string: "https://www.lrt.lt/servisai/dev-authrz/api/v1/users/subscriptions")!
     var request = URLRequest(url: url)
     request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-    let (data, _) = try await URLSession.shared.data(for: request)
+    let data = try await authorizedData(for: request)
     let response = try JSONDecoder().decode(SubscriptionsResponse.self, from: data)
     return response.subscriptions
   }
@@ -143,7 +143,7 @@ class CarPlayNetwork {
     let url = URL(string: "\(watchHistoryUrl)/\(mediaType)/\(count)")!
     var request = URLRequest(url: url)
     request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-    let (data, _) = try await URLSession.shared.data(for: request)
+    let data = try await authorizedData(for: request)
     let response = try JSONDecoder().decode(WatchHistoryResponse.self, from: data)
     return response.list
   }
@@ -155,7 +155,7 @@ class CarPlayNetwork {
     request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.httpBody = try JSONEncoder().encode(WatchHistoryPushRequest(list: entries))
-    _ = try await URLSession.shared.data(for: request)
+    _ = try await authorizedData(for: request)
   }
 
   func deleteWatchHistory(articleId: Int, accessToken: String) async throws {
@@ -163,7 +163,15 @@ class CarPlayNetwork {
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-    _ = try await URLSession.shared.data(for: request)
+    _ = try await authorizedData(for: request)
+  }
+
+  private func authorizedData(for request: URLRequest) async throws -> Data {
+    let (data, response) = try await URLSession.shared.data(for: request)
+    guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+      throw URLError(.badServerResponse)
+    }
+    return data
   }
 
   private func fetchStreamInfo(streamUrl: String) async throws -> StreamInfo {

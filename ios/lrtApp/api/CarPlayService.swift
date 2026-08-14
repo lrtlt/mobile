@@ -51,6 +51,17 @@ class CarPlayService {
     }
   }
 
+  /// Updates progress on a cached continue-playing row without rebuilding the list identity.
+  /// Home uses this to move the progress bar in place instead of calling `updateSections`.
+  func updateContinuePlayingProgress(articleId: Int, progressPct: Double, positionSec: Int) {
+    stateQueue.sync(flags: .barrier) {
+      guard let index = self.continuePlayingCache.firstIndex(where: { $0.articleId == articleId })
+      else { return }
+      self.continuePlayingCache[index] = self.continuePlayingCache[index].withProgress(
+        progressPct: progressPct, startPositionSec: positionSec)
+    }
+  }
+
   private func cachedArticleInfo(for articleId: Int) -> PodcastEpisodeInfo? {
     return stateQueue.sync { articleInfoCache[articleId] }
   }
@@ -67,8 +78,8 @@ class CarPlayService {
     stateQueue.sync(flags: .barrier) { self.subscriptionCoverCache[key] = cover }
   }
 
-  func fetchRecommended() async throws -> [CarPlayItem] {
-    return try await network.fetchRecommended()
+  func fetchRecommended(ignoreCache: Bool = false) async throws -> [CarPlayItem] {
+    return try await network.fetchRecommended(ignoreCache: ignoreCache)
   }
 
   func fetchNewest() async throws -> [CarPlayItem] {

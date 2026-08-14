@@ -19,6 +19,7 @@ class PlayerController {
   private var playerIntervalObserver: Any?
   private var readyToPlayObserver: NSKeyValueObservation?
   private var interruptionObserver: Any?
+  private var setupGeneration = 0
 
   // Watch-history tracking
   private var watchHistoryTimer: Timer?
@@ -79,6 +80,9 @@ class PlayerController {
   }
 
   func setupStream(for item: CarPlayItem) throws {
+    setupGeneration += 1
+    let generation = setupGeneration
+
     player?.pause()
     removeObservers()
     resetPlaybackRate()
@@ -105,9 +109,16 @@ class PlayerController {
     } else {
       player = AVPlayer(url: url)
       if let startSec = item.startPositionSec, startSec > 0 {
-        player?.seek(to: CMTime(seconds: Double(startSec), preferredTimescale: CMTimeScale(NSEC_PER_SEC)))
+        let seekTime = CMTime(seconds: Double(startSec), preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        player?.seek(to: seekTime) { [weak self] _ in
+          DispatchQueue.main.async {
+            guard let self = self, self.setupGeneration == generation else { return }
+            self.play()
+          }
+        }
+      } else {
+        play()
       }
-      play()
     }
 
     addPlayerObservers()
@@ -439,19 +450,18 @@ class PlayerController {
       updatedAt: Int64(Date().timeIntervalSince1970 * 1000)
     )
     // Local cache first, then the network — the phone app's store-then-flush order. The row has
-    // to disappear when the episode ends, not one round-trip later, and not only if the PUT
-    // succeeds. The push below posts `watchHistoryUpdated` again once it lands; that second
-    // repaint is a no-op because the signature will not have moved.
+    // to disappear (or its bar move) when the tick happens, not one round-trip later, and not
+    // only if the PUT succeeds.
     if isCompleted {
       CarPlayService.shared.removeFromContinuePlaying(articleId: articleId)
-      NotificationCenter.default.post(name: .watchHistoryUpdated, object: nil)
+    } else {
+      CarPlayService.shared.updateContinuePlayingProgress(
+        articleId: articleId, progressPct: progressPct, positionSec: positionSec)
     }
+    NotificationCenter.default.post(name: .watchHistoryUpdated, object: nil)
 
     Task {
       await CarPlayService.shared.pushPlaybackProgress(entry: entry)
-      await MainActor.run {
-        NotificationCenter.default.post(name: .watchHistoryUpdated, object: nil)
-      }
     }
   }
 

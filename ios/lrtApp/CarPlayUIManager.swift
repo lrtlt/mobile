@@ -478,7 +478,9 @@ class CarPlayUIManager {
     interfaceController.pushTemplate(listTemplate, animated: true, completion: nil)
   }
 
-  func showNowPlayingTemplate(isLive: Bool) {
+  /// Refreshes the live/on-demand button set on the shared Now Playing template without
+  /// navigating to it. Auto-advance and dashboard skip must not yank the driver off a browse.
+  func updateNowPlayingButtons(isLive: Bool) {
     if nowPlayingTemplate == nil {
       nowPlayingTemplate = CPNowPlayingTemplate.shared
       nowPlayingTemplate?.isUpNextButtonEnabled = false
@@ -505,7 +507,10 @@ class CarPlayUIManager {
       }
       nowPlayingTemplate?.updateNowPlayingButtons([backwardButton, speedButton, forwardButton])
     }
+  }
 
+  func showNowPlayingTemplate(isLive: Bool) {
+    updateNowPlayingButtons(isLive: isLive)
     if interfaceController?.topTemplate !== nowPlayingTemplate {
       interfaceController?.pushTemplate(nowPlayingTemplate!, animated: true, completion: nil)
     }
@@ -549,7 +554,7 @@ class CarPlayUIManager {
 
   private func updatePlaybackRateButton(rate: Float, isLive: Bool) {
     guard !isLive else { return }
-    showNowPlayingTemplate(isLive: false)
+    updateNowPlayingButtons(isLive: false)
   }
 
   private static func playbackRateImage(rate: Float) -> UIImage {
