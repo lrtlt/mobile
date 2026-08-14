@@ -20,33 +20,34 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
 
   private var watchHistoryObserver: NSObjectProtocol?
   private var nowPlayingObserver: NSObjectProtocol?
+  private var tabLoadTask: Task<Void, Never>?
 
-  /// A loaded tab that renders a `Klausykite toliau` section.
+  /// Home, the one tab that renders a `Klausykite toliau` section.
   ///
-  /// Home and Mano LRT both carry one, and both have to repaint off the single
-  /// `watchHistoryUpdated` notification. A host therefore stores the closure that rebuilds its
-  /// own sections *around* the continue-playing section rather than the built rows themselves:
-  /// a `CPListItem` belongs to one section at a time, so the two tabs can never share instances,
-  /// and rebuilding from the cached model keeps neither of them stale.
+  /// It has to repaint off the `watchHistoryUpdated` notification without losing the sections
+  /// around it, so the host stores the closure that rebuilds Home *around* the continue-playing
+  /// section rather than the built rows themselves. Mano LRT used to carry a copy of the section
+  /// too, which is why this was once a per-tab dictionary; a single host is all that is left.
   private struct ContinuePlayingHost {
     weak var template: CPListTemplate?
     let makeSections: @MainActor (CPListSection?) -> [CPListSection]
   }
 
-  private var continuePlayingHosts: [CarPlayTab: ContinuePlayingHost] = [:]
+  private var continuePlayingHost: ContinuePlayingHost?
 
-  /// Identity of the continue-playing data last painted. `watchHistoryUpdated` fires every 10s
-  /// while audio plays, and most ticks carry unchanged data — repainting on those would reset
-  /// the list the driver is looking at, twice over now that two tabs host the section.
-  private var paintedContinuePlayingSignature: String?
+  /// Article-id identity of the continue-playing data last painted. Progress-only ticks must
+  /// not rebuild the section — that resets the list the driver is looking at — so they update
+  /// `playbackProgress` on these stored rows instead.
+  private var paintedContinuePlayingIdentity: String?
+  private var paintedContinuePlayingRows: [CPListItem] = []
+  private var continuePlayingPaintGeneration = 0
 
   private static let continuePlayingVisibleCount = 3
 
-  /// Tiles in Home's `Naujausi` grid. The rest of the feed is behind that section's `Daugiau`
-  /// row, so this bounds what Home shows rather than what it can reach. Lower than it was
-  /// because the section now draws `.condensed` tiles, which are far wider than the
-  /// `.imageGrid` ones it used to draw and so wrap into many more lines at the same count.
-  private static let newestGridTileCount = 6
+  /// Rows in Home's `Siūlome` and `Naujausi` sections. Both are lists rather than grids, so the
+  /// cap is what keeps the tab scannable — the rest of each feed is one `Daugiau` row away, so
+  /// this bounds what Home shows rather than what it can reach.
+  private static let homeSectionVisibleCount = 4
 
   /// The logged-out `Mano LRT` copy, byte-identical to Android Auto's `LOGGED_OUT_TITLE` and
   /// `LOGGED_OUT_BODY` — same words, same split, both platforms.
@@ -57,6 +58,10 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   /// a ladder only earns its keep when the preferred string might not fit.
   private static let loggedOutTitle = "Prisijunkite LRT.lt programėlėje"
   private static let loggedOutSubtitle = "Mėgaukitės dar patogesne patirtimi"
+
+  /// Byte-identical to Android Auto's `EMPTY_SUBSCRIPTIONS_TITLE` / `EMPTY_SUBSCRIPTIONS_BODY`.
+  private static let emptySubscriptionsTitle = "Neturite prenumeratų"
+  private static let emptySubscriptionsSubtitle = "Prenumeruokite laidas programėlėje"
 
   func templateApplicationScene(
     _ templateApplicationScene: CPTemplateApplicationScene,
@@ -73,7 +78,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     watchHistoryObserver = NotificationCenter.default.addObserver(
       forName: .watchHistoryUpdated, object: nil, queue: .main
     ) { [weak self] _ in
-      self?.refreshContinuePlayingSections()
+      self?.refreshContinuePlayingSection()
     }
 
     // Keep the Now Playing template's button set in sync when PlayerController changes
@@ -82,7 +87,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       forName: .nowPlayingItemChanged, object: nil, queue: .main
     ) { [weak self] _ in
       guard let self = self, self.interfaceController != nil else { return }
-      self.uiManager?.showNowPlayingTemplate(isLive: self.playlist.current?.isLive ?? false)
+      self.uiManager?.updateNowPlayingButtons(isLive: self.playlist.current?.isLive ?? false)
     }
 
     // Remote command handlers now live on PlayerController.shared for the whole app
@@ -151,36 +156,54 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     // means an unrecognised title no longer mints an event nothing will ever query.
     Analytics.logEvent("carplay_tab_open_\(tab.analyticsKey)", parameters: nil)
 
-    switch tab {
-    case .home:
-      Task { await loadHome(into: listTemplate) }
-    case .live:
-      Task { await loadLive(into: listTemplate) }
-    case .podcasts:
-      Task { await loadPodcasts(into: listTemplate) }
-    case .manoLRT:
-      Task { await loadManoLRT(into: listTemplate) }
+    startTabLoad {
+      switch tab {
+      case .home:
+        await self.loadHome(into: listTemplate)
+      case .live:
+        await self.loadLive(into: listTemplate)
+      case .podcasts:
+        await self.loadPodcasts(into: listTemplate)
+      case .manoLRT:
+        await self.loadManoLRT(into: listTemplate)
+      }
     }
+  }
+
+  private func startTabLoad(_ work: @escaping @MainActor () async -> Void) {
+    tabLoadTask?.cancel()
+    tabLoadTask = Task { @MainActor in
+      await work()
+    }
+  }
+
+  private static func isCancellation(_ error: Error) -> Bool {
+    if error is CancellationError { return true }
+    if let urlError = error as? URLError, urlError.code == .cancelled { return true }
+    return false
   }
 
   // MARK: - Siūlome (Home)
 
-  /// Home is three sections: `Klausykite toliau` as rows, then `Siūlome` and `Naujausi` as a
-  /// grid each, with the `Atnaujinti` row last. Only the first is auth-dependent, and it is
-  /// simply absent when there is nothing to continue — Home renders for a logged-out driver.
-  private func loadHome(into template: CPListTemplate) async {
+  /// Home is three sections of the same shape — `Klausykite toliau`, `Siūlome`, `Naujausi`, each
+  /// a short list of rows over a `Daugiau` drill-in — with the `Atnaujinti` row last. Only the
+  /// first is auth-dependent, and it is simply absent when there is nothing to continue, so Home
+  /// renders for a logged-out driver.
+  private func loadHome(into template: CPListTemplate, forceRefresh: Bool = false) async {
     do {
       async let newestFetch = CarPlayService.shared.fetchNewest()
-      async let recommendedFetch = CarPlayService.shared.fetchRecommended()
+      async let recommendedFetch = CarPlayService.shared.fetchRecommended(ignoreCache: forceRefresh)
       let newest = try await newestFetch
       let recommended = try await recommendedFetch
+      guard !Task.isCancelled else { return }
 
       guard let uiManager = uiManager else { return }
       let covers = await uiManager.loadCovers(for: newest + recommended)
+      guard !Task.isCancelled else { return }
 
-      continuePlayingHosts[.home] = ContinuePlayingHost(template: template) {
+      continuePlayingHost = ContinuePlayingHost(template: template) {
         [weak self, weak template] continuePlayingSection in
-        guard let self = self, let uiManager = self.uiManager else { return [] }
+        guard let self = self else { return [] }
 
         var sections: [CPListSection] = []
 
@@ -190,82 +213,97 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
           sections.append(continuePlayingSection)
         }
 
-        // 2. Siūlome — condensed tiles, the same shape `Naujausi` below now draws. Uncapped:
-        // the recommendations list is short and curated, unlike the newest feed, so there is
-        // nothing to hold back behind a drill-in.
-        let recommendedGrid = uiManager.makeImageRowItem(
-          from: recommended, covers: covers, style: .condensed
-        ) {
-          [weak self] selected, shown in
-          guard let self = self else { return }
-          self.playlist.setQueue(shown, startingWith: selected)
-          self.onPlayableItemSelected(from: selected)
+        // 2. Siūlome and 3. Naujausi — both drawn the same way `Klausykite toliau` above is:
+        // a short list of rows, capped at `homeSectionVisibleCount`, over a `Daugiau` row that
+        // pushes the whole feed. The two sections used to be grids of one row each, and to be
+        // shaped differently from the section above them; now all three of Home's sections read
+        // alike and their headers are what tells them apart.
+        //
+        // `Daugiau` stays conditional rather than hardcoded because the condition is what is
+        // actually true — `Siūlome` is a short curated feed and can legitimately fit whole,
+        // while `Naujausi` returns far more than four and effectively always carries one.
+        //
+        // Every section is bounded, so Home cannot outgrow the template's item budget: at most
+        // 3 + 1 continue-playing rows, 4 + 1 each here, and `Atnaujinti`.
+        //
+        // Siūlome is dropped when it comes back empty, the same way `Klausykite toliau` above
+        // is — a header over nothing is worse than one section fewer. Naujausi always carries
+        // `Atnaujinti`, so it is never empty and never needs the test.
+        if !recommended.isEmpty {
+          sections.append(
+            self.makeHomeSection(
+              header: "Siūlome", items: recommended, covers: covers, extraRows: []))
         }
-        sections.append(
-          CPListSection(
-            items: [recommendedGrid.row], header: "Siūlome", sectionIndexTitle: nil))
 
-        // 3. Naujausi — a grid of the newest items, capped at `newestGridTileCount`. The feed
-        // returns far more than that, so `Daugiau` is effectively always present here and is
-        // the route to the rest.
-        //
-        // Same `.condensed` tiles as `Siūlome` above: the two sections deliberately looked
-        // different before, and now deliberately do not. Their headers are what separates the
-        // curated row from the feed.
-        //
-        // `Daugiau` is still conditional rather than hardcoded, because the condition is what
-        // is actually true: it appears when the grid could not show everything. Below iOS 26
-        // the system caps tiles lower still, and an item whose cover failed to download is
-        // dropped at any version — both cases are already covered by the same test.
-        //
-        // `Atnaujinti` rides at the end of this section because it is the last section, and it
-        // reloads all three — it is scoped to the tab, not to Naujausi, and being the final row
-        // of the tab is what says so.
-        //
-        // With both content sections collapsed to a single row each, Home has no open-ended
-        // section at all: the recommended grid + the newest grid + an optional `Daugiau` + at
-        // most 4 continue-playing + `Atnaujinti`. Nothing here needs the row budget any more.
-        let newestGrid = uiManager.makeImageRowItem(
-          from: newest, covers: covers, style: .condensed, limit: Self.newestGridTileCount
-        ) {
-          [weak self] selected, shown in
-          guard let self = self else { return }
-          self.playlist.setQueue(shown, startingWith: selected)
-          self.onPlayableItemSelected(from: selected)
+        // `Atnaujinti` rides at the end of the last section because it reloads all three — it is
+        // scoped to the tab, not to Naujausi, and being the final row of the tab is what says so.
+        let refreshRow = self.makeUtilityRow(text: "Atnaujinti", accessoryType: .none) {
+          [weak self] in
+          guard let self = self, let template = template else { return }
+          self.startTabLoad {
+            await self.loadHome(into: template, forceRefresh: true)
+          }
         }
-        var newestRows: [any CPListTemplateItem] = [newestGrid.row]
-        if newestGrid.shown.count < newest.count {
-          newestRows.append(
-            self.makeUtilityRow(text: "Daugiau") { [weak self] in
-              await self?.showFullNewestList(items: newest, covers: covers)
-            })
-        }
-        newestRows.append(
-          self.makeUtilityRow(text: "Atnaujinti", accessoryType: .none) { [weak self] in
-            guard let self = self, let template = template else { return }
-            await self.loadHome(into: template)
-          })
         sections.append(
-          CPListSection(items: newestRows, header: "Naujausi", sectionIndexTitle: nil))
+          self.makeHomeSection(
+            header: "Naujausi", items: newest, covers: covers, extraRows: [refreshRow]))
 
         return sections
       }
 
-      applyContinuePlayingSections()
+      applyContinuePlayingSection()
       Task { await CarPlayService.shared.refreshContinuePlaying() }
     } catch {
-      // Drop the host first: a watch-history tick must not repaint over the retry row.
-      continuePlayingHosts[.home] = nil
+      if Self.isCancellation(error) { return }
+      continuePlayingHost = nil
+      paintedContinuePlayingIdentity = nil
+      paintedContinuePlayingRows = []
       showLoadError(in: template) { [weak self, weak template] in
         guard let self = self, let template = template else { return }
-        await self.loadHome(into: template)
+        self.startTabLoad {
+          await self.loadHome(into: template, forceRefresh: true)
+        }
       }
     }
   }
 
-  /// The full newest list behind the `Naujausi` section's `Daugiau` row, including the items the
-  /// grid already showed and the ones it could not.
-  private func showFullNewestList(items: [CarPlayItem], covers: [String: UIImage]) async {
+  /// One of Home's two feed sections: the first `homeSectionVisibleCount` items as rows, a
+  /// `Daugiau` drill-in when there are more, then whatever `extraRows` the caller appends.
+  ///
+  /// Tapping a row queues the *whole* feed rather than the visible slice, matching
+  /// `Klausykite toliau` — the cap is about how much of the section is drawn, not about what
+  /// playback may run on into.
+  private func makeHomeSection(
+    header: String, items: [CarPlayItem], covers: [String: UIImage],
+    extraRows: [any CPListTemplateItem]
+  ) -> CPListSection {
+    guard let uiManager = uiManager else {
+      return CPListSection(items: extraRows, header: header, sectionIndexTitle: nil)
+    }
+
+    let visible = Array(items.prefix(Self.homeSectionVisibleCount))
+    var rows: [any CPListTemplateItem] = uiManager.makeListItems(
+      from: visible, covers: covers
+    ) { [weak self] selected in
+      guard let self = self else { return }
+      self.playlist.setQueue(items, startingWith: selected)
+      self.onPlayableItemSelected(from: selected)
+    }
+
+    if items.count > visible.count {
+      rows.append(
+        makeUtilityRow(text: "Daugiau") { [weak self] in
+          await self?.showFullList(title: header, items: items, covers: covers)
+        })
+    }
+    rows.append(contentsOf: extraRows)
+
+    return CPListSection(items: rows, header: header, sectionIndexTitle: nil)
+  }
+
+  /// The full feed behind a Home section's `Daugiau` row, including the items the section
+  /// already showed.
+  private func showFullList(title: String, items: [CarPlayItem], covers: [String: UIImage]) async {
     guard let uiManager = uiManager, let interfaceController = interfaceController else { return }
 
     let rows = uiManager.makeListItems(from: items, covers: covers) { [weak self] selected in
@@ -273,7 +311,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       self.playlist.setQueue(items, startingWith: selected)
       self.onPlayableItemSelected(from: selected)
     }
-    let template = CPListTemplate(title: "Naujausi", sections: [CPListSection(items: rows)])
+    let template = CPListTemplate(title: title, sections: [CPListSection(items: rows)])
     interfaceController.pushTemplate(template, animated: true, completion: nil)
   }
 
@@ -282,6 +320,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   private func loadLive(into template: CPListTemplate) async {
     do {
       let items = try await CarPlayService.shared.fetchLive()
+      guard !Task.isCancelled else { return }
       guard let uiManager = uiManager else { return }
 
       let rows = await uiManager.createListItems(from: items) { [weak self] selected in
@@ -289,11 +328,13 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
         self.playlist.setQueue(items, startingWith: selected)
         self.onPlayableItemSelected(from: selected)
       }
+      guard !Task.isCancelled else { return }
       template.updateSections([CPListSection(items: rows)])
     } catch {
+      if Self.isCancellation(error) { return }
       showLoadError(in: template) { [weak self, weak template] in
         guard let self = self, let template = template else { return }
-        await self.loadLive(into: template)
+        self.startTabLoad { await self.loadLive(into: template) }
       }
     }
   }
@@ -302,9 +343,8 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
 
   private func loadManoLRT(into template: CPListTemplate) async {
     guard CarPlayService.shared.isLoggedIn() else {
-      // Nothing else at all: no continue playing, no subscriptions. The A–Z browse is not
-      // lost with them — it lives in the `Laidos` tab, which has no auth dependency.
-      continuePlayingHosts[.manoLRT] = nil
+      // No subscriptions, and nothing else either. The A–Z browse is not lost with them — it
+      // lives in the `Laidos` tab, which has no auth dependency.
       showLoggedOut(in: template)
       // Still refresh: logged out this clears the cache and posts, which blanks Home's
       // `Klausykite toliau` instead of leaving a stale section behind.
@@ -313,76 +353,127 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     }
 
     // Clear the login prompt: the variants persist on the template across reloads, and Mano LRT
-    // can now legitimately end up with zero rows — a driver who has just signed in and has
-    // neither history nor subscriptions would otherwise be told to sign in again.
+    // can legitimately end up with zero rows — a driver who has just signed in and has no
+    // subscriptions would otherwise be told to sign in again.
     template.emptyViewTitleVariants = []
+    template.emptyViewSubtitleVariants = []
 
-    let subscriptions = await activeSubscriptions()
+    let subscriptions: [UserSubscription]
+    do {
+      subscriptions = try await activeSubscriptions()
+    } catch {
+      if Self.isCancellation(error) { return }
+      showLoadError(in: template) { [weak self, weak template] in
+        guard let self = self, let template = template else { return }
+        self.startTabLoad { await self.loadManoLRT(into: template) }
+      }
+      Task { await CarPlayService.shared.refreshContinuePlaying() }
+      return
+    }
+    guard !Task.isCancelled else { return }
+
+    if subscriptions.isEmpty {
+      template.emptyViewTitleVariants = [Self.emptySubscriptionsTitle]
+      template.emptyViewSubtitleVariants = [Self.emptySubscriptionsSubtitle]
+      template.updateSections([])
+      Task { await CarPlayService.shared.refreshContinuePlaying() }
+      return
+    }
+
     // Subscriptions carry no artwork, so a cover is borrowed from each category's newest
     // episode — one request per subscription, cached for the session.
     let coverUrls = await CarPlayService.shared.fetchSubscriptionCovers(for: subscriptions)
+    guard !Task.isCancelled else { return }
     guard let uiManager = uiManager else { return }
     let coverImages = await uiManager.loadCovers(urls: Array(coverUrls.values))
+    guard !Task.isCancelled else { return }
     let subscriptionCovers = coverUrls.compactMapValues { coverImages[$0] }
 
-    continuePlayingHosts[.manoLRT] = ContinuePlayingHost(template: template) {
-      [weak self] continuePlayingSection in
-      guard let self = self, let uiManager = self.uiManager else { return [] }
-
-      var sections: [CPListSection] = []
-
-      // 1. Klausykite toliau — same shape as Home, omitted when empty.
-      if let continuePlayingSection = continuePlayingSection {
-        sections.append(continuePlayingSection)
+    // Prenumeratos — a grid of covers and nothing else: no title under a tile, no subtitle.
+    //
+    // The only section in the tab: `Klausykite toliau` used to sit above it, and now lives in
+    // Home alone rather than in both places.
+    //
+    // As a grid the section is one row rather than one per subscription, so it no longer
+    // competes for the template's item budget — which it used to lose, silently dropping
+    // subscriptions past the cap. Below iOS 26 the framework still caps tiles at
+    // `CPMaximumNumberOfGridImages`, and a subscription with no cover cannot be a tile, so
+    // leftovers (and a cover-less list) go behind `Daugiau` or become the section itself.
+    let subscriptionGrid = uiManager.makeSubscriptionRow(
+      from: subscriptions, covers: subscriptionCovers, style: .grid
+    ) { [weak self] subscription in
+      guard let self = self, let categoryId = subscription.categoryId else { return }
+      Task {
+        await self.showEpisodes(
+          categoryId: categoryId, categoryTitle: subscription.name ?? "")
       }
-
-      // 2. Prenumeratos — a grid of covers and nothing else: no title under a tile, no
-      // subtitle. Omitted when there are none and when the fetch fails. The row that used to
-      // keep this section alive regardless (`Visos laidos`) moved out to the `Laidos` tab, so
-      // an empty section would now be a bare header over nothing.
-      //
-      // As a grid the section is one row rather than one per subscription, so it no longer
-      // competes for the template's item budget — which it used to lose, silently dropping
-      // subscriptions past the cap. Uncapped here for the same reason: nothing else in the app
-      // lists a driver's subscriptions, so a tile that is not drawn is a subscription that
-      // cannot be reached from `Mano LRT` at all.
-      let subscriptionGrid = uiManager.makeSubscriptionRow(
-        from: subscriptions, covers: subscriptionCovers, style: .grid
-      ) { [weak self] subscription in
-        guard let self = self, let categoryId = subscription.categoryId else { return }
-        Task {
-          await self.showEpisodes(
-            categoryId: categoryId, categoryTitle: subscription.name ?? "")
-        }
-      }
-      if !subscriptionGrid.shown.isEmpty {
-        sections.append(
-          CPListSection(
-            items: [subscriptionGrid.row], header: "Prenumeratos", sectionIndexTitle: nil))
-      }
-
-      return sections
     }
 
-    applyContinuePlayingSections()
+    let shownKeys = Set(subscriptionGrid.shown.map(\.subscriptionKey))
+    let leftover = subscriptions.filter { !shownKeys.contains($0.subscriptionKey) }
+
+    var sections: [CPListSection] = []
+    if !subscriptionGrid.shown.isEmpty {
+      var rows: [any CPListTemplateItem] = [subscriptionGrid.row]
+      if !leftover.isEmpty {
+        rows.append(
+          makeUtilityRow(text: "Daugiau") { [weak self] in
+            await self?.showSubscriptionList(leftover)
+          })
+      }
+      sections.append(
+        CPListSection(
+          items: rows, header: "Prenumeratos", sectionIndexTitle: nil))
+    } else if !leftover.isEmpty {
+      sections.append(
+        CPListSection(
+          items: makeSubscriptionListItems(leftover),
+          header: "Prenumeratos",
+          sectionIndexTitle: nil))
+    }
+    template.updateSections(sections)
+
+    // Home's section is not visible from here any more, but a driver who signed in on the phone
+    // arrives with an empty cache — refreshing keeps Home current for when they switch back.
     Task { await CarPlayService.shared.refreshContinuePlaying() }
   }
 
-  /// Active **audio** subscriptions, or an empty list when the fetch fails. A network error is not
-  /// distinguished from having none: both drop the `Prenumeratos` section, and the A–Z browse
-  /// stays reachable from its own tab either way.
+  /// Active **audio** subscriptions. A network error is thrown so the tab can show a retry row
+  /// rather than looking like the driver has no subscriptions.
   ///
   /// Video subscriptions are dropped because the same subscription list backs the phone app, where
   /// following a mediateka show is legitimate — there is just nothing to play from one here.
   /// Filtered before the covers are fetched, so a dropped tile costs no request either.
-  private func activeSubscriptions() async -> [UserSubscription] {
-    do {
-      let active = try await CarPlayService.shared.fetchSubscriptions().filter { $0.isActive }
-      return await CategoryMediaTypeResolver.shared.keepAudio(active)
-    } catch {
-      print("Failed to load subscriptions: \(error.localizedDescription)")
-      return []
+  private func activeSubscriptions() async throws -> [UserSubscription] {
+    let active = try await CarPlayService.shared.fetchSubscriptions().filter { $0.isActive }
+    return await CategoryMediaTypeResolver.shared.keepAudio(active)
+  }
+
+  private func makeSubscriptionListItems(_ subscriptions: [UserSubscription]) -> [CPListItem] {
+    return subscriptions.map { subscription in
+      let item = CPListItem(text: subscription.name ?? "", detailText: nil)
+      item.accessoryType = .disclosureIndicator
+      item.handler = { [weak self] _, completion in
+        Task {
+          guard let self = self, let categoryId = subscription.categoryId else {
+            completion()
+            return
+          }
+          await self.showEpisodes(
+            categoryId: categoryId, categoryTitle: subscription.name ?? "")
+          completion()
+        }
+      }
+      return item
     }
+  }
+
+  private func showSubscriptionList(_ subscriptions: [UserSubscription]) async {
+    guard let interfaceController = interfaceController else { return }
+    let template = CPListTemplate(
+      title: "Prenumeratos",
+      sections: [CPListSection(items: makeSubscriptionListItems(subscriptions))])
+    interfaceController.pushTemplate(template, animated: true, completion: nil)
   }
 
   private func showLoggedOut(in template: CPListTemplate) {
@@ -408,6 +499,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   private func loadPodcasts(into template: CPListTemplate) async {
     do {
       let categories = try await CarPlayService.shared.fetchPodcasts()
+      guard !Task.isCancelled else { return }
 
       // Group categories by first letter
       let groupedCategories = Dictionary(grouping: categories) { category in
@@ -437,11 +529,12 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
 
       template.updateSections(sections)
     } catch {
+      if Self.isCancellation(error) { return }
       // A tab gets the same retry row as the others, rather than the alert this used when it
       // was a pushed template — there is nothing to dismiss back to.
       showLoadError(in: template) { [weak self, weak template] in
         guard let self = self, let template = template else { return }
-        await self.loadPodcasts(into: template)
+        self.startTabLoad { await self.loadPodcasts(into: template) }
       }
     }
   }
@@ -469,39 +562,50 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
 
   // MARK: - Klausykite toliau
 
-  /// Repaints every loaded host, skipping the work when the cached data is unchanged.
-  private func refreshContinuePlayingSections() {
-    let signature = Self.signature(for: CarPlayService.shared.cachedContinuePlaying)
-    guard signature != paintedContinuePlayingSignature else { return }
-    applyContinuePlayingSections()
+  /// Repaints Home when the continue-playing *list* changed. Progress-only ticks update the
+  /// existing rows' bars in place so the list the driver is looking at is not reset.
+  private func refreshContinuePlayingSection() {
+    let items = CarPlayService.shared.cachedContinuePlaying
+    let identity = Self.identitySignature(for: items)
+    if identity != paintedContinuePlayingIdentity {
+      applyContinuePlayingSection()
+      return
+    }
+    updateContinuePlayingProgressBars(items: items)
   }
 
-  /// Rebuilds both hosts from the one cached continue-playing array.
-  ///
-  /// Cover images are downloaded once for the whole pass — the two tabs need their own
-  /// `CPListItem` instances but can share the images behind them.
-  private func applyContinuePlayingSections() {
-    guard !continuePlayingHosts.isEmpty, let uiManager = uiManager else { return }
+  private func updateContinuePlayingProgressBars(items: [CarPlayItem]) {
+    let visible = Array(items.prefix(Self.continuePlayingVisibleCount))
+    for (idx, row) in paintedContinuePlayingRows.enumerated() where idx < visible.count {
+      let pct = visible[idx].progressPct ?? 0
+      row.playbackProgress = CGFloat(max(0, min(1, pct)))
+    }
+  }
+
+  /// Rebuilds Home from the cached continue-playing array.
+  private func applyContinuePlayingSection() {
+    guard let host = continuePlayingHost, let uiManager = uiManager else { return }
 
     let items = CarPlayService.shared.cachedContinuePlaying
     let visible = Array(items.prefix(Self.continuePlayingVisibleCount))
 
+    continuePlayingPaintGeneration += 1
+    let generation = continuePlayingPaintGeneration
+
     Task { [weak self] in
       guard let self = self else { return }
       let covers = await uiManager.loadCovers(for: visible)
+      guard generation == self.continuePlayingPaintGeneration else { return }
 
-      let hosts = self.continuePlayingHosts
-      for (tab, host) in hosts {
-        guard let template = host.template else {
-          self.continuePlayingHosts[tab] = nil
-          continue
-        }
-        let section = self.makeContinuePlayingSection(
-          items: items, visible: visible, covers: covers)
-        template.updateSections(host.makeSections(section))
+      guard let template = host.template else {
+        self.continuePlayingHost = nil
+        return
       }
+      let section = self.makeContinuePlayingSection(
+        items: items, visible: visible, covers: covers)
+      template.updateSections(host.makeSections(section))
 
-      self.paintedContinuePlayingSignature = Self.signature(for: items)
+      self.paintedContinuePlayingIdentity = Self.identitySignature(for: items)
     }
   }
 
@@ -509,7 +613,10 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   private func makeContinuePlayingSection(
     items: [CarPlayItem], visible: [CarPlayItem], covers: [String: UIImage]
   ) -> CPListSection? {
-    guard !visible.isEmpty, let uiManager = uiManager else { return nil }
+    guard !visible.isEmpty, let uiManager = uiManager else {
+      paintedContinuePlayingRows = []
+      return nil
+    }
 
     let rows = uiManager.makeListItems(from: visible, covers: covers) { [weak self] selected in
       guard let self = self else { return }
@@ -520,6 +627,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       let pct = visible[idx].progressPct ?? 0
       row.playbackProgress = CGFloat(max(0, min(1, pct)))
     }
+    paintedContinuePlayingRows = rows
 
     var sectionItems = rows
     if items.count > Self.continuePlayingVisibleCount {
@@ -550,16 +658,16 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     interfaceController.pushTemplate(template, animated: true, completion: nil)
   }
 
-  private static func signature(for items: [CarPlayItem]) -> String {
-    return items.map { "\($0.articleId ?? 0):\($0.progressPct ?? 0)" }.joined(separator: ",")
+  private static func identitySignature(for items: [CarPlayItem]) -> String {
+    return items.map { "\($0.articleId ?? 0)" }.joined(separator: ",")
   }
 
   // MARK: - Rows
 
   /// A row that navigates or refreshes rather than plays. Utility rows (`Atnaujinti`,
   /// `Daugiau`) are never queue members, so they can never shift `currentIndex`. `Daugiau`
-  /// labels the drill-in in both `Naujausi` and `Klausykite toliau` — same job, and each is
-  /// scoped to its own section.
+  /// labels the drill-in in `Klausykite toliau`, `Siūlome` and `Naujausi` alike — same job, and
+  /// each is scoped to its own section.
   private func makeUtilityRow(
     text: String, accessoryType: CPListItemAccessoryType = .disclosureIndicator,
     action: @escaping @MainActor () async -> Void
@@ -613,8 +721,12 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       NotificationCenter.default.removeObserver(observer)
       nowPlayingObserver = nil
     }
-    continuePlayingHosts.removeAll()
-    paintedContinuePlayingSignature = nil
+    tabLoadTask?.cancel()
+    tabLoadTask = nil
+    continuePlayingPaintGeneration += 1
+    continuePlayingHost = nil
+    paintedContinuePlayingIdentity = nil
+    paintedContinuePlayingRows = []
     self.interfaceController = nil
   }
 

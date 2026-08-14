@@ -21,8 +21,13 @@ class CarPlayAuthManager {
   func getAccessToken() async throws -> String {
     let credentials = try await credentialsManager.credentials(
       withScope: "openid profile email offline_access",
-      minTTL: 60
+      minTTL: 60,
+      parameters: ["audience": Self.apiAudience]
     )
     return credentials.accessToken
   }
+
+  /// Must match the phone app's `AUTH0_AUDIENCE`. Renewing without it yields a token the
+  /// watch-history and subscriptions APIs reject.
+  private static let apiAudience = "https://www.lrt.lt/servisai/authrz"
 }

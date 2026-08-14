@@ -82,8 +82,8 @@ enum GridTileStyle {
   }
 }
 
-/// One tile's content, separated from what selecting it does — a tile can play something
-/// (`Naujausi`, `Siūlome`) or navigate somewhere (`Prenumeratos`).
+/// One tile's content, separated from what selecting it does — a tile can play something or
+/// navigate somewhere (`Prenumeratos`).
 struct GridTile {
   /// Ignored by `.grid`, which draws the cover alone.
   let title: String
@@ -102,8 +102,8 @@ class CarPlayUIManager {
   private var playbackRateHandler: (() -> Float)?
 
   /// Cover images, keyed by URL, for the lifetime of the CarPlay session. `Klausykite toliau`
-  /// now lives in two tabs and repaints off a notification that fires every 10s during
-  /// playback, so without this the same covers would be re-downloaded continuously.
+  /// repaints off a notification that fires every 10s during playback, so without this the same
+  /// covers would be re-downloaded continuously.
   private var coverImageCache: [String: UIImage] = [:]
 
   init(interfaceController: CPInterfaceController) {
@@ -222,6 +222,10 @@ class CarPlayUIManager {
   }
 
   /// Builds `items` as a single grid row rather than one list row each.
+  ///
+  /// No caller today — Home's `Siūlome` and `Naujausi` were its last two and are lists now.
+  /// Kept because it is the only route from `CarPlayItem`s to a grid, and `makeSubscriptionRow`
+  /// below still needs everything underneath it.
   ///
   /// CarPlay has no grid *section*. `CPGridTemplate` is a whole template, and Home needs three
   /// sections, so it is not an option here. `CPListImageRowItem` is the one construct that puts
@@ -474,7 +478,9 @@ class CarPlayUIManager {
     interfaceController.pushTemplate(listTemplate, animated: true, completion: nil)
   }
 
-  func showNowPlayingTemplate(isLive: Bool) {
+  /// Refreshes the live/on-demand button set on the shared Now Playing template without
+  /// navigating to it. Auto-advance and dashboard skip must not yank the driver off a browse.
+  func updateNowPlayingButtons(isLive: Bool) {
     if nowPlayingTemplate == nil {
       nowPlayingTemplate = CPNowPlayingTemplate.shared
       nowPlayingTemplate?.isUpNextButtonEnabled = false
@@ -501,7 +507,10 @@ class CarPlayUIManager {
       }
       nowPlayingTemplate?.updateNowPlayingButtons([backwardButton, speedButton, forwardButton])
     }
+  }
 
+  func showNowPlayingTemplate(isLive: Bool) {
+    updateNowPlayingButtons(isLive: isLive)
     if interfaceController?.topTemplate !== nowPlayingTemplate {
       interfaceController?.pushTemplate(nowPlayingTemplate!, animated: true, completion: nil)
     }
@@ -545,7 +554,7 @@ class CarPlayUIManager {
 
   private func updatePlaybackRateButton(rate: Float, isLive: Bool) {
     guard !isLive else { return }
-    showNowPlayingTemplate(isLive: false)
+    updateNowPlayingButtons(isLive: false)
   }
 
   private static func playbackRateImage(rate: Float) -> UIImage {

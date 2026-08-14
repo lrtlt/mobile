@@ -31,6 +31,20 @@ struct CarPlayItem: Decodable {
     self.startPositionSec = startPositionSec
     self.progressPct = progressPct
   }
+
+  func withProgress(progressPct: Double, startPositionSec: Int) -> CarPlayItem {
+    return CarPlayItem(
+      title: title,
+      content: content,
+      cover: cover,
+      streamUrl: streamUrl,
+      isLive: isLive,
+      channelId: channelId,
+      articleId: articleId,
+      startPositionSec: startPositionSec,
+      progressPct: progressPct
+    )
+  }
 }
 
 struct WatchHistoryEntry: Codable {
