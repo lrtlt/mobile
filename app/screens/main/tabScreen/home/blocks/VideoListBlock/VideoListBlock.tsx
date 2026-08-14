@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
 import {useNavigationStore} from '../../../../../../state/navigation_store';
+import MutedVideoPreview from './MutedVideoPreview';
 
 interface VideoListBlockProps {
   block: HomeBlockVideoList;
@@ -54,7 +55,7 @@ const VideoListBlock: React.FC<VideoListBlockProps> = ({block}) => {
                 initialIndex: i,
               })
             }>
-            <VerticalVideoComponent article={article} />
+            <VerticalVideoComponent article={article} autoplay={i === 0} />
           </TouchableDebounce>
         ))}
       </ScrollView>
@@ -62,7 +63,7 @@ const VideoListBlock: React.FC<VideoListBlockProps> = ({block}) => {
   );
 };
 
-const VerticalVideoComponent: React.FC<{article: Article}> = ({article}) => {
+const VerticalVideoComponent: React.FC<{article: Article; autoplay?: boolean}> = ({article, autoplay}) => {
   const {colors} = useTheme();
 
   let imgUri;
@@ -104,6 +105,7 @@ const VerticalVideoComponent: React.FC<{article: Article}> = ({article}) => {
           }}
           resizeMode={FastImage.resizeMode.stretch}
         />
+        {autoplay && <MutedVideoPreview articleId={article.id} />}
         {mediaDuration}
         <ViewCount style={style.viewCount} article={article} visible={true} />
         <LinearGradient
