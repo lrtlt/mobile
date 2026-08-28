@@ -83,30 +83,20 @@ const LANGUAGES_GROUP: Menu2ItemGroup = {
 /**
  * Paths that are handled by a dedicated app screen. Everything that is not
  * listed here (and is not a category or a tag page) is opened as a webpage.
+ * Each entry builds the item itself, because not every screen takes a url.
  */
-const PATH_TO_TYPE: Record<
-  string,
-  | typeof MENU_TYPE_HOME
-  | typeof MENU_TYPE_SEARCH
-  | typeof MENU_TYPE_PROGRAM
-  | typeof MENU_TYPE_MEDIATEKA
-  | typeof MENU_TYPE_MEDIATEKA_SHOWS
-  | typeof MENU_TYPE_RADIOTEKA
-  | typeof MENU_TYPE_RADIOTEKA_SHOWS
-  | typeof MENU_TYPE_GAMES
-  | typeof MENU_TYPE_WEATHER
-> = {
-  '/': MENU_TYPE_HOME,
-  '/paieska': MENU_TYPE_SEARCH,
-  '/programa': MENU_TYPE_PROGRAM,
-  '/radioteka/programa': MENU_TYPE_PROGRAM,
-  '/mediateka': MENU_TYPE_MEDIATEKA,
-  '/mediateka/tv-laidos': MENU_TYPE_MEDIATEKA_SHOWS,
-  '/mediateka/radijo-laidos': MENU_TYPE_RADIOTEKA_SHOWS,
-  '/radioteka': MENU_TYPE_RADIOTEKA,
-  '/audioteka': MENU_TYPE_RADIOTEKA,
-  '/zaidimai': MENU_TYPE_GAMES,
-  '/orai': MENU_TYPE_WEATHER,
+const PATH_TO_ITEM: Record<string, (title: string, url: string) => Menu2Item> = {
+  '/': (title, url) => ({type: MENU_TYPE_HOME, title, url}),
+  '/paieska': (title, url) => ({type: MENU_TYPE_SEARCH, title, url}),
+  '/programa': (title, url) => ({type: MENU_TYPE_PROGRAM, title, url}),
+  '/radioteka/programa': (title, url) => ({type: MENU_TYPE_PROGRAM, title, url}),
+  '/mediateka': (title, url) => ({type: MENU_TYPE_MEDIATEKA, title, url}),
+  '/mediateka/tv-laidos': (title, url) => ({type: MENU_TYPE_MEDIATEKA_SHOWS, title, url}),
+  '/mediateka/radijo-laidos': (title, url) => ({type: MENU_TYPE_RADIOTEKA_SHOWS, title, url}),
+  '/radioteka': (title, url) => ({type: MENU_TYPE_RADIOTEKA, title, url}),
+  '/audioteka': (title, url) => ({type: MENU_TYPE_RADIOTEKA, title, url}),
+  '/zaidimai': (title) => ({type: MENU_TYPE_GAMES, title}),
+  '/orai': (title, url) => ({type: MENU_TYPE_WEATHER, title, url}),
 };
 
 /**
@@ -187,9 +177,9 @@ const mapItem = (item: SidebarMenuItem, isTopLevel: boolean): Menu2Item | undefi
   const path = item.target === '_blank' ? undefined : toPath(item.url);
 
   if (path) {
-    const type = PATH_TO_TYPE[path];
-    if (type) {
-      return {type, title, url};
+    const buildItem = PATH_TO_ITEM[path];
+    if (buildItem) {
+      return buildItem(title, url);
     }
 
     const pageCategories = PATH_TO_PAGE_CATEGORIES[path];

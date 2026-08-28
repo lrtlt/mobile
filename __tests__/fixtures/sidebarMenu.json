@@ -1,0 +1,502 @@
+{
+  "id": 86,
+  "name": "Sidebar menu",
+  "slug": "sidebar-menu",
+  "description": "LRT.lt hamburgerio meniu (LRT.lt, mediatekai, radiotekai, app'sui).",
+  "isActive": true,
+  "items": [
+    {
+      "id": 961,
+      "name": "Programa",
+      "url": "/programa",
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": []
+    },
+    {
+      "id": 967,
+      "name": "Aktualijos",
+      "url": null,
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": [
+        {
+          "id": 2884,
+          "name": "Lietuvoje",
+          "url": "/naujienos/lietuvoje",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2885,
+          "name": "Sveikata",
+          "url": "/naujienos/sveikata",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2886,
+          "name": "Verslas",
+          "url": "/naujienos/verslas",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2887,
+          "name": "Verslo pozicija",
+          "url": "/naujienos/verslo-pozicija",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2888,
+          "name": "Pasaulyje",
+          "url": "/naujienos/pasaulyje",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2889,
+          "name": "Nuomonės",
+          "url": "/naujienos/nuomones",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2890,
+          "name": "Eismas",
+          "url": "/naujienos/eismas",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2891,
+          "name": "Mokslas ir IT",
+          "url": "/naujienos/mokslas-ir-it",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2892,
+          "name": "Švietimas",
+          "url": "/naujienos/svietimas",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2893,
+          "name": "LRT tyrimai",
+          "url": "/naujienos/lrt-tyrimai",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2894,
+          "name": "LRT faktai",
+          "url": "/tema/lrt-faktai",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2895,
+          "name": "Tavo LRT",
+          "url": "/naujienos/tavo-lrt",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2896,
+          "name": "Lituanica",
+          "url": "/lituanica",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2897,
+          "name": "Pozicija",
+          "url": "/naujienos/pozicija",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        }
+      ]
+    },
+    {
+      "id": 968,
+      "name": "Mediateka",
+      "url": "/mediateka",
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": [
+        {
+          "id": 2898,
+          "name": "Pradžia",
+          "url": "/mediateka",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2899,
+          "name": "Programa",
+          "url": "/programa",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2900,
+          "name": "Laidos",
+          "url": "/mediateka/tv-laidos",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2901,
+          "name": "Filmai",
+          "url": "https://epika.lrt.lt/filmai",
+          "isActive": true,
+          "target": "_blank",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2902,
+          "name": "Serialai",
+          "url": "https://epika.lrt.lt/serialai",
+          "isActive": true,
+          "target": "_blank",
+          "variation": null,
+          "subitems": []
+        }
+      ]
+    },
+    {
+      "id": 969,
+      "name": "Radioteka",
+      "url": null,
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": [
+        {
+          "id": 2903,
+          "name": "Pradžia",
+          "url": "/radioteka",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2904,
+          "name": "Programa",
+          "url": "https://www.lrt.lt/radioteka/programa",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2905,
+          "name": "Radijo laidų sąrašas",
+          "url": "/mediateka/radijo-laidos",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        }
+      ]
+    },
+    {
+      "id": 962,
+      "name": "Epika",
+      "url": "https://epika.lrt.lt/",
+      "isActive": true,
+      "target": "_blank",
+      "variation": null,
+      "subitems": []
+    },
+    {
+      "id": 963,
+      "name": "Kultūra",
+      "url": "/naujienos/kultura",
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": []
+    },
+    {
+      "id": 964,
+      "name": "Sportas",
+      "url": "/naujienos/sportas",
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": []
+    },
+    {
+      "id": 970,
+      "name": "Vaikams",
+      "url": null,
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": [
+        {
+          "id": 2906,
+          "name": "Pradžia",
+          "url": "/vaikams",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2907,
+          "name": "Filmai",
+          "url": "https://epika.lrt.lt/vaikams",
+          "isActive": true,
+          "target": "_blank",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2909,
+          "name": "Žaidimai",
+          "url": "/tema/zaidimai-vaikams",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2910,
+          "name": "Mokykla",
+          "url": "/mediateka/rekomenduojame/mokykla",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        }
+      ]
+    },
+    {
+      "id": 971,
+      "name": "Laisvalaikis",
+      "url": null,
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": [
+        {
+          "id": 2911,
+          "name": "Muzika",
+          "url": "/naujienos/muzika",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2912,
+          "name": "Laisvalaikis",
+          "url": "/naujienos/laisvalaikis",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        }
+      ]
+    },
+    {
+      "id": 972,
+      "name": "Žaidimai",
+      "url": "https://www.lrt.lt/zaidimai/",
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": []
+    },
+    {
+      "id": 973,
+      "name": "Projektai",
+      "url": null,
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": [
+        {
+          "id": 2914,
+          "name": "Pradžia",
+          "url": "/projektai",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2915,
+          "name": "Mano kraštas",
+          "url": "/mano-krastas",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2916,
+          "name": "Auksinis protas",
+          "url": "/projektai/auksinis-protas",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2917,
+          "name": "Prototo",
+          "url": "/projektai/prototo",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2918,
+          "name": "„Jaunojo dizainerio prizas“ 2026",
+          "url": "https://www.lrt.lt/projektai/jaunojo-dizainerio-prizas-rinkimai",
+          "isActive": true,
+          "target": "_blank",
+          "variation": null,
+          "subitems": []
+        }
+      ]
+    },
+    {
+      "id": 974,
+      "name": "Archyvai",
+      "url": null,
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": [
+        {
+          "id": 2919,
+          "name": "Pradžia",
+          "url": "https://archyvai.lrt.lt/paveldas",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2920,
+          "name": "Apie projektą",
+          "url": "https://archyvai.lrt.lt/paveldas/apie",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2921,
+          "name": "Laidų ir filmų sąrašas",
+          "url": "https://archyvai.lrt.lt/paveldas/archyvai-laidos",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2922,
+          "name": "Šią dieną",
+          "url": "https://archyvai.lrt.lt/paveldas/ivykiai",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2923,
+          "name": "Įkelti turinį",
+          "url": "https://www.lrt.lt/lrt100/ikelk",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2924,
+          "name": "Mano išsaugoti",
+          "url": "https://archyvai.lrt.lt/paveldas/kolekcijos",
+          "isActive": true,
+          "target": "_self",
+          "variation": null,
+          "subitems": []
+        },
+        {
+          "id": 2925,
+          "name": "Parduotuvė",
+          "url": "https://archyvai-parduotuve.lrt.lt/",
+          "isActive": true,
+          "target": "_blank",
+          "variation": null,
+          "subitems": []
+        }
+      ]
+    },
+    {
+      "id": 965,
+      "name": "Paprastai",
+      "url": "https://www.lrt.lt/naujienos/lrt-paprastai",
+      "isActive": true,
+      "target": "_self",
+      "variation": null,
+      "subitems": []
+    },
+    {
+      "id": 966,
+      "name": "Eurovision Sport",
+      "url": "https://www.lrt.lt/projektai/eurovision-sport",
+      "isActive": true,
+      "target": "_blank",
+      "variation": null,
+      "subitems": []
+    }
+  ]
+}
