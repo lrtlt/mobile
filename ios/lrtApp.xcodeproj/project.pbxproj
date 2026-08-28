@@ -24,7 +24,6 @@
 		9C54AE332D2D8886009F63EC /* CarPlayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2D2D2D8886009F63EC /* CarPlayService.swift */; };
 		9C54AE342D2D8886009F63EC /* CarPlayUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE2E2D2D8886009F63EC /* CarPlayUtils.swift */; };
 		9C54AE3A2D2D8E93009F63EC /* CarPlayUIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AE372D2D8E93009F63EC /* CarPlayUIManager.swift */; };
-		9C54AEA02D2D8886009F63EC /* CategoryMediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C54AEA12D2D8886009F63EC /* CategoryMediaType.swift */; };
 		9C6632FA2B839B1100E82A8E /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6632F92B839B1100E82A8E /* NotificationService.m */; };
 		9C6632FE2B839B1100E82A8E /* FCMImageNotification.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9C6632F62B839B1100E82A8E /* FCMImageNotification.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		9C78266B2B5887FD00B7183B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C78266A2B5887FD00B7183B /* AppDelegate.swift */; };
@@ -102,7 +101,6 @@
 		9C54AE2D2D2D8886009F63EC /* CarPlayService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayService.swift; sourceTree = "<group>"; };
 		9C54AE2E2D2D8886009F63EC /* CarPlayUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayUtils.swift; sourceTree = "<group>"; };
 		9C54AE372D2D8E93009F63EC /* CarPlayUIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CarPlayUIManager.swift; path = lrtApp/CarPlayUIManager.swift; sourceTree = "<group>"; };
-		9C54AEA12D2D8886009F63EC /* CategoryMediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryMediaType.swift; sourceTree = "<group>"; };
 		9C6632F62B839B1100E82A8E /* FCMImageNotification.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FCMImageNotification.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C6632F82B839B1100E82A8E /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		9C6632F92B839B1100E82A8E /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
@@ -264,7 +262,6 @@
 				9C54AE2C2D2D8886009F63EC /* CarPlayNetwork.swift */,
 				9C54AE2D2D2D8886009F63EC /* CarPlayService.swift */,
 				9C54AE2E2D2D8886009F63EC /* CarPlayUtils.swift */,
-				9C54AEA12D2D8886009F63EC /* CategoryMediaType.swift */,
 			);
 			name = api;
 			path = lrtApp/api;
@@ -779,7 +776,6 @@
 				9C54AE342D2D8886009F63EC /* CarPlayUtils.swift in Sources */,
 				9C54AE312D2D8886009F63EC /* CarPlayModels.swift in Sources */,
 				9C54AE322D2D8886009F63EC /* CarPlayNetwork.swift in Sources */,
-				9C54AEA02D2D8886009F63EC /* CategoryMediaType.swift in Sources */,
 				9C78266F2B588AD800B7183B /* CarScene.swift in Sources */,
 				9C78266E2B588AD800B7183B /* PhoneScene.swift in Sources */,
 				9C9EDE892D2FD77100C0E5D4 /* PlayerController.swift in Sources */,
@@ -1297,7 +1293,7 @@
 				INFOPLIST_FILE = FCMImageNotification/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FCMImageNotification;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
@@ -1336,7 +1332,7 @@
 				INFOPLIST_FILE = FCMImageNotification/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FCMImageNotification;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;

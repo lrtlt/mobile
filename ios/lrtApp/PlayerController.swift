@@ -277,8 +277,12 @@ class PlayerController {
     Task { @MainActor [weak self] in
       guard let self = self else { return }
       do {
-        let info = try await CarPlayService.shared.fetchEpisodeInfo(episodeId: articleId)
-        guard let streamUrl = info.info?.streamUrl, !streamUrl.isEmpty else {
+        // A queued item may be audio (direct stream URL in the article payload) or video
+        // (`get_playlist_url` → `playlist_item.file`) — see `CarPlayService.fetchEpisodeStreamUrl`.
+        guard
+          let streamUrl = try await CarPlayService.shared.fetchEpisodeStreamUrl(
+            episodeId: articleId), !streamUrl.isEmpty
+        else {
           print("Queued episode \(articleId) has no stream URL")
           return
         }
@@ -308,7 +312,8 @@ class PlayerController {
       channelId: item.channelId,
       articleId: item.articleId,
       startPositionSec: item.startPositionSec,
-      progressPct: item.progressPct
+      progressPct: item.progressPct,
+      mediaType: item.mediaType
     )
   }
 
@@ -438,7 +443,10 @@ class PlayerController {
 
     let entry = WatchHistoryEntry(
       articleId: articleId,
-      mediaType: "audio",
+      // The bucket the episode came from. A TV-show episode must land in `"video"` or the phone
+      // app's radioteka continue row would offer a mediateka episode — and vice versa would hide
+      // its progress from the mediateka row.
+      mediaType: item.mediaType,
       categoryId: nil,
       // A finished entry is normalised to the start rather than left at the end. It is filtered
       // out of `Klausykite toliau` either way, but if it is ever surfaced again — replayed, or

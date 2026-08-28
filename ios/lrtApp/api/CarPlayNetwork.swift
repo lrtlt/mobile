@@ -89,15 +89,6 @@ class CarPlayNetwork {
     return items
   }
 
-  /// The whole audio-category catalogue, undecorated — `total_found` included so the caller can
-  /// tell a complete list from one `count` truncated. Uncached here: `CategoryMediaTypeResolver`
-  /// keeps the derived id set for hours, so a second cache would only hold the raw payload alive.
-  func fetchAudioCategoryCatalogue() async throws -> PodcastCategoriesResponse {
-    let url = URL(string: "https://www.lrt.lt/api/json/search/categories?type=audio&count=2000")!
-    let (data, _) = try await URLSession.shared.data(from: url)
-    return try JSONDecoder().decode(PodcastCategoriesResponse.self, from: data)
-  }
-
   func fetchPodcastEpisodes(categoryId: Int) async throws -> [PodcastEpisode] {
     let episodesUrl = URL(string: "https://www.lrt.lt/api/json/category?id=\(categoryId)")!
 
@@ -124,6 +115,14 @@ class CarPlayNetwork {
     let (data, _) = try await URLSession.shared.data(from: episodeUrl)
     let episodeInfo = try JSONDecoder().decode(PodcastEpisodeInfoResponse.self, from: data)
     return episodeInfo
+  }
+
+  /// The HLS manifest behind a mediateka article's `get_playlist_url`.
+  func fetchPlaylistFile(urlString: String) async throws -> String? {
+    guard let url = URL(string: urlString) else { return nil }
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let response = try JSONDecoder().decode(MediaPlaylistResponse.self, from: data)
+    return response.playlistItem?.file
   }
 
   func fetchSubscriptions(accessToken: String) async throws -> [UserSubscription] {

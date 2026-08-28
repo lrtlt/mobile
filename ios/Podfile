@@ -68,6 +68,16 @@ target 'lrtApp' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # `react_native_post_install` raises most pods to `min_ios_version_supported`, but some
+    # (GoogleUtilities, Promises, BoringSSL-GRPC, ...) keep the deployment target from their own
+    # manifest — as low as 9.0. The iOS 27 SDK rejects anything below 15.0, so every pod target
+    # is forced up to the app's floor. Pods are not committed, so this runs on every install.
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.6'
+      end
+    end
   end
 end
 

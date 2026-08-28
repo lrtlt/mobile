@@ -438,15 +438,14 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     Task { await CarPlayService.shared.refreshContinuePlaying() }
   }
 
-  /// Active **audio** subscriptions. A network error is thrown so the tab can show a retry row
-  /// rather than looking like the driver has no subscriptions.
+  /// Active subscriptions, audio and video alike. A network error is thrown so the tab can show
+  /// a retry row rather than looking like the driver has no subscriptions.
   ///
-  /// Video subscriptions are dropped because the same subscription list backs the phone app, where
-  /// following a mediateka show is legitimate — there is just nothing to play from one here.
-  /// Filtered before the covers are fetched, so a dropped tile costs no request either.
+  /// A video (mediateka) tile browses exactly like an audio one — the category listing carries
+  /// every episode and each one's article payload resolves to a playable stream. Episodes remember
+  /// which media type they came from so watch-history progress lands in the right backend bucket.
   private func activeSubscriptions() async throws -> [UserSubscription] {
-    let active = try await CarPlayService.shared.fetchSubscriptions().filter { $0.isActive }
-    return await CategoryMediaTypeResolver.shared.keepAudio(active)
+    return try await CarPlayService.shared.fetchSubscriptions().filter { $0.isActive }
   }
 
   private func makeSubscriptionListItems(_ subscriptions: [UserSubscription]) -> [CPListItem] {

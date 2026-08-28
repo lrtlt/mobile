@@ -408,7 +408,8 @@ class CarPlayUIManager {
       streamUrl: nil,
       isLive: false,
       channelId: nil,
-      articleId: episode.id
+      articleId: episode.id,
+      mediaType: episode.mediaType
     )
   }
 
@@ -443,11 +444,12 @@ class CarPlayUIManager {
           }
 
           do {
-            let episodeInfo = try await CarPlayService.shared.fetchEpisodeInfo(
-              episodeId: episodeId
-            )
-
-            guard let streamUrl = episodeInfo.info?.streamUrl, !streamUrl.isEmpty else {
+            // Video episodes resolve through a second playlist hop — see
+            // `CarPlayService.fetchEpisodeStreamUrl`.
+            guard
+              let streamUrl = try await CarPlayService.shared.fetchEpisodeStreamUrl(
+                episodeId: episodeId), !streamUrl.isEmpty
+            else {
               self.showErrorAlert()
               completion()
               return
@@ -460,7 +462,8 @@ class CarPlayUIManager {
               streamUrl: streamUrl,
               isLive: false,
               channelId: nil,
-              articleId: episodeId
+              articleId: episodeId,
+              mediaType: queue[index].mediaType
             )
             onEpisodeSelected(carPlayItem, queue, index)
           } catch {

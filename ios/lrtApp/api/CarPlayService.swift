@@ -102,6 +102,22 @@ class CarPlayService {
     return try await network.fetchEpisodeInfo(episodeId: episodeId)
   }
 
+  /// A playable stream URL for one episode, whichever media type it belongs to.
+  ///
+  /// Radioteka articles carry `stream_url` on the payload itself — one request, as this always
+  /// was. Mediateka articles leave it empty and point at `get_playlist_url`, so video costs a
+  /// second request whose `playlist_item.file` holds the manifest. Nil means neither hop produced
+  /// a URL; callers decide what to show.
+  func fetchEpisodeStreamUrl(episodeId: Int) async throws -> String? {
+    let info = try await network.fetchEpisodeInfo(episodeId: episodeId).info
+    guard let info = info else { return nil }
+    if let direct = info.streamUrl, !direct.isEmpty {
+      return direct
+    }
+    guard let playlistUrl = info.playlistUrl, !playlistUrl.isEmpty else { return nil }
+    return try await network.fetchPlaylistFile(urlString: playlistUrl)
+  }
+
   func fetchSubscriptions() async throws -> [UserSubscription] {
     let token = try await CarPlayAuthManager.shared.getAccessToken()
     return try await network.fetchSubscriptions(accessToken: token)
@@ -264,7 +280,8 @@ class CarPlayService {
         channelId: nil,
         articleId: entry.articleId,
         startPositionSec: entry.positionSec,
-        progressPct: entry.progressPct
+        progressPct: entry.progressPct,
+        mediaType: entry.mediaType
       )
     }
   }

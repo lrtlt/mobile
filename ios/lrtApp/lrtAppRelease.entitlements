@@ -11,6 +11,8 @@
 		</array>
 		<key>com.apple.developer.carplay-audio</key>
 		<true />
+		<key>com.apple.developer.carplay-video</key>
+		<true />
 		<key>com.apple.developer.devicecheck.appattest-environment</key>
 		<string>production</string>
 		<key>com.apple.developer.networking.wifi-info</key>

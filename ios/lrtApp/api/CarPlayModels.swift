@@ -1,5 +1,12 @@
 import Foundation
 
+/// Media-type bucket names used by the shared watch-history endpoint. An entry written as
+/// `"video"` surfaces in the phone app's mediateka continue row; `"audio"` in radioteka.
+enum MediaType {
+  static let audio = "audio"
+  static let video = "video"
+}
+
 struct CarPlayItem: Decodable {
   let title: String
   let content: String
@@ -11,6 +18,12 @@ struct CarPlayItem: Decodable {
   let startPositionSec: Int?
   let progressPct: Double?
 
+  /// Which watch-history bucket progress for this item belongs in. Not decoded from any server
+  /// payload — every constructor decides it: `"audio"` by default, `"video"` wherever an episode
+  /// is known to come from a mediateka category (`PodcastEpisode.isVideo` or a hydrated
+  /// continue-playing entry that arrived from the `video` history).
+  var mediaType: String = MediaType.audio
+
   enum CodingKeys: String, CodingKey {
     case title, content, cover, streamUrl, isLive, channelId, startPositionSec, progressPct
     case articleId = "id"
@@ -19,7 +32,7 @@ struct CarPlayItem: Decodable {
   init(
     title: String, content: String, cover: String?, streamUrl: String?, isLive: Bool?,
     channelId: Int?, articleId: Int? = nil, startPositionSec: Int? = nil,
-    progressPct: Double? = nil
+    progressPct: Double? = nil, mediaType: String = MediaType.audio
   ) {
     self.title = title
     self.content = content
@@ -30,6 +43,7 @@ struct CarPlayItem: Decodable {
     self.articleId = articleId
     self.startPositionSec = startPositionSec
     self.progressPct = progressPct
+    self.mediaType = mediaType
   }
 
   func withProgress(progressPct: Double, startPositionSec: Int) -> CarPlayItem {
@@ -42,7 +56,8 @@ struct CarPlayItem: Decodable {
       channelId: channelId,
       articleId: articleId,
       startPositionSec: startPositionSec,
-      progressPct: progressPct
+      progressPct: progressPct,
+      mediaType: mediaType
     )
   }
 }
@@ -134,12 +149,27 @@ struct PodcastEpisode: Decodable {
   let imgPathPostfix: String?
   let durationSeconds: Int?
 
+  /// `is_video` marks a mediateka episode; radioteka episodes leave it absent. Verified against
+  /// both endpoints 2026-08-27. This is what keeps a played TV show's progress out of the
+  /// `"audio"` watch-history bucket — same discriminator the phone app reads off article payloads
+  /// (`ArticlePlaylist`).
+  let isVideoItem: Int?
+
   enum CodingKeys: String, CodingKey {
     case title
     case id
     case imgPathPrefix = "img_path_prefix"
     case imgPathPostfix = "img_path_postfix"
     case durationSeconds = "media_duration_sec"
+    case isVideoItem = "is_video"
+  }
+
+  var isVideo: Bool {
+    return isVideoItem == 1
+  }
+
+  var mediaType: String {
+    return isVideo ? MediaType.video : MediaType.audio
   }
 }
 
@@ -157,6 +187,10 @@ struct PodcastEpisodeInfo: Decodable {
   let title: String?
   let categoryTitle: String?
   let mainPhoto: MainPhoto?
+  /// Mediateka articles carry no top-level `stream_url`; instead they point at this playlist
+  /// endpoint, whose own payload holds the HLS manifest under `playlist_item.file`. Radioteka
+  /// articles leave it absent. Resolved by `CarPlayService.fetchEpisodeStreamUrl`.
+  let playlistUrl: String?
 
   enum CodingKeys: String, CodingKey {
     case id
@@ -164,11 +198,24 @@ struct PodcastEpisodeInfo: Decodable {
     case title
     case categoryTitle = "category_title"
     case mainPhoto = "main_photo"
+    case playlistUrl = "get_playlist_url"
   }
 }
 
 struct MainPhoto: Decodable {
   let path: String?
+}
+
+struct MediaPlaylistResponse: Decodable {
+  let playlistItem: MediaPlaylistItem?
+
+  enum CodingKeys: String, CodingKey {
+    case playlistItem = "playlist_item"
+  }
+}
+
+struct MediaPlaylistItem: Decodable {
+  let file: String?
 }
 
 struct SubscriptionsResponse: Decodable {
