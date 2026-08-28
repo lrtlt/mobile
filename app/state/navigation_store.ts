@@ -10,25 +10,21 @@ import {
   MENU_TYPE_HOME,
   MENU_TYPE_MEDIATEKA,
   MENU_TYPE_NEWEST,
-  MENU_TYPE_PAGE,
   MENU_TYPE_POPULAR,
   MENU_TYPE_RADIOTEKA,
-  MENU_TYPE_WEBPAGE,
   MenuItem,
   MenuItemCategory,
   MenuItemChannels,
   MenuItemPage,
   MenuItemProjects,
-  MenuResponse,
 } from '../api/Types';
-import {fetchMenuItemsApi, fetchMenuItemsV2} from '../api';
+import {fetchMenuItemsV2} from '../api';
 import {EventRegister} from 'react-native-event-listeners';
 import {EVENT_OPEN_CATEGORY, EVENT_SELECT_CATEGORY_INDEX} from '../constants';
-import {useSettingsStore} from './settings_store';
 import {createMMKV} from 'react-native-mmkv';
 
 const menuCache = createMMKV({id: 'menu-cache'});
-const MENU_CACHE_KEY = 'app-menu-v3';
+const MENU_CACHE_KEY = 'app-menu-v4';
 const MENU_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 
 type MenuCacheEntry = {
@@ -72,7 +68,6 @@ export type NavigationState = {
 };
 
 type NavigationActions = {
-  fetchMenuItems: () => void;
   fetchMenuItemsV2: () => void;
   openHomeRoute: () => void;
   openRadiotekaRoute: () => void;
@@ -98,24 +93,6 @@ const initialState: NavigationState = {
 
 export const useNavigationStore = create<NavigationStore>((set) => ({
   ...initialState,
-  fetchMenuItems: async () => {
-    set({isLoading: true, isError: false, isReady: false});
-    try {
-      const data: MenuResponse = await fetchMenuItemsApi();
-      set({
-        routes: parseRoutes(data),
-        channels: parseChannels(data),
-        pages: parsePages(data),
-        projects: parseProjects(data),
-        isLoading: false,
-        isReady: true,
-      });
-      useSettingsStore.getState().fetchLogo(data.logo);
-    } catch (e) {
-      console.log('Fetch menu error', e);
-      set({isLoading: false, isError: true, isReady: false});
-    }
-  },
   fetchMenuItemsV2: async () => {
     const cached = readMenuCache();
     if (cached) {
@@ -188,26 +165,6 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
   },
 }));
 
-const parseRoutes = (apiResponse: MenuResponse): (MenuItem | MenuItemCategory)[] => {
-  const availableTypes = [
-    MENU_TYPE_HOME,
-    MENU_TYPE_RADIOTEKA,
-    MENU_TYPE_MEDIATEKA,
-    MENU_TYPE_NEWEST,
-    MENU_TYPE_POPULAR,
-    MENU_TYPE_CATEGORY,
-  ];
-
-  const routes = apiResponse.main_menu.filter((item): item is MenuItem | MenuItemCategory => {
-    return availableTypes.includes(item.type);
-  });
-  routes.unshift({
-    type: MENU_TYPE_HOME,
-    name: 'Pagrindinis',
-  });
-  return routes;
-};
-
 const parseRoutesV2 = (apiResponse: Menu2Response): Menu2Item[] => {
   const flat = apiResponse.items.flatMap((item) => {
     if (item.type === MENU_TYPE_EXPANDABLE && item.items) {
@@ -267,20 +224,4 @@ const parseRoutesV2 = (apiResponse: Menu2Response): Menu2Item[] => {
     popularRoute,
     ...categories,
   ];
-};
-
-const parsePages = (apiResponse: MenuResponse): MenuItemPage[] => {
-  return apiResponse.main_menu.filter((item): item is MenuItemPage => {
-    return item.type === MENU_TYPE_PAGE;
-  });
-};
-
-const parseChannels = (apiResponse: MenuResponse): MenuItemChannels | undefined => {
-  return apiResponse.main_menu.find((i): i is MenuItemChannels => i.type === 'channels');
-};
-
-const parseProjects = (apiResponse: MenuResponse): MenuItemProjects[] => {
-  return apiResponse.main_menu.filter((item): item is MenuItemProjects => {
-    return item.type === MENU_TYPE_WEBPAGE;
-  });
 };

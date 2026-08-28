@@ -17,11 +17,11 @@ import {
   homeGet,
   liveFeedGet,
   mediatekaGetV2,
-  menuGet,
   newestArticlesGet,
   popularArticlesGet,
   putDailyQuestionVote,
   radiotekaGet,
+  sidebarMenuGet,
 } from './Endpoints';
 import {get, put} from './HttpClient';
 import {
@@ -36,18 +36,16 @@ import {
   LiveFeedResponse,
   MediatekaV2DataResponse,
   Menu2Response,
-  MenuResponse,
   NewestArticlesResponse,
   PopularArticlesResponse,
   RadiotekaArticle,
   RadiotekaResponse,
   SearchResponse,
+  SidebarMenuResponse,
 } from './Types';
 
-import {getFirestore} from '@react-native-firebase/firestore';
 import {MENU_DATA} from '../../menu';
-
-export const fetchMenuItemsApi = () => get<MenuResponse>(menuGet());
+import {mapSidebarMenu} from './menuMapper';
 
 export const fetchHomeApi = () => get<HomeDataResponse>(homeGet());
 
@@ -116,14 +114,18 @@ export const fetchCounter = (id: number | string, url: string = 'https://www.lrt
     },
   });
 
+export const fetchSidebarMenu = () => get<SidebarMenuResponse>(sidebarMenuGet());
+
 export const fetchMenuItemsV2 = async (): Promise<Menu2Response> => {
   try {
-    const snapshot = await getFirestore().collection('internal').doc('app-menu-v3').get({source: 'server'});
-    if (snapshot.exists()) {
-      return snapshot.data() as Menu2Response;
+    const sidebarMenu = await fetchSidebarMenu();
+    if (!sidebarMenu?.items?.length) {
+      throw new Error('Sidebar menu response is empty');
     }
+    return {items: mapSidebarMenu(sidebarMenu)};
   } catch (e) {
-    console.warn('Failed to fetch menu from Firestore, using fallback', e);
+    console.warn('Failed to fetch sidebar menu, using fallback', e);
   }
+
   return {items: MENU_DATA} as Menu2Response;
 };

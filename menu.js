@@ -152,12 +152,12 @@ export const MENU_DATA = [
       {
         type: 'webpage',
         title: 'Filmai',
-        url: 'https://epika.lrt.lt/filmai?_gl=1*1arpe8a*_gcl_au*MTM5MDA2ODE3My4xNzU1NzYxNjA2',
+        url: 'https://epika.lrt.lt/filmai',
       },
       {
         type: 'webpage',
         title: 'Serialai',
-        url: 'https://epika.lrt.lt/serialai?_gl=1*1arpe8a*_gcl_au*MTM5MDA2ODE3My4xNzU1NzYxNjA2',
+        url: 'https://epika.lrt.lt/serialai',
       },
     ],
   },
@@ -168,12 +168,12 @@ export const MENU_DATA = [
       {
         type: 'radioteka',
         title: 'Pradžia',
-        url: 'https://www.lrt.lt/mediateka',
+        url: 'https://www.lrt.lt/radioteka',
       },
       {
         type: 'program',
         title: 'Programa',
-        url: 'https://www.lrt.lt/programa',
+        url: 'https://www.lrt.lt/radioteka/programa',
       },
       {
         type: 'radioteka-shows',
@@ -199,7 +199,7 @@ export const MENU_DATA = [
   {
     type: 'webpage',
     title: 'EPIKA',
-    url: 'https://epika.lrt.lt/?_gl=1*iyx4t3*_gcl_au*MTM5MDA2ODE3My4xNzU1NzYxNjA2',
+    url: 'https://epika.lrt.lt/',
   },
   {
     type: 'category',
@@ -227,7 +227,7 @@ export const MENU_DATA = [
       {
         type: 'webpage',
         title: 'Filmai',
-        url: 'https://epika.lrt.lt/vaikams?_gl=1*1ogseq9*_gcl_au*MTM5MDA2ODE3My4xNzU1NzYxNjA2',
+        url: 'https://epika.lrt.lt/vaikams',
       },
       // {
       //   type: 'webpage',
@@ -286,13 +286,13 @@ export const MENU_DATA = [
       },
       {
         type: 'webpage',
-        title: 'Prototo',
-        url: 'https://www.lrt.lt/projektai/prototo',
+        title: 'Auksinis protas',
+        url: 'https://www.lrt.lt/projektai/auksinis-protas',
       },
       {
         type: 'webpage',
-        title: 'Auksinis protas',
-        url: 'https://www.lrt.lt/projektai/auksinis-protas',
+        title: 'Prototo',
+        url: 'https://www.lrt.lt/projektai/prototo',
       },
       // {
       //   type: 'webpage',
@@ -311,19 +311,19 @@ export const MENU_DATA = [
       // },
       {
         type: 'webpage',
-        title: 'Ministerija Futura',
-        url: 'https://www.lrt.lt/projektai/ministerijafutura',
+        title: '„Jaunojo dizainerio prizas“ 2026',
+        url: 'https://www.lrt.lt/projektai/jaunojo-dizainerio-prizas-rinkimai',
       },
     ],
   },
   {
     type: 'expandable',
-    title: 'LRT ARCHYVAI',
+    title: 'ARCHYVAI',
     items: [
       {
         type: 'webpage',
         title: 'Pradžia',
-        url: 'https://archyvai.lrt.lt/paveldas?_gl=1*1f6ari3*_gcl_au*MTM5MDA2ODE3My4xNzU1NzYxNjA2',
+        url: 'https://archyvai.lrt.lt/paveldas',
       },
       {
         type: 'webpage',
@@ -343,24 +343,24 @@ export const MENU_DATA = [
       {
         type: 'webpage',
         title: 'Įkelti turinį',
-        url: 'https://archyvai.lrt.lt/paveldas/ikelk',
+        url: 'https://www.lrt.lt/lrt100/ikelk',
       },
       {
         type: 'webpage',
-        title: 'Mano įšsaugoti',
+        title: 'Mano išsaugoti',
         url: 'https://archyvai.lrt.lt/paveldas/kolekcijos',
       },
       {
         type: 'webpage',
         title: 'Parduotuvė',
-        url: 'https://archyvai-parduotuve.lrt.lt/?_gl=1*i78eis*_gcl_au*MTM5MDA2ODE3My4xNzU1NzYxNjA2',
+        url: 'https://archyvai-parduotuve.lrt.lt/',
       },
     ],
   },
   {
     type: 'webpage',
-    title: 'LRT PAPRASTAI',
-    url: 'https://www.lrt.lt/naujienos/lrt-paprastai?_gl=1*i78eis*_gcl_au*MTM5MDA2ODE3My4xNzU1NzYxNjA2',
+    title: 'PAPRASTAI',
+    url: 'https://www.lrt.lt/naujienos/lrt-paprastai',
   },
   {
     type: 'webpage',
@@ -393,12 +393,6 @@ export const MENU_DATA = [
         title: 'Wiadomosci (PL)',
         url: 'https://www.lrt.lt/pl/wiadomosci',
         category_id: 1261,
-      },
-      {
-        type: 'category',
-        title: 'Novini (UA)',
-        url: 'https://www.lrt.lt/ua/novini',
-        category_id: 1263,
       },
     ],
   },
