@@ -3,10 +3,10 @@ import {SEARCH_TYPE_AUDIO} from './Types';
 const BASE_URL = 'https://www.lrt.lt/api/json/';
 
 /**
- * Returns array of category items.
+ * Returns the sidebar menu structure (lrt.lt hamburger menu).
  */
-export const menuGet = () => {
-  return `${BASE_URL}menu`;
+export const sidebarMenuGet = () => {
+  return 'https://api.lrt.lt/api/v2/menus/by-slug/sidebar-menu';
 };
 
 /**

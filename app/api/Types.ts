@@ -189,6 +189,26 @@ export type Menu2ItemGroup = {
   items: Menu2Item[];
 };
 
+/** Response of the sidebar menu API (api.lrt.lt). */
+export type SidebarMenuResponse = {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  isActive?: boolean;
+  items: SidebarMenuItem[];
+};
+
+export type SidebarMenuItem = {
+  id: number;
+  name: string;
+  url: string | null;
+  isActive?: boolean;
+  target?: '_self' | '_blank';
+  variation?: string | null;
+  subitems?: SidebarMenuItem[];
+};
+
 export type MenuItem = {
   type:
     | typeof MENU_TYPE_HOME
