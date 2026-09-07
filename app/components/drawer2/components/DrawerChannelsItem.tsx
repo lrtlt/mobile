@@ -20,13 +20,12 @@ const DrawerChannelsItem: React.FC<Props> = ({item}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const {data} = useCurrentProgram();
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
+  const {colors} = useTheme();
 
   if (item.type !== 'channels') {
     console.warn('DrawerChannelsItem used for non-channels item', item);
     return null;
   }
-
-  const {colors} = useTheme();
 
   return (
     <View>

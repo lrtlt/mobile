@@ -16,11 +16,6 @@ interface Props {
 }
 const DrawerExpandableItem: React.FC<Props> = ({item, onPress, alwaysExpanded = false}) => {
   const [isExpanded, setIsExpanded] = useState(alwaysExpanded);
-
-  if (item.type !== 'expandable' && item.type !== 'group') {
-    console.warn('DrawerExpandableItem used for non-expandable item', item);
-    return null;
-  }
   const {colors} = useTheme();
 
   useOnDrawerClose(
@@ -29,6 +24,11 @@ const DrawerExpandableItem: React.FC<Props> = ({item, onPress, alwaysExpanded = 
       // setIsExpanded(false);
     }, []),
   );
+
+  if (item.type !== 'expandable' && item.type !== 'group') {
+    console.warn('DrawerExpandableItem used for non-expandable item', item);
+    return null;
+  }
 
   return (
     <View>
