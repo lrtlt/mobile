@@ -53,11 +53,6 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
   const style = getArticleStyle(styleType);
   const {colors, simplyfied} = useTheme();
 
-  // Safety check for article object
-  if (!article) {
-    return null;
-  }
-
   const onPressHandler = useCallback(() => {
     if (typeof onPress === 'function' && article) {
       onPress(article);
@@ -88,6 +83,11 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
     },
     [onPress, article],
   );
+
+  // Safety check for article object
+  if (!article) {
+    return null;
+  }
 
   const date = Boolean(article?.item_date) && Boolean(dateEnabled) && (
     <TextComponent style={style.categoryTitle} type="secondary" importantForAccessibility="no">
