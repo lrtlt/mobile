@@ -4,6 +4,8 @@ import {Article} from '../../Types';
 import {
   HomeBlockChannels,
   HomeBlockType,
+  HomeV3BlockChannels,
+  HomeV3BlockType,
   LiveChannel,
   MediatekaBlockType,
   RadiotekaResponse,
@@ -14,6 +16,7 @@ import {
   fetchCategoryApi,
   fetchCategoryHome,
   fetchHomeApi,
+  fetchHomeApiV3,
   fetchMediatekaApiV2,
   fetchNewestApi,
   fetchPopularApi,
@@ -31,6 +34,10 @@ type BaseBlockState = {
 
 type HomeState = {
   items: HomeBlockType[];
+} & BaseBlockState;
+
+type HomeV3State = {
+  items: HomeV3BlockType[];
 } & BaseBlockState;
 
 type MediatekaState = {
@@ -73,6 +80,7 @@ type ChannelState = {
 
 export type ArticleState = {
   home: HomeState;
+  homeV3: HomeV3State;
   mediateka: HomeState;
   mediatekaV2: MediatekaState;
   radioteka: RadiotekaState;
@@ -86,6 +94,7 @@ export type ArticleState = {
 
 type ArticleActions = {
   fetchHome: () => void;
+  fetchHomeV3: () => void;
   fetchMediatekaV2: () => void;
   fetchRadioteka: () => void;
   fetchPopular: (page: number, count: number, withOverride?: boolean) => void;
@@ -111,6 +120,12 @@ type ArticleStore = ArticleState & ArticleActions;
 
 const initialState: ArticleState = {
   home: {
+    isFetching: false,
+    isError: false,
+    lastFetchTime: 0,
+    items: [],
+  },
+  homeV3: {
     isFetching: false,
     isError: false,
     lastFetchTime: 0,
@@ -201,6 +216,35 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
         produce((state: ArticleState) => {
           state.home.isFetching = false;
           state.home.isError = true;
+        }),
+      );
+    }
+  },
+  fetchHomeV3: async () => {
+    set(
+      produce((state: ArticleState) => {
+        state.homeV3.isFetching = true;
+        state.homeV3.isError = false;
+      }),
+    );
+    try {
+      const data = await fetchHomeApiV3();
+      const items = data.homepage_data;
+      set({
+        homeV3: {
+          items,
+          isFetching: false,
+          isError: false,
+          lastFetchTime: Date.now(),
+        },
+        channels: _parseChannelsV3(items),
+      });
+    } catch (e) {
+      console.log('Fetch home v3 error', e);
+      set(
+        produce((state: ArticleState) => {
+          state.homeV3.isFetching = false;
+          state.homeV3.isError = true;
         }),
       );
     }
@@ -461,4 +505,15 @@ const _parseChannels = (state: HomeState): ChannelState => {
       tempLiveChannels: block.data.live_items?.filter((c) => Boolean(c.web_permanent)),
     };
   }
+};
+
+// v3 nests the channel lists one level deeper: data.items.{items, live_items}.
+const _parseChannelsV3 = (items: HomeV3BlockType[]): ChannelState => {
+  const block = items.find((i) => i.type === 'channels') as HomeV3BlockChannels | undefined;
+  const channels = block?.data?.items;
+  return {
+    channels: channels?.items ?? [],
+    liveChannels: channels?.live_items?.filter((c) => !c.web_permanent) ?? [],
+    tempLiveChannels: channels?.live_items?.filter((c) => Boolean(c.web_permanent)) ?? [],
+  };
 };

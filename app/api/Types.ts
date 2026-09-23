@@ -441,6 +441,128 @@ export type HomeDataResponse = {
   homepage_data: HomeBlockType[];
 };
 
+/**
+ * Article in the home v3 API. The underscore fields are layout hints the web
+ * home page renders from, so the app follows them to look the same.
+ */
+export type HomeV3Article = FeedArticle & {
+  unix_time?: number;
+  time_diff_week?: number | null;
+  time_diff_month?: number | null;
+  time_diff_year?: number | null;
+  _skip_image?: 1 | null;
+  _set_img_size?: string | null;
+  _view_badge?: 1 | null;
+  _with_summary?: 1 | null;
+  _with_first_keyword?: 1 | null;
+  _first_keyword?: {slug: string; slug_title: string} | null;
+  no_badges_on_photo?: 0 | 1 | null;
+  no_duration_badge?: 0 | 1 | null;
+  _MORE_BUTTON?: 1 | null;
+  _MORE_BUTTON_TITLE?: string | null;
+  _MORE_BUTTON_URL?: string | null;
+};
+
+type HomeV3BlockBase = {
+  widget_id?: number | null;
+  widget_name?: string | null;
+  // Arrives as a number or a numeric string ("63").
+  template_id?: number | string;
+};
+
+/** Top 9 articles: hero, two-column pair and a list. */
+export type HomeV3BlockTopArticles = HomeV3BlockBase & {
+  type: 'top_articles1-9';
+  data: {articles_list: HomeV3Article[]};
+};
+
+/** Articles 10-15: list with thumbnails on the left. */
+export type HomeV3BlockTopArticlesList = HomeV3BlockBase & {
+  type: 'top_articles10-15';
+  data: {articles_list: HomeV3Article[]};
+};
+
+export type HomeV3BlockTopFeed = HomeV3BlockBase & {
+  type: 'top_feed';
+  data: {articles: HomeV3Article[]};
+};
+
+export type HomeV3BlockChannels = HomeV3BlockBase & {
+  type: 'channels';
+  data: {items: HomeChannels & {has_tvprog?: 0 | 1}};
+};
+
+/** "Skaitomiausi per 24 val." */
+export type HomeV3BlockArticlesList = HomeV3BlockBase & {
+  type: 'articles_list';
+  data: {title: string; url: string; articles_list: HomeV3Article[]};
+};
+
+export type HomeV3BlockCategory = HomeV3BlockBase & {
+  type: 'category';
+  template_name?: string;
+  data: {
+    category_id: number;
+    category_title: string;
+    category_url: string;
+    articles_list: HomeV3Article[];
+  };
+};
+
+export type HomeV3BlockSlug = HomeV3BlockBase & {
+  type: 'slug';
+  slug?: string;
+  background_image?: string;
+  data: {
+    slug_title: string;
+    slug_url: string;
+    articles_list: HomeV3Article[];
+  };
+};
+
+/**
+ * Mediateka / Radioteka / Epika items. Epika items point to epika.lrt.lt: they have no `id`,
+ * the tap target is `href` and the image comes whole in `image`.
+ */
+export type HomeV3MediaArticle = HomeV3Article & {
+  href?: string;
+  image?: string;
+  article_is_epika?: 1;
+  _add_blur_img?: 1 | null;
+};
+
+/** A titled media shelf: Mediateka, Radioteka or Epika (`is_epika`). */
+export type HomeV3BlockWithTitle = HomeV3BlockBase & {
+  type: 'block_with_title';
+  is_epika?: 1;
+  data: {
+    block_title: string;
+    block_url: string;
+    articles_list: HomeV3MediaArticle[];
+  };
+};
+
+export type HomeV3BlockType =
+  | HomeV3BlockWithTitle
+  | HomeV3BlockTopArticles
+  | HomeV3BlockTopArticlesList
+  | HomeV3BlockTopFeed
+  | HomeV3BlockChannels
+  | HomeV3BlockArticlesList
+  | HomeV3BlockCategory
+  | HomeV3BlockSlug
+  // v2 blocks the v3 feed may still carry.
+  | HomeBlockVideoList
+  | HomeBlockEmbed
+  | HomeBlockDailyQuestion
+  | HomeBlockEpikaBlock
+  | HomeBlockTopUrlList;
+
+export type HomeV3DataResponse = {
+  generated_at?: string;
+  homepage_data: HomeV3BlockType[];
+};
+
 export type MediatekaBlockWidget = {
   widget_name: string;
 

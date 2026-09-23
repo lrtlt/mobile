@@ -6,9 +6,15 @@ import {IconDrawerMenu, IconUserNew} from '../../components/svg';
 import {Pressable} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
 import HomeScreen from './tabScreen/home/HomeScreen';
+import HomeScreenV3 from './tabScreen/homeV3/HomeScreenV3';
 import TestScreen from '../testScreen/TestScreen';
 import {EventRegister} from 'react-native-event-listeners';
-import {EVENT_LOGO_PRESS, EVENT_OPEN_CATEGORY, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
+import {
+  EVENT_LOGO_PRESS,
+  EVENT_OPEN_CATEGORY,
+  EVENT_SELECT_CATEGORY_INDEX,
+  HOME_V3_ENABLED,
+} from '../../constants';
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Animated, {useSharedValue, useAnimatedStyle, withTiming} from 'react-native-reanimated';
@@ -216,7 +222,11 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
 
       switch (route.type) {
         case MENU_TYPE_HOME:
-          return <HomeScreen isCurrent={current} onScroll={handleScroll} paddingTop={TAB_BAR_HEIGHT} />;
+          return HOME_V3_ENABLED ? (
+            <HomeScreenV3 isCurrent={current} onScroll={handleScroll} paddingTop={TAB_BAR_HEIGHT} />
+          ) : (
+            <HomeScreen isCurrent={current} onScroll={handleScroll} paddingTop={TAB_BAR_HEIGHT} />
+          );
         case MENU_TYPE_MEDIATEKA:
           return <MediatekaScreen onScroll={handleScroll} paddingTop={TAB_BAR_HEIGHT} />;
         case MENU_TYPE_RADIOTEKA:

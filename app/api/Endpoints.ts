@@ -17,6 +17,13 @@ export const homeGet = () => {
 };
 
 /**
+ * Home page data (v3). Mirrors the www.lrt.lt home page layout.
+ */
+export const homeGetV3 = () => {
+  return `${BASE_URL}home/v3`;
+};
+
+/**
  * Returns article screen data by articleId
  */
 export const articleGet = (articleId: number | string, isMedia?: boolean) => {
