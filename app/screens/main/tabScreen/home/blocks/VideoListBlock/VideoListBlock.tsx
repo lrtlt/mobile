@@ -63,7 +63,10 @@ const VideoListBlock: React.FC<VideoListBlockProps> = ({block}) => {
   );
 };
 
-const VerticalVideoComponent: React.FC<{article: Article; autoplay?: boolean}> = ({article, autoplay}) => {
+export const VerticalVideoComponent: React.FC<{article: Article; autoplay?: boolean}> = ({
+  article,
+  autoplay,
+}) => {
   const {colors} = useTheme();
 
   let imgUri;

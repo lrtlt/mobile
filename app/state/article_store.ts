@@ -2,8 +2,9 @@ import {create} from 'zustand';
 import {produce} from 'immer';
 import {Article} from '../../Types';
 import {
-  HomeBlockChannels,
   HomeBlockType,
+  HomeV3BlockChannels,
+  HomeV3BlockType,
   LiveChannel,
   MediatekaBlockType,
   RadiotekaResponse,
@@ -13,7 +14,7 @@ import {
 import {
   fetchCategoryApi,
   fetchCategoryHome,
-  fetchHomeApi,
+  fetchHomeApiV3,
   fetchMediatekaApiV2,
   fetchNewestApi,
   fetchPopularApi,
@@ -31,6 +32,10 @@ type BaseBlockState = {
 
 type HomeState = {
   items: HomeBlockType[];
+} & BaseBlockState;
+
+type HomeV3State = {
+  items: HomeV3BlockType[];
 } & BaseBlockState;
 
 type MediatekaState = {
@@ -72,7 +77,7 @@ type ChannelState = {
 };
 
 export type ArticleState = {
-  home: HomeState;
+  homeV3: HomeV3State;
   mediateka: HomeState;
   mediatekaV2: MediatekaState;
   radioteka: RadiotekaState;
@@ -85,7 +90,7 @@ export type ArticleState = {
 };
 
 type ArticleActions = {
-  fetchHome: () => void;
+  fetchHomeV3: () => void;
   fetchMediatekaV2: () => void;
   fetchRadioteka: () => void;
   fetchPopular: (page: number, count: number, withOverride?: boolean) => void;
@@ -110,7 +115,7 @@ type ArticleActions = {
 type ArticleStore = ArticleState & ArticleActions;
 
 const initialState: ArticleState = {
-  home: {
+  homeV3: {
     isFetching: false,
     isError: false,
     lastFetchTime: 0,
@@ -176,31 +181,31 @@ export const initialCategoryState: CategoryState = {
 
 export const useArticleStore = create<ArticleStore>((set, get) => ({
   ...initialState,
-  fetchHome: async () => {
+  fetchHomeV3: async () => {
     set(
       produce((state: ArticleState) => {
-        state.home.isFetching = true;
-        state.home.isError = false;
+        state.homeV3.isFetching = true;
+        state.homeV3.isError = false;
       }),
     );
     try {
-      const data = await fetchHomeApi();
-      const homeState = {
-        items: data.homepage_data,
-        isFetching: false,
-        isError: false,
-        lastFetchTime: Date.now(),
-      };
+      const data = await fetchHomeApiV3();
+      const items = data.homepage_data;
       set({
-        home: homeState,
-        channels: _parseChannels(homeState),
+        homeV3: {
+          items,
+          isFetching: false,
+          isError: false,
+          lastFetchTime: Date.now(),
+        },
+        channels: _parseChannelsV3(items),
       });
     } catch (e) {
-      console.log('Fetch home error', e);
+      console.log('Fetch home v3 error', e);
       set(
         produce((state: ArticleState) => {
-          state.home.isFetching = false;
-          state.home.isError = true;
+          state.homeV3.isFetching = false;
+          state.homeV3.isError = true;
         }),
       );
     }
@@ -446,19 +451,13 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
   },
 }));
 
-const _parseChannels = (state: HomeState): ChannelState => {
-  const block = state.items.find((i) => i.type === 'channels') as HomeBlockChannels;
-  if (!block) {
-    return {
-      channels: [],
-      liveChannels: [],
-      tempLiveChannels: [],
-    };
-  } else {
-    return {
-      channels: block.data.items,
-      liveChannels: block.data.live_items?.filter((c) => !c.web_permanent),
-      tempLiveChannels: block.data.live_items?.filter((c) => Boolean(c.web_permanent)),
-    };
-  }
+// v3 nests the channel lists one level deeper: data.items.{items, live_items}.
+const _parseChannelsV3 = (items: HomeV3BlockType[]): ChannelState => {
+  const block = items.find((i) => i.type === 'channels') as HomeV3BlockChannels | undefined;
+  const channels = block?.data?.items;
+  return {
+    channels: channels?.items ?? [],
+    liveChannels: channels?.live_items?.filter((c) => !c.web_permanent) ?? [],
+    tempLiveChannels: channels?.live_items?.filter((c) => Boolean(c.web_permanent)) ?? [],
+  };
 };

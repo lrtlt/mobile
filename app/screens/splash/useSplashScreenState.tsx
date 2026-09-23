@@ -5,7 +5,8 @@ import {useArticleStore} from '../../state/article_store';
 
 const useSplashScreenState = () => {
   const {fetchMenuItemsV2} = useNavigationStore.getState();
-  const {fetchHome} = useArticleStore.getState();
+  const {fetchHomeV3} = useArticleStore.getState();
+  const isHomeError = useArticleStore((state) => state.homeV3.isError);
 
   const state = useNavigationStore(
     useShallow((state) => ({
@@ -21,24 +22,31 @@ const useSplashScreenState = () => {
 
   useEffect(() => {
     if (state.isReady) {
-      fetchHome();
+      fetchHomeV3();
     }
   }, [state.isReady]);
 
   const load = useCallback(
     (ignoreError = false) => {
-      if (state.isError && ignoreError === false) {
+      if ((state.isError || isHomeError) && ignoreError === false) {
         return;
       }
-      if (state.isLoading !== true) {
+      if (state.isReady) {
+        // With the menu in, only the home page request can have failed. The first
+        // request comes from the effect above, so this is only for retries.
+        if (ignoreError) {
+          fetchHomeV3();
+        }
+      } else if (state.isLoading !== true) {
         fetchMenuItemsV2();
       }
     },
-    [state],
+    [state, isHomeError],
   );
 
   return {
     ...state,
+    isError: state.isError || isHomeError,
     load,
   };
 };

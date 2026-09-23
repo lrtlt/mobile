@@ -10,10 +10,10 @@ export const sidebarMenuGet = () => {
 };
 
 /**
- * Home page data.
+ * Home page data (v3). Mirrors the www.lrt.lt home page layout.
  */
-export const homeGet = () => {
-  return `${BASE_URL}home/v2`;
+export const homeGetV3 = () => {
+  return `${BASE_URL}home/v3`;
 };
 
 /**

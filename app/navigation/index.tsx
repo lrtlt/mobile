@@ -43,7 +43,7 @@ const linking: LinkingOptions<MainStackParamList> = {
 
 const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
   const [isNavigatorReady, setNavigatorReady] = useState(false);
-  const isAppReady = useArticleStore(useShallow((state) => state.home.items.length > 0));
+  const isAppReady = useArticleStore(useShallow((state) => state.homeV3.items.length > 0));
   const isOfflineMode = useNavigationStore((state) => state.isOfflineMode);
   const routeNameRef = useRef<string | undefined>(undefined);
   const routeParamsRef = useRef<any>({});

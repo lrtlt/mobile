@@ -14,7 +14,7 @@ import {
   getMediatekaArticlesBySeason,
   getRadiotekaArticleByUrl,
   getRadiotekaArticlesBySeason,
-  homeGet,
+  homeGetV3,
   liveFeedGet,
   mediatekaGetV2,
   newestArticlesGet,
@@ -33,6 +33,7 @@ import {
   DailyQuestionResponse,
   GenreResponse,
   HomeDataResponse,
+  HomeV3DataResponse,
   LiveFeedResponse,
   MediatekaV2DataResponse,
   Menu2Response,
@@ -47,7 +48,7 @@ import {
 import {MENU_DATA} from '../../menu';
 import {mapSidebarMenu} from './menuMapper';
 
-export const fetchHomeApi = () => get<HomeDataResponse>(homeGet());
+export const fetchHomeApiV3 = () => get<HomeV3DataResponse>(homeGetV3());
 
 export const fetchMediatekaApiV2 = () => get<MediatekaV2DataResponse>(mediatekaGetV2());
 
