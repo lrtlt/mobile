@@ -2,7 +2,6 @@ import {create} from 'zustand';
 import {produce} from 'immer';
 import {Article} from '../../Types';
 import {
-  HomeBlockChannels,
   HomeBlockType,
   HomeV3BlockChannels,
   HomeV3BlockType,
@@ -15,7 +14,6 @@ import {
 import {
   fetchCategoryApi,
   fetchCategoryHome,
-  fetchHomeApi,
   fetchHomeApiV3,
   fetchMediatekaApiV2,
   fetchNewestApi,
@@ -79,7 +77,6 @@ type ChannelState = {
 };
 
 export type ArticleState = {
-  home: HomeState;
   homeV3: HomeV3State;
   mediateka: HomeState;
   mediatekaV2: MediatekaState;
@@ -93,7 +90,6 @@ export type ArticleState = {
 };
 
 type ArticleActions = {
-  fetchHome: () => void;
   fetchHomeV3: () => void;
   fetchMediatekaV2: () => void;
   fetchRadioteka: () => void;
@@ -119,12 +115,6 @@ type ArticleActions = {
 type ArticleStore = ArticleState & ArticleActions;
 
 const initialState: ArticleState = {
-  home: {
-    isFetching: false,
-    isError: false,
-    lastFetchTime: 0,
-    items: [],
-  },
   homeV3: {
     isFetching: false,
     isError: false,
@@ -191,35 +181,6 @@ export const initialCategoryState: CategoryState = {
 
 export const useArticleStore = create<ArticleStore>((set, get) => ({
   ...initialState,
-  fetchHome: async () => {
-    set(
-      produce((state: ArticleState) => {
-        state.home.isFetching = true;
-        state.home.isError = false;
-      }),
-    );
-    try {
-      const data = await fetchHomeApi();
-      const homeState = {
-        items: data.homepage_data,
-        isFetching: false,
-        isError: false,
-        lastFetchTime: Date.now(),
-      };
-      set({
-        home: homeState,
-        channels: _parseChannels(homeState),
-      });
-    } catch (e) {
-      console.log('Fetch home error', e);
-      set(
-        produce((state: ArticleState) => {
-          state.home.isFetching = false;
-          state.home.isError = true;
-        }),
-      );
-    }
-  },
   fetchHomeV3: async () => {
     set(
       produce((state: ArticleState) => {
@@ -489,23 +450,6 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
     }
   },
 }));
-
-const _parseChannels = (state: HomeState): ChannelState => {
-  const block = state.items.find((i) => i.type === 'channels') as HomeBlockChannels;
-  if (!block) {
-    return {
-      channels: [],
-      liveChannels: [],
-      tempLiveChannels: [],
-    };
-  } else {
-    return {
-      channels: block.data.items,
-      liveChannels: block.data.live_items?.filter((c) => !c.web_permanent),
-      tempLiveChannels: block.data.live_items?.filter((c) => Boolean(c.web_permanent)),
-    };
-  }
-};
 
 // v3 nests the channel lists one level deeper: data.items.{items, live_items}.
 const _parseChannelsV3 = (items: HomeV3BlockType[]): ChannelState => {

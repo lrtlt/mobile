@@ -1,13 +1,13 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {View, StyleSheet, StatusBar, RefreshControl} from 'react-native';
-import {ScrollingChannels, ScreenLoader, BannerComponent} from '../../../../components';
+import {View, StyleSheet, StatusBar, RefreshControl, Button} from 'react-native';
+import {ScrollingChannels, ScreenLoader, ScreenError, BannerComponent} from '../../../../components';
 import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
 import {ARTICLE_EXPIRE_DURATION, EVENT_LOGO_PRESS} from '../../../../constants';
 import Gemius from 'react-native-gemius-plugin';
 import {EventRegister} from 'react-native-event-listeners';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../../../Theme';
-import {HomeV3BlockCategory, HomeV3BlockSlug, HomeV3BlockType} from '../../../../api/Types';
+import {HomeV3BlockType} from '../../../../api/Types';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../../../navigation/MainStack';
 import DailyQuestionComponent from '../../../../components/dailyQuestion/DailyQuestionComponent';
@@ -28,7 +28,7 @@ import CategoryArticlesBlock from './blocks/CategoryArticlesBlock/CategoryArticl
 import SingleArticleBlock from './blocks/SingleArticleBlock/SingleArticleBlock';
 import VideoListBlock from './blocks/VideoListBlock/VideoListBlock';
 import MediaBlock from './blocks/MediaBlock/MediaBlock';
-// Blocks shared with the v2 home page.
+// Blocks shared with the category home pages.
 import TopUrlBlock from '../home/blocks/TopUrlBlock/TopUrlBlock';
 import EpikaBlock from '../home/blocks/EpikaBlock/EpikaBlock';
 import useHomeColors from './components/useHomeColors';
@@ -38,6 +38,7 @@ const selectHomeScreenState = () => (state: ArticleState) => {
   const block = state.homeV3;
   return {
     refreshing: block.isFetching && block.items.length > 0,
+    isError: block.isError,
     lastFetchTime: block.lastFetchTime,
     items: block.items,
   };
@@ -56,7 +57,7 @@ const HomeScreenV3: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, onSc
   const {fetchHomeV3} = useArticleStore.getState();
   const state = useArticleStore(useShallow(selectHomeScreenState()));
 
-  const {colors, dark} = useTheme();
+  const {colors, dark, strings} = useTheme();
 
   const {items, lastFetchTime, refreshing} = state;
 
@@ -148,7 +149,7 @@ const HomeScreenV3: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, onSc
             case 'single_article':
               return <SingleArticleBlock block={block} />;
             case 'slug_featured':
-              return <SlugFeaturedBlock block={toSlugBlock(block)} />;
+              return <SlugFeaturedBlock block={block} />;
             default:
               return <CategoryArticlesBlock block={block} />;
           }
@@ -179,6 +180,14 @@ const HomeScreenV3: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, onSc
   const blocks = useMemo(() => withTopFeedFirst(items), [items]);
 
   if (items.length === 0) {
+    if (state.isError) {
+      return (
+        <ScreenError
+          text={strings.error_no_connection}
+          actions={<Button title={strings.tryAgain} color={colors.primary} onPress={callApi} />}
+        />
+      );
+    }
     return <ScreenLoader />;
   }
 
@@ -214,19 +223,6 @@ const withTopFeedFirst = (items: HomeV3BlockType[]) => [
   ...items.filter((i) => i.type === 'top_feed'),
   ...items.filter((i) => i.type !== 'top_feed'),
 ];
-
-/** A category block with template 18 renders like a featured topic. */
-const toSlugBlock = (block: HomeV3BlockCategory): HomeV3BlockSlug => {
-  return {
-    ...block,
-    type: 'slug',
-    data: {
-      slug_title: block.data.category_title,
-      slug_url: block.data.category_url,
-      articles_list: block.data.articles_list,
-    },
-  };
-};
 
 const BlockSeparator: React.FC<{leadingItem?: HomeV3BlockType; trailingItem?: HomeV3BlockType}> = ({
   leadingItem,

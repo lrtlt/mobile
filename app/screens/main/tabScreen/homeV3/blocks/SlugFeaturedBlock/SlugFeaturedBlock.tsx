@@ -2,9 +2,10 @@ import React, {useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {HomeV3Article, HomeV3BlockSlug} from '../../../../../../api/Types';
+import {HomeV3Article, HomeV3BlockCategory, HomeV3BlockSlug} from '../../../../../../api/Types';
 import {TouchableDebounce} from '../../../../../../components';
 import {MainStackParamList} from '../../../../../../navigation/MainStack';
+import {useNavigationStore} from '../../../../../../state/navigation_store';
 import {IMG_SIZE_L, IMG_SIZE_S} from '../../../../../../util/ImageUtil';
 import ArticleHero from '../../components/ArticleHero';
 import ArticleImage from '../../components/ArticleImage';
@@ -18,17 +19,23 @@ import useArticlePress from '../../components/useArticlePress';
 import {hasImage, isVideoArticle} from '../../util';
 
 interface SlugFeaturedBlockProps {
-  block: HomeV3BlockSlug;
+  block: HomeV3BlockSlug | HomeV3BlockCategory;
 }
 
-/** Topic with a featured article and a 2x2 grid below (template 18). */
+/** Topic (or category) with a featured article and a 2x2 grid below (template 18). */
 const SlugFeaturedBlock: React.FC<SlugFeaturedBlockProps> = ({block}) => {
-  const {slug_title, slug_url, articles_list: articles} = block.data;
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
 
+  const title = block.type === 'slug' ? block.data.slug_title : block.data.category_title;
+  const articles = block.data.articles_list;
+
   const onHeaderPress = useCallback(() => {
-    navigation.navigate('Slug', {name: slug_title, slugUrl: slug_url});
-  }, [navigation, slug_title, slug_url]);
+    if (block.type === 'slug') {
+      navigation.navigate('Slug', {name: block.data.slug_title, slugUrl: block.data.slug_url});
+    } else {
+      useNavigationStore.getState().openCategoryById(block.data.category_id, block.data.category_title);
+    }
+  }, [block, navigation]);
 
   if (!articles?.length) {
     return null;
@@ -42,7 +49,7 @@ const SlugFeaturedBlock: React.FC<SlugFeaturedBlockProps> = ({block}) => {
 
   return (
     <View style={styles.root}>
-      <SectionTitle title={slug_title} onPress={onHeaderPress} />
+      <SectionTitle title={title} onPress={onHeaderPress} />
       <ArticleHero article={hero} imageSize={IMG_SIZE_L} />
       {rows.map((row, index) => (
         <View key={index} style={styles.row}>

@@ -25,7 +25,8 @@ const SplashScreen: React.FC<React.PropsWithChildren<{}>> = () => {
         <ActivityIndicator
           style={styles.loader}
           size="large"
-          animating={state.isReady !== true && state.isError === false}
+          // The splash stays up until the home page loads, keep spinning until then.
+          animating={state.isError === false}
           color={colors.buttonContent}
         />
         {state.isError && (

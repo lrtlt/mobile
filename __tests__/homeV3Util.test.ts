@@ -41,6 +41,7 @@ describe('getRelativeTimeText', () => {
 
   it('falls back to the API time fields without unix_time', () => {
     expect(getRelativeTimeText({time_diff_hour: 4} as HomeV3Article, NOW)).toBe('Prieš 4 val.');
+    expect(getRelativeTimeText({time_diff_year: 2} as HomeV3Article, NOW)).toBe('Prieš 2 m.');
     expect(getRelativeTimeText({item_date: '2026.09.14 06:00'} as HomeV3Article, NOW)).toBe(
       '2026.09.14 06:00',
     );

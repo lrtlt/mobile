@@ -150,6 +150,9 @@ const getApiRelativeTimeText = (article: HomeV3Article): string | undefined => {
   if (article.time_diff_month) {
     return `Prieš ${article.time_diff_month} mėn.`;
   }
+  if (article.time_diff_year) {
+    return `Prieš ${article.time_diff_year} m.`;
+  }
   return article.item_date;
 };
 

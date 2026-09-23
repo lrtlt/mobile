@@ -15,9 +15,6 @@ export const ARTICLES_PER_PAGE_COUNT = 15;
 
 export const ARTICLE_EXPIRE_DURATION = 1000 * 60 * 4; //4 minutes
 
-//Home page: v3 mirrors the www.lrt.lt layout, false falls back to the v2 home page.
-export const HOME_V3_ENABLED = true;
-
 export const SIMPLIFIED_CATEGORY_ID = 69;
 
 //Channel types:
