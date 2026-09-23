@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
 import {View, Dimensions, StyleSheet, Animated as RNAnimated} from 'react-native';
 import {SceneRendererProps, TabView} from 'react-native-tab-view';
-import {ActionButton, Logo} from '../../components';
+import {ActionButton, ErrorBoundary, Logo} from '../../components';
 import {IconDrawerMenu, IconUserNew} from '../../components/svg';
 import {Pressable} from 'react-native-gesture-handler';
 import TabBar from './tabBar/TabBar';
@@ -124,6 +124,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
         }),
     };
   }, [routes]);
+  type TabRoute = (typeof state.routes)[number];
 
   useEffect(() => {
     const listener = EventRegister.addEventListener(EVENT_SELECT_CATEGORY_INDEX, (data) => {
@@ -203,17 +204,8 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
     });
   }, [colors.headerTint, dim.appBarIconSize, navigation, user, selectedTabIndex]);
 
-  const renderScene = useCallback(
-    (sceneProps: SceneRendererProps & {route: (typeof state.routes)[0]}) => {
-      const {route} = sceneProps;
-      const routeIndex = state.routes.findIndex((r) => r.key === route.key);
-
-      //Render only selected screen
-      if (Math.abs(selectedTabIndex - routeIndex) > 0) {
-        return <View />;
-      }
-      const current = routeIndex === selectedTabIndex;
-
+  const renderTabScreen = useCallback(
+    (route: TabRoute, current: boolean) => {
       switch (route.type) {
         case MENU_TYPE_HOME:
           return <HomeScreenV3 isCurrent={current} onScroll={handleScroll} paddingTop={TAB_BAR_HEIGHT} />;
@@ -266,7 +258,27 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           return <TestScreen text={'Unkown type: ' + JSON.stringify(route)} />;
       }
     },
-    [selectedTabIndex, state, handleScroll],
+    [handleScroll],
+  );
+
+  const renderScene = useCallback(
+    (sceneProps: SceneRendererProps & {route: TabRoute}) => {
+      const {route} = sceneProps;
+      const routeIndex = state.routes.findIndex((r) => r.key === route.key);
+
+      //Render only selected screen
+      if (Math.abs(selectedTabIndex - routeIndex) > 0) {
+        return <View />;
+      }
+
+      // Isolate each tab so a render exception shows an error screen instead of crashing the app.
+      return (
+        <ErrorBoundary key={route.key} name={route.type}>
+          {renderTabScreen(route, routeIndex === selectedTabIndex)}
+        </ErrorBoundary>
+      );
+    },
+    [selectedTabIndex, state, renderTabScreen],
   );
 
   const renderLazyPlaceHolder = useCallback(() => {
