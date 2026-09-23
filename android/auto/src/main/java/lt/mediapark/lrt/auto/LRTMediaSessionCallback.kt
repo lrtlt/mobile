@@ -24,6 +24,7 @@ import java.util.concurrent.Callable
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.RejectedExecutionException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -121,11 +122,10 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
                     // the whole browsable rather than a tab of its own. Routed through the browse
                     // executor so it cannot rebuild the tree underneath a browse in flight.
                     submitBlocking { loadHome(forceRefreshNewest = true) }.get()
-                    session.notifyChildrenChanged(
-                        MediaItemTree.HOME,
-                        MediaItemTree.getChildren(MediaItemTree.HOME).size,
-                        null
-                    )
+                    // The count is read on the browse executor too — [notifyBrowseChanged], not a
+                    // direct read here, because a retry-driven re-browse of another tab can be
+                    // rebuilding the tree while this coroutine runs.
+                    notifyBrowseChanged(session, MediaItemTree.HOME)
                     Log.d(TAG, "Auto-refreshed home")
                 } catch (e: Exception) {
                     Log.e(TAG, "Error auto-refreshing home", e)
@@ -212,19 +212,15 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
      * Home hosts `Klausykite toliau`, so it is the one browsable that has to repaint off a
      * playback event. The overflow folder is notified too — a driver sitting in `Daugiau`
      * would otherwise keep the pre-pause rows until they backed out.
+     *
+     * Notifies via [notifyBrowseChanged]: this runs in the push coroutine's `finally`, off the
+     * browse executor, so a direct count read could race a browse rebuilding the tree — and an
+     * exception from a `finally` would take the coroutine down with it.
      */
     fun notifyContinuePlayingChanged() {
         val session = currentSession ?: return
-        session.notifyChildrenChanged(
-            MediaItemTree.HOME,
-            MediaItemTree.getChildren(MediaItemTree.HOME).size,
-            null
-        )
-        session.notifyChildrenChanged(
-            MediaItemTree.CONTINUE_MORE_FOLDER,
-            MediaItemTree.getChildren(MediaItemTree.CONTINUE_MORE_FOLDER).size,
-            null
-        )
+        notifyBrowseChanged(session, MediaItemTree.HOME)
+        notifyBrowseChanged(session, MediaItemTree.CONTINUE_MORE_FOLDER)
     }
 
     /**
@@ -372,11 +368,37 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         }
     }
 
+    /**
+     * Tells the head unit [parentId]'s children changed, which makes it re-browse them.
+     *
+     * Runs on [browseExecutor]: the child count is read from [MediaItemTree], and the tree is
+     * mutated only on that thread — a count read from the retry timer or the connectivity callback
+     * could catch a list mid-rebuild and throw, which would end the retry with the error row still
+     * cached. Queuing behind any browse in flight also orders this notify after the load it
+     * reports on, so the count it sends is the count the re-browse will find.
+     *
+     * Fire-and-forget: [session.notifyChildrenChanged] failing costs one retry cycle, not the
+     * retry loop itself.
+     */
     private fun notifyBrowseChanged(
         session: MediaLibraryService.MediaLibrarySession,
         parentId: String
     ) {
-        session.notifyChildrenChanged(parentId, MediaItemTree.getChildren(parentId).size, null)
+        try {
+            browseExecutor.execute {
+                try {
+                    session.notifyChildrenChanged(
+                        parentId,
+                        MediaItemTree.getChildren(parentId).size,
+                        null
+                    )
+                } catch (e: Exception) {
+                    Log.e(TAG, "Notifying $parentId children changed failed", e)
+                }
+            }
+        } catch (e: RejectedExecutionException) {
+            // The service is shutting down; there is no head unit left to notify.
+        }
     }
 
     private fun hasNetwork(): Boolean {
