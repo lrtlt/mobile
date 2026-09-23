@@ -96,6 +96,17 @@ object MediaItemTree {
 
     private const val EMPTY_SUBSCRIPTIONS_BODY = "Prenumeruokite laidas programėlėje"
 
+    /**
+     * The failed-load row. The title is CarPlay's retry row word for word; the body differs
+     * because a browse row that neither plays nor browses cannot be tapped — the retry is
+     * automatic here, where CarPlay's row is a button.
+     */
+    private const val LOAD_ERROR_TITLE = "Įvyko klaida! Patikrinkite interneto ryšį"
+
+    private const val LOAD_ERROR_BODY = "Bandysime dar kartą automatiškai"
+
+    private const val LOAD_ERROR_PREFIX = "[load_error]"
+
     private const val KEY_COMPLETION_PERCENTAGE =
         "android.media.extra.PLAYBACK_COMPLETION_PERCENTAGE"
     private const val KEY_GROUP_TITLE = "android.media.browse.CONTENT_STYLE_GROUP_TITLE_HINT"
@@ -669,6 +680,32 @@ object MediaItemTree {
             mediaType = MediaMetadata.MEDIA_TYPE_MIXED
         )
         treeNodes[mediaId] = MediaItemNode(item)
+        node.addChild(mediaId)
+    }
+
+    // MARK: - Load errors
+
+    /**
+     * Replaces [parentId]'s children with the failed-load row, so a browse that could not fetch
+     * reads as a failure rather than as a browsable with nothing in it.
+     *
+     * The row's media ID is scoped to its parent because a media ID maps to one node, and more
+     * than one browsable can be failing at once.
+     */
+    fun setLoadError(parentId: String) {
+        val node = treeNodes[parentId] ?: return
+        node.clearChildren()
+        val mediaId = LOAD_ERROR_PREFIX + parentId
+        treeNodes[mediaId] = MediaItemNode(
+            buildMediaItem(
+                title = LOAD_ERROR_TITLE,
+                subtitle = LOAD_ERROR_BODY,
+                mediaId = mediaId,
+                isPlayable = false,
+                isBrowsable = false,
+                mediaType = MediaMetadata.MEDIA_TYPE_MIXED
+            )
+        )
         node.addChild(mediaId)
     }
 
