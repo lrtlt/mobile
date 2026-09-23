@@ -1,4 +1,5 @@
 import useNavigationAnalytics, {TrackingParams} from '../../../../util/useNavigationAnalytics';
+import {newsLandingPage, toLrtUrl} from '../../../../util/smartocto';
 
 type Params = {
   categoryTitle?: string;
@@ -12,17 +13,12 @@ const useCategoryScreenAnalytics = (params: Params) => {
 
 const toTrackingParams = ({categoryTitle, categoryUrl}: Params): TrackingParams | undefined => {
   const title = `${categoryTitle} - LRT`;
-  const viewId = `https://www.lrt.lt${categoryUrl}`;
-
-  const sections = ['naujienos'];
-  if (categoryTitle) {
-    sections.unshift(categoryTitle);
-  }
+  const url = categoryUrl ? toLrtUrl(categoryUrl) : undefined;
 
   return {
-    viewId: viewId ?? title,
+    viewId: url ?? title,
     title: title,
-    sections: sections,
+    smartocto: url ? newsLandingPage(url, title) : undefined,
   };
 };
 

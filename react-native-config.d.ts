@@ -5,8 +5,6 @@ declare module 'react-native-config' {
     GEMIUS_PLAYER_SCRIPT_ID: string;
     APP_CHECK_DEBUG_TOKEN_ANDROID: string;
     APP_CHECK_DEBUG_TOKEN_IOS: string;
-    CHARTBEAT_ACCOUNT_ID: string;
-    CHARTBEAT_DASHBOARD_ID: string;
     THEO_PLAYER_LICENCE: string;
     AUTH0_DOMAIN: string;
     AUTH0_CLIENT_ID: string;

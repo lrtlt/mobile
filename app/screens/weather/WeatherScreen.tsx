@@ -13,6 +13,7 @@ import {ForecastLocation} from '../../api/Types';
 import useFetchWeatherArticles from './useFetchWeatherArticles';
 import SlugArticlesBlock from '../main/tabScreen/home/blocks/SlugArticlesBlock/SlugArticlesBlock';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import {newsLandingPage} from '../../util/smartocto';
 import {useSettingsStore} from '../../state/settings_store';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Weather'>;
@@ -41,11 +42,14 @@ const WeatherScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const weatherUrl = `https://www.lrt.lt/orai/${selectedLocation?.c ?? 'vilnius'}`;
+  const weatherTitle = `Orai | ${selectedLocation?.n ?? 'Vilnius'} | ${
+    selectedLocation?.ad ?? 'Vilniaus miesto sav.'
+  } - LRT`;
   useNavigationAnalytics({
-    viewId: `https://www.lrt.lt/orai/${selectedLocation?.c ?? 'vilnius'}`,
-    title: `Orai | ${selectedLocation?.n ?? 'Vilnius'} | ${
-      selectedLocation?.ad ?? 'Vilniaus miesto sav.'
-    } - LRT`,
+    viewId: weatherUrl,
+    title: weatherTitle,
+    smartocto: newsLandingPage(weatherUrl, weatherTitle),
   });
 
   const handleSelectLocation = useCallback((location: ForecastLocation) => {

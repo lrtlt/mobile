@@ -49,7 +49,6 @@ const BookmarksScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation})
   useNavigationAnalytics({
     viewId: 'Lrt app - Bookmarks',
     title: 'Lrt app - Išsaugoti straipsniai',
-    sections: ['Bendra'],
   });
 
   const {bottom} = useSafeAreaInsets();

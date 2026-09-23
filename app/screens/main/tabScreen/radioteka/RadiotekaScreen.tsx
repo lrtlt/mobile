@@ -9,6 +9,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
+import {mediaLandingPage} from '../../../../util/smartocto';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import {useShallow} from 'zustand/shallow';
 import Config from 'react-native-config';
@@ -65,8 +66,7 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({onScroll, pa
   useNavigationAnalytics({
     viewId: 'https://www.lrt.lt/radioteka',
     title: 'Radioteka - LRT - Radioteka - LRT',
-    authors: ['Lrt.lt'],
-    sections: ['Radioteka'],
+    smartocto: mediaLandingPage('https://www.lrt.lt/radioteka', 'LRT - Radioteka - LRT', 'Radioteka'),
   });
 
   const refresh = useCallback(() => {

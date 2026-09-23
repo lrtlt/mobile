@@ -12,6 +12,7 @@ import {Article} from '../../../Types';
 import useSearch from './context/useSearch';
 import {defaultSearchFilter} from './context/SearchContext';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import {newsLandingPage} from '../../util/smartocto';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {pushArticle, navigateArticle} from '../../util/NavigationUtils';
@@ -56,7 +57,7 @@ const SearchScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, rou
   useNavigationAnalytics({
     viewId: 'https://www.lrt.lt/paieska',
     title: 'Paieška - LRT',
-    sections: ['Bendra'],
+    smartocto: newsLandingPage('https://www.lrt.lt/paieska', 'Paieška - LRT'),
   });
 
   const {fullHeight, subHeaderHeight} = useAppBarHeight();

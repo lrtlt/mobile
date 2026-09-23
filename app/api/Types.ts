@@ -1130,6 +1130,7 @@ export type ArticleContentDefault = {
   article_subtitle?: string;
   article_url?: string;
   article_date: string;
+  item_date_iso8601?: string;
   article_summary: string;
   article_photos: ArticlePhotoType[];
   main_photo: ArticlePhotoType;
@@ -1158,6 +1159,7 @@ export type ArticleContentMedia = {
   subtitle?: string;
   article_is_heritage?: 0 | 1;
   date: string;
+  item_date_iso8601?: string;
   category_id: number;
   category_title: string;
   category_decription?: string;

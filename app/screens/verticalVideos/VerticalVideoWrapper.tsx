@@ -21,6 +21,7 @@ const VerticalVideoWrapper: React.FC<{id: number | string; isActive: boolean}> =
 
   useArticleAnalytics({
     article: article,
+    enabled: isActive,
   });
 
   const coverOpacity = useSharedValue(1);

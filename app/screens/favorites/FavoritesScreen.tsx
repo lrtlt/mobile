@@ -66,7 +66,6 @@ const FavoritesScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation})
   useNavigationAnalytics({
     viewId: 'Lrt app - Favorites',
     title: 'Lrt app - Išsaugoti straipsniai',
-    sections: ['Bendra'],
   });
 
   const {bottom} = useSafeAreaInsets();
