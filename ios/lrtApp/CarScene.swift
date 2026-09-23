@@ -4,6 +4,7 @@ import Combine
 import FirebaseAnalytics
 import Foundation
 import MediaPlayer
+import Network
 import UIKit
 
 class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBarTemplateDelegate {
@@ -21,6 +22,23 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   private var watchHistoryObserver: NSObjectProtocol?
   private var nowPlayingObserver: NSObjectProtocol?
   private var tabLoadTask: Task<Void, Never>?
+
+  /// The reload a failed tab is waiting on, and the timer that will run it.
+  ///
+  /// A tab only loads when it is selected, so a failure used to sit on screen until the driver
+  /// tapped the retry row or the tab again — and nobody driving does that, they just see a dead
+  /// tab. Reception in a car comes back on its own, so the retry is automatic: as soon as the
+  /// phone regains a network path, or every 5 s while it already has one (the request failed
+  /// for some other reason — a timeout, a server error).
+  ///
+  /// Set by `showLoadError`, cleared by every `startTabLoad`: whatever loads next owns the screen,
+  /// and a retry left armed would start a load that cancels the one the driver just asked for.
+  private var pendingRetry: (@MainActor () async -> Void)?
+  private var autoRetryTask: Task<Void, Never>?
+  private var pathMonitor: NWPathMonitor?
+  private var hasNetworkPath = true
+
+  private static let autoRetryIntervalNanoseconds: UInt64 = 5 * 1_000_000_000
 
   /// Home, the one tab that renders a `Klausykite toliau` section.
   ///
@@ -94,6 +112,8 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     // lifetime (so the dashboard Music widget works without opening the app). Here we only
     // wire up the CarPlay Now Playing template's custom buttons.
     setupTemplateButtons()
+
+    startPathMonitor()
 
     // Attempt to resume playback if state exists
     if cache.getShouldResumePlayer(),
@@ -171,6 +191,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   }
 
   private func startTabLoad(_ work: @escaping @MainActor () async -> Void) {
+    cancelAutoRetry()
     tabLoadTask?.cancel()
     tabLoadTask = Task { @MainActor in
       await work()
@@ -683,9 +704,16 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     return item
   }
 
+  /// Paints the retry row over a failed tab and arms the automatic retry.
+  ///
+  /// Always runs inside the tab-load task. When that task was cancelled, a newer load owns the
+  /// screen — the same tab re-selected, or another one — so painting here would put an error over
+  /// it, and arming a retry would later cancel it.
   private func showLoadError(
     in template: CPListTemplate, retry: @escaping @MainActor () async -> Void
   ) {
+    guard !Task.isCancelled else { return }
+
     let item = CPListItem(
       text: "Įvyko klaida! Patikrinkite interneto ryšį",
       detailText: "Paspauskite norėdami pabandyti dar kartą"
@@ -697,6 +725,58 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
       }
     }
     template.updateSections([CPListSection(items: [item])])
+    scheduleAutoRetry(retry)
+  }
+
+  // MARK: - Automatic retry
+
+  private func scheduleAutoRetry(_ retry: @escaping @MainActor () async -> Void) {
+    pendingRetry = retry
+    autoRetryTask?.cancel()
+    autoRetryTask = Task { @MainActor [weak self] in
+      try? await Task.sleep(nanoseconds: Self.autoRetryIntervalNanoseconds)
+      guard !Task.isCancelled, let self = self else { return }
+      // Offline, a timed retry can only fail again. The path monitor runs it instead, the moment
+      // a route comes back.
+      guard self.hasNetworkPath else { return }
+      await self.runPendingRetry()
+    }
+  }
+
+  /// Runs the armed retry once. The retry goes through `startTabLoad`, which disarms everything,
+  /// and a second failure arms it afresh from `showLoadError`.
+  private func runPendingRetry() async {
+    guard let retry = pendingRetry else { return }
+    pendingRetry = nil
+    await retry()
+  }
+
+  private func cancelAutoRetry() {
+    pendingRetry = nil
+    autoRetryTask?.cancel()
+    autoRetryTask = nil
+  }
+
+  private func startPathMonitor() {
+    pathMonitor?.cancel()
+    let monitor = NWPathMonitor()
+    monitor.pathUpdateHandler = { [weak self] path in
+      let hasPath = path.status == .satisfied
+      Task { @MainActor in
+        self?.networkPathChanged(hasPath: hasPath)
+      }
+    }
+    monitor.start(queue: DispatchQueue(label: "com.lrt.carplay.path"))
+    pathMonitor = monitor
+  }
+
+  private func networkPathChanged(hasPath: Bool) {
+    let regained = hasPath && !hasNetworkPath
+    hasNetworkPath = hasPath
+    // The likeliest moment for a failed tab to succeed, so it does not wait out the timer.
+    if regained {
+      Task { await runPendingRetry() }
+    }
   }
 
   // MARK: - Lifecycle
@@ -723,6 +803,10 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     }
     tabLoadTask?.cancel()
     tabLoadTask = nil
+    cancelAutoRetry()
+    pathMonitor?.cancel()
+    pathMonitor = nil
+    hasNetworkPath = true
     continuePlayingPaintGeneration += 1
     continuePlayingHost = nil
     paintedContinuePlayingIdentity = nil

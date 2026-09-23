@@ -7,6 +7,11 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
+/**
+ * The browse feeds. A fetch that fails falls back to the last list it got — stale beats nothing
+ * in a car — and throws only when there is no list to fall back on, so the browse can tell a
+ * failure from a feed that is genuinely empty and show a retry rather than a blank browsable.
+ */
 class LRTAutoRepository(private val api: LRTAutoService) {
 
     /**
@@ -55,6 +60,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                     recommendedLastFetchTime = System.currentTimeMillis()
                 }
             }catch (e: Exception) {
+                if (recommended.isEmpty()) throw e
                 e.printStackTrace()
             }
         }
@@ -69,6 +75,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                     newestLastFetchTime = System.currentTimeMillis()
                 }
             }catch (e: Exception) {
+                if (newest.isEmpty()) throw e
                 e.printStackTrace()
             }
         }
@@ -113,6 +120,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                     liveLastFetchTime = System.currentTimeMillis()
                 }
             }catch (e: Exception) {
+                if (live.isEmpty()) throw e
                 e.printStackTrace()
             }
         }
@@ -127,20 +135,16 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                     podcastCategoriesLastFetchTime = System.currentTimeMillis()
                 }
             }catch (e: Exception) {
+                if (podcastCategories.isEmpty()) throw e
                 e.printStackTrace()
             }
         }
         podcastCategories
     }
 
+    /** Uncached, so there is no stale list to fall back on: a failed fetch always throws. */
     suspend fun getPodcastEpisodes(categoryId: Int) = withContext(Dispatchers.IO) {
-        var items: List<PodcastEpisode> = emptyList()
-        try {
-            items = api.getPodcastEpisodes(categoryId).items ?: emptyList()
-        }catch (e: Exception) {
-            e.printStackTrace()
-        }
-        items
+        api.getPodcastEpisodes(categoryId).items ?: emptyList()
     }
 
     suspend fun getPodcastEpisodeInfo(id: Int) = withContext(Dispatchers.IO) {
@@ -172,6 +176,7 @@ class LRTAutoRepository(private val api: LRTAutoService) {
                     subscriptionsLastFetchTime = System.currentTimeMillis()
                 }
             } catch (e: Exception) {
+                if (subscriptions.isEmpty()) throw e
                 e.printStackTrace()
             }
         }

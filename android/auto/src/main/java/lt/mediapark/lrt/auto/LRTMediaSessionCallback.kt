@@ -1,5 +1,8 @@
 package lt.mediapark.lrt.auto
 
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.OptIn
@@ -18,6 +21,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
 import java.util.concurrent.Callable
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlinx.coroutines.CoroutineScope
@@ -66,6 +70,29 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     @Volatile
     private var episodeQueue: EpisodeQueue? = null
 
+    /**
+     * Browsables whose last load failed, each with the timer re-browsing it.
+     *
+     * Android Auto asks for a browsable's children once per subscription and then keeps them —
+     * switching tabs does not re-browse. A tab whose load failed therefore kept its empty list
+     * until the process restarted. Now the failure is kept here, and the head unit is told the
+     * children changed, which is what makes it ask again: on a timer while the phone has a
+     * network, and at once when a network comes back.
+     *
+     * A key stays until a browse of it succeeds, even after its timer runs out, so a network
+     * returning later still retries it.
+     */
+    private val failedBrowses = ConcurrentHashMap<String, Job>()
+
+    private val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
+
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            val session = currentSession ?: return
+            failedBrowses.keys.forEach { notifyBrowseChanged(session, it) }
+        }
+    }
+
     init {
         authManager = AutoAuthManager(context)
         val retrofit: Retrofit = Retrofit.Builder()
@@ -75,6 +102,12 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         val service: LRTAutoService = retrofit.create(LRTAutoService::class.java)
         repository = LRTAutoRepository(service)
         MediaItemTree.initialize()
+        try {
+            connectivityManager?.registerDefaultNetworkCallback(networkCallback)
+        } catch (e: Exception) {
+            // Losing this costs only the instant retry; the timed one still runs.
+            Log.e(TAG, "Could not watch connectivity", e)
+        }
     }
 
     private fun startHomeAutoRefresh(session: MediaLibraryService.MediaLibrarySession) {
@@ -276,14 +309,80 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
      * Home: `Klausykite toliau`, then `Siūlome` and `Naujausi`. All three are fetched together
      * because they land in one browsable, and only the first is auth-dependent — Home renders for
      * a logged-out driver.
+     *
+     * One feed is enough for Home to be worth drawing, and the two-minute refresh fills in the
+     * other. Only when both fail is there nothing to show, and that throws for [browse] to turn
+     * into its error row.
      */
     private suspend fun loadHome(forceRefreshNewest: Boolean = false) = coroutineScope {
-        val recommendedFetch = async { repository.getRecommended() }
-        val newestFetch = async { repository.getNewest(forceRefresh = forceRefreshNewest) }
+        val recommendedFetch = async { runCatching { repository.getRecommended() } }
+        val newestFetch = async {
+            runCatching { repository.getNewest(forceRefresh = forceRefreshNewest) }
+        }
         val continueFetch = async { fetchContinuePlaying() }
+        val recommended = recommendedFetch.await()
+        val newest = newestFetch.await()
+        if (recommended.isFailure && newest.isFailure) {
+            throw newest.exceptionOrNull()!!
+        }
         MediaItemTree.applyHomeSections(
-            continueFetch.await(), recommendedFetch.await(), newestFetch.await()
+            continueFetch.await(),
+            recommended.getOrDefault(emptyList()),
+            newest.getOrDefault(emptyList())
         )
+    }
+
+    /**
+     * Runs one browse's [load] and answers with [parentId]'s children.
+     *
+     * A load that throws has nothing to show — the repository falls back to stale lists on its
+     * own and throws only without one — so the children become the error row and a re-browse is
+     * scheduled rather than the head unit caching an empty list for good.
+     */
+    private fun browse(
+        session: MediaLibraryService.MediaLibrarySession,
+        parentId: String,
+        params: LibraryParams?,
+        load: suspend () -> Unit
+    ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = submitBlocking {
+        try {
+            load()
+            failedBrowses.remove(parentId)?.cancel()
+        } catch (e: Exception) {
+            Log.e(TAG, "Loading $parentId failed", e)
+            MediaItemTree.setLoadError(parentId)
+            scheduleBrowseRetry(session, parentId)
+        }
+        LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
+    }
+
+    private fun scheduleBrowseRetry(
+        session: MediaLibraryService.MediaLibrarySession,
+        parentId: String
+    ) {
+        // A running timer is left alone: the re-browses it triggers land back here when they fail
+        // too, and re-arming would restart it for as long as the failure lasts.
+        if (failedBrowses[parentId]?.isActive == true) return
+        failedBrowses[parentId] = scope.launch {
+            repeat(BROWSE_RETRY_ATTEMPTS) {
+                delay(BROWSE_RETRY_INTERVAL_MS)
+                // Offline, a re-browse can only fail again; [networkCallback] covers the return.
+                if (hasNetwork()) notifyBrowseChanged(session, parentId)
+            }
+        }
+    }
+
+    private fun notifyBrowseChanged(
+        session: MediaLibraryService.MediaLibrarySession,
+        parentId: String
+    ) {
+        session.notifyChildrenChanged(parentId, MediaItemTree.getChildren(parentId).size, null)
+    }
+
+    private fun hasNetwork(): Boolean {
+        val network = connectivityManager?.activeNetwork ?: return false
+        return connectivityManager.getNetworkCapabilities(network)
+            ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 
     @OptIn(UnstableApi::class) override fun onGetChildren(
@@ -299,78 +398,60 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         if (parentId == MediaItemTree.HOME) {
             logAnalyticsEvent(browser.packageName, "android_auto_recommended_open")
             startHomeAutoRefresh(session)
-            return submitBlocking {
-                loadHome()
-                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
-            }
+            return browse(session, parentId, params) { loadHome() }
         }
 
         if (parentId == MediaItemTree.CONTINUE_MORE_FOLDER) {
-            return submitBlocking {
-                loadHome()
-                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
-            }
+            return browse(session, parentId, params) { loadHome() }
         }
 
         if (parentId == MediaItemTree.RECOMMENDED_ALL) {
             logAnalyticsEvent(browser.packageName, "android_auto_recommended_all_open")
-            return submitBlocking {
+            return browse(session, parentId, params) {
                 MediaItemTree.setRecommendedAllItems(repository.getRecommended())
-                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
 
         if (parentId == MediaItemTree.NEWEST_ALL) {
             logAnalyticsEvent(browser.packageName, "android_auto_newest_open")
-            return submitBlocking {
+            return browse(session, parentId, params) {
                 MediaItemTree.setNewestAllItems(repository.getNewest(forceRefresh = true))
-                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
 
         if (parentId == MediaItemTree.LIVE) {
             logAnalyticsEvent(browser.packageName, "android_auto_live_open")
-            return submitBlocking {
-                val liveItems = repository.getLive()
-                MediaItemTree.setLiveItems(liveItems)
-                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
+            return browse(session, parentId, params) {
+                MediaItemTree.setLiveItems(repository.getLive())
             }
         }
 
         if(parentId == MediaItemTree.PODCAST_CATEGORIES) {
             logAnalyticsEvent(browser.packageName, "android_auto_podcasts_open")
-            return submitBlocking {
+            return browse(session, parentId, params) {
                 // No subscriptions folder any more — that moved to Mano LRT, which is why this
                 // browse has no auth dependency at all.
                 MediaItemTree.setPodcastCategories(repository.getPodcastCategories())
-                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
             }
         }
 
         if (parentId == MediaItemTree.MANO_LRT) {
             logAnalyticsEvent(browser.packageName, "android_auto_mano_lrt_open")
-            return submitBlocking {
-                loadManoLRT()
-                LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
-            }
+            return browse(session, parentId, params) { loadManoLRT() }
         }
 
         MediaItemTree.getSubscriptionCategoryId(parentId).let {
             if (it > 0) {
-                return submitBlocking {
-                    val episodes = repository.getPodcastEpisodes(it)
-                    MediaItemTree.setSubscriptionEpisodes(it, episodes)
-                    LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
+                return browse(session, parentId, params) {
+                    MediaItemTree.setSubscriptionEpisodes(it, repository.getPodcastEpisodes(it))
                 }
             }
         }
 
         MediaItemTree.getPodcastCategoryId(parentId).let {
             if(it > 0) {
-                return submitBlocking {
-                    val podcastItems = repository.getPodcastEpisodes(it)
-                    MediaItemTree.setPodcastEpisodes(it, podcastItems)
-                    LibraryResult.ofItemList(MediaItemTree.getChildren(parentId), params)
+                return browse(session, parentId, params) {
+                    MediaItemTree.setPodcastEpisodes(it, repository.getPodcastEpisodes(it))
                 }
             }
         }
@@ -386,8 +467,9 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
      * Mano LRT: `Prenumeratos` and nothing else — `Klausykite toliau` lives in Home alone now. The
      * group is conditional, so a signed-in driver with no subscriptions sees a message row.
      *
-     * A failed subscription fetch is not distinguished from having none — both drop the group, and
-     * the A–Z browse stays reachable from `Laidos` either way.
+     * A failed subscription fetch, or a token that would not renew, throws rather than reading as
+     * having none — telling a subscriber they have no subscriptions is the wrong message, and
+     * [browse] retries the failure where an empty list would have stayed.
      */
     private suspend fun loadManoLRT() {
         if (!authManager.isLoggedIn()) {
@@ -398,12 +480,7 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
             return
         }
 
-        val allSubscriptions = try {
-            repository.getSubscriptions(authManager.getAccessToken())
-        } catch (e: Exception) {
-            Log.e(TAG, "Error fetching subscriptions", e)
-            emptyList()
-        }
+        val allSubscriptions = repository.getSubscriptions(authManager.getAccessToken())
         // Video subscriptions are dropped: the same subscription list backs the phone app, where a
         // mediateka show is a legitimate thing to follow, but there is nothing to play from one
         // here. Filtered before the covers so a dropped tile costs no request either.
@@ -615,6 +692,13 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
 
     fun release() {
         stopHomeAutoRefresh()
+        failedBrowses.values.forEach { it.cancel() }
+        failedBrowses.clear()
+        try {
+            connectivityManager?.unregisterNetworkCallback(networkCallback)
+        } catch (e: Exception) {
+            // Never registered.
+        }
         browseExecutor.shutdown()
     }
 
@@ -623,5 +707,12 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
 
         /** Resolved episodes kept queued beyond the one playing. */
         private const val EPISODE_LOOKAHEAD = 2
+
+        /**
+         * A failed browse is re-browsed every 5 s for five minutes. Past that only a returning
+         * network, or the driver opening it again, retries it.
+         */
+        private const val BROWSE_RETRY_INTERVAL_MS = 5_000L
+        private const val BROWSE_RETRY_ATTEMPTS = 60
     }
 }
