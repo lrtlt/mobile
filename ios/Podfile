@@ -45,6 +45,10 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+# RNFB v24+ resolves Firebase via SPM by default, which is incompatible with
+# `use_frameworks! :linkage => :static` below (duplicate-symbol errors).
+$RNFirebaseDisableSPM = true
+
 target 'lrtApp' do
   config = use_native_modules!
   use_frameworks! :linkage => :static

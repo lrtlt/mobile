@@ -1,9 +1,15 @@
-import {initializeAppCheck, firebase} from '@react-native-firebase/app-check';
+import {getApp} from '@react-native-firebase/app';
+import {
+  ReactNativeFirebaseAppCheckProvider,
+  initializeAppCheck,
+  getToken,
+  type AppCheck,
+} from '@react-native-firebase/app-check';
 import {useEffect} from 'react';
 import {logEvent, getAnalytics} from '@react-native-firebase/analytics';
 import Config from 'react-native-config';
 
-const appCheckProvider = firebase.appCheck().newReactNativeFirebaseAppCheckProvider();
+const appCheckProvider = new ReactNativeFirebaseAppCheckProvider();
 appCheckProvider.configure({
   android: {
     provider: __DEV__ ? 'debug' : 'playIntegrity',
@@ -13,12 +19,11 @@ appCheckProvider.configure({
     provider: __DEV__ ? 'debug' : 'appAttestWithDeviceCheckFallback',
     debugToken: Config.APP_CHECK_DEBUG_TOKEN_IOS,
   },
-  isTokenAutoRefreshEnabled: true,
 });
 
-const verify = async () => {
+const verify = async (appCheck: AppCheck) => {
   try {
-    const {token} = await firebase.appCheck().getToken(true);
+    const {token} = await getToken(appCheck, true);
     if (token.length > 0) {
       console.log('AppCheck verification passed');
       logEvent(getAnalytics(), 'app_lrt_lt_check_verification_passed');
@@ -36,12 +41,16 @@ const verify = async () => {
 
 const useAppCheckSetup = () => {
   useEffect(() => {
-    initializeAppCheck(firebase.app(), {provider: appCheckProvider, isTokenAutoRefreshEnabled: true})
-      .then(verify)
-      .catch((e) => {
-        console.warn('AppCheck initialization failed', e);
-        logEvent(getAnalytics(), 'app_lrt_lt_check_initialization_error');
+    try {
+      const appCheck = initializeAppCheck(getApp(), {
+        provider: appCheckProvider,
+        isTokenAutoRefreshEnabled: true,
       });
+      verify(appCheck);
+    } catch (e) {
+      console.warn('AppCheck initialization failed', e);
+      logEvent(getAnalytics(), 'app_lrt_lt_check_initialization_error');
+    }
   }, []);
 };
 

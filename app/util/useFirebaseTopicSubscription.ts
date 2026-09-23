@@ -1,4 +1,8 @@
-import messaging from '@react-native-firebase/messaging';
+import {
+  getMessaging,
+  subscribeToTopic as fcmSubscribeToTopic,
+  unsubscribeFromTopic as fcmUnsubscribeFromTopic,
+} from '@react-native-firebase/messaging';
 import {createMMKV} from 'react-native-mmkv';
 import {fetchPushCategories} from '../api/hooks/useNotificationTopics';
 
@@ -35,8 +39,7 @@ export const subscribeToAllDefaultTopics = async (): Promise<void> => {
     // Subscribe to topics in parallel
     const results = await Promise.allSettled(
       topicsToSubscribe.map((slug) =>
-        messaging()
-          .subscribeToTopic(slug)
+        fcmSubscribeToTopic(getMessaging(), slug)
           .then(() => {
             console.log('Subscribed to topic:', slug);
             return slug;
@@ -89,8 +92,7 @@ export const unsubscribeFromAllTopicsExceptHidden = async (): Promise<void> => {
     // Unsubscribe from topics in parallel
     const results = await Promise.allSettled(
       topicsToUnsubscribe.map((slug) =>
-        messaging()
-          .unsubscribeFromTopic(slug)
+        fcmUnsubscribeFromTopic(getMessaging(), slug)
           .then(() => {
             console.log('Unsubscribed from topic:', slug);
             return slug;
@@ -121,7 +123,7 @@ export const unsubscribeFromAllTopicsExceptHidden = async (): Promise<void> => {
  */
 export const subscribeToTopic = async (slug: string): Promise<boolean> => {
   try {
-    await messaging().subscribeToTopic(slug);
+    await fcmSubscribeToTopic(getMessaging(), slug);
     console.log('Subscribed to topic:', slug);
 
     // Update storage to include this topic
@@ -146,7 +148,7 @@ export const subscribeToTopic = async (slug: string): Promise<boolean> => {
  */
 export const unsubscribeFromTopic = async (slug: string): Promise<boolean> => {
   try {
-    await messaging().unsubscribeFromTopic(slug);
+    await fcmUnsubscribeFromTopic(getMessaging(), slug);
     console.log('Unsubscribed from topic:', slug);
 
     // Update storage to remove this topic

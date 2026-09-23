@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {getFirestore, onSnapshot} from '@react-native-firebase/firestore';
+import {getFirestore, onSnapshot, doc} from '@react-native-firebase/firestore';
 import TextComponent from '../text/Text';
 import {useTheme} from '../../Theme';
 import Text from '../text/Text';
@@ -47,9 +47,8 @@ const NowComponent: React.FC<React.PropsWithChildren<Props>> = ({channelId}) => 
       return;
     }
 
-    const db = getFirestore();
-    const doc = db.doc(docId);
-    const unsubscribe = onSnapshot<any>(doc, {
+    const songDoc = doc(getFirestore(), docId);
+    const unsubscribe = onSnapshot<any>(songDoc, {
       next(snapshot) {
         try {
           const {info} = snapshot.data() as any;

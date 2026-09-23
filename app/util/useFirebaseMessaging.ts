@@ -22,7 +22,7 @@ import notifee, {
   AndroidCategory,
   AndroidStyle,
 } from '@notifee/react-native';
-import crashlytics from '@react-native-firebase/crashlytics';
+import {getCrashlytics, log as crashlyticsLog} from '@react-native-firebase/crashlytics';
 import {createMMKV} from 'react-native-mmkv';
 
 const INITIAL_URL_STORAGE_KEY = 'initialUrl';
@@ -40,16 +40,16 @@ const storage = createMMKV({
 const _handleNotificationOpen = async (data: NotificationData | undefined, isInitial: boolean) => {
   const url = data?.launchUrl;
   console.log(`_handleNotificationOpen: isInitial:${isInitial} data:${JSON.stringify(data)}`);
-  crashlytics().log(`_handleNotificationOpen: isInitial:${isInitial} data:${JSON.stringify(data)}`);
+  crashlyticsLog(getCrashlytics(), `_handleNotificationOpen: isInitial:${isInitial} data:${JSON.stringify(data)}`);
   if (url) {
     if (isInitial) {
       const initialUrl = storage.getString(INITIAL_URL_STORAGE_KEY);
       if (initialUrl == url) {
-        crashlytics().log(`_handleNotificationOpen: initialUrl already handled: ${url}`);
+        crashlyticsLog(getCrashlytics(), `_handleNotificationOpen: initialUrl already handled: ${url}`);
         console.debug('initialUrl already handled');
         return;
       } else {
-        crashlytics().log(`_handleNotificationOpen: saving initial url: ${url}`);
+        crashlyticsLog(getCrashlytics(), `_handleNotificationOpen: saving initial url: ${url}`);
         storage.set(INITIAL_URL_STORAGE_KEY, url);
       }
     }

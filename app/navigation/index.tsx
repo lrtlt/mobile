@@ -3,7 +3,7 @@ import {StatusBar} from 'react-native';
 import {LinkingOptions, NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
 import SplashViewComponent from '../screens/splash/SplashScreenView';
 
-import crashlytics from '@react-native-firebase/crashlytics';
+import {getCrashlytics, log as crashlyticsLog} from '@react-native-firebase/crashlytics';
 
 import {DEEP_LINKING_URL_PREFIX} from '../constants';
 import Gemius, {GemiusParams} from 'react-native-gemius-plugin';
@@ -66,7 +66,7 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
 
       if (!checkEqual(routeParamsRef.current, params)) {
         console.log('Current route:', currentRoute);
-        crashlytics().log(`Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
+        crashlyticsLog(getCrashlytics(), `Current screen: ${currentScreen}\n Params:\n${JSON.stringify(params)}`);
         Gemius.sendPageViewedEvent(Config.GEMIUS_VIEW_SCRIPT_ID, params);
         routeParamsRef.current = params;
       }
