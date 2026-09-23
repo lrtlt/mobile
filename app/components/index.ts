@@ -22,6 +22,7 @@ export {default as ProgramItem} from './programItem/ProgramItem';
 export {default as NowPlaying} from './NowPlaying/NowPlaying';
 export {default as ProgressiveImage} from './progressiveImage/ProgressiveImage';
 export {default as ScreenError} from './screenError/ScreenError';
+export {default as ErrorBoundary} from './errorBoundary/ErrorBoundary';
 export {default as ScreenLoader} from './screenLoader/ScreenLoader';
 export {default as ScrollingChannels} from './scrollingChannels/ScrollingChannels';
 export {default as DefaultSectionHeader} from './sectionHeader/DefaultHeader';

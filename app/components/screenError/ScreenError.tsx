@@ -15,7 +15,7 @@ const ScreenError: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
   return (
     <View style={[styles.container, props.style]}>
-      <IconScreenError size={64} color={colors.textError} />
+      <IconScreenError size={100} color={colors.primaryDark} bodyColor={colors.card} />
       <TextComponent style={styles.text}>{props.text}</TextComponent>
       {props.actions ? props.actions : null}
     </View>

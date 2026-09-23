@@ -1,47 +1,84 @@
 import * as React from 'react';
-import Svg, {Path} from 'react-native-svg';
+import Svg, {Circle, ClipPath, Defs, G, Line, Path, Rect} from 'react-native-svg';
 
-function SvgComponent(props) {
+// Retro TV showing a glitched test pattern in LRT channel colours ("technical difficulties").
+// w=160 h=136
+
+// SMPTE-like bars: white, Opus, LRT HD, LRT World, LRT Plius, LR, LRT.
+const BARS = ['#EEF0F7', '#F2B12E', '#83A8D9', '#6D9B36', '#A91B73', '#C4242C', '#333399'];
+const BARS_REVERSED = ['#333399', '#1D2142', '#A91B73', '#1D2142', '#83A8D9', '#1D2142', '#EEF0F7'];
+const DARK = '#1D2142';
+
+const SCREEN_X = 18;
+const SCREEN_Y = 44;
+const SCREEN_W = 100;
+const SCREEN_H = 70;
+const BAR_W = SCREEN_W / BARS.length;
+
+// Renders one extra wrap-around bar on each side so shifted (glitched) rows still fill the screen.
+const renderBars = (colors, y, height, offset = 0) =>
+  [-1, ...colors.keys(), colors.length].map((i) => (
+    <Rect
+      key={`${y}-${i}`}
+      x={SCREEN_X + offset + i * BAR_W}
+      y={y}
+      width={BAR_W + 0.5}
+      height={height}
+      fill={colors[(i + colors.length) % colors.length]}
+    />
+  ));
+
+function SvgComponent({size = 140, color = DARK, bodyColor = '#F9F9F9', ...props}) {
   return (
-    <Svg height={props.size} viewBox="0 0 512 512" width={props.size} {...props}>
-      <Path
-        d="M331 360v122c0 8.398-6.598 15-15 15H196c-8.402 0-15-6.602-15-15V360c0-8.402 6.598-15 15-15h120c8.402 0 15 6.598 15 15zm0 0"
-        fill="#b4d2d7"
+    <Svg width={size} height={(size * 136) / 160} viewBox="0 0 160 136" fill="none" {...props}>
+      <Defs>
+        <ClipPath id="lrtScreenErrorClip">
+          <Rect x={SCREEN_X} y={SCREEN_Y} width={SCREEN_W} height={SCREEN_H} rx={8} />
+        </ClipPath>
+      </Defs>
+
+      {/* Antennas */}
+      <Line x1={80} y1={30} x2={56} y2={8} stroke={color} strokeWidth={4} strokeLinecap="round" />
+      <Line x1={80} y1={30} x2={106} y2={4} stroke={color} strokeWidth={4} strokeLinecap="round" />
+      <Circle cx={56} cy={8} r={4} fill={color} />
+      <Circle cx={106} cy={4} r={4} fill={color} />
+      <Rect x={68} y={24} width={24} height={10} rx={5} fill={color} />
+
+      {/* Feet */}
+      <Rect x={28} y={122} width={16} height={12} rx={3} fill={color} />
+      <Rect x={116} y={122} width={16} height={12} rx={3} fill={color} />
+
+      {/* Body */}
+      <Rect x={6} y={32} width={148} height={94} rx={16} fill={bodyColor} stroke={color} strokeWidth={4} />
+
+      {/* Screen: test pattern with glitched bands */}
+      <G clipPath="url(#lrtScreenErrorClip)">
+        {renderBars(BARS, SCREEN_Y, 48)}
+        {renderBars(BARS_REVERSED, 92, 8)}
+        <Rect x={SCREEN_X} y={100} width={SCREEN_W} height={14} fill={DARK} />
+        <Rect x={36} y={100} width={18} height={14} fill="#EEF0F7" />
+        <Rect x={54} y={100} width={18} height={14} fill="#2C478B" />
+        {renderBars(BARS, 64, 7, 10)}
+        {renderBars(BARS, 77, 3, -6)}
+        <Path d="M18 44h46L18 90z" fill="#FFFFFF" opacity={0.12} />
+      </G>
+      <Rect
+        x={SCREEN_X}
+        y={SCREEN_Y}
+        width={SCREEN_W}
+        height={SCREEN_H}
+        rx={8}
+        stroke={color}
+        strokeWidth={3}
       />
-      <Path d="M331 360v122c0 8.398-6.598 15-15 15h-60V345h60c8.402 0 15 6.598 15 15zm0 0" fill="#87a0af" />
-      <Path
-        d="M391 497c0 8.398-6.598 15-15 15H136c-8.402 0-15-6.602-15-15 0-8.402 6.598-15 15-15h240c8.402 0 15 6.598 15 15zm0 0"
-        fill="#e1ebf0"
-      />
-      <Path d="M391 497c0 8.398-6.598 15-15 15H256v-30h120c8.402 0 15 6.598 15 15zm0 0" fill="#b4d2d7" />
-      <Path
-        d="M512 255v120c0 8.398-6.598 15-15 15H15c-8.402 0-15-6.602-15-15V255c3.035-.168 273.004-15.04 256-14.102zm0 0"
-        fill="#e1ebf0"
-      />
-      <Path d="M512 255v120c0 8.398-6.598 15-15 15H256V240.898zm0 0" fill="#b4d2d7" />
-      <Path d="M497 0H15C6.598 0 0 6.598 0 15v240h512V15c0-8.402-6.598-15-15-15zm0 0" fill="#07485e" />
-      <Path d="M497 0H256v255h256V15c0-8.402-6.598-15-15-15zm0 0" fill="#03232e" />
-      <Path
-        d="M301 315c0 8.398-6.598 15-15 15h-60c-8.402 0-15-6.602-15-15 0-8.402 6.598-15 15-15h60c8.402 0 15 6.598 15 15zm0 0"
-        fill="#b4d2d7"
-      />
-      <Path d="M301 315c0 8.398-6.598 15-15 15h-30v-30h30c8.402 0 15 6.598 15 15zm0 0" fill="#87a0af" />
-      <Path
-        d="M166 90c-8.29 0-15 6.71-15 15v15h-30V75c0-8.29-6.71-15-15-15s-15 6.71-15 15v60c0 8.29 6.71 15 15 15h45v45c0 8.29 6.71 15 15 15s15-6.71 15-15v-90c0-8.29-6.71-15-15-15zm0 0"
-        fill="#e1ebf0"
-      />
-      <Path
-        d="M421 105v90c0 8.398-6.598 15-15 15s-15-6.602-15-15v-45h-45c-8.402 0-15-6.602-15-15V75c0-8.402 6.598-15 15-15s15 6.598 15 15v45h30v-15c0-8.402 6.598-15 15-15s15 6.598 15 15zm0 0"
-        fill="#b4d2d7"
-      />
-      <Path
-        d="M286 60h-60c-8.402 0-15 6.598-15 15v120c0 8.398 6.598 15 15 15h60c8.402 0 15-6.602 15-15V75c0-8.402-6.598-15-15-15zm-15 120h-30V90h30zm0 0"
-        fill="#e1ebf0"
-      />
-      <Path
-        d="M301 75v120c0 8.398-6.598 15-15 15h-30v-30h15V90h-15V60h30c8.402 0 15 6.598 15 15zm0 0"
-        fill="#b4d2d7"
-      />
+
+      {/* Controls */}
+      <Circle cx={136} cy={60} r={7} stroke={color} strokeWidth={3} />
+      <Line x1={136} y1={60} x2={136} y2={55} stroke={color} strokeWidth={3} strokeLinecap="round" />
+      <Circle cx={136} cy={81} r={4.5} stroke={color} strokeWidth={3} />
+      <Line x1={129} y1={97} x2={143} y2={97} stroke={color} strokeWidth={3} strokeLinecap="round" />
+      <Line x1={129} y1={104} x2={143} y2={104} stroke={color} strokeWidth={3} strokeLinecap="round" />
+      <Line x1={129} y1={111} x2={143} y2={111} stroke={color} strokeWidth={3} strokeLinecap="round" />
     </Svg>
   );
 }
