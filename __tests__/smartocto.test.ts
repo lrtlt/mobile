@@ -2,7 +2,10 @@ jest.mock('react-native', () => ({Platform: {OS: 'ios', Version: '18.2', constan
 
 jest.mock('react-native-mmkv', () => ({
   createMMKV: () => {
-    const values = new Map<string, string | number>();
+    const values = ((globalThis as Record<string, unknown>).__smartoctoStorage = new Map<
+      string,
+      string | number
+    >());
     return {
       getString: (key: string) => values.get(key),
       getNumber: (key: string) => values.get(key),
@@ -15,7 +18,7 @@ jest.mock('../app/util/useNavigationAnalytics', () => ({__esModule: true, defaul
 
 import {ArticleContent} from '../app/api/Types';
 import {articleToTrackingParams} from '../app/screens/article/useArticleAnalytics';
-import {mediaLandingPage, newsLandingPage, toLrtUrl, trackPageView} from '../app/util/smartocto';
+import {LIFETIME_ID_TTL, mediaLandingPage, newsLandingPage, toLrtUrl, trackPageView} from '../app/util/smartocto';
 
 // Expected values are what lrt.lt sends to smartocto for the same pages (window._ain)
 describe('articleToTrackingParams', () => {
@@ -169,6 +172,14 @@ describe('trackPageView', () => {
       return {endpoint, params: Object.fromEntries(new URLSearchParams(query))};
     });
 
+  const storedLifetimeId = (id?: string) => {
+    const storage = (globalThis as Record<string, unknown>).__smartoctoStorage as Map<string, string>;
+    if (id !== undefined) {
+      storage.set('lifetime_id', id);
+    }
+    return storage;
+  };
+
   const page = newsLandingPage('https://www.lrt.lt/naujienos/lietuvoje', 'Lietuvoje - LRT');
 
   beforeEach(() => {
@@ -220,6 +231,29 @@ describe('trackPageView', () => {
     expect(second.m).toBe('registered');
     expect(third.u).not.toBe(first.u);
     expect(third.ul).toBe(first.ul);
+  });
+
+  it('renews the lifetime id after its two-year expiry', () => {
+    trackPageView(page, 'anonymous');
+    jest.advanceTimersByTime(LIFETIME_ID_TTL + 60 * 1000);
+    trackPageView(page, 'anonymous');
+
+    const [first, second] = requests().map(({params}) => params);
+    expect(second.ul).not.toBe(first.ul);
+  });
+
+  it.each([
+    'garbage',
+    String(Date.now()), // creation time instead of the expiry timestamp
+    '0.1', // long expired
+    '.1', // missing expiry
+  ])('recovers from a malformed or expired stored lifetime id %p', (storedId) => {
+    storedLifetimeId(storedId);
+    trackPageView(page, 'anonymous');
+
+    const [{params}] = requests();
+    expect(params.ul).toMatch(/^\d{13}\.\d+(\.\d+)?$/);
+    expect(params.ul).not.toBe(storedId);
   });
 
   it('URL-encodes values like the web tracker', () => {

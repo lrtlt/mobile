@@ -18,7 +18,8 @@ const LRT_ORIGIN_PATTERN = /^https?:\/\/(?:www\.)?lrt\.lt/i;
 const DOMAIN_ID = '30520';
 
 const SESSION_TIMEOUT = 30 * 60 * 1000;
-const LIFETIME_ID_TTL = 2 * 365 * 24 * 60 * 60 * 1000;
+/** Visitor lifetime ids are renewed after two years. Exported for tests. */
+export const LIFETIME_ID_TTL = 2 * 365 * 24 * 60 * 60 * 1000;
 
 const KEY_LIFETIME_ID = 'lifetime_id';
 const KEY_SESSION_ID = 'session_id';
@@ -47,15 +48,19 @@ const storage = createMMKV({
   id: 'smartocto-storage',
 });
 
-// Same format as the web tracker's cookie ids: `<timestamp ms>.<random * 1e9>`
+// Same format as the web tracker's cookie ids: `<timestamp ms>.<random * 1e9>`.
+// For the lifetime id the timestamp doubles as its renewal expiry.
 const generateId = (timestamp: number) => `${timestamp}.${Math.random() * 1e9}`;
 
 const getLifetimeId = () => {
-  let id = storage.getString(KEY_LIFETIME_ID);
-  if (!id) {
-    id = generateId(Date.now() + LIFETIME_ID_TTL);
-    storage.set(KEY_LIFETIME_ID, id);
+  const stored = storage.getString(KEY_LIFETIME_ID);
+  const [expiry] = stored?.split('.') ?? [];
+  if (stored && Number(expiry) > Date.now()) {
+    return stored;
   }
+  // First visit, an expired id or a malformed value: start a new lifetime id.
+  const id = generateId(Date.now() + LIFETIME_ID_TTL);
+  storage.set(KEY_LIFETIME_ID, id);
   return id;
 };
 

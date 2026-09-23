@@ -39,6 +39,8 @@ const useNavigationAnalytics = (params?: TrackingParams) => {
 
   useEffect(() => {
     if (!params) {
+      // Tracking was disabled (or the params are not ready yet): drop a view queued by an earlier render.
+      pushToAnalytics.cancel();
       return;
     }
 
@@ -48,7 +50,11 @@ const useNavigationAnalytics = (params?: TrackingParams) => {
     const listener = navigation.addListener('focus', () => {
       pushToAnalytics(params);
     });
-    return listener;
+    return () => {
+      listener();
+      // Unmount or a changed view: the view is no longer on screen when the debounce fires.
+      pushToAnalytics.cancel();
+    };
   }, [params?.viewId]);
 };
 
