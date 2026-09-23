@@ -30,7 +30,7 @@ const SlugScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route
 
   const {colors, strings} = useTheme();
 
-  const segments = slugUrl?.split('/');
+  const segments = slugUrl?.split(/[?#]/)[0].split('/');
   const tag = segments ? segments[segments.length - 1] : '';
   const {data, error, isLoading, refetch} = useArticlesByTag(tag, ARTICLES_PER_PAGE_COUNT * 6);
 
@@ -38,10 +38,11 @@ const SlugScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route
     return formatArticles(-1, data?.articles || [], false);
   }, [data]);
 
+  // The web counterpart is a /tema/{tag} tag page. Tag pages load no smartocto tracker on
+  // lrt.lt (no window._ain), so unlike other landing pages these views omit smartocto.
   useNavigationAnalytics({
-    viewId: `https://www.lrt.lt/${slugUrl}`,
+    viewId: `https://www.lrt.lt/tema/${tag}`,
     title: name,
-    sections: ['slug'],
   });
 
   const renderLoading = () => {

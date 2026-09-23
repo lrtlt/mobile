@@ -1,5 +1,6 @@
 import useNavigationAnalytics, {TrackingParams} from '../../util/useNavigationAnalytics';
 import {ChannelResponse} from '../../api/Types';
+import {mediaLandingPage} from '../../util/smartocto';
 
 type Params = {
   channel_response?: ChannelResponse;
@@ -14,15 +15,12 @@ const channelToTrackingParams = (channel_response?: ChannelResponse): TrackingPa
   if (!channel_response) {
     return undefined;
   }
-  const channelTitle = channel_response.channel_info.title;
+  const {channel_url, title} = channel_response.channel_info;
   return {
-    viewId: channel_response.channel_info.channel_url,
-    title: `${channelTitle} - Tiesiogiai - LRT`,
-    sections: ['Tiesiogiai', 'lrt.lt', toTitleCase(channelTitle)],
+    viewId: channel_url,
+    title: `${title} - Tiesiogiai - LRT`,
+    smartocto: mediaLandingPage(channel_url, title, 'Tiesiogiai'),
   };
 };
-
-const toTitleCase = (s: string) =>
-  s.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase());
 
 export default useChannelAnalytics;

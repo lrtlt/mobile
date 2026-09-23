@@ -5,6 +5,7 @@ import {StyleSheet} from 'react-native';
 import {SafeWebView} from '../../components';
 import {MainStackParamList} from '../../navigation/MainStack';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import {newsLandingPage} from '../../util/smartocto';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Games'>;
@@ -26,6 +27,12 @@ const GamesScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigatio
   useNavigationAnalytics({
     viewId: 'https://www.lrt.lt/zaidimai',
     title: `LRT Žaidimai - LRT`,
+    // lrt.lt serves games at the trailing slash url, with sections taken from its CMS path
+    smartocto: newsLandingPage(
+      'https://www.lrt.lt/zaidimai/',
+      'LRT Žaidimai - LRT',
+      'api>root-project>zaidimai',
+    ),
   });
 
   return (

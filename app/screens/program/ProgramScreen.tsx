@@ -11,6 +11,7 @@ import ProgramDateModal from './ProgramDateModal';
 import {delay} from 'lodash';
 import moment from 'moment';
 import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import {newsLandingPage} from '../../util/smartocto';
 import {useWeeklyProgram} from '../../api/hooks/useProgram';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Program'>;
@@ -43,7 +44,7 @@ const ProgramScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
   useNavigationAnalytics({
     viewId: 'https://www.lrt.lt/programa',
     title: 'TV / Radijo programa savaitei - LRT',
-    sections: ['Bendra'],
+    smartocto: newsLandingPage('https://www.lrt.lt/programa', 'TV / Radijo programa savaitei - LRT'),
   });
 
   useEffect(() => {

@@ -54,7 +54,6 @@ const ContinuePlayingScreen: React.FC<React.PropsWithChildren<Props>> = ({naviga
   useNavigationAnalytics({
     viewId: 'Lrt app - Continue playing',
     title: 'Lrt app - Žiūrėti toliau',
-    sections: ['Bendra'],
   });
 
   const renderItem = (val: ListRenderItemInfo<SavedArticle[]>) => {

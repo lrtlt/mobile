@@ -54,7 +54,7 @@ const SimpleArticleScreen: React.FC<React.PropsWithChildren<Props>> = ({
   useSimpleArticleScreenAnalytics({
     type,
     categoryTitle,
-    categoryUrl: categoryUrl ?? `/${categoryTitle?.toLocaleLowerCase()}`,
+    categoryUrl,
   });
 
   useEffect(() => {

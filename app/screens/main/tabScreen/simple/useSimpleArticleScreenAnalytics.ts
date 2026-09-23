@@ -1,5 +1,6 @@
 import {MENU_TYPE_CATEGORY, MENU_TYPE_NEWEST, MENU_TYPE_POPULAR} from '../../../../api/Types';
 import useNavigationAnalytics, {TrackingParams} from '../../../../util/useNavigationAnalytics';
+import {newsLandingPage, toLrtUrl} from '../../../../util/smartocto';
 
 type Params = {
   type: typeof MENU_TYPE_CATEGORY | typeof MENU_TYPE_NEWEST | typeof MENU_TYPE_POPULAR;
@@ -17,12 +18,12 @@ const toTrackingParams = ({type, categoryTitle, categoryUrl}: Params): TrackingP
     return undefined;
   }
   let title = '';
-  let viewId;
+  let url;
 
   switch (type) {
     case MENU_TYPE_CATEGORY:
       title = `${categoryTitle} - LRT`;
-      viewId = `https://www.lrt.lt${categoryUrl}`;
+      url = categoryUrl ? toLrtUrl(categoryUrl) : undefined;
       break;
     case MENU_TYPE_NEWEST:
       title = 'Naujausi - LRT';
@@ -32,15 +33,11 @@ const toTrackingParams = ({type, categoryTitle, categoryUrl}: Params): TrackingP
       break;
   }
 
-  const sections = ['naujienos'];
-  if (categoryTitle) {
-    sections.unshift(categoryTitle);
-  }
-
   return {
-    viewId: viewId ?? title,
+    viewId: url ?? title,
     title: title,
-    sections: sections,
+    // Newest and popular lists have no lrt.lt page
+    smartocto: url ? newsLandingPage(url, title) : undefined,
   };
 };
 

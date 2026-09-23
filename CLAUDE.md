@@ -118,7 +118,7 @@ Menu structure is dynamic and loaded from Firestore (`internal/app-menu-v2` docu
 
 **Analytics**:
 - Gemius plugin (configured via `.env` variables)
-- Chartbeat SDK (account ID: 65978)
+- smartocto (`app/util/smartocto.ts`): GET requests to its ingestion endpoint, no SDK
 - Firebase Analytics
 
 **Authentication**: Auth0 (v5.3.1) configured via `.env` variables
@@ -169,7 +169,6 @@ Strategy pattern in `app/util/articleFormatters/` for dynamic layouts:
 `.env` file contains:
 - Gemius analytics credentials
 - Firebase App Check debug tokens
-- Chartbeat configuration
 - THEOplayer license
 - Auth0 domain and client ID
 
@@ -210,6 +209,8 @@ React Query integrates with Netinfo. Check `useNavigationStore` for `isOfflineMo
 ### Analytics Tracking
 
 Navigation changes automatically trigger Gemius tracking. Use Firebase Analytics for custom events via `useArticleStorageStore` methods.
+
+Screens report views through `useNavigationAnalytics` (Firebase screen view + smartocto page view). smartocto merges app and web traffic by url, domain id and post id, so the `smartocto` page metadata must match what lrt.lt sends in its `window._ain` object character for character. Check the web page before changing it. Screens without an lrt.lt page (bookmarks, history, gallery...) omit `smartocto`, and so does the tag screen (SlugScreen), because lrt.lt `/tema/...` tag pages load no smartocto tracker at all.
 
 ## Testing Notes
 

@@ -1,31 +1,33 @@
 import {useNavigation} from '@react-navigation/native';
-import {useEffect, useMemo} from 'react';
-import {ChartbeatTracker} from './useChartbeatSetup';
+import {useEffect, useMemo, useRef} from 'react';
 import {debounce} from 'lodash';
+import {useAuth0} from 'react-native-auth0';
 import {logScreenView, getAnalytics} from '@react-native-firebase/analytics';
+import {ReaderType, SmartoctoPage, trackPageView} from './smartocto';
 
 const EVENT_DEBOUNCE_DURATION = 200;
 
 export type TrackingParams = {
   viewId: string;
   title?: string;
-  authors?: string[];
-  sections?: string[];
+  /** lrt.lt page metadata for smartocto. Omitted for screens that have no lrt.lt page. */
+  smartocto?: SmartoctoPage;
 };
 
 const useNavigationAnalytics = (params?: TrackingParams) => {
   const navigation = useNavigation();
 
+  const {user} = useAuth0();
+  const readerType = useRef<ReaderType>('anonymous');
+  readerType.current = user ? 'registered' : 'anonymous';
+
   const pushToAnalytics = useMemo(
     () =>
       debounce((p: TrackingParams) => {
         console.log('Tracking view:', p.viewId);
-        ChartbeatTracker.trackView({
-          viewId: p.viewId,
-          title: p.title,
-          authors: p.authors,
-          sections: p.sections,
-        });
+        if (p.smartocto) {
+          trackPageView(p.smartocto, readerType.current);
+        }
 
         logScreenView(getAnalytics(), {
           screen_name: p.title,
@@ -37,6 +39,8 @@ const useNavigationAnalytics = (params?: TrackingParams) => {
 
   useEffect(() => {
     if (!params) {
+      // Tracking was disabled (or the params are not ready yet): drop a view queued by an earlier render.
+      pushToAnalytics.cancel();
       return;
     }
 
@@ -46,7 +50,11 @@ const useNavigationAnalytics = (params?: TrackingParams) => {
     const listener = navigation.addListener('focus', () => {
       pushToAnalytics(params);
     });
-    return listener;
+    return () => {
+      listener();
+      // Unmount or a changed view: the view is no longer on screen when the debounce fires.
+      pushToAnalytics.cancel();
+    };
   }, [params?.viewId]);
 };
 

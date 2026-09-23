@@ -17,6 +17,7 @@ import GenrePodcastGrid from './GenrePodcastGrid';
 import {fetchartcilesByCategory} from '../../api';
 import Snackbar from '../../components/snackbar/SnackBar';
 import useNavigationAnalytics, {TrackingParams} from '../../util/useNavigationAnalytics';
+import {mediaLandingPage} from '../../util/smartocto';
 import {pushArticle} from '../../util/NavigationUtils';
 
 interface Props {
@@ -39,11 +40,11 @@ const GenreScreen: React.FC<React.PropsWithChildren<Props>> = ({route, navigatio
   useNavigationAnalytics(
     useMemo(() => {
       if (genre) {
+        const url = `https://www.lrt.lt${genre.url}`;
         const params: TrackingParams = {
-          viewId: `https://www.lrt.lt${genre.url}`,
+          viewId: url,
           title: `${genre.title} - Radioteka - LRT`,
-          sections: ['Radioteka'],
-          authors: ['lrt.lt'],
+          smartocto: mediaLandingPage(url, genre.title, 'Radioteka'),
         };
         return params;
       }

@@ -13,6 +13,7 @@ import {MainStackParamList} from '../../../../navigation/MainStack';
 import DailyQuestionComponent from '../../../../components/dailyQuestion/DailyQuestionComponent';
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
 import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
+import {newsLandingPage} from '../../../../util/smartocto';
 import {useShallow} from 'zustand/shallow';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -33,6 +34,8 @@ import TopUrlBlock from '../home/blocks/TopUrlBlock/TopUrlBlock';
 import EpikaBlock from '../home/blocks/EpikaBlock/EpikaBlock';
 import useHomeColors from './components/useHomeColors';
 import {getBlockSeparator, getBlockVariant} from './util';
+
+const HOME_TITLE = 'Lietuvos nacionalinis radijas ir televizija. Naujienos, įrašai ir transliacijos. - LRT';
 
 const selectHomeScreenState = () => (state: ArticleState) => {
   const block = state.homeV3;
@@ -69,8 +72,8 @@ const HomeScreenV3: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, onSc
 
   useNavigationAnalytics({
     viewId: 'https://www.lrt.lt/',
-    title: 'Lietuvos nacionalinis radijas ir televizija. Naujienos, įrašai ir transliacijos. - LRT',
-    sections: ['/Lrt'],
+    title: HOME_TITLE,
+    smartocto: newsLandingPage('https://www.lrt.lt/', HOME_TITLE),
   });
 
   useEffect(() => {

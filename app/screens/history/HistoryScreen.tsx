@@ -65,7 +65,6 @@ const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
   useNavigationAnalytics({
     viewId: 'Lrt app - History',
     title: 'Lrt app -  Istorija / Peržiūrėti straipsniai',
-    sections: ['Bendra'],
   });
 
   const renderItem = (val: ListRenderItemInfo<SavedArticle[]>) => {
