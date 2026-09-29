@@ -14,13 +14,16 @@ import useArticlePress from '../../components/useArticlePress';
 import useHomeColors from '../../components/useHomeColors';
 import {hasImage} from '../../util';
 
+/** Author photo size, shared by the lead and the rows so all photos match. */
+const PHOTO_SIZE = 90;
+
 interface OpinionsBlockProps {
   block: HomeV3BlockCategory;
 }
 
 /**
  * "Nuomonės" (template 17) on a grey panel: a lead opinion with a rounded author photo,
- * two rows with small photos and two text-only columns.
+ * two rows with same-size photos and two text-only columns.
  */
 const OpinionsBlock: React.FC<OpinionsBlockProps> = ({block}) => {
   const {category_id, category_title, articles_list: articles} = block.data;
@@ -66,7 +69,7 @@ const OpinionsBlock: React.FC<OpinionsBlockProps> = ({block}) => {
           key={article.id}
           article={article}
           thumbnail="left"
-          thumbnailWidth={56}
+          thumbnailWidth={PHOTO_SIZE}
           thumbnailRadius={16}
           thumbnailAspectRatio={1}
           showCategory={false}
@@ -119,7 +122,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   leadImage: {
-    width: 90,
+    width: PHOTO_SIZE,
   },
   row: {
     paddingBottom: 16,
