@@ -106,10 +106,14 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('lrt.keystore')
-            storePassword //<store password>
-            keyAlias // <alias>
-            keyPassword // <key password>
+            // Upload key is provided via env vars on CI (see .github/workflows/android-play-release.yml).
+            // Locally, Android Studio's "Generate Signed Bundle" injects its own signing config.
+            if (System.getenv("ANDROID_KEYSTORE_FILE")) {
+                storeFile file(System.getenv("ANDROID_KEYSTORE_FILE"))
+                storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword System.getenv("ANDROID_KEY_PASSWORD")
+            }
         }
     }
     buildTypes {
@@ -119,7 +123,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig System.getenv("ANDROID_KEYSTORE_FILE") ? signingConfigs.release : signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
