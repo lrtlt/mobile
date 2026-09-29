@@ -99,7 +99,6 @@ const HomeScreenV3: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, onSc
       console.log(`Home v3 data expired!`);
       callApi();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing, state.lastFetchTime]);
 
   useEffect(() => {
