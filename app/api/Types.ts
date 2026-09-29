@@ -542,8 +542,15 @@ export type HomeV3BlockWithTitle = HomeV3BlockBase & {
   };
 };
 
+/** One article with its summary and a "Skaityti" button on a grey panel (template 64). */
+export type HomeV3BlockArticle = HomeV3BlockBase & {
+  type: 'article';
+  data: {article: HomeV3Article};
+};
+
 export type HomeV3BlockType =
   | HomeV3BlockWithTitle
+  | HomeV3BlockArticle
   | HomeV3BlockTopArticles
   | HomeV3BlockTopArticlesList
   | HomeV3BlockTopFeed

@@ -29,6 +29,7 @@ import CategoryArticlesBlock from './blocks/CategoryArticlesBlock/CategoryArticl
 import SingleArticleBlock from './blocks/SingleArticleBlock/SingleArticleBlock';
 import VideoListBlock from './blocks/VideoListBlock/VideoListBlock';
 import MediaBlock from './blocks/MediaBlock/MediaBlock';
+import ExclusiveArticleBlock from './blocks/ExclusiveArticleBlock/ExclusiveArticleBlock';
 // Blocks shared with the category home pages.
 import TopUrlBlock from '../home/blocks/TopUrlBlock/TopUrlBlock';
 import EpikaBlock from '../home/blocks/EpikaBlock/EpikaBlock';
@@ -139,6 +140,8 @@ const HomeScreenV3: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, onSc
           return <MostReadBlock block={block} />;
         case 'block_with_title':
           return <MediaBlock block={block} />;
+        case 'article':
+          return <ExclusiveArticleBlock block={block} />;
         case 'slug': {
           switch (getBlockVariant(block)) {
             case 'slug_banner':

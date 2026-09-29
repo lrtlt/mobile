@@ -11,6 +11,7 @@ export type HomeV3BlockVariant =
   | 'slug_featured'
   | 'opinions'
   | 'single_article'
+  | 'exclusive_article'
   | 'category_list'
   | 'media'
   | 'legacy';
@@ -30,6 +31,8 @@ export const getBlockVariant = (block: HomeV3BlockType): HomeV3BlockVariant => {
       return 'most_read';
     case 'block_with_title':
       return 'media';
+    case 'article':
+      return 'exclusive_article';
     case 'slug': {
       switch (getTemplateId(block)) {
         case 63:
