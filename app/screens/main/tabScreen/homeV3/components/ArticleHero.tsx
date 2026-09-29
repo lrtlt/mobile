@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
-import {Text, TouchableDebounce} from '../../../../../components';
+import {TouchableDebounce} from '../../../../../components';
 import {HomeV3Article} from '../../../../../api/Types';
 import {ImageSize, IMG_SIZE_L} from '../../../../../util/ImageUtil';
 import {hasImage, isVideoArticle} from '../util';
@@ -12,7 +12,6 @@ import ArticleBadge from './ArticleBadge';
 import KeywordTag from './KeywordTag';
 import MediaCta, {MEDIA_ACCENTS} from './MediaCta';
 import useArticlePress from './useArticlePress';
-import useHomeColors from './useHomeColors';
 
 const TITLE_SIZES = {
   big: {fontSize: 22, lineHeight: 28},
@@ -30,7 +29,7 @@ interface Props {
   style?: ViewStyle;
 }
 
-/** Image on top, then info row, serif title, badge, summary and keyword tag. */
+/** Image on top, then info row, serif title, badge and keyword tag. */
 const ArticleHero: React.FC<Props> = ({
   article,
   titleSize = 'big',
@@ -40,14 +39,7 @@ const ArticleHero: React.FC<Props> = ({
   alwaysShowBadges,
   style,
 }) => {
-  const colors = useHomeColors();
   const onPress = useArticlePress();
-
-  const summary = Boolean(article._with_summary) && Boolean(article.summary) && (
-    <Text style={{...styles.summary, color: colors.description}} numberOfLines={3}>
-      {article.summary?.trim()}
-    </Text>
-  );
 
   const keyword =
     Boolean(article._with_first_keyword) && article._first_keyword ? article._first_keyword : undefined;
@@ -74,7 +66,6 @@ const ArticleHero: React.FC<Props> = ({
           <ArticleTitle article={article} serif playPrefix="none" {...TITLE_SIZES[titleSize]} />
           <ArticleSubtitle article={article} />
           {article.badge_title ? <ArticleBadge article={article} size="big" /> : null}
-          {summary}
         </View>
       </TouchableDebounce>
       {keyword ? <KeywordTag keyword={keyword} /> : null}
@@ -88,11 +79,5 @@ const styles = StyleSheet.create({
   content: {
     gap: 8,
     marginBottom: 4,
-  },
-  summary: {
-    fontSize: 18,
-    lineHeight: 22,
-    marginTop: 4,
-    marginBottom: 12,
   },
 });

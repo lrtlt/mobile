@@ -18,7 +18,7 @@ const TopArticlesListBlock: React.FC<TopArticlesListBlockProps> = ({block}) => {
   return (
     <View style={styles.root}>
       {articles.map((article) => (
-        <ArticleListItem key={article.id} article={article} thumbnail="left" thumbnailWidth={120} />
+        <ArticleListItem key={article.id} article={article} />
       ))}
     </View>
   );

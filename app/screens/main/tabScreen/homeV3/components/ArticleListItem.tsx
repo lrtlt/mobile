@@ -4,7 +4,7 @@ import {TouchableDebounce} from '../../../../../components';
 import {IconPlay} from '../../../../../components/svg';
 import {HomeV3Article} from '../../../../../api/Types';
 import {IMG_SIZE_XS} from '../../../../../util/ImageUtil';
-import {hasImage, isVideoArticle} from '../util';
+import {isVideoArticle} from '../util';
 import ArticleImage from './ArticleImage';
 import ArticleInfo from './ArticleInfo';
 import ArticleTitle from './ArticleTitle';
@@ -15,7 +15,7 @@ import useHomeColors from './useHomeColors';
 
 interface Props {
   article: HomeV3Article;
-  /** Where the thumbnail goes. Articles the API marks with `_skip_image` never get one. */
+  /** Where the thumbnail goes. Shown even when the API marks the article with `_skip_image`. */
   thumbnail?: 'left' | 'right' | 'none';
   thumbnailWidth?: number;
   thumbnailRadius?: number;
@@ -30,12 +30,12 @@ interface Props {
 /** Text article row: info, title, badge, with an optional thumbnail on either side. */
 const ArticleListItem: React.FC<Props> = ({
   article,
-  thumbnail = 'right',
-  thumbnailWidth = 90,
+  thumbnail = 'left',
+  thumbnailWidth = 130,
   thumbnailRadius = 0,
   thumbnailAspectRatio = 3 / 2,
   showCategory = true,
-  titleFontSize = 18,
+  titleFontSize = 17.5,
   titleLineHeight = 22,
   numberOfLines,
   style,
@@ -43,7 +43,7 @@ const ArticleListItem: React.FC<Props> = ({
   const colors = useHomeColors();
   const onPress = useArticlePress();
 
-  const image = thumbnail !== 'none' && hasImage(article) && (
+  const image = thumbnail !== 'none' && (
     <ArticleImage
       article={article}
       imageSize={IMG_SIZE_XS}
