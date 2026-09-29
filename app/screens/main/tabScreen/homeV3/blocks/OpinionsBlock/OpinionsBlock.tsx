@@ -73,6 +73,9 @@ const OpinionsBlock: React.FC<OpinionsBlockProps> = ({block}) => {
           thumbnailRadius={16}
           thumbnailAspectRatio={1}
           showCategory={false}
+          titleSerif
+          titleFontSize={16}
+          titleLineHeight={20}
           style={{...styles.row, borderColor: colors.separator}}
         />
       ))}
@@ -91,8 +94,9 @@ const OpinionsBlock: React.FC<OpinionsBlockProps> = ({block}) => {
                 article={article}
                 thumbnail="none"
                 showCategory={false}
+                titleSerif
                 titleFontSize={16}
-                titleLineHeight={18}
+                titleLineHeight={20}
               />
             </View>
           ))}

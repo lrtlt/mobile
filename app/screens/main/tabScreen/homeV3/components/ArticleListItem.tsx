@@ -21,6 +21,7 @@ interface Props {
   thumbnailRadius?: number;
   thumbnailAspectRatio?: number;
   showCategory?: boolean;
+  titleSerif?: boolean;
   titleFontSize?: number;
   titleLineHeight?: number;
   numberOfLines?: number;
@@ -35,6 +36,7 @@ const ArticleListItem: React.FC<Props> = ({
   thumbnailRadius = 0,
   thumbnailAspectRatio = 3 / 2,
   showCategory = true,
+  titleSerif,
   titleFontSize = 17.5,
   titleLineHeight = 22,
   numberOfLines,
@@ -65,6 +67,7 @@ const ArticleListItem: React.FC<Props> = ({
           <ArticleInfo article={article} showCategory={showCategory} />
           <ArticleTitle
             article={article}
+            serif={titleSerif}
             fontSize={titleFontSize}
             lineHeight={titleLineHeight}
             numberOfLines={numberOfLines}
