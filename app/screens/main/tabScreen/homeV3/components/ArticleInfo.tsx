@@ -50,10 +50,10 @@ const styles = StyleSheet.create({
     columnGap: 8,
   },
   category: {
-    fontSize: 12,
+    fontSize: 12.5,
     flexShrink: 1,
   },
   time: {
-    fontSize: 12,
+    fontSize: 12.5,
   },
 });

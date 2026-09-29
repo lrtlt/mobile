@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     width: 80,
   },
   time: {
-    fontSize: 12,
+    fontSize: 12.5,
     lineHeight: 24,
     paddingStart: 8,
   },

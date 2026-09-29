@@ -27,7 +27,7 @@ export default ArticleSubtitle;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 12,
-    lineHeight: 15,
+    fontSize: 14.5,
+    lineHeight: 18,
   },
 });

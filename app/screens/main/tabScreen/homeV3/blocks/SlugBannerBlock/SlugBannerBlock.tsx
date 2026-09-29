@@ -59,7 +59,7 @@ const SlugBannerBlock: React.FC<SlugBannerBlockProps> = ({block}) => {
           <View style={styles.article}>
             {hasImage(article) ? <ArticleImage article={article} imageSize={IMG_SIZE_M} /> : null}
             <ArticleInfo article={article} absoluteDate />
-            <ArticleTitle article={article} fontSize={18} lineHeight={22} />
+            <ArticleTitle article={article} fontSize={16} lineHeight={20} />
             <ArticleSubtitle article={article} />
           </View>
         </TouchableDebounce>

@@ -85,7 +85,7 @@ const GridItem: React.FC<{article: HomeV3Article}> = ({article}) => {
           />
         ) : null}
         <ArticleInfo article={article} />
-        <ArticleTitle article={article} fontSize={18} lineHeight={22} />
+        <ArticleTitle article={article} fontSize={16} lineHeight={20} />
         <ArticleSubtitle article={article} />
         {article.badge_title ? <ArticleBadge article={article} /> : null}
       </View>

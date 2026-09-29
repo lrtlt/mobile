@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(2, 3, 13, 0.4)',
   },
   text: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#FFFFFF',
   },
 });
