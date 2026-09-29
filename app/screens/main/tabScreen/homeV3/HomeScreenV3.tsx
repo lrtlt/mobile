@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {View, StyleSheet, StatusBar, RefreshControl, Button} from 'react-native';
+import {View, StyleSheet, StatusBar, RefreshControl, Button, useWindowDimensions} from 'react-native';
 import {ScrollingChannels, ScreenLoader, ScreenError, BannerComponent} from '../../../../components';
 import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
 import {ARTICLE_EXPIRE_DURATION, EVENT_LOGO_PRESS} from '../../../../constants';
@@ -35,6 +35,9 @@ import EpikaBlock from '../home/blocks/EpikaBlock/EpikaBlock';
 import useHomeColors from './components/useHomeColors';
 import {getBlockSeparator, getBlockVariant} from './util';
 
+/** How many screen heights to render beyond the viewport. */
+const DRAW_DISTANCE_SCREENS = 1;
+
 const HOME_TITLE = 'Lietuvos nacionalinis radijas ir televizija. Naujienos, įrašai ir transliacijos. - LRT';
 
 const selectHomeScreenState = () => (state: ArticleState) => {
@@ -56,6 +59,7 @@ interface Props {
 const HomeScreenV3: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, onScroll, paddingTop}) => {
   const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const listRef = useRef<FlashListRef<any>>(null);
+  const {height: windowHeight} = useWindowDimensions();
 
   const {fetchHomeV3} = useArticleStore.getState();
   const state = useArticleStore(useShallow(selectHomeScreenState()));
@@ -212,6 +216,7 @@ const HomeScreenV3: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, onSc
           ItemSeparatorComponent={BlockSeparator}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={callApi} />}
           data={blocks}
+          drawDistance={windowHeight * DRAW_DISTANCE_SCREENS}
           removeClippedSubviews={false}
           keyExtractor={keyExtractor}
           onScroll={onScroll}

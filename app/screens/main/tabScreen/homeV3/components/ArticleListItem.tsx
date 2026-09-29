@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    gap: 8,
+    gap: 4,
   },
   playBadge: {
     width: 18,

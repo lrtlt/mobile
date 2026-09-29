@@ -46,7 +46,7 @@ const OpinionsBlock: React.FC<OpinionsBlockProps> = ({block}) => {
         <View style={{...styles.lead, borderColor: colors.separator}}>
           <View style={styles.leadContent}>
             <ArticleInfo article={lead} showCategory={false} />
-            <ArticleTitle article={lead} serif fontSize={24} lineHeight={30} />
+            <ArticleTitle article={lead} serif fontSize={22} lineHeight={28} />
             <ArticleSubtitle article={lead} />
           </View>
           {hasImage(lead) ? (

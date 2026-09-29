@@ -15,9 +15,9 @@ import useArticlePress from './useArticlePress';
 import useHomeColors from './useHomeColors';
 
 const TITLE_SIZES = {
-  big: {fontSize: 28, lineHeight: 32},
-  medium: {fontSize: 24, lineHeight: 30},
-  small: {fontSize: 20, lineHeight: 24},
+  big: {fontSize: 22, lineHeight: 28},
+  medium: {fontSize: 22, lineHeight: 28},
+  small: {fontSize: 16, lineHeight: 20},
 };
 
 interface Props {
