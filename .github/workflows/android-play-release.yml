@@ -42,6 +42,9 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
+          # setup-node v5 enables caching from package.json's packageManager field,
+          # which needs yarn.lock (not committed in this repo)
+          package-manager-cache: false
 
       - uses: actions/setup-java@v5
         with:
