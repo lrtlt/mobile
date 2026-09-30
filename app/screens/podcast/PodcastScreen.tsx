@@ -12,7 +12,7 @@ import PodcastAbout from './about/PodcastAbout';
 import {ArticleContentMedia, isMediaArticle} from '../../api/Types';
 import {ScrollView} from 'react-native-gesture-handler';
 import FastImage from '@d11/react-native-fast-image';
-import {buildArticleImageUri, IMG_SIZE_XXL} from '../../util/ImageUtil';
+import {buildArticleImageUri, IMG_SIZE_XL} from '../../util/ImageUtil';
 import PodcastEpisode from './episode/PodcastEpisode';
 import PodcastRecommendations from './recommendations/PodcastRecommendations';
 import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection';
@@ -145,7 +145,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                       borderColor: '#fff',
                     }}
                     source={{
-                      uri: buildArticleImageUri(IMG_SIZE_XXL, article.main_photo?.path),
+                      uri: buildArticleImageUri(IMG_SIZE_XL, article.main_photo?.path),
                     }}
                   />
                 </View>

@@ -5,7 +5,7 @@ import ThemeProvider from '../../../../../../theme/ThemeProvider';
 import {themeLight} from '../../../../../../Theme';
 import {RadiotekaTopArticlesBlock} from '../../../../../../api/Types';
 import FastImage from '@d11/react-native-fast-image';
-import {buildImageUri, IMG_SIZE_M, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
+import {buildImageUri, IMG_SIZE_M, IMG_SIZE_XL} from '../../../../../../util/ImageUtil';
 import LinearGradient from 'react-native-linear-gradient';
 import {Article} from '../../../../../../../Types';
 import PlayButton from '../play_button/play_button';
@@ -68,7 +68,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   }
 
   const imgUrl = buildImageUri(
-    IMG_SIZE_XXL,
+    IMG_SIZE_XL,
     articles[selectedIndexSafe].hero_photo?.img_path_prefix ?? articles[selectedIndexSafe].img_path_prefix,
     articles[selectedIndexSafe].hero_photo?.img_path_postfix ?? articles[selectedIndexSafe].img_path_postfix,
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {HomeV3BlockTopArticles} from '../../../../../../api/Types';
-import {IMG_SIZE_M, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
+import {IMG_SIZE_M, IMG_SIZE_XL} from '../../../../../../util/ImageUtil';
 import ArticleHero from '../../components/ArticleHero';
 import ArticleListItem from '../../components/ArticleListItem';
 import useHomeColors from '../../components/useHomeColors';
@@ -25,7 +25,7 @@ const TopArticlesBlock: React.FC<TopArticlesBlockProps> = ({block}) => {
 
   return (
     <View style={styles.root}>
-      <ArticleHero article={hero} imageSize={IMG_SIZE_XXL} />
+      <ArticleHero article={hero} imageSize={IMG_SIZE_XL} />
       {pair.length > 0 ? (
         <View style={styles.pair}>
           {pair.map((article) => (

@@ -7,7 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import {MediatekaBlockWidget} from '../../../../../../api/Types';
 import {Article} from '../../../../../../../Types';
-import {buildImageUri, IMG_SIZE_XXL} from '../../../../../../util/ImageUtil';
+import {buildImageUri, IMG_SIZE_XL} from '../../../../../../util/ImageUtil';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
 import {themeLight, useTheme} from '../../../../../../Theme';
 import {Text, TouchableDebounce} from '../../../../../../components';
@@ -42,9 +42,8 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
     return null;
   }
 
-
   const imgUrl = buildImageUri(
-    IMG_SIZE_XXL,
+    IMG_SIZE_XL,
     selectedArticle.hero_photo?.img_path_prefix ?? selectedArticle.img_path_prefix,
     selectedArticle.hero_photo?.img_path_postfix ?? selectedArticle.img_path_postfix,
   );

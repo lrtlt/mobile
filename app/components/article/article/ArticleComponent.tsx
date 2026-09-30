@@ -218,8 +218,6 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
           <TextComponent
             style={{
               ...style.title,
-              // Matches the home page: a lone article is a semibold Playfair headline, articles sharing a row are sans.
-              ...(styleType === 'single' ? {fontWeight: '600'} : null),
               fontSize: simplyfied ? 18 : style.title.fontSize,
               lineHeight: simplyfied ? undefined : style.title.lineHeight,
             }}
