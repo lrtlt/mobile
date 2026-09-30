@@ -49,7 +49,7 @@ const OpinionsBlock: React.FC<OpinionsBlockProps> = ({block}) => {
         <View style={{...styles.lead, borderColor: colors.separator}}>
           <View style={styles.leadContent}>
             <ArticleInfo article={lead} showCategory={false} />
-            <ArticleTitle article={lead} serif fontSize={22} lineHeight={28} />
+            <ArticleTitle article={lead} font="serifBold" />
             <ArticleSubtitle article={lead} />
           </View>
           {hasImage(lead) ? (
@@ -73,13 +73,10 @@ const OpinionsBlock: React.FC<OpinionsBlockProps> = ({block}) => {
           thumbnailRadius={16}
           thumbnailAspectRatio={1}
           showCategory={false}
-          titleSerif
-          titleFontSize={16}
-          titleLineHeight={20}
           style={{...styles.row, borderColor: colors.separator}}
         />
       ))}
-      {columns.length > 0 ? (
+      {/* {columns.length > 0 ? (
         <View style={styles.columns}>
           {columns.map((article, index) => (
             <View
@@ -94,14 +91,11 @@ const OpinionsBlock: React.FC<OpinionsBlockProps> = ({block}) => {
                 article={article}
                 thumbnail="none"
                 showCategory={false}
-                titleSerif
-                titleFontSize={16}
-                titleLineHeight={20}
               />
             </View>
           ))}
         </View>
-      ) : null}
+      ) : null} */}
     </View>
   );
 };
@@ -130,7 +124,7 @@ const styles = StyleSheet.create({
   },
   row: {
     paddingBottom: 16,
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     gap: 24,
   },
   columns: {

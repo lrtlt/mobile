@@ -97,6 +97,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>PlayfairDisplay-Regular.ttf</string>
+		<string>PlayfairDisplay-SemiBold.ttf</string>
 		<string>SourceSansPro-Regular.ttf</string>
 		<string>SourceSansPro-SemiBold.ttf</string>
 		<string>SourceSansPro-LightItalic.ttf</string>

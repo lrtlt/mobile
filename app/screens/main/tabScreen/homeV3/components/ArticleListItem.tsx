@@ -21,9 +21,6 @@ interface Props {
   thumbnailRadius?: number;
   thumbnailAspectRatio?: number;
   showCategory?: boolean;
-  titleSerif?: boolean;
-  titleFontSize?: number;
-  titleLineHeight?: number;
   numberOfLines?: number;
   style?: ViewStyle;
 }
@@ -36,9 +33,6 @@ const ArticleListItem: React.FC<Props> = ({
   thumbnailRadius = 0,
   thumbnailAspectRatio = 3 / 2,
   showCategory = true,
-  titleSerif,
-  titleFontSize = 17.5,
-  titleLineHeight = 22,
   numberOfLines,
   style,
 }) => {
@@ -65,13 +59,7 @@ const ArticleListItem: React.FC<Props> = ({
         {thumbnail === 'left' ? image : null}
         <View style={styles.content}>
           <ArticleInfo article={article} showCategory={showCategory} />
-          <ArticleTitle
-            article={article}
-            serif={titleSerif}
-            fontSize={titleFontSize}
-            lineHeight={titleLineHeight}
-            numberOfLines={numberOfLines}
-          />
+          <ArticleTitle article={article} numberOfLines={numberOfLines} />
           <ArticleSubtitle article={article} />
           {article.badge_title ? <ArticleBadge article={article} /> : null}
           {hasPlayBadge ? (

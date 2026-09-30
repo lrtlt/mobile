@@ -10,7 +10,8 @@ type FontFamily =
   | 'SourceSansPro-Regular'
   | 'SourceSansPro-SemiBold'
   | 'SourceSansPro-LightItalic'
-  | 'PlayfairDisplay-Regular';
+  | 'PlayfairDisplay-Regular'
+  | 'PlayfairDisplay-SemiBold';
 
 export interface TextComponentProps extends TextProps {
   type?: Type;
