@@ -86,7 +86,7 @@ const MediaBlock: React.FC<MediaBlockProps> = ({block}) => {
             )}
             <View style={styles.leadContent}>
               <ArticleInfo article={lead} absoluteDate />
-              <ArticleTitle article={lead} serif fontSize={22} lineHeight={28} playPrefix="none" />
+              <ArticleTitle article={lead} font="serifBold" playPrefix="none" />
               <ArticleSubtitle article={lead} />
             </View>
           </View>
@@ -112,7 +112,7 @@ const MediaBlock: React.FC<MediaBlockProps> = ({block}) => {
               </View>
               <View style={styles.rowContent}>
                 <ArticleInfo article={article} absoluteDate />
-                <ArticleTitle article={article} fontSize={16} lineHeight={20} playPrefix={accent} />
+                <ArticleTitle article={article} playPrefix={accent} />
                 <ArticleSubtitle article={article} />
               </View>
             </View>

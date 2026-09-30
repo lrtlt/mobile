@@ -48,7 +48,7 @@ const MostReadBlock: React.FC<MostReadBlockProps> = ({block}) => {
 
   const onListLayout = (e: LayoutChangeEvent) => {
     const {width} = e.nativeEvent.layout;
-    setListWidth(prev => (prev === width ? prev : width));
+    setListWidth((prev) => (prev === width ? prev : width));
   };
 
   if (!articles?.length) {
@@ -83,6 +83,7 @@ const MostReadBlock: React.FC<MostReadBlockProps> = ({block}) => {
                     <Text
                       style={{...styles.rankText, color: colors.text}}
                       fontFamily="PlayfairDisplay-Regular"
+                      allowFontScaling={false}
                       scalingEnabled={false}>
                       {index + 1}
                     </Text>
@@ -90,7 +91,7 @@ const MostReadBlock: React.FC<MostReadBlockProps> = ({block}) => {
                 )}
               </ArticleImage>
               <ArticleInfo article={article} />
-              <ArticleTitle article={article} fontSize={16} lineHeight={18} numberOfLines={4} />
+              <ArticleTitle article={article} numberOfLines={4} />
               <ArticleSubtitle article={article} />
               {article.badge_title ? <ArticleBadge article={article} /> : null}
             </View>

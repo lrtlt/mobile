@@ -6,12 +6,11 @@ import {HomeV3Article} from '../../../../../api/Types';
 import {isVideoArticle} from '../util';
 import {PlayColors} from './MediaCta';
 import useHomeColors from './useHomeColors';
+import {TITLE_FONTS, TitleFontName} from '../titleFonts';
 
 interface Props {
   article: HomeV3Article;
-  serif?: boolean;
-  fontSize: number;
-  lineHeight: number;
+  font?: TitleFontName;
   numberOfLines?: number;
   /**
    * Play mark in front of the title. 'auto' marks video articles in blue as the web does,
@@ -24,14 +23,13 @@ interface Props {
 /** Article title, optionally with the web's play square in front. */
 const ArticleTitle: React.FC<Props> = ({
   article,
-  serif,
-  fontSize,
-  lineHeight,
+  font = 'sans',
   numberOfLines,
   playPrefix = 'auto',
   style,
 }) => {
   const colors = useHomeColors();
+  const {fontFamily, fontSize, lineHeight} = TITLE_FONTS[font];
   const prefixSize = Math.round(lineHeight * 0.8);
 
   let prefix: PlayColors | undefined;
@@ -44,8 +42,9 @@ const ArticleTitle: React.FC<Props> = ({
   return (
     <Text
       style={{...styles.title, fontSize, lineHeight, color: colors.text, ...style}}
-      fontFamily={serif ? 'PlayfairDisplay-Regular' : 'SourceSansPro-Regular'}
-      numberOfLines={numberOfLines}>
+      fontFamily={fontFamily}
+      numberOfLines={numberOfLines}
+    >
       {prefix ? (
         <>
           <View
@@ -54,7 +53,8 @@ const ArticleTitle: React.FC<Props> = ({
               width: prefixSize,
               height: prefixSize,
               backgroundColor: prefix.background,
-            }}>
+            }}
+          >
             <IconPlay size={prefixSize * 0.45} color={prefix.foreground} />
           </View>
           {'  '}

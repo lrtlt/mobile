@@ -218,9 +218,12 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
           <TextComponent
             style={{
               ...style.title,
+              // Matches the home page: a lone article is a semibold Playfair headline, articles sharing a row are sans.
+              ...(styleType === 'single' ? {fontWeight: '600'} : null),
               fontSize: simplyfied ? 18 : style.title.fontSize,
+              lineHeight: simplyfied ? undefined : style.title.lineHeight,
             }}
-            fontFamily="PlayfairDisplay-Regular">
+            fontFamily={styleType === 'single' ? 'PlayfairDisplay-Regular' : 'SourceSansPro-Regular'}>
             {simplyfied && simpleIcon}
             {simplyfied && ' '}
             {article?.title || ''}
@@ -288,6 +291,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
+    lineHeight: 28,
   },
   subtitle: {
     paddingTop: 4,
@@ -328,6 +332,7 @@ const stylesScroll = StyleSheet.create({
   title: {
     ...styles.title,
     fontSize: 17,
+    lineHeight: 20,
   },
 });
 
@@ -335,7 +340,8 @@ const stylesMulti = StyleSheet.create({
   ...styles,
   title: {
     ...styles.title,
-    fontSize: 16,
+    fontSize: 17,
+    lineHeight: 21,
   },
 });
 

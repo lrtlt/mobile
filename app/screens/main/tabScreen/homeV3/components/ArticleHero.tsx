@@ -13,15 +13,15 @@ import KeywordTag from './KeywordTag';
 import MediaCta, {MEDIA_ACCENTS} from './MediaCta';
 import useArticlePress from './useArticlePress';
 
-const TITLE_SIZES = {
-  big: {fontSize: 22, lineHeight: 28},
-  medium: {fontSize: 22, lineHeight: 28},
-  small: {fontSize: 16, lineHeight: 20},
-};
+const TITLE_FONT_NAMES = {
+  big: 'serifBold',
+  medium: 'serif',
+  small: 'sans',
+} as const;
 
 interface Props {
   article: HomeV3Article;
-  titleSize?: keyof typeof TITLE_SIZES;
+  titleSize?: keyof typeof TITLE_FONT_NAMES;
   imageSize?: ImageSize;
   showCategory?: boolean;
   absoluteDate?: boolean;
@@ -29,7 +29,7 @@ interface Props {
   style?: ViewStyle;
 }
 
-/** Image on top, then info row, serif title, badge and keyword tag. */
+/** Image on top, then info row, title in the font of its size (see titleFonts), badge and keyword tag. */
 const ArticleHero: React.FC<Props> = ({
   article,
   titleSize = 'big',
@@ -63,7 +63,7 @@ const ArticleHero: React.FC<Props> = ({
             </ArticleImage>
           ) : null}
           <ArticleInfo article={article} showCategory={showCategory} absoluteDate={absoluteDate} />
-          <ArticleTitle article={article} serif playPrefix="none" {...TITLE_SIZES[titleSize]} />
+          <ArticleTitle article={article} font={TITLE_FONT_NAMES[titleSize]} playPrefix="none" />
           <ArticleSubtitle article={article} />
           {article.badge_title ? <ArticleBadge article={article} size="big" /> : null}
         </View>
