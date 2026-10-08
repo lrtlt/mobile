@@ -1,5 +1,6 @@
 import React, {useEffect, useRef} from 'react';
-import {View, StyleSheet, FlatList, Dimensions} from 'react-native';
+import {View, StyleSheet, Dimensions} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import Text from '../../../../../../components/text/Text';
 import {TouchableDebounce} from '../../../../../../components';
 import FastImage from '@d11/react-native-fast-image';

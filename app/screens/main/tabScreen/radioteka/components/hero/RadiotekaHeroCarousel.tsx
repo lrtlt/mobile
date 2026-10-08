@@ -1,5 +1,6 @@
 import React, {useState, useRef} from 'react';
-import {View, StyleSheet, FlatList, Image, ViewToken, useWindowDimensions} from 'react-native';
+import {View, StyleSheet, Image, ViewToken, useWindowDimensions} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import Text from '../../../../../../components/text/Text';
 import FastImage from '@d11/react-native-fast-image';
 import ListenCount from '../../../../../../components/article/article/ListenCount';

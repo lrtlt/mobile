@@ -1,5 +1,6 @@
 import React, {useState, useCallback} from 'react';
-import {View, StyleSheet, ScrollView, useWindowDimensions} from 'react-native';
+import {View, StyleSheet, useWindowDimensions} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 import FastImage from '@d11/react-native-fast-image';
 

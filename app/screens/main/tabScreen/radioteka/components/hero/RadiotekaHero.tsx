@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {View, StyleSheet, Dimensions, ScrollView, useWindowDimensions} from 'react-native';
+import {View, StyleSheet, Dimensions, useWindowDimensions} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {Text, TouchableDebounce} from '../../../../../../components';
 import ThemeProvider from '../../../../../../theme/ThemeProvider';
 import {themeLight} from '../../../../../../Theme';

@@ -1,5 +1,6 @@
 import React, {useCallback, useMemo, useRef} from 'react';
-import {View, StyleSheet, FlatList, Dimensions} from 'react-native';
+import {View, StyleSheet, Dimensions} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import FastImage from '@d11/react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
