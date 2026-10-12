@@ -9,7 +9,7 @@ export const useArticle = (articleId?: number | string, isMedia?: boolean) => {
   const urlFallback = `https://www.lrt.lt/api/json/article/${articleId}${!isMedia ? '?media' : ''}`;
 
   return useQuery({
-    queryKey: [QUERY_KEY, articleId],
+    queryKey: [QUERY_KEY, articleId, isMedia],
     queryFn: async ({signal}) => {
       try {
         const response = await get<ArticleContentResponse>(url, {signal});

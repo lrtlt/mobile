@@ -24,12 +24,15 @@ const linking: LinkingOptions<MainStackParamList> = {
     screens: {
       Article: {
         path: '/naujienos/:category/*/:articleId/:title',
+        parse: {articleId: Number},
       },
       Vodcast: {
         path: '/mediateka/irasas/:articleId/:title',
+        parse: {articleId: Number},
       },
       Podcast: {
         path: '/radioteka/irasas/:articleId/:title',
+        parse: {articleId: Number},
       },
       ArticleProxy: {
         path: 'article/:articleId',
