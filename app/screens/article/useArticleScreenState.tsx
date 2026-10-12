@@ -24,7 +24,8 @@ const STATE_READY = 'ready';
 
 const useArticleScreenState = (
   articleId: number,
-  // isMedia is used to determine if the article is a media type (audio/video)
+  // isMedia is used to determine if the article is a media type (audio/video).
+  // The id guess fails for old media records, whose ids overlap with news ids.
   isMedia: boolean = articleId > 1000000000,
 ): [ScreenState, (accept: boolean) => void] => {
   const [screenState, setScreenState] = useState<ScreenState>({
