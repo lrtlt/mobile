@@ -2,8 +2,8 @@ import {useNavigation} from '@react-navigation/native';
 import {useEffect, useMemo, useRef} from 'react';
 import {debounce} from 'lodash';
 import {useAuth0} from 'react-native-auth0';
-import {logScreenView, getAnalytics} from '@react-native-firebase/analytics';
 import {ReaderType, SmartoctoPage, trackPageView} from './smartocto';
+import {logPageView} from './googleAnalytics';
 
 const EVENT_DEBOUNCE_DURATION = 200;
 
@@ -29,10 +29,7 @@ const useNavigationAnalytics = (params?: TrackingParams) => {
           trackPageView(p.smartocto, readerType.current);
         }
 
-        logScreenView(getAnalytics(), {
-          screen_name: p.title,
-          screen_class: p.viewId.replace('https://www.lrt.lt', ''),
-        });
+        logPageView(p.viewId, p.title);
       }, EVENT_DEBOUNCE_DURATION),
     [],
   );
