@@ -44,7 +44,7 @@ The `Siūlome` section on Home, drawn as a `CPListImageRowItem` — one list row
 
 ## Row budget
 
-How many rows a CarPlay tab's one open-ended section may use. `CPListTemplate` trims **silently** past its runtime `maximumItemCount`, working from the end, where every Utility row sits — so a tab with an unbounded section has to reserve its fixed rows and cap the rest. **Nothing needs one today**: turning both `Naujausi` and `Prenumeratos` into a Recommendation grid left every tab bounded by construction, and `CarPlayUIManager.contentRowBudget(reserving:)` was removed with a comment marking where. Bring it back if a section ever grows unbounded again — grids are a layout choice that could be reversed. Android Auto paginates rather than trimming, so it has no counterpart. See carplay-ui.md §10.
+How many rows a CarPlay tab's one open-ended section may use. `CPListTemplate` trims **silently** past its runtime `maximumItemCount`, working from the end, where every Utility row sits — so a tab with an unbounded section has to reserve its fixed rows and cap the rest. `Prenumeratos` is the one section that needs one: it was a cover-only grid (one row, bounded by construction) until drivers could not tell the shows apart, and is a titled list again. It caps itself inline in `CarScene.loadManoLRT` — past `maximumItemCount` the tail goes behind a `Daugiau` row. The shared `CarPlayUIManager.contentRowBudget(reserving:)` stays removed until a second open-ended section appears. Android Auto paginates rather than trimming, so it has no counterpart. See carplay-ui.md §10.
 
 ## Episode queue window
 

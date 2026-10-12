@@ -82,8 +82,7 @@ enum GridTileStyle {
   }
 }
 
-/// One tile's content, separated from what selecting it does — a tile can play something or
-/// navigate somewhere (`Prenumeratos`).
+/// One tile's content, separated from what selecting it does.
 struct GridTile {
   /// Ignored by `.grid`, which draws the cover alone.
   let title: String
@@ -149,9 +148,9 @@ class CarPlayUIManager {
 
   // Note: there was a `contentRowBudget(reserving:)` here, which capped an open-ended section
   // against `CPListTemplate.maximumItemCount` so the system's silent trim — which works from
-  // the end, where every navigation affordance sits — could not eat it. `Prenumeratos` was its
-  // last caller; as a grid it is one row, so no section in the app is open-ended any more and
-  // nothing needs the budget. Bring it back if one ever is again (docs/carplay-ui.md §10).
+  // the end, where every navigation affordance sits — could not eat it. `Prenumeratos` is the
+  // one open-ended section now, and it caps itself inline in `CarScene.loadManoLRT` (it has no
+  // fixed rows to reserve). Bring a shared helper back if a second one appears.
 
   /// Downloads any cover images for `items` that aren't cached yet and returns the ones it has,
   /// keyed by cover URL.
@@ -223,9 +222,9 @@ class CarPlayUIManager {
 
   /// Builds `items` as a single grid row rather than one list row each.
   ///
-  /// No caller today — Home's `Siūlome` and `Naujausi` were its last two and are lists now.
-  /// Kept because it is the only route from `CarPlayItem`s to a grid, and `makeSubscriptionRow`
-  /// below still needs everything underneath it.
+  /// No caller today — Home's `Siūlome` and `Naujausi` were its last two and are lists now, and
+  /// `Prenumeratos` went the same way. Kept because it is the only route from `CarPlayItem`s to
+  /// a grid.
   ///
   /// CarPlay has no grid *section*. `CPGridTemplate` is a whole template, and Home needs three
   /// sections, so it is not an option here. `CPListImageRowItem` is the one construct that puts
@@ -266,42 +265,6 @@ class CarPlayUIManager {
     return (row, shown)
   }
 
-  /// Builds `subscriptions` as a grid.
-  ///
-  /// Subscriptions carry no artwork of their own, so `covers` is keyed by `subscriptionKey`
-  /// rather than by image URL — see `CarPlayService.fetchSubscriptionCovers`. A subscription
-  /// with no cover cannot be a tile, exactly as elsewhere, which is why `shown` comes back:
-  /// the caller needs to know what the driver can actually reach from here.
-  ///
-  /// Selecting a tile navigates rather than plays, which is why this cannot go through
-  /// `makeImageRowItem`.
-  func makeSubscriptionRow(
-    from subscriptions: [UserSubscription], covers: [String: UIImage],
-    style: GridTileStyle, limit: Int? = nil,
-    handler: @escaping (UserSubscription) -> Void
-  ) -> (row: CPListImageRowItem, shown: [UserSubscription]) {
-    let paired: [(subscription: UserSubscription, image: UIImage)] = subscriptions.compactMap {
-      subscription in
-      guard let image = covers[subscription.subscriptionKey] else { return nil }
-      return (subscription, image)
-    }
-
-    let visible = Array(paired.prefix(Self.drawableTileCount(of: paired.count, limit: limit)))
-    let shown = visible.map(\.subscription)
-    let tiles = visible.map {
-      // Both texts are carried but neither is drawn under the `.grid` style this section uses.
-      // They are kept so the section can be restyled without rebuilding the tiles, and because
-      // the pre-17.4 legacy row would ignore them anyway.
-      GridTile(title: $0.subscription.name ?? "", subtitle: nil, image: $0.image)
-    }
-
-    let row = makeImageRow(tiles: tiles, style: style) { index in
-      guard shown.indices.contains(index) else { return }
-      handler(shown[index])
-    }
-    return (row, shown)
-  }
-
   /// How many tiles a grid will actually draw, given how many it could draw and the caller's
   /// limit. Below iOS 26 the framework imposes its own ceiling on top; the lower one wins.
   private static func drawableTileCount(of available: Int, limit: Int?) -> Int {
@@ -323,13 +286,13 @@ class CarPlayUIManager {
       // Every style that can carry an `imageShape` uses `.roundedRectangle` rather than
       // `.circular`: covers are photographic 16:9 article images, and a circular mask would crop
       // most of one away. `.grid`'s element takes no shape at all. All leave
-      // `accessorySymbolName` nil — even the subscription grid, whose tiles do navigate, since
-      // a chevron on a tile reads as decoration at a glance. Multiple lines let every tile show
+      // `accessorySymbolName` nil, even on a tile that navigates, since a chevron on a tile
+      // reads as decoration at a glance. Multiple lines let every tile show
       // rather than only the first lineful.
       switch style {
       case .grid:
-        // The cover alone. `Prenumeratos` uses this: the tiles are square-ish and uniform, and
-        // a subscription is recognised by its show artwork rather than read.
+        // The cover alone. `Prenumeratos` used this until drivers turned out unable to tell its
+        // shows apart by artwork — it is a titled list now.
         let elements = tiles.map { CPListImageRowItemGridElement(image: $0.image) }
         rowItem = CPListImageRowItem(
           text: nil, gridElements: elements, allowsMultipleLines: true)

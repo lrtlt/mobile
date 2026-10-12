@@ -410,48 +410,30 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     guard !Task.isCancelled else { return }
     let subscriptionCovers = coverUrls.compactMapValues { coverImages[$0] }
 
-    // Prenumeratos — a grid of covers and nothing else: no title under a tile, no subtitle.
+    // Prenumeratos — one row per show: its name beside its cover. The section used to be a grid
+    // of covers alone, and drivers could not tell which show a tile was; the name is what they
+    // read, the cover only backs it up. A subscription with no cover still gets a row.
     //
     // The only section in the tab: `Klausykite toliau` used to sit above it, and now lives in
     // Home alone rather than in both places.
     //
-    // As a grid the section is one row rather than one per subscription, so it no longer
-    // competes for the template's item budget — which it used to lose, silently dropping
-    // subscriptions past the cap. Below iOS 26 the framework still caps tiles at
-    // `CPMaximumNumberOfGridImages`, and a subscription with no cover cannot be a tile, so
-    // leftovers (and a cover-less list) go behind `Daugiau` or become the section itself.
-    let subscriptionGrid = uiManager.makeSubscriptionRow(
-      from: subscriptions, covers: subscriptionCovers, style: .grid
-    ) { [weak self] subscription in
-      guard let self = self, let categoryId = subscription.categoryId else { return }
-      Task {
-        await self.showEpisodes(
-          categoryId: categoryId, categoryTitle: subscription.name ?? "")
-      }
+    // As rows the section is open-ended again, and `CPListTemplate` trims **silently** past
+    // `maximumItemCount` — so past the budget the tail goes behind a `Daugiau` row rather than
+    // being dropped.
+    let budget = max(CPListTemplate.maximumItemCount, 2)
+    var rows: [any CPListTemplateItem]
+    if subscriptions.count > budget {
+      let shown = Array(subscriptions.prefix(budget - 1))
+      let leftover = Array(subscriptions.dropFirst(budget - 1))
+      rows = makeSubscriptionListItems(shown, covers: subscriptionCovers)
+      rows.append(
+        makeUtilityRow(text: "Daugiau") { [weak self] in
+          await self?.showSubscriptionList(leftover, covers: subscriptionCovers)
+        })
+    } else {
+      rows = makeSubscriptionListItems(subscriptions, covers: subscriptionCovers)
     }
-
-    let shownKeys = Set(subscriptionGrid.shown.map(\.subscriptionKey))
-    let leftover = subscriptions.filter { !shownKeys.contains($0.subscriptionKey) }
-
-    var sections: [CPListSection] = []
-    if !subscriptionGrid.shown.isEmpty {
-      var rows: [any CPListTemplateItem] = [subscriptionGrid.row]
-      if !leftover.isEmpty {
-        rows.append(
-          makeUtilityRow(text: "Daugiau") { [weak self] in
-            await self?.showSubscriptionList(leftover)
-          })
-      }
-      sections.append(
-        CPListSection(
-          items: rows, header: "Prenumeratos", sectionIndexTitle: nil))
-    } else if !leftover.isEmpty {
-      sections.append(
-        CPListSection(
-          items: makeSubscriptionListItems(leftover),
-          header: "Prenumeratos",
-          sectionIndexTitle: nil))
-    }
+    let sections = [CPListSection(items: rows, header: "Prenumeratos", sectionIndexTitle: nil)]
     template.updateSections(sections)
 
     // Home's section is not visible from here any more, but a driver who signed in on the phone
@@ -464,15 +446,23 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
   ///
   /// Video subscriptions are dropped because the same subscription list backs the phone app, where
   /// following a mediateka show is legitimate — there is just nothing to play from one here.
-  /// Filtered before the covers are fetched, so a dropped tile costs no request either.
+  /// Filtered before the covers are fetched, so a dropped row costs no request either. Keys that
+  /// are not category subscriptions are dropped too: there is no episode list to open from one.
   private func activeSubscriptions() async throws -> [UserSubscription] {
-    let active = try await CarPlayService.shared.fetchSubscriptions().filter { $0.isActive }
+    let active = try await CarPlayService.shared.fetchSubscriptions().filter {
+      $0.isActive && $0.categoryId != nil
+    }
     return await CategoryMediaTypeResolver.shared.keepAudio(active)
   }
 
-  private func makeSubscriptionListItems(_ subscriptions: [UserSubscription]) -> [CPListItem] {
+  /// `covers` is keyed by `subscriptionKey`; a subscription missing from it gets a text-only row.
+  private func makeSubscriptionListItems(
+    _ subscriptions: [UserSubscription], covers: [String: UIImage]
+  ) -> [CPListItem] {
     return subscriptions.map { subscription in
-      let item = CPListItem(text: subscription.name ?? "", detailText: nil)
+      let item = CPListItem(
+        text: subscription.name ?? "", detailText: nil,
+        image: covers[subscription.subscriptionKey])
       item.accessoryType = .disclosureIndicator
       item.handler = { [weak self] _, completion in
         Task {
@@ -489,11 +479,13 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     }
   }
 
-  private func showSubscriptionList(_ subscriptions: [UserSubscription]) async {
+  private func showSubscriptionList(
+    _ subscriptions: [UserSubscription], covers: [String: UIImage]
+  ) async {
     guard let interfaceController = interfaceController else { return }
     let template = CPListTemplate(
       title: "Prenumeratos",
-      sections: [CPListSection(items: makeSubscriptionListItems(subscriptions))])
+      sections: [CPListSection(items: makeSubscriptionListItems(subscriptions, covers: covers))])
     interfaceController.pushTemplate(template, animated: true, completion: nil)
   }
 
