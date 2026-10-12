@@ -49,7 +49,7 @@ actor CategoryMediaTypeResolver {
   ///
   /// Fails open: an unresolvable catalogue returns the list untouched, on the same reasoning as
   /// `mediaType(of:)`. Keys that are not category subscriptions (`UserSubscription.categoryId`
-  /// nil) pass through — this filter only ever removes video, and the grid skips those on its own.
+  /// nil) pass through — this filter only ever removes video, and `Mano LRT` drops those itself.
   func keepAudio(_ subscriptions: [UserSubscription]) async -> [UserSubscription] {
     guard !subscriptions.isEmpty else { return subscriptions }
     guard let ids = await resolveAudioCategoryIds() else { return subscriptions }

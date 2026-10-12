@@ -259,9 +259,9 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         browser: MediaSession.ControllerInfo,
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<MediaItem>> {
-        // Declare list as the default for both kinds of row; `Prenumeratos`, the one grid group
-        // left, overrides it per item. Without CONTENT_STYLE_SUPPORTED the head unit ignores the
-        // per-item hints entirely.
+        // Declare list for both kinds of row. Every group is a list now — `Prenumeratos`, the last
+        // grid, became one because drivers could not tell its cover-only tiles apart. Without
+        // CONTENT_STYLE_SUPPORTED the head unit ignores these hints entirely.
         val extras = Bundle().apply {
             putBoolean(MediaItemTree.KEY_CONTENT_STYLE_SUPPORTED, true)
             putInt(

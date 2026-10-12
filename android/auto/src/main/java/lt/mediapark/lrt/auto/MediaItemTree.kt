@@ -110,14 +110,12 @@ object MediaItemTree {
     private const val KEY_COMPLETION_PERCENTAGE =
         "android.media.extra.PLAYBACK_COMPLETION_PERCENTAGE"
     private const val KEY_GROUP_TITLE = "android.media.browse.CONTENT_STYLE_GROUP_TITLE_HINT"
-    private const val KEY_SINGLE_ITEM_HINT = "android.media.browse.CONTENT_STYLE_SINGLE_ITEM_HINT"
 
     const val KEY_CONTENT_STYLE_SUPPORTED = "android.media.browse.CONTENT_STYLE_SUPPORTED"
     const val KEY_CONTENT_STYLE_BROWSABLE_HINT =
         "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT"
     const val KEY_CONTENT_STYLE_PLAYABLE_HINT = "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT"
     const val CONTENT_STYLE_LIST_ITEM = 1
-    const val CONTENT_STYLE_GRID_ITEM = 2
 
     /**
      * `Klausykite toliau`'s ID space. The suffixes read `_home` because `Mano LRT` used to render
@@ -264,12 +262,8 @@ object MediaItemTree {
         treeNodes[ROOT]!!.addChild(MANO_LRT)
     }
 
-    /**
-     * [title] is nullable because `Prenumeratos` tiles carry no text at all — see
-     * [applyManoLRTSections]. Every other row names itself.
-     */
     @OptIn(UnstableApi::class) private fun buildMediaItem(
-        title: String?,
+        title: String,
         mediaId: String,
         isPlayable: Boolean,
         isBrowsable: Boolean,
@@ -307,23 +301,17 @@ object MediaItemTree {
 
     /**
      * Extras every addressable row carries: where it hangs and which group it belongs to, plus the
-     * optional group header and grid hint. [sectionSiblings] reads the first two back.
+     * optional group header. [sectionSiblings] reads the first two back.
      */
     private fun rowExtras(
         parentId: String,
         sectionId: String,
         groupTitle: String? = null,
-        asGrid: Boolean = false,
         build: Bundle.() -> Unit = {}
     ): Bundle = Bundle().apply {
         putString(EXTRA_PARENT_ID, parentId)
         putString(EXTRA_SECTION_ID, sectionId)
         if (groupTitle != null) putString(KEY_GROUP_TITLE, groupTitle)
-        // Per-item override of the browsable's declared content style. `Prenumeratos` is the only
-        // group that takes it now, drawing as cover tiles the way CarPlay's `.grid` row does.
-        // Home's three groups are all lists — `Klausykite toliau` has to be, because a grid tile
-        // has nowhere to put its progress bar, and `Siūlome` and `Naujausi` follow it.
-        if (asGrid) putInt(KEY_SINGLE_ITEM_HINT, CONTENT_STYLE_GRID_ITEM)
         build()
     }
 
@@ -600,22 +588,17 @@ object MediaItemTree {
     // MARK: - ManoLRT
 
     /**
-     * `Mano LRT`: `Prenumeratos` as cover tiles and nothing else. `Klausykite toliau` used to sit
+     * `Mano LRT`: `Prenumeratos` as list rows and nothing else. `Klausykite toliau` used to sit
      * above it and now lives in Home alone. The group is conditional, so a signed-in driver with no
      * subscriptions sees a message row rather than a blank browsable.
      *
-     * [covers] is keyed by `subscriptionKey`: no subscription payload carries artwork, so each
-     * tile borrows the cover of its category's newest episode. A subscription without one still
-     * gets a tile — unlike CarPlay, where the grid is images and a gap would shift every index
-     * after it, an Android browsable row simply renders without art.
+     * Each row is the show's name beside its cover, like CarPlay's. The rows used to be cover-only
+     * grid tiles, and drivers could not tell which show a tile was — the name is what they read,
+     * the cover only backs it up. The title is also the header of the episode list a row pushes.
      *
-     * `Prenumeratos` tiles are **cover-only**: no title, no subtitle, matching what CarPlay's
-     * `.grid` style draws. Android Auto has no flag for that, so the absence has to be the
-     * metadata itself — a null title. Two consequences follow that CarPlay does not share:
-     * a tile whose cover also failed to load is now blank rather than merely unlabelled, and the
-     * episode list a tile pushes takes its header from this same title, so that screen loses its
-     * name too. Nothing else reads it — these rows were never indexed for voice search, and
-     * [setSubscriptionEpisodes] is keyed off the media ID.
+     * [covers] is keyed by `subscriptionKey`: no subscription payload carries artwork, so each
+     * row borrows the cover of its category's newest episode. A subscription without one still
+     * gets a row, just without art.
      */
     fun applyManoLRTSections(
         subscriptions: List<UserSubscription>,
@@ -637,16 +620,13 @@ object MediaItemTree {
             val categoryId = subscription.categoryId ?: return@forEach
             val mediaId = SUBSCRIPTION_PREFIX + categoryId
             val item = buildMediaItem(
-                // Cover-only tiles: neither a title nor a subtitle is drawn.
-                title = null,
+                title = subscription.name ?: "-",
                 mediaId = mediaId,
                 isPlayable = false,
                 isBrowsable = true,
                 mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PODCASTS,
                 imageUri = covers[subscription.subscriptionKey]?.let(Uri::parse),
-                extras = rowExtras(
-                    MANO_LRT, SECTION_SUBSCRIPTIONS, "Prenumeratos", asGrid = true
-                )
+                extras = rowExtras(MANO_LRT, SECTION_SUBSCRIPTIONS, "Prenumeratos")
             )
             treeNodes[mediaId] = MediaItemNode(item)
             node.addChild(mediaId)

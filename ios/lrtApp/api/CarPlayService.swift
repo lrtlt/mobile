@@ -112,10 +112,10 @@ class CarPlayService {
   /// Neither `UserSubscription` nor `PodcastCategory` carries artwork — only `PodcastEpisode`
   /// does — so a category's cover has to be borrowed from its newest episode. That is one
   /// request per subscription, run concurrently and cached for the session, which is the price
-  /// of rendering `Prenumeratos` as a grid rather than as text rows.
+  /// of giving `Prenumeratos` rows artwork at all.
   ///
-  /// A subscription whose fetch fails is simply absent from the result; the grid drops tiles it
-  /// has no image for.
+  /// A subscription whose fetch fails is simply absent from the result; its row goes without an
+  /// image.
   func fetchSubscriptionCovers(for subscriptions: [UserSubscription]) async -> [String: String] {
     let wanted = subscriptions.filter { $0.categoryId != nil }
     let missing = wanted.filter { cachedSubscriptionCover(for: $0.subscriptionKey) == nil }
