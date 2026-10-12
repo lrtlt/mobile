@@ -210,7 +210,7 @@ React Query integrates with Netinfo. Check `useNavigationStore` for `isOfflineMo
 
 Navigation changes automatically trigger Gemius tracking. Use Firebase Analytics for custom events via `useArticleStorageStore` methods.
 
-Screens report views through `useNavigationAnalytics` (Firebase screen view + smartocto page view). smartocto merges app and web traffic by url, domain id and post id, so the `smartocto` page metadata must match what lrt.lt sends in its `window._ain` object character for character. Check the web page before changing it. Screens without an lrt.lt page (bookmarks, history, gallery...) omit `smartocto`, and so does the tag screen (SlugScreen), because lrt.lt `/tema/...` tag pages load no smartocto tracker at all.
+Screens report views through `useNavigationAnalytics` (Firebase `page_view` + smartocto page view). The Firebase `page_view` (`app/util/googleAnalytics.ts`) mirrors the GA4 `page_view` lrt.lt sends (page_location, page_title, page_referrer), so app and web views land in the same event; no `screen_view` is sent. smartocto merges app and web traffic by url, domain id and post id, so the `smartocto` page metadata must match what lrt.lt sends in its `window._ain` object character for character. Check the web page before changing it. Screens without an lrt.lt page (bookmarks, history, gallery...) omit `smartocto`, and so does the tag screen (SlugScreen), because lrt.lt `/tema/...` tag pages load no smartocto tracker at all.
 
 ## Testing Notes
 
