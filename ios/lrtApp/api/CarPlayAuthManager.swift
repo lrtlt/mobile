@@ -7,10 +7,13 @@ class CarPlayAuthManager {
   private let credentialsManager: CredentialsManager
 
   private init() {
+    // DPoP must match the phone app: react-native-auth0 enables it by default and stores a key
+    // thumbprint next to the credentials, so a manager without it refuses every refresh with
+    // `dpopNotConfigured` once the access token the phone app left behind expires.
     let auth = Auth0.authentication(
       clientId: "bRojXnSKqnmaJhQRFY6V0zopGygYrRfg",
       domain: "lrt.eu.auth0.com"
-    )
+    ).useDPoP()
     credentialsManager = CredentialsManager(authentication: auth)
   }
 
