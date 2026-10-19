@@ -7,18 +7,36 @@ import {toLrtUrl} from './smartocto';
  * reported together. Screens without an lrt.lt page are not sent.
  */
 
+// Firebase Analytics accepts event parameter values of up to 100 characters
+const MAX_PARAM_LENGTH = 100;
+
+// Article, vodcast and podcast urls (the deep links in app/navigation/index.tsx) end with an id and a title slug.
+// The slug is the long part, so it is dropped as a whole, keeping the url up to the id.
+const TITLE_SLUG_PATTERN =
+  /^(https:\/\/www\.lrt\.lt\/(?:naujienos\/[^/]+\/.+|mediateka\/irasas|radioteka\/irasas)\/\d+)\/[^/]+$/;
+
+/** Trims a value to the Firebase parameter length, dropping the title slug of a long lrt.lt url first. Exported for tests. */
+export const toParamValue = (value: string) => {
+  if (value.length <= MAX_PARAM_LENGTH) {
+    return value;
+  }
+  const withoutSlug = value.replace(TITLE_SLUG_PATTERN, '$1');
+  return withoutSlug.slice(0, MAX_PARAM_LENGTH);
+};
+
 // The browser sends the previous page as page_referrer on lrt.lt
 let lastPageLocation: string | undefined;
 
 export const logPageView = (viewId: string, title?: string) => {
-  const pageLocation = toLrtUrl(viewId);
-  if (!pageLocation) {
+  const lrtUrl = toLrtUrl(viewId);
+  if (!lrtUrl) {
     return;
   }
+  const pageLocation = toParamValue(lrtUrl);
 
   logEvent(getAnalytics(), 'page_view', {
     page_location: pageLocation,
-    ...(title ? {page_title: title} : {}),
+    ...(title ? {page_title: toParamValue(title)} : {}),
     ...(lastPageLocation ? {page_referrer: lastPageLocation} : {}),
   });
   lastPageLocation = pageLocation;
