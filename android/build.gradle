@@ -12,6 +12,8 @@ buildscript {
         targetSdkVersion = 36
         ndkVersion = "27.1.12297006"
         kotlinVersion = "2.1.20"
+        // 23.0.0+ pulls mediarouter 1.9.0, which needs compileSdk 37 and AGP 9.1
+        castFrameworkVersion = "22.3.1"
     }
     repositories {
         mavenCentral()
