@@ -3,7 +3,7 @@ import {useEffect, useMemo, useRef} from 'react';
 import {debounce} from 'lodash';
 import {useAuth0} from 'react-native-auth0';
 import {ReaderType, SmartoctoPage, trackPageView} from './smartocto';
-import {logPageView} from './googleAnalytics';
+import {PageContent, logPageView} from './googleAnalytics';
 
 const EVENT_DEBOUNCE_DURATION = 200;
 
@@ -12,6 +12,8 @@ export type TrackingParams = {
   title?: string;
   /** lrt.lt page metadata for smartocto. Omitted for screens that have no lrt.lt page. */
   smartocto?: SmartoctoPage;
+  /** Article type and id for the Firebase page_view. Omitted for screens that are not an article. */
+  content?: PageContent;
 };
 
 const useNavigationAnalytics = (params?: TrackingParams) => {
@@ -29,7 +31,7 @@ const useNavigationAnalytics = (params?: TrackingParams) => {
           trackPageView(p.smartocto, readerType.current);
         }
 
-        logPageView(p.viewId, p.title);
+        logPageView(p.viewId, p.title, p.content);
       }, EVENT_DEBOUNCE_DURATION),
     [],
   );
