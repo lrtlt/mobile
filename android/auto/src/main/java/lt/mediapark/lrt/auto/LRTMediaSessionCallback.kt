@@ -6,6 +6,8 @@ import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.OptIn
+import androidx.car.app.connection.CarConnection
+import androidx.lifecycle.Observer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -87,12 +89,6 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     private val failedBrowses = ConcurrentHashMap<String, Job>()
 
     /**
-     * Android Auto controllers connected right now. The head unit can hold more than one at a time
-     * (browsing and transport), so the drive is over when the last of them leaves, not the first.
-     */
-    private val autoControllers = ConcurrentHashMap.newKeySet<MediaSession.ControllerInfo>()
-
-    /**
      * Whether the driver has opened LRT on the head unit in this connection.
      * `android_auto_connected` is logged when this is set and `android_auto_disconnected` only
      * when it is cleared, so the two always pair up.
@@ -101,6 +97,20 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
      * one at car start, to offer resuming it — and those binds are not opens.
      */
     private val autoOpened = AtomicBoolean(false)
+
+    /**
+     * Ends the Android Auto session when the phone leaves the car.
+     *
+     * Controller callbacks cannot mark that: Android Auto browses through the legacy
+     * `MediaBrowserService` endpoint, and Media3 never removes a controller connected that way, so
+     * [onDisconnected] does not fire for it. With playback keeping the service alive, `release()`
+     * does not run either, and the open flag left set would swallow the next drive's
+     * `android_auto_connected`.
+     */
+    private val carConnection = CarConnection(context).type
+    private val carConnectionObserver = Observer<Int> { type ->
+        if (type == CarConnection.CONNECTION_TYPE_NOT_CONNECTED) markAutoClosed()
+    }
 
     private val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
@@ -126,6 +136,8 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
             // Losing this costs only the instant retry; the timed one still runs.
             Log.e(TAG, "Could not watch connectivity", e)
         }
+        // The callback is built in the service's onCreate, on the main thread observeForever needs.
+        carConnection.observeForever(carConnectionObserver)
     }
 
     private fun startHomeAutoRefresh(session: MediaLibraryService.MediaLibrarySession) {
@@ -282,7 +294,6 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         mediaSession: MediaSession,
         controller: MediaSession.ControllerInfo
     ): MediaSession.ConnectionResult {
-        if (isAutomotive(controller.packageName)) autoControllers.add(controller)
         val accepted = super.onConnect(mediaSession, controller)
         return MediaSession.ConnectionResult.AcceptedResultBuilder(mediaSession)
             .setAvailableSessionCommands(
@@ -293,15 +304,6 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
             )
             .setAvailablePlayerCommands(accepted.availablePlayerCommands)
             .build()
-    }
-
-    override fun onDisconnected(
-        session: MediaSession,
-        controller: MediaSession.ControllerInfo
-    ) {
-        if (autoControllers.remove(controller) && autoControllers.isEmpty()) {
-            markAutoClosed()
-        }
     }
 
     @OptIn(UnstableApi::class) override fun onGetLibraryRoot(
@@ -764,8 +766,8 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     // overrides; `MediaItemTree.search` itself stays, because voice search still uses it.
 
     fun release() {
-        // The service can be torn down without the controllers being disconnected first.
-        autoControllers.clear()
+        carConnection.removeObserver(carConnectionObserver)
+        // The service can be torn down while still in the car.
         markAutoClosed()
         stopHomeAutoRefresh()
         failedBrowses.values.forEach { it.cancel() }
