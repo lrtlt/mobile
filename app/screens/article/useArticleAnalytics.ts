@@ -41,6 +41,7 @@ export const articleToTrackingParams = (article?: ArticleContent): TrackingParam
         pubdate: article.item_date_iso8601,
         articleType: 'news',
       },
+      content: {type: 'text', id: String(article.article_id)},
     };
   } else {
     // Radioteka or Mediateka
@@ -61,6 +62,7 @@ export const articleToTrackingParams = (article?: ArticleContent): TrackingParam
         pubdate: article.item_date_iso8601 ? new Date(article.item_date_iso8601).toISOString() : undefined,
         articleType: article.is_audio === 1 ? 'audio' : 'video',
       },
+      content: {type: article.is_audio === 1 ? 'audio' : 'video', id: String(article.id)},
     };
   }
 };

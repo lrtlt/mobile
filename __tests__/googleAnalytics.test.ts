@@ -29,6 +29,22 @@ describe('logPageView', () => {
     ]);
   });
 
+  it('sends the content type and id of articles', () => {
+    logPageView(
+      'https://www.lrt.lt/naujienos/lietuvoje/2/3061211/konstitucinis-teismas',
+      'Konstitucinis Teismas - LRT',
+      {
+        type: 'text',
+        id: '3061211',
+      },
+    );
+
+    expect(jest.mocked(logEvent).mock.calls[0][2]).toMatchObject({
+      content_type: 'text',
+      content_id: '3061211',
+    });
+  });
+
   it('skips screens without an lrt.lt page', () => {
     logPageView('Lrt app - Bookmarks', 'Lrt app - Bookmarks');
     logPageView('https://example.com/page', 'Example - LRT');

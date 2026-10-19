@@ -50,6 +50,7 @@ describe('articleToTrackingParams', () => {
       pubdate: '2026-09-23T10:20:00Z',
       articleType: 'news',
     });
+    expect(articleToTrackingParams(article)?.content).toEqual({type: 'text', id: '3061211'});
   });
 
   it('lists every author without the affiliation', () => {
@@ -94,6 +95,7 @@ describe('articleToTrackingParams', () => {
       pubdate: '2026-09-23T07:05:00.000Z',
       articleType: 'audio',
     });
+    expect(articleToTrackingParams(article)?.content).toEqual({type: 'audio', id: '3061155'});
   });
 
   it('mirrors lrt.lt metadata of a mediateka article', () => {
@@ -116,6 +118,7 @@ describe('articleToTrackingParams', () => {
       pubdate: '2026-09-23T09:10:00.000Z',
       articleType: 'video',
     });
+    expect(articleToTrackingParams(article)?.content).toEqual({type: 'video', id: '3061180'});
   });
 });
 
