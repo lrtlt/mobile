@@ -6,6 +6,8 @@ import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.OptIn
+import androidx.car.app.connection.CarConnection
+import androidx.lifecycle.Observer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -25,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.RejectedExecutionException
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -85,6 +88,30 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
      */
     private val failedBrowses = ConcurrentHashMap<String, Job>()
 
+    /**
+     * Whether the driver has opened LRT on the head unit in this connection.
+     * `android_auto_connected` is logged when this is set and `android_auto_disconnected` only
+     * when it is cleared, so the two always pair up.
+     *
+     * Not set in [onConnect]: Android Auto binds media apps it may never show — the last-used
+     * one at car start, to offer resuming it — and those binds are not opens.
+     */
+    private val autoOpened = AtomicBoolean(false)
+
+    /**
+     * Ends the Android Auto session when the phone leaves the car.
+     *
+     * Controller callbacks cannot mark that: Android Auto browses through the legacy
+     * `MediaBrowserService` endpoint, and Media3 never removes a controller connected that way, so
+     * [onDisconnected] does not fire for it. With playback keeping the service alive, `release()`
+     * does not run either, and the open flag left set would swallow the next drive's
+     * `android_auto_connected`.
+     */
+    private val carConnection = CarConnection(context).type
+    private val carConnectionObserver = Observer<Int> { type ->
+        if (type == CarConnection.CONNECTION_TYPE_NOT_CONNECTED) markAutoClosed()
+    }
+
     private val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
@@ -109,6 +136,8 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
             // Losing this costs only the instant retry; the timed one still runs.
             Log.e(TAG, "Could not watch connectivity", e)
         }
+        // The callback is built in the service's onCreate, on the main thread observeForever needs.
+        carConnection.observeForever(carConnectionObserver)
     }
 
     private fun startHomeAutoRefresh(session: MediaLibraryService.MediaLibrarySession) {
@@ -149,12 +178,36 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         if (!isAutomotive(packageName)) {
             return
         }
+        logEvent(event)
+    }
 
+    private fun logEvent(event: String) {
         try{
             Log.d(TAG, "logAnalyticsEvent: $event")
             FirebaseAnalytics.getInstance(context).logEvent(event, null)
         }catch (e: Exception){
             //
+        }
+    }
+
+    /**
+     * Logs `android_auto_connected` on the first browse of one of LRT's own browsables in this
+     * connection. The root does not count — Android Auto reads it to list the tabs, which it can
+     * do without putting the app on screen.
+     */
+    private fun markAutoOpened(packageName: String, parentId: String) {
+        if (!isAutomotive(packageName) || parentId == MediaItemTree.ROOT) return
+        if (autoOpened.compareAndSet(false, true)) {
+            logEvent("android_auto_connected")
+        }
+    }
+
+    /**
+     * Logs `android_auto_disconnected` if `android_auto_connected` was logged for this connection.
+     */
+    private fun markAutoClosed() {
+        if (autoOpened.getAndSet(false)) {
+            logEvent("android_auto_disconnected")
         }
     }
 
@@ -241,7 +294,6 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         mediaSession: MediaSession,
         controller: MediaSession.ControllerInfo
     ): MediaSession.ConnectionResult {
-        logAnalyticsEvent(controller.packageName, "android_auto_connected")
         val accepted = super.onConnect(mediaSession, controller)
         return MediaSession.ConnectionResult.AcceptedResultBuilder(mediaSession)
             .setAvailableSessionCommands(
@@ -416,6 +468,7 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
         currentSession = session
+        markAutoOpened(browser.packageName, parentId)
 
         if (parentId == MediaItemTree.HOME) {
             logAnalyticsEvent(browser.packageName, "android_auto_recommended_open")
@@ -713,6 +766,9 @@ class LRTMediaSessionCallback(private val context: Context): MediaLibraryService
     // overrides; `MediaItemTree.search` itself stays, because voice search still uses it.
 
     fun release() {
+        carConnection.removeObserver(carConnectionObserver)
+        // The service can be torn down while still in the car.
+        markAutoClosed()
         stopHomeAutoRefresh()
         failedBrowses.values.forEach { it.cancel() }
         failedBrowses.clear()
