@@ -11,3 +11,10 @@
 
 -keep class com.swmansion.reanimated.** { *; }
 -keep class com.facebook.react.turbomodule.** { *; }
+
+# react-native-config looks up BuildConfig by name and reads its fields via reflection
+-keep class lt.mediapark.lrt.BuildConfig { *; }
+
+# Readable Crashlytics stack traces (the mapping file is uploaded by the Crashlytics plugin)
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
