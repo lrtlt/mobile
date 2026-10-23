@@ -49,7 +49,7 @@ const PlaylistAbout: React.FC<PropsWithChildren<Props>> = ({
   const EpisodeInfo = useCallback(() => {
     return (
       <>
-        <View pointerEvents="none">
+        <View>
           <ArticleParagraph htmlText={episodeInfo} textSize={16} />
         </View>
       </>

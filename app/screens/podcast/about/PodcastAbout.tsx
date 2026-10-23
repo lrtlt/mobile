@@ -78,7 +78,7 @@ const PodcastAbout: React.FC<PropsWithChildren<Props>> = ({article, isVodcast = 
             {getMediaDurationMinutes(article.media_duration)} min.
           </TextComponent>
         </View>
-        <View pointerEvents="none">
+        <View>
           <TextComponent style={styles.title} fontFamily="PlayfairDisplay-Regular">
             {article.title}
           </TextComponent>
