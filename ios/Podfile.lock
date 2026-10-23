@@ -1211,12 +1211,6 @@ PODS:
     - abseil/meta/type_traits
     - abseil/xcprivacy
   - abseil/xcprivacy (1.20240722.0)
-  - AppCheckCore (11.3.2):
-    - GoogleUtilities/Environment (~> 8.0)
-    - GoogleUtilities/UserDefaults (~> 8.0)
-    - PromisesObjC (~> 2.4)
-    - PromisesSwift (~> 2.4)
-    - RecaptchaInterop (~> 101.0)
   - Auth0 (2.25.0):
     - JWTDecode (= 3.3.0)
     - SimpleKeychain (= 1.3.0)
@@ -1230,9 +1224,6 @@ PODS:
     - React-Core
   - DSFRegex (3.3.1)
   - FBLazyVector (0.86.3)
-  - Firebase/AppCheck (12.18.0):
-    - Firebase/CoreOnly
-    - FirebaseAppCheck (~> 12.18.0)
   - Firebase/CoreOnly (12.18.0):
     - FirebaseCore (~> 12.18.0)
   - Firebase/Crashlytics (12.18.0):
@@ -1262,12 +1253,6 @@ PODS:
     - GoogleUtilities/Network (~> 8.1)
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
     - nanopb (~> 3.30910.0)
-  - FirebaseAppCheck (12.18.0):
-    - AppCheckCore (~> 11.3)
-    - FirebaseAppCheckInterop (~> 12.18.0)
-    - FirebaseCore (~> 12.18.0)
-    - GoogleUtilities/Environment (~> 8.1)
-    - GoogleUtilities/UserDefaults (~> 8.1)
   - FirebaseAppCheckInterop (12.18.0)
   - FirebaseCore (12.18.0):
     - FirebaseCoreInternal (~> 12.18.0)
@@ -3455,7 +3440,6 @@ PODS:
     - React-utils (= 0.86.3)
     - ReactNativeDependencies
   - ReactNativeDependencies (0.86.3)
-  - RecaptchaInterop (101.0.0)
   - RNFastImage (8.13.0):
     - hermes-engine
     - libavif/core (~> 0.11.1)
@@ -3528,29 +3512,6 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
-    - Yoga
-  - RNFBAppCheck (26.4.0):
-    - Firebase/AppCheck (= 12.18.0)
-    - hermes-engine
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - ReactNativeDependencies
-    - RNFBApp
     - Yoga
   - RNFBCrashlytics (26.4.0):
     - Firebase/Crashlytics (= 12.18.0)
@@ -4070,7 +4031,6 @@ DEPENDENCIES:
   - "RNFastImage (from `../node_modules/@d11/react-native-fast-image`)"
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
-  - "RNFBAppCheck (from `../node_modules/@react-native-firebase/app-check`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
@@ -4087,13 +4047,11 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - abseil
-    - AppCheckCore
     - Auth0
     - BoringSSL-GRPC
     - DSFRegex
     - Firebase
     - FirebaseAnalytics
-    - FirebaseAppCheck
     - FirebaseAppCheckInterop
     - FirebaseCore
     - FirebaseCoreExtension
@@ -4121,7 +4079,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - PromisesSwift
-    - RecaptchaInterop
     - SDWebImage
     - SDWebImageAVIFCoder
     - SDWebImageSVGCoder
@@ -4315,8 +4272,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/analytics"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
-  RNFBAppCheck:
-    :path: "../node_modules/@react-native-firebase/app-check"
   RNFBCrashlytics:
     :path: "../node_modules/@react-native-firebase/crashlytics"
   RNFBFirestore:
@@ -4350,7 +4305,6 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   A0Auth0: 79dd2f7ceed30828a20cf23f9155607ce7bed90f
   abseil: a05cc83bf02079535e17169a73c5be5ba47f714b
-  AppCheckCore: be8fce5469f68d7f6a29aa94b25f097409ff7fdc
   Auth0: 93135339d62b1e6cdb18ac6198b06d986854ba90
   BoringSSL-GRPC: dded2a44897e45f28f08ae87a55ee4bcd19bc508
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
@@ -4358,7 +4312,6 @@ SPEC CHECKSUMS:
   FBLazyVector: 94a9e5b949d0f65bbc1a741f8a7c72499da32567
   Firebase: 5523dd53ebe603451b4e1befcd99fa20a5c015cd
   FirebaseAnalytics: 651ecdc96c7dd8df0c15d55b6c6b70f78c2987b9
-  FirebaseAppCheck: 06fc2eca9cc0499dc393f9d4320faeb373b24851
   FirebaseAppCheckInterop: 8c2fe8b563377bd948ee6acc2871fe2dfb3a034a
   FirebaseCore: 96787d19ee32dc2242cc487b301bc616afeb398b
   FirebaseCoreExtension: a86bab02524ca2bff95dddab7a3fcad505c2ddeb
@@ -4468,11 +4421,9 @@ SPEC CHECKSUMS:
   ReactCodegen: b7d961f1cc36d710b1f32efcd399acaece733e47
   ReactCommon: ff13dfd7b6302a79e5ea9b60f877716e60161547
   ReactNativeDependencies: 6738e602b46fd24aa453cd58267ec3bb8bf29d27
-  RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   RNFastImage: d6b630819037d141fe5254d4377c67fa6c2868ce
   RNFBAnalytics: 0420db9a615fcdd0e21bb6d0bddd30b0a9523ee9
   RNFBApp: 550b730d23df54dd0796ef5df62e52738cadb376
-  RNFBAppCheck: 47c567dfe3deef87579d2330ecff786e55450121
   RNFBCrashlytics: e3d0dbbc662024866c9a963357bafb849bfadcec
   RNFBFirestore: af9148874ee92bc99253c0b049ecdb9e494a894a
   RNFBMessaging: e0a8b5a53a08ee15d06e40cb0d58279de41cdfa8

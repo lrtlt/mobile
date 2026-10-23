@@ -21,7 +21,6 @@
     "@react-native-community/netinfo": "^12.0.1",
     "@react-native-firebase/analytics": "^26.4.0",
     "@react-native-firebase/app": "^26.4.0",
-    "@react-native-firebase/app-check": "^26.4.0",
     "@react-native-firebase/crashlytics": "^26.4.0",
     "@react-native-firebase/firestore": "^26.4.0",
     "@react-native-firebase/messaging": "^26.4.0",

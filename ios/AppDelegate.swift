@@ -1,7 +1,6 @@
 import CarPlay
 import Firebase
 import GoogleCast
-import RNFBAppCheck
 import React
 import ReactAppDependencyProvider
 import React_RCTAppDelegate
@@ -21,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
-    RNFBAppCheckModule.sharedInstance()
     FirebaseApp.configure()
 
     // let kReceiverAppID = kGCKDefaultMediaReceiverApplicationID

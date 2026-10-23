@@ -110,7 +110,6 @@ Menu structure is dynamic and loaded from Firestore (`internal/app-menu-v2` docu
 - Messaging (FCM): Push notifications with foreground/background handlers
 - Crashlytics: Error reporting
 - Firestore: Dynamic menu configuration
-- App Check: Security token validation
 
 **Media Players**:
 - THEOplayer (v10.7.1): Video/audio playback via `PlayerProvider` context
@@ -168,7 +167,6 @@ Strategy pattern in `app/util/articleFormatters/` for dynamic layouts:
 
 `.env` file contains:
 - Gemius analytics credentials
-- Firebase App Check debug tokens
 - THEOplayer license
 - Auth0 domain and client ID
 

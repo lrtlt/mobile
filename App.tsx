@@ -10,7 +10,6 @@ import PlayerProvider from './app/components/videoComponent/context/PlayerProvid
 import useNotificationsPermission from './app/util/useNotificationsPermission';
 import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
 import ThemeProvider from './app/theme/ThemeProvider';
-import useAppCheckSetup from './app/util/useAppCheckSetup';
 import {Auth0Provider} from 'react-native-auth0';
 
 import {enableFreeze} from 'react-native-screens';
@@ -25,7 +24,6 @@ enableFreeze(true);
 
 const App: React.FC = () => {
   useQueryAppStateSync();
-  useAppCheckSetup();
   useNotificationsPermission();
   useAppTrackingPermission();
   useGoogleAnalyticsSetup();
