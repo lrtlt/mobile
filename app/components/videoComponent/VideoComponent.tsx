@@ -10,7 +10,7 @@ import {MediaType} from './context/PlayerContext';
 import {StreamData, useStreamInfo} from '../../api/hooks/useStream';
 import {PlaybackTrackingMeta} from './usePlaybackProgressTracker';
 import {usePlaybackProgressStore} from '../../state/playback_progress_store';
-import {PLAYBACK_PROGRESS_MIN_POSITION_SEC} from '../../constants';
+import {PLAYBACK_PROGRESS_MIN_POSITION_SEC, VIDEO_ASPECT_RATIO} from '../../constants';
 
 interface Props {
   style?: ViewStyle;
@@ -115,7 +115,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
     if (isLoading) {
       return (
         <View style={style}>
-          <View style={{...styles.loaderContainer}}>
+          <View style={{...styles.loaderContainer, aspectRatio: aspectRatio ?? VIDEO_ASPECT_RATIO}}>
             <ActivityIndicator size="small" animating={isLoading} color={colors.primary} />
           </View>
         </View>
@@ -142,9 +142,7 @@ const VideoComponent: React.FC<PropsWithChildren<Props>> = ({
         startTime={
           data.isLiveStream
             ? undefined
-            : startTime ||
-              resolveResumeStartTime(progressTracking?.articleId) ||
-              data.offset
+            : startTime || resolveResumeStartTime(progressTracking?.articleId) || data.offset
         }
         poster={backgroundImage ?? data.poster}
         tracks={data.tracks}
