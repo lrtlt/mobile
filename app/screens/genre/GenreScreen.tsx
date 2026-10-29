@@ -16,8 +16,8 @@ import RadiotekaGenres from '../main/tabScreen/radioteka/components/genres/Radio
 import GenrePodcastGrid from './GenrePodcastGrid';
 import {fetchartcilesByCategory} from '../../api';
 import Snackbar from '../../components/snackbar/SnackBar';
-import useNavigationAnalytics, {TrackingParams} from '../../util/useNavigationAnalytics';
-import {mediaLandingPage} from '../../util/smartocto';
+import useNavigationAnalytics, {TrackingParams} from '../../analytics/useNavigationAnalytics';
+import {mediaLandingPage} from '../../analytics/smartocto';
 import {pushArticle} from '../../util/NavigationUtils';
 
 interface Props {

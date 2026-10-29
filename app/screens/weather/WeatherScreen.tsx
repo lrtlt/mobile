@@ -12,8 +12,8 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import {ForecastLocation} from '../../api/Types';
 import useFetchWeatherArticles from './useFetchWeatherArticles';
 import SlugArticlesBlock from '../main/tabScreen/home/blocks/SlugArticlesBlock/SlugArticlesBlock';
-import useNavigationAnalytics from '../../util/useNavigationAnalytics';
-import {newsLandingPage} from '../../util/smartocto';
+import useNavigationAnalytics from '../../analytics/useNavigationAnalytics';
+import {newsLandingPage} from '../../analytics/smartocto';
 import {useSettingsStore} from '../../state/settings_store';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Weather'>;

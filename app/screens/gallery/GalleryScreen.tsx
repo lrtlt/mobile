@@ -10,7 +10,7 @@ import {IconClose} from '../../components/svg';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import useNavigationAnalytics from '../../analytics/useNavigationAnalytics';
 import ZoomableImage from './ZoomableImage';
 import ThumbnailStrip from './ThumbnailStrip';
 

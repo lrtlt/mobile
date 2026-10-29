@@ -2,7 +2,7 @@ import {Platform} from 'react-native';
 import Gemius from 'react-native-gemius-plugin';
 import {GEMIUS_HIT_COLLECTOR_HOST} from '../constants';
 import Config from 'react-native-config';
-import {getAppVersion} from './useAppVersion';
+import {getAppVersion} from '../util/useAppVersion';
 
 export const setupGemius = () => {
   const appVersion = getAppVersion();

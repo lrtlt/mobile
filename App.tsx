@@ -8,7 +8,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {StyleSheet} from 'react-native';
 import PlayerProvider from './app/components/videoComponent/context/PlayerProvider';
 import useNotificationsPermission from './app/util/useNotificationsPermission';
-import useGoogleAnalyticsSetup from './app/util/useGoogleAnalyticsSetup';
+import useGoogleAnalyticsSetup from './app/analytics/useGoogleAnalyticsSetup';
 import ThemeProvider from './app/theme/ThemeProvider';
 import {Auth0Provider} from 'react-native-auth0';
 

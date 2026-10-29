@@ -117,7 +117,7 @@ Menu structure is dynamic and loaded from Firestore (`internal/app-menu-v2` docu
 
 **Analytics**:
 - Gemius plugin (configured via `.env` variables)
-- smartocto (`app/util/smartocto.ts`): GET requests to its ingestion endpoint, no SDK
+- smartocto (`app/analytics/smartocto.ts`): GET requests to its ingestion endpoint, no SDK
 - Firebase Analytics
 
 **Authentication**: Auth0 (v5.3.1) configured via `.env` variables
@@ -139,6 +139,7 @@ Most styling uses React Native's `StyleSheet.create()`.
 
 ```
 app/
+├── analytics/        # Firebase, smartocto and Gemius tracking, view counter, useNavigationAnalytics
 ├── api/              # HTTP client, endpoints, React Query hooks
 ├── components/       # 60+ reusable UI components organized by domain
 ├── constants/        # App-wide constants
@@ -149,7 +150,7 @@ app/
 ├── theme/            # Theme context and dark mode support
 └── util/             # Utilities, formatters, setup hooks
     ├── articleFormatters/  # Template-based layout strategy pattern
-    └── [setup hooks]       # useFirebaseMessaging, useGoogleAnalyticsSetup, etc.
+    └── [setup hooks]       # useFirebaseMessaging, useNetworkStatus, etc.
 ```
 
 **Key Screens** (`app/screens/`): `article`, `channel`, `podcast`, `vodcast`, `search`, `user`, `favorites`, `bookmarks`, `history`, `weather`, `games`, `gallery`, `verticalVideos`
@@ -208,7 +209,7 @@ React Query integrates with Netinfo. Check `useNavigationStore` for `isOfflineMo
 
 Navigation changes automatically trigger Gemius tracking. Use Firebase Analytics for custom events via `useArticleStorageStore` methods.
 
-Screens report views through `useNavigationAnalytics` (Firebase `page_view` + smartocto page view). The Firebase `page_view` (`app/util/googleAnalytics.ts`) mirrors the GA4 `page_view` lrt.lt sends (page_location, page_title, page_referrer), so app and web views land in the same event; no `screen_view` is sent. smartocto merges app and web traffic by url, domain id and post id, so the `smartocto` page metadata must match what lrt.lt sends in its `window._ain` object character for character. Check the web page before changing it. Screens without an lrt.lt page (bookmarks, history, gallery...) omit `smartocto`, and so does the tag screen (SlugScreen), because lrt.lt `/tema/...` tag pages load no smartocto tracker at all.
+Screens report views through `useNavigationAnalytics` (Firebase `page_view` + smartocto page view). For article pages the smartocto visit also sends an Article Read after 10 s and Attention Time every 5 s, counted only while the screen is focused and the app is in the foreground. Attention Time deliberately omits the scroll position (`sp`): lrt.lt reports read depth, and app values would mislead. The Firebase `page_view` (`app/analytics/googleAnalytics.ts`) mirrors the GA4 `page_view` lrt.lt sends (page_location, page_title, page_referrer), so app and web views land in the same event; no `screen_view` is sent. smartocto merges app and web traffic by url, domain id and post id, so the `smartocto` page metadata must match what lrt.lt sends in its `window._ain` object character for character. Check the web page before changing it. Screens without an lrt.lt page (bookmarks, history, gallery...) omit `smartocto`, and so does the tag screen (SlugScreen), because lrt.lt `/tema/...` tag pages load no smartocto tracker at all.
 
 ## Testing Notes
 

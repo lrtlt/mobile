@@ -4,7 +4,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {FacebookComments} from '../../components';
 import {MainStackParamList} from '../../navigation/MainStack';
-import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import useNavigationAnalytics from '../../analytics/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Comments'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Comments'>;

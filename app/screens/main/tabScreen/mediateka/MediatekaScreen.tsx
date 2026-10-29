@@ -10,8 +10,8 @@ import moment from 'moment';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import useAppStateCallback from '../../../../hooks/useAppStateCallback';
-import useNavigationAnalytics from '../../../../util/useNavigationAnalytics';
-import {mediaLandingPage} from '../../../../util/smartocto';
+import useNavigationAnalytics from '../../../../analytics/useNavigationAnalytics';
+import {mediaLandingPage} from '../../../../analytics/smartocto';
 import {ArticleState, useArticleStore} from '../../../../state/article_store';
 import {useShallow} from 'zustand/shallow';
 import Config from 'react-native-config';
