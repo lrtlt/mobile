@@ -12,6 +12,7 @@ import {IconSettings} from '../../components/svg';
 import {logEvent, getAnalytics} from '@react-native-firebase/analytics';
 import AppBarBackButton from '../../components/appBar/AppBarBackButton';
 import {ActionButton} from '../../components';
+import useContentSideInsets from '../../hooks/useContentSideInsets';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Offline'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Offline'>;
@@ -27,6 +28,7 @@ type Route = {
 };
 
 const OfflineScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
+  const contentInsets = useContentSideInsets();
   const {colors, strings, dim} = useTheme();
 
   const [index, setIndex] = useState(0);
@@ -78,7 +80,8 @@ const OfflineScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
   const renderTabBar = useCallback((tabBarProps: any) => <TabBar {...tabBarProps} />, [colors]);
 
   return (
-    <View style={styles.root}>
+    <View
+      style={[styles.root, {paddingLeft: contentInsets.left, paddingRight: contentInsets.right}]}>
       <TabView
         navigationState={{index, routes}}
         renderScene={renderScene}

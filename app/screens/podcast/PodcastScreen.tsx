@@ -4,7 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AdultContentWarning, ScreenError, ScreenLoader} from '../../components';
 import useArticleScreenState from '../article/useArticleScreenState';
 import {useTheme} from '../../Theme';
@@ -23,6 +23,7 @@ import {useAllSeasonEpisodes} from './episodeSelection/useSeason';
 import RadiotekaGenres from '../main/tabScreen/radioteka/components/genres/RadiotekaGenres';
 import useArticleHeader from '../article/useArticleHeader_v2';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
+import useContentSideInsets from '../../hooks/useContentSideInsets';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Podcast'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Podcast'>;
@@ -33,6 +34,7 @@ type Props = {
 };
 
 const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
+  const contentInsets = useContentSideInsets();
   const {articleId} = route.params;
 
   const [{article, category_info, loadingState}, acceptAdultContent] = useArticleScreenState(articleId, true);
@@ -112,9 +114,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
         <>
           {appBar}
           {article && (
-            <SafeAreaView
-              style={[styles.screen, {backgroundColor: colors.greyBackground}]}
-              edges={['left', 'right']}>
+            <View style={[styles.screen, {backgroundColor: colors.greyBackground}, {paddingLeft: contentInsets.left, paddingRight: contentInsets.right}]}>
               <ScrollView
                 contentContainerStyle={{paddingBottom: bottom + 32, paddingTop: appBarHeight.fullHeight}}>
                 <PodcastEpisodeSelection
@@ -163,7 +163,7 @@ const PodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                   />
                 )}
               </ScrollView>
-            </SafeAreaView>
+            </View>
           )}
         </>
       );

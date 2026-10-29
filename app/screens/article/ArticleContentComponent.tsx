@@ -27,7 +27,7 @@ import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
 import {useTheme} from '../../Theme';
 import SimpleFooter from './simpleFooter/SimpleFooter';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import useContentSideInsets from '../../hooks/useContentSideInsets';
 
 export type ArticleSelectableItem = {
   type: 'photo' | 'article';
@@ -46,7 +46,8 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({
   scrollToLiveFeed,
 }) => {
   const {width: screenWidth} = useWindowDimensions();
-  const contentWidth = screenWidth - 12 * 2;
+  const insets = useContentSideInsets();
+  const contentWidth = screenWidth - insets.left - insets.right - 12 * 2;
 
   const {simplyfied} = useTheme();
   const articleData = useMemo(() => compose(article, simplyfied), [article]);
@@ -135,7 +136,6 @@ const ArticleContentComponent: React.FC<React.PropsWithChildren<Props>> = ({
   );
 
   const appBarHeight = useAppBarHeight();
-  const insets = useSafeAreaInsets();
 
   return (
     <>

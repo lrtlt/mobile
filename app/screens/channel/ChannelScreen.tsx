@@ -15,6 +15,7 @@ import useChannelAnalytics from './useChannelAnalytics';
 import Config from 'react-native-config';
 import {TVProgramChannel} from '../../api/Types';
 import {useChannelStreamInfo} from '../../api/hooks/useChannel';
+import useContentSideInsets from '../../hooks/useContentSideInsets';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Channel'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Channel'>;
@@ -25,6 +26,7 @@ type Props = {
 };
 
 const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
+  const contentInsets = useContentSideInsets();
   const [selectedChannel, setSelectedChannel] = useState(route.params.channelId);
 
   useEffect(() => {
@@ -95,7 +97,7 @@ const ChannelScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
   const shouldRenderTVBar = !!data || !!error;
 
   return (
-    <SafeAreaView style={styles.screen} edges={['left', 'right', 'bottom']}>
+    <SafeAreaView style={[styles.screen, {paddingLeft: contentInsets.left, paddingRight: contentInsets.right}]} edges={['bottom']}>
       <MyScrollView style={styles.scrollContainer}>
         <View style={styles.container}>
           <View collapsable={false}>{content}</View>

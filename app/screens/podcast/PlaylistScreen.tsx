@@ -4,7 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../../Theme';
 import {ScrollView} from 'react-native-gesture-handler';
 import FastImage from '@d11/react-native-fast-image';
@@ -14,6 +14,7 @@ import {useMediaPlayer} from '../../components/videoComponent/context/useMediaPl
 import ArticlePlaylist from '../../components/videoComponent/context/playlist/ArticlePlaylist';
 import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection';
 import PlaylistAbout from './about/PlaylistAbout';
+import useContentSideInsets from '../../hooks/useContentSideInsets';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Playlist'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Playlist'>;
@@ -24,6 +25,7 @@ type Props = {
 };
 
 const PlaylistScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
+  const contentInsets = useContentSideInsets();
   const [selectedEpisode, setSelectedEpisode] = useState<number>(0);
   const {data} = route.params.data;
 
@@ -56,7 +58,7 @@ const PlaylistScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, r
   const {bottom} = useSafeAreaInsets();
 
   return (
-    <SafeAreaView style={[styles.screen, {backgroundColor: colors.greyBackground}]} edges={['left', 'right']}>
+    <View style={[styles.screen, {backgroundColor: colors.greyBackground}, {paddingLeft: contentInsets.left, paddingRight: contentInsets.right}]}>
       <ScrollView contentContainerStyle={{paddingBottom: bottom + 32}}>
         <PodcastEpisodeSelection
           preloadedEpisodes={episodes}
@@ -93,7 +95,7 @@ const PlaylistScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, r
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

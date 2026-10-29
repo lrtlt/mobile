@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import SimpleArticleScreen from '../main/tabScreen/simple/SimpleArticleScreen';
 import {MENU_TYPE_CATEGORY} from '../../api/Types';
 import {SIMPLIFIED_CATEGORY_ID} from '../../constants';
+import useContentSideInsets from '../../hooks/useContentSideInsets';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Category'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Category'>;
@@ -18,6 +18,7 @@ type Props = {
 };
 
 const CategoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
+  const contentInsets = useContentSideInsets();
   const {id, name, url} = route.params;
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const CategoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, r
   //Not using navigation analytics here because it's already used in ArticleTabScreen
 
   return (
-    <SafeAreaView style={styles.screen} edges={['left', 'right']}>
+    <View style={[styles.screen, {paddingLeft: contentInsets.left, paddingRight: contentInsets.right}]}>
       <SimpleArticleScreen
         type={MENU_TYPE_CATEGORY}
         showTitle={false}
@@ -43,7 +44,7 @@ const CategoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, r
         categoryTitle={name}
         categoryUrl={url}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

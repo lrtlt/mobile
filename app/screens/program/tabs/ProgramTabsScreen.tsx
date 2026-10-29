@@ -6,6 +6,7 @@ import {useTheme} from '../../../Theme';
 import {ProgramItemType, SingleDayProgram} from '../../../api/Types';
 
 import ProgramList from './ProgramList';
+import useContentSideInsets, {useBarSideMargins} from '../../../hooks/useContentSideInsets';
 
 interface Props {
   program: SingleDayProgram[];
@@ -21,6 +22,8 @@ type Route = {
 const TabsScreen: React.FC<React.PropsWithChildren<Props>> = ({program}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const {colors} = useTheme();
+  const contentInsets = useContentSideInsets();
+  const sideMargins = useBarSideMargins();
 
   const routes: Route[] = useMemo(() => {
     if (!program) {
@@ -60,12 +63,12 @@ const TabsScreen: React.FC<React.PropsWithChildren<Props>> = ({program}) => {
             return <TabBarItem key={key} {...rest} label={renderTabLabel as any} />;
           }}
           indicatorStyle={{backgroundColor: colors.primary}}
-          style={{backgroundColor: colors.background}}
+          style={[{backgroundColor: colors.background}, sideMargins]}
           tabStyle={styles.tab}
         />
       );
     },
-    [renderTabLabel],
+    [renderTabLabel, sideMargins],
   );
 
   const renderScene: TabViewProps<Route>['renderScene'] = useCallback(
@@ -97,7 +100,8 @@ const TabsScreen: React.FC<React.PropsWithChildren<Props>> = ({program}) => {
   );
 
   return (
-    <View style={styles.root}>
+    <View
+      style={[styles.root, {paddingLeft: contentInsets.left, paddingRight: contentInsets.right}]}>
       <TabView
         navigationState={{
           index: currentIndex < 0 ? 0 : currentIndex,
