@@ -10,8 +10,8 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import ProgramDateModal from './ProgramDateModal';
 import {delay} from 'lodash';
 import moment from 'moment';
-import useNavigationAnalytics from '../../util/useNavigationAnalytics';
-import {newsLandingPage} from '../../util/smartocto';
+import useNavigationAnalytics from '../../analytics/useNavigationAnalytics';
+import {newsLandingPage} from '../../analytics/smartocto';
 import {useWeeklyProgram} from '../../api/hooks/useProgram';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Program'>;

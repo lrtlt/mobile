@@ -14,13 +14,21 @@ jest.mock('react-native-mmkv', () => ({
   },
 }));
 
-jest.mock('../app/util/useNavigationAnalytics', () => ({__esModule: true, default: jest.fn()}));
+jest.mock('../app/analytics/useNavigationAnalytics', () => ({__esModule: true, default: jest.fn()}));
 
 import {ArticleContent} from '../app/api/Types';
 import {articleToTrackingParams} from '../app/screens/article/useArticleAnalytics';
-import {LIFETIME_ID_TTL, mediaLandingPage, newsLandingPage, toLrtUrl, trackPageView} from '../app/util/smartocto';
+import {
+  SmartoctoPage,
+  mediaLandingPage,
+  newsLandingPage,
+  toLrtUrl,
+  trackPageView,
+} from '../app/analytics/smartocto';
+import {LIFETIME_ID_TTL} from '../app/analytics/smartocto_session';
 
-// Expected values are what lrt.lt sends to smartocto for the same pages (window._ain)
+// Expected values are what lrt.lt sends to smartocto for the same pages (window._ain),
+// except article ids, which are taken from the article url (see analyticsArticleId)
 describe('articleToTrackingParams', () => {
   it('mirrors lrt.lt metadata of a news article', () => {
     const article = {
@@ -87,7 +95,7 @@ describe('articleToTrackingParams', () => {
     expect(articleToTrackingParams(article)?.smartocto).toEqual({
       url: 'https://www.lrt.lt/radioteka/irasas/2000872059/kauno-zalgirio-prekes-zenklo-atnaujinimo-bendraautoris',
       pageType: 'article',
-      postId: '3061155',
+      postId: '2000872059',
       title: 'Kauno „Žalgirio“ prekės ženklo atnaujinimo bendraautoris',
       authors: 'LRT KLASIKA',
       sections: 'Radioteka>Tendencingai',
@@ -95,7 +103,7 @@ describe('articleToTrackingParams', () => {
       pubdate: '2026-09-23T07:05:00.000Z',
       articleType: 'audio',
     });
-    expect(articleToTrackingParams(article)?.content).toEqual({type: 'audio', id: '3061155'});
+    expect(articleToTrackingParams(article)?.content).toEqual({type: 'audio', id: '2000872059'});
   });
 
   it('mirrors lrt.lt metadata of a mediateka article', () => {
@@ -111,14 +119,14 @@ describe('articleToTrackingParams', () => {
     } as unknown as ArticleContent;
 
     expect(articleToTrackingParams(article)?.smartocto).toMatchObject({
-      postId: '3061180',
+      postId: '2000872064',
       authors: '',
       sections: 'Mediateka>Žvilgtelk',
       tags: '',
       pubdate: '2026-09-23T09:10:00.000Z',
       articleType: 'video',
     });
-    expect(articleToTrackingParams(article)?.content).toEqual({type: 'video', id: '3061180'});
+    expect(articleToTrackingParams(article)?.content).toEqual({type: 'video', id: '2000872064'});
   });
 });
 
@@ -203,7 +211,7 @@ describe('trackPageView', () => {
     expect(endpoint).toBe('https://ingestion.smartocto.com/p');
     expect(params).toMatchObject({
       d: 'https://www.lrt.lt/naujienos/lietuvoje',
-      f: '30520',
+      f: '3052',
       c: 'Lietuvoje - LRT',
       a: 'redaction',
       e: 'naujienos>lietuvoje',
@@ -257,6 +265,85 @@ describe('trackPageView', () => {
     const [{params}] = requests();
     expect(params.ul).toMatch(/^\d{13}\.\d+(\.\d+)?$/);
     expect(params.ul).not.toBe(storedId);
+  });
+
+  describe('article visit', () => {
+    const article: SmartoctoPage = {
+      url: 'https://www.lrt.lt/naujienos/lietuvoje/2/3061211/konstitucinis-teismas',
+      pageType: 'article',
+      postId: '3061211',
+      title: 'Konstitucinis Teismas',
+      articleType: 'news',
+    };
+    const byType = () => ({
+      views: requests().filter(({endpoint, params}) => endpoint.endsWith('/p') && params.t === '0'),
+      reads: requests().filter(({endpoint, params}) => endpoint.endsWith('/p') && params.t === '1'),
+      attention: requests().filter(({endpoint}) => endpoint === 'https://ingestion.smartocto.com/a'),
+    });
+
+    it('sends an article read after 10 seconds and attention time every 5 seconds', () => {
+      const visit = trackPageView(article, 'anonymous');
+
+      jest.advanceTimersByTime(9 * 1000);
+      expect(byType().reads).toHaveLength(0);
+      expect(byType().attention).toHaveLength(1);
+
+      jest.advanceTimersByTime(1000);
+      visit.end();
+
+      const {views, reads, attention} = byType();
+      expect(reads).toHaveLength(1);
+      expect(reads[0].params).toEqual({...views[0].params, t: '1'});
+      expect(attention.map(({params}) => [params.at, params.ar, params.seq])).toEqual([
+        ['5', '5', '1'],
+        ['10', '5', '2'],
+      ]);
+      // Same visit identifiers as the page view, and no scroll position
+      const {d, f, pid, u, ul, x, ch} = views[0].params;
+      expect(attention[0].params).toMatchObject({d, f, pid, u, ul, x, ch});
+      expect(attention[0].params).not.toHaveProperty('sp');
+      expect(Number(attention[0].params.ts)).toBe(Date.now() - 5 * 1000);
+    });
+
+    it('counts attention only while the visit is not paused', () => {
+      const visit = trackPageView(article, 'anonymous');
+      jest.advanceTimersByTime(4 * 1000);
+      visit.pause();
+      jest.advanceTimersByTime(60 * 1000);
+      expect(byType().attention).toHaveLength(0);
+
+      visit.resume();
+      jest.advanceTimersByTime(1000);
+      expect(byType().attention.map(({params}) => params.at)).toEqual(['5']);
+    });
+
+    it('stops tracking when the visit ends', () => {
+      const visit = trackPageView(article, 'anonymous');
+      jest.advanceTimersByTime(4 * 1000);
+      visit.end();
+      visit.resume();
+      jest.advanceTimersByTime(60 * 1000);
+
+      expect(byType().reads).toHaveLength(0);
+      expect(byType().attention).toHaveLength(0);
+    });
+
+    it('keeps the session alive while the article is read', () => {
+      const visit = trackPageView(article, 'anonymous');
+      jest.advanceTimersByTime(40 * 60 * 1000);
+      visit.end();
+      trackPageView(page, 'anonymous');
+
+      const {views} = byType();
+      expect(views[1].params.u).toBe(views[0].params.u);
+    });
+
+    it('sends no article read or attention time for landing pages', () => {
+      trackPageView(page, 'anonymous');
+      jest.advanceTimersByTime(60 * 1000);
+
+      expect(requests()).toHaveLength(1);
+    });
   });
 
   it('URL-encodes values like the web tracker', () => {

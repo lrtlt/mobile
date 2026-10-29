@@ -4,8 +4,8 @@ import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {SafeWebView} from '../../components';
 import {MainStackParamList} from '../../navigation/MainStack';
-import useNavigationAnalytics from '../../util/useNavigationAnalytics';
-import {newsLandingPage} from '../../util/smartocto';
+import useNavigationAnalytics from '../../analytics/useNavigationAnalytics';
+import {newsLandingPage} from '../../analytics/smartocto';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Games'>;

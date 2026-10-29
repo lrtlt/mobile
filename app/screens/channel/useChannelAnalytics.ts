@@ -1,6 +1,6 @@
-import useNavigationAnalytics, {TrackingParams} from '../../util/useNavigationAnalytics';
+import useNavigationAnalytics, {TrackingParams} from '../../analytics/useNavigationAnalytics';
 import {ChannelResponse} from '../../api/Types';
-import {mediaLandingPage} from '../../util/smartocto';
+import {mediaLandingPage} from '../../analytics/smartocto';
 
 type Params = {
   channel_response?: ChannelResponse;

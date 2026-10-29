@@ -7,7 +7,7 @@ import {useTheme} from '../../Theme';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import useNavigationAnalytics from '../../analytics/useNavigationAnalytics';
 import {pushArticle} from '../../util/NavigationUtils';
 import {useArticlesByTag} from '../../api/hooks/useArticlesByTag';
 

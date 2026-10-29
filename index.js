@@ -1,7 +1,7 @@
 // Setup RN Gesture handler
 import 'react-native-gesture-handler';
 
-import {setupGemius} from './app/util/useGemiusSetup';
+import {setupGemius} from './app/analytics/useGemiusSetup';
 setupGemius();
 
 globalThis.RNFB_SILENCE_MODULAR_DEPRECATION_WARNINGS = true;

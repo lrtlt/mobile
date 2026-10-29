@@ -1,5 +1,5 @@
-import useNavigationAnalytics, {TrackingParams} from '../../../../util/useNavigationAnalytics';
-import {newsLandingPage, toLrtUrl} from '../../../../util/smartocto';
+import useNavigationAnalytics, {TrackingParams} from '../../../../analytics/useNavigationAnalytics';
+import {newsLandingPage, toLrtUrl} from '../../../../analytics/smartocto';
 
 type Params = {
   categoryTitle?: string;

@@ -1,6 +1,7 @@
-import useNavigationAnalytics, {TrackingParams} from '../../util/useNavigationAnalytics';
+import useNavigationAnalytics, {TrackingParams} from '../../analytics/useNavigationAnalytics';
 import {ArticleContent, Author, Keyword, isDefaultArticle} from '../../api/Types';
-import {sectionsFromPath} from '../../util/smartocto';
+import {sectionsFromPath} from '../../analytics/smartocto';
+import {analyticsArticleId} from '../../analytics/analyticsArticleId';
 
 type Params = {
   article?: ArticleContent;
@@ -25,6 +26,7 @@ export const articleToTrackingParams = (article?: ArticleContent): TrackingParam
     return undefined;
   }
 
+  const id = analyticsArticleId(article);
   if (isDefaultArticle(article)) {
     const url = `https://www.lrt.lt${article.article_url}`;
     return {
@@ -33,7 +35,7 @@ export const articleToTrackingParams = (article?: ArticleContent): TrackingParam
       smartocto: {
         url,
         pageType: 'article',
-        postId: String(article.article_id),
+        postId: id,
         title: article.article_title,
         authors: formatAuthors(article.article_authors),
         sections: sectionsFromPath(article.category_url ?? ''),
@@ -41,7 +43,7 @@ export const articleToTrackingParams = (article?: ArticleContent): TrackingParam
         pubdate: article.item_date_iso8601,
         articleType: 'news',
       },
-      content: {type: 'text', id: String(article.article_id)},
+      content: {type: 'text', id},
     };
   } else {
     // Radioteka or Mediateka
@@ -53,7 +55,7 @@ export const articleToTrackingParams = (article?: ArticleContent): TrackingParam
       smartocto: {
         url,
         pageType: 'article',
-        postId: String(article.id),
+        postId: id,
         title: article.title,
         authors: formatAuthors(article.authors),
         sections: `${section}>${article.category_title}`,
@@ -62,7 +64,7 @@ export const articleToTrackingParams = (article?: ArticleContent): TrackingParam
         pubdate: article.item_date_iso8601 ? new Date(article.item_date_iso8601).toISOString() : undefined,
         articleType: article.is_audio === 1 ? 'audio' : 'video',
       },
-      content: {type: article.is_audio === 1 ? 'audio' : 'video', id: String(article.id)},
+      content: {type: article.is_audio === 1 ? 'audio' : 'video', id},
     };
   }
 };

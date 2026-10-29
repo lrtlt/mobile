@@ -1,6 +1,6 @@
 import {MENU_TYPE_CATEGORY, MENU_TYPE_NEWEST, MENU_TYPE_POPULAR} from '../../../../api/Types';
-import useNavigationAnalytics, {TrackingParams} from '../../../../util/useNavigationAnalytics';
-import {newsLandingPage, toLrtUrl} from '../../../../util/smartocto';
+import useNavigationAnalytics, {TrackingParams} from '../../../../analytics/useNavigationAnalytics';
+import {newsLandingPage, toLrtUrl} from '../../../../analytics/smartocto';
 
 type Params = {
   type: typeof MENU_TYPE_CATEGORY | typeof MENU_TYPE_NEWEST | typeof MENU_TYPE_POPULAR;

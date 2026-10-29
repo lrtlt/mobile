@@ -3,7 +3,7 @@ jest.mock('react-native-mmkv', () => ({createMMKV: () => ({})}));
 jest.mock('@react-native-firebase/analytics', () => ({getAnalytics: jest.fn(), logEvent: jest.fn()}));
 
 import {logEvent} from '@react-native-firebase/analytics';
-import {logPageView, toParamValue} from '../app/util/googleAnalytics';
+import {logPageView, toParamValue} from '../app/analytics/googleAnalytics';
 
 // Expected values are what lrt.lt sends to G-0HK3QSMV3W for the same pages
 describe('logPageView', () => {

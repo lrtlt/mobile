@@ -6,7 +6,7 @@ import {RouteProp} from '@react-navigation/native';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {formatArticles} from '../../util/articleFormatters';
-import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import useNavigationAnalytics from '../../analytics/useNavigationAnalytics';
 import {SavedArticle} from '../../state/article_storage_store';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {pushArticle} from '../../util/NavigationUtils';

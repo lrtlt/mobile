@@ -6,7 +6,7 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import SimpleArticleScreen from '../main/tabScreen/simple/SimpleArticleScreen';
-import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import useNavigationAnalytics from '../../analytics/useNavigationAnalytics';
 import {MENU_TYPE_CATEGORY} from '../../api/Types';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Page'>;

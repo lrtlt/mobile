@@ -14,7 +14,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import PodcastEpisodeSelection from './episodeSelection/PodcastEpisodeSelection';
 import useArticleAnalytics from '../article/useArticleAnalytics';
 import RadiotekaGenres from '../main/tabScreen/radioteka/components/genres/RadiotekaGenres';
-import {useCounterForArticle} from '../../util/useCounter';
+import {useCounterForArticle} from '../../analytics/useCounter';
 import useArticleHeader from '../article/useArticleHeader_v2';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import VodcastRecommendations from './recommendations/VodcastRecommendations';

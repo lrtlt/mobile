@@ -5,7 +5,7 @@ import {Platform, StyleSheet, View} from 'react-native';
 import {SafeWebView} from '../../components';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
-import useNavigationAnalytics from '../../util/useNavigationAnalytics';
+import useNavigationAnalytics from '../../analytics/useNavigationAnalytics';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'WebPage'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'WebPage'>;
