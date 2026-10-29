@@ -81,7 +81,7 @@ const RadiotekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
 
   return (
     <ThemeProvider forceTheme={themeLight}>
-      <View style={[styles.container, !isLandscape && {height: windowHeight - 132}]}>
+      <View style={[styles.container, !isLandscape && {minHeight: windowHeight - 132}]}>
         <View>
           <FastImage
             style={{

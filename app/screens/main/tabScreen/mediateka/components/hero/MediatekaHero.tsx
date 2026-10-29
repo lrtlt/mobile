@@ -54,7 +54,7 @@ const MediatekaHero: React.FC<React.PropsWithChildren<Props>> = ({block, onArtic
   const durationMinutes = Math.floor((selectedArticle.media_duration_sec ?? 0) / 60);
   return (
     <ThemeProvider forceTheme={themeLight}>
-      <View style={[styles.container, !isLandscape && {height: windowHeight - 132}]}>
+      <View style={[styles.container, !isLandscape && {minHeight: windowHeight - 132}]}>
         <View>
           <FastImage
             style={{width: '100%', aspectRatio: aspectRatio}}
