@@ -3,6 +3,7 @@ import {NavigationState, Route, SceneRendererProps, TabBar, TabBarItem} from 're
 import {StyleSheet, View} from 'react-native';
 import {useTheme} from '../../../Theme';
 import TabLabel from '../tabLabel/TabLabel';
+import {useBarSideMargins} from '../../../hooks/useContentSideInsets';
 
 type TabBarComponentProps = SceneRendererProps & {
   navigationState: NavigationState<Route>;
@@ -10,6 +11,7 @@ type TabBarComponentProps = SceneRendererProps & {
 
 const TabBarComponent: React.FC<TabBarComponentProps> = (props) => {
   const {colors} = useTheme();
+  const sideMargins = useBarSideMargins();
 
   const renderLabel = useCallback((labelProps: any) => <TabLabel {...labelProps} />, []);
 
@@ -39,7 +41,7 @@ const TabBarComponent: React.FC<TabBarComponentProps> = (props) => {
         return <TabBarItem key={key} {...rest} label={renderLabel} />;
       }}
       indicatorStyle={{backgroundColor: colors.primaryDark}}
-      style={{backgroundColor: colors.background}}
+      style={[{backgroundColor: colors.background}, sideMargins]}
       tabStyle={styles.tab}
     />
   );

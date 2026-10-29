@@ -3,7 +3,6 @@ import {StyleSheet, View} from 'react-native';
 
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import SimpleArticleScreen from '../main/tabScreen/simple/SimpleArticleScreen';
 import {MENU_TYPE_CATEGORY} from '../../api/Types';
 import ThemeProvider from '../../theme/ThemeProvider';
@@ -11,6 +10,7 @@ import {useTheme} from '../../Theme';
 import SimpleDisclaimer from '../article/simpleFooter/SimpleDisclaimer';
 import {SIMPLIFIED_CATEGORY_ID} from '../../constants';
 import useCategoryScreenAnalytics from '../main/tabScreen/category/useCategoryScreenAnalytics';
+import useContentSideInsets from '../../hooks/useContentSideInsets';
 
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Simple'>;
 
@@ -25,6 +25,7 @@ const categoryInfo = {
 };
 
 const SimpleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
+  const contentInsets = useContentSideInsets();
   const theme = useTheme();
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const SimpleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =>
 
   return (
     <ThemeProvider forceTheme={{...theme, simplyfied: true}}>
-      <SafeAreaView style={styles.screen} edges={['left', 'right']}>
+      <View style={[styles.screen, {paddingLeft: contentInsets.left, paddingRight: contentInsets.right}]}>
         <SimpleArticleScreen
           type={MENU_TYPE_CATEGORY}
           showTitle={false}
@@ -57,7 +58,7 @@ const SimpleScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =>
             </View>
           }
         />
-      </SafeAreaView>
+      </View>
     </ThemeProvider>
   );
 };

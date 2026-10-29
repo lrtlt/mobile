@@ -72,6 +72,15 @@ target 'lrtApp' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # Xcode 27 rejects deployment targets below 15.0, and many pods still declare older ones
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 15.6
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.6'
+        end
+      end
+    end
   end
 end
 

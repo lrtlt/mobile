@@ -3,7 +3,7 @@ import {View, StyleSheet} from 'react-native';
 import {Forecast, MyScrollView, WeatherEmbed} from '../../components';
 
 import {useTheme} from '../../Theme';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import WeatherLocations from './WeatherLocations';
 import ConfirmModal from './ConfirmModal';
 import {RouteProp} from '@react-navigation/native';
@@ -15,6 +15,7 @@ import SlugArticlesBlock from '../main/tabScreen/home/blocks/SlugArticlesBlock/S
 import useNavigationAnalytics from '../../analytics/useNavigationAnalytics';
 import {newsLandingPage} from '../../analytics/smartocto';
 import {useSettingsStore} from '../../state/settings_store';
+import useContentSideInsets from '../../hooks/useContentSideInsets';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Weather'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Weather'>;
@@ -25,6 +26,7 @@ type Props = {
 };
 
 const WeatherScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
+  const contentInsets = useContentSideInsets();
   const {setForecastLocation} = useSettingsStore.getState();
   const forecastLocation = useSettingsStore((state) => state.forecastLocation);
 
@@ -60,7 +62,7 @@ const WeatherScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
   const {bottom} = useSafeAreaInsets();
 
   return (
-    <SafeAreaView style={styles.screen} edges={['left', 'right']}>
+    <View style={[styles.screen, {paddingLeft: contentInsets.left, paddingRight: contentInsets.right}]}>
       <MyScrollView
         style={styles.scrollContainer}
         contentContainerStyle={{paddingBottom: bottom}}
@@ -97,7 +99,7 @@ const WeatherScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
           setConfirmModalVisible(false);
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

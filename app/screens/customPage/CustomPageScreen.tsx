@@ -8,6 +8,7 @@ import {MainStackParamList} from '../../navigation/MainStack';
 import SimpleArticleScreen from '../main/tabScreen/simple/SimpleArticleScreen';
 import useNavigationAnalytics from '../../analytics/useNavigationAnalytics';
 import {MENU_TYPE_CATEGORY} from '../../api/Types';
+import useContentSideInsets from '../../hooks/useContentSideInsets';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Page'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Page'>;
@@ -18,6 +19,7 @@ type Props = {
 };
 
 const CustomPageScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
+  const contentInsets = useContentSideInsets();
   const [currentRouteIndex, setCurrentRouteIndex] = useState(0);
   const {page} = route.params;
 
@@ -44,7 +46,8 @@ const CustomPageScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation,
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, {paddingLeft: contentInsets.left, paddingRight: contentInsets.right}]}>
       <TabView
         renderLazyPlaceholder={renderLazyPlaceHolder}
         tabBarPosition="top"

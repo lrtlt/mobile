@@ -148,8 +148,8 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
           {
             paddingTop: 16 + insets.top,
             paddingBottom: 16 + insets.bottom,
+            // Left drawer, so only the left inset applies; it never reaches the right edge
             paddingLeft: 0 + insets.left,
-            paddingRight: 0 + insets.right,
           },
         ]}>
         {!!menuItems &&

@@ -4,7 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AdultContentWarning, ScreenError, ScreenLoader, VideoComponent} from '../../components';
 import useArticleScreenState from '../article/useArticleScreenState';
 import {useTheme} from '../../Theme';
@@ -19,6 +19,7 @@ import useArticleHeader from '../article/useArticleHeader_v2';
 import useAppBarHeight from '../../components/appBar/useAppBarHeight';
 import VodcastRecommendations from './recommendations/VodcastRecommendations';
 import useNextEpisode from './episodeSelection/useNextEpisode';
+import useContentSideInsets from '../../hooks/useContentSideInsets';
 
 type ScreenRouteProp = RouteProp<MainStackParamList, 'Vodcast'>;
 type ScreenNavigationProp = StackNavigationProp<MainStackParamList, 'Vodcast'>;
@@ -29,6 +30,7 @@ type Props = {
 };
 
 const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, route}) => {
+  const contentInsets = useContentSideInsets();
   const {articleId} = route.params;
 
   const [{article, category_info, loadingState}, acceptAdultContent] = useArticleScreenState(articleId, true);
@@ -102,10 +104,7 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
         <>
           {appBar}
           {article && (
-            <SafeAreaView
-              style={[styles.screen, {backgroundColor: colors.greyBackground}]}
-              edges={['left', 'right']}
-            >
+            <View style={[styles.screen, {backgroundColor: colors.greyBackground}, {paddingLeft: contentInsets.left, paddingRight: contentInsets.right}]}>
               <ScrollView
                 contentContainerStyle={{paddingBottom: bottom + 32, paddingTop: appBarHeight.fullHeight}}
               >
@@ -148,7 +147,7 @@ const VodcastScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation, ro
                   />
                 )}
               </ScrollView>
-            </SafeAreaView>
+            </View>
           )}
         </>
       );

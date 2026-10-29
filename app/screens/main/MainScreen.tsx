@@ -10,7 +10,7 @@ import TestScreen from '../testScreen/TestScreen';
 import {EventRegister} from 'react-native-event-listeners';
 import {EVENT_LOGO_PRESS, EVENT_OPEN_CATEGORY, EVENT_SELECT_CATEGORY_INDEX} from '../../constants';
 import {useTheme} from '../../Theme';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import useContentSideInsets from '../../hooks/useContentSideInsets';
 import Animated, {useSharedValue, useAnimatedStyle, withTiming} from 'react-native-reanimated';
 
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
@@ -54,6 +54,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
 
   const {user} = useAuth0();
   const {colors, dim} = useTheme();
+  const contentInsets = useContentSideInsets();
 
   const {isVisible, onClose} = useOnboardingLogic();
 
@@ -162,10 +163,6 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           <IconDrawerMenu size={dim.appBarIconSize} color={colors.headerTint} />
         </ActionButton>
       ),
-      headerLeftContainerStyle: {
-        borderRightWidth: StyleSheet.hairlineWidth,
-        borderColor: colors.border,
-      },
       headerRight: () => (
         <ActionButton
           onPress={async () => {
@@ -180,10 +177,6 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           )}
         </ActionButton>
       ),
-      headerRightContainerStyle: {
-        borderLeftWidth: StyleSheet.hairlineWidth,
-        borderColor: colors.border,
-      },
       headerTitle: () => (
         <Pressable
           onPress={() => {
@@ -286,7 +279,9 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right']} accessible={false}>
+    <View
+      style={[styles.container, {paddingLeft: contentInsets.left, paddingRight: contentInsets.right}]}
+      accessible={false}>
       <TabView
         accessible={false}
         renderLazyPlaceholder={renderLazyPlaceHolder}
@@ -304,7 +299,9 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
         lazyPreloadDistance={0}
         initialLayout={{height: 0, width: Dimensions.get('screen').width}}
       />
-      <Animated.View style={[styles.tabBarContainer, tabBarAnimatedStyle]}>
+      {/* Absolute children ignore the container padding, so apply the content insets here */}
+      <Animated.View
+        style={[styles.tabBarContainer, {left: contentInsets.left, right: contentInsets.right}, tabBarAnimatedStyle]}>
         <TabBar
           navigationState={{
             routes: state.routes,
@@ -330,7 +327,7 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
           }, 350);
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
