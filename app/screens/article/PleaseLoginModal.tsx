@@ -2,7 +2,7 @@ import * as React from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import TextComponent from '../../components/text/Text';
-import Modal from 'react-native-modal';
+import BaseModal from '../../components/baseModal/BaseModal';
 import {useTheme} from '../../Theme';
 import {TouchableDebounce} from '../../components';
 
@@ -17,13 +17,10 @@ const PleaseLoginModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
 
   return (
-    <Modal
+    <BaseModal
       style={styles.modal}
       isVisible={props.visible}
-      coverScreen={true}
       backdropOpacity={0.7}
-      backdropTransitionInTiming={400}
-      backdropTransitionOutTiming={400}
       statusBarTranslucent={true}
       onBackdropPress={props.onCancel}
       onBackButtonPress={props.onCancel}>
@@ -46,7 +43,7 @@ const PleaseLoginModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
           </TouchableDebounce>
         </View>
       </View>
-    </Modal>
+    </BaseModal>
   );
 };
 

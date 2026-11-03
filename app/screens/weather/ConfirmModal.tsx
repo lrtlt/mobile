@@ -2,7 +2,7 @@ import * as React from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import TextComponent from '../../components/text/Text';
-import Modal from 'react-native-modal';
+import BaseModal from '../../components/baseModal/BaseModal';
 import {useTheme} from '../../Theme';
 import {TouchableDebounce} from '../../components';
 
@@ -17,13 +17,11 @@ const ConfirmModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
 
   return (
-    <Modal
+    <BaseModal
       style={styles.modal}
       isVisible={props.visible}
       avoidKeyboard={true}
-      useNativeDriver={true}
       statusBarTranslucent={true}
-      coverScreen={true}
       backdropOpacity={0.6}
       onBackdropPress={props.onCancel}
       onBackButtonPress={props.onCancel}>
@@ -50,7 +48,7 @@ const ConfirmModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
           </TouchableDebounce>
         </View>
       </View>
-    </Modal>
+    </BaseModal>
   );
 };
 

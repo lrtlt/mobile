@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Linking} from 'react-native';
+import {View, StyleSheet, Linking, ScrollViewInstance} from 'react-native';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../../Theme';
@@ -11,7 +11,7 @@ import MyScrollView from '../MyScrollView/MyScrollView';
 import {useNavigationStore} from '../../state/navigation_store';
 import {useShallow} from 'zustand/shallow';
 import {MainStackParamList} from '../../navigation/MainStack';
-import useOnDrawerClose from '../drawer/useOnDrawerClose';
+import useOnDrawerClose from './useOnDrawerClose';
 import DrawerBasicItem from './components/DrawerBasicItem';
 import {Menu2Item} from '../../api/Types';
 import DrawerExpandableItem from './components/DrawerExpandableItem';
@@ -31,7 +31,7 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
     useNavigationStore.getState();
 
   const insets = useSafeAreaInsets();
-  const scrollRef = useRef<MyScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
 
   useOnDrawerClose(
     useCallback(() => {

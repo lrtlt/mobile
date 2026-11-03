@@ -1,5 +1,5 @@
-import {useCallback, useEffect, useRef, useState} from 'react';
-import {AppState, AppStateStatus, Dimensions, StyleSheet, View} from 'react-native';
+import {useCallback, useEffect, useState} from 'react';
+import {AppState, StyleSheet, View} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {
   AspectRatio,
@@ -14,6 +14,7 @@ import {useArticle} from '../../../../../../api/hooks/useArticle';
 import {useStreamInfo} from '../../../../../../api/hooks/useStream';
 import {useMediaPlayer} from '../../../../../../components/videoComponent/context/useMediaPlayer';
 import usePlayerLoop from '../../../../../../components/videoComponent/usePlayerLoop';
+import useIsOnScreen from '../../../../../../util/useIsOnScreen';
 
 const previewConfig: PlayerConfiguration = {
   license: Config.THEO_PLAYER_LICENCE,
@@ -22,45 +23,8 @@ const previewConfig: PlayerConfiguration = {
   },
 };
 
-const useIsOnScreen = (enabled: boolean) => {
-  const ref = useRef<View>(null);
-  const [isOnScreen, setIsOnScreen] = useState(false);
-
-  useEffect(() => {
-    if (!enabled) {
-      setIsOnScreen(false);
-      return;
-    }
-
-    let mounted = true;
-    const check = () => {
-      ref.current?.measureInWindow((x, y, width, height) => {
-        if (!mounted) {
-          return;
-        }
-        if (width <= 0 || height <= 0) {
-          setIsOnScreen(false);
-          return;
-        }
-        const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
-        setIsOnScreen(y < screenHeight && y + height > 0 && x < screenWidth && x + width > 0);
-      });
-    };
-
-    const raf = requestAnimationFrame(check);
-    const interval = setInterval(check, 400);
-    return () => {
-      mounted = false;
-      cancelAnimationFrame(raf);
-      clearInterval(interval);
-    };
-  }, [enabled]);
-
-  return {ref, isOnScreen};
-};
-
 const useIsAppActive = () => {
-  const [appState, setAppState] = useState<AppStateStatus>(AppState.currentState);
+  const [appState, setAppState] = useState(AppState.currentState);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', setAppState);

@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 LRT.lt is a React Native mobile application (iOS and Android) for the Lithuanian public broadcasting service. The app provides access to news articles, live TV/radio streams, podcasts, videos, and weather information.
 
+React Native 0.88 (React 19.3, New Architecture only, Hermes).
+
 ## Development Commands
 
 ### Running the App
@@ -13,7 +15,8 @@ LRT.lt is a React Native mobile application (iOS and Android) for the Lithuanian
 ```bash
 # iOS
 yarn run-ios                                    # Build & run in debug mode
-react-native run-ios --configuration Release   # Build & run in release mode
+react-native run-ios --mode Release            # Build & run in release mode
+yarn run-ios --device                           # Build & run on a connected iPhone
 
 # Android
 yarn run-android                                # Build & run in debug mode
@@ -43,9 +46,15 @@ yarn test          # Run Jest tests
 
 ### Platform-specific Setup
 
-**iOS**: After installing dependencies, run `cd ios && pod install` to install CocoaPods.
+**iOS**: After installing dependencies, run `yarn pods` (`bundle exec pod install` in `ios/`). CocoaPods crashes without a UTF-8 locale, so set `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8` if needed. React Native core is installed as the prebuilt `React.xcframework` (React Native's default), so changes under `node_modules/react-native` are not compiled on iOS.
 
-**Android**: Ensure Android SDK is configured. The app uses Gradle build system.
+**Android**: compileSdk 37, AGP 9 (with `android.builtInKotlin=false` / `android.newDsl=false` opt-outs), Kotlin 2.2, minSdk 26 (required by Auth0 v6). `castFrameworkVersion` stays pinned to 22.3.1: Cast 23+ is built with Kotlin 2.4, which the Kotlin 2.2 compiler can't read.
+
+### Yarn Patches
+
+Yarn 3 applies `.yarn/patches/*` through `resolutions` in `package.json`. A patch only applies to the exact version in its key, so recreate it with `yarn patch` / `yarn patch-commit` when bumping the package:
+- `@d11/react-native-fast-image@8.13.0`: bases its `ImageStyle` type on React Native's (the strict types no longer export `FlexStyle` / `ShadowStyleIOS`). Types only.
+- `react-native-autoheight-webview@1.6.5` (two stacked patches)
 
 ### Version Bumping
 
@@ -105,14 +114,14 @@ Menu structure is dynamic and loaded from Firestore (`internal/app-menu-v2` docu
 
 ### Native Integrations
 
-**Firebase** (v22.4.0):
+**Firebase** (v26.4.1, Firebase iOS SDK 12 via CocoaPods):
 - Analytics: Navigation and event tracking
 - Messaging (FCM): Push notifications with foreground/background handlers
 - Crashlytics: Error reporting
 - Firestore: Dynamic menu configuration
 
 **Media Players**:
-- THEOplayer (v10.7.1): Video/audio playback via `PlayerProvider` context
+- THEOplayer (v11.8.0): Video/audio playback via `PlayerProvider` context
 - Google Cast (v4.9.1): Chromecast support
 
 **Analytics**:
@@ -120,9 +129,9 @@ Menu structure is dynamic and loaded from Firestore (`internal/app-menu-v2` docu
 - smartocto (`app/analytics/smartocto.ts`): GET requests to its ingestion endpoint, no SDK
 - Firebase Analytics
 
-**Authentication**: Auth0 (v5.3.1) configured via `.env` variables
+**Authentication**: Auth0 (v6.1.0) configured via `.env` variables. `Auth0Provider` sets `useDPoP={true}`: v6 defaults it to off, but signed-in sessions are DPoP-bound and the native CarPlay / Android Auto auth managers (`CarPlayAuthManager.swift`, `AutoAuthManager.kt`, which use Auth0.swift 3 / Auth0.Android 4 directly) enable DPoP too.
 
-**Storage**: MMKV (v3.3.3) for ultra-fast persistent key-value storage
+**Storage**: MMKV (v4.3.2, built on react-native-nitro-modules) for ultra-fast persistent key-value storage
 
 **Notifications**: Notifee (v9.1.8) for native notification handling
 
@@ -155,7 +164,11 @@ app/
 
 **Key Screens** (`app/screens/`): `article`, `channel`, `podcast`, `vodcast`, `search`, `user`, `favorites`, `bookmarks`, `history`, `weather`, `games`, `gallery`, `verticalVideos`
 
-**Key Components** (`app/components/`): `videoComponent`, `audioComponent`, `articleParagraphs`, `htmlRenderer`, `drawer`, `opusPlaylistModal`, `facebookComments`, `MyScrollView`, `MyFlatList`
+**Key Components** (`app/components/`): `videoComponent`, `audioComponent`, `articleParagraphs`, `htmlRenderer`, `drawer2`, `baseModal`, `opusPlaylistModal`, `facebookComments`, `MyScrollView`, `MyFlatList`
+
+Modals use `BaseModal` (`app/components/baseModal/BaseModal.tsx`), a wrapper around React Native's `Modal` with a fading backdrop and slide-up content (Reanimated). It keeps react-native-modal's prop names (`isVisible`, `onBackdropPress`, `onBackButtonPress`, `backdropOpacity`, `avoidKeyboard`); react-native-modal was removed because it uses `InteractionManager`, which React Native 0.88 removed.
+
+The status bar is set per screen through native-stack's `statusBarStyle` option in `app/navigation/MainStack.tsx`, not with React Native's `StatusBar` component.
 
 ### Article Formatters
 
@@ -182,6 +195,8 @@ Use `react-native-config` to access environment variables in code.
 Configuration extends `@react-native/typescript-config` with:
 - Platform-specific module suffixes: `.ios`, `.android`, `.native`
 - `noUnusedLocals: true` for stricter checking
+
+The code type-checks against React Native's strict generated types (`types_generated`, the 0.88 default). Use their names: `ScrollViewInstance` for scroll view refs, `HostInstance` for native view refs (e.g. `measureInWindow`), `ListViewToken` instead of `ViewToken`. `Falsy` and `StyleSheet.absoluteFillObject` no longer exist; use `StyleSheet.absoluteFill`. Import react-native-webview types from `react-native-webview/lib/...`, not `src/`, or `tsc` type-checks the library's sources.
 
 ## Important Patterns
 
@@ -214,7 +229,7 @@ Screens report views through `useNavigationAnalytics` (Firebase `page_view` + sm
 ## Testing Notes
 
 - Jest is configured in `package.json`
-- Node version: >=20
+- Node version: >=22.13 (required by React Native 0.88)
 - Run tests with `yarn test`
 
 ## Platform-specific Considerations

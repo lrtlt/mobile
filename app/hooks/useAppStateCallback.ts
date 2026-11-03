@@ -6,7 +6,7 @@ const useAppStateCallback = (onForeground: () => void) => {
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
-      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+      if (appState.current?.match(/inactive|background/) && nextAppState === 'active') {
         onForeground();
       }
       appState.current = nextAppState;

@@ -301,7 +301,11 @@ const MainScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) => {
       />
       {/* Absolute children ignore the container padding, so apply the content insets here */}
       <Animated.View
-        style={[styles.tabBarContainer, {left: contentInsets.left, right: contentInsets.right}, tabBarAnimatedStyle]}>
+        style={[
+          styles.tabBarContainer,
+          {left: contentInsets.left, right: contentInsets.right},
+          tabBarAnimatedStyle,
+        ]}>
         <TabBar
           navigationState={{
             routes: state.routes,

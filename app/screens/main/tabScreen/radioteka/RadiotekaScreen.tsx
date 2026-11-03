@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {View, RefreshControl, StyleSheet, StatusBar} from 'react-native';
+import {View, RefreshControl, StyleSheet} from 'react-native';
 import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
 import {ScreenLoader} from '../../../../components';
 import {ARTICLE_EXPIRE_DURATION} from '../../../../constants';
@@ -47,7 +47,7 @@ const selectRadiotekaScreenState = (state: ArticleState) => {
 
 const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({onScroll, paddingTop}) => {
   const listRef = useRef<FlashListRef<any>>(null);
-  const {colors, dark} = useTheme();
+  const {colors} = useTheme();
 
   const navigation = useNavigation<StackNavigationProp<MainStackParamList, 'Home'>>();
 
@@ -307,11 +307,6 @@ const RadiotekaScreen: React.FC<React.PropsWithChildren<Props>> = ({onScroll, pa
 
   return (
     <>
-      <StatusBar
-        barStyle={dark ? 'light-content' : 'dark-content'}
-        translucent={false}
-        backgroundColor={colors.statusBar}
-      />
       <View style={[styles.container, {backgroundColor: colors.radiotekaBackground}]}>
         <FlashList
           showsVerticalScrollIndicator={false}

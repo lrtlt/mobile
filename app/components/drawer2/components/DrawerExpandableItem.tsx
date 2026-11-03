@@ -7,7 +7,7 @@ import {useTheme} from '../../../Theme';
 import {useCallback, useState} from 'react';
 import DrawerSubItem from './DrawerSubItem';
 import Divider from '../../divider/Divider';
-import useOnDrawerClose from '../../drawer/useOnDrawerClose';
+import useOnDrawerClose from '../useOnDrawerClose';
 
 interface Props {
   item: Menu2Item;

@@ -18,6 +18,7 @@ import {Platform} from 'react-native';
 import {useNavigationStore} from '../state/navigation_store';
 import Drawer2Component from '../components/drawer2/Drawer2';
 import DefaultAppBar from '../components/appBar/DefaultAppBar';
+import {useTheme} from '../Theme';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -160,6 +161,7 @@ const SearchDrawerNavigator: React.FC<React.PropsWithChildren<{}>> = () => {
 
 export default () => {
   const isOfflineMode = useNavigationStore((state) => state.isOfflineMode);
+  const {dark} = useTheme();
 
   return (
     <Stack.Navigator
@@ -167,6 +169,7 @@ export default () => {
       initialRouteName={isOfflineMode ? 'Offline' : 'Home'}
       screenOptions={{
         presentation: 'card',
+        statusBarStyle: dark ? 'light' : 'dark',
         header: (props) => <DefaultAppBar {...props.options} />,
       }}>
       <Stack.Screen
@@ -242,6 +245,7 @@ export default () => {
         name="VideoList"
         component={Screens.VerticalVideosScreen}
         options={{
+          statusBarStyle: 'light',
           animation: 'slide_from_bottom',
           animationDuration: 200,
           presentation: Platform.select({

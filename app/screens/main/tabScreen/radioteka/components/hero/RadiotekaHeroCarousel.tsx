@@ -1,5 +1,5 @@
 import React, {useState, useRef} from 'react';
-import {View, StyleSheet, Image, ViewToken, useWindowDimensions} from 'react-native';
+import {View, StyleSheet, Image, ListViewToken, useWindowDimensions} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Text from '../../../../../../components/text/Text';
 import FastImage from '@d11/react-native-fast-image';
@@ -28,7 +28,7 @@ export const RadiotekaHeroCarousel: React.FC<RadiotekaHeroCarouselProps> = ({
   const flatListRef = useRef<FlatList>(null);
   const {width} = useWindowDimensions();
 
-  const onViewableItemsChanged = useRef(({viewableItems}: {viewableItems: ViewToken[]}) => {
+  const onViewableItemsChanged = useRef(({viewableItems}: {viewableItems: ListViewToken[]}) => {
     if (viewableItems[0] && typeof viewableItems[0].index === 'number') {
       setActiveIndex(viewableItems[0].index);
     }

@@ -8,8 +8,6 @@ export {default as ArticlePhoto} from './articlePhoto/ArticlePhoto';
 export {default as AnimatedAppBar} from './appBar/AnimatedAppBar';
 export {default as AudioComponent} from './audioComponent/AudioComponent';
 export {default as CoverImage} from './coverImage/CoverImage';
-export {default as Drawer} from './drawer/Drawer';
-export {default as DrawerItem} from './drawerItem/DrawerItem';
 export {default as FacebookReactions} from './facebookReactions/FacebookReactions';
 export {default as FacebookComments} from './facebookComments/FacebookComments';
 export {default as ListLoader} from './listLoader/ListLoader';

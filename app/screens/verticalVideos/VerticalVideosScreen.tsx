@@ -1,9 +1,8 @@
 import React, {useEffect} from 'react';
-import {Platform, StatusBar} from 'react-native';
 
 import {useTheme} from '../../Theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {RouteProp, useFocusEffect} from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
 import InfinitePager from 'react-native-infinite-pager';
@@ -34,8 +33,6 @@ const VerticalVideoScreen: React.FC<React.PropsWithChildren<Props>> = ({navigati
     });
   }, [route.params]);
 
-  useStatusBarChange();
-
   return (
     <SafeAreaView
       style={{
@@ -62,22 +59,6 @@ const VerticalVideoScreen: React.FC<React.PropsWithChildren<Props>> = ({navigati
       />
     </SafeAreaView>
   );
-};
-
-const useStatusBarChange = () => {
-  const {colors, dark} = useTheme();
-  useFocusEffect(() => {
-    StatusBar.setBarStyle('light-content');
-    if (Platform.OS === 'android') {
-      StatusBar.setBackgroundColor(HEADER_BACKGROUND_COLOR);
-    }
-    return () => {
-      StatusBar.setBarStyle(dark ? 'light-content' : 'dark-content');
-      if (Platform.OS === 'android') {
-        StatusBar.setBackgroundColor(colors.statusBar);
-      }
-    };
-  });
 };
 
 export default VerticalVideoScreen;

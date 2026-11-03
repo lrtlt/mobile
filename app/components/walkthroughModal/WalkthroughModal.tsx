@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState, useRef} from 'react';
 import {View, StyleSheet, Dimensions} from 'react-native';
-import Modal from 'react-native-modal';
+import BaseModal from '../baseModal/BaseModal';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../../Theme';
 import Text from '../text/Text';
@@ -46,8 +46,7 @@ const WalkthroughModal: React.FC<WalkthroughModalProps> = ({visible, onClose, on
   }, [pageIndex]);
 
   return (
-    <Modal
-      accessible={false}
+    <BaseModal
       style={{
         ...styles.modal,
         marginTop: insets.top + 32,
@@ -57,8 +56,6 @@ const WalkthroughModal: React.FC<WalkthroughModalProps> = ({visible, onClose, on
         alignItems: 'center',
       }}
       isVisible={visible}
-      useNativeDriver={false}
-      coverScreen={true}
       backdropOpacity={0.7}
       onBackButtonPress={onClose}>
       <View
@@ -163,7 +160,7 @@ const WalkthroughModal: React.FC<WalkthroughModalProps> = ({visible, onClose, on
           </View>
         </View>
       </View>
-    </Modal>
+    </BaseModal>
   );
 };
 

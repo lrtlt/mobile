@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 
-import Modal from 'react-native-modal';
+import BaseModal from '../../components/baseModal/BaseModal';
 import {ProgramDay} from '../../components';
 import Divider from '../../components/divider/Divider';
 import {useTheme} from '../../Theme';
@@ -17,12 +17,10 @@ const ProgramDateModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const {colors} = useTheme();
 
   return (
-    <Modal
+    <BaseModal
       style={styles.modal}
       isVisible={props.visible}
       avoidKeyboard={true}
-      useNativeDriver={true}
-      coverScreen={true}
       backdropOpacity={0.7}
       onBackdropPress={props.onCancel}
       onBackButtonPress={props.onCancel}>
@@ -38,7 +36,7 @@ const ProgramDateModal: React.FC<React.PropsWithChildren<Props>> = (props) => {
           </TouchableOpacity>
         ))}
       </View>
-    </Modal>
+    </BaseModal>
   );
 };
 

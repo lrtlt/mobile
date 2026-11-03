@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {View, StyleSheet, StatusBar, RefreshControl, Button, useWindowDimensions} from 'react-native';
+import {View, StyleSheet, RefreshControl, Button, useWindowDimensions} from 'react-native';
 import {ScrollingChannels, ScreenLoader, ScreenError, BannerComponent} from '../../../../components';
 import {FlashList, FlashListRef, ListRenderItemInfo} from '@shopify/flash-list';
 import {ARTICLE_EXPIRE_DURATION, EVENT_LOGO_PRESS} from '../../../../constants';
@@ -65,7 +65,7 @@ const HomeScreenV3: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, onSc
   const {fetchHomeV3} = useArticleStore.getState();
   const state = useArticleStore(useShallow(selectHomeScreenState()));
 
-  const {colors, dark, strings} = useTheme();
+  const {colors, strings} = useTheme();
 
   const {items, lastFetchTime, refreshing} = state;
 
@@ -202,11 +202,6 @@ const HomeScreenV3: React.FC<React.PropsWithChildren<Props>> = ({isCurrent, onSc
 
   return (
     <>
-      <StatusBar
-        barStyle={dark ? 'light-content' : 'dark-content'}
-        translucent={false}
-        backgroundColor={colors.statusBar}
-      />
       <View style={styles.container}>
         <FlashList
           showsVerticalScrollIndicator={false}
