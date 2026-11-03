@@ -15,6 +15,9 @@
 # react-native-config looks up BuildConfig by name and reads its fields via reflection
 -keep class lt.mediapark.lrt.BuildConfig { *; }
 
+# Room creates databases (e.g. WorkManager's WorkDatabase_Impl) by reflection; R8 full mode strips their constructors
+-keep class * extends androidx.room.RoomDatabase { <init>(); }
+
 # Readable Crashlytics stack traces (the mapping file is uploaded by the Crashlytics plugin)
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception
