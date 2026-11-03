@@ -3,7 +3,7 @@ import {StyleSheet, View, ScrollView} from 'react-native';
 import {default as PlayButtonRadioteka} from '../../main/tabScreen/radioteka/components/play_button/play_button';
 import {default as PlayButtonMediateka} from '../../main/tabScreen/mediateka/components/play_button/play_button';
 import {MoreArticlesButton, Text, TouchableDebounce} from '../../../components';
-import Modal from 'react-native-modal';
+import BaseModal from '../../../components/baseModal/BaseModal';
 import {themeLight, useTheme} from '../../../Theme';
 import {useMediaPlayer} from '../../../components/videoComponent/context/useMediaPlayer';
 import {Article} from '../../../../Types';
@@ -106,16 +106,13 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
   const {top, bottom} = useSafeAreaInsets();
 
   return (
-    <Modal
-      accessible={false}
+    <BaseModal
       style={{
         flex: 1,
         paddingTop: top,
         paddingBottom: bottom,
       }}
       isVisible={visible}
-      useNativeDriver={true}
-      coverScreen={true}
       backdropOpacity={1}
       onBackButtonPress={onClose}
     >
@@ -187,7 +184,7 @@ const PodcastEpisodesModal: React.FC<PropsWithChildren<Props>> = ({
           <MoreArticlesButton onPress={onClose} customText={strings.close} />
         </View>
       </View>
-    </Modal>
+    </BaseModal>
   );
 };
 

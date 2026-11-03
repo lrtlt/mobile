@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity, ColorValue} from 'react-native';
-import Modal from 'react-native-modal';
+import BaseModal from '../baseModal/BaseModal';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {OpusPlayListItem} from '../../api/Types';
 import {useTheme} from '../../Theme';
@@ -20,7 +20,7 @@ const ChannelPlaylistModal: React.FC<ChannelPlaylistModalProps> = ({visible, onC
   const insets = useSafeAreaInsets();
 
   return (
-    <Modal
+    <BaseModal
       style={{
         ...styles.modal,
         // backgroundColor: colors.slugBackground,
@@ -30,8 +30,6 @@ const ChannelPlaylistModal: React.FC<ChannelPlaylistModalProps> = ({visible, onC
         marginBottom: insets.bottom + 16,
       }}
       isVisible={visible}
-      useNativeDriver={false}
-      coverScreen={true}
       backdropOpacity={0.8}
       onBackdropPress={onCancel}
       onBackButtonPress={onCancel}>
@@ -46,7 +44,7 @@ const ChannelPlaylistModal: React.FC<ChannelPlaylistModalProps> = ({visible, onC
         </TouchableOpacity>
         <ChannelPlaylistList items={items} color={color} />
       </View>
-    </Modal>
+    </BaseModal>
   );
 };
 
