@@ -105,6 +105,7 @@
   },
   "packageManager": "yarn@3.6.4",
   "resolutions": {
-    "react-native-autoheight-webview@^1.6.5": "patch:react-native-autoheight-webview@patch%3Areact-native-autoheight-webview@npm%253A1.6.5%23./.yarn/patches/react-native-autoheight-webview-npm-1.6.5-c3f5e8ed07.patch%3A%3Aversion=1.6.5&hash=88b8e6&locator=lrt.lt%2540workspace%253A.#./.yarn/patches/react-native-autoheight-webview-patch-e675469c4b.patch"
+    "react-native-autoheight-webview@^1.6.5": "patch:react-native-autoheight-webview@patch%3Areact-native-autoheight-webview@npm%253A1.6.5%23./.yarn/patches/react-native-autoheight-webview-npm-1.6.5-c3f5e8ed07.patch%3A%3Aversion=1.6.5&hash=88b8e6&locator=lrt.lt%2540workspace%253A.#./.yarn/patches/react-native-autoheight-webview-patch-e675469c4b.patch",
+    "@d11/react-native-fast-image@8.13.0": "patch:@d11/react-native-fast-image@npm%3A8.13.0#./.yarn/patches/@d11-react-native-fast-image-npm-8.13.0-1ba5757ff5.patch"
   }
 }

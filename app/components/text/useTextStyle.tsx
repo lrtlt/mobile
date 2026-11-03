@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {Falsy, StyleSheet, TextStyle} from 'react-native';
+import {StyleSheet, TextStyle} from 'react-native';
 import {useTheme} from '../../Theme';
 import {TextComponentProps} from './Text';
 import {useSettingsStore} from '../../state/settings_store';
@@ -11,7 +11,7 @@ const useTextStyle = ({scalingEnabled = true, type = 'primary', ...props}: TextC
   const {colors, simplyfied} = useTheme();
 
   const textSizeMultiplier = useSettingsStore(useShallow((state) => state.textSizeMultiplier));
-  const style: TextStyle | Falsy = Array.isArray(props.style)
+  const style: TextStyle | null | undefined = Array.isArray(props.style)
     ? StyleSheet.flatten(props.style)
     : (props.style as TextStyle);
 

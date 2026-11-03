@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {AppState, AppStateStatus, Dimensions, StyleSheet, View} from 'react-native';
+import {AppState, Dimensions, HostInstance, StyleSheet, View} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {
   AspectRatio,
@@ -23,7 +23,7 @@ const previewConfig: PlayerConfiguration = {
 };
 
 const useIsOnScreen = (enabled: boolean) => {
-  const ref = useRef<View>(null);
+  const ref = useRef<HostInstance>(null);
   const [isOnScreen, setIsOnScreen] = useState(false);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const useIsOnScreen = (enabled: boolean) => {
 };
 
 const useIsAppActive = () => {
-  const [appState, setAppState] = useState<AppStateStatus>(AppState.currentState);
+  const [appState, setAppState] = useState(AppState.currentState);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', setAppState);

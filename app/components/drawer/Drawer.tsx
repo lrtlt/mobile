@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ScrollViewInstance} from 'react-native';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../../Theme';
@@ -37,7 +37,7 @@ const DrawerComponent: React.FC<React.PropsWithChildren<Props>> = ({navigation})
 
   const insets = useSafeAreaInsets();
 
-  const scrollRef = useRef<MyScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
 
   const Line = useCallback(
     () => <Divider style={{marginHorizontal: dim.drawerPadding * 2}} />,

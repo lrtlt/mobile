@@ -104,7 +104,7 @@ const HistoryScreen: React.FC<React.PropsWithChildren<Props>> = ({navigation}) =
         ListFooterComponent={
           isFetchingNextPage ? (
             <ActivityIndicator style={styles.footer} color={colors.primary} />
-          ) : null
+          ) : undefined
         }
       />
     </View>

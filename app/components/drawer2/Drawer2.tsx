@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Linking} from 'react-native';
+import {View, StyleSheet, Linking, ScrollViewInstance} from 'react-native';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../../Theme';
@@ -31,7 +31,7 @@ const Drawer2Component: React.FC<React.PropsWithChildren<Props>> = ({navigation}
     useNavigationStore.getState();
 
   const insets = useSafeAreaInsets();
-  const scrollRef = useRef<MyScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
 
   useOnDrawerClose(
     useCallback(() => {

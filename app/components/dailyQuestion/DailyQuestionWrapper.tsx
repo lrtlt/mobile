@@ -16,7 +16,7 @@ const DailyQuestionWrapper: React.FC<DailyQuestionWrapperProps> = ({id, contentM
   const answer = useSettingsStore((state) => state.daily_question_response);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (question) {
       const isAnswered = answer?.daily_question_id === question.data.id;
       const isQuestionOngoing = question.data.can_vote && !question.data.is_ended;

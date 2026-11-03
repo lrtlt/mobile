@@ -40,7 +40,7 @@ const OpinionsBlock: React.FC<OpinionsBlockProps> = ({block}) => {
 
   const [lead, ...rest] = articles;
   const rows = rest.slice(0, 2);
-  const columns = rest.slice(2, 4);
+  // const columns = rest.slice(2, 4);
 
   return (
     <View style={{...styles.root, backgroundColor: colors.sectionBackground}}>
