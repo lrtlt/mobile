@@ -48,7 +48,7 @@ yarn test          # Run Jest tests
 
 **iOS**: After installing dependencies, run `yarn pods` (`bundle exec pod install` in `ios/`). CocoaPods crashes without a UTF-8 locale, so set `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8` if needed. React Native core is installed as the prebuilt `React.xcframework` (React Native's default), so changes under `node_modules/react-native` are not compiled on iOS.
 
-**Android**: compileSdk 37, AGP 9 (with `android.builtInKotlin=false` / `android.newDsl=false` opt-outs), Kotlin 2.2, minSdk 26 (required by Auth0 v6). `castFrameworkVersion` stays pinned to 22.3.1: Cast 23+ is built with Kotlin 2.4, which the Kotlin 2.2 compiler can't read.
+**Android**: compileSdk 37, AGP 9 (with `android.builtInKotlin=false` / `android.newDsl=false` opt-outs), Kotlin 2.4 (`kotlinVersion` in `android/build.gradle`, also the `kotlin-gradle-plugin` classpath version; Firebase BoM 35 and Cast 23 ship Kotlin 2.4 metadata), minSdk 26 (required by Auth0 v6). Android Auto (`android/auto`) uses Firebase Analytics/Firestore directly with its own `firebase-bom` pin: keep it equal to `sdkVersions.android.firebase` in `@react-native-firebase/app`'s package.json.
 
 ### Yarn Patches
 
@@ -114,7 +114,8 @@ Menu structure is dynamic and loaded from Firestore (`internal/app-menu-v2` docu
 
 ### Native Integrations
 
-**Firebase** (v26.4.1, Firebase iOS SDK 12 via CocoaPods):
+**Firebase** (v27.1.0; Firebase iOS SDK 13.1.1 via Swift Package Manager, Android BoM 35.0.2):
+- iOS Firebase is SPM-only, which requires `use_frameworks! :linkage => :dynamic` for `lrtApp`. RNFB's pod install hooks link FirebaseCore into the app target and add the SPM embed and build-setting phases. `link_firebase_spm_products` in the Podfile links the other products our native code uses from the same `firebase-ios-sdk` package reference at the same exact version: FirebaseAnalytics and FirebaseFirestore for the CarPlay code, and FirebaseMessaging for the `FCMImageNotification` extension, which has no CocoaPods. Every product has to be declared by an RNFB pod and by our target so there is one copy and one configured `FirebaseApp`; `AppDelegate.swift` calls `FirebaseApp.configure()`.
 - Analytics: Navigation and event tracking
 - Messaging (FCM): Push notifications with foreground/background handlers
 - Crashlytics: Error reporting
@@ -235,7 +236,7 @@ Screens report views through `useNavigationAnalytics` (Firebase `page_view` + sm
 ## Platform-specific Considerations
 
 **iOS**:
-- CocoaPods dependencies managed in `ios/Podfile`
+- CocoaPods dependencies managed in `ios/Podfile`, with dynamic frameworks (required by Firebase SPM). `THEOplayer-Connector-SideloadedSubtitle` declares `static_framework`, which CocoaPods rejects under a dynamic pod, so the Podfile's `pre_install` builds it as a dynamic framework.
 - Xcode configuration files in `ios/lrtApp.xcworkspace`
 
 **Android**:
