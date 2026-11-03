@@ -11,7 +11,7 @@ import MyScrollView from '../MyScrollView/MyScrollView';
 import {useNavigationStore} from '../../state/navigation_store';
 import {useShallow} from 'zustand/shallow';
 import {MainStackParamList} from '../../navigation/MainStack';
-import useOnDrawerClose from '../drawer/useOnDrawerClose';
+import useOnDrawerClose from './useOnDrawerClose';
 import DrawerBasicItem from './components/DrawerBasicItem';
 import {Menu2Item} from '../../api/Types';
 import DrawerExpandableItem from './components/DrawerExpandableItem';
