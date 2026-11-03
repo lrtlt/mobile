@@ -114,7 +114,7 @@ Menu structure is dynamic and loaded from Firestore (`internal/app-menu-v2` docu
 
 ### Native Integrations
 
-**Firebase** (v26.4.0):
+**Firebase** (v26.4.1, Firebase iOS SDK 12 via CocoaPods):
 - Analytics: Navigation and event tracking
 - Messaging (FCM): Push notifications with foreground/background handlers
 - Crashlytics: Error reporting
