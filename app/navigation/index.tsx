@@ -1,5 +1,4 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {StatusBar} from 'react-native';
 import {LinkingOptions, NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
 import SplashViewComponent from '../screens/splash/SplashScreenView';
 
@@ -88,11 +87,6 @@ const NavigatorComponent: React.FC<React.PropsWithChildren<{}>> = () => {
 
   return (
     <>
-      <StatusBar
-        barStyle={theme.dark ? 'light-content' : 'dark-content'}
-        translucent={false}
-        backgroundColor={theme.colors.statusBar}
-      />
       <NavigationContainer
         ref={navRef}
         theme={theme}

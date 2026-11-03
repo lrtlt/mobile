@@ -18,7 +18,6 @@ const SplashScreen: React.FC<React.PropsWithChildren<{}>> = () => {
     <>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={colors.background}
       />
       <View style={{...styles.container, backgroundColor: colors.background}}>
         <Logo width={80} height={80} />
