@@ -46,7 +46,7 @@ const App: React.FC = () => {
 export default () => (
   <GestureHandlerRootView style={styles.flex}>
     <QueryClientProvider client={queryClient}>
-      <Auth0Provider domain={Config.AUTH0_DOMAIN} clientId={Config.AUTH0_CLIENT_ID}>
+      <Auth0Provider domain={Config.AUTH0_DOMAIN} clientId={Config.AUTH0_CLIENT_ID} useDPoP={true}>
         <App />
       </Auth0Provider>
     </QueryClientProvider>

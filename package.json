@@ -38,7 +38,7 @@
     "moment": "^2.31.0",
     "react": "19.3.0",
     "react-native": "0.88.1",
-    "react-native-auth0": "^5.11.1",
+    "react-native-auth0": "^6.1.0",
     "react-native-autoheight-webview": "^1.6.5",
     "react-native-config": "^1.7.2",
     "react-native-event-listeners": "^1.0.7",

@@ -18,14 +18,13 @@ class AutoAuthManager(context: Context) {
             "bRojXnSKqnmaJhQRFY6V0zopGygYrRfg",
             "lrt.eu.auth0.com"
         )
-        // DPoP must match the phone app: react-native-auth0 enables it by default and stores a key
+        // DPoP must match the phone app (useDPoP on Auth0Provider): react-native-auth0 then stores a key
         // thumbprint next to the credentials, so a manager without it refuses every refresh with
         // DPOP_NOT_CONFIGURED once the access token the phone app left behind expires.
         val authAPI = AuthenticationAPIClient(auth0).useDPoP(context)
         credentialsManager = SecureCredentialsManager(
             authAPI,
             context,
-            auth0,
             SharedPreferencesStorage(context)
         )
     }
