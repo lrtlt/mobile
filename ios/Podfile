@@ -17,9 +17,6 @@ prepare_react_native_project!
 # Enable New Architecture
 ENV['RCT_NEW_ARCH_ENABLED'] = '1'
 
-# Build React Native core from source: the prebuilt binary lacks our .yarn/patches (iOS text measurement fix)
-ENV['RCT_USE_PREBUILT_RNCORE'] = '0'
-
 # ⬇️ uncomment wanted permissions
 setup_permissions([
   'AppTrackingTransparency',

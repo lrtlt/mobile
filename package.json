@@ -7,10 +7,10 @@
     "run-ios": "react-native run-ios",
     "run-android": "react-native run-android",
     "start": "react-native start",
-    "clean-build": "watchman watch-del-all && rm -rf node_modules/ && yarn cache clean && yarn install && cd ios && RCT_USE_PREBUILT_RNCORE=0 bundle exec pod install && cd .. &&  yarn start --reset-cache",
+    "clean-build": "watchman watch-del-all && rm -rf node_modules/ && yarn cache clean && yarn install && cd ios && bundle exec pod install && cd .. &&  yarn start --reset-cache",
     "clean-build-win": "rmdir /s /q %appdata%\\..\\Temp\\react-native-* & rmdir /s /q node_modules & yarn cache clean --force & yarn install & cd android & gradlew clean & cd .. &  yarn start --reset-cache",
     "test": "jest",
-    "pods": "cd ios && RCT_USE_PREBUILT_RNCORE=0 bundle exec pod install",
+    "pods": "cd ios && bundle exec pod install",
     "lint": "eslint . --ext .ts,.tsx",
     "ts": "tsc --skipLibCheck"
   },
@@ -36,8 +36,8 @@
     "immer": "^10.2.0",
     "lodash": "^4.18.1",
     "moment": "^2.31.0",
-    "react": "19.2.3",
-    "react-native": "0.86.3",
+    "react": "19.3.0",
+    "react-native": "0.88.1",
     "react-native-auth0": "^5.11.1",
     "react-native-autoheight-webview": "^1.6.5",
     "react-native-config": "^1.7.2",
@@ -72,11 +72,11 @@
     "@react-native-community/cli": "20.2.0",
     "@react-native-community/cli-platform-android": "20.2.0",
     "@react-native-community/cli-platform-ios": "20.2.0",
-    "@react-native/babel-preset": "0.86.3",
-    "@react-native/eslint-config": "0.86.3",
-    "@react-native/jest-preset": "0.86.3",
-    "@react-native/metro-config": "0.86.3",
-    "@react-native/typescript-config": "0.86.3",
+    "@react-native/babel-preset": "0.88.1",
+    "@react-native/eslint-config": "0.88.1",
+    "@react-native/jest-preset": "0.88.1",
+    "@react-native/metro-config": "0.88.1",
+    "@react-native/typescript-config": "0.88.1",
     "@tanstack/eslint-plugin-query": "^5.103.2",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.25",
@@ -87,7 +87,7 @@
     "jest": "^29.6.3",
     "prettier": "2.8.8",
     "react-native-svg-app-icon": "^0.7.0",
-    "react-test-renderer": "19.2.3",
+    "react-test-renderer": "19.3.0",
     "typescript": "^5.9.3"
   },
   "jest": {
@@ -105,7 +105,6 @@
   },
   "packageManager": "yarn@3.6.4",
   "resolutions": {
-    "react-native-autoheight-webview@^1.6.5": "patch:react-native-autoheight-webview@patch%3Areact-native-autoheight-webview@npm%253A1.6.5%23./.yarn/patches/react-native-autoheight-webview-npm-1.6.5-c3f5e8ed07.patch%3A%3Aversion=1.6.5&hash=88b8e6&locator=lrt.lt%2540workspace%253A.#./.yarn/patches/react-native-autoheight-webview-patch-e675469c4b.patch",
-    "react-native@0.86.3": "patch:react-native@npm%3A0.86.3#./.yarn/patches/react-native-npm-0.86.3-a26c4d71a9.patch"
+    "react-native-autoheight-webview@^1.6.5": "patch:react-native-autoheight-webview@patch%3Areact-native-autoheight-webview@npm%253A1.6.5%23./.yarn/patches/react-native-autoheight-webview-npm-1.6.5-c3f5e8ed07.patch%3A%3Aversion=1.6.5&hash=88b8e6&locator=lrt.lt%2540workspace%253A.#./.yarn/patches/react-native-autoheight-webview-patch-e675469c4b.patch"
   }
 }

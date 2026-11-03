@@ -36,14 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       return
     }
 
-    //Prepare launchOptions if application launched from a Universal Link or a custom URL scheme
-    var launchOptions: [AnyHashable: Any] = [:]
-    if let universalLinkUrl = connectionOptions?.userActivities.first?.webpageURL {
-      launchOptions[UIApplication.LaunchOptionsKey.url] = universalLinkUrl
-    } else if let schemeUrl = connectionOptions?.urlContexts.first?.url {
-      launchOptions[UIApplication.LaunchOptionsKey.url] = schemeUrl
-    }
-
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
     delegate.dependencyProvider = RCTAppDependencyProvider()
@@ -51,10 +43,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     reactNativeDelegate = delegate
     reactNativeFactory = factory
 
+    #if DEBUG
+      factory.devMenuConfiguration = RCTDevMenuConfiguration(
+        devMenuEnabled: true,
+        shakeGestureEnabled: true,
+        keyboardShortcutsEnabled: true
+      )
+    #endif
+
+    // Passes the Universal Link or custom URL scheme the app was launched from to Linking.getInitialURL
     factory.startReactNative(
       withModuleName: "lrtApp",
       in: window,
-      launchOptions: launchOptions
+      connectionOptions: connectionOptions
     )
   }
 
@@ -76,10 +77,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
-  override func sourceURL(for bridge: RCTBridge) -> URL? {
-    self.bundleURL()
-  }
-
   override func bundleURL() -> URL? {
     #if DEBUG
       RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")

@@ -4,7 +4,6 @@
   "exclude": ["**/node_modules", "**/Pods"],
   "compilerOptions": {
     "noUnusedLocals": true,
-    "moduleSuffixes": [".ios", ".android", ".native", ""],
-    "types": ["jest"]
+    "moduleSuffixes": [".ios", ".android", ".native", ""]
   }
 }
