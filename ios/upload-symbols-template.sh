@@ -12,7 +12,7 @@
 # Note: If you haven't migrated from Fabric Crashlytics, replace FirebaseCrashlytics to Fabric on line 15.
 
 ARCHIVE=$1
-UPLOADSCRIPT="./Pods/FirebaseCrashlytics/upload-symbols" # Path to Fabric upload script
+UPLOADSCRIPT=$(ls -t ~/Library/Developer/Xcode/DerivedData/lrtApp-*/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols 2>/dev/null | head -n 1) # Firebase SPM checkout
 GOOGLECONFIG="./GoogleService-Info.plist"   # Path to Google services info
 
 if [ -d $ARCHIVE ]; then

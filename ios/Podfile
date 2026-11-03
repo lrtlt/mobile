@@ -45,19 +45,60 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-# RNFB v24+ resolves Firebase via SPM by default, which is incompatible with
-# `use_frameworks! :linkage => :static` below (duplicate-symbol errors).
-$RNFirebaseDisableSPM = true
+# Links firebase-ios-sdk products used by our own native code from RNFB's package
+# reference, so they share the FirebaseCore that RNFB and AppDelegate configure.
+def link_firebase_spm_products(installer, products_by_target)
+  return unless defined?(RNFirebaseSPM) && RNFirebaseSPM.active?
+
+  project = installer.aggregate_targets.map(&:user_project).compact.uniq.first
+  pkg_class = Xcodeproj::Project::Object::XCRemoteSwiftPackageReference
+  modified = false
+
+  pkg = project.root_object.package_references.find do |candidate|
+    candidate.instance_of?(pkg_class) && candidate.repositoryURL == RNFirebaseSPM.url
+  end
+  unless pkg
+    pkg = project.new(pkg_class)
+    rnfirebase_assign_stable_uuid!(project, pkg, rnfirebase_stable_package_uuid_key(false))
+    pkg.repositoryURL = RNFirebaseSPM.url
+    project.root_object.package_references << pkg
+    modified = true
+  end
+  modified = true if rnfirebase_pin_spm_package_requirement!(pkg)
+
+  products_by_target.each do |target_name, products|
+    target = project.native_targets.find { |t| t.name == target_name }
+    raise Pod::Informative, "No #{target_name} target to link Firebase SPM products into" unless target
+
+    products.each do |product|
+      dep = target.package_product_dependencies.find { |d| d.product_name == product }
+      unless dep
+        dep = project.new(Xcodeproj::Project::Object::XCSwiftPackageProductDependency)
+        rnfirebase_assign_stable_uuid!(project, dep, "product-dependency:#{target_name}:#{product}")
+        dep.package = pkg
+        dep.product_name = product
+        target.package_product_dependencies << dep
+        modified = true
+      end
+      next if target.frameworks_build_phase.files.any? { |bf| bf.product_ref == dep }
+
+      build_file = project.new(Xcodeproj::Project::Object::PBXBuildFile)
+      rnfirebase_assign_stable_uuid!(project, build_file, "build-file:#{target_name}:#{product}")
+      build_file.product_ref = dep
+      target.frameworks_build_phase.files << build_file
+      modified = true
+    end
+  end
+
+  project.save if modified
+end
 
 target 'lrtApp' do
   config = use_native_modules!
-  use_frameworks! :linkage => :static
-  $RNFirebaseAsStaticFramework = true
+  # RNFB 27 resolves Firebase through SPM, which requires dynamic frameworks
+  use_frameworks! :linkage => :dynamic
 
   pod 'react-native-google-cast', :git => 'https://github.com/Danesz/react-native-google-cast.git', branch: 'feature/guestmode_apple_silicon'
-  #THIS IS A WORKAROUND FOR ARCHIVE BUILD BECAUSE OF FCMImageNotification
-  #Version is intentionally unpinned so it follows whatever Firebase/RN resolve to
-  pod 'GoogleUtilities'
 
   use_react_native!(
     :path => config[:reactNativePath],
@@ -82,12 +123,19 @@ target 'lrtApp' do
       end
     end
   end
-end
 
-target 'FCMImageNotification' do
-  use_frameworks! :linkage => :static
-  #Version is intentionally unpinned so it follows the host app's resolved Firebase version
-  pod 'Firebase/Messaging'
-  #This was added manually so it matches the host app's resolved version
-  pod 'GoogleUtilities'
+  pre_install do |installer|
+    installer.pod_targets.each do |pod|
+      if pod.name == 'THEOplayer-Connector-SideloadedSubtitle'
+        pod.instance_variable_set(:@build_type, Pod::BuildType.dynamic_framework)
+      end
+    end
+  end
+
+  post_integrate do |installer|
+    link_firebase_spm_products(installer, {
+      'lrtApp' => ['FirebaseAnalytics', 'FirebaseFirestore'],
+      'FCMImageNotification' => ['FirebaseMessaging'],
+    })
+  end
 end
