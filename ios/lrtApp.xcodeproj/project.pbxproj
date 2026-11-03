@@ -14,9 +14,9 @@
 		30DF8C0F1DC54C25996EA68C /* PlayfairDisplay-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B1BAAF427CA44828E0B7B95 /* PlayfairDisplay-Regular.ttf */; };
 		5DE5469DBE4D4DF687A0D573 /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A436044A3C041F281F7BF8B /* SourceSansPro-SemiBold.ttf */; };
 		61299A4B3648B6D7C37FBFA8 /* Pods_lrtApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B444A0B5A3869DA4136C766C /* Pods_lrtApp.framework */; };
+		619BA53D83CDF551E46F81A7 /* RDSFirestoreListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F826ACB5742EE525C399D3 /* RDSFirestoreListener.m */; };
 		6E77BFFD1A0446E7AF06C197 /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A3C40A1A26044BDA6A6599C /* SourceSansPro-Regular.ttf */; };
 		6F35ABBC254AC514009EE240 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6F35ABBB254AC514009EE240 /* GoogleService-Info.plist */; };
-		76340CBA710EC4B3D5AF7AB6 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 9754506F81E0C386F0AA1D6E /* FirebaseFirestore */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8B2D5F3CAE405B7192C6D3E8 /* PlayfairDisplay-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C4E2B9D3F4A6081B5C2D7 /* PlayfairDisplay-SemiBold.ttf */; };
 		911EEC6B98EAC4A7CAA390B5 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = D08585B498E4FA644FFA2B27 /* FirebaseMessaging */; };
@@ -88,6 +88,7 @@
 		1A3C40A1A26044BDA6A6599C /* SourceSansPro-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Regular.ttf"; path = "../assets/font/SourceSansPro-Regular.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* lrtApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "lrtApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* lrtApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "lrtApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		46F826ACB5742EE525C399D3 /* RDSFirestoreListener.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RDSFirestoreListener.m; path = lrtApp/RDSFirestoreListener.m; sourceTree = "<group>"; };
 		4A436044A3C041F281F7BF8B /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-SemiBold.ttf"; path = "../assets/font/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
 		4B1BAAF427CA44828E0B7B95 /* PlayfairDisplay-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "PlayfairDisplay-Regular.ttf"; path = "../assets/font/PlayfairDisplay-Regular.ttf"; sourceTree = "<group>"; };
 		62350164273C4F2A885BD709 /* SourceSansPro-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-LightItalic.ttf"; path = "../assets/font/SourceSansPro-LightItalic.ttf"; sourceTree = "<group>"; };
@@ -119,6 +120,7 @@
 		9CAUTH0002D2FD77100C0E5D4 /* CarPlayAuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayAuthManager.swift; sourceTree = "<group>"; };
 		9CB19FE32B0EAC2B00F49E23 /* lrtAppRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = lrtAppRelease.entitlements; path = lrtApp/lrtAppRelease.entitlements; sourceTree = "<group>"; };
 		9CRDS00002D2FD77100C0E5D4 /* RDSNowPlayingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RDSNowPlayingService.swift; path = lrtApp/RDSNowPlayingService.swift; sourceTree = "<group>"; };
+		9E63105F74659DC0D6A87B8C /* RDSFirestoreListener.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RDSFirestoreListener.h; path = lrtApp/RDSFirestoreListener.h; sourceTree = "<group>"; };
 		B444A0B5A3869DA4136C766C /* Pods_lrtApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lrtApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -138,7 +140,6 @@
 			files = (
 				61299A4B3648B6D7C37FBFA8 /* Pods_lrtApp.framework in Frameworks */,
 				E0206E4615F0794A48A3BC81 /* FirebaseAnalytics in Frameworks */,
-				76340CBA710EC4B3D5AF7AB6 /* FirebaseFirestore in Frameworks */,
 				26CDE5A830283A3F1A155279 /* FirebaseCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -188,6 +189,8 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				9C7826692B5887FD00B7183B /* lrtApp-Bridging-Header.h */,
 				9C808A8D2C19AEAE00C5A257 /* PrivacyInfo.xcprivacy */,
+				9E63105F74659DC0D6A87B8C /* RDSFirestoreListener.h */,
+				46F826ACB5742EE525C399D3 /* RDSFirestoreListener.m */,
 			);
 			name = lrtApp;
 			sourceTree = "<group>";
@@ -330,7 +333,6 @@
 			name = lrtApp;
 			packageProductDependencies = (
 				E92353DA69465FF96F193324 /* FirebaseAnalytics */,
-				9754506F81E0C386F0AA1D6E /* FirebaseFirestore */,
 				899865CA645D466F1994BC08 /* FirebaseCore */,
 			);
 			productName = lrtApp;
@@ -827,6 +829,7 @@
 				9C54AE332D2D8886009F63EC /* CarPlayService.swift in Sources */,
 				9C9EDE8B2D2FE24200C0E5D4 /* Playlist.swift in Sources */,
 				9CRDS00012D2FD77100C0E5D4 /* RDSNowPlayingService.swift in Sources */,
+				619BA53D83CDF551E46F81A7 /* RDSFirestoreListener.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1510,11 +1513,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ECB02FC8EBFEE4AD838F1A71 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
-		};
-		9754506F81E0C386F0AA1D6E /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ECB02FC8EBFEE4AD838F1A71 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
 		};
 		D08585B498E4FA644FFA2B27 /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -1,10 +1,9 @@
-import FirebaseFirestore
 import MediaPlayer
 
 class RDSNowPlayingService {
   static let shared = RDSNowPlayingService()
 
-  private var listener: ListenerRegistration?
+  private var listener: RDSFirestoreListener?
 
   private init() {}
 
@@ -26,9 +25,8 @@ class RDSNowPlayingService {
 
     guard let docPath = firestoreDocPath(for: channelId) else { return }
 
-    let db = Firestore.firestore()
-    listener = db.document(docPath).addSnapshotListener { snapshot, error in
-      guard let data = snapshot?.data(), error == nil else {
+    listener = RDSFirestoreListener(documentPath: docPath) { data, error in
+      guard let data, error == nil else {
         print("RDSNowPlayingService: error listening to \(docPath): \(error?.localizedDescription ?? "unknown")")
         return
       }

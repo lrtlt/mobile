@@ -134,7 +134,7 @@ target 'lrtApp' do
 
   post_integrate do |installer|
     link_firebase_spm_products(installer, {
-      'lrtApp' => ['FirebaseAnalytics', 'FirebaseFirestore'],
+      'lrtApp' => ['FirebaseAnalytics'],
       'FCMImageNotification' => ['FirebaseMessaging'],
     })
   end
