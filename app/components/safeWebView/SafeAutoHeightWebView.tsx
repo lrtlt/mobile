@@ -4,7 +4,7 @@ import React, {forwardRef, useCallback, useRef} from 'react';
 import {Linking, Platform, useWindowDimensions} from 'react-native';
 import {StyleSheet, View} from 'react-native';
 import WebView, {AutoHeightWebViewProps, SizeUpdate} from 'react-native-autoheight-webview';
-import {type ShouldStartLoadRequest} from 'react-native-webview/src/WebViewTypes';
+import {type ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
 import {MainStackParamList} from '../../navigation/MainStack';
 import {useTheme} from '../../Theme';
 import useInjectBeforeLoad from './useInjectBeforeLoad';

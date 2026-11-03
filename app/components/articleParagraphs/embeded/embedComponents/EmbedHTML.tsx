@@ -1,6 +1,6 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {WebViewSource} from 'react-native-webview/src/WebViewTypes';
+import {WebViewSource} from 'react-native-webview/lib/WebViewTypes';
 import WebView from 'react-native-webview';
 
 import {ArticleEmbedHTMLType} from '../../../../api/Types';
