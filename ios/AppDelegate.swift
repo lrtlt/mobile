@@ -1,5 +1,5 @@
 import CarPlay
-import Firebase
+import FirebaseCore
 import GoogleCast
 import React
 import ReactAppDependencyProvider
