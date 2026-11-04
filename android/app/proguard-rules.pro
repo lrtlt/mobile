@@ -18,6 +18,17 @@
 # Room creates databases (e.g. WorkManager's WorkDatabase_Impl) by reflection; R8 full mode strips their constructors
 -keep class * extends androidx.room.RoomDatabase { <init>(); }
 
+# @d11/react-native-fast-image (README "ProGuard Config"). Glide instantiates the modules named in the
+# manifest by reflection, so their constructors are kept too (R8 full mode strips them otherwise)
+-keep public class com.dylanvann.fastimage.* {*;}
+-keep public class com.dylanvann.fastimage.** {*;}
+-keep public class * implements com.bumptech.glide.module.GlideModule { <init>(); }
+-keep public class * extends com.bumptech.glide.module.AppGlideModule { <init>(...); }
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
 # Readable Crashlytics stack traces (the mapping file is uploaded by the Crashlytics plugin)
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception
