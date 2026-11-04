@@ -45,54 +45,6 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-# Links firebase-ios-sdk products into our own targets from RNFB's package
-# reference, at the exact version RNFB pins.
-def link_firebase_spm_products(installer, products_by_target)
-  return unless defined?(RNFirebaseSPM) && RNFirebaseSPM.active?
-
-  project = installer.aggregate_targets.map(&:user_project).compact.uniq.first
-  pkg_class = Xcodeproj::Project::Object::XCRemoteSwiftPackageReference
-  modified = false
-
-  pkg = project.root_object.package_references.find do |candidate|
-    candidate.instance_of?(pkg_class) && candidate.repositoryURL == RNFirebaseSPM.url
-  end
-  unless pkg
-    pkg = project.new(pkg_class)
-    rnfirebase_assign_stable_uuid!(project, pkg, rnfirebase_stable_package_uuid_key(false))
-    pkg.repositoryURL = RNFirebaseSPM.url
-    project.root_object.package_references << pkg
-    modified = true
-  end
-  modified = true if rnfirebase_pin_spm_package_requirement!(pkg)
-
-  products_by_target.each do |target_name, products|
-    target = project.native_targets.find { |t| t.name == target_name }
-    raise Pod::Informative, "No #{target_name} target to link Firebase SPM products into" unless target
-
-    products.each do |product|
-      dep = target.package_product_dependencies.find { |d| d.product_name == product }
-      unless dep
-        dep = project.new(Xcodeproj::Project::Object::XCSwiftPackageProductDependency)
-        rnfirebase_assign_stable_uuid!(project, dep, "product-dependency:#{target_name}:#{product}")
-        dep.package = pkg
-        dep.product_name = product
-        target.package_product_dependencies << dep
-        modified = true
-      end
-      next if target.frameworks_build_phase.files.any? { |bf| bf.product_ref == dep }
-
-      build_file = project.new(Xcodeproj::Project::Object::PBXBuildFile)
-      rnfirebase_assign_stable_uuid!(project, build_file, "build-file:#{target_name}:#{product}")
-      build_file.product_ref = dep
-      target.frameworks_build_phase.files << build_file
-      modified = true
-    end
-  end
-
-  project.save if modified
-end
-
 target 'lrtApp' do
   config = use_native_modules!
   # RNFB 27 resolves Firebase through SPM, which requires dynamic frameworks
@@ -130,11 +82,5 @@ target 'lrtApp' do
         pod.instance_variable_set(:@build_type, Pod::BuildType.dynamic_framework)
       end
     end
-  end
-
-  post_integrate do |installer|
-    link_firebase_spm_products(installer, {
-      'FCMImageNotification' => ['FirebaseMessaging'],
-    })
   end
 end
