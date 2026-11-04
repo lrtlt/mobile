@@ -45,8 +45,8 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-# Links firebase-ios-sdk products used by our own native code from RNFB's package
-# reference, so they share the FirebaseCore that RNFB and AppDelegate configure.
+# Links firebase-ios-sdk products into our own targets from RNFB's package
+# reference, at the exact version RNFB pins.
 def link_firebase_spm_products(installer, products_by_target)
   return unless defined?(RNFirebaseSPM) && RNFirebaseSPM.active?
 
@@ -134,7 +134,6 @@ target 'lrtApp' do
 
   post_integrate do |installer|
     link_firebase_spm_products(installer, {
-      'lrtApp' => ['FirebaseAnalytics'],
       'FCMImageNotification' => ['FirebaseMessaging'],
     })
   end

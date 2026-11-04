@@ -38,7 +38,7 @@
 		9C9EDE8B2D2FE24200C0E5D4 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EDE8A2D2FE24200C0E5D4 /* Playlist.swift */; };
 		9CAUTH0012D2FD77100C0E5D4 /* CarPlayAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAUTH0002D2FD77100C0E5D4 /* CarPlayAuthManager.swift */; };
 		9CRDS00012D2FD77100C0E5D4 /* RDSNowPlayingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CRDS00002D2FD77100C0E5D4 /* RDSNowPlayingService.swift */; };
-		E0206E4615F0794A48A3BC81 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = E92353DA69465FF96F193324 /* FirebaseAnalytics */; };
+		A32D44F0A8DB051D52FBD42E /* CarPlayAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ACBF1AC24E40063AE2D63C2 /* CarPlayAnalytics.m */; };
 		ECA5399AC90AC950D6455561 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 9C808A8D2C19AEAE00C5A257 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +98,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = lrtApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F73005EC221D36C68379F41 /* Pods-lrtApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp.debug.xcconfig"; path = "Target Support Files/Pods-lrtApp/Pods-lrtApp.debug.xcconfig"; sourceTree = "<group>"; };
 		945979D07578987EF3B629E6 /* Pods-lrtApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lrtApp.release.xcconfig"; path = "Target Support Files/Pods-lrtApp/Pods-lrtApp.release.xcconfig"; sourceTree = "<group>"; };
+		9ACBF1AC24E40063AE2D63C2 /* CarPlayAnalytics.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = CarPlayAnalytics.m; path = lrtApp/CarPlayAnalytics.m; sourceTree = "<group>"; };
 		9C0CA4EC28291CF100E1601F /* logo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo2.png; path = lrtApp/logo2.png; sourceTree = "<group>"; };
 		9C54AE2A2D2D8886009F63EC /* CarPlayCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayCache.swift; sourceTree = "<group>"; };
 		9C54AE2B2D2D8886009F63EC /* CarPlayModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlayModels.swift; sourceTree = "<group>"; };
@@ -122,6 +123,7 @@
 		9CRDS00002D2FD77100C0E5D4 /* RDSNowPlayingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RDSNowPlayingService.swift; path = lrtApp/RDSNowPlayingService.swift; sourceTree = "<group>"; };
 		9E63105F74659DC0D6A87B8C /* RDSFirestoreListener.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RDSFirestoreListener.h; path = lrtApp/RDSFirestoreListener.h; sourceTree = "<group>"; };
 		B444A0B5A3869DA4136C766C /* Pods_lrtApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lrtApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D49EB477A11D8F8FC591CDDA /* CarPlayAnalytics.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CarPlayAnalytics.h; path = lrtApp/CarPlayAnalytics.h; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -139,7 +141,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				61299A4B3648B6D7C37FBFA8 /* Pods_lrtApp.framework in Frameworks */,
-				E0206E4615F0794A48A3BC81 /* FirebaseAnalytics in Frameworks */,
 				26CDE5A830283A3F1A155279 /* FirebaseCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -191,6 +192,8 @@
 				9C808A8D2C19AEAE00C5A257 /* PrivacyInfo.xcprivacy */,
 				9E63105F74659DC0D6A87B8C /* RDSFirestoreListener.h */,
 				46F826ACB5742EE525C399D3 /* RDSFirestoreListener.m */,
+				D49EB477A11D8F8FC591CDDA /* CarPlayAnalytics.h */,
+				9ACBF1AC24E40063AE2D63C2 /* CarPlayAnalytics.m */,
 			);
 			name = lrtApp;
 			sourceTree = "<group>";
@@ -332,7 +335,6 @@
 			);
 			name = lrtApp;
 			packageProductDependencies = (
-				E92353DA69465FF96F193324 /* FirebaseAnalytics */,
 				899865CA645D466F1994BC08 /* FirebaseCore */,
 			);
 			productName = lrtApp;
@@ -830,6 +832,7 @@
 				9C9EDE8B2D2FE24200C0E5D4 /* Playlist.swift in Sources */,
 				9CRDS00012D2FD77100C0E5D4 /* RDSNowPlayingService.swift in Sources */,
 				619BA53D83CDF551E46F81A7 /* RDSFirestoreListener.m in Sources */,
+				A32D44F0A8DB051D52FBD42E /* CarPlayAnalytics.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1518,11 +1521,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ECB02FC8EBFEE4AD838F1A71 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
-		};
-		E92353DA69465FF96F193324 /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ECB02FC8EBFEE4AD838F1A71 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

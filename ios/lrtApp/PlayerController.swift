@@ -1,5 +1,4 @@
 import AVFoundation
-import FirebaseAnalytics
 import MediaPlayer
 
 class PlayerController {
@@ -340,24 +339,24 @@ class PlayerController {
         let type = AVAudioSession.InterruptionType(rawValue: typeValue)
       else {
         print("Interruption: Invalid notification")
-        Analytics.logEvent("carplay_interruption_no_user_info", parameters: nil)
+        CarPlayAnalytics.logEvent("carplay_interruption_no_user_info")
         return
       }
 
       switch type {
       case .began:
-        Analytics.logEvent("carplay_interruption_began", parameters: nil)
+        CarPlayAnalytics.logEvent("carplay_interruption_began")
         print("Interruption: began")
         // Pause playback when interruption begins
         self.pause()
       case .ended:
-        Analytics.logEvent("carplay_interruption_ended", parameters: nil)
+        CarPlayAnalytics.logEvent("carplay_interruption_ended")
         print("Interruption: ended")
         // Resume playback when interruption ends, if appropriate
         if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
           let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
           if options.contains(.shouldResume) {
-            Analytics.logEvent("carplay_interruption_resuming", parameters: nil)
+            CarPlayAnalytics.logEvent("carplay_interruption_resuming")
             print("Interruption: Resuming playback")
             self.play()
           }

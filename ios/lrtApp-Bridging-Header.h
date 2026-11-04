@@ -7,6 +7,7 @@
 #import <React/RCTUtils.h>
 #import <React/RCTConvert.h>
 #import <React/RCTBundleURLProvider.h>
+#import "lrtApp/CarPlayAnalytics.h"
 #import "lrtApp/RDSFirestoreListener.h"
 
 
