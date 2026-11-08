@@ -10,6 +10,7 @@ import {themeLight, useTheme} from '../../../Theme';
 import TextComponent from '../../text/Text';
 import {Article} from '../../../../Types';
 import ArticleBadges from './ArticleBadges';
+import ArticleChainItems from './ArticleChainItems';
 import ListenCount from './ListenCount';
 import Badge from '../../badge/Badge';
 import MediaIcon from '../../mediaIcon/MediaIcon';
@@ -59,31 +60,6 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
     }
   }, [onPress, article]);
 
-  const onChainItemPressHandler = useCallback(
-    (item: Article['chain_items'][number]) => {
-      if (typeof onPress !== 'function' || !article) {
-        return;
-      }
-
-      switch (article.chain_option) {
-        case 1:
-          if (item.id) {
-            onPress({...article, id: item.id, title: item.title, is_video: 0, is_audio: 0});
-          } else {
-            onPress(article);
-          }
-          break;
-        case 2:
-          onPress({...article, scrollToLiveFeed: true} as Article);
-          break;
-        default:
-          onPress(article);
-          break;
-      }
-    },
-    [onPress, article],
-  );
-
   // Safety check for article object
   if (!article) {
     return null;
@@ -130,39 +106,6 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
 
   const badge = Boolean(article?.badge_title) && (
     <Badge style={style.badge} label={article.badge_title!} type={article?.badge_class} />
-  );
-
-  const chainItems = Boolean(article?.chain_items?.length) && (
-    <View style={chainStyles.container}>
-      {article.chain_items.map((item, index) => {
-        const isLast = index === article.chain_items.length - 1;
-        return (
-          <TouchableDebounce
-            key={item.chain_item_id ?? item.id ?? index}
-            debounceTime={500}
-            onPress={() => onChainItemPressHandler(item)}
-            activeOpacity={0.8}
-            accessibilityRole="link">
-            <View style={chainStyles.itemRow}>
-              <View style={chainStyles.bulletColumn}>
-                <View
-                  style={[
-                    chainStyles.bullet,
-                    index === 0
-                      ? {backgroundColor: colors.primary, borderColor: colors.primary}
-                      : {backgroundColor: 'transparent', borderColor: colors.primary},
-                  ]}
-                />
-                {!isLast && <View style={[chainStyles.line, {backgroundColor: colors.textDisbled}]} />}
-              </View>
-              <TextComponent style={chainStyles.itemText} numberOfLines={2}>
-                {item.title}
-              </TextComponent>
-            </View>
-          </TouchableDebounce>
-        );
-      })}
-    </View>
   );
 
   let imgUri = getArticleImageUri(article, styleType == 'single' ? IMG_SIZE_M : IMG_SIZE_S);
@@ -237,7 +180,7 @@ const ArticleComponent: React.FC<React.PropsWithChildren<Props>> = ({
             </TextComponent>
           )}
           {!simplyfied && <ArticleBadges style={style.badges} article={article} />}
-          {chainItems}
+          <ArticleChainItems article={article} onPress={onPress} />
         </View>
       </TouchableDebounce>
     </View>
@@ -340,39 +283,5 @@ const stylesMulti = StyleSheet.create({
     ...styles.title,
     fontSize: 17,
     lineHeight: 21,
-  },
-});
-
-const BULLET_SIZE = 8;
-const BULLET_COLUMN_WIDTH = 24;
-
-const chainStyles = StyleSheet.create({
-  container: {},
-  itemRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  bulletColumn: {
-    width: BULLET_COLUMN_WIDTH,
-    alignItems: 'center',
-    paddingTop: 6,
-  },
-  bullet: {
-    width: BULLET_SIZE,
-    height: BULLET_SIZE,
-    borderRadius: BULLET_SIZE / 2,
-    borderWidth: 1.5,
-  },
-  line: {
-    flex: 1,
-    width: 1,
-    marginTop: 12,
-    marginBottom: 4,
-    minHeight: 16,
-  },
-  itemText: {
-    flex: 1,
-    fontSize: 15,
-    paddingBottom: 12,
   },
 });
