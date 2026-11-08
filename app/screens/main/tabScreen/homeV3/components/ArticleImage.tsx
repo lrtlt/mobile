@@ -18,6 +18,7 @@ interface Props {
   imageSize?: ImageSize;
   aspectRatio?: number;
   borderRadius?: number;
+  blurRadius?: number;
   /**
    * Photo count and play badges in the bottom left corner. `true` follows the API's
    * `_view_badge` hint, 'always' shows them regardless.
@@ -34,6 +35,7 @@ const ArticleImage: React.FC<React.PropsWithChildren<Props>> = ({
   imageSize = IMG_SIZE_L,
   aspectRatio = 3 / 2,
   borderRadius = 0,
+  blurRadius,
   showBadges = true,
   showDuration = false,
   style,
@@ -53,7 +55,14 @@ const ArticleImage: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <View
       style={[styles.container, {aspectRatio, borderRadius, backgroundColor: colors.photoBackground}, style]}>
-      {uri ? <FastImage style={StyleSheet.absoluteFill} source={{uri}} resizeMode="cover" /> : null}
+      {uri ? (
+        <FastImage
+          style={StyleSheet.absoluteFill}
+          source={{uri}}
+          resizeMode="cover"
+          blurRadius={blurRadius}
+        />
+      ) : null}
       {badgesVisible && (hasGallery || hasPlay) ? (
         <View style={styles.badges} importantForAccessibility="no-hide-descendants">
           {hasGallery ? (
