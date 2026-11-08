@@ -6,7 +6,7 @@
 //
 
 #import "NotificationService.h"
-#import "FirebaseMessaging.h"
+@import FirebaseMessaging;
 
 @interface NotificationService ()
 

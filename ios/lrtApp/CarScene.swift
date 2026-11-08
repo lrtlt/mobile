@@ -1,7 +1,6 @@
 import AVFoundation
 import CarPlay
 import Combine
-import FirebaseAnalytics
 import Foundation
 import MediaPlayer
 import Network
@@ -86,7 +85,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     didConnect interfaceController: CPInterfaceController
   ) {
     print("CarPlay interface controller connected")
-    Analytics.logEvent("carplay_connected", parameters: nil)
+    CarPlayAnalytics.logEvent("carplay_connected")
     self.interfaceController = interfaceController
     self.connectedAt = Date()
 
@@ -174,7 +173,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     // Keyed off `analyticsKey` rather than the title, which is not a legal Firebase event name
     // for every tab — `Mano LRT` has a space, `Siūlome` a `ū`. Logging after the guard also
     // means an unrecognised title no longer mints an event nothing will ever query.
-    Analytics.logEvent("carplay_tab_open_\(tab.analyticsKey)", parameters: nil)
+    CarPlayAnalytics.logEvent("carplay_tab_open_\(tab.analyticsKey)")
 
     startTabLoad {
       switch tab {
@@ -778,7 +777,7 @@ class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPTabBa
     didDisconnectInterfaceController interfaceController: CPInterfaceController
   ) {
     print("CarPlay interface controller disconnected")
-    Analytics.logEvent("carplay_disconnected", parameters: nil)
+    CarPlayAnalytics.logEvent("carplay_disconnected")
     saveState()
     player.pause()
     RDSNowPlayingService.shared.stopListening()
