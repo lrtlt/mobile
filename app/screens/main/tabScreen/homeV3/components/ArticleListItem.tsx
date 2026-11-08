@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
-import {TouchableDebounce} from '../../../../../components';
+import {ArticleChainItems, TouchableDebounce} from '../../../../../components';
 import {IconPlay} from '../../../../../components/svg';
 import {HomeV3Article} from '../../../../../api/Types';
 import {IMG_SIZE_XS} from '../../../../../util/ImageUtil';
@@ -54,23 +54,26 @@ const ArticleListItem: React.FC<Props> = ({
   const hasPlayBadge = Boolean(article.article_has_audiovideo) && !isVideoArticle(article);
 
   return (
-    <TouchableDebounce onPress={() => onPress(article)} accessibilityRole="link" activeOpacity={0.8}>
-      <View style={[styles.container, style]}>
-        {thumbnail === 'left' ? image : null}
-        <View style={styles.content}>
-          <ArticleInfo article={article} showCategory={showCategory} />
-          <ArticleTitle article={article} numberOfLines={numberOfLines} />
-          <ArticleSubtitle article={article} />
-          {article.badge_title ? <ArticleBadge article={article} /> : null}
-          {hasPlayBadge ? (
-            <View style={{...styles.playBadge, backgroundColor: colors.smallBadge}}>
-              <IconPlay size={8} color={colors.text} />
-            </View>
-          ) : null}
+    <View>
+      <TouchableDebounce onPress={() => onPress(article)} accessibilityRole="link" activeOpacity={0.8}>
+        <View style={[styles.container, style]}>
+          {thumbnail === 'left' ? image : null}
+          <View style={styles.content}>
+            <ArticleInfo article={article} showCategory={showCategory} />
+            <ArticleTitle article={article} numberOfLines={numberOfLines} />
+            <ArticleSubtitle article={article} />
+            {article.badge_title ? <ArticleBadge article={article} /> : null}
+            {hasPlayBadge ? (
+              <View style={{...styles.playBadge, backgroundColor: colors.smallBadge}}>
+                <IconPlay size={8} color={colors.text} />
+              </View>
+            ) : null}
+          </View>
+          {thumbnail === 'right' ? image : null}
         </View>
-        {thumbnail === 'right' ? image : null}
-      </View>
-    </TouchableDebounce>
+      </TouchableDebounce>
+      <ArticleChainItems article={article} onPress={onPress} style={styles.chainItems} />
+    </View>
   );
 };
 
@@ -92,5 +95,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingStart: 1,
+  },
+  chainItems: {
+    marginTop: 8,
   },
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
-import {TouchableDebounce} from '../../../../../components';
+import {ArticleChainItems, TouchableDebounce} from '../../../../../components';
 import {HomeV3Article} from '../../../../../api/Types';
 import {ImageSize, IMG_SIZE_L} from '../../../../../util/ImageUtil';
 import {hasImage, isVideoArticle} from '../util';
@@ -68,6 +68,7 @@ const ArticleHero: React.FC<Props> = ({
           {article.badge_title ? <ArticleBadge article={article} size="big" /> : null}
         </View>
       </TouchableDebounce>
+      <ArticleChainItems article={article} onPress={onPress} style={styles.chainItems} />
       {keyword ? <KeywordTag keyword={keyword} /> : null}
     </View>
   );
@@ -79,5 +80,8 @@ const styles = StyleSheet.create({
   content: {
     gap: 8,
     marginBottom: 4,
+  },
+  chainItems: {
+    marginTop: 8,
   },
 });

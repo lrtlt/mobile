@@ -1,4 +1,5 @@
 export {default as AdultContentWarning} from './adultContentWarning/AdultContentWarning';
+export {default as ArticleChainItems} from './article/article/ArticleChainItems';
 export {default as ArticleComponent} from './article/article/ArticleComponent';
 export {default as ArticleFeedItem} from './article/articleFeedItem/ArticleFeedItem';
 export {default as ArticleRow} from './article/articleRow/ArticleRow';
